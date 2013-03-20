@@ -18,10 +18,15 @@ This application will run on Windows and Linux based systems.
 There will be a specific Linux distro for raspberry pi using a kiosk, debian distro.
 
 Basic featurelist:
+
  . Multiple apps like youtube, weather stopify etc.
+ 
  . Movie database with information and playback
+ 
  . Music database with information and playback
+ 
  . TV show database with information and playback 
+ 
  . easy to use app framework
  
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
