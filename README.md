@@ -31,4 +31,5 @@ Basic featurelist:
  
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
 this application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
+
 Copyright (C) 2013 - Jan Smolders
