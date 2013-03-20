@@ -3,6 +3,8 @@ mediacenterjs
 
 A HTML/CSS/Javascipt (NodeJs) based Mediacenter
 
+Donate: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L
+
 Status: unstable WIP
 
 What is the goal/purpose:
