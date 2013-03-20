@@ -17,6 +17,13 @@ If using a smart TV, a upnp connection will be established. If using an standard
 This application will run on Windows and Linux based systems. 
 There will be a specific Linux distro for raspberry pi using a kiosk, debian distro.
 
+Basic featurelist:
+ . Multiple apps like youtube, weather stopify etc.
+ . Movie database with information and playback
+ . Music database with information and playback
+ . TV show database with information and playback 
+ . easy to use app framework
+ 
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
 this application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
 Copyright (C) 2013 - Jan Smolders
