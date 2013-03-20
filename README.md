@@ -27,7 +27,7 @@ Basic featurelist:
  
  . TV show database with information and playback 
  
- . easy to use app framework
+ . Easy to use app framework
  
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
 this application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
