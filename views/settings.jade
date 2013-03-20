@@ -1,0 +1,21 @@
+doctype 5
+html(lang="en")
+	head
+		// Core inclusion
+		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
+		link(rel='stylesheet', href='/core/css/style.css')
+		script(src="/core/js/jquery-1.8.2.min.js")
+		script(src="/core/js/jquery.mcjs.core.js")
+		script
+			$(document).ready(function(){
+				$('body').mcjs();
+			});
+		
+	body.settings
+		#backdrop
+			img.backdropimg(src="/core/css/img/homepage.jpg")	
+		#wrapper
+			#header
+				h1 Settings
+		form#settingsbox".validate-form(method="post" action="/settings)
+			

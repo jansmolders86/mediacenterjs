@@ -1,0 +1,327 @@
+/*
+	MediaCenterJS - A NodeJS based mediacenter solution
+	
+    Copyright (C) 2013 - Jan Smolders
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+.movieposter.focused{ border:0;}
+
+.posterview{
+	width: 100%;
+	height:450px;
+	position:absolute;
+	bottom:50px;
+	left:50px;
+}
+.movieposters{ 
+	position: relative;
+	margin-top: 200px;
+	width: 100%;
+	height: 450px !important;
+	overflow:hidden;
+}
+
+.caroufredsel_wrapper{
+	height: 450px !important;
+}
+
+#next, #prev{ 
+	width:47px;
+	height:69px;
+	position:absolute; 
+	bottom:250px; 	
+	z-index:999;
+}
+#next{	background: url("img/carousel-sprite.png") no-repeat left bottom; right:0px;}
+#prev{	background: url("img/carousel-sprite.png") no-repeat left top; left:0;}
+
+.movieposter{ 
+	float:left; 
+	height:320px; 
+	padding:0 20px;
+	list-style:none;
+	z-index:3;
+	position:relative;
+	width:180px;
+}
+
+.posterview ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: block;
+}
+
+.posterview li:first-child {
+	margin-left:0;
+}
+
+.posterview li {
+	padding: 10px;
+	margin: 15px;
+	position:relative;
+	display: block;
+	float: left;
+}
+
+.movieposter img{ 
+	float:left; 
+	width:32px;
+	height:32px;
+} 
+
+.movieposter img.coverfound{
+	width:185px;
+	height:278px;
+	box-shadow: 1px 1px 8px #000;
+	-moz-box-shadow: 1px 1px 8px #000;
+	-webkit-box-shadow: 1px 1px 8px #000;
+	padding:0;
+}
+
+.movieposter span{ 
+	display:block; 
+	float:left; 
+	font-size: 14px;
+	color:#fff;
+	margin-top:10px;
+	text-transform:capitalize;
+}
+
+.submitnewtitle{}
+
+#configuration{
+	height:0;
+	width:0;
+	visibility:hidden;
+}
+
+/***** -----------------   MOVIE INFORMATION (HOVER)  ---------------------- *****/
+
+.movieposter .info{	
+	background: url(img/overlay.png) repeat left top; 
+	height: 35px;
+	margin-top: 10px;
+	margin-left:3px;
+	padding: 10px 5px 0;
+	text-align: center;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	visibility:hidden;  
+}
+
+.movieposter .info img {	 
+	width:24px;
+	height:24px;
+}
+
+.movieposter .info img:first-child {
+	margin-left:10px;
+	margin-right:3px;
+}	
+
+.movieposter:hover .info,
+.movieposter:focus .info,
+.movieposter.focused .info{
+	visibility:visible;  
+	-webkit-animation: fade-in 1.3s; 
+	-moz-animation:  fade-in 1.3s; 
+    -o-animation: fade-in 1.3s; 
+    animation: fade-in 1.3s; 
+}
+
+.movieposter .info a{ 
+	color:#8c8c8c;
+	padding:0 10px; 
+	font-size:18px;
+	cursor:pointer;
+	line-height:20px;
+}  
+.movieposter .info a:first-child{ padding-left:0;}  
+.movieposter .info a:hover,
+.movieposter .info a:focus{ color:#fff; font-size:20px;}  
+
+/***** -----------------   MOVIE DETAILS  ---------------------- *****/
+
+#moviedetailswrapper{	
+	background: url(img/overlay.png) repeat;
+	width:100%;
+	height:100%;
+}
+#moviedetails{padding-top:150px}
+#overview{
+	float:left;
+	color:#ddd; 
+	width:750px; 
+	margin-right:5px;
+	height:367px;
+	line-height:24px;
+	padding:20px;
+}
+
+#poster{
+	float:left;
+	width:185px;
+	padding:20px;
+}
+
+#moviedetails a.backlink{margin-top:23px; height:50px}
+#moviedetails h1{font-size:32px; line-height:36px;}
+
+.imdbrating{
+	color:#ddd;
+	font-size:14px;
+	text-align:left;
+	width:80px;
+	float:left;
+}
+.imdbrating p{
+	margin:10px 0 20px 0;
+}
+
+.imdbrating h3{font-size:30px;}
+
+.certification{
+	border:2px solid #000;
+	background-color:#fff;
+	font-family:Palatino;
+	font-weight:bold;
+	font-size:24px;
+	color:#000;	
+	display:inline-block;
+	float:right;
+	margin-top:10px;
+	text-align:center;
+	padding:3px 5px;
+}
+
+/***** -----------------   MOVIEPLAYER -------------------- *****/
+
+.controls{
+	padding:20px;
+	width:960px;
+	heigth:150px;
+}
+
+.controls input{
+	float:left;
+	border:0;
+	width:22px;
+	height:22px;
+	padding: 0 20px;
+}
+
+#FileFrame{
+	width:1024px;
+	height:600px;
+}
+#movieplayer {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+}
+#movieplayer .play{ background:url(/css/img/player/play.png) no-repeat; }
+#movieplayer .pause{ background:url(/css/img/player/pause.png) no-repeat; }
+#movieplayer .stop{ background:url(/css/img/player/stop.png) no-repeat; }
+#movieplayer .mute{ background:url(/css/img/player/mute.png) no-repeat; }
+
+#movieplayer {
+	padding:0;
+	margin:0 auto;
+	width:1024px;
+	height:600px;
+	padding:5px;	
+}
+
+#movieplayer-main, #movieplayer, #movieplayer_plugin{
+	left: 20%;
+}
+
+#movieplayerwrapper{
+	width:100%;
+	height:100%;
+	position:relative;
+}
+
+#movieplayer_toolbar_slider_tb > tbody > tr > td:first-child{
+    background:#92c8dc;
+    text-align:center;
+	height:10px;
+} 
+ 
+#movieplayer_toolbar_slider{
+	border:1px solid #ccc;
+	height:10px;
+	margin-top:5px;
+}
+ 
+.x-vlc-slider-thumb {
+    background:#179bb7;
+    width:10px;
+	height:10px;
+}
+
+#movieplayer_timer{
+	color:#fff;
+	margin-top:3px;
+	font-size:12px;
+}
+
+.x-vlc-toolbar {
+    color:black;
+}
+ .x-vlc-toolbar * {
+      vertical-align:top;
+      }
+.x-vlc-btn {
+    padding-right:10px;
+	width:22px;
+	height:22px;
+	border:0;
+}
+.x-vlc-btn-fullscreen {
+    background:url(images/fullscreen2.gif) no-repeat;
+}
+ .x-vlc-btn-plus {
+    background:url(images/plus2.gif) no-repeat;
+}
+.x-vlc-btn-moins {
+    background:url(images/moins2.gif) no-repeat;
+}
+.x-vlc-btn:hover {
+    color:red;   
+}
+.x-vlc-btn-play {
+    background:url(img/player/play.png) no-repeat;
+}
+.x-vlc-btn-stop {
+    background:url(img/player/stop.png) no-repeat;
+
+}
+.x-vlc-btn-pause {
+    background:url(img/player/pause.png) no-repeat;
+
+}
+.x-vlc-timer {
+    width:100px;
+    font-size:12px;
+    vertical-align:top;
+    text-align:center
+}
+.x-vlc-about {
+    font-size:10px;
+}

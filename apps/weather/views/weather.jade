@@ -1,0 +1,34 @@
+doctype 5
+html(lang="en")
+	head
+		// Core inclusion
+		link(rel='stylesheet', href='/core/css/style.css')
+		script(src="/core/js/jquery-1.8.2.min.js")
+		script(src="/core/js/jquery.mcjs.core.js")
+		
+		// App specific
+		script(src="/weather/js/jquery.mcjs.weather.js")
+		link(rel='stylesheet', href='/weather/css/style.css')
+		
+		title Weather
+		script
+			$(document).ready(function(){
+				$('body').mcjs();
+				$('body').mcjsw();
+			});
+	body#weather.weather
+		#config
+			.location=userLocation
+			.language=userLanguage
+		#backdrop
+			img.backdropimg(src="/core/css/img/homepage.jpg")
+		#weatherwrapper
+			#wrapper
+				a.backlink(href="/") 
+					img(src="/core/icons/back.png")
+				h1
+				.current
+					.degrees
+					.feelslike
+					.weathertype
+				.forecast
