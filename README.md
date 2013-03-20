@@ -3,7 +3,7 @@ mediacenterjs
 
 A HTML/CSS/Javascipt (NodeJs) based Mediacenter
 
-<span class="mega-icon-circle-slash"></span> Status: unstable WIP
+Status: unstable WIP
 
 What is the goal/purpose:
 MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques(HTML5/CSS/Javascript) and languages.
