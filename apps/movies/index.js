@@ -85,8 +85,9 @@ exports.update = function(req, res, next){
 	function getFile(url) {
 		var def = deferred()
 		,xhr = new XMLHttpRequest(); 
-		
+		console.log("starting XHR with url:", url);
 		xhr.onreadystatechange = function() {
+			console.log("status ready");
 			if (this.readyState == 4 && this.status >= 200 && this.status < 300 || this.status === 304) {
 				try {
 					var result = eval(this.responseText);
@@ -94,11 +95,13 @@ exports.update = function(req, res, next){
 				} catch (e) {
 					def.resolve(e);
 				}
+				console.log("resolving files");
 				def.resolve(result && result[0]);
 			} else if (this.status === 401){
 				console.log('Error 401')
 				def.resolve(new Error('Error:' + this.responseText));
 			};
+			console.log("not ready");
 		};
 		xhr.open("GET", url); 
 		xhr.send(null);
