@@ -29,10 +29,10 @@ var express = require('express')
 , writeFile = promisify(fs.writeFile)
 , filepath = './public/movies/config/moviefiles.js'
 , i=0
-, server = require('http').createServer(app)
-, io = require('socket.io').listen(server);
+//, server = require('http').createServer(app)
+//, io = require('socket.io').listen(server);
 
-server.listen(300);	
+//server.listen(300);	
 exports.engine = 'jade';
 
 var configfile = []
@@ -73,7 +73,7 @@ exports.update = function(req, res, next){
 	   return writeFile(filepath, JSON.stringify(data, null, 4));
 	}).end(function () {
 		// Download Cache
-		io.sockets.on('connection', function (client) { client.emit('chat', 'Building database complete. Proceeding with cache') });
+		//io.sockets.on('connection', function (client) { client.emit('chat', 'Building database complete. Proceeding with cache') });
 		downloadCache()
 	}, function (e) {
 		console.log("Failed", e);
@@ -84,29 +84,22 @@ exports.update = function(req, res, next){
 	// Get Scraper info
 	function getFile(url) {
 		var def = deferred()
-		,xhr = new XMLHttpRequest(); 
-		console.log("starting XHR with url:", url);
-		xhr.onreadystatechange = function() {
-			console.log("status ready");
-			if (this.readyState == 4 && this.status >= 200 && this.status < 300 || this.status === 304) {
-				try {
-					var result = eval(this.responseText);
-					console.log('getting files', i++)
-				} catch (e) {
-					def.resolve(e);
-				}
-				console.log("resolving files");
-				def.resolve(result && result[0]);
-			} else if (this.status === 401){
-				console.log('Error 401')
-				def.resolve(new Error('Error:' + this.responseText));
-			};
-			console.log("not ready");
+		, xhr = new XMLHttpRequest();
+		xhr.open("GET", url, true); 
+		xhr.onerror = function () {
+			def.resolve(new Error(this.responseText));
 		};
-		xhr.open("GET", url); 
+		xhr.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status >= 200 && this.status < 300 || this.status === 304) {
+				console.log('get', i++); 
+				def.resolve(eval(this.responseText)[0]);
+			}
+		};
+		//xhr.timeout = 10000;
 		xhr.send(null);
 		return def.promise;
 	};
+	
 	
 	function downloadCache(){
 		// Download images to cache
