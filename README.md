@@ -7,7 +7,7 @@ Donate: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV
 
 Screenshots: https://github.com/jansmolders86/mediacenterjs/tree/master/screenshots
 
-Status: Unstable WIP
+Status: Currently broken
 
 What is the goal/purpose:
 MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques(HTML5/CSS/Javascript) and languages.
