@@ -22,17 +22,9 @@ var express = require('express')
 , sys = require('util')
 , XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 , downloader = require('downloader')
-, promisify = require('deferred').promisify
-, deferred = require('deferred')
-, readdir = promisify(fs.readdir)
-, exists = promisify(fs.exists)
-, writeFile = promisify(fs.writeFile)
-, filepath = './public/movies/config/moviefiles.js'
-, i=0
-//, server = require('http').createServer(app)
-//, io = require('socket.io').listen(server);
+, movielistpath = './public/movies/config/moviefiles.js'
+, scraperinfopath = './public/movies/config/scraperinfo.js'
 
-//server.listen(300);	
 exports.engine = 'jade';
 
 var configfile = []
@@ -45,62 +37,99 @@ var moviefiles = []
 ,moviefiles = fs.readFileSync(moviefilepath)
 ,moviefileResults = JSON.parse(moviefiles)	
 
-	
-// Render the indexpage
-exports.update = function(req, res, next){
-	// Set max of events to unlimited
-	req.setMaxListeners(0)
+/*var scraperinfo = []
+,scraperInfoPath = './public/movies/config/scraperinfo.js'
+,scraperInfo = fs.readFileSync(scraperInfoPath)
+,scraperInfoResults = JSON.parse(scraperInfo)	*/
 
-	readdir(configfileResults.moviepath).map(function (file) {
-		var filename = file
-		, year = filename.match(/\(.*?([0-9]{4}).*?\)/)
-		, stripped = filename.replace(/\.|_|\/|\+|-/g," ")
-		, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
-		, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|SER|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
-		, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
-		, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
-		, movieTitle = noCountries.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight()
-		if (year == null) year = ''
-		var url = "http://api.themoviedb.org/2.1/Movie.search/"+configfileResults.language+"/json/1d0a02550b7d3eb40e4e8c47a3d8ffc6/"+movieTitle+"?year="+ year +"?="
-		return getFile(url)(function (ajaxResult) {
-			return {
-				movieTitle:movieTitle,
-				filename: file,
-				movieScraperInfo: ajaxResult
-			};
-		});
-	})(function (data) {
-	   return writeFile(filepath, JSON.stringify(data, null, 4));
-	}).end(function () {
-		// Download Cache
-		//io.sockets.on('connection', function (client) { client.emit('chat', 'Building database complete. Proceeding with cache') });
-		downloadCache()
-	}, function (e) {
-		console.log("Failed", e);
+
+
+//Get all movie files and ignore other files. (str files will be handled later)
+fs.readdir(configfileResults.moviepath,function(err,files){
+    if (err) throw err;
+	var allMovies = new Array();
+    files.forEach(function(file){
+		if (file.match(/\.(avi|mkv|mpeg|mpg|mov|mp4|txt)/i,"")){
+			movieFiles = file
+			/*, year = movieFiles.match(/\(.*?([0-9]{4}).*?\)/)
+			, stripped = movieFiles.replace(/\.|_|\/|\+|-/g," ")
+			, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
+			, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|SER|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
+			, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
+			, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
+			, movieTitle = noCountries.trimRight()*/
+			
+			allMovies[allMovies.length] = movieFiles;
+		}
+    });
+	var allMoviesJSON = JSON.stringify(allMovies, null, 4);
+	fs.writeFile(movielistpath, allMoviesJSON, function(e) {
+		if (!e) {
+			console.log('writing', allMoviesJSON);
+		}else{ 
+			console.log('Error getting movielist', e)
+		};
 	});
+});
 
 
+	
+exports.index = function(req, res, next){		
+	res.render('movies',{
+		movies: moviefileResults,
+		configuration: configfileResults.highres
+	});
+};
+
+
+
+
+exports.post = function(req, res, next){		
+	console.log('body: ' + eval(req.body));
+		
+	/*
 	
 	// Get Scraper info
-	function getFile(url) {
-		var def = deferred()
-		, xhr = new XMLHttpRequest();
-		xhr.open("GET", url, true); 
-		xhr.onerror = function () {
-			def.resolve(new Error(this.responseText));
-		};
-		xhr.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status >= 200 && this.status < 300 || this.status === 304) {
-				console.log('get', i++); 
-				def.resolve(eval(this.responseText)[0]);
-			}
-		};
-		//xhr.timeout = 10000;
-		xhr.send(null);
-		return def.promise;
+	function getScraperInfo() {
+		moviefileResults.forEach(function(file){
+			var filename = file
+			, result = null
+			, xhr = new XMLHttpRequest()
+			, year = filename.match(/\(.*?([0-9]{4}).*?\)/)
+			, stripped = filename.replace(/\.|_|\/|\+|-/g," ")
+			, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
+			, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|SER|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
+			, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
+			, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
+			, movieTitle = noCountries.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight()
+			if (year == null) year = ''
+			var scraperResults = getFile("http://api.themoviedb.org/2.1/Movie.search/"+configfileResults.language+"/json/1d0a02550b7d3eb40e4e8c47a3d8ffc6/"+movieTitle+"?year="+ year +"?=")
+		}
 	};
 	
 	
+	
+	// Get Scraper info by doing a synchronous AJAX call  
+	function getFile(url, callback) { 
+		xhr = new XMLHttpRequest();  
+		var results = []
+		// Make it synchronous by adding 'false'
+		xhr.open("GET", url, false);  
+		xhr.onreadystatechange = function(){
+			// If status is ready
+			if (this.readyState == 4 && this.status >= 200 && this.status < 300 || this.status === 304) {
+				results = eval(this.responseText)
+			} else if (this.status === 401){
+				console.log('Error 401')
+			};
+		};
+		xhr.send(null);
+		// Return a array with movie info
+		return results[0]
+	};
+
+
+
 	function downloadCache(){
 		// Download images to cache
 		console.log('getting images of movies. Using high quality:', configfileResults.highres)
@@ -133,9 +162,16 @@ exports.update = function(req, res, next){
 			}
 		}
 		res.redirect('/movies/')
-	};
-	
+	};*/
+
+	res.send(req.body);
 };
+
+
+
+
+/*Changing the way the movie app works to save up memory. I'm moving request for the elements to the frontend in a callback of caroufredsel.
+This change currently breaks the movie section of MCJS. */
 
 
 exports.details = function(req, res, next){	
@@ -145,12 +181,7 @@ exports.details = function(req, res, next){
 	});
 };
 	
-exports.index = function(req, res, next){		
-	res.render('movies',{
-		movies: moviefileResults,
-		configuration: configfileResults.highres
-	});
-};
+
 
 exports.play = function(req, res, next){
    /* var filePath = 
@@ -163,6 +194,6 @@ exports.play = function(req, res, next){
 
     var readStream = fs.createReadStream(filePath);
     // We replaced all the event handlers with a simple call to util.pump()
-    util.pump(readStream, response);*/
+    util.pump(readStream, response);
+*/
 }
-

@@ -35,7 +35,7 @@
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
 			
-			_loadCache(o, $(this));
+		//	_loadCache(o, $(this));
 			_focusedItem(o, $(this));
 			_carousel(o, $(this));
 			
@@ -44,6 +44,7 @@
 	
 	/**** Start of custom functions ***/
 
+	/*
 	function _loadCache(o, $that){
 		$.ajax('/movies/config/moviefiles.js', {
 			type: 'get',
@@ -89,6 +90,9 @@
 			}
 		});
 	};	
+	*/
+	
+	
 
 	/**** MOVIE HANDELING *******/
 	
@@ -129,6 +133,20 @@
 		$('.movieposters').find(".movieposter:first").addClass("focused");
 		$('.movieposters').carouFredSel({
 			auto: false,
+			onCreate: function( data ) {
+				data.items.each(function() { 
+					var title = $(this).find('span.title').html();
+					_postVisibleItems(o, title)
+				});
+			},
+			scroll  : {
+				onAfter : function( data ) {
+					data.items.visible.each(function() { 
+						var title = $(this).find('span.title')
+						_postVisibleItems(o, title)
+					});
+				}
+			},
 			prev: {
 				key : "left",
 				button : "#prev",
@@ -150,6 +168,21 @@
 			}
 		});
 	}	
+	
+	
+	function _postVisibleItems(o, title){
+		console.log(title)
+		$.ajax('/movies/post/', {
+			type: 'post',
+			data: title,
+			success: function(data) {
+				console.log(data)
+			},
+			error  : function(data) {
+				console.log('e', data)
+			}
+		});
+	};	
 	
 
 	/**** End of custom functions ***/
