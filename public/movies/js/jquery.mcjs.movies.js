@@ -174,7 +174,7 @@
 		console.log(title)
 		$.ajax('/movies/post/', {
 			type: 'post',
-			data: title,
+			data: {movieTitle : title},
 			success: function(data) {
 				console.log(data)
 			},

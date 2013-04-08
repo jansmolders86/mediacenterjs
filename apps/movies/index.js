@@ -44,35 +44,6 @@ var moviefiles = []
 
 
 
-//Get all movie files and ignore other files. (str files will be handled later)
-fs.readdir(configfileResults.moviepath,function(err,files){
-    if (err) throw err;
-	var allMovies = new Array();
-    files.forEach(function(file){
-		if (file.match(/\.(avi|mkv|mpeg|mpg|mov|mp4|txt)/i,"")){
-			movieFiles = file
-			/*, year = movieFiles.match(/\(.*?([0-9]{4}).*?\)/)
-			, stripped = movieFiles.replace(/\.|_|\/|\+|-/g," ")
-			, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
-			, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|SER|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
-			, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
-			, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
-			, movieTitle = noCountries.trimRight()*/
-			
-			allMovies[allMovies.length] = movieFiles;
-		}
-    });
-	var allMoviesJSON = JSON.stringify(allMovies, null, 4);
-	fs.writeFile(movielistpath, allMoviesJSON, function(e) {
-		if (!e) {
-			console.log('writing', allMoviesJSON);
-		}else{ 
-			console.log('Error getting movielist', e)
-		};
-	});
-});
-
-
 	
 exports.index = function(req, res, next){		
 	res.render('movies',{
@@ -85,28 +56,22 @@ exports.index = function(req, res, next){
 
 
 exports.post = function(req, res, next){		
-	console.log('body: ' + eval(req.body));
-		
-	/*
-	
+	var movieRequest = req.body;
+	console.log('movierequest', movieRequest.movieTitle)
+
 	// Get Scraper info
-	function getScraperInfo() {
-		moviefileResults.forEach(function(file){
-			var filename = file
-			, result = null
-			, xhr = new XMLHttpRequest()
-			, year = filename.match(/\(.*?([0-9]{4}).*?\)/)
-			, stripped = filename.replace(/\.|_|\/|\+|-/g," ")
-			, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
-			, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|SER|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
-			, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
-			, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
-			, movieTitle = noCountries.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight()
-			if (year == null) year = ''
-			var scraperResults = getFile("http://api.themoviedb.org/2.1/Movie.search/"+configfileResults.language+"/json/1d0a02550b7d3eb40e4e8c47a3d8ffc6/"+movieTitle+"?year="+ year +"?=")
-		}
-	};
-	
+	var filename = movieRequest.movieTitle
+	, year = filename.match(/\(.*?([0-9]{4}).*?\)/)
+	, stripped = filename.replace(/\.|_|\/|\+|-/g," ")
+	, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
+	, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|SER|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
+	, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
+	, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
+	, movieTitle = noCountries.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight()
+	if (year == null) year = ''
+	var scraperResults = getFile("http://api.themoviedb.org/2.1/Movie.search/"+configfileResults.language+"/json/1d0a02550b7d3eb40e4e8c47a3d8ffc6/"+movieTitle+"?year="+ year +"?=")
+
+	console.log(scraperResults)
 	
 	
 	// Get Scraper info by doing a synchronous AJAX call  
@@ -128,7 +93,7 @@ exports.post = function(req, res, next){
 		return results[0]
 	};
 
-
+	/*
 
 	function downloadCache(){
 		// Download images to cache
@@ -164,7 +129,7 @@ exports.post = function(req, res, next){
 		res.redirect('/movies/')
 	};*/
 
-	res.send(req.body);
+	res.send(scraperResults);
 };
 
 

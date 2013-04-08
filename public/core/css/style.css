@@ -305,9 +305,20 @@ a#view{
 }
 
 .row{
-	height:50px;
+	min-height:50px;
 	width:700px;
 	float:left;
+
+}
+
+.row span.info{
+	display:block;
+	color:#e5e5e5;
+	min-height:30px;
+	clear:both;
+	padding-top:20px;
+	margin:0px 0 50px;
+	font-size:14px;
 }
 
 label,
