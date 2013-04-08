@@ -44,15 +44,13 @@ var moviefiles = []
 
 
 
-	
+
 exports.index = function(req, res, next){		
 	res.render('movies',{
 		movies: moviefileResults,
 		configuration: configfileResults.highres
 	});
 };
-
-
 
 
 exports.post = function(req, res, next){		

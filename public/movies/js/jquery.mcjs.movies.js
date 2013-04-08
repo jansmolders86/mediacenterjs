@@ -138,6 +138,8 @@
 					var title = $(this).find('span.title').html();
 					_postVisibleItems(o, title)
 				});
+				
+				_getVisibleItems(o, title)
 			},
 			scroll  : {
 				onAfter : function( data ) {
@@ -183,7 +185,6 @@
 			}
 		});
 	};	
-	
 
 	/**** End of custom functions ***/
 	
