@@ -96,41 +96,13 @@ app.post('/settings', function(req, res){
 	
 	// Write to JSON file
 	fs.writeFile(configfilepath, JSON.stringify(myData, null, 4), function(err, callback) {
+		var movielistpath = './public/movies/data/movieindex.js'
 		if(err) {
 			// Respond to client with sever error
 			res.send(500);
 			console.log(err);
 		} else {
 			
-			//Get all movie files and ignore other files. (str files will be handled later)
-			fs.readdir(configfileResults.moviepath,function(err,files){
-				if (err) throw err;
-				var allMovies = new Array();
-				files.forEach(function(file){
-					if (file.match(/\.(avi|mkv|mpeg|mpg|mov|mp4|txt)/i,"")){
-						movieFiles = file
-						/*, year = movieFiles.match(/\(.*?([0-9]{4}).*?\)/)
-						, stripped = movieFiles.replace(/\.|_|\/|\+|-/g," ")
-						, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
-						, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|SER|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
-						, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
-						, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
-						, movieTitle = noCountries.trimRight()*/
-						
-						allMovies[allMovies.length] = movieFiles;
-					}
-				});
-				var allMoviesJSON = JSON.stringify(allMovies, null, 4);
-				fs.writeFile(movielistpath, allMoviesJSON, function(e) {
-					if (!e) {
-						console.log('writing', allMoviesJSON);
-						// Respond to client giving the ok, set a timeout to give supervisor time to reload the server
-						res.render('thanks');
-					}else{ 
-						console.log('Error getting movielist', e);
-					};
-				});
-			});
 
 		}
 	}); 
