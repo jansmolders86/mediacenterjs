@@ -84,7 +84,7 @@ exports.post = function(req, res, next){
 				getFile("http://api.themoviedb.org/2.1/Movie.search/"+configfileResults.language+"/json/1d0a02550b7d3eb40e4e8c47a3d8ffc6/"+movieTitle+"?year="+ year +"?=", function(scraperResult) {
 
 					//TODO: fix proper handling of unknown files
-					if (typeof scraperResult) {
+					if (scraperResult != undefined) {
 						// Download images
 						downloadCache(scraperResult,function(poster, backdrop) {
 							console.log('download completed, continuing');
@@ -131,6 +131,7 @@ exports.post = function(req, res, next){
 							});
 						});	
 					} else {
+						//TODO: Make nice notification of failed movies (or log) 
 						fs.rmdir('./public/movies/data/'+movieRequest.movieTitle, function (err) {
 							if (err) {
 								console.log('Problem removing bad dir',err);
@@ -147,8 +148,7 @@ exports.post = function(req, res, next){
 	// Get Scraper info by doing a synchronous AJAX call  
 	function getFile(url,callback) { 
 		xhr = new XMLHttpRequest();  
-		var results = []
-		// Make it synchronous by adding 'false'
+		var results = [];
 		xhr.open("GET", url);  
 		xhr.onreadystatechange = function(){
 			// If status is ready
@@ -185,6 +185,10 @@ exports.post = function(req, res, next){
 };
 
 exports.play = function(req, res, next){
+
+	//TODO: Get player to work:  
+	//TODO: Add nice curtain like animation (black divs from side to side closing into eachother)
+	
    /* var filePath = 
 		var stat = fs.statSync(filePath);
 
