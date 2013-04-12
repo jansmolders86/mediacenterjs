@@ -1,10 +1,10 @@
 {
-    "moviepath": "",
+    "moviepath": "c:/temp",
     "highres": "yes",
     "musicpath": "tbd",
     "tvpath": "tbd",
-    "language": "",
+    "language": "nl",
     "onscreenkeyboard": "no",
-    "location": "",
+    "location": "eindhoven",
     "screensaver": "dim"
 }

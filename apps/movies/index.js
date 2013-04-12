@@ -127,10 +127,19 @@ exports.post = function(req, res, next){
 						, backdrop = scraperResult.backdrops[2].image.url;
 					}
 					
+					// Download images
+					downloadCache(poster,backdrop)
+					
+					var localImageDir = '/movies/data/'+movieRequest.movieTitle+'/'
+					,localPoster = poster.match(/[^//]+$/i) 
+					,localBackdrop = backdrop.match(/[^//]+$/i) 
+					,posterpath = localImageDir+localPoster
+					,backdroppath = localImageDir+localBackdrop;
+					
 					var scraperdata = new Array();
 					var scraperdataset = null
 					
-					scraperdataset = { original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster, backdrop:backdrop  }
+					scraperdataset = { original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:posterpath, backdrop:backdroppath }
 					scraperdata[scraperdata.length] = scraperdataset;
 					
 					// write new json with specific scarper results
@@ -178,43 +187,16 @@ exports.post = function(req, res, next){
 	};
 	
 
-
-
-	/*
-
-	function downloadCache(){
+	function downloadCache(poster,backdrop,callback){
+		var downloadDir = './public/movies/data/'+movieRequest.movieTitle+'/'
 		// Download images to cache
 		console.log('getting images of movies. Using high quality:', configfileResults.highres)
-		for(i=0; i < moviefileResults.length; i++) {
-			// Get the correct images from the scraper
-
-			if (typeof moviefileResults[i].movieScraperInfo) {
-			
-				if (configfileResults.highres === 'yes'){
-					var posterPath = moviefileResults[i].movieScraperInfo.posters[2].image.url
-					, backdropPath = moviefileResults[i].movieScraperInfo.backdrops[3].image.url
-				} else if (configfileResults.highres === 'no'){
-					var posterPath = moviefileResults[i].movieScraperInfo.posters[1].image.url
-					, backdropPath = moviefileResults[i].movieScraperInfo.backdrops[2].image.url;
-				}
-				
-				var downloadDir = './public/movies/cache/'
-				, localFileNamePoster = posterPath.match(/[^//]+$/i)
-				, localFileNameBackdrop = posterPath.match(/[^//]+$/i);
-				
-				// Download the poster
-				if (fs.existsSync(downloadDir+localFileNamePoster)) {
-					console.log('File found on HDD')
-				} else {
-					downloader.on('done', function(msg) { console.log('done', msg); });
-					downloader.on('error', function(msg) { console.log('error', msg); });
-					downloader.download(posterPath, downloadDir);
-					downloader.download(backdropPath, downloadDir);
-				}
-			}
-		}
-		res.redirect('/movies/')
-	};*/
+		// Download the poster
+		downloader.on('done', function(msg) { console.log('done', msg); });
+		downloader.on('error', function(msg) { console.log('error', msg); });
+		downloader.download(poster, downloadDir);
+		downloader.download(backdrop, downloadDir);
+	};
 };
 
 
