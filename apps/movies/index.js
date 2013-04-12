@@ -83,8 +83,7 @@ exports.post = function(req, res, next){
 				// Get scraper results (ajax call)
 				getFile("http://api.themoviedb.org/2.1/Movie.search/"+configfileResults.language+"/json/1d0a02550b7d3eb40e4e8c47a3d8ffc6/"+movieTitle+"?year="+ year +"?=", function(scraperResult) {
 
-					//TODO: fix proper handling of unknown files
-					if (scraperResult != undefined) {
+					if (scraperResult != 'Nothing found.') {
 						// Download images
 						downloadCache(scraperResult,function(poster, backdrop) {
 							console.log('download completed, continuing');
@@ -131,13 +130,31 @@ exports.post = function(req, res, next){
 							});
 						});	
 					} else {
-						//TODO: Make nice notification of failed movies (or log) 
-						fs.rmdir('./public/movies/data/'+movieRequest.movieTitle, function (err) {
-							if (err) {
-								console.log('Problem removing bad dir',err);
-							} else {
-								console.log('Removing dir, nothing found for:'+ movieRequest.movieTitle +'. Please check name');
-							}
+						//TODO: Do this better
+						//Setting up array
+						var nodata = new Array();
+						var nodataset = null
+						
+						nodataset = { original_name:'No Data', imdb_id:'No Data', rating:'No Data', certification:'No Data', overview:'No Data', poster:'No Data', backdrop:'No Data' }
+						nodata[nodata.length] = nodataset;
+						// write new json with specific scraper results
+						var nodataJSON = JSON.stringify(nodata, null, 4);
+							
+						fs.writeFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', nodataJSON, function(e) {
+							if (!e) {
+								console.log('written nodata');
+								// Read written file and send to client.
+								fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
+									if(!err){
+										console.log(data)
+										res.send(data);
+									}else{
+										console.log('Cannot write no scraper data', err)
+									}
+								});
+							}else{ 
+								console.log('Error', e);
+							};
 						});
 					}						
 				});
@@ -153,7 +170,7 @@ exports.post = function(req, res, next){
 		xhr.onreadystatechange = function(){
 			// If status is ready
 			if (this.readyState == 4 && this.status >= 200 && this.status < 300 || this.status === 304) {
-				results = eval(this.responseText)
+				results = eval(this.responseText);
 				callback(results[0]);
 			} else if (this.status === 401){
 				console.log('Error 401')
