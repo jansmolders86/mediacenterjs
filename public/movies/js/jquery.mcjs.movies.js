@@ -43,57 +43,6 @@
 	}
 	
 	/**** Start of custom functions ***/
-
-	/*
-	function _loadCache(o, $that){
-		$.ajax('/movies/config/moviefiles.js', {
-			type: 'get',
-			contentType: 'text/json',
-			success: function(data) {
-				data = $.parseJSON(data) 
-				$.each(data, function(i,item) {
-					if (typeof item.movieScraperInfo) {			
-						if( $('#configuration').html() === 'yes'){ 
-							var poster = item.movieScraperInfo.posters[2].image.url
-							,backdrop = item.movieScraperInfo.backdrops[3].image.url
-						} else if ($('#configuration').html() === 'no'){
-							var poster = item.movieScraperInfo.posters[1].image.url
-							,backdrop = item.movieScraperInfo.backdrops[2].image.url
-						}
-						var name = item.movieTitle
-						,localposter = '/movies/cache/'+poster.match(/[^//]+$/i)
-						,localbackdrop = '/movies/cache/'+backdrop.match(/[^//]+$/i);
-						$.each($('.movieposter'), function() {
-							if ( $(this).find('span').html() == name ){
-								$(this).find("img.movieposter").attr('src',localposter);	
-								$(this).find("img.movieposter").attr('data-backdrop',localbackdrop);	
-								$(this).find("img.movieposter").addClass('coverfound');
-							}	
-						});
-						if( $('#moviedetails').length){
-							if (item.movieTitle == $('#moviedetails').find('h1').html()){
-								$('#backdrop').find("img").attr('src',localbackdrop);
-								$('#moviedetails').find('#overview').append('<p>'+item.movieScraperInfo.overview+'</p>');
-								$('#moviedetails').find('#poster > img').attr('src',localposter).addClass('fadein');
-								$('#moviedetails').find('#poster > .imdbrating').append('<p> IMDB <h3>'+item.movieScraperInfo.rating+'</h3></p>');
-								$('#moviedetails').find('#poster > .certification').html(item.movieScraperInfo.certification);
-								$('#moviedetailswrapper').addClass('fadeinslow');
-							}
-						}	
-					}
-				});
-			
-			},
-			error  : function(configjson) {
-				$('.guimessage').remove();
-				$('#wrapper').append('<p class="guimessage">Can not get configfile. Please make sure it is present!</p>')
-			}
-		});
-	};	
-	*/
-	
-	
-
 	/**** MOVIE HANDELING *******/
 	
 	function _focusedItem(o, $that){
@@ -136,16 +85,16 @@
 			onCreate: function( data ) {
 				data.items.each(function() { 
 					var title = $(this).find('span.title').html();
-					_postVisibleItems(o, title)
+					var visibleMovie = $(this) 
+					_handleVisibleMovies(o, title, visibleMovie)
 				});
-				
-				_getVisibleItems(o, title)
 			},
 			scroll  : {
 				onAfter : function( data ) {
 					data.items.visible.each(function() { 
-						var title = $(this).find('span.title')
-						_postVisibleItems(o, title)
+						var title = $(this).find('span.title').html();
+						var visibleMovie = $(this) 
+						_handleVisibleMovies(o, title, visibleMovie )
 					});
 				}
 			},
@@ -169,22 +118,46 @@
 				easing  : "swing",
 			}
 		});
-	}	
+	};
+
 	
 	
-	function _postVisibleItems(o, title){
-		console.log(title)
+	function _handleVisibleMovies(o, title, visibleMovie){
+		// Post the movie to the sever so we get data back
+		// we can use to fill the movie specifications
+		
 		$.ajax('/movies/post/', {
 			type: 'post',
 			data: {movieTitle : title},
-			success: function(data) {
-				console.log(data)
+			success: function(data) { 
+				var movieData = $.parseJSON(data);
+			
+				visibleMovie.find('.original_name').html(movieData[0].original_name) 
+				visibleMovie.find("img.movieposter").attr('src',movieData[0].poster);	
+				visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
+			
+				//TODO: handle detail click with jquery to show movie specific items
+				
+				visibleMovie.find("img.movieposter").addClass('coverfound');
+			
+				// Movie detail page
+				if( $('#moviedetails').length){
+					if (item.movieTitle == $('#moviedetails').find('h1').html()){
+						$('#backdrop').find("img").attr('src',movieData[0].backdrop);
+						$('#moviedetails').find('#overview').append('<p>'+movieData[0].overview+'</p>');
+						$('#moviedetails').find('#poster > img').attr('src',movieData[0].poster).addClass('fadein');
+						$('#moviedetails').find('#poster > .imdbrating').append('<p> IMDB <h3>'+movieData[0].rating+'</h3></p>');
+						$('#moviedetails').find('#poster > .certification').html(movieData[0].certification);
+						$('#moviedetailswrapper').addClass('fadeinslow');
+					}
+				}	
 			},
 			error  : function(data) {
-				console.log('e', data)
+				console.log('e', data);
 			}
 		});
 	};	
+	
 
 	/**** End of custom functions ***/
 	

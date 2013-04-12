@@ -13,14 +13,8 @@ html(lang="en")
 		link(rel='stylesheet', href='/movies/css/style.css')
 		script(src="/movies/js/jquery.carouFredSel-6.1.0-packed.js")
 		script(src="/movies/js/jquery.mcjs.movies.js")
-		script(src="/core/js/plugins/socket.io.js")
 
 		script
-			var socket = io.connect('http://localhost:300');
-			socket.on('chat', function (msg) {
-				$('#messagesystem').html(msg);
-			});
-		
 			$(document).ready(function(){
 				$('body').mcjs();
 				$('body').mcjsm();
@@ -41,10 +35,11 @@ html(lang="en")
 						each movie in movies
 							li.movieposter 
 								.info
-									a.moviedetails(href="/movies/"+ movie.movieTitle  + "/details/") 
+									a.moviedetails(href="") 
 										img(src="/movies/img/info.png")
 								a.play(href="/movies/play/"+ movie.filename)
 									img(src="/movies/img/loading.gif").movieposter							
+								span.original_name	Loa
 								span.title= movie
 			a#prev
 			a#next
