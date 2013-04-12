@@ -138,13 +138,11 @@
 				setTimeout(function(){
 					visibleMovie.find("img.movieposter").attr('src',movieData[0].poster);			
 					visibleMovie.find("img.movieposter").addClass('coverfound');
-					visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
 				},2000);
 
-			
-				//TODO: handle detail click with jquery to show movie specific items
-
-			
+				visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
+				
+				//TODO: handle detail click with jquery to show movie details
 				// Movie detail page
 				/*if( $('#moviedetails').length){
 					if (item.movieTitle == $('#moviedetails').find('h1').html()){
@@ -155,7 +153,8 @@
 						$('#moviedetails').find('#poster > .certification').html(movieData[0].certification);
 						$('#moviedetailswrapper').addClass('fadeinslow');
 					}
-				}	*/
+				}	
+				*/
 			},
 			error  : function(data) {
 				console.log('e', data);
