@@ -54,7 +54,8 @@ app.get("/", function(req, res, next) {
 		res.render('setupsettings');	
 	} else {
 	
-		//TODO: Make this a nicer solution. This is a bit hacky
+		//TODO: Make this a nicer solution. 
+		//TODO: Make sure every file gets found.
 		
 		//Get all movie files and ignore other files. (str files will be handled later)
 		var movielistpath = './public/movies/data/movieindex.js'

@@ -135,7 +135,7 @@ exports.post = function(req, res, next){
 						var nodata = new Array();
 						var nodataset = null
 						
-						nodataset = { original_name:'No Data', imdb_id:'No Data', rating:'No Data', certification:'No Data', overview:'No Data', poster:'No Data', backdrop:'No Data' }
+						nodataset = { original_name:movieRequest.movieTitle, imdb_id:'No Data', rating:'No Data', certification:'No Data', overview:'No Data', poster:'/movies/css/img/nodata.jpg', backdrop:'/movies/css/img/overlay.png' }
 						nodata[nodata.length] = nodataset;
 						// write new json with specific scraper results
 						var nodataJSON = JSON.stringify(nodata, null, 4);
