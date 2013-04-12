@@ -133,15 +133,20 @@
 				var movieData = $.parseJSON(data);
 			
 				visibleMovie.find('.original_name').html(movieData[0].original_name) 
-				visibleMovie.find("img.movieposter").attr('src',movieData[0].poster);	
-				visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
+				
+				/* Give the plugin time to load the (new) image(s) */
+				setTimeout(function(){
+					visibleMovie.find("img.movieposter").attr('src',movieData[0].poster);			
+					visibleMovie.find("img.movieposter").addClass('coverfound');
+					visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
+				},2000);
+
 			
 				//TODO: handle detail click with jquery to show movie specific items
-				
-				visibleMovie.find("img.movieposter").addClass('coverfound');
+
 			
 				// Movie detail page
-				if( $('#moviedetails').length){
+				/*if( $('#moviedetails').length){
 					if (item.movieTitle == $('#moviedetails').find('h1').html()){
 						$('#backdrop').find("img").attr('src',movieData[0].backdrop);
 						$('#moviedetails').find('#overview').append('<p>'+movieData[0].overview+'</p>');
@@ -150,7 +155,7 @@
 						$('#moviedetails').find('#poster > .certification').html(movieData[0].certification);
 						$('#moviedetailswrapper').addClass('fadeinslow');
 					}
-				}	
+				}	*/
 			},
 			error  : function(data) {
 				console.log('e', data);

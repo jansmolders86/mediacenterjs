@@ -37,40 +37,12 @@ var moviefiles = []
 ,moviefileResults = JSON.parse(moviefiles)	
 
 
-//TODO: Fix placement of initial index
-
-//Get all movie files and ignore other files. (str files will be handled later)
-fs.readdir(configfileResults.moviepath,function(err,files){
-	if (err) throw err;
-	var allMovies = new Array();
-	files.forEach(function(file){
-		if (file.match(/\.(avi|mkv|mpeg|mpg|mov|mp4|txt)/i,"")){
-			movieFiles = file
-			allMovies[allMovies.length] = movieFiles;
-		}
-	});
-	var allMoviesJSON = JSON.stringify(allMovies, null, 4);
-	fs.writeFile(movielistpath, allMoviesJSON, function(e) {
-		if (!e) {
-			console.log('writing', allMoviesJSON);
-			// Respond to client giving the ok, set a timeout to give supervisor time to reload the server
-			//res.render('thanks');
-		}else{ 
-			console.log('Error getting movielist', e);
-		};
-	});
-});
-
-
 exports.index = function(req, res, next){	
-
-	
 	res.render('movies',{
 		movies: moviefileResults,
 		configuration: configfileResults.highres
 	});
 };
-
 
 exports.post = function(req, res, next){		
 	var movieRequest = req.body;
@@ -96,8 +68,7 @@ exports.post = function(req, res, next){
 				console.log('Error creating folder',err);
 			} else {
 				console.log('Directory '+movieRequest.movieTitle+' created');
-	
-	
+
 				// Building scraper url
 				var filename = movieRequest.movieTitle
 				, year = filename.match(/\(.*?([0-9]{4}).*?\)/)
@@ -108,65 +79,70 @@ exports.post = function(req, res, next){
 				, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
 				, movieTitle = noCountries.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight()
 				if (year == null) year = ''
+				
+				// Get scraper results (ajax call)
 				getFile("http://api.themoviedb.org/2.1/Movie.search/"+configfileResults.language+"/json/1d0a02550b7d3eb40e4e8c47a3d8ffc6/"+movieTitle+"?year="+ year +"?=", function(scraperResult) {
 
-					console.log('Cleaning up scraper data')
-					// Cleaning up scraper data: Usefull scraper result values to variables
-					
-					var original_name = scraperResult.original_name
-					, imdb_id = scraperResult.imdb_id
-					, rating = scraperResult.rating
-					, certification = scraperResult.certification
-					, overview = scraperResult.overview;
-					
-					if (configfileResults.highres === 'yes'){
-						var poster = scraperResult.posters[2].image.url
-						, backdrop = scraperResult.backdrops[3].image.url
-					} else if (configfileResults.highres === 'no'){
-						var poster = scraperResult.posters[1].image.url
-						, backdrop = scraperResult.backdrops[2].image.url;
-					}
-					
-					// Download images
-					downloadCache(poster,backdrop)
-					
-					var localImageDir = '/movies/data/'+movieRequest.movieTitle+'/'
-					,localPoster = poster.match(/[^//]+$/i) 
-					,localBackdrop = backdrop.match(/[^//]+$/i) 
-					,posterpath = localImageDir+localPoster
-					,backdroppath = localImageDir+localBackdrop;
-					
-					var scraperdata = new Array();
-					var scraperdataset = null
-					
-					scraperdataset = { original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:posterpath, backdrop:backdroppath }
-					scraperdata[scraperdata.length] = scraperdataset;
-					
-					// write new json with specific scarper results
-					var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-					
-					fs.writeFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', scraperdataJSON, function(e) {
-						if (!e) {
-							console.log('written scraperdata');
-							// Read written file and send to client.
-							fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
-								if(!err){
-									console.log(data)
-									res.send(data);
-								}else{
-									console.log('Cannot read scraper data', err)
-								}
+					//TODO: fix proper handling of unknown files
+					if (typeof scraperResult) {
+						// Download images
+						downloadCache(scraperResult,function(poster, backdrop) {
+							console.log('download completed, continuing');
+							
+							//Variable for local file location
+							var localImageDir = '/movies/data/'+movieRequest.movieTitle+'/'
+							,localPoster = poster.match(/[^//]+$/i) 
+							,localBackdrop = backdrop.match(/[^//]+$/i) 
+							,posterpath = localImageDir+localPoster
+							,backdroppath = localImageDir+localBackdrop;
+							
+							// Cleaning up scraper data: Usefull scraper result values to variables
+							var original_name = scraperResult.original_name
+							, imdb_id = scraperResult.imdb_id
+							, rating = scraperResult.rating
+							, certification = scraperResult.certification
+							, overview = scraperResult.overview;
+							
+							//Setting up array
+							var scraperdata = new Array();
+							var scraperdataset = null
+							
+							scraperdataset = { original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:posterpath, backdrop:backdroppath }
+							scraperdata[scraperdata.length] = scraperdataset;
+							
+							// write new json with specific scraper results
+							var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+							
+							fs.writeFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', scraperdataJSON, function(e) {
+								if (!e) {
+									console.log('written scraperdata');
+									// Read written file and send to client.
+									fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
+										if(!err){
+											console.log(data)
+											res.send(data);
+										}else{
+											console.log('Cannot read scraper data', err)
+										}
+									});
+								}else{ 
+									console.log('Error getting movielist', e);
+								};
 							});
-						}else{ 
-							console.log('Error getting movielist', e);
-						};
-					});
+						});	
+					} else {
+						fs.rmdir('./public/movies/data/'+movieRequest.movieTitle, function (err) {
+							if (err) {
+								console.log('Problem removing bad dir',err);
+							} else {
+								console.log('Removing dir, nothing found for:'+ movieRequest.movieTitle +'. Please check name');
+							}
+						});
+					}						
 				});
 			}
 		});
 	};
-	
-	
 	
 	// Get Scraper info by doing a synchronous AJAX call  
 	function getFile(url,callback) { 
@@ -187,45 +163,38 @@ exports.post = function(req, res, next){
 	};
 	
 
-	function downloadCache(poster,backdrop,callback){
-		var downloadDir = './public/movies/data/'+movieRequest.movieTitle+'/'
-		// Download images to cache
-		console.log('getting images of movies. Using high quality:', configfileResults.highres)
-		// Download the poster
-		downloader.on('done', function(msg) { console.log('done', msg); });
-		downloader.on('error', function(msg) { console.log('error', msg); });
-		downloader.download(poster, downloadDir);
-		downloader.download(backdrop, downloadDir);
+	function downloadCache(scraperResult,callback){
+			if (configfileResults.highres === 'yes'){
+				var poster = scraperResult.posters[2].image.url
+				, backdrop = scraperResult.backdrops[3].image.url
+			} else if (configfileResults.highres === 'no'){
+				var poster = scraperResult.posters[1].image.url
+				, backdrop = scraperResult.backdrops[2].image.url;
+			}
+			var downloadDir = './public/movies/data/'+movieRequest.movieTitle+'/'
+			// Download images to cache
+			console.log('getting images of movies. Using high quality:', configfileResults.highres)
+			// Download the poster
+			downloader.on('done', function(msg) { console.log('done', msg); });
+			downloader.on('error', function(msg) { console.log('error', msg); });
+			downloader.download(poster, downloadDir);
+			downloader.download(backdrop, downloadDir);
+		
+		callback(poster,backdrop);
 	};
 };
 
-
-
-
-/*Changing the way the movie app works to save up memory. I'm moving request for the elements to the frontend in a callback of caroufredsel.
-This change currently breaks the movie section of MCJS. */
-
-
-exports.details = function(req, res, next){	
-	res.render('moviedetail',{
-		movie: req.param('id'),
-		movies: moviefileResults
-	});
-};
-	
-
-
 exports.play = function(req, res, next){
    /* var filePath = 
-    var stat = fs.statSync(filePath);
+		var stat = fs.statSync(filePath);
 
-    response.writeHead(200, {
-        'Content-Type': 'video/avi',
-        'Content-Length': stat.size
-    });
+		response.writeHead(200, {
+			'Content-Type': 'video/avi',
+			'Content-Length': stat.size
+		});
 
-    var readStream = fs.createReadStream(filePath);
-    // We replaced all the event handlers with a simple call to util.pump()
-    util.pump(readStream, response);
-*/
+		var readStream = fs.createReadStream(filePath);
+		// We replaced all the event handlers with a simple call to util.pump()
+		util.pump(readStream, response);
+	*/
 }

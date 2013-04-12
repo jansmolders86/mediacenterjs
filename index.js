@@ -53,6 +53,31 @@ app.get("/", function(req, res, next) {
 	if(	configfileResults.moviepath == '' && configfileResults.language == '' && configfileResults.location == '' || configfileResults.moviepath == null || configfileResults.moviepath == undefined){
 		res.render('setupsettings');	
 	} else {
+	
+		//TODO: Make this a nicer solution. This is a bit hacky
+		
+		//Get all movie files and ignore other files. (str files will be handled later)
+		var movielistpath = './public/movies/data/movieindex.js'
+		fs.readdir(configfileResults.moviepath,function(err,files){
+			if (err) throw err;
+			var allMovies = new Array();
+			files.forEach(function(file){
+				if (file.match(/\.(avi|mkv|mpeg|mpg|mov|mp4|txt)/i,"")){
+					movieFiles = file
+					allMovies[allMovies.length] = movieFiles;
+				}
+			});
+			var allMoviesJSON = JSON.stringify(allMovies, null, 4);
+			fs.writeFile(movielistpath, allMoviesJSON, function(e) {
+				if (!e) {
+					console.log('writing', allMoviesJSON);
+				}else{ 
+					console.log('Error getting movielist', e);
+				};
+			});
+		});
+	
+		// Load apps
 		var apps = []
 		//Search app folder for apps and check if tile icon is present
 		fs.readdirSync(__dirname + '/apps').forEach(function(name){
@@ -95,15 +120,15 @@ app.post('/settings', function(req, res){
 	}
 	
 	// Write to JSON file
-	fs.writeFile(configfilepath, JSON.stringify(myData, null, 4), function(err, callback) {
-		var movielistpath = './public/movies/data/movieindex.js'
-		if(err) {
+	fs.writeFile(configfilepath, JSON.stringify(myData, null, 4), function(e) {
+		if(e) {
 			// Respond to client with sever error
 			res.send(500);
 			console.log(err);
 		} else {
-			
-
+			setTimeout(function(){
+				res.render('/thanks');
+			},2000);			
 		}
 	}); 
 });
