@@ -36,6 +36,9 @@ var moviefiles = []
 ,moviefiles = fs.readFileSync(moviefilepath)
 ,moviefileResults = JSON.parse(moviefiles)	
 
+var movieTitle = null
+, noDataPoster = '/movies/css/img/nodata.jpg'
+, noDataBackdrop = '/movies/css/img/overlay.png'
 
 exports.index = function(req, res, next){	
 	res.render('movies',{
@@ -72,12 +75,15 @@ exports.post = function(req, res, next){
 				// Building scraper url
 				var filename = movieRequest.movieTitle
 				, year = filename.match(/\(.*?([0-9]{4}).*?\)/)
-				, stripped = filename.replace(/\.|_|\/|\+|-/g," ")
+				, cd = filename.match(/cd 1|cd 2|cd 3|cd 4|cd1|cd2|cd3|cd4/gi,"") //TODO: Handle multiple CD's properly
+				, stripped = filename.replace(/\.|_|\/|\+|\-/g," ")
 				, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
 				, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|SER|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
 				, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
 				, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
-				, movieTitle = noCountries.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight()
+				, noCD = noCountries.replace(/cd 1|cd 2|cd 3|cd 4|cd1|cd2|cd3|cd4/gi,"")
+				
+				movieTitle = noCD.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight()
 				if (year == null) year = ''
 				
 				// Get scraper results (ajax call)
@@ -135,7 +141,7 @@ exports.post = function(req, res, next){
 						var nodata = new Array();
 						var nodataset = null
 						
-						nodataset = { original_name:movieRequest.movieTitle, imdb_id:'No Data', rating:'No Data', certification:'No Data', overview:'No Data', poster:'/movies/css/img/nodata.jpg', backdrop:'/movies/css/img/overlay.png' }
+						nodataset = { original_name:movieTitle, imdb_id:'No Data', rating:'No Data', certification:'No Data', overview:'No Data', poster:noDataPoster, backdrop:noDataBackdrop }
 						nodata[nodata.length] = nodataset;
 						// write new json with specific scraper results
 						var nodataJSON = JSON.stringify(nodata, null, 4);
@@ -181,6 +187,7 @@ exports.post = function(req, res, next){
 	
 
 	function downloadCache(scraperResult,callback){
+		if(typeof scraperResult){
 			if (configfileResults.highres === 'yes'){
 				var poster = scraperResult.posters[2].image.url
 				, backdrop = scraperResult.backdrops[3].image.url
@@ -188,6 +195,7 @@ exports.post = function(req, res, next){
 				var poster = scraperResult.posters[1].image.url
 				, backdrop = scraperResult.backdrops[2].image.url;
 			}
+			
 			var downloadDir = './public/movies/data/'+movieRequest.movieTitle+'/'
 			// Download images to cache
 			console.log('getting images of movies. Using high quality:', configfileResults.highres)
@@ -196,6 +204,10 @@ exports.post = function(req, res, next){
 			downloader.on('error', function(msg) { console.log('error', msg); });
 			downloader.download(poster, downloadDir);
 			downloader.download(backdrop, downloadDir);
+		}else{
+			var poster = noDataPoster
+			, backdrop = noDataBackdrop
+		}
 		
 		callback(poster,backdrop);
 	};

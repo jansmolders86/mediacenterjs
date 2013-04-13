@@ -63,10 +63,10 @@ app.get("/", function(req, res, next) {
 			if (err) throw err;
 			var allMovies = new Array();
 			files.forEach(function(file){
-				if (file.match(/\.(avi|mkv|mpeg|mpg|mov|mp4|txt)/i,"")){
+			//	if (file.match(/\.(avi|mkv|mpeg|mpg|mov|mp4|txt)/i,"")){
 					movieFiles = file
 					allMovies[allMovies.length] = movieFiles;
-				}
+			//	}
 			});
 			var allMoviesJSON = JSON.stringify(allMovies, null, 4);
 			fs.writeFile(movielistpath, allMoviesJSON, function(e) {
