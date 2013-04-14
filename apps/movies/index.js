@@ -36,10 +36,15 @@ var moviefiles = []
 ,moviefiles = fs.readFileSync(moviefilepath)
 ,moviefileResults = JSON.parse(moviefiles)	
 
+//Defaults
 var movieTitle = null
 , noDataPoster = '/movies/css/img/nodata.jpg'
 , noDataBackdrop = '/movies/css/img/overlay.png'
-
+, original_name = 'No data found...'
+, imdb_id = 'No data found...'
+, rating = 'No data found...'
+, certification = 'No data found...'
+, overview = 'No data found...'
 
 
 
@@ -126,19 +131,22 @@ exports.post = function(req, res, next){
 						downloadCache(scraperResult,function(poster, backdrop) {
 							console.log('download completed, continuing');
 							
-							//Variable for local file location
-							var localImageDir = '/movies/data/'+movieRequest.movieTitle+'/'
-							,localPoster = poster.match(/[^//]+$/i) 
-							,localBackdrop = backdrop.match(/[^//]+$/i) 
-							,posterpath = localImageDir+localPoster
-							,backdroppath = localImageDir+localBackdrop;
-							
-							// Cleaning up scraper data: Usefull scraper result values to variables
-							var original_name = scraperResult.original_name
-							, imdb_id = scraperResult.imdb_id
-							, rating = scraperResult.rating
-							, certification = scraperResult.certification
-							, overview = scraperResult.overview;
+							// Additional error check
+							if(typeof scraperResult){
+								//Variable for local file location
+								var localImageDir = '/movies/data/'+movieRequest.movieTitle+'/'
+								,localPoster = poster.match(/[^//]+$/i) 
+								,localBackdrop = backdrop.match(/[^//]+$/i) 
+								,posterpath = localImageDir+localPoster
+								,backdroppath = localImageDir+localBackdrop;
+								
+								// Cleaning up scraper data: Usefull scraper result values to variables
+								original_name = scraperResult.original_name
+								imdb_id = scraperResult.imdb_id
+								rating = scraperResult.rating
+								certification = scraperResult.certification
+								overview = scraperResult.overview;
+							}
 							
 							//Setting up array
 							var scraperdata = new Array();
@@ -219,6 +227,7 @@ exports.post = function(req, res, next){
 	
 
 	function downloadCache(scraperResult,callback){
+		// Additional error check
 		if(typeof scraperResult){
 			if (configfileResults.highres === 'yes'){
 				var poster = scraperResult.posters[2].image.url
