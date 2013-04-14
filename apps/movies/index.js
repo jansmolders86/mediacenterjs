@@ -22,7 +22,7 @@ var express = require('express')
 , sys = require('util')
 , XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 , downloader = require('downloader')
-, movielistpath = './public/movies/data/movieindex.js'
+, movielistpath = './public/movies/data/movieindex.js';
 
 exports.engine = 'jade';
 
@@ -38,8 +38,8 @@ var moviefiles = []
 
 //Defaults
 var movieTitle = null
-, noDataPoster = '/movies/css/img/nodata.jpg'
-, noDataBackdrop = '/movies/css/img/overlay.png'
+, posterpath = '/movies/css/img/nodata.jpg'
+, backdroppath = '/movies/css/img/overlay.png'
 , original_name = 'No data found...'
 , imdb_id = 'No data found...'
 , rating = 'No data found...'
@@ -76,6 +76,9 @@ exports.update = function(req, res, next){
 		fs.writeFile(movielistpath, allMoviesJSON, function(e) {
 			if (!e) {
 				console.log('writing', allMoviesJSON);
+				setTimeout(function(){
+					res.redirect('/movies');
+				},2000);
 			}else{ 
 				console.log('Error getting movielist', e);
 			};
@@ -136,9 +139,10 @@ exports.post = function(req, res, next){
 								//Variable for local file location
 								var localImageDir = '/movies/data/'+movieRequest.movieTitle+'/'
 								,localPoster = poster.match(/[^//]+$/i) 
-								,localBackdrop = backdrop.match(/[^//]+$/i) 
-								,posterpath = localImageDir+localPoster
-								,backdroppath = localImageDir+localBackdrop;
+								,localBackdrop = backdrop.match(/[^//]+$/i);
+								
+								posterpath = localImageDir+localPoster
+								backdroppath = localImageDir+localBackdrop;
 								
 								// Cleaning up scraper data: Usefull scraper result values to variables
 								original_name = scraperResult.original_name
@@ -181,7 +185,7 @@ exports.post = function(req, res, next){
 						var nodata = new Array();
 						var nodataset = null
 						
-						nodataset = { original_name:movieTitle, imdb_id:'No Data', rating:'No Data', certification:'No Data', overview:'No Data', poster:noDataPoster, backdrop:noDataBackdrop }
+						nodataset = { original_name:movieTitle, imdb_id:'No Data', rating:'No Data', certification:'No Data', overview:'No Data', poster:posterpath, backdrop:backdroppath }
 						nodata[nodata.length] = nodataset;
 						// write new json with specific scraper results
 						var nodataJSON = JSON.stringify(nodata, null, 4);
