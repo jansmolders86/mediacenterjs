@@ -125,41 +125,47 @@
 	function _handleVisibleMovies(o, title, visibleMovie){
 		// Post the movie to the sever so we get data back
 		// we can use to fill the movie specifications
-		
-		$.ajax('/movies/post/', {
-			type: 'post',
-			data: {movieTitle : title},
-			success: function(data) { 
-				var movieData = $.parseJSON(data);
-			
-				visibleMovie.find('.original_name').html(movieData[0].original_name) 
+		setTimeout(function(){
+			$.ajax('/movies/post/', {
+				type: 'post',
+				data: {movieTitle : title},
+				success: function(data) { 
+					var movieData = $.parseJSON(data);
 				
-				/* Give the plugin time to load the (new) image(s) */
-				setTimeout(function(){
-					visibleMovie.find("img.movieposter").attr('src',movieData[0].poster);			
-					visibleMovie.find("img.movieposter").addClass('coverfound');
-				},2000);
+					visibleMovie.find('.original_name').html(movieData[0].original_name) 
+					
+					/* Give the plugin time to load the (new) image(s) */
+					setTimeout(function(){
+						visibleMovie.find("img.movieposter").attr('src',movieData[0].poster);			
+						visibleMovie.find("img.movieposter").addClass('coverfound');
+					},1000);
 
-				visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
-				
-				//TODO: handle detail click with jquery to show movie details
-				// Movie detail page
-				/*if( $('#moviedetails').length){
-					if (item.movieTitle == $('#moviedetails').find('h1').html()){
-						$('#backdrop').find("img").attr('src',movieData[0].backdrop);
-						$('#moviedetails').find('#overview').append('<p>'+movieData[0].overview+'</p>');
-						$('#moviedetails').find('#poster > img').attr('src',movieData[0].poster).addClass('fadein');
-						$('#moviedetails').find('#poster > .imdbrating').append('<p> IMDB <h3>'+movieData[0].rating+'</h3></p>');
-						$('#moviedetails').find('#poster > .certification').html(movieData[0].certification);
-						$('#moviedetailswrapper').addClass('fadeinslow');
+					visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
+					
+					if(movieData[0].cdNumber != null){
+						visibleMovie.find("a,play").append('<div class="cdNumber">'+movieData[0].cdNumber+'<div>');
 					}
-				}	
-				*/
-			},
-			error  : function(data) {
-				console.log('e', data);
-			}
-		});
+					
+					
+					//TODO: handle detail click with jquery to show movie details
+					// Movie detail page
+					/*if( $('#moviedetails').length){
+						if (item.movieTitle == $('#moviedetails').find('h1').html()){
+							$('#backdrop').find("img").attr('src',movieData[0].backdrop);
+							$('#moviedetails').find('#overview').append('<p>'+movieData[0].overview+'</p>');
+							$('#moviedetails').find('#poster > img').attr('src',movieData[0].poster).addClass('fadein');
+							$('#moviedetails').find('#poster > .imdbrating').append('<p> IMDB <h3>'+movieData[0].rating+'</h3></p>');
+							$('#moviedetails').find('#poster > .certification').html(movieData[0].certification);
+							$('#moviedetailswrapper').addClass('fadeinslow');
+						}
+					}	
+					*/
+				},
+				error  : function(data) {
+					console.log('e', data);
+				}
+			});
+		},1000);
 	};	
 	
 

@@ -38,6 +38,7 @@ var moviefiles = []
 
 //Defaults
 var movieTitle = null
+, cdNumber = null
 , posterpath = '/movies/css/img/nodata.jpg'
 , backdroppath = '/movies/css/img/overlay.png'
 , original_name = 'No data found...'
@@ -115,15 +116,15 @@ exports.post = function(req, res, next){
 				// Building scraper url
 				var filename = movieRequest.movieTitle
 				, year = filename.match(/\(.*?([0-9]{4}).*?\)/)
-				, cd = filename.match(/cd 1|cd 2|cd 3|cd 4|cd1|cd2|cd3|cd4/gi,"") //TODO: Handle multiple CD's properly
 				, stripped = filename.replace(/\.|_|\/|\+|\-/g," ")
 				, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
 				, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|SER|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
 				, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
 				, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
-				, noCD = noCountries.replace(/cd 1|cd 2|cd 3|cd 4|cd1|cd2|cd3|cd4/gi,"")
+				, noCD = noCountries.replace(/cd 1|cd 2|cd 3|cd 4|cd1|cd2|cd3|cd4/gi,"");
 				
-				movieTitle = noCD.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight()
+				cdNumber = filename.match(/cd 1|cd 2|cd 3|cd 4|cd1|cd2|cd3|cd4/gi,"");
+				movieTitle = noCD.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight();
 				if (year == null) year = ''
 				
 				// Get scraper results (ajax call)
@@ -150,63 +151,38 @@ exports.post = function(req, res, next){
 								rating = scraperResult.rating
 								certification = scraperResult.certification
 								overview = scraperResult.overview;
-							}
-							
-							//Setting up array
-							var scraperdata = new Array();
-							var scraperdataset = null
-							
-							scraperdataset = { original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:posterpath, backdrop:backdroppath }
-							scraperdata[scraperdata.length] = scraperdataset;
-							
-							// write new json with specific scraper results
-							var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-							
-							fs.writeFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', scraperdataJSON, function(e) {
-								if (!e) {
-									console.log('written scraperdata');
-									// Read written file and send to client.
-									fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
-										if(!err){
-											console.log(data)
-											res.send(data);
-										}else{
-											console.log('Cannot read scraper data', err)
-										}
-									});
-								}else{ 
-									console.log('Error getting movielist', e);
-								};
-							});
-						});	
-					} else {
-						//TODO: Do this better
-						//Setting up array
-						var nodata = new Array();
-						var nodataset = null
-						
-						nodataset = { original_name:movieTitle, imdb_id:'No Data', rating:'No Data', certification:'No Data', overview:'No Data', poster:posterpath, backdrop:backdroppath }
-						nodata[nodata.length] = nodataset;
-						// write new json with specific scraper results
-						var nodataJSON = JSON.stringify(nodata, null, 4);
-							
-						fs.writeFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', nodataJSON, function(e) {
-							if (!e) {
-								console.log('written nodata');
-								// Read written file and send to client.
-								fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
-									if(!err){
-										console.log(data)
-										res.send(data);
-									}else{
-										console.log('Cannot write no scraper data', err)
-									}
-								});
-							}else{ 
-								console.log('Error', e);
 							};
 						});
-					}						
+					}; 
+					
+							
+					//Setting up array for writing
+					var scraperdata = new Array();
+					var scraperdataset = null
+					
+					scraperdataset = { original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:posterpath, backdrop:backdroppath, cdNumber:cdNumber }
+					scraperdata[scraperdata.length] = scraperdataset;
+					
+					// write new json with specific scraper results
+					var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+					
+					fs.writeFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', scraperdataJSON, function(e) {
+						if (!e) {
+							console.log('written scraperdata');
+							// Read written file and send to client.
+							fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
+								if(!err){
+									console.log(data)
+									res.send(data);
+								}else{
+									console.log('Cannot read scraper data', err)
+								}
+							});
+						}else{ 
+							console.log('Error getting movielist', e);
+						};
+					});
+					
 				});
 			}
 		});
