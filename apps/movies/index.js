@@ -40,12 +40,44 @@ var movieTitle = null
 , noDataPoster = '/movies/css/img/nodata.jpg'
 , noDataBackdrop = '/movies/css/img/overlay.png'
 
+
+
+
 exports.index = function(req, res, next){	
 	res.render('movies',{
 		movies: moviefileResults,
 		configuration: configfileResults.highres
 	});
 };
+
+
+
+exports.update = function(req, res, next){		
+	//Get all movie files and ignore other files. (
+	//str files will be handled later)
+	var movielistpath = './public/movies/data/movieindex.js'
+	fs.readdir(configfileResults.moviepath,function(err,files){
+		if (err) throw err;
+		var allMovies = new Array();
+		files.forEach(function(file){
+			if (file.match(/\.(bmp|jpg|png|gif|mp3|sub|srt|txt|doc|docx|pdf|nfo|cbr|xml|idx|exe|rar|zip|7z|diz|par|torrent|par2|ppt|info|md|db|)/i,"")){
+				return
+			} else {
+				movieFiles = file
+				allMovies[allMovies.length] = movieFiles;
+			}
+		});
+		var allMoviesJSON = JSON.stringify(allMovies, null, 4);
+		fs.writeFile(movielistpath, allMoviesJSON, function(e) {
+			if (!e) {
+				console.log('writing', allMoviesJSON);
+			}else{ 
+				console.log('Error getting movielist', e);
+			};
+		});
+	});
+};
+
 
 exports.post = function(req, res, next){		
 	var movieRequest = req.body;
@@ -212,6 +244,9 @@ exports.post = function(req, res, next){
 		callback(poster,backdrop);
 	};
 };
+
+
+
 
 exports.play = function(req, res, next){
 
