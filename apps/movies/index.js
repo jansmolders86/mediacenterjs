@@ -136,7 +136,7 @@ exports.post = function(req, res, next){
 						downloadCache(scraperResult,function(poster, backdrop) {
 							console.log('Cache download completed');
 							// Additional error check
-							if(typeof scraperResult){
+							if(typeof scraperResult && scraperResult.posters.length > 2 && scraperResult.backdrops.length > 3){
 								var localImageDir = '/movies/data/'+movieRequest.movieTitle+'/'
 								,localPoster = poster.match(/[^//]+$/i) 
 								,localBackdrop = backdrop.match(/[^//]+$/i);
