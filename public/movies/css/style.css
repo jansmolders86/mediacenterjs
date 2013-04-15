@@ -76,6 +76,30 @@
 	float: left;
 }
 
+
+.movieposter .play .cdNumber{
+	width:90px;
+	height:80px;
+	background:url(img/cdnumber-bg.png) no-repeat;
+	position:absolute;
+	top:62px;
+	right:0;
+	z-index:3;
+}
+
+.movieposter .play .cdNumber > span{
+	color:#fff;
+	font-size:14px;
+	-webkit-transform: rotate(44.5deg);  /* Chrome, Safari 3.1+ */
+    -moz-transform: rotate(44.5deg);  /* Firefox 3.5-15 */
+    -ms-transform: rotate(44.5deg);  /* IE 9 */
+    -o-transform: rotate(44.5deg);  /* Opera 10.50-12.00 */
+	transform: rotate(44.5deg); 
+	font-weight:bold;
+	margin-left: 47px;
+	margin-top: 17px;
+}
+
 .movieposter img{ 
 	float:left; 
 	width:32px;

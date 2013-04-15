@@ -36,16 +36,7 @@ var moviefiles = []
 ,moviefiles = fs.readFileSync(moviefilepath)
 ,moviefileResults = JSON.parse(moviefiles)	
 
-//Defaults
-var movieTitle = null
-, cdNumber = null
-, posterpath = '/movies/css/img/nodata.jpg'
-, backdroppath = '/movies/css/img/overlay.png'
-, original_name = 'No data found...'
-, imdb_id = 'No data found...'
-, rating = 'No data found...'
-, certification = 'No data found...'
-, overview = 'No data found...';
+
 
 
 
@@ -89,7 +80,19 @@ exports.update = function(req, res, next){
 };
 
 
-exports.post = function(req, res, next){		
+exports.post = function(req, res, next){	
+	//Defaults
+	var movieTitle = null
+	, cdNumber = null
+	, posterpath = '/movies/css/img/nodata.jpg'
+	, backdroppath = '/movies/css/img/overlay.png'
+	, original_name = 'No data found...'
+	, imdb_id = 'No data found...'
+	, rating = 'No data found...'
+	, certification = 'No data found...'
+	, overview = 'No data found...';
+
+	
 	var movieRequest = req.body;
 	console.log('movierequest', movieRequest.movieTitle)
 	
@@ -199,7 +202,7 @@ exports.post = function(req, res, next){
 	
 	function downloadCache(scraperResult,callback){
 		// Additional error check
-		if(typeof scraperResult){
+		if(typeof scraperResult && scraperResult.posters.length > 2 && scraperResult.backdrops.length > 3){
 			if (configfileResults.highres === 'yes'){
 				var poster = scraperResult.posters[2].image.url
 				, backdrop = scraperResult.backdrops[3].image.url
@@ -225,7 +228,7 @@ exports.play = function(req, res, next){
 
 	//TODO: Get player to work:  
 	//TODO: Add nice curtain like animation (black divs from side to side closing into eachother)
-	
+	/*
 	var filePath = 
 	var stat = fs.statSync(filePath);
 
@@ -237,5 +240,5 @@ exports.play = function(req, res, next){
 	var readStream = fs.createReadStream(filePath);
 	// We replaced all the event handlers with a simple call to util.pump()
 	util.pump(readStream, response);
-	
+	*/
 };
