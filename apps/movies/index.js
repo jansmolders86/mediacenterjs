@@ -45,7 +45,7 @@ var movieTitle = null
 , imdb_id = 'No data found...'
 , rating = 'No data found...'
 , certification = 'No data found...'
-, overview = 'No data found...'
+, overview = 'No data found...';
 
 
 
@@ -55,7 +55,6 @@ exports.index = function(req, res, next){
 		configuration: configfileResults.highres
 	});
 };
-
 
 
 exports.update = function(req, res, next){		
@@ -96,7 +95,6 @@ exports.post = function(req, res, next){
 	
 	//Check if folder already exists
 	if (fs.existsSync('./public/movies/data/'+movieRequest.movieTitle)) {
-		console.log(movieRequest.movieTitle+' data found on HDD');
 		// Read cached file and send to client.
 		fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
 			if(!err){
@@ -108,7 +106,6 @@ exports.post = function(req, res, next){
 		});
 	} else {
 		console.log('New movie, getting details')
-		// Create new folder
 		fs.mkdir('./public/movies/data/'+movieRequest.movieTitle, 0777, function (err) {
 			if (err) {
 				console.log('Error creating folder',err);
@@ -133,13 +130,10 @@ exports.post = function(req, res, next){
 				getFile("http://api.themoviedb.org/2.1/Movie.search/"+configfileResults.language+"/json/1d0a02550b7d3eb40e4e8c47a3d8ffc6/"+movieTitle+"?year="+ year +"?=", function(scraperResult) {
 
 					if (scraperResult != 'Nothing found.') {
-						// Download images
 						downloadCache(scraperResult,function(poster, backdrop) {
-							console.log('download completed, continuing');
-							
+							console.log('Cache download completed');
 							// Additional error check
 							if(typeof scraperResult){
-								//Variable for local file location
 								var localImageDir = '/movies/data/'+movieRequest.movieTitle+'/'
 								,localPoster = poster.match(/[^//]+$/i) 
 								,localBackdrop = backdrop.match(/[^//]+$/i);
@@ -147,7 +141,8 @@ exports.post = function(req, res, next){
 								posterpath = localImageDir+localPoster
 								backdroppath = localImageDir+localBackdrop;
 								
-								// Cleaning up scraper data: Usefull scraper result values to variables
+								// Cleaning up scraper data: 
+								// Usefull scraper result values to variables
 								original_name = scraperResult.original_name
 								imdb_id = scraperResult.imdb_id
 								rating = scraperResult.rating
@@ -165,14 +160,10 @@ exports.post = function(req, res, next){
 					
 					scraperdataset = { original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:posterpath, backdrop:backdroppath, cdNumber:cdNumber }
 					scraperdata[scraperdata.length] = scraperdataset;
-					
-					// write new json with specific scraper results
 					var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
 					
 					fs.writeFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', scraperdataJSON, function(e) {
 						if (!e) {
-							console.log('written scraperdata');
-							// Read written file and send to client.
 							fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
 								if(!err){
 									console.log(data)
@@ -191,24 +182,21 @@ exports.post = function(req, res, next){
 		});
 	};
 	
-	// Get Scraper info
 	function getFile(url,callback) { 
 		xhr = new XMLHttpRequest();  
 		var results = [];
 		xhr.open("GET", url);  
 		xhr.onreadystatechange = function(){
-			// If status is ready
 			if (this.readyState == 4 && this.status >= 200 && this.status < 300 || this.status === 304) {
 				results = eval(this.responseText);
 				callback(results[0]);
 			} else if (this.status === 401){
-				console.log('Error 401')
+				console.log('Error 401');
 			};
 		};
 		xhr.send(null);
 	};
 	
-	// Download images to local caches
 	function downloadCache(scraperResult,callback){
 		// Additional error check
 		if(typeof scraperResult){
@@ -219,11 +207,7 @@ exports.post = function(req, res, next){
 				var poster = scraperResult.posters[1].image.url
 				, backdrop = scraperResult.backdrops[2].image.url;
 			}
-			
 			var downloadDir = './public/movies/data/'+movieRequest.movieTitle+'/'
-			// Download images to cache
-			console.log('getting images of movies. Using high quality:', configfileResults.highres)
-			// Download the poster
 			downloader.on('done', function(msg) { console.log('done', msg); });
 			downloader.on('error', function(msg) { console.log('error', msg); });
 			downloader.download(poster, downloadDir);
@@ -231,13 +215,10 @@ exports.post = function(req, res, next){
 		}else{
 			var poster = posterpath
 			, backdrop = backdroppath
-		}
-		
+		};
 		callback(poster,backdrop);
 	};
 };
-
-
 
 
 exports.play = function(req, res, next){
@@ -257,4 +238,4 @@ exports.play = function(req, res, next){
 		// We replaced all the event handlers with a simple call to util.pump()
 		util.pump(readStream, response);
 	*/
-}
+};
