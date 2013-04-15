@@ -226,16 +226,16 @@ exports.play = function(req, res, next){
 	//TODO: Get player to work:  
 	//TODO: Add nice curtain like animation (black divs from side to side closing into eachother)
 	
-   /* var filePath = 
-		var stat = fs.statSync(filePath);
+	var filePath = 
+	var stat = fs.statSync(filePath);
 
-		response.writeHead(200, {
-			'Content-Type': 'video/avi',
-			'Content-Length': stat.size
-		});
+	response.writeHead(200, {
+		'Content-Type': 'video/avi',
+		'Content-Length': stat.size
+	});
 
-		var readStream = fs.createReadStream(filePath);
-		// We replaced all the event handlers with a simple call to util.pump()
-		util.pump(readStream, response);
-	*/
+	var readStream = fs.createReadStream(filePath);
+	// We replaced all the event handlers with a simple call to util.pump()
+	util.pump(readStream, response);
+	
 };
