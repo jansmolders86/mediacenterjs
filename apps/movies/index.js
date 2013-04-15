@@ -59,14 +59,16 @@ exports.index = function(req, res, next){
 
 
 exports.update = function(req, res, next){		
-	//Get all movie files and ignore other files. (
-	//str files will be handled later)
+	//Get all movie files and ignore other files. 
+	//(str files will be handled later)
 	var movielistpath = './public/movies/data/movieindex.js'
+	
+	console.log('Gettign movies from:', configfileResults.moviepath)
 	fs.readdir(configfileResults.moviepath,function(err,files){
 		if (err) throw err;
 		var allMovies = new Array();
 		files.forEach(function(file){
-			if (file.match(/\.(bmp|jpg|png|gif|mp3|sub|srt|txt|doc|docx|pdf|nfo|cbr|xml|idx|exe|rar|zip|7z|diz|par|torrent|par2|ppt|info|md|db|)/i,"")){
+			if (file.match(/\.(bmp|jpg|png|gif|mp3|sub|srt|txt|doc|docx|pdf|nfo|cbr|xml|idx|exe|rar|zip|7z|diz|par|torrent|par2|ppt|info|md|db)/)){
 				return
 			} else {
 				movieFiles = file
@@ -155,6 +157,7 @@ exports.post = function(req, res, next){
 						});
 					}; 
 					
+					//http://api.themoviedb.org/2.1/Genres.getList/en/xml/APIKEY  //TODO: get Genre, or even better, upgrade to 3.0
 							
 					//Setting up array for writing
 					var scraperdata = new Array();
@@ -188,7 +191,7 @@ exports.post = function(req, res, next){
 		});
 	};
 	
-	// Get Scraper info by doing a synchronous AJAX call  
+	// Get Scraper info
 	function getFile(url,callback) { 
 		xhr = new XMLHttpRequest();  
 		var results = [];
@@ -205,7 +208,7 @@ exports.post = function(req, res, next){
 		xhr.send(null);
 	};
 	
-
+	// Download images to local caches
 	function downloadCache(scraperResult,callback){
 		// Additional error check
 		if(typeof scraperResult){
@@ -226,8 +229,8 @@ exports.post = function(req, res, next){
 			downloader.download(poster, downloadDir);
 			downloader.download(backdrop, downloadDir);
 		}else{
-			var poster = noDataPoster
-			, backdrop = noDataBackdrop
+			var poster = posterpath
+			, backdrop = backdroppath
 		}
 		
 		callback(poster,backdrop);
