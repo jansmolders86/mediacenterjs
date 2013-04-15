@@ -30,17 +30,15 @@ var configfile = []
 ,configfilepath = './configuration/setup.js'
 ,configfile = fs.readFileSync(configfilepath)
 ,configfileResults = JSON.parse(configfile);	
-	
-var moviefiles = []
-,moviefilepath = './public/movies/data/movieindex.js'
-,moviefiles = fs.readFileSync(moviefilepath)
-,moviefileResults = JSON.parse(moviefiles)	
-
-
-
 
 
 exports.index = function(req, res, next){	
+
+	var moviefiles = []
+	,moviefilepath = './public/movies/data/movieindex.js'
+	,moviefiles = fs.readFileSync(moviefilepath)
+	,moviefileResults = JSON.parse(moviefiles)	
+
 	res.render('movies',{
 		movies: moviefileResults,
 		configuration: configfileResults.highres
