@@ -33,22 +33,28 @@ var configfile = []
 
 
 exports.index = function(req, res, next){	
-
-	var moviefiles = []
-	,moviefilepath = './public/movies/data/movieindex.js'
-	,moviefiles = fs.readFileSync(moviefilepath)
-	,moviefileResults = JSON.parse(moviefiles)	
-
-	res.render('movies',{
-		movies: moviefileResults,
-		configuration: configfileResults.highres
+	updateMovies(function(){
+		var moviefiles = []
+		,moviefilepath = './public/movies/data/movieindex.js'
+		,moviefiles = fs.readFileSync(moviefilepath)
+		,moviefileResults = JSON.parse(moviefiles)	
+		
+		res.render('movies',{
+			movies: moviefileResults,
+			configuration: configfileResults.highres
+		});
 	});
 };
 
+//Manual update
+exports.update = function(req, res){		
+	updateMovies(function(){
+		res.redirect('/movies');
+	});	
+};
 
-exports.update = function(req, res, next){		
-	//Get all movie files and ignore other files. 
-	//(str files will be handled later)
+//Generic update function
+function updateMovies(callback) { 
 	var movielistpath = './public/movies/data/movieindex.js'
 	
 	console.log('Gettign movies from:', configfileResults.moviepath)
@@ -67,15 +73,14 @@ exports.update = function(req, res, next){
 		fs.writeFile(movielistpath, allMoviesJSON, function(e) {
 			if (!e) {
 				console.log('writing', allMoviesJSON);
-				setTimeout(function(){
-					res.redirect('/movies');
-				},2000);
+				callback();
 			}else{ 
 				console.log('Error getting movielist', e);
 			};
 		});
 	});
 };
+
 
 
 exports.post = function(req, res, next){	
@@ -220,7 +225,6 @@ exports.post = function(req, res, next){
 		callback(poster,backdrop);
 	};
 };
-
 
 exports.play = function(req, res, next){
 
