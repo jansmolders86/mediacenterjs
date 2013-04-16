@@ -33,7 +33,7 @@ var configfile = []
 
 
 exports.index = function(req, res, next){	
-	updateMovies(function(){
+	updateMovies(req, res, function(status){
 		var moviefiles = []
 		,moviefilepath = './public/movies/data/movieindex.js'
 		,moviefiles = fs.readFileSync(moviefilepath)
@@ -41,6 +41,7 @@ exports.index = function(req, res, next){
 		
 		res.render('movies',{
 			movies: moviefileResults,
+			status:status,
 			configuration: configfileResults.highres
 		});
 	});
@@ -48,36 +49,43 @@ exports.index = function(req, res, next){
 
 //Manual update
 exports.update = function(req, res){		
-	updateMovies(function(){
+	updateMovies(req, res, function(status){
 		res.redirect('/movies');
 	});	
 };
 
-//Generic update function
-function updateMovies(callback) { 
+//Update function
+function updateMovies(req, res, callback) { 
 	var movielistpath = './public/movies/data/movieindex.js'
+	, status = null;
 	
 	console.log('Gettign movies from:', configfileResults.moviepath)
 	fs.readdir(configfileResults.moviepath,function(err,files){
-		if (err) throw err;
-		var allMovies = new Array();
-		files.forEach(function(file){
-			if (file.match(/\.(bmp|jpg|png|gif|mp3|sub|srt|txt|doc|docx|pdf|nfo|cbr|xml|idx|exe|rar|zip|7z|diz|par|torrent|par2|ppt|info|md|db)/)){
-				return
-			} else {
-				movieFiles = file
-				allMovies[allMovies.length] = movieFiles;
-			}
-		});
-		var allMoviesJSON = JSON.stringify(allMovies, null, 4);
-		fs.writeFile(movielistpath, allMoviesJSON, function(e) {
-			if (!e) {
-				console.log('writing', allMoviesJSON);
-				callback();
-			}else{ 
-				console.log('Error getting movielist', e);
-			};
-		});
+		if (err){
+			status = 'wrong or bad directory, please specify a existing directory';
+			console.log(status);
+			callback(status);
+			//res.redirect('/settings');
+		}else{
+			var allMovies = new Array();
+			files.forEach(function(file){
+				if (file.match(/\.(bmp|jpg|png|gif|mp3|sub|srt|txt|doc|docx|pdf|nfo|cbr|xml|idx|exe|rar|zip|7z|diz|par|torrent|par2|ppt|info|md|db)/)){
+					return
+				} else {
+					movieFiles = file
+					allMovies[allMovies.length] = movieFiles;
+				}
+			});
+			var allMoviesJSON = JSON.stringify(allMovies, null, 4);
+			fs.writeFile(movielistpath, allMoviesJSON, function(e) {
+				if (!e) {
+					console.log('writing', allMoviesJSON);
+					callback(status);
+				}else{ 
+					console.log('Error getting movielist', e);
+				};
+			});
+		};
 	});
 };
 

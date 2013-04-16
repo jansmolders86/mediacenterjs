@@ -30,17 +30,20 @@ html(lang="en")
 				img(src="/core/icons/back.png")
 			h1 Movies
 			#moviebrowser
-				.posterview
-					ul.movieposters
-						each movie in movies
-							li.movieposter 
-								.info
-									a.moviedetails(href="") 
-										img(src="/movies/img/info.png")
-								a.play(href="/movies/play/"+ movie.filename)
-									img(src="/movies/img/loading.gif").movieposter							
-								span.original_name	Loading...
-								span.title= movie
+				if status !== null
+					p.gui= status
+				else
+					.posterview
+						ul.movieposters
+							each movie in movies
+								li.movieposter 
+									.info
+										a.moviedetails(href="") 
+											img(src="/movies/img/info.png")
+									a.play(href="/movies/play/"+ movie.filename)
+										img(src="/movies/img/loading.gif").movieposter							
+									span.original_name	Loading...
+									span.title= movie		
 			a#prev
 			a#next
 		a#view

@@ -1,5 +1,5 @@
 {
-    "moviepath": "c:/temp",
+    "moviepath": "c:/test",
     "highres": "yes",
     "musicpath": "tbd",
     "tvpath": "tbd",
