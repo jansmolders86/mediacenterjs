@@ -22,7 +22,8 @@ var express = require('express')
 , sys = require('util')
 , XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 , downloader = require('downloader')
-, movielistpath = './public/movies/data/movieindex.js';
+, movielistpath = './public/movies/data/movieindex.js'
+, request = require('request');
 
 exports.engine = 'jade';
 
@@ -65,7 +66,6 @@ function updateMovies(req, res, callback) {
 			status = 'wrong or bad directory, please specify a existing directory';
 			console.log(status);
 			callback(status);
-			//res.redirect('/settings');
 		}else{
 			var allMovies = new Array();
 			files.forEach(function(file){
@@ -92,7 +92,6 @@ function updateMovies(req, res, callback) {
 
 
 exports.post = function(req, res, next){	
-	//Defaults
 	var movieTitle = null
 	, cdNumber = null
 	, posterpath = '/movies/css/img/nodata.jpg'
@@ -140,6 +139,35 @@ exports.post = function(req, res, next){
 				movieTitle = noCD.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight();
 				if (year == null) year = ''
 				
+
+				/* 3.0 implementation
+				
+					?api_key=7983694ec277523c31ff1212e35e5fa3
+					
+					request({
+					  url: "http://themoviedb.apiary.io/3/search/movie",
+					  headers: {"Accept": "application/json"},
+					  qs: {"api_key":"7983694ec277523c31ff1212e35e5fa3", "query":"a new hope"}
+					  method: "GET"
+					}, function (error, response, body) {
+					  console.log("Status", response.statusCode);
+					  console.log("Headers", JSON.stringify(response.headers));
+					  console.log("Reponse received", body);
+					});
+					
+					
+					request({
+					  url: "http://themoviedb.apiary.io/3/movie/{id}",
+					  headers: {"Accept": "application/json"},
+					  method: "GET"
+					}, function (error, response, body) {
+					  console.log("Status", response.statusCode);
+					  console.log("Headers", JSON.stringify(response.headers));
+					  console.log("Reponse received", body);
+					});
+				
+				*/
+				
 				// Get scraper results (ajax call)
 				getFile("http://api.themoviedb.org/2.1/Movie.search/"+configfileResults.language+"/json/1d0a02550b7d3eb40e4e8c47a3d8ffc6/"+movieTitle+"?year="+ year +"?=", function(scraperResult) {
 
@@ -165,9 +193,7 @@ exports.post = function(req, res, next){
 							};
 						});
 					}; 
-					
-					//http://api.themoviedb.org/2.1/Genres.getList/en/xml/APIKEY  //TODO: get Genre, or even better, upgrade to 3.0
-							
+											
 					//Setting up array for writing
 					var scraperdata = new Array();
 					var scraperdataset = null
@@ -195,6 +221,7 @@ exports.post = function(req, res, next){
 			}
 		});
 	};
+	
 	
 	function getFile(url,callback) { 
 		xhr = new XMLHttpRequest();  
