@@ -23,7 +23,7 @@ var express = require('express')
 , XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 , downloader = require('downloader')
 , movielistpath = './public/movies/data/movieindex.js'
-, request = require('request');
+, request = require("request");;
 
 exports.engine = 'jade';
 
@@ -93,13 +93,17 @@ function updateMovies(req, res, callback) {
 
 exports.post = function(req, res, next){	
 	var movieTitle = null
+	, api_key = '7983694ec277523c31ff1212e35e5fa3'
 	, cdNumber = null
-	, posterpath = '/movies/css/img/nodata.jpg'
-	, backdroppath = '/movies/css/img/overlay.png'
+	, id = 'No data found...'
+	, poster_path = '/movies/css/img/nodata.jpg'
+	, backdrop_path = '/movies/css/img/overlay.png'
 	, original_name = 'No data found...'
 	, imdb_id = 'No data found...'
 	, rating = 'No data found...'
 	, certification = 'No data found...'
+	, genre = 'No data found...'
+	, runtime = 'No data found...'
 	, overview = 'No data found...';
 
 	
@@ -139,84 +143,62 @@ exports.post = function(req, res, next){
 				movieTitle = noCD.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight();
 				if (year == null) year = ''
 				
+				getFile("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&year="+ year +"&language="+configfileResults.language+"&=", function(response) {
+					if (response != 'Nothing found.') {
+					
+						var requestResponse = JSON.parse(response)
+						,requestInitialDetails = requestResponse.results[0]
+				
+						console.log(requestInitialDetails)
+						 downloadCache(requestInitialDetails,function(poster, backdrop) {
 
-				/* 3.0 implementation
-				
-					?api_key=7983694ec277523c31ff1212e35e5fa3
-					
-					request({
-					  url: "http://themoviedb.apiary.io/3/search/movie",
-					  headers: {"Accept": "application/json"},
-					  qs: {"api_key":"7983694ec277523c31ff1212e35e5fa3", "query":"a new hope"}
-					  method: "GET"
-					}, function (error, response, body) {
-					  console.log("Status", response.statusCode);
-					  console.log("Headers", JSON.stringify(response.headers));
-					  console.log("Reponse received", body);
-					});
-					
-					
-					request({
-					  url: "http://themoviedb.apiary.io/3/movie/{id}",
-					  headers: {"Accept": "application/json"},
-					  method: "GET"
-					}, function (error, response, body) {
-					  console.log("Status", response.statusCode);
-					  console.log("Headers", JSON.stringify(response.headers));
-					  console.log("Reponse received", body);
-					});
-				
-				*/
-				
-				// Get scraper results (ajax call)
-				getFile("http://api.themoviedb.org/2.1/Movie.search/"+configfileResults.language+"/json/1d0a02550b7d3eb40e4e8c47a3d8ffc6/"+movieTitle+"?year="+ year +"?=", function(scraperResult) {
-
-					if (scraperResult != 'Nothing found.') {
-						downloadCache(scraperResult,function(poster, backdrop) {
-							console.log('Cache download completed');
 							// Additional error check
-							if(typeof scraperResult && scraperResult.posters.length > 2 && scraperResult.backdrops.length > 3){
+							if(typeof response){
 								var localImageDir = '/movies/data/'+movieRequest.movieTitle+'/'
-								,localPoster = poster.match(/[^//]+$/i) 
-								,localBackdrop = backdrop.match(/[^//]+$/i);
+								poster_path = localImageDir+requestInitialDetails.poster_path;
+								backdrop_path = localImageDir+requestInitialDetails.backdrop_path;
+								id = requestInitialDetails.id;
+								original_name = requestInitialDetails.original_title;
+									
+								getFile("http://api.themoviedb.org/3/movie/" + id + "?api_key="+api_key+"&=", function(response) {
 								
-								posterpath = localImageDir+localPoster
-								backdroppath = localImageDir+localBackdrop;
+									var secondRequestResponse = JSON.parse(response);
+									
+									//genre = response.genres[0].name;
+									runtime = secondRequestResponse.runtime;
+									imdb_id = secondRequestResponse.imdb_id;
+									rating = secondRequestResponse.rating;
+									certification = secondRequestResponse.certification;
+									overview = secondRequestResponse.overview;
+									
+									//Setting up array for writing
+									var scraperdata = new Array()
+									,scraperdataset = null;
+									
+									scraperdataset = { id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+									scraperdata[scraperdata.length] = scraperdataset;
+									var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+									
+									fs.writeFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', scraperdataJSON, function(e) {
+										if (!e) {
+											fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
+												if(!err){
+													console.log(data)
+													res.send(data);
+												}else{
+													console.log('Cannot read scraper data', err)
+												}
+											});
+										}else{ 
+											console.log('Error getting movielist', e);
+										};
+									});
+									
+								});
 								
-								// Cleaning up scraper data: 
-								// Usefull scraper result values to variables
-								original_name = scraperResult.original_name
-								imdb_id = scraperResult.imdb_id
-								rating = scraperResult.rating
-								certification = scraperResult.certification
-								overview = scraperResult.overview;
 							};
-						});
-					}; 
-											
-					//Setting up array for writing
-					var scraperdata = new Array();
-					var scraperdataset = null
-					
-					scraperdataset = { original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:posterpath, backdrop:backdroppath, cdNumber:cdNumber }
-					scraperdata[scraperdata.length] = scraperdataset;
-					var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-					
-					fs.writeFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', scraperdataJSON, function(e) {
-						if (!e) {
-							fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
-								if(!err){
-									console.log(data)
-									res.send(data);
-								}else{
-									console.log('Cannot read scraper data', err)
-								}
-							});
-						}else{ 
-							console.log('Error getting movielist', e);
-						};
-					});
-					
+						}); 
+					};
 				});
 			}
 		});
@@ -224,38 +206,43 @@ exports.post = function(req, res, next){
 	
 	
 	function getFile(url,callback) { 
-		xhr = new XMLHttpRequest();  
-		var results = [];
-		xhr.open("GET", url);  
-		xhr.onreadystatechange = function(){
-			if (this.readyState == 4 && this.status >= 200 && this.status < 300 || this.status === 304) {
-				results = eval(this.responseText);
-				callback(results[0]);
-			} else if (this.status === 401){
-				console.log('Error 401');
-			};
-		};
-		xhr.send(null);
+		request({
+			url: url,
+			headers: {"Accept": "application/json"},
+			method: "GET"
+		}, function (error, response, body) {
+			if(!error){
+				callback(body);
+			}else{
+				console.log(error);
+			}
+		});
 	};
 	
-	function downloadCache(scraperResult,callback){
+	function downloadCache(response,callback){
 		// Additional error check
-		if(typeof scraperResult && scraperResult.posters.length > 2 && scraperResult.backdrops.length > 3){
+		if(typeof response){
+		
+			var size = "w1920";
 			if (configfileResults.highres === 'yes'){
-				var poster = scraperResult.posters[2].image.url
-				, backdrop = scraperResult.backdrops[3].image.url
+				size = "w1920"
 			} else if (configfileResults.highres === 'no'){
-				var poster = scraperResult.posters[1].image.url
-				, backdrop = scraperResult.backdrops[2].image.url;
-			}
-			var downloadDir = './public/movies/data/'+movieRequest.movieTitle+'/'
+				size = "w1280"
+			};
+				
+			var backdrop_url = "http://cf2.imgobject.com/t/p/"+size+"/"
+			, poster_url = "http://cf2.imgobject.com/t/p/w342/"
+			, poster = poster_url+response.poster_path
+			, backdrop = backdrop_url+response.backdrop_path
+			, downloadDir = './public/movies/data/'+movieRequest.movieTitle+'/';
+			
 			downloader.on('done', function(msg) { console.log('done', msg); });
 			downloader.on('error', function(msg) { console.log('error', msg); });
 			downloader.download(poster, downloadDir);
 			downloader.download(backdrop, downloadDir);
 		}else{
 			var poster = posterpath
-			, backdrop = backdroppath
+			, backdrop = backdroppath;
 		};
 		callback(poster,backdrop);
 	};
