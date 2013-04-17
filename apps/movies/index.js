@@ -154,7 +154,8 @@ exports.post = function(req, res, next){
 
 							// Additional error check
 							if(typeof response){
-								var localImageDir = '/movies/data/'+movieRequest.movieTitle+'/'
+								var localImageDir = '/movies/data/'+movieRequest.movieTitle+'/';
+								
 								poster_path = localImageDir+requestInitialDetails.poster_path;
 								backdrop_path = localImageDir+requestInitialDetails.backdrop_path;
 								id = requestInitialDetails.id;
