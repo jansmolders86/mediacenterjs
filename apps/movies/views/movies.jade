@@ -37,10 +37,7 @@ html(lang="en")
 						ul.movieposters
 							each movie in movies
 								li.movieposter 
-									.info
-										a.moviedetails(href="") 
-											img(src="/movies/img/info.png")
-									a.play(href="/movies/play/"+ movie.filename)
+									a.details(href="")
 										img(src="/movies/img/loading.gif").movieposter							
 									span.original_name	Loading...
 									span.title= movie		
@@ -52,3 +49,12 @@ html(lang="en")
 			img(src="/core/icons/refresh.png")
 		a#settings(href="/settings/")
 			img(src="/core/icons/settings.png")
+			
+		#moviedetails
+			#overview
+				a.backlink(href="/movies/") 
+					img(src="/core/icons/back.png")
+				h1
+			#additional
+				#genre
+				#runtime

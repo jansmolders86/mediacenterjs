@@ -130,38 +130,40 @@
 			data: {movieTitle : title},
 			success: function(data) { 
 				var movieData = $.parseJSON(data);
-			
 				visibleMovie.find('.original_name').html(movieData[0].original_name) 
 				
-				/* Give the plugin time to load the (new) image(s) */
+				// Give the plugin time to load the (new) image(s).
+				// Is need for chrome bug with image loading 
+				
 				setTimeout(function(){
-					visibleMovie.find("img.movieposter").attr('src',movieData[0].poster);			
-					visibleMovie.find("img.movieposter").addClass('coverfound');
-				},300);
+					visibleMovie.find("img.movieposter").attr('src','');	
+					visibleMovie.find("img.movieposter").attr('src',movieData[0].poster).addClass('coverfound');							
+				},350);
 
 				visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
 				
 				if(movieData[0].cdNumber != null){
-				
 					if($('.cdNumber').length < 1){
 						visibleMovie.find("> a.play").append('<div class="cdNumber"><span>'+movieData[0].cdNumber+'</span><div>');
-					}
-				}
-				
-				
-				//TODO: handle detail click with jquery to show movie details
-				// Movie detail page
-				/*if( $('#moviedetails').length){
-					if (item.movieTitle == $('#moviedetails').find('h1').html()){
-						$('#backdrop').find("img").attr('src',movieData[0].backdrop);
-						$('#moviedetails').find('#overview').append('<p>'+movieData[0].overview+'</p>');
-						$('#moviedetails').find('#poster > img').attr('src',movieData[0].poster).addClass('fadein');
-						$('#moviedetails').find('#poster > .imdbrating').append('<p> IMDB <h3>'+movieData[0].rating+'</h3></p>');
-						$('#moviedetails').find('#poster > .certification').html(movieData[0].certification);
-						$('#moviedetailswrapper').addClass('fadeinslow');
-					}
-				}	
-				*/
+					};
+				};
+
+				$(".details").click( function(e) {
+					e.preventDefault();
+					$('#moviedetails').find('#overview > h1').html(movieData[0].original_name);
+					$('#moviedetails').find('#overview').append('<p>'+movieData[0].overview+'</p>');
+					//$('#moviedetails').find('#poster > .imdbrating').append('<p> IMDB <h3>'+movieData[0].imdb_rating+'</h3></p>');
+					$('#moviedetails').find('#genre').append('<p> Genre '+movieData[0].genre+'</p>');
+					$('#moviedetails').find('#runtime').append('<p> Runtime: '+movieData[0].runtime+'</p>');
+					//$('#moviedetails').find('#poster > .certification').html(movieData[0].certification);
+					$("#moviedetails").animate({
+						right:0
+					}).addClass('ready');
+					
+					//if($("#moviedetails").hasClass('ready')){
+					//	alert('going to play');
+					//} 
+				});
 			},
 			error  : function(data) {
 				console.log('e', data);

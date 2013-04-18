@@ -137,9 +137,9 @@ exports.post = function(req, res, next){
 				, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|SER|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
 				, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
 				, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
-				, noCD = noCountries.replace(/cd 1|cd 2|cd 3|cd 4|cd1|cd2|cd3|cd4/gi,"");
+				, noCD = noCountries.replace(/cd [1-9]|cd[1-9]/gi,"");
 				
-				cdNumber = filename.match(/cd 1|cd 2|cd 3|cd 4|cd1|cd2|cd3|cd4/gi,"");
+				cdNumber = filename.match(/cd [1-9]|cd[1-9]/gi,"");
 				movieTitle = noCD.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight();
 				if (year == null) year = ''
 				
@@ -165,12 +165,14 @@ exports.post = function(req, res, next){
 								
 									var secondRequestResponse = JSON.parse(response);
 									
-									//genre = response.genres[0].name;
+									genre = secondRequestResponse.genres[0].name;
 									runtime = secondRequestResponse.runtime;
 									imdb_id = secondRequestResponse.imdb_id;
-									rating = secondRequestResponse.rating;
-									certification = secondRequestResponse.certification;
+									// Needs seperate call
+									// rating = secondRequestResponse.rating;
+									// certification = requestInitialDetails.certification;
 									overview = secondRequestResponse.overview;
+
 									
 									//Setting up array for writing
 									var scraperdata = new Array()
