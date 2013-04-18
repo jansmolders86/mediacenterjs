@@ -183,16 +183,19 @@ span.title{visibility:hidden;}
 
 #moviedetails{
 	position: absolute;
-	right: -6000px;
-	top: 50px;
+	right: 0px;
+	top: 200px;
+	width:100%; 
+	opacity:0;
 	background: url(img/overlay.png) repeat;
+	height:367px;
 }
 #overview{
 	float:left;
 	color:#ddd; 
 	width:750px; 
 	margin-right:5px;
-	max-height:367px;
+	height:367px;
 	line-height:24px;
 	padding:20px;
 }
@@ -213,7 +216,7 @@ span.title{visibility:hidden;}
 
 #additional > div > p{
 	margin:0;
-	padding:0 0 30px 0;
+	padding:50px 0 30px 0;
 } 
 
 #additional > div:first-child{

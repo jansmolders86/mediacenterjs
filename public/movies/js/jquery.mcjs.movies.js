@@ -51,28 +51,38 @@
 			mouseenter: function() {	
 				$('.movieposters').find("li:first").removeClass("focused");
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
-				$(this).addClass("focused")
+				$(this).addClass("focused");
 				$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
+
+				var currentMovieTitle = $(this).find('span.title').html();
+				_showDetails(o, currentMovieTitle);
 			},
 			mouseleave: function() {
 				$(".backdropimg").removeClass("fadeinslow");
 				if ($('.movieposter.focused').length > 1){
 					$('.movieposter').removeClass("focused")
-				}
+				};
+				_hideDetails(o);
 			},			
 			focus: function() {				
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
+				
+				var currentMovieTitle = $(this).find('.title');
+				_showDetails(o, currentMovieTitle);
 			},
 			focusout: function() {
 				$(".backdropimg").removeClass("fadeinslow");
+				_hideDetails(o);
 			}
 		});	
 		
 		if ($('.movieposter.focused')){
 			var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 			$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
-		} 					
+		} else if($('.movieposter.focused').length < 1){
+			_hideDetails(o);
+		}		
 	};
 	
 
@@ -90,6 +100,11 @@
 				});
 			},
 			scroll  : {
+				onBefore : function (){
+					$("#moviedetails").animate({
+						right:-6000
+					});
+				},
 				onAfter : function( data ) {
 					data.items.visible.each(function() { 
 						var title = $(this).find('span.title').html();
@@ -133,44 +148,47 @@
 				visibleMovie.find('.original_name').html(movieData[0].original_name) 
 				
 				// Give the plugin time to load the (new) image(s).
-				// Is need for chrome bug with image loading 
+				// Is need for chrome bug with image loading..
 				
 				setTimeout(function(){
 					visibleMovie.find("img.movieposter").attr('src','');	
 					visibleMovie.find("img.movieposter").attr('src',movieData[0].poster).addClass('coverfound');							
 				},350);
-
 				visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
-				
 				if(movieData[0].cdNumber != null){
 					if($('.cdNumber').length < 1){
 						visibleMovie.find("> a.play").append('<div class="cdNumber"><span>'+movieData[0].cdNumber+'</span><div>');
 					};
 				};
-
-				$(".details").click( function(e) {
-					e.preventDefault();
-					$('#moviedetails').find('#overview > h1').html(movieData[0].original_name);
-					$('#moviedetails').find('#overview').append('<p>'+movieData[0].overview+'</p>');
-					//$('#moviedetails').find('#poster > .imdbrating').append('<p> IMDB <h3>'+movieData[0].imdb_rating+'</h3></p>');
-					$('#moviedetails').find('#genre').append('<p> Genre '+movieData[0].genre+'</p>');
-					$('#moviedetails').find('#runtime').append('<p> Runtime: '+movieData[0].runtime+'</p>');
-					//$('#moviedetails').find('#poster > .certification').html(movieData[0].certification);
-					$("#moviedetails").animate({
-						right:0
-					}).addClass('ready');
-					
-					//if($("#moviedetails").hasClass('ready')){
-					//	alert('going to play');
-					//} 
-				});
 			},
 			error  : function(data) {
 				console.log('e', data);
-			}
+			};
 		});
 	};	
 	
+	function _showDetails(o, currentMovieTitle){
+		$.ajax('/movies/data/'+currentMovieTitle+'/data.js', {
+			type: 'get',
+			success: function(data) { 
+				var movieData = $.parseJSON(data);
+				setTimeout(function(){
+					$('body').append('<div id="moviedetails"><div id="overview"></div></div>');
+					$('#moviedetails').append('<div id="overview"><h1>'+movieData[0].original_name+'</h1><p>'+movieData[0].overview+'</p></div><div id="additional"><div id="genre"><p> Genre: '+movieData[0].genre+'</p></div><div id="runtime"><p> Runtime: '+movieData[0].runtime+'</p></div></div>');
+					$("#moviedetails").animate({opacity:1});
+					//TODO: Add settings to be able to manage the timeout
+				},2000);
+			},
+			error  : function(data) {
+				console.log('e', data);
+			};
+		});
+	};
+	
+	function _hideDetails(o){
+		$("#moviedetails").animate({opacity:0});
+		$('#moviedetails').remove();
+	};
 
 	/**** End of custom functions ***/
 	
