@@ -35,7 +35,6 @@
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
 			
-		//	_loadCache(o, $(this));
 			_focusedItem(o, $(this));
 			_carousel(o, $(this));
 			
@@ -53,7 +52,7 @@
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(this).addClass("focused");
 				$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
-
+				console.log('ssd')
 				var currentMovieTitle = $(this).find('span.title').html();
 				_showDetails(o, currentMovieTitle);
 			},
@@ -88,7 +87,6 @@
 
 	// Movie poster carousel - Needs plugin jquery.carouFredSel-6.1.0-packed.js
 	function _carousel(o, $that){
-		console.log('carousel')
 		$('.movieposters').find(".movieposter:first").addClass("focused");
 		$('.movieposters').carouFredSel({
 			auto: false,
@@ -96,6 +94,7 @@
 				data.items.each(function() { 
 					var title = $(this).find('span.title').html();
 					var visibleMovie = $(this) 
+									console.log('ssd')
 					_handleVisibleMovies(o, title, visibleMovie)
 				});
 			},
@@ -155,10 +154,8 @@
 					visibleMovie.find("img.movieposter").attr('src',movieData[0].poster).addClass('coverfound');							
 				},350);
 				visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
-				if(movieData[0].cdNumber != null){
-					if($('.cdNumber').length < 1){
-						visibleMovie.find("> a.play").append('<div class="cdNumber"><span>'+movieData[0].cdNumber+'</span><div>');
-					};
+				if(movieData[0].cdNumber != null && $('.cdNumber').length < 1){
+					visibleMovie.find("> a.play").append('<div class="cdNumber"><span>'+movieData[0].cdNumber+'</span><div>');
 				};
 			},
 			error  : function(data) {
@@ -166,6 +163,8 @@
 			};
 		});
 	};	
+	
+	
 	
 	function _showDetails(o, currentMovieTitle){
 		$.ajax('/movies/data/'+currentMovieTitle+'/data.js', {
@@ -185,10 +184,38 @@
 		});
 	};
 	
+	
+	
 	function _hideDetails(o){
 		$("#moviedetails").animate({opacity:0});
 		$('#moviedetails').remove();
 	};
+	
+	
+	
+	//Playmovie Needs plugin - frontbox-jquery-vlc.js
+	function _playmovie(o, title){
+		$.ajax('/movies/post/', {
+			type: 'post',
+			data: {movieTitle : title},
+			success: function(data) { 
+				//TODO: Make it a stream 
+				var uri = data
+				var player = VLCobject.embedPlayer('movieplayer', 1024, 600, true);
+				player.play(uri);
+				
+				$('#movieplayer_plugin').attr("height", "100%")
+				$('#movieplayer_plugin').attr("width", "100%")
+				$('#movieplayer_plugin').focus();
+			
+				$('#movieplayer_hide, #movieplayer_toolbar_btn4, #movieplayer_toolbar_btn5').hide();
+			},
+			error  : function(data) {
+				console.log('e', data);
+			};
+		});
+	};	
+	
 
 	/**** End of custom functions ***/
 	

@@ -255,9 +255,10 @@ exports.play = function(req, res, next){
 
 	//TODO: Get player to work:  
 	//TODO: Add nice curtain like animation (black divs from side to side closing into eachother)
-	/*
-	var filePath = 
-	var stat = fs.statSync(filePath);
+
+	var movieRequest = req.body
+	, filePath = configfileResults.moviepath+movieRequest
+	,stat = fs.statSync(filePath);
 
 	response.writeHead(200, {
 		'Content-Type': 'video/avi',
@@ -265,7 +266,7 @@ exports.play = function(req, res, next){
 	});
 
 	var readStream = fs.createReadStream(filePath);
+	
 	// We replaced all the event handlers with a simple call to util.pump()
 	util.pump(readStream, response);
-	*/
 };
