@@ -18,25 +18,22 @@
 (function($){
 
 	var ns = 'mcjsm'
-	,methods = {}
+	,methods = {};
 
 	function _init(options) {
 		var opts = $.extend(true, {}, $.fn.mcjsm.defaults, options);
 		return this.each(function() {
 			var $that = $(this)
-				,o = $.extend(true, {}, opts, $that.data(opts.datasetKey));
+			,o = $.extend(true, {}, opts, $that.data(opts.datasetKey));
 				
 			// add data to the defaults (e.g. $node caches etc)	
-			o = $.extend(true, o, { 
-				$that: $that
-				,movielocation 	: undefined
-			});
+			o = $.extend(true, o, { $that: $that, movielocation: undefined});
 			
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
 			
-			_focusedItem(o, $(this));
-			_carousel(o, $(this));
+			_focusedItem(o);
+			_carousel(o);
 			
 		});
 	}
@@ -44,7 +41,7 @@
 	/**** Start of custom functions ***/
 	/**** MOVIE HANDELING *******/
 	
-	function _focusedItem(o, $that){
+	function _focusedItem(o){
 		// movie poster handlers 
 		$('.movieposter').on({
 			mouseenter: function() {	
@@ -52,16 +49,15 @@
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(this).addClass("focused");
 				$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
-				console.log('ssd')
 				var currentMovieTitle = $(this).find('span.title').html();
 				_showDetails(o, currentMovieTitle);
 			},
 			mouseleave: function() {
 				$(".backdropimg").removeClass("fadeinslow");
 				if ($('.movieposter.focused').length > 1){
-					$('.movieposter').removeClass("focused")
-				};
-				_hideDetails(o);
+					$('.movieposter').removeClass("focused");
+				}
+				_hideDetails();
 			},			
 			focus: function() {				
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
@@ -72,7 +68,7 @@
 			},
 			focusout: function() {
 				$(".backdropimg").removeClass("fadeinslow");
-				_hideDetails(o);
+				_hideDetails();
 			}
 		});	
 		
@@ -82,20 +78,19 @@
 		} else if($('.movieposter.focused').length < 1){
 			_hideDetails(o);
 		}		
-	};
+	}
 	
 
 	// Movie poster carousel - Needs plugin jquery.carouFredSel-6.1.0-packed.js
-	function _carousel(o, $that){
+	function _carousel(o){
 		$('.movieposters').find(".movieposter:first").addClass("focused");
 		$('.movieposters').carouFredSel({
 			auto: false,
 			onCreate: function( data ) {
 				data.items.each(function() { 
 					var title = $(this).find('span.title').html();
-					var visibleMovie = $(this) 
-									console.log('ssd')
-					_handleVisibleMovies(o, title, visibleMovie)
+					var visibleMovie = $(this);
+					_handleVisibleMovies(o, title, visibleMovie);
 				});
 			},
 			scroll  : {
@@ -107,114 +102,102 @@
 				onAfter : function( data ) {
 					data.items.visible.each(function() { 
 						var title = $(this).find('span.title').html();
-						var visibleMovie = $(this) 
-						_handleVisibleMovies(o, title, visibleMovie )
+						var visibleMovie = $(this);
+						_handleVisibleMovies(o, title, visibleMovie );
 					});
-				}
+				},
+				fx : "scroll",
+				easing  : "swing"
 			},
 			prev: {
 				key : "left",
-				button : "#prev",
+				button : "#prev"
 			},
 			next: {
 				key : "right",
-				button : "#next",
-			},
-			scroll      : {
-				fx : "scroll",
-				easing  : "swing",
+				button : "#next"
 			},
 			mousewheel: true,
 			swipe: {
 				onMouse: true,
 				onTouch: true,
 				fx : "scroll",
-				easing  : "swing",
+				easing  : "swing"
 			}
 		});
-	};
+	}
 
 	
 	
 	function _handleVisibleMovies(o, title, visibleMovie){
-		// Post the movie to the sever so we get data back
-		// we can use to fill the movie specifications
-		$.ajax('/movies/post/', {
+		$.ajax({
+			url: '/movies/post/', 
 			type: 'post',
-			data: {movieTitle : title},
-			success: function(data) { 
-				var movieData = $.parseJSON(data);
-				visibleMovie.find('.original_name').html(movieData[0].original_name) 
-				
-				// Give the plugin time to load the (new) image(s).
-				// Is need for chrome bug with image loading..
-				
-				setTimeout(function(){
-					visibleMovie.find("img.movieposter").attr('src','');	
-					visibleMovie.find("img.movieposter").attr('src',movieData[0].poster).addClass('coverfound');							
-				},350);
-				visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
-				if(movieData[0].cdNumber != null && $('.cdNumber').length < 1){
-					visibleMovie.find("> a.play").append('<div class="cdNumber"><span>'+movieData[0].cdNumber+'</span><div>');
-				};
-			},
-			error  : function(data) {
-				console.log('e', data);
-			};
+			data: {movieTitle : title}
+		}).done(function(data){
+			var movieData = $.parseJSON(data);
+			visibleMovie.find('.original_name').html(movieData[0].original_name);
+			
+			// Give the plugin time to load the (new) image(s).
+			// Is need for chrome bug with image loading..
+			
+			setTimeout(function(){
+				visibleMovie.find("img.movieposter").attr('src','');	
+				visibleMovie.find("img.movieposter").attr('src',movieData[0].poster).addClass('coverfound');							
+			},350);
+			
+			visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
+			
+			if(movieData[0].cdNumber !== null && $('.cdNumber').length < 1){
+				visibleMovie.find("> a.play").append('<div class="cdNumber"><span>'+movieData[0].cdNumber+'</span><div>');
+			}
 		});
-	};	
+	}
 	
 	
 	
 	function _showDetails(o, currentMovieTitle){
-		$.ajax('/movies/data/'+currentMovieTitle+'/data.js', {
-			type: 'get',
-			success: function(data) { 
-				var movieData = $.parseJSON(data);
-				setTimeout(function(){
-					$('body').append('<div id="moviedetails"><div id="overview"></div></div>');
-					$('#moviedetails').append('<div id="overview"><h1>'+movieData[0].original_name+'</h1><p>'+movieData[0].overview+'</p></div><div id="additional"><div id="genre"><p> Genre: '+movieData[0].genre+'</p></div><div id="runtime"><p> Runtime: '+movieData[0].runtime+'</p></div></div>');
-					$("#moviedetails").animate({opacity:1});
-					//TODO: Add settings to be able to manage the timeout
-				},2000);
-			},
-			error  : function(data) {
-				console.log('e', data);
-			};
+		$.ajax({
+			url: '/movies/data/'+currentMovieTitle+'/data.js', 
+			type: 'get'
+		}).done(function(data){
+			var movieData = $.parseJSON(data);
+			setTimeout(function(){
+				$('body').append('<div id="moviedetails"><div id="overview"></div></div>');
+				$('#moviedetails').append('<div id="overview"><h1>'+movieData[0].original_name+'</h1><p>'+movieData[0].overview+'</p></div><div id="additional"><div id="genre"><p> Genre: '+movieData[0].genre+'</p></div><div id="runtime"><p> Runtime: '+movieData[0].runtime+'</p></div></div>');
+				$("#moviedetails").animate({opacity:1});
+				//TODO: Add settings to be able to manage the timeout
+			},2000);
 		});
-	};
+	}
 	
 	
 	
-	function _hideDetails(o){
+	function _hideDetails(){
 		$("#moviedetails").animate({opacity:0});
 		$('#moviedetails').remove();
-	};
+	}
 	
 	
 	
 	//Playmovie Needs plugin - frontbox-jquery-vlc.js
 	function _playmovie(o, title){
-		$.ajax('/movies/post/', {
+		$.ajax({
+			url: '/movies/play/', 
 			type: 'post',
-			data: {movieTitle : title},
-			success: function(data) { 
-				//TODO: Make it a stream 
-				var uri = data
-				var player = VLCobject.embedPlayer('movieplayer', 1024, 600, true);
-				player.play(uri);
-				
-				$('#movieplayer_plugin').attr("height", "100%")
-				$('#movieplayer_plugin').attr("width", "100%")
-				$('#movieplayer_plugin').focus();
+			data: {movieTitle : title}
+		}).done(function(data){
+			var uri = data;
+			var player = VLCobject.embedPlayer('movieplayer', 1024, 600, true);
+			player.play(uri);
 			
-				$('#movieplayer_hide, #movieplayer_toolbar_btn4, #movieplayer_toolbar_btn5').hide();
-			},
-			error  : function(data) {
-				console.log('e', data);
-			};
+			$('#movieplayer_plugin').attr("height", "100%");
+			$('#movieplayer_plugin').attr("width", "100%");
+			$('#movieplayer_plugin').focus();
+		
+			$('#movieplayer_hide, #movieplayer_toolbar_btn4, #movieplayer_toolbar_btn5').hide();
 		});
-	};	
+	}
 	
 
 	/**** End of custom functions ***/
@@ -226,10 +209,10 @@
 			return _init.apply( this, arguments );
 		} else {
 			$.error( 'Method ' +  method + ' does not exist on jQuery.fn.mcjsm' );
-		};
+		}
 	};
 	
 	/* default values for this plugin */
-	$.fn.mcjsm.defaults = {}
+	$.fn.mcjsm.defaults = {};
 
 })(jQuery);
