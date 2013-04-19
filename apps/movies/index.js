@@ -256,6 +256,8 @@ exports.post = function(req, res, next){
 		var filePath = configfileResults.moviepath+'/'+movieRequest.movieTitle
 		, stat = fs.statSync(filePath);
 		
+		res.send(filePath);
+		/*
 		console.log(filePath);
 
 		res.writeHead(200, {
@@ -267,6 +269,7 @@ exports.post = function(req, res, next){
 		
 		// We replaced all the event handlers with a simple call to util.pump()
 		util.pump(readStream, res);
+		*/
 	}
 };
 

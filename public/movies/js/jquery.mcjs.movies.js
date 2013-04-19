@@ -202,7 +202,7 @@
 			data: {movieTitle : title, type : 'play'}
 		}).done(function(data){
 			console.log(data);
-		/*	var player = VLCobject.embedPlayer('movieplayer', 1024, 600, true);
+			var player = VLCobject.embedPlayer('movieplayer', 1024, 600, true);
 			player.play(uri);
 			
 			$('#movieplayer_plugin').attr("height", "100%");
@@ -210,7 +210,6 @@
 			$('#movieplayer_plugin').focus();
 		
 			$('#movieplayer_hide, #movieplayer_toolbar_btn4, #movieplayer_toolbar_btn5').hide();
-			*/
 		});
 	}
 	
