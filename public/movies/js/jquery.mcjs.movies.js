@@ -17,14 +17,14 @@
 */
 (function($){
 
-	var ns = 'mcjsm'
-	,methods = {};
+	var ns = 'mcjsm';
+	var methods = {};
 
 	function _init(options) {
 		var opts = $.extend(true, {}, $.fn.mcjsm.defaults, options);
 		return this.each(function() {
-			var $that = $(this)
-			,o = $.extend(true, {}, opts, $that.data(opts.datasetKey));
+			var $that = $(this);
+			var o = $.extend(true, {}, opts, $that.data(opts.datasetKey));
 				
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { $that: $that, movielocation: undefined});
@@ -51,6 +51,11 @@
 				$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
 				var currentMovieTitle = $(this).find('span.title').html();
 				_showDetails(o, currentMovieTitle);
+	
+				$(this).find('a.play').click( function(e) {
+					e.preventDefault();
+					_playmovie(o, currentMovieTitle);
+				});
 			},
 			mouseleave: function() {
 				$(".backdropimg").removeClass("fadeinslow");
@@ -65,6 +70,11 @@
 				
 				var currentMovieTitle = $(this).find('.title');
 				_showDetails(o, currentMovieTitle);
+				
+				$(this).find('a.play').click( function(e) {
+					e.preventDefault();
+					_playmovie(o, currentMovieTitle);
+				});				
 			},
 			focusout: function() {
 				$(".backdropimg").removeClass("fadeinslow");
@@ -75,6 +85,11 @@
 		if ($('.movieposter.focused')){
 			var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 			$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
+			
+			$(this).find('a.play').click( function(e) {
+				e.preventDefault();
+				_playmovie(o, currentMovieTitle);
+			});			
 		} else if($('.movieposter.focused').length < 1){
 			_hideDetails(o);
 		}		
@@ -95,9 +110,7 @@
 			},
 			scroll  : {
 				onBefore : function (){
-					$("#moviedetails").animate({
-						right:-6000
-					});
+					_hideDetails();
 				},
 				onAfter : function( data ) {
 					data.items.visible.each(function() { 
@@ -133,7 +146,7 @@
 		$.ajax({
 			url: '/movies/post/', 
 			type: 'post',
-			data: {movieTitle : title}
+			data: {movieTitle : title, type : 'show'}
 		}).done(function(data){
 			var movieData = $.parseJSON(data);
 			visibleMovie.find('.original_name').html(movieData[0].original_name);
@@ -179,16 +192,17 @@
 	}
 	
 	
-	
 	//Playmovie Needs plugin - frontbox-jquery-vlc.js
 	function _playmovie(o, title){
+		//TODO: Add nice curtain like animation (black divs from side to side closing into eachother)
+		console.log(title);
 		$.ajax({
-			url: '/movies/play/', 
+			url: '/movies/post/', 
 			type: 'post',
-			data: {movieTitle : title}
+			data: {movieTitle : title, type : 'play'}
 		}).done(function(data){
-			var uri = data;
-			var player = VLCobject.embedPlayer('movieplayer', 1024, 600, true);
+			console.log(data);
+		/*	var player = VLCobject.embedPlayer('movieplayer', 1024, 600, true);
 			player.play(uri);
 			
 			$('#movieplayer_plugin').attr("height", "100%");
@@ -196,6 +210,7 @@
 			$('#movieplayer_plugin').focus();
 		
 			$('#movieplayer_hide, #movieplayer_toolbar_btn4, #movieplayer_toolbar_btn5').hide();
+			*/
 		});
 	}
 	

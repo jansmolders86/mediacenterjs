@@ -13,6 +13,7 @@ html(lang="en")
 		link(rel='stylesheet', href='/movies/css/style.css')
 		script(src="/movies/js/jquery.carouFredSel-6.1.0-packed.js")
 		script(src="/movies/js/jquery.mcjs.movies.js")
+		script(src="/movies/js/jquery.mcjs.movies.player.js")
 
 		script
 			$(document).ready(function(){
@@ -37,7 +38,7 @@ html(lang="en")
 						ul.movieposters
 							each movie in movies
 								li.movieposter 
-									a.details(href="")
+									a.play(href="")
 										img(src="/movies/img/loading.gif").movieposter							
 									span.original_name	Loading...
 									span.title= movie		
