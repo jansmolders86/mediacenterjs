@@ -42,8 +42,7 @@ exports.index = function(req, res, next){
 		
 		res.render('movies',{
 			movies: moviefileResults,
-			status:status,
-			configuration: configfileResults.highres
+			status:status
 		});
 	});
 };

@@ -176,11 +176,10 @@
 		}).done(function(data){
 			var movieData = $.parseJSON(data);
 			setTimeout(function(){
-				$('body').append('<div id="moviedetails"><div id="overview"></div></div>');
-				$('#moviedetails').append('<div id="overview"><h1>'+movieData[0].original_name+'</h1><p>'+movieData[0].overview+'</p></div><div id="additional"><div id="genre"><p> Genre: '+movieData[0].genre+'</p></div><div id="runtime"><p> Runtime: '+movieData[0].runtime+'</p></div></div>');
+				$('body').append('<div id="moviedetails"><div id="overview"><h1>'+movieData[0].original_name+'</h1><p>'+movieData[0].overview+'</p></div><div id="additional"><div id="genre"><p> Genre: '+movieData[0].genre+'</p></div><div id="runtime"><p> Runtime: '+movieData[0].runtime+'</p></div></div></div>');
 				$("#moviedetails").animate({opacity:1});
-				//TODO: Add settings to be able to manage the timeout
-			},2000);
+				//TODO: Add settings to be able to manage the presentation
+			},1000);
 		});
 	}
 	

@@ -41,6 +41,7 @@
 	
 			_resizeviewport(o, $(this)); 	// Strech bg to fullscreen
 			_keyevents(o,$(this)); 			// init keys
+			_settingsBar(o);
 			
 			if(o.debug == false){
 				$(document).bind("contextmenu", function(e) {
@@ -56,6 +57,7 @@
 	
 	function _initpages(o, $that){
 		$(".backdropimg").addClass("fadein");
+	
 
 		//TODO: Add multilanguage
 		/*// Set up i18n translation
@@ -69,10 +71,37 @@
 		});	*/
 	}
 	
+	function _settingsBar(o){
+	
+		function showSetting(){
+			$('#settingsbar').stop().animate({
+				width:700,
+				top:0,
+				opacity:1
+			})
+		}
+						
+		function hideSetting(){
+			$('#settingsbar').stop().animate({
+				width:200,
+				top:-695,
+				opacity:0.5
+			})
+		}
+	
+		$('#settingsbar').on({
+			mouseenter: function() { showSetting(); },
+			mouseleave: function() { hideSetting(); },			
+			focus: function() {	showSetting(); },
+			focusout: function() { hideSetting(); },
+			click: function() { showSetting(); }
+		});	
+	}
+	
 	// Resize background image according to viewport
 	function _resizeviewport(o, $that){
 		var $img = $(".backdropimg");
-		$(window).on('resize', function () {
+		$(window).resize(function() {
 			var viewport = {
 				width   : o.viewportWidth,
 				height : o.viewportheight
@@ -84,7 +113,7 @@
 				height    : imgHeight,
 				marginTop : (imgHeight > o.viewportheight) ? Math.floor((imgHeight - o.viewportheight) / 2 * -1) : 0
 			});
-		}).trigger('resize');
+		});
 	}
 	
 	

@@ -1,5 +1,5 @@
 [
-    "a new hope.avi",
-    "buried.avi",
+    "buried cd 2.avi",
+    "rise of the planets of the apes.avi",
     "up.avi"
 ]

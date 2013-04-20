@@ -226,45 +226,23 @@ p a:hover{text-decoration:none;}
 	cursor:pointer;
 }
 
-a#settings{
-	width:32px;
-	height:32px;
-	position:absolute;
-	display:block;
-	top: 15px;
-	right: 295px;
-	z-index:9;
+#settingsbar{
+	width: 200px;
+	height: 700px;
+	position: absolute;
+	right: 20px;
+	background-color: #000;
+	top: -695px;
+	z-index: 99999;
+	border-bottom:3px solid #ccc;
+	box-shadow: 0 0 0 6px #000;
+	overflow-y:auto;
+	overflow-x:hidden;
+	opacity:0.5;
+	list-style:none;
+	margin:0;
 }
 
-a#update{
-	width:32px;
-	height:32px;
-	position:absolute;
-	display:block;
-	top: 15px;
-	right: 340px;
-	z-index:9;
-}
-
-a#cache{
-	width:32px;
-	height:32px;
-	position:absolute;
-	display:block;
-	top: 60px;
-	right: 340px;
-	z-index:9;
-}
-
-a#view{
-	width:32px;
-	height:32px;
-	position:absolute;
-	display:block;
-	top: 15px;
-	right: 385px;
-	z-index:9;
-}
 
 #messagesystem{
 	width:250px;
@@ -369,7 +347,7 @@ input[type=submit],
 a.btn{
 	background-color:#018287;
 	border: solid 1px #fff;
-	padding:10px 5px;
+	padding:10px;
 	cursor:pointer;
 	color:#fff;
 	text-align:center;

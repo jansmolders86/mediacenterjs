@@ -1,0 +1,50 @@
+		ul#settingsbar
+			li
+				form#setup.validate-form(action='/settings',method='post')
+				
+					.row
+						a.btn(href='/movies/update') Manually update movielist
+					.row
+						a.btn.toggleDetails(href='') Hide moviedetails
+					.row
+						label Specify movielocation
+						input(name="movielocation",type="text",placeholder="C:/temp or /mnt/media/hdd/movies")
+					.row
+						span.label Use high res images (720 or 1080)
+						.checkgroup
+							input#highresyes(name="highres",type="radio",value="yes",checked) 
+							label(for="highresyes") Yes
+							input#highresno(name="highres",type="radio",value="no") 
+							label(for="highresno") No
+					.row
+						span.label Show details on hover
+						.checkgroup
+							input#movieDetailsYes(name="movieDetails",type="radio",value="yes",checked) 
+							label(for="movieDetailsYes") Yes
+							input#movieDetailsNo(name="movieDetails",type="radio",value="no") 
+							label(for="movieDetailsNo") No
+					.row
+						span.label Dim screen on inactivity
+						.checkgroup
+							input#dimYes(name="dim",type="radio",value="yes",checked) 
+							label(for="dimYes") Yes
+							input#dimNo(name="dim",type="radio",value="no") 
+							label(for="dimNo") No
+					.row
+						span.label Use onscreen keyboard
+						.checkgroup
+							input#yeskeyboard(name="usekeyboard",type="radio",value="yes") 
+							label(for="yeskeyboard") Yes
+							input#nokeyboard(name="usekeyboard",type="radio",value="no",checked) 
+							label(for="nokeyboard") No
+					.row
+						label Language
+						input(name="language",type="text",placeholder="ie nl or gb")
+					.row
+						label You current location (city)
+						input(name="location",type="text",placeholder="ie london or amsterdam")
+						input(name="screensaver",type="text",value="dim",style="visibility:hidden;")
+						input(name="musiclocation",type="text",value="tbd",style="visibility:hidden;")
+						input(name="tvlocation",type="text",value="tbd",style="visibility:hidden;")
+					.row
+						input(type="submit",value="Submit")
