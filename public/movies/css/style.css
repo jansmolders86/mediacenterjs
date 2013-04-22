@@ -126,7 +126,9 @@
 	text-transform:capitalize;
 }
 
-.submitnewtitle{}
+.movieposter .original_name{
+	opacity:0;
+}
 
 #configuration{
 	height:0;
@@ -135,51 +137,6 @@
 }
 
 span.title{visibility:hidden;}
-
-/***** -----------------   MOVIE INFORMATION (HOVER)  ---------------------- *****/
-
-.movieposter .info{	
-	background: url(img/overlay.png) repeat left top; 
-	height: 35px;
-	margin-top: 10px;
-	margin-left:3px;
-	padding: 10px 5px 0;
-	text-align: center;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	visibility:hidden;  
-}
-
-.movieposter .info img {	 
-	width:24px;
-	height:24px;
-}
-
-.movieposter .info img:first-child {
-	margin-left:10px;
-	margin-right:3px;
-}	
-
-.movieposter:hover .info,
-.movieposter:focus .info,
-.movieposter.focused .info{
-	visibility:visible;  
-	-webkit-animation: fade-in 1.3s; 
-	-moz-animation:  fade-in 1.3s; 
-    -o-animation: fade-in 1.3s; 
-    animation: fade-in 1.3s; 
-}
-
-.movieposter .info a{ 
-	color:#8c8c8c;
-	padding:0 10px; 
-	font-size:18px;
-	cursor:pointer;
-	line-height:20px;
-}  
-.movieposter .info a:first-child{ padding-left:0;}  
-.movieposter .info a:hover,
-.movieposter .info a:focus{ color:#fff; font-size:20px;}  
 
 /***** -----------------   MOVIE DETAILS  ---------------------- *****/
 

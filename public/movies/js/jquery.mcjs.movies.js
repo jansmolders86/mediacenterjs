@@ -50,7 +50,8 @@
 				$(this).addClass("focused");
 				$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
 				var currentMovieTitle = $(this).find('span.title').html();
-				_showDetails(o, currentMovieTitle);
+				var currentMovie = $(this);
+				_showDetails(o,currentMovie, currentMovieTitle);
 	
 				$(this).find('a.play').click( function(e) {
 					e.preventDefault();
@@ -62,14 +63,17 @@
 				if ($('.movieposter.focused').length > 1){
 					$('.movieposter').removeClass("focused");
 				}
-				_hideDetails();
+				
+				var currentMovie = $(this);
+				_hideDetails(currentMovie);
 			},			
 			focus: function() {				
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
 				
 				var currentMovieTitle = $(this).find('.title');
-				_showDetails(o, currentMovieTitle);
+				var currentMovie = $(this);
+				_showDetails(o,currentMovie, currentMovieTitle);
 				
 				$(this).find('a.play').click( function(e) {
 					e.preventDefault();
@@ -78,7 +82,8 @@
 			},
 			focusout: function() {
 				$(".backdropimg").removeClass("fadeinslow");
-				_hideDetails();
+				var currentMovie = $(this);
+				_hideDetails(currentMovie);
 			}
 		});	
 		
@@ -91,7 +96,8 @@
 				_playmovie(o, currentMovieTitle);
 			});			
 		} else if($('.movieposter.focused').length < 1){
-			_hideDetails(o);
+			var currentMovie = $(this);
+			_hideDetails(currentMovie);
 		}		
 	}
 	
@@ -169,7 +175,7 @@
 	
 	
 	
-	function _showDetails(o, currentMovieTitle){
+	function _showDetails(o, currentMovie, currentMovieTitle){
 		$.ajax({
 			url: '/movies/data/'+currentMovieTitle+'/data.js', 
 			type: 'get'
@@ -181,12 +187,15 @@
 				//TODO: Add settings to be able to manage the presentation
 			},1000);
 		});
+		
+		currentMovie.find('.original_name').animate({opacity:1});
 	}
 	
 	
 	
-	function _hideDetails(){
+	function _hideDetails(currentMovie){
 		$("#moviedetails").animate({opacity:0});
+		currentMovie.find('.original_name').animate({opacity:0});
 		$('#moviedetails').remove();
 	}
 	

@@ -32,6 +32,7 @@ var configfile = []
 ,configfile = fs.readFileSync(configfilepath)
 ,configfileResults = JSON.parse(configfile);	
 
+require('../../lib/global-functions');
 
 exports.index = function(req, res, next){	
 	updateMovies(req, res, function(status){
@@ -42,7 +43,14 @@ exports.index = function(req, res, next){
 		
 		res.render('movies',{
 			movies: moviefileResults,
-			status:status
+			status:status,
+			moviepath: configfileResults.moviepath,
+			highres: configfileResults.highres,
+			language: configfileResults.language,
+			onscreenkeyboard: configfileResults.onscreenkeyboard,
+			location: configfileResults.location,
+			screensaver: configfileResults.screensaver,
+			showdetails: configfileResults.showdetails
 		});
 	});
 };
@@ -53,6 +61,7 @@ exports.update = function(req, res){
 		res.redirect('/movies');
 	});	
 };
+
 
 //Update function
 function updateMovies(req, res, callback) { 
@@ -109,7 +118,6 @@ exports.post = function(req, res, next){
 	var movieRequest = req.body;
 	console.log('movierequest', movieRequest.movieTitle)
 	console.log('PostType', movieRequest.type);
-	
 	if (movieRequest.type === 'show'){
 		//Check if folder already exists
 		if (fs.existsSync('./public/movies/data/'+movieRequest.movieTitle)) {
@@ -144,7 +152,7 @@ exports.post = function(req, res, next){
 					movieTitle = noCD.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight();
 					if (year == null) year = ''
 					
-					getFile("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&year="+ year +"&language="+configfileResults.language+"&=", function(response) {
+					xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&year="+ year +"&language="+configfileResults.language+"&=", function(response) {
 						if (response != 'Nothing found.') {
 						
 							var requestResponse = JSON.parse(response)
@@ -162,7 +170,7 @@ exports.post = function(req, res, next){
 									id = requestInitialDetails.id;
 									original_name = requestInitialDetails.original_title;
 										
-									getFile("http://api.themoviedb.org/3/movie/" + id + "?api_key="+api_key+"&=", function(response) {
+									xhrCall("http://api.themoviedb.org/3/movie/" + id + "?api_key="+api_key+"&=", function(response) {
 									
 										var secondRequestResponse = JSON.parse(response);
 										
@@ -204,21 +212,6 @@ exports.post = function(req, res, next){
 							}); 
 						};
 					});
-				}
-			});
-		};
-		
-		
-		function getFile(url,callback) { 
-			request({
-				url: url,
-				headers: {"Accept": "application/json"},
-				method: "GET"
-			}, function (error, response, body) {
-				if(!error){
-					callback(body);
-				}else{
-					console.log(error);
 				}
 			});
 		};

@@ -26,6 +26,8 @@ var configfile = []
 ,configfile = fs.readFileSync(configfilepath)
 ,configfileResults = JSON.parse(configfile);	
 
+require('./lib/global-functions');
+
 app.configure(function(){
 	app.set('view engine', 'jade');
 	app.set('views', __dirname + '/views');
@@ -74,16 +76,22 @@ app.get("/", function(req, res, next) {
 	}
 });
 
-app.get("/settings/", function(req, res, next) {  
-	res.render('settings');	
-});
-
-
-//	Handle the initial setup. Because this is very generic and should only be launched once at first boot,
-//	I decided to keep it in the initial app.js file. Could be moved later though
+//	Handle the writing of settings. Because this is fairly generic,
+//	I decided to keep it in the initial app.js file. Could be moved later though..
 
 app.post('/settings', function(req, res){
-	// Fill JSON array with new settings
+	writeSettings(req, res, function(){
+		res.render('/thanks');
+	});
+});
+
+app.post('/movies/settings', function(req, res){
+	writeSettings(req, res, function(){
+		res.render('/movies/');
+	});
+});
+
+function writeSettings(req, res, callback){
 	var myData = {
 		moviepath : req.body.movielocation
 		,highres: req.body.highres
@@ -93,21 +101,21 @@ app.post('/settings', function(req, res){
 		,onscreenkeyboard: req.body.usekeyboard
 		,location: req.body.location
 		,screensaver: req.body.screensaver
+		,showdetails: req.body.showdetails
 	}
 	
-	// Write to JSON file
 	fs.writeFile(configfilepath, JSON.stringify(myData, null, 4), function(e) {
 		if(e) {
 			// Respond to client with sever error
 			res.send(500);
-			console.log(err);
+			console.log('Error wrting settings',err);
 		} else {
 			setTimeout(function(){
-				res.render('/thanks');
-			},2000);			
+				callback();
+			},1000);			
 		}
 	}); 
-});
+}
 
 
 
