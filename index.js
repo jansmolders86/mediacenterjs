@@ -26,8 +26,6 @@ var configfile = []
 ,configfile = fs.readFileSync(configfilepath)
 ,configfileResults = JSON.parse(configfile);	
 
-require('./lib/helper');
-
 app.configure(function(){
 	app.set('view engine', 'jade');
 	app.set('views', __dirname + '/views');
@@ -53,7 +51,7 @@ app.configure('production', function(){
 require('./lib/routing')(app,{ verbose: !module.parent });
 app.get("/", function(req, res, next) {  
 	if(	configfileResults.moviepath == '' && configfileResults.language == '' && configfileResults.location == '' || configfileResults.moviepath == null || configfileResults.moviepath == undefined){
-		res.render('setupsettings');	
+		res.render('setup');	
 	} else {
 		// Load apps
 		var apps = []
@@ -77,17 +75,21 @@ app.get("/", function(req, res, next) {
 });
 
 //	Handle the writing of settings. Because this is fairly generic,
-//	I decided to keep it in the initial app.js file. Could be moved later though..
+//	I decided to keep it in the initial app.js file. 
 
-app.post('/settings', function(req, res){
+app.get("/settings", function(req, res, next) {  
+	res.render('settings');	
+});
+
+app.post('/setuppost', function(req, res){
 	writeSettings(req, res, function(){
-		res.render('/thanks');
+		res.render('/finish');
 	});
 });
 
-app.post('/movies/settings', function(req, res){
+app.post('/submit', function(req, res){
 	writeSettings(req, res, function(){
-		res.render('/movies/');
+		res.render('/');
 	});
 });
 
@@ -116,8 +118,6 @@ function writeSettings(req, res, callback){
 		}
 	}); 
 }
-
-
 
 // Open App socket
 app.listen(3000);

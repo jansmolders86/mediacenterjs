@@ -184,7 +184,6 @@
 			setTimeout(function(){
 				$('body').append('<div id="moviedetails"><div id="overview"><h1>'+movieData[0].original_name+'</h1><p>'+movieData[0].overview+'</p></div><div id="additional"><div id="genre"><p> Genre: '+movieData[0].genre+'</p></div><div id="runtime"><p> Runtime: '+movieData[0].runtime+'</p></div></div></div>');
 				$("#moviedetails").animate({opacity:1});
-				//TODO: Add settings to be able to manage the presentation
 			},1000);
 		});
 		
@@ -199,25 +198,17 @@
 		$('#moviedetails').remove();
 	}
 	
-	
-	//Playmovie Needs plugin - frontbox-jquery-vlc.js
 	function _playmovie(o, title){
 		//TODO: Add nice curtain like animation (black divs from side to side closing into eachother)
-		console.log(title);
 		$.ajax({
 			url: '/movies/post/', 
 			type: 'post',
 			data: {movieTitle : title, type : 'play'}
 		}).done(function(data){
-			console.log(data);
-			var player = VLCobject.embedPlayer('movieplayer', 1024, 600, true);
-			player.play(uri);
-			
-			$('#movieplayer_plugin').attr("height", "100%");
-			$('#movieplayer_plugin').attr("width", "100%");
-			$('#movieplayer_plugin').focus();
-		
-			$('#movieplayer_hide, #movieplayer_toolbar_btn4, #movieplayer_toolbar_btn5').hide();
+			$('#moviebrowser').hide();
+			console.log(data)
+			$('#wrapper').append('<embed src="" id="player">');
+			$('#player').attr('src',data)
 		});
 	}
 	

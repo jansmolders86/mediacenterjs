@@ -23,7 +23,8 @@ var express = require('express')
 , XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 , downloader = require('downloader')
 , movielistpath = './public/movies/data/movieindex.js'
-, request = require("request");;
+, request = require("request")
+, http = require('http');
 
 exports.engine = 'jade';
 
@@ -31,8 +32,6 @@ var configfile = []
 ,configfilepath = './configuration/setup.js'
 ,configfile = fs.readFileSync(configfilepath)
 ,configfileResults = JSON.parse(configfile);	
-
-require('../../lib/helper');
 
 exports.index = function(req, res, next){	
 	updateMovies(req, res, function(status){
@@ -124,7 +123,6 @@ exports.post = function(req, res, next){
 			// Read cached file and send to client.
 			fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
 				if(!err){
-					console.log(data)
 					res.send(data);
 				}else{
 					console.log('Cannot read scraper data', err)
@@ -244,24 +242,37 @@ exports.post = function(req, res, next){
 		};
 	
 	} else if (movieRequest.type === 'play'){
-		var filePath = configfileResults.moviepath+'/'+movieRequest.movieTitle
-		, stat = fs.statSync(filePath);
+		var filePath = configfileResults.moviepath+'/'+movieRequest.movieTitle;
+		var stat = fs.statSync(filePath);
 		
-		res.send(filePath);
-		/*
-		console.log(filePath);
-
 		res.writeHead(200, {
-			'Content-Type': 'video/avi',
+			'Content-Type': 'video/avi', 
 			'Content-Length': stat.size
 		});
-
-		var readStream = fs.createReadStream(filePath);
 		
-		// We replaced all the event handlers with a simple call to util.pump()
-		util.pump(readStream, res);
-		*/
+		var readStream = fs.createReadStream(filePath);
+		readStream.on('data', function(data) {
+			console.log('streaming', data)
+			res.write(data);
+		});
+		
+		readStream.on('end', function() {
+			res.end();        
+		});
 	}
 };
 
 
+function xhrCall(url,callback) { 
+	request({
+		url: url,
+		headers: {"Accept": "application/json"},
+		method: "GET"
+	}, function (error, response, body) {
+		if(!error){
+			callback(body);
+		}else{
+			console.log('XHR Error',error);
+		}
+	});
+};
