@@ -32,7 +32,7 @@ var configfile = []
 ,configfile = fs.readFileSync(configfilepath)
 ,configfileResults = JSON.parse(configfile);	
 
-require('../../lib/global-functions');
+require('../../lib/helpers');
 
 exports.index = function(req, res, next){	
 	updateMovies(req, res, function(status){
@@ -157,8 +157,7 @@ exports.post = function(req, res, next){
 						
 							var requestResponse = JSON.parse(response)
 							,requestInitialDetails = requestResponse.results[0]
-					
-							console.log(requestInitialDetails)
+
 							 downloadCache(requestInitialDetails,function(poster, backdrop) {
 
 								// Additional error check

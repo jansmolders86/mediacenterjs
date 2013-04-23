@@ -26,7 +26,7 @@ var configfile = []
 ,configfile = fs.readFileSync(configfilepath)
 ,configfileResults = JSON.parse(configfile);	
 
-require('./lib/global-functions');
+require('./lib/helpers');
 
 app.configure(function(){
 	app.set('view engine', 'jade');
@@ -50,7 +50,7 @@ app.configure('production', function(){
 	app.use(express.errorHandler()); 
 });   
 
-require('./lib/boot')(app,{ verbose: !module.parent });
+require('./lib/routing')(app,{ verbose: !module.parent });
 app.get("/", function(req, res, next) {  
 	if(	configfileResults.moviepath == '' && configfileResults.language == '' && configfileResults.location == '' || configfileResults.moviepath == null || configfileResults.moviepath == undefined){
 		res.render('setupsettings');	
