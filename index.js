@@ -26,7 +26,7 @@ var configfile = []
 ,configfile = fs.readFileSync(configfilepath)
 ,configfileResults = JSON.parse(configfile);	
 
-require('./lib/helpers');
+require('./lib/helper');
 
 app.configure(function(){
 	app.set('view engine', 'jade');

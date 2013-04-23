@@ -32,7 +32,7 @@ var configfile = []
 ,configfile = fs.readFileSync(configfilepath)
 ,configfileResults = JSON.parse(configfile);	
 
-require('../../lib/helpers');
+require('../../lib/helper');
 
 exports.index = function(req, res, next){	
 	updateMovies(req, res, function(status){
