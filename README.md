@@ -5,7 +5,11 @@ A HTML/CSS/Javascipt (NodeJs) based Mediacenter
 
 Donate: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L
 
-Screenshots: https://github.com/jansmolders86/mediacenterjs/tree/master/screenshots
+Screenshots: 
+
+![Dashboard] (screenshots/interface.jpg)
+
+![Dashboard] (screenshots/movies.jpg)
 
 Status: Heavy work in progress
 
@@ -23,15 +27,11 @@ There will be a specific Linux distro for raspberry pi using a kiosk, debian dis
 
 Basic featurelist:
 
- . Multiple apps like youtube, weather stopify etc.
- 
- . Movie database with information and playback
- 
- . Music database with information and playback
- 
- . TV show database with information and playback 
- 
- . Easy to use app framework
+* Multiple apps like youtube, weather stopify etc.
+* Movie database with information and playback
+* Music database with information and playback
+* TV show database with information and playback 
+* Easy to use app framework
  
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
 this application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
