@@ -1,7 +1,7 @@
 mediacenterjs
 =============
 
-A HTML/CSS/Javascipt (NodeJs) based Mediacenter
+__A HTML/CSS/Javascipt (NodeJs) based Mediacenter__
 
 [![Donate] (screenshots/paypal-donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
 
