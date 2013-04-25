@@ -3,15 +3,48 @@ mediacenterjs
 
 A HTML/CSS/Javascipt (NodeJs) based Mediacenter
 
-Donate: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L
+![Donate] (screenshots/paypal-donate.gif) https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L
 
 Screenshots: 
 
 ![Dashboard] (screenshots/interface.jpg)
 
-![Dashboard] (screenshots/movies.jpg)
+![Movies] (screenshots/movies.jpg)
 
-Status: Heavy work in progress
+Status: 
+=======
+
+Heavy work in progress
+		
+What works?
+===========
+
+* Basic Routing
+* Basic MVC Framework
+* Present inital setup
+* Show time and date
+* Basic App framework
+* Automated dashboard
+* Basic keyboard controls
+* Onscreen keyboard
+* Movie indexing
+* Display movies with art
+* Local caching
+* Display movie information
+* Weather information (Only in Dutch)
+
+What's comming up
+=================
+
+* Settings
+* transcoding
+* Screensaver 
+
+What's not working
+==================
+
+* The rest...
+
 
 What is the goal/purpose:
 MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques(HTML5/CSS/Javascript) and languages.
