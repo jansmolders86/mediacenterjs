@@ -18,10 +18,9 @@ What works?
 ===========
 
 * Basic Routing
-* Basic MVC Framework
+* Basic MVC 'App' Framework
 * Clientside inital setup
 * Show time and date on dashboard
-* Basic App framework
 * Dashboard with dynamic app display
 * Keyboard controls
 * Onscreen keyboard
