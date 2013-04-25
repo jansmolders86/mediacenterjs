@@ -30,7 +30,7 @@ What works?
 * Display movie information
 * Weather information (Only in Dutch)
 
-What's comming up
+What's coming up
 =================
 
 * Settings
