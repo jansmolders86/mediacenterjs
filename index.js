@@ -93,7 +93,7 @@ app.get("/settings", function(req, res, next) {
 
 app.post('/setuppost', function(req, res){
 	writeSettings(req, res, function(){
-		res.render('/finish');
+		res.render('finish');
 	});
 });
 
