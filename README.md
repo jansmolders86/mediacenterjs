@@ -19,7 +19,7 @@ What works?
 
 * Basic Routing
 * Basic MVC 'App' Framework
-* Clientside inital setup
+* Clientside initial setup
 * Show time and date on dashboard
 * Dashboard with dynamic app display
 * Keyboard controls
