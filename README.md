@@ -12,22 +12,22 @@ Screenshots:
 Status: 
 =======
 
-Heavy work in progress
+__Heavy work in progress__
 		
 What works?
 ===========
 
 * Basic Routing
 * Basic MVC Framework
-* Present inital setup
-* Show time and date
+* Clientside inital setup
+* Show time and date on dashboard
 * Basic App framework
-* Automated dashboard
-* Basic keyboard controls
+* Dashboard with dynamic app display
+* Keyboard controls
 * Onscreen keyboard
 * Movie indexing
-* Display movies with art
-* Local caching
+* Display movies with Poster and Backdrop
+* Local caching of information and images
 * Display movie information
 * Weather information (Only in Dutch)
 
