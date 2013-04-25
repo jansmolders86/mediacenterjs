@@ -33,9 +33,9 @@ What works?
 What's coming up
 =================
 
-* Settings
-* transcoding
-* Screensaver 
+* Handle the writing of settings
+* Transcoding of movie files
+* Activate Screensaver (dimming mode)
 
 What's not working
 ==================
