@@ -46,6 +46,10 @@ html(lang="en")
 		#wrapper
 			#header
 				h1 MediacenterJS
+				
+				ul.settingslink
+					li
+						a(href="/settings") Settings
 				#dateandtime
 					.time=time
 					.date=date	
@@ -54,5 +58,3 @@ html(lang="en")
 					li.tile
 						a(href="/"+item)
 							img(src="/"+item+"/tile.png")
-		a#settings(href="/settings/")
-			img(src="/core/icons/settings.png")

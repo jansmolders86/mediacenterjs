@@ -207,8 +207,7 @@
 		}).done(function(data){
 			$('#moviebrowser').hide();
 			console.log(data)
-			$('#wrapper').append('<embed src="" id="player">');
-			$('#player').attr('src',data)
+			//$('#wrapper').append('<embed src="http://localhost:3000" id="player">');
 		});
 	}
 	

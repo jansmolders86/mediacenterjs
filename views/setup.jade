@@ -14,7 +14,10 @@ html(lang="en")
 				.row
 					label Specify movielocation
 					input(name="movielocation",type="text",placeholder="C:/temp or /mnt/media/hdd/movies")
-					span.info MediaCenterJS will index all the moviefiles in this initial folder. <br/> You can add or change a location later in the settings. 
+					span.info 
+						span.quote &ldquo;
+						span MediaCenterJS will index all the moviefiles in this initial folder. <br/> You can add or change a location later in the settings.
+						span.quote &rdquo; 						
 				.row
 					span.label Use high res images (needs more diskspace) 
 					.checkgroup
@@ -39,5 +42,8 @@ html(lang="en")
 					input(name="musiclocation",type="text",value="tbd",style="visibility:hidden;")
 					input(name="tvlocation",type="text",value="tbd",style="visibility:hidden;")
 					input(name="showdetails",type="text",value="yes",style="visibility:hidden;")
+				.row
+					label Port
+					input(name="language",type="text",placeholder="ie 3000 or 1337", value= port)
 				.row
 					input(type="submit",value="Submit")

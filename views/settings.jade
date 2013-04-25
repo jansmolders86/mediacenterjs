@@ -7,72 +7,79 @@ html(lang="en")
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/jquery.mcjs.core.js")
 	body
-		#settings
-			form#setup.validate-form(action='/submit',method='post')
-				.row
-					a.btn(href='/movies/update') Manually update movielist
-				.row
-					span.label Show moviedetails
-					.checkgroup
-						if showdetails === 'yes'
-							input#detailsyes(name="details",type="radio",value="yes",checked) 
-							label(for="detailsyes") Yes
-							input#detailsno(name="details",type="radio",value="no") 
-							label(for="detailsno") No
-						else
-							input#detailsyes(name="details",type="radio",value="yes") 
-							label(for="detailsyes") Yes
-							input#detailsno(name="details",type="radio",value="no",checked) 
-							label(for="detailsno") No
-				.row
-					label Specify movielocation
-					input(name="movielocation",type="text",placeholder="C:/temp or /mnt/media/hdd/movies", value= moviepath)
-				.row
-					span.label Use high res images (720 or 1080)
-					.checkgroup
-						if highres === 'yes'
-							input#highresyes(name="highres",type="radio",value="yes",checked) 
-							label(for="highresyes") Yes
-							input#highresno(name="highres",type="radio",value="no") 
-							label(for="highresno") No
-						else
-							input#highresyes(name="highres",type="radio",value="yes") 
-							label(for="highresyes") Yes
-							input#highresno(name="highres",type="radio",value="no",checked) 
-							label(for="highresno") No
-				.row
-					span.label Dim screen on inactivity
-					.checkgroup
-						if screensaver === 'dim'
-							input#dimYes(name="screensaver",type="radio",value="dim",checked) 
-							label(for="dimYes") Yes
-							input#dimNo(name="screensaver",type="radio",value="off") 
-							label(for="dimNo") No
-						else 
-							input#dimYes(name="screensaver",type="radio",value="dim") 
-							label(for="dimYes") Yes
-							input#dimNo(name="screensaver",type="radio",value="off",checked) 
-							label(for="dimNo") No
-				.row
-					span.label Use onscreen keyboard
-					.checkgroup
-						if onscreenkeyboard === 'yes'
-							input#yeskeyboard(name="usekeyboard",type="radio",value="yes",checked) 
-							label(for="yeskeyboard") Yes
-							input#nokeyboard(name="usekeyboard",type="radio",value="no") 
-							label(for="nokeyboard") No
-						else
-							input#yeskeyboard(name="usekeyboard",type="radio",value="yes") 
-							label(for="yeskeyboard") Yes
-							input#nokeyboard(name="usekeyboard",type="radio",value="no",checked) 
-							label(for="nokeyboard") No
-				.row
-					label Language
-					input(name="language",type="text",placeholder="ie nl or gb", value= language)
-				.row
-					label You current location (city)
-					input(name="location",type="text",placeholder="ie london or amsterdam", value= location)
-					input(name="musiclocation",type="text",value="tbd",style="visibility:hidden;")
-					input(name="tvlocation",type="text",value="tbd",style="visibility:hidden;")
-				.row
-					input(type="submit",value="Submit")		
+		#wrapper
+			a.backlink(href="/") 
+				img(src="/core/icons/back.png")
+			h1 Settings
+			#settings
+				form#setup.validate-form(action='/submit',method='post')
+					.row
+						a.btn(href='/movies/update') Manually update movielist
+					.row
+						span.label Show moviedetails
+						.checkgroup
+							if showdetails === 'yes'
+								input#detailsyes(name="details",type="radio",value="yes",checked) 
+								label(for="detailsyes") Yes
+								input#detailsno(name="details",type="radio",value="no") 
+								label(for="detailsno") No
+							else
+								input#detailsyes(name="details",type="radio",value="yes") 
+								label(for="detailsyes") Yes
+								input#detailsno(name="details",type="radio",value="no",checked) 
+								label(for="detailsno") No
+					.row
+						label Specify movielocation
+						input(name="movielocation",type="text",placeholder="C:/temp or /mnt/media/hdd/movies", value= moviepath)
+					.row
+						span.label Use high res images (720 or 1080)
+						.checkgroup
+							if highres === 'yes'
+								input#highresyes(name="highres",type="radio",value="yes",checked) 
+								label(for="highresyes") Yes
+								input#highresno(name="highres",type="radio",value="no") 
+								label(for="highresno") No
+							else
+								input#highresyes(name="highres",type="radio",value="yes") 
+								label(for="highresyes") Yes
+								input#highresno(name="highres",type="radio",value="no",checked) 
+								label(for="highresno") No
+					.row
+						span.label Dim screen on inactivity
+						.checkgroup
+							if screensaver === 'dim'
+								input#dimYes(name="screensaver",type="radio",value="dim",checked) 
+								label(for="dimYes") Yes
+								input#dimNo(name="screensaver",type="radio",value="off") 
+								label(for="dimNo") No
+							else 
+								input#dimYes(name="screensaver",type="radio",value="dim") 
+								label(for="dimYes") Yes
+								input#dimNo(name="screensaver",type="radio",value="off",checked) 
+								label(for="dimNo") No
+					.row
+						span.label Use onscreen keyboard
+						.checkgroup
+							if onscreenkeyboard === 'yes'
+								input#yeskeyboard(name="usekeyboard",type="radio",value="yes",checked) 
+								label(for="yeskeyboard") Yes
+								input#nokeyboard(name="usekeyboard",type="radio",value="no") 
+								label(for="nokeyboard") No
+							else
+								input#yeskeyboard(name="usekeyboard",type="radio",value="yes") 
+								label(for="yeskeyboard") Yes
+								input#nokeyboard(name="usekeyboard",type="radio",value="no",checked) 
+								label(for="nokeyboard") No
+					.row
+						label Language
+						input(name="language",type="text",placeholder="ie nl or gb", value= language)
+					.row
+						label You current location (city)
+						input(name="location",type="text",placeholder="ie london or amsterdam", value= location)
+						input(name="musiclocation",type="text",value="tbd",style="visibility:hidden;")
+						input(name="tvlocation",type="text",value="tbd",style="visibility:hidden;")
+					.row
+						label Port
+						input(name="language",type="text",placeholder="ie 3000 or 1337", value= port)
+					.row
+						input(type="submit",value="Submit")		

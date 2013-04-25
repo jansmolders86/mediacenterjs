@@ -6,5 +6,7 @@
     "language": "nl",
     "onscreenkeyboard": "no",
     "location": "eindhoven",
-    "screensaver": "dim"
+    "screensaver": "dim",
+    "showdetails": "yes",
+	"port":3000
 }

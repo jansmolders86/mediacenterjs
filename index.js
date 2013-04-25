@@ -29,7 +29,6 @@ var configfile = []
 app.configure(function(){
 	app.set('view engine', 'jade');
 	app.set('views', __dirname + '/views');
-	app.locals.pretty = true;
 	app.setMaxListeners(100);
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
@@ -53,7 +52,6 @@ app.get("/", function(req, res, next) {
 	if(	configfileResults.moviepath == '' && configfileResults.language == '' && configfileResults.location == '' || configfileResults.moviepath == null || configfileResults.moviepath == undefined){
 		res.render('setup');	
 	} else {
-		// Load apps
 		var apps = []
 		//Search app folder for apps and check if tile icon is present
 		fs.readdirSync(__dirname + '/apps').forEach(function(name){
@@ -74,11 +72,23 @@ app.get("/", function(req, res, next) {
 	}
 });
 
-//	Handle the writing of settings. Because this is fairly generic,
+//	Handle settings. Because this is done in one place,
 //	I decided to keep it in the initial app.js file. 
+//	TODO: Add extend to settings from app
 
 app.get("/settings", function(req, res, next) {  
-	res.render('settings');	
+	res.render('settings',{
+		moviepath: configfileResults.moviepath,
+		musicpath : configfileResults.musicpath,
+		tvpath : configfileResults.tvpath,
+		highres: configfileResults.highres,
+		language: configfileResults.language,
+		onscreenkeyboard: configfileResults.onscreenkeyboard,
+		location: configfileResults.location,
+		screensaver: configfileResults.screensaver,
+		showdetails: configfileResults.showdetails,
+		port: configfileResults.port
+	});	
 });
 
 app.post('/setuppost', function(req, res){
@@ -104,6 +114,7 @@ function writeSettings(req, res, callback){
 		,location: req.body.location
 		,screensaver: req.body.screensaver
 		,showdetails: req.body.showdetails
+		,port: req.body.port
 	}
 	
 	fs.writeFile(configfilepath, JSON.stringify(myData, null, 4), function(e) {
@@ -120,5 +131,5 @@ function writeSettings(req, res, callback){
 }
 
 // Open App socket
-app.listen(3000);
-console.log("MediacenterJS listening on port: 3000"); 
+app.listen(configfileResults.port);
+console.log("MediacenterJS listening on port:", configfileResults.port); 

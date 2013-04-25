@@ -188,6 +188,24 @@ h3 a{
 	margin-left:60px;
 }
 
+.settingslink{
+	position: absolute;
+	top: 6px;
+	right: 500px;
+	height:50px;
+	list-style:none;
+}
+
+.settingslink li{height:50px;}
+.settingslink li a{
+	background:url(/core/icons/settings.png) no-repeat;
+	padding-left:50px;
+	color:#fff;
+	height:50px;
+	display:block;
+	line-height:32px;
+}
+
 p{color:#ddd; font-size:20px; font-family: 'Open Sans', sans-serif; margin:40px 0;}
 p a{color:#018287; text-decoration:none; font-size:20px; font-family: 'Open Sans', sans-serif;}
 p a:hover{text-decoration:none;}
@@ -289,14 +307,24 @@ p a:hover{text-decoration:none;}
 
 }
 
-.row span.info{
+span.info{
 	display:block;
-	color:#e5e5e5;
+	color:#ccc;
 	min-height:30px;
 	clear:both;
 	padding-top:20px;
 	margin:0px 0 50px;
 	font-size:14px;
+	line-height: 20px;
+}
+
+span.quote{
+	font-size: 55px;
+	display: inline-block;
+	line-height: 0px;
+	vertical-align: text-bottom;
+	padding:0 5px;
+	color:#ccc;
 }
 
 label,

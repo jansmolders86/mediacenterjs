@@ -24,7 +24,7 @@ var express = require('express')
 , downloader = require('downloader')
 , movielistpath = './public/movies/data/movieindex.js'
 , request = require("request")
-, http = require('http');
+, ffmpeg = require('ffmpeg-node');
 
 exports.engine = 'jade';
 
@@ -42,14 +42,7 @@ exports.index = function(req, res, next){
 		
 		res.render('movies',{
 			movies: moviefileResults,
-			status:status,
-			moviepath: configfileResults.moviepath,
-			highres: configfileResults.highres,
-			language: configfileResults.language,
-			onscreenkeyboard: configfileResults.onscreenkeyboard,
-			location: configfileResults.location,
-			screensaver: configfileResults.screensaver,
-			showdetails: configfileResults.showdetails
+			status:status
 		});
 	});
 };
@@ -243,22 +236,12 @@ exports.post = function(req, res, next){
 	
 	} else if (movieRequest.type === 'play'){
 		var filePath = configfileResults.moviepath+'/'+movieRequest.movieTitle;
-		var stat = fs.statSync(filePath);
+		ffmpeg.exec(["-i", filePath, "test.mp4"], callback);
+		 
+		function callback(error, info) {
+			console.log(info)
 		
-		res.writeHead(200, {
-			'Content-Type': 'video/avi', 
-			'Content-Length': stat.size
-		});
-		
-		var readStream = fs.createReadStream(filePath);
-		readStream.on('data', function(data) {
-			console.log('streaming', data)
-			res.write(data);
-		});
-		
-		readStream.on('end', function() {
-			res.end();        
-		});
+		}
 	}
 };
 
