@@ -45,13 +45,12 @@ What's not working
 What is the goal/purpose:
 =========================
 
-MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques(HTML5/CSS/Javascript) and languages.
-The backend is based on Nodejs/ExpressJS 3x with jade templates producing easy to use and code for end product. 
-The goal is to make it possible to add a 'app' to MCJS even with limited knowlegde of said frontend techniques.
-Asside from that, due to the use of node, MCJS is/will be very fast and highly customizable.
+MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques and languages (HTML5/CSS/Javascript).
+The backend is based on Nodejs/ExpressJS 3x with jade templates producing easy to use code. 
+The goal is to make it possible to add an 'app' to MCJS even with limited knowlegde of said frontend techniques. 
+An 'app' in this case is basically a wrapper for a feature you can use within MCJS.
 
-The actual playing of the video will be possible with different utilities. 
-If using a smart TV, a upnp connection will be established. If using an standard tv with, for instance Rasberry PI, VLC wil be used to play the video. 
+On the wishlist for MCJS are UPNP, fast transcoding and crossbrowser compatibility.
 
 This application will run on Windows and Linux based systems. 
 There will be a specific Linux distro for raspberry pi using a kiosk, debian distro.
