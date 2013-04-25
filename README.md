@@ -3,9 +3,6 @@ mediacenterjs
 
 __A HTML/CSS/Javascipt (NodeJs) based Mediacenter__
 
-[![Donate] (screenshots/paypal-donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
-
-
 Screenshots: 
 
 ![Dashboard] (screenshots/interface.jpg)
@@ -46,8 +43,9 @@ What's not working
 
 * The rest...
 
-
 What is the goal/purpose:
+=========================
+
 MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques(HTML5/CSS/Javascript) and languages.
 The backend is based on Nodejs/ExpressJS 3x with jade templates producing easy to use and code for end product. 
 The goal is to make it possible to add a 'app' to MCJS even with limited knowlegde of said frontend techniques.
@@ -66,7 +64,9 @@ Basic featurelist:
 * Music database with information and playback
 * TV show database with information and playback 
 * Easy to use app framework
- 
+
+[![Donate] (screenshots/paypal-donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
+
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
 this application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
 
