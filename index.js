@@ -109,16 +109,16 @@ app.post('/submit', function(req, res){
 
 // Temp routing
 app.get('/video/:filename', function(req, res) {
-	console.log('Setting up stream', req.params.filename)
-	res.contentType('avi');
-	var pathToMovie = configfileResults.moviepath + req.params.filename; 
-	var proc = new ffmpeg({ source: pathToMovie, nolog: true }).usingPreset('divx').writeToStream(res, function(retcode, error){
+	console.log('Setting up stream', configfileResults.moviepath + req.params.filename)
+	var stream = fs.createWriteStream(configfileResults.moviepath + req.params.filename)
+	var proc = new ffmpeg({ source: configfileResults.moviepath + req.params.filename, nolog: true }).usingPreset('divx').writeToStream(stream, function(retcode, error){
 		if (!error){
 			console.log('file conversion error',error);
 		}else{
 			console.log('file has been converted succesfully',retcode);
 		}
-    });
+	});
+	
 });
 
 function writeSettings(req, res, callback){
