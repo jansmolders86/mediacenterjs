@@ -92,7 +92,7 @@ app.get("/settings", function(req, res, next) {
 });
 
 
-//TODO: restart app on post
+//TODO: restart app on post, works fine with Nodemon though..
 app.post('/setuppost', function(req, res){
 	writeSettings(req, res, function(){
 		res.render('finish');

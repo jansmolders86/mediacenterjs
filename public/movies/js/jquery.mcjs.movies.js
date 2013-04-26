@@ -39,10 +39,8 @@
 	}
 	
 	/**** Start of custom functions ***/
-	/**** MOVIE HANDELING *******/
 	
 	function _focusedItem(o){
-		// movie poster handlers 
 		$('.movieposter').on({
 			mouseenter: function() {	
 				$('.movieposters').find("li:first").removeClass("focused");
@@ -52,18 +50,12 @@
 				var currentMovieTitle = $(this).find('span.title').html();
 				var currentMovie = $(this);
 				_showDetails(o,currentMovie, currentMovieTitle);
-	
-				$(this).find('a.play').click( function(e) {
-					e.preventDefault();
-					_playmovie(o, currentMovieTitle);
-				});
 			},
 			mouseleave: function() {
 				$(".backdropimg").removeClass("fadeinslow");
 				if ($('.movieposter.focused').length > 1){
 					$('.movieposter').removeClass("focused");
 				}
-				
 				var currentMovie = $(this);
 				_hideDetails(currentMovie);
 			},			
@@ -73,12 +65,7 @@
 				
 				var currentMovieTitle = $(this).find('.title');
 				var currentMovie = $(this);
-				_showDetails(o,currentMovie, currentMovieTitle);
-				
-				$(this).find('a.play').click( function(e) {
-					e.preventDefault();
-					_playmovie(o, currentMovieTitle);
-				});				
+				_showDetails(o,currentMovie, currentMovieTitle);		
 			},
 			focusout: function() {
 				$(".backdropimg").removeClass("fadeinslow");
@@ -89,12 +76,7 @@
 		
 		if ($('.movieposter.focused')){
 			var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
-			$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
-			
-			$(this).find('a.play').click( function(e) {
-				e.preventDefault();
-				_playmovie(o, currentMovieTitle);
-			});			
+			$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');		
 		} else if($('.movieposter.focused').length < 1){
 			var currentMovie = $(this);
 			_hideDetails(currentMovie);
@@ -102,7 +84,7 @@
 	}
 	
 
-	// Movie poster carousel - Needs plugin jquery.carouFredSel-6.1.0-packed.js
+	// Needs plugin jquery.carouFredSel-6.1.0-packed.js
 	function _carousel(o){
 		$('.movieposters').find(".movieposter:first").addClass("focused");
 		$('.movieposters').carouFredSel({
@@ -152,7 +134,7 @@
 		$.ajax({
 			url: '/movies/post/', 
 			type: 'post',
-			data: {movieTitle : title, type : 'show'}
+			data: {movieTitle : title}
 		}).done(function(data){
 			var movieData = $.parseJSON(data);
 			visibleMovie.find('.original_name').html(movieData[0].original_name);
@@ -174,7 +156,6 @@
 	}
 	
 	
-	
 	function _showDetails(o, currentMovie, currentMovieTitle){
 		$.ajax({
 			url: '/movies/data/'+currentMovieTitle+'/data.js', 
@@ -186,29 +167,14 @@
 				$("#moviedetails").animate({opacity:1});
 			},1000);
 		});
-		
 		currentMovie.find('.original_name').animate({opacity:1});
 	}
-	
 	
 	
 	function _hideDetails(currentMovie){
 		$("#moviedetails").animate({opacity:0});
 		currentMovie.find('.original_name').animate({opacity:0});
 		$('#moviedetails').remove();
-	}
-	
-	function _playmovie(o, title){
-		//TODO: Add nice curtain like animation (black divs from side to side closing into eachother)
-		$.ajax({
-			url: '/movies/post/', 
-			type: 'post',
-			data: {movieTitle : title, type : 'play'}
-		}).done(function(data){
-			$('#moviebrowser').hide();
-			console.log(data)
-			//$('#wrapper').append('<embed src="http://localhost:3000" id="player">');
-		});
 	}
 	
 
