@@ -81,7 +81,7 @@ function updateMovies(req, res, callback) {
 			var allMoviesJSON = JSON.stringify(allMovies, null, 4);
 			fs.writeFile(movielistpath, allMoviesJSON, function(e) {
 				if (!e) {
-					console.log('writing', allMoviesJSON);
+					console.log('Updating movielist', allMoviesJSON);
 					callback(status);
 				}else{ 
 					console.log('Error getting movielist', e);
@@ -241,7 +241,9 @@ exports.post = function(req, res, next){
 	};
 };
 
+/*
 exports.video = function(req, res, next){	
+	console.log('Setting up stream', req.params.filename)
 	res.contentType('avi');
 	var pathToMovie = configfileResults.moviepath + req.params.filename; 
 	var proc = new ffmpeg({ source: pathToMovie, nolog: true }).usingPreset('divx').writeToStream(res, function(retcode, error){
@@ -251,7 +253,8 @@ exports.video = function(req, res, next){
 			console.log('file has been converted succesfully',retcode);
 		}
     });
-}
+};
+*/
 
 function xhrCall(url,callback) { 
 	request({

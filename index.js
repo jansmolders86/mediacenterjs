@@ -19,7 +19,8 @@
 var express = require('express')
 , app = express()
 , fs = require ('fs')
-, dateFormat = require('dateformat');
+, dateFormat = require('dateformat')
+, ffmpeg = require('fluent-ffmpeg');
 
 var configfile = []
 ,configfilepath = './configuration/setup.js'
@@ -103,6 +104,21 @@ app.post('/submit', function(req, res){
 	writeSettings(req, res, function(){
 		res.render('/');
 	});
+});
+
+
+// Temp routing
+app.get('/video/:filename', function(req, res) {
+	console.log('Setting up stream', req.params.filename)
+	res.contentType('avi');
+	var pathToMovie = configfileResults.moviepath + req.params.filename; 
+	var proc = new ffmpeg({ source: pathToMovie, nolog: true }).usingPreset('divx').writeToStream(res, function(retcode, error){
+		if (!error){
+			console.log('file conversion error',error);
+		}else{
+			console.log('file has been converted succesfully',retcode);
+		}
+    });
 });
 
 function writeSettings(req, res, callback){

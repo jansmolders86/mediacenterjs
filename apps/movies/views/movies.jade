@@ -37,7 +37,7 @@ html(lang="en")
 						ul.movieposters
 							each movie in movies
 								li.movieposter 
-									a.play#player(href= movie)
+									a.play#player(href='/video/'+ movie)
 										img(src="/movies/img/loading.gif").movieposter							
 									span.original_name	Loading...
 									span.title= movie		
