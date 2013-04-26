@@ -8,5 +8,5 @@
     "location": "",
     "screensaver": "dim",
     "showdetails": "yes",
-	"port":3000
+    "port": "3000"
 }

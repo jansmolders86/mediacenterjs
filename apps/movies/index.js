@@ -24,7 +24,9 @@ var express = require('express')
 , downloader = require('downloader')
 , movielistpath = './public/movies/data/movieindex.js'
 , request = require("request")
-, ffmpeg = require('ffmpeg-node');
+, ffmpeg = require('fluent-ffmpeg')
+, winston = require('winston')
+, rimraf = require('rimraf');
 
 exports.engine = 'jade';
 
@@ -113,12 +115,21 @@ exports.post = function(req, res, next){
 	if (movieRequest.type === 'show'){
 		//Check if folder already exists
 		if (fs.existsSync('./public/movies/data/'+movieRequest.movieTitle)) {
-			// Read cached file and send to client.
-			fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
-				if(!err){
-					res.send(data);
-				}else{
-					console.log('Cannot read scraper data', err)
+			fs.stat('./public/movies/data/'+movieRequest.movieTitle+'/data.js', function (err, stats) {
+				// If data file is created without data, we remove it (rm -rf).
+				if(stats.size < 0){
+					rimraf('./public/movies/data/'+movieRequest.movieTitle, function () {
+						console.log('Removed bad dir', movieRequest.movieTitle);
+					})
+				} else {
+					// Read cached file and send to client.
+					fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
+						if(!err){
+							res.send(data);
+						}else{
+							console.log('Cannot read scraper data', err)
+						}
+					});
 				}
 			});
 		} else {
@@ -185,7 +196,6 @@ exports.post = function(req, res, next){
 											if (!e) {
 												fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
 													if(!err){
-														console.log(data)
 														res.send(data);
 													}else{
 														console.log('Cannot read scraper data', err)
@@ -233,13 +243,16 @@ exports.post = function(req, res, next){
 		};
 	
 	} else if (movieRequest.type === 'play'){
-		var filePath = configfileResults.moviepath+'/'+movieRequest.movieTitle;
-		ffmpeg.exec(["-i", filePath, "test.mp4"], callback);
-		 
-		function callback(error, info) {
-			console.log(info)
-		
-		}
+		var pathToMovie = configfileResults.moviepath+'/'+movieRequest.movieTitle;
+		console.log('Requesting movie:',pathToMovie)
+		res.contentType('avi');
+		var proc = new ffmpeg({ source: pathToMovie, nolog: true }).usingPreset('divx').writeToStream(res, function(retcode, error){
+			if (!error){
+				console.log('file conversion error',error);
+			}else{
+				console.log('file has been converted succesfully',retcode);
+			}
+		});
 	}
 };
 

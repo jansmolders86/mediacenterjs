@@ -13,12 +13,13 @@ html(lang="en")
 		link(rel='stylesheet', href='/movies/css/style.css')
 		script(src="/movies/js/jquery.carouFredSel-6.1.0-packed.js")
 		script(src="/movies/js/jquery.mcjs.movies.js")
-		script(src="/movies/js/jquery.mcjs.movies.player.js")
+		script(src="/movies/js/flowplayer/flowplayer.min.js")
 
 		script
 			$(document).ready(function(){
 				$('body').mcjs();
 				$('body').mcjsm();
+				flowplayer("player", "/movies/js/flowplayer/flowplayer.swf");
 			});
 
 	body
@@ -36,9 +37,10 @@ html(lang="en")
 						ul.movieposters
 							each movie in movies
 								li.movieposter 
-									a.play(href="")
+									a.play#player(href="")
 										img(src="/movies/img/loading.gif").movieposter							
 									span.original_name	Loading...
 									span.title= movie		
 			a#prev
 			a#next	
+	

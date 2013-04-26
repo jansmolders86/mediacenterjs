@@ -19,7 +19,7 @@
 var express = require('express')
 , app = express()
 , fs = require ('fs')
-, dateFormat = require('dateformat')
+, dateFormat = require('dateformat');
 
 var configfile = []
 ,configfilepath = './configuration/setup.js'
@@ -91,6 +91,8 @@ app.get("/settings", function(req, res, next) {
 	});	
 });
 
+
+//TODO: restart app on post
 app.post('/setuppost', function(req, res){
 	writeSettings(req, res, function(){
 		res.render('finish');
