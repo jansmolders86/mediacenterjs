@@ -241,21 +241,6 @@ exports.post = function(req, res, next){
 	};
 };
 
-/*
-exports.video = function(req, res, next){	
-	console.log('Setting up stream', req.params.filename)
-	res.contentType('avi');
-	var pathToMovie = configfileResults.moviepath + req.params.filename; 
-	var proc = new ffmpeg({ source: pathToMovie, nolog: true }).usingPreset('divx').writeToStream(res, function(retcode, error){
-		if (!error){
-			console.log('file conversion error',error);
-		}else{
-			console.log('file has been converted succesfully',retcode);
-		}
-    });
-};
-*/
-
 function xhrCall(url,callback) { 
 	request({
 		url: url,

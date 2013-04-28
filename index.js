@@ -109,13 +109,19 @@ app.post('/submit', function(req, res){
 
 // Temp routing
 app.get('/video/:filename', function(req, res) {
+	res.contentType('avi');
 	console.log('Setting up stream', configfileResults.moviepath + req.params.filename)
-	var stream = fs.createWriteStream(configfileResults.moviepath + req.params.filename)
-	var proc = new ffmpeg({ source: configfileResults.moviepath + req.params.filename, nolog: true }).usingPreset('divx').writeToStream(stream, function(retcode, error){
+	
+	var stream = configfileResults.moviepath + req.params.filename
+	var proc = new ffmpeg({ source: configfileResults.moviepath + req.params.filename, nolog: true, timeout: 120, })
+		.usingPreset('divx')
+		.withAspect('4:3')
+		.withSize('640x480')
+		.writeToStream(res, function(retcode, error){
 		if (!error){
-			console.log('file conversion error',error);
-		}else{
 			console.log('file has been converted succesfully',retcode);
+		}else{
+			console.log('file conversion error',error);
 		}
 	});
 	
