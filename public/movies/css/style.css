@@ -42,8 +42,8 @@
 	width:47px;
 	height:69px;
 	position:absolute; 
-	bottom:250px; 	
-	z-index:999;
+	bottom:180px; 	
+	z-index:8;
 }
 #next{	background: url("img/carousel-sprite.png") no-repeat left bottom; right:0px;}
 #prev{	background: url("img/carousel-sprite.png") no-repeat left top; left:0;}
@@ -72,7 +72,7 @@
 
 .posterview li {
 	padding: 0px;
-	margin: 15px;
+	margin: 15px 7px;
 	position:relative;
 	display: block;
 	float: left;
@@ -142,25 +142,33 @@ span.title{visibility:hidden;}
 
 #moviedetails{
 	position: absolute;
-	right: 0px;
-	top: 150px;
-	width:100%; 
+	left: 500px;
+	top: 0px;
+	width:700px; 
 	opacity:0;
 	background: url(img/overlay.png) repeat;
-	height:350px;
+	height:250px;
+	z-index:7;
 }
+
 #overview{
 	float:left;
 	color:#ddd; 
-	width:750px; 
+	width:650px; 
 	margin-right:5px;
-	height:367px;
+	height:180px;
 	line-height:24px;
-	padding:20px 20px 20px 100px;
+	padding:20px;
+}
+
+#additional{
+	margin: -60px 0px 0;
+	width: 690px;
+	height: 100px;
+	float: left;
 }
 
 #overview  h1{ margin-bottom:0px;}
-
 #overview p{font-size:16px; margin-top:10px;}
 
 #poster{
@@ -171,7 +179,7 @@ span.title{visibility:hidden;}
 
 #additional > div{
 	float:left;
-	font-size:14px;
+	font-size:13px;
 	margin-left:40px;	
 }
 

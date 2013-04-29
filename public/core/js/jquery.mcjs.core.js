@@ -41,7 +41,6 @@
 	
 			_resizeviewport(o, $(this)); 	// Strech bg to fullscreen
 			_keyevents(o,$(this)); 			// init keys
-			_settingsBar(o);
 			
 			if(o.debug == false){
 				$(document).bind("contextmenu", function(e) {
@@ -69,33 +68,6 @@
 			extension: 'js',
 			loadBaseFile: false  
 		});	*/
-	}
-	
-	function _settingsBar(o){
-	
-		function showSetting(){
-			$('#settingsbar').stop().animate({
-				width:700,
-				top:0,
-				opacity:1
-			})
-		}
-						
-		function hideSetting(){
-			$('#settingsbar').stop().animate({
-				width:200,
-				top:-695,
-				opacity:0.5
-			})
-		}
-	
-		$('#settingsbar').on({
-			mouseenter: function() { showSetting(); },
-			mouseleave: function() { hideSetting(); },			
-			focus: function() {	showSetting(); },
-			focusout: function() { hideSetting(); },
-			click: function() { showSetting(); }
-		});	
 	}
 	
 	// Resize background image according to viewport
@@ -156,7 +128,6 @@
 				break;
 				case 13 : //enter
 					document.location = focused.find('a').attr('href');
-					
 				break;
 				case 8  : //backspace
 					if (!elid){

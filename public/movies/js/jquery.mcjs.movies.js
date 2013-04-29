@@ -35,6 +35,13 @@
 			_focusedItem(o);
 			_carousel(o);
 			
+			
+			$('a.play').click(function(e) {
+				e.preventDefault();	
+				var url = '/movies/video/' + $(this).attr('data-movie')
+				_playMovie(url)
+			});
+			
 		});
 	}
 	
@@ -139,13 +146,13 @@
 			var movieData = $.parseJSON(data);
 			visibleMovie.find('.original_name').html(movieData[0].original_name);
 			
-			// Give the plugin time to load the (new) image(s).
+			// Give the plugin time to load the (new) images.
 			// Is need for chrome bug with image loading..
 			
 			setTimeout(function(){
 				visibleMovie.find("img.movieposter").attr('src','');	
 				visibleMovie.find("img.movieposter").attr('src',movieData[0].poster).addClass('coverfound');							
-			},350);
+			},300);
 			
 			visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
 			
@@ -163,7 +170,7 @@
 		}).done(function(data){
 			var movieData = $.parseJSON(data);
 			setTimeout(function(){
-				$('body').append('<div id="moviedetails"><div id="overview"><h1>'+movieData[0].original_name+'</h1><p>'+movieData[0].overview+'</p></div><div id="additional"><div id="genre"><p> Genre: '+movieData[0].genre+'</p></div><div id="runtime"><p> Runtime: '+movieData[0].runtime+'</p></div></div></div>');
+				$('body').append('<div id="moviedetails"><div id="overview"><h1>'+movieData[0].original_name+'</h1><p>'+movieData[0].overview+'</p></div><div id="additional"><div id="genre"><p> Genre: '+movieData[0].genre+'</p></div><div id="runtime"><p> Runtime: '+movieData[0].runtime+' min</p></div></div></div>');
 				$("#moviedetails").animate({opacity:1});
 			},1000);
 		});
@@ -177,6 +184,18 @@
 		$('#moviedetails').remove();
 	}
 	
+	function _playMovie(url){
+		$('#wrapper, #moviedetails, #backdrop').hide();
+		$('body').css('backgroundColor','#000');
+		$.ajax({
+			url: url, 
+			type: 'get'
+		}).done(function(data){
+			$('#moviebrowser').show();
+		});
+		
+		$('body').append('<video id="player" class="video-js vjs-default-skin" style="position: absolute; top: 0; left:0px width:100%; height:100%; z-index:9;" controls width="100%" height="100%"><source src="'+url+'" type="video/webm"></video>');
+	}
 
 	/**** End of custom functions ***/
 	

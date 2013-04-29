@@ -46,14 +46,13 @@ html(lang="en")
 		#wrapper
 			#header
 				h1 MediacenterJS
-				
 				ul.settingslink
 					li
 						a(href="/settings") Settings
 				#dateandtime
 					.time=time
 					.date=date	
-			ul
+			ul#tiles
 				each item in apps
 					li.tile
 						a(href="/"+item)

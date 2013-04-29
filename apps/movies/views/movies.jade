@@ -13,15 +13,15 @@ html(lang="en")
 		link(rel='stylesheet', href='/movies/css/style.css')
 		script(src="/movies/js/jquery.carouFredSel-6.1.0-packed.js")
 		script(src="/movies/js/jquery.mcjs.movies.js")
-		script(src="/movies/js/flowplayer/flowplayer.min.js")
+		
+		link (href="http://vjs.zencdn.net/c/video-js.css")
+		script (src="http://vjs.zencdn.net/c/video.js")
 
 		script
 			$(document).ready(function(){
 				$('body').mcjs();
 				$('body').mcjsm();
-				flowplayer("player", "/movies/js/flowplayer/flowplayer.swf");
 			});
-
 	body
 		#backdrop
 			img.backdropimg(src="/core/css/img/homepage.jpg")	
@@ -37,9 +37,10 @@ html(lang="en")
 						ul.movieposters
 							each movie in movies
 								li.movieposter 
-									a.play#player(href='/video/'+ movie)
+									a.play(data-movie= movie)
 										img(src="/movies/img/loading.gif").movieposter							
 									span.original_name	Loading...
 									span.title= movie		
 			a#prev
 			a#next	
+			
