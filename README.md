@@ -39,7 +39,7 @@ What currently works?
 What's coming up
 =================
 
-* Handle the writing of settings propperly
+* Handle the writing of settings properly
 * Activate Screensaver (dimming mode)
 * Better movie playback
 
@@ -73,18 +73,15 @@ What can the movie browser/player do?
 -------------
 
 Once you specify the location of your movies, the movie browser can get all the information you might need including runtime, plot, genre, backdrop and movieposter (more to come). 
-You can browse the movies via a poster carousel. (more views to come) Once the information of a movie has been requested the data will be stored locally. This means that the building of the movielist index only takes a couple of miliseconds.
-After the only slight loading time the system has, is when a movie is requested for the first time because the data is being downloaded. When a playback is requested, the server transcodes the movie to the webm open standard so the html5 player can play the movie in the browser.
+Once you browse your movie collection, the system will download all the information and store it locally. This means that the building of the movielist index only takes a couple of miliseconds.
+After that the only slight loading time the system has, is when a movie is requested for the first time (because the data has to be downloaded).
 
-What is a MCJS App? 
+When a playback is requested, the server transcodes the movie to the webm open standard so the html5 player can play the movie in the browser.
+
+What is a MCJS App and how will it work?
 -------------
 
 An 'app' in this case is basically a wrapper for a feature you can use within MCJS.
-
-How does it work?
--------------
-
-###The MVC part###
 
 An App consists of two parts. A public part and a Model View Controller. When you look in the root of MCJS you'll see a folder calls 'Apps'. 
 In this folder you can create a new folder or copy the hello world example and rename it.
@@ -131,17 +128,20 @@ What is the beta version going to have?
 =======================================
 
 On the todolist for MCJS are:
+
 * UPNP
 * Fast transcoding 
 * Crossbrowser compatibility
 * Easy to add/change themes
 * And a set of ready made apps like youtube and google music.
 * Multilanguage support
+* App import/export functionality
 
 This application will run on Windows and Linux based systems. 
 There will be a specific Linux distro for raspberry pi using a kiosk, debian distro.
 
 I do this in my free time so if you want to encourage me to continue this enourmous project, feel free to do so.
+
 [![Donate] (screenshots/paypal-donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
 
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
