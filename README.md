@@ -12,7 +12,7 @@ Screenshots:
 Status: 
 =======
 
-__Heavy work in progress, not ready for use__
+__Heavy work in progress, pre-alpha, not ready for use__
 		
 What works?
 ===========
