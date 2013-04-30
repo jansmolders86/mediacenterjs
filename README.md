@@ -3,7 +3,7 @@ MediacenterJS
 
 __A NodeJS based Mediacenter__
 
-Screenshots: 
+Screenshots (Pre-Alpha GUI): 
 
 ![Dashboard] (screenshots/interface.jpg)
 
