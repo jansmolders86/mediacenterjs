@@ -39,7 +39,7 @@ What currently works?
 What's coming up
 =================
 
-* Handle the writing of settings propperly
+* Handle the writing of settings properly
 * Activate Screensaver (dimming mode)
 * Better movie playback
 
