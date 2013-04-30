@@ -1,7 +1,7 @@
-mediacenterjs
+MediacenterJS
 =============
 
-__A HTML/CSS/Javascipt (NodeJs) based Mediacenter__
+__A NodeJS (HTML/CSS/Javascipt) based Mediacenter__
 
 Screenshots: 
 
