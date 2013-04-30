@@ -13,22 +13,27 @@ Status:
 =======
 
 __Heavy work in progress, pre-alpha, not ready for use__
+
+Why use it (once it is ready)?
+===========
+* Lightning fast
+* Extremely versatile
+* Works on everything
 		
-What works?
+What currently works?
 ===========
 
 * Basic Routing
 * Basic MVC 'App' Framework
 * Clientside initial setup
 * Show time and date on dashboard
-* Dashboard with dynamic app display
-* Keyboard controls
+* Dynamic dashboard
+* Basic keyboard controls
 * Onscreen keyboard
 * Movie indexing
 * Display movies with Poster, Backdrop and information 
 * Local caching of information and images
-* Basic transcoding and playing of movie
-* Display movie information
+* Basic transcoding and playback
 * Weather information (Only in Dutch)
 
 What's coming up
@@ -68,9 +73,8 @@ What can the movie browser/player do?
 -------------
 
 Once you specify the location of your movies, the movie browser can get all the information you might need including runtime, plot, genre, backdrop and movieposter (more to come). 
-You can browse the movies via a poster carousel. (more views to come) Once a movie has been requested the data will be stored locally. This means that the building of the movielist index only takes a couple of miliseconds.
-After the only light loading time the system needs is when a movie is requested for the first time. When a playback is requested, the server transcodes the movie to the webm open standard so the html5 player can play the movie in the browser.
-
+You can browse the movies via a poster carousel. (more views to come) Once the information of a movie has been requested the data will be stored locally. This means that the building of the movielist index only takes a couple of miliseconds.
+After the only slight loading time the system has, is when a movie is requested for the first time because the data is being downloaded. When a playback is requested, the server transcodes the movie to the webm open standard so the html5 player can play the movie in the browser.
 
 What is a MCJS App? 
 -------------
@@ -126,12 +130,13 @@ This app makes heavy use of:
 What is the beta version going to have?
 =======================================
 
-On the wishlist for MCJS are:
+On the todolist for MCJS are:
 * UPNP
 * Fast transcoding 
 * Crossbrowser compatibility
 * Easy to add/change themes
 * And a set of ready made apps like youtube and google music.
+* Multilanguage support
 
 This application will run on Windows and Linux based systems. 
 There will be a specific Linux distro for raspberry pi using a kiosk, debian distro.
