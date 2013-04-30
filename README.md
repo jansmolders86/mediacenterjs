@@ -1,7 +1,7 @@
 MediacenterJS
 =============
 
-__A NodeJS (HTML/CSS/Javascipt) based Mediacenter__
+__A NodeJS based Mediacenter__
 
 Screenshots: 
 
@@ -64,14 +64,14 @@ What do I need to have installed to run this?
 * A modern browser like Chrome or Firefox
 
 What is a MCJS App? 
-=======================
+-------------
 
 An 'app' in this case is basically a wrapper for a feature you can use within MCJS.
 
 How does it work?
-=================
+-------------
 
-__The MVC part__
+###The MVC part###
 
 An App consists of two parts. A public part and a Model View Controller. When you look in the root of MCJS you'll see a folder calls 'Apps'. 
 In this folder you can create a new folder or copy the hello world example and rename it.
@@ -97,7 +97,7 @@ If we look at the hello world example, you will see the following contents
 __The public part of an App / Making it public__
 
 When we go back to the root folder you will also see a folder called public. Everything in this folder is accessible from the client. Add a folder with the same name. 
-If you want your app to show up in the dashboard, all you need to do is add a tile.png to your public folder. This will alert MCJS that you want your app to be accessible from the dhashboard, and it will automatically add it.
+If you want your app to show up in the dashboard, all you need to do is add a tile.png to your public folder. This will alert MCJS that you want your app to be accessible from the dashboard, and it will automatically add it.
 You can make a background app that hooks on a existing app without having it showing up in the dashboard simply by not adding the tile.
 
 __Bulding an App__
@@ -108,7 +108,12 @@ In the future there will be a handy package installer to export your app with.
 What is the beta version going to have?
 =======================================
 
-On the wishlist for MCJS are UPNP, fast transcoding and crossbrowser compatibility and a set of ready made apps like youtube and google music.
+On the wishlist for MCJS are:
+* UPNP
+* Fast transcoding 
+* Crossbrowser compatibility
+* Easy to add/change themes
+* And a set of ready made apps like youtube and google music.
 
 This application will run on Windows and Linux based systems. 
 There will be a specific Linux distro for raspberry pi using a kiosk, debian distro.
@@ -116,6 +121,6 @@ There will be a specific Linux distro for raspberry pi using a kiosk, debian dis
 [![Donate] (screenshots/paypal-donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
 
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
-this application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
+This application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
 
 Copyright (C) 2013 - Jan Smolders
