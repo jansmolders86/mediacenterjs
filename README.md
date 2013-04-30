@@ -78,15 +78,10 @@ After that the only slight loading time the system has, is when a movie is reque
 
 When a playback is requested, the server transcodes the movie to the webm open standard so the html5 player can play the movie in the browser.
 
-What is a MCJS App? 
+What is a MCJS App and how will it work?
 -------------
 
 An 'app' in this case is basically a wrapper for a feature you can use within MCJS.
-
-How does it work?
--------------
-
-###The MVC part###
 
 An App consists of two parts. A public part and a Model View Controller. When you look in the root of MCJS you'll see a folder calls 'Apps'. 
 In this folder you can create a new folder or copy the hello world example and rename it.
