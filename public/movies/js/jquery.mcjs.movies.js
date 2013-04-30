@@ -170,7 +170,7 @@
 		}).done(function(data){
 			var movieData = $.parseJSON(data);
 			setTimeout(function(){
-				$('body').append('<div id="moviedetails"><div id="overview"><h1>'+movieData[0].original_name+'</h1><p>'+movieData[0].overview+'</p></div><div id="additional"><div id="genre"><p> Genre: '+movieData[0].genre+'</p></div><div id="runtime"><p> Runtime: '+movieData[0].runtime+' min</p></div></div></div>');
+				$('#wrapper').append('<div id="moviedetails"><div id="overview"><h1>'+movieData[0].original_name+'</h1><p>'+movieData[0].overview+'</p></div><div id="additional"><div id="genre"><p> Genre: '+movieData[0].genre+'</p></div><div id="runtime"><p> Runtime: '+movieData[0].runtime+' min</p></div></div></div>');
 				$("#moviedetails").animate({opacity:1});
 			},1000);
 		});
@@ -194,7 +194,7 @@
 			$('#moviebrowser').show();
 		});
 		
-		$('body').append('<video id="player" class="video-js vjs-default-skin" style="position: absolute; top: 0; left:0px width:100%; height:100%; z-index:9;" controls width="100%" height="100%"><source src="'+url+'" type="video/webm"></video>');
+		$('body').append('<video id="player" class="video-js vjs-default-skin" style="position: absolute; top: 0; left:0px width:100%; height:100%; z-index:9;" controls poster="/movies/img/loading-video.png" width="100%" height="100%"><source src="'+url+'" type="video/webm"></video>');
 	}
 
 	/**** End of custom functions ***/

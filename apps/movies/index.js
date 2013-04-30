@@ -93,23 +93,12 @@ function updateMovies(req, res, callback) {
 
 
 exports.play = function(req, res){
-	//res.contentType('avi');
-	console.log('Setting up stream', configfileResults.moviepath + req.params.filename)
-	
 	var stream = configfileResults.moviepath + req.params.filename	
-	, proc = new ffmpeg({ source: configfileResults.moviepath + req.params.filename, nolog: true, priority: 1, timeout:14400})
-		//.usingPreset('divx')
-		//.withFps(24)
-		//.withAspect('4:3')
-		//.withSize('640x480')
+	, proc = new ffmpeg({ source: configfileResults.moviepath + req.params.filename, nolog: true, priority: 1, timeout:15000})
 		.toFormat('webm')
-		.onProgress(function(progress) {
-			//console.log(progress);
-		})
 		.writeToStream(res, function(retcode, error){
 		if (!error){
 			console.log('file has been converted succesfully',retcode);
-			res.send(proc);
 		}else{
 			console.log('file conversion error',error);
 		}
