@@ -128,12 +128,14 @@ What is the beta version going to have?
 =======================================
 
 On the todolist for MCJS are:
+
 * UPNP
 * Fast transcoding 
 * Crossbrowser compatibility
 * Easy to add/change themes
 * And a set of ready made apps like youtube and google music.
 * Multilanguage support
+* App import/export functionality
 
 This application will run on Windows and Linux based systems. 
 There will be a specific Linux distro for raspberry pi using a kiosk, debian distro.
