@@ -140,7 +140,7 @@ On the todolist for MCJS are:
 This application will run on Windows and Linux based systems. 
 There will be a specific Linux distro for raspberry pi using a kiosk, debian distro.
 
-I do this in my free time so if you want to encourage me to continue this enourmous project, feel free to do so.
+I'm building MCJS in my free time so if you want to encourage me to continue this enourmous project, feel free to do so.
 
 [![Donate] (screenshots/paypal-donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
 
