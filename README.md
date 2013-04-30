@@ -105,6 +105,15 @@ __Bulding an App__
 There are thousands of usefull node libraries you can use to build your app. Simply install the module you want with NPM and start using it. 
 In the future there will be a handy package installer to export your app with. 
 
+###Credits###
+
+This app makes heavy use of:
+
+* Express (https://github.com/visionmedia/express)
+* Node-Fluent-FFmpeg (https://github.com/schaermu/node-fluent-ffmpeg)
+* Node-XMLHttpRequest (https://github.com/driverdan/node-XMLHttpRequest)
+
+
 What is the beta version going to have?
 =======================================
 
@@ -117,14 +126,6 @@ On the wishlist for MCJS are:
 
 This application will run on Windows and Linux based systems. 
 There will be a specific Linux distro for raspberry pi using a kiosk, debian distro.
-
-__Credits__
-
-This app makes heavy use of:
-
-* Express (https://github.com/visionmedia/express)
-* Node-Fluent-FFmpeg (https://github.com/schaermu/node-fluent-ffmpeg)
-* Node-XMLHttpRequest (https://github.com/driverdan/node-XMLHttpRequest)
 
 [![Donate] (screenshots/paypal-donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
 
