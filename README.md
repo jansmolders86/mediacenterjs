@@ -36,7 +36,7 @@ What's coming up
 
 * Handle the writing of settings propperly
 * Activate Screensaver (dimming mode)
-* better movie playback
+* Better movie playback
 
 What's not working
 ==================
@@ -56,12 +56,12 @@ Basic featurelist:
 * Movie, tv and music database with information and playback
 * Easy to use app framework
 
-What do I need to use this? 
+What do I need to have installed to run this? 
 ==========================
 
 * FFmpeg installed
 * NodeJS installed
-* a modern browser like Chrome or Firefox
+* A modern browser like Chrome or Firefox
 
 What is a MCJS App? 
 =======================
