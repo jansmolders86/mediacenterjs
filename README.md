@@ -62,6 +62,15 @@ What do I need to have installed to run this?
 * FFmpeg installed
 * NodeJS installed
 * A modern browser like Chrome or Firefox
+* An internet connection
+
+What can the movie browser/player do? 
+-------------
+
+Once you specify the location of your movies, the movie browser can get all the information you might need including runtime, plot, genre, backdrop and movieposter (more to come). 
+You can browse the movies via a poster carousel. (more views to come) Once a movie has been requested the data will be stored locally. This means that the building of the movielist index only takes a couple of miliseconds.
+After the only light loading time the system needs is when a movie is requested for the first time. When a playback is requested, the server transcodes the movie to the webm open standard so the html5 player can play the movie in the browser.
+
 
 What is a MCJS App? 
 -------------
