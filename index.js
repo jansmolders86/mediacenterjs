@@ -20,7 +20,8 @@ var express = require('express')
 , app = express()
 , fs = require ('fs')
 , dateFormat = require('dateformat')
-, ffmpeg = require('fluent-ffmpeg');
+, cp = require('child_process');
+
 
 var configfile = []
 ,configfilepath = './configuration/setup.js'
@@ -98,6 +99,8 @@ app.post('/setuppost', function(req, res){
 	writeSettings(req, res, function(){
 		res.render('finish');
 	});
+	var server = cp.fork('index.js');
+	server.kill();
 });
 
 app.post('/submit', function(req, res){
@@ -134,5 +137,12 @@ function writeSettings(req, res, callback){
 }
 
 // Open App socket
-app.listen(configfileResults.port);
+if (configfileResults.port == "" || configfileResults.port == undefined ){
+	console.log('Error parsing configfile, failing back to default port')
+	app.listen(parseInt(3000));
+} else{
+	app.listen(parseInt(configfileResults.port));
+}
+
+
 console.log("MediacenterJS listening on port:", configfileResults.port); 
