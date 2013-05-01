@@ -102,7 +102,7 @@ app.post('/setuppost', function(req, res){
 
 app.post('/submit', function(req, res){
 	writeSettings(req, res, function(){
-		res.render('/');
+		res.redirect('/');
 	});
 });
 

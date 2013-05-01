@@ -62,7 +62,7 @@ function updateMovies(req, res, callback) {
 	var movielistpath = './public/movies/data/movieindex.js'
 	, status = null;
 	
-	console.log('Gettign movies from:', configfileResults.moviepath)
+	console.log('Getting movies from:', configfileResults.moviepath)
 	fs.readdir(configfileResults.moviepath,function(err,files){
 		if (err){
 			status = 'wrong or bad directory, please specify a existing directory';
@@ -127,23 +127,43 @@ exports.post = function(req, res, next){
 	console.log('movierequest', movieRequest.movieTitle)
 	//Check if folder already exists
 	if (fs.existsSync('./public/movies/data/'+movieRequest.movieTitle)) {
-		fs.stat('./public/movies/data/'+movieRequest.movieTitle+'/data.js', function (err, stats) {
-			// If data file is created without data, we remove it (rm -rf).
-			if(stats.size < 0){
-				rimraf('./public/movies/data/'+movieRequest.movieTitle, function () {
-					console.log('Removed bad dir', movieRequest.movieTitle);
-				})
-			} else {
-				// Read cached file and send to client.
-				fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
-					if(!err){
-						res.send(data);
-					}else{
-						console.log('Cannot read scraper data', err)
-					}
-				});
-			}
-		});
+		if(fs.existsSync('./public/movies/data/'+movieRequest.movieTitle+'/data.js')){
+			fs.stat('./public/movies/data/'+movieRequest.movieTitle+'/data.js', function (err, stats) {
+				// If data file is created without data, we remove it (rm -rf).
+				if(stats.size == 0){
+					rimraf('./public/movies/data/'+movieRequest.movieTitle, function (e) {
+						if(!e){
+						console.log('Removed bad dir', movieRequest.movieTitle);
+						} else {
+							console.log(e)
+						}
+					});
+				} else {
+					// Read cached file and send to client.
+					fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
+						if(!err){
+							res.send(data);
+						}else if(err){
+							rimraf('./public/movies/data/'+movieRequest.movieTitle, function (e) {
+								if(!e){
+								console.log('Removed bad dir', movieRequest.movieTitle);
+								} else {
+									console.log(e)
+								}
+							});
+						}
+					});
+				}
+			});
+		} else {
+			rimraf('./public/movies/data/'+movieRequest.movieTitle, function (e) {
+				if(!e){
+				console.log('Removed bad dir', movieRequest.movieTitle);
+				} else {
+					console.log(e)
+				}
+			});
+		}
 	} else {
 		console.log('New movie, getting details')
 		fs.mkdir('./public/movies/data/'+movieRequest.movieTitle, 0777, function (err) {
