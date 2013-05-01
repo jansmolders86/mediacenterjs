@@ -96,6 +96,7 @@ exports.play = function(req, res){
 	var stream = configfileResults.moviepath + req.params.filename	
 	, proc = new ffmpeg({ source: configfileResults.moviepath + req.params.filename, nolog: true, priority: 1, timeout:15000})
 		.toFormat('webm')
+		.withVideoBitrate('1024k')
 		.writeToStream(res, function(retcode, error){
 		if (!error){
 			console.log('file has been converted succesfully',retcode);
