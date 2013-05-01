@@ -138,7 +138,7 @@ Even if you are only adding a single addition to the routing table please use th
 * The method is can be GET, POST or PUT
 * The path is the url. The variable 'name' will be replaced by your app name. You can add this to avoid collisions with other apps.
 	
-__Bulding an App__
+__Building an App__
 
 There are thousands of usefull node libraries you can use to build your app. Simply install the module you want with NPM and start using it. 
 In the future there will be a handy package installer to export your app with. 
