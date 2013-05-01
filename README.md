@@ -134,6 +134,7 @@ You can extend the basic routing table with your own custom routes by adding the
 
 Even if you are only adding a single addition to the routing table please use this syntax. 
 *The 'Case' is the hook string you use in your index.js file. For instance:
+
 	exports.routinghook = function(req, res, next){
 	
 * The method is can be GET, POST or PUT
