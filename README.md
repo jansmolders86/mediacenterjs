@@ -78,6 +78,12 @@ After that the only slight loading time the system has, is when a movie is reque
 
 When a playback is requested, the server transcodes the movie to the webm open standard so the html5 player can play the movie in the browser.
 
+
+Partial documentation 
+==========================
+I'm writing the documentation as I'm coding so the documentation may not always be complete or coherent. 
+A complete documentation will be available when the project reaches Beta status.
+
 What is a MCJS App and how will it work?
 -------------
 
@@ -110,6 +116,28 @@ When we go back to the root folder you will also see a folder called public. Eve
 If you want your app to show up in the dashboard, all you need to do is add a tile.png to your public folder. This will alert MCJS that you want your app to be accessible from the dashboard, and it will automatically add it.
 You can make a background app that hooks on a existing app without having it showing up in the dashboard simply by not adding the tile.
 
+__route.js__
+
+You can extend the basic routing table with your own custom routes by adding them in this file. The syntax of the route file is as follows:
+
+	module.exports = function(obj, name) {
+		for (var key in obj) {
+			switch (key) {	
+				case 'routinghook':
+				method = 'get';
+				path = '/' + name + '/url';
+				break;
+			}
+		}
+	}
+
+Even if you are only adding a single addition to the routing table please use this syntax. 
+*The 'Case' is the hook string you use in your index.js file. For instance:
+	exports.routinghook = function(req, res, next){
+	
+* The method is can be GET, POST or PUT
+* The path is the url. The variable 'name' will be replaced by your app name. You can add this to avoid collisions with other apps.
+	
 __Bulding an App__
 
 There are thousands of usefull node libraries you can use to build your app. Simply install the module you want with NPM and start using it. 
