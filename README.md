@@ -114,7 +114,8 @@ __The public part of an App / Making it public__
 
 When we go back to the root folder you will also see a folder called public. Everything in this folder is accessible from the client. Add a folder with the same name. 
 If you want your app to show up in the dashboard, all you need to do is add a tile.png to your public folder. This will alert MCJS that you want your app to be accessible from the dashboard, and it will automatically add it.
-You can make a background app that hooks on a existing app without having it showing up in the dashboard simply by not adding the tile.
+
+So in theory, you can make a background app that hooks on an existing app, or just runs in the background, without having it showing up in the dashboard simply by not adding the tile.
 
 __route.js__
 
