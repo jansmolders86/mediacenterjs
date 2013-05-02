@@ -49,49 +49,6 @@ exports.index = function(req, res, next){
 	});
 };
 
-//Manual update
-exports.update = function(req, res){		
-	updateMovies(req, res, function(status){
-		res.redirect('/movies');
-	});	
-};
-
-
-//Update function
-function updateMovies(req, res, callback) { 
-	var movielistpath = './public/movies/data/movieindex.js'
-	, status = null;
-	
-	console.log('Getting movies from:', configfileResults.moviepath)
-	fs.readdir(configfileResults.moviepath,function(err,files){
-		if (err){
-			status = 'wrong or bad directory, please specify a existing directory';
-			console.log(status);
-			callback(status);
-		}else{
-			var allMovies = new Array();
-			files.forEach(function(file){
-				if (file.match(/\.(bmp|jpg|png|gif|mp3|sub|srt|txt|doc|docx|pdf|nfo|cbr|xml|idx|exe|rar|zip|7z|diz|par|torrent|par2|ppt|info|md|db)/)){
-					return
-				} else {
-					movieFiles = file
-					allMovies[allMovies.length] = movieFiles;
-				}
-			});
-			var allMoviesJSON = JSON.stringify(allMovies, null, 4);
-			fs.writeFile(movielistpath, allMoviesJSON, function(e) {
-				if (!e) {
-					console.log('Updating movielist', allMoviesJSON);
-					callback(status);
-				}else{ 
-					console.log('Error getting movielist', e);
-				};
-			});
-		};
-	});
-};
-
-
 exports.play = function(req, res){
 	var stream = configfileResults.moviepath + req.params.filename	
 	, proc = new ffmpeg({ source: configfileResults.moviepath + req.params.filename, nolog: true, priority: 1, timeout:15000})
@@ -105,7 +62,6 @@ exports.play = function(req, res){
 		}
 	});
 }
-
 
 exports.post = function(req, res, next){	
 	var movieTitle = null
@@ -124,18 +80,19 @@ exports.post = function(req, res, next){
 
 	
 	var movieRequest = req.body;
-	console.log('movierequest', movieRequest.movieTitle)
+	console.log('movierequest:', movieRequest.movieTitle)
 	//Check if folder already exists
 	if (fs.existsSync('./public/movies/data/'+movieRequest.movieTitle)) {
 		if(fs.existsSync('./public/movies/data/'+movieRequest.movieTitle+'/data.js')){
 			fs.stat('./public/movies/data/'+movieRequest.movieTitle+'/data.js', function (err, stats) {
-				// If data file is created without data, we remove it (rm -rf).
+				// If data file is created without data, we remove it (rm -rf using module RimRaf).
 				if(stats.size == 0){
 					rimraf('./public/movies/data/'+movieRequest.movieTitle, function (e) {
 						if(!e){
-						console.log('Removed bad dir', movieRequest.movieTitle);
+							console.log('Removed bad dir', movieRequest.movieTitle);
+							res.redirect('/movies/')
 						} else {
-							console.log(e)
+							console.log('Removing dir error:', e)
 						}
 					});
 				} else {
@@ -146,9 +103,10 @@ exports.post = function(req, res, next){
 						}else if(err){
 							rimraf('./public/movies/data/'+movieRequest.movieTitle, function (e) {
 								if(!e){
-								console.log('Removed bad dir', movieRequest.movieTitle);
+									console.log('Removed bad dir', movieRequest.movieTitle);
+									res.redirect('/movies/')
 								} else {
-									console.log(e)
+									console.log('Removing dir error:', e)
 								}
 							});
 						}
@@ -158,9 +116,10 @@ exports.post = function(req, res, next){
 		} else {
 			rimraf('./public/movies/data/'+movieRequest.movieTitle, function (e) {
 				if(!e){
-				console.log('Removed bad dir', movieRequest.movieTitle);
+					console.log('Removed bad dir', movieRequest.movieTitle);
+					res.redirect('/movies/')
 				} else {
-					console.log(e)
+					console.log('Removing dir error:', e)
 				}
 			});
 		}
@@ -246,10 +205,10 @@ exports.post = function(req, res, next){
 		});
 	};
 	
+
+	
 	function downloadCache(response,callback){
-		// Additional error check
 		if(typeof response){
-		
 			var size = "w1920";
 			if (configfileResults.highres === 'yes'){
 				size = "w1920"
@@ -273,7 +232,10 @@ exports.post = function(req, res, next){
 		};
 		callback(poster,backdrop);
 	};
+
 };
+
+
 
 function xhrCall(url,callback) { 
 	request({
@@ -286,5 +248,39 @@ function xhrCall(url,callback) {
 		}else{
 			console.log('XHR Error',error);
 		}
+	});
+};
+
+
+function updateMovies(req, res, callback) { 
+	var movielistpath = './public/movies/data/movieindex.js'
+	, status = null;
+	
+	console.log('Getting movies from:', configfileResults.moviepath)
+	fs.readdir(configfileResults.moviepath,function(err,files){
+		if (err){
+			status = 'wrong or bad directory, please specify a existing directory';
+			console.log(status);
+			callback(status);
+		}else{
+			var allMovies = new Array();
+			files.forEach(function(file){
+				if (file.match(/\.(bmp|jpg|png|gif|mp3|sub|srt|txt|doc|docx|pdf|nfo|cbr|xml|idx|exe|rar|zip|7z|diz|par|torrent|par2|ppt|info|md|db)/)){
+					return
+				} else {
+					movieFiles = file
+					allMovies[allMovies.length] = movieFiles;
+				}
+			});
+			var allMoviesJSON = JSON.stringify(allMovies, null, 4);
+			fs.writeFile(movielistpath, allMoviesJSON, function(e) {
+				if (!e) {
+					console.log('Updating movielist', allMoviesJSON);
+					callback(status);
+				}else{ 
+					console.log('Error getting movielist', e);
+				};
+			});
+		};
 	});
 };

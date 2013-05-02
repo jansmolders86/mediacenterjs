@@ -152,7 +152,7 @@
 			setTimeout(function(){
 				visibleMovie.find("img.movieposter").attr('src','');	
 				visibleMovie.find("img.movieposter").attr('src',movieData[0].poster).addClass('coverfound');							
-			},300);
+			},350);
 			
 			visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
 			

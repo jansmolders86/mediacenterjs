@@ -56,38 +56,47 @@
 				url : "http://api.wunderground.com/api/68a6ea8f6013979c/geolookup/conditions/lang:"+o.LANG+"/q/"+ o.language +"/"+ o.location+".json",
 				dataType : "jsonp",
 				success : function(parsed_json) {
-					var locations = parsed_json['location']['city'];
-					var country = parsed_json['location']['country'];
-					var weathertype = parsed_json['current_observation']['weather'];
-					var weathericon = parsed_json['current_observation']['icon_url'];
-					var feelslike_c = parsed_json['current_observation']['feelslike_c'];
-					var temp_c = parsed_json['current_observation']['temp_c'];
-					
-					$("#weather").find("h1").html( locations +", "+ country);
-					$("#weather").find(".weathertype").html(weathertype);
-					$("#weather").find(".degrees").html( temp_c + " <sup>&#8451;</sup>");
-					$("#weather").find(".feelslike").html( "Gevoelstemperatuur: " + feelslike_c + " <sup>&#8451;</sup>");
-
-					var weathertypeset = $('.weathertype').text()
-			
-					if ( weathertypeset.match(/bewolkt|Bewolkt/i) ){
-						$(".backdropimg").attr('src', "/weather/img/clouds.jpg").addClass("fadein");
-					}else if( weathertypeset.match(/mist|Mist/i) ){
-						$(".backdropimg").attr('src', "/weather/img/misty.jpg").addClass("fadein");
-					}else if( weathertypeset.match(/helder|Helder/i) ){
-						$(".backdropimg").attr('src', "/weather/img/clear.jpg").addClass("fadein");
-					}else if( weathertypeset.match(/zon|Zon/i) ){
-						$(".backdropimg").attr('src', "/weather/img/sunny.jpg").addClass("fadein");
-					}else if( weathertypeset.match(/regen|Regen/i) ){
-						$(".backdropimg").attr('src', "/weather/img/rainy.jpg").addClass("fadein");
-					}else if( weathertypeset.match(/sneeuw|Sneeuw/i) ){
-						$(".backdropimg").attr('src', "/weather/img/snowy.jpg").addClass("fadein");
-					}else if( weathertypeset.match(/storm|Strom/i) ){
-						$(".backdropimg").attr('src', "/weather/img/stormy.jpg").addClass("fadein");
+					console.log(parsed_json)
+					if (parsed_json['response']['error']){
+						var errorMessage = parsed_json['response']['error']['description']
+						$("#weather").find("h1").html(errorMessage);
 					}else {
-						$(".backdropimg").attr('src', "/weather/img/default.jpg").addClass("fadein");
+						var locations = parsed_json['location']['city'];
+						var country = parsed_json['location']['country'];
+						var weathertype = parsed_json['current_observation']['weather'];
+						var weathericon = parsed_json['current_observation']['icon_url'];
+						var feelslike_c = parsed_json['current_observation']['feelslike_c'];
+						var temp_c = parsed_json['current_observation']['temp_c'];
+						
+						$("#weather").find("h1").html( locations +", "+ country);
+						$("#weather").find(".weathertype").html(weathertype);
+						$("#weather").find(".degrees").html( temp_c + " <sup>&#8451;</sup>");
+						$("#weather").find(".feelslike").html( "Gevoelstemperatuur: " + feelslike_c + " <sup>&#8451;</sup>");
+
+						var weathertypeset = $('.weathertype').text()
+				
+						if ( weathertypeset.match(/bewolkt|Bewolkt/i) ){
+							$(".backdropimg").attr('src', "/weather/img/clouds.jpg").addClass("fadein");
+						}else if( weathertypeset.match(/mist|Mist/i) ){
+							$(".backdropimg").attr('src', "/weather/img/misty.jpg").addClass("fadein");
+						}else if( weathertypeset.match(/helder|Helder/i) ){
+							$(".backdropimg").attr('src', "/weather/img/clear.jpg").addClass("fadein");
+						}else if( weathertypeset.match(/zon|Zon/i) ){
+							$(".backdropimg").attr('src', "/weather/img/sunny.jpg").addClass("fadein");
+						}else if( weathertypeset.match(/regen|Regen/i) ){
+							$(".backdropimg").attr('src', "/weather/img/rainy.jpg").addClass("fadein");
+						}else if( weathertypeset.match(/sneeuw|Sneeuw/i) ){
+							$(".backdropimg").attr('src', "/weather/img/snowy.jpg").addClass("fadein");
+						}else if( weathertypeset.match(/storm|Strom/i) ){
+							$(".backdropimg").attr('src', "/weather/img/stormy.jpg").addClass("fadein");
+						}else {
+							$(".backdropimg").attr('src', "/weather/img/default.jpg").addClass("fadein");
+						}
+						$('#weatherwrapper').addClass('fadeinslow');
 					}
-					$('#weatherwrapper').addClass('fadeinslow');		
+				},
+				error : function() {
+					$("#weather").find("h1").html( 'Can not get weather of location' + o.location + '<br/> Please specify a larger city.');
 				}
 			})
 		} else {
