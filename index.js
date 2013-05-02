@@ -19,8 +19,7 @@
 var express = require('express')
 , app = express()
 , fs = require ('fs')
-, dateFormat = require('dateformat')
-, cp = require('child_process');
+, dateFormat = require('dateformat');
 
 
 var configfile = []
@@ -93,14 +92,10 @@ app.get("/settings", function(req, res, next) {
 	});	
 });
 
-
-//TODO: restart app on post, works fine with Nodemon though..
 app.post('/setuppost', function(req, res){
 	writeSettings(req, res, function(){
 		res.render('finish');
 	});
-	var server = cp.fork('index.js');
-	server.kill();
 });
 
 app.post('/submit', function(req, res){
