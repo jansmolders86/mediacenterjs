@@ -97,7 +97,7 @@ User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-ins
 
 Install NodeJS: http://nodejs.org/download/
 
-The program wil boot in setup mode, being accesible on localhost:3000 or 'IP of the server':3000
+The program wil boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000
 
 What is a MCJS App and how will it work?
 -------------
