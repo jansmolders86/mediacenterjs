@@ -89,10 +89,12 @@ Setup
 After you have downloaded MediacenterJS, click on the .bat file (in Windows) to start the project. 
 Or make sure you've browsed to the root of the server in the terminal/command prompt and type node index.
 
-Please make sure you've installed NodeJS and FFmpeg first!
+__Please make sure you've installed NodeJS and FFmpeg first!__
 
 User guide for installing FFmpeg on Windows: (http://www.wikihow.com/Install-FFmpeg-on-Windows)
+
 User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-install-ffmpeg-linux)
+
 Install NodeJS: http://nodejs.org/download/
 
 The program wil boot in setup mode, being accesible on localhost:3000 or 'IP of the server':3000
