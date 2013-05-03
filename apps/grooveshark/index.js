@@ -19,8 +19,22 @@
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
 
+var gs = require('grooveshark')
+, client = new gs('your_api_key', 'your_api_secret');
+
 // Render the indexpage
 exports.index = function(req, res, next){
-	res.render('hello');
+
+	client.authenticate('your_grooveshark_username', 'you_grooveshark_password', function(err) {
+	  client.request('someMethod', {param1: 'foobar', param2: 1234}, function(err, status, body) {
+		if(err) {
+		  throw err
+		}
+
+		console.log(body);
+	  });
+	})
+
+	res.render('grooveshark');
 };
 
