@@ -5,17 +5,16 @@ html(lang="en")
 		link(rel='stylesheet', href='/core/css/style.css')
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/jquery.mcjs.core.js")
-		
-		// App specific
-		link(rel='stylesheet', href='/hello-world/css/style.css')
-		
-		title Hello World
+
+		title Google Music
 		script
 			$(document).ready(function(){
 				$('body').mcjs();
 			});
 	body
 		#backdrop
-			img.backdropimg(src="/hello-world/css/img/bg.png")
+			img.backdropimg(src="")
 		#wrapper
-			p That was easy wasn't it. Now create something awesome!
+			a.backlink(href="/") 
+				img(src="/core/icons/back.png")
+			h1 This is a placeholder for the Google music app.

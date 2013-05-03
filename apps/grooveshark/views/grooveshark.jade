@@ -5,10 +5,7 @@ html(lang="en")
 		link(rel='stylesheet', href='/core/css/style.css')
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/jquery.mcjs.core.js")
-		
-		// App specific
-		link(rel='stylesheet', href='/hello-world/css/style.css')
-		
+
 		title Grooveshark
 		script
 			$(document).ready(function(){
@@ -18,4 +15,6 @@ html(lang="en")
 		#backdrop
 			img.backdropimg(src="")
 		#wrapper
-			p This is a placeholder for the Grooveshark app.
+			a.backlink(href="/") 
+				img(src="/core/icons/back.png")
+			h1 This is a placeholder for the Grooveshark app.
