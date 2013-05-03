@@ -26,8 +26,19 @@ exports.index = function(req, res, next){
 	res.render('youtube');
 };
 
+var youtube = require('youtube-feeds')
 exports.create = function(req, res, next){
-	// search videos
-	youtube.feeds.videos( {q: 'parkour'})
+
+	youtube.httpProtocol = 'https'
+	youtube.feeds.videos( {q:'keywords'}, function( err, data ) {
+		if( err instanceof Error ) {
+			console.log( 'Error searching Youtube', err )
+		} else {
+			console.log( 'Getting Youtube data', data )
+		}
+	});
+	
+	res.render('youtube')
+
 };
 
