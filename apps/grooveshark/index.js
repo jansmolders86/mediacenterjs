@@ -28,10 +28,10 @@ exports.index = function(req, res, next){
 	client.authenticate('your_grooveshark_username', 'you_grooveshark_password', function(err) {
 	  client.request('someMethod', {param1: 'foobar', param2: 1234}, function(err, status, body) {
 		if(err) {
-		  throw err
+			console.log('Error client request', err);
+		}else {
+			console.log(body);
 		}
-
-		console.log(body);
 	  });
 	})
 
