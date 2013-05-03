@@ -23,9 +23,6 @@ exports.engine = 'jade';
 
 // Render the indexpage
 exports.index = function(req, res, next){
-	res.render('youtube');
-};
-
 var youtube = require('youtube-feeds')
 exports.create = function(req, res, next){
 
@@ -38,7 +35,6 @@ exports.create = function(req, res, next){
 		}
 	});
 	
-	res.render('youtube')
-
+	res.render('youtube');
 };
 
