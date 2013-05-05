@@ -22,9 +22,8 @@ exports.engine = 'jade';
 //var youtube = require('youtube-feeds')
 
 // Render the indexpage
-exports.index = function(req, res, next){
 var youtube = require('youtube-feeds')
-exports.create = function(req, res, next){
+exports.index = function(req, res, next){
 
 	youtube.httpProtocol = 'https'
 	youtube.feeds.videos( {q:'keywords'}, function( err, data ) {

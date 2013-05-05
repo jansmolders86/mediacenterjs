@@ -78,7 +78,7 @@ exports.post = function(req, res, next){
 	, runtime = 'No data found...'
 	, overview = 'No data found...';
 
-	
+	//TODO only get movies, not folders
 	var movieRequest = req.body;
 	console.log('movierequest:', movieRequest.movieTitle)
 	//Check if folder already exists

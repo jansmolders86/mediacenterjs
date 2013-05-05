@@ -1,4 +1,4 @@
-var upnp = require('upnp-device');
+/*var upnp = require('upnp-device');
 var mediaServer = upnp.createDevice('MediaServer', 'MediacenterJS');
 
 console.log('Upnp server status:', mediaServer)
@@ -17,3 +17,5 @@ mediaServer.on('ready', function() {
 mediaServer.on('error', function(err) {
 	console.log('error starting upnp server', err)
 });
+
+*/
