@@ -78,7 +78,6 @@ exports.post = function(req, res, next){
 	, runtime = 'No data found...'
 	, overview = 'No data found...';
 
-	//TODO only get movies, not folders
 	var movieRequest = req.body;
 	console.log('movierequest:', movieRequest.movieTitle)
 	//Check if folder already exists
@@ -252,6 +251,9 @@ function xhrCall(url,callback) {
 };
 
 
+
+//TODO: make update function a recursive search through directories
+
 function updateMovies(req, res, callback) { 
 	var movielistpath = './public/movies/data/movieindex.js'
 	, status = null;
@@ -284,3 +286,57 @@ function updateMovies(req, res, callback) {
 		};
 	});
 };
+
+
+/*
+//TODO: make update function a recursive search through directories
+function updateMovies(req, res, callback) { 
+	var movielistpath = './public/movies/data/movieindex.js'
+	var dir = configfileResults.moviepath
+	, status = null;
+	
+	console.log('Getting movies from:', configfileResults.moviepath)
+	fs.readdir(dir,function(err,files){
+		if (err){
+			status = 'wrong or bad directory, please specify a existing directory';
+			console.log(status);
+			callback(status);
+		}else{
+			var allMovies = new Array();
+			files.forEach(function(file){
+				var fullPath = dir + file;
+				fs.stat(file, function(err, stat) {
+					if (stat && stat.isDirectory(dir, err)) {
+						fs.readdir(fullPath,function(err,files){
+							console.log('subfiles', files);
+							allMovies.push(file);
+						});
+					} else {
+						console.log('files', file);
+						movieFiles = file
+						allMovies[allMovies.length] = movieFiles;
+					}
+				});
+			});
+				
+				//files.forEach(function(file){
+				//	if (file.match(/\.(bmp|jpg|png|gif|mp3|sub|srt|txt|doc|docx|pdf|nfo|cbr|xml|idx|exe|rar|zip|7z|diz|par|torrent|par2|ppt|info|md|db)/)){
+				//		return
+				//	} else {
+				//		movieFiles = file
+				//		allMovies[allMovies.length] = movieFiles;
+				//	}
+
+			var allMoviesJSON = JSON.stringify(allMovies, null, 4);
+			fs.writeFile(movielistpath, allMoviesJSON, function(e) {
+				if (!e) {
+					console.log('Updating movielist', allMoviesJSON);
+					callback(status);
+				}else{ 
+					console.log('Error getting movielist', e);
+				};
+			});
+		};
+	});
+};
+*/
