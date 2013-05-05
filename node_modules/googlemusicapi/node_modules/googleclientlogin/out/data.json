@@ -1,0 +1,236 @@
+{
+    "project": {},
+    "files": {
+        "index.js": {
+            "name": "index.js",
+            "modules": {},
+            "classes": {
+                "GoogleClientLogin": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "GoogleClientLogin": {
+            "name": "GoogleClientLogin",
+            "shortname": "GoogleClientLogin",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "index.js",
+            "line": 66,
+            "description": "Helps to log in to any google service with the clientlogin method\nGoogle returns 3 values when login was success:\nAuth, SID, LSID\n\nAfter the login you need to include the Auth value into\nthe Authorization HTTP header on each request:\n\nclient.request('GET', '...', {\n  ...,\n  'Authorization':'GoogleLogin auth=' + googleClientLoginInstance.getAuthId()\n})",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "conf",
+                    "description": "An object, with two properties: email and password",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "email",
+                            "description": "",
+                            "type": "String"
+                        },
+                        {
+                            "name": "password",
+                            "description": "",
+                            "type": "String"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "index.js",
+            "line": 98,
+            "description": "Splits response data into key-value pairs,\nOnly for internal usage",
+            "itemtype": "method",
+            "name": "_parseData",
+            "class": "GoogleClientLogin"
+        },
+        {
+            "file": "index.js",
+            "line": 111,
+            "description": "Parses the response of the login\nemits error and login event",
+            "itemtype": "method",
+            "name": "_parseLoginResponse",
+            "params": [
+                {
+                    "name": "response",
+                    "description": "The response object",
+                    "type": "http.ClientResponse"
+                }
+            ],
+            "class": "GoogleClientLogin"
+        },
+        {
+            "file": "index.js",
+            "line": 134,
+            "description": "Fires when login was success",
+            "itemtype": "event",
+            "name": "login",
+            "class": "GoogleClientLogin"
+        },
+        {
+            "file": "index.js",
+            "line": 140,
+            "description": "Fires when login failed",
+            "itemtype": "event",
+            "name": "loginFailed",
+            "class": "GoogleClientLogin"
+        },
+        {
+            "file": "index.js",
+            "line": 152,
+            "description": "Method to find out which account type should we use, default is HOSTED_OR_GOOGLE\nOnly for internal usage",
+            "itemtype": "method",
+            "name": "_getAccountType",
+            "params": [
+                {
+                    "name": "params",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "accountType",
+                            "description": "",
+                            "type": "String",
+                            "optional": true
+                        }
+                    ]
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "GoogleClientLogin"
+        },
+        {
+            "file": "index.js",
+            "line": 173,
+            "description": "Method to create the content of the login request\nOnly for internal usage",
+            "itemtype": "method",
+            "name": "_getRequestContent",
+            "params": [
+                {
+                    "name": "params",
+                    "description": "(Optional) You can pass the logincaptcha and\nlogintoken and the accountType as properties",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "string"
+            },
+            "class": "GoogleClientLogin"
+        },
+        {
+            "file": "index.js",
+            "line": 218,
+            "description": "Logs in the user",
+            "itemtype": "method",
+            "name": "login",
+            "params": [
+                {
+                    "name": "params",
+                    "description": "(optional) You can pass the logincaptcha and\nlogintoken and the accountType as properties",
+                    "type": "Object"
+                }
+            ],
+            "class": "GoogleClientLogin"
+        },
+        {
+            "file": "index.js",
+            "line": 253,
+            "description": "Method to get the AuthId property",
+            "itemtype": "method",
+            "name": "getAuthId",
+            "return": {
+                "description": "the AuthId or undefined",
+                "type": "String || undefined"
+            },
+            "class": "GoogleClientLogin"
+        },
+        {
+            "file": "index.js",
+            "line": 262,
+            "description": "Method to ge the SID property",
+            "itemtype": "method",
+            "name": "getSID",
+            "return": {
+                "description": "the value of the SID property or undefined",
+                "type": "String || undefined"
+            },
+            "class": "GoogleClientLogin"
+        },
+        {
+            "file": "index.js",
+            "line": 271,
+            "description": "Method to get the LSID property",
+            "itemtype": "method",
+            "name": "getLSID",
+            "return": {
+                "description": "the value of the LSID property or undefined",
+                "type": "String || undefined"
+            },
+            "class": "GoogleClientLogin"
+        },
+        {
+            "file": "index.js",
+            "line": 280,
+            "description": "Method to get the error code",
+            "itemtype": "method",
+            "name": "getError",
+            "return": {
+                "description": "the error code or undefined",
+                "type": "Number || undefined"
+            },
+            "class": "GoogleClientLogin"
+        },
+        {
+            "file": "index.js",
+            "line": 289,
+            "description": "Method to know if captcha is required",
+            "itemtype": "method",
+            "name": "isCaptchaRequired",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "GoogleClientLogin"
+        },
+        {
+            "file": "index.js",
+            "line": 298,
+            "description": "Method to get the captcha url",
+            "itemtype": "method",
+            "name": "getCaptchaUrl",
+            "return": {
+                "description": "the value of the CaptchaUrl property or undefined",
+                "type": "String || undefined"
+            },
+            "class": "GoogleClientLogin"
+        },
+        {
+            "file": "index.js",
+            "line": 307,
+            "description": "Returns the value of the CaptchaToken property",
+            "itemtype": "method",
+            "name": "getCaptchaToken",
+            "return": {
+                "description": "string or undefined",
+                "type": "String || undefined"
+            },
+            "class": "GoogleClientLogin"
+        }
+    ],
+    "warnings": []
+}

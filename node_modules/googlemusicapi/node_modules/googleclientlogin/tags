@@ -1,0 +1,35 @@
+!_TAG_FILE_FORMAT	2	/extended format/
+!_TAG_FILE_SORTED	0	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Patrick Walton	/pwalton@mozilla.com/
+!_TAG_PROGRAM_NAME	jsctags	//
+!_TAG_PROGRAM_URL	http://github.com/pcwalton/jsctags	/GitHub repository/
+!_TAG_PROGRAM_VERSION	0.1	//
+EventEmitter	index.js	/^var EventEmitter = require('events').EventEmitter,$/;"	v	lineno:7	type:any
+util	index.js	/^    util = require('util');$/;"	v	lineno:8	type:any
+userAgent	index.js	/^const userAgent = 'GCLNodejs';$/;"	v	lineno:11	type:string
+ver	index.js	/^const ver = '0.2.2';$/;"	v	lineno:13	type:string
+loginURL	index.js	/^const loginURL = '\/accounts\/ClientLogin';$/;"	v	lineno:15	type:string
+googleHost	index.js	/^const googleHost = 'www.google.com';$/;"	v	lineno:16	type:string
+captchaRequiredError	index.js	/^const captchaRequiredError = 'CaptchaRequired';$/;"	v	lineno:17	type:string
+errors	index.js	/^const errors = {$/;"	v	lineno:20	type:Object
+events	index.js	/^const events = {$/;"	v	lineno:26	type:Object
+accountTypes	index.js	/^const accountTypes = {$/;"	v	lineno:32	type:Object
+services	index.js	/^const services = {$/;"	v	lineno:38	type:Object
+GoogleClientLogin	index.js	/^var GoogleClientLogin = function (conf) {$/;"	f	lineno:83	type:void function(any)
+GoogleClientLogin	index.js	/^var GoogleClientLogin = function (conf) {$/;"	v	lineno:83	type:void function(any)
+_parseData	index.js	/^GoogleClientLogin.prototype._parseData = function (data) {$/;"	f	lineno:97	type:void function(any)
+%anonymous_function	index.js	/^  data.split('\\n').forEach(function (dataStr) {$/;"	f	lineno:99	type:void function(any)
+_parseLoginResponse	index.js	/^GoogleClientLogin.prototype._parseLoginResponse = function (response) {$/;"	f	lineno:111	type:void function(any)
+%anonymous_function	index.js	/^  response.on('data', function (chunk) {$/;"	f	lineno:115	type:void function(any)
+%anonymous_function	index.js	/^  response.on('error', function (e) {$/;"	f	lineno:119	type:void function(any)
+%anonymous_function	index.js	/^  response.on('end', function () {$/;"	f	lineno:123	type:void function()
+_getAccountType	index.js	/^GoogleClientLogin.prototype._getAccountType = function (params) {$/;"	f	lineno:152	type:string function(any)
+_getRequestContent	index.js	/^GoogleClientLogin.prototype._getRequestContent = function (params) {$/;"	f	lineno:173	type:<boolean | Object> function(any)
+login	index.js	/^GoogleClientLogin.prototype.login = function (params) {$/;"	f	lineno:216	type:void function(any)
+getAuthId	index.js	/^GoogleClientLogin.prototype.getAuthId = function () {$/;"	f	lineno:250	type:any function()
+getSID	index.js	/^GoogleClientLogin.prototype.getSID = function () {$/;"	f	lineno:259	type:any function()
+getLSID	index.js	/^GoogleClientLogin.prototype.getLSID = function () {$/;"	f	lineno:268	type:any function()
+getError	index.js	/^GoogleClientLogin.prototype.getError = function () {$/;"	f	lineno:277	type:any function()
+isCaptchaRequired	index.js	/^GoogleClientLogin.prototype.isCaptchaRequired = function () {$/;"	f	lineno:286	type:boolean function()
+getCaptchaUrl	index.js	/^GoogleClientLogin.prototype.getCaptchaUrl = function () {$/;"	f	lineno:295	type:any function()
+getCaptchaToken	index.js	/^GoogleClientLogin.prototype.getCaptchaToken = function () {$/;"	f	lineno:304	type:any function()
