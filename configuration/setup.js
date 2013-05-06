@@ -7,6 +7,5 @@
     "onscreenkeyboard": "no",
     "location": "",
     "screensaver": "dim",
-    "showdetails": "yes",
-    "port": ""
+    "port": "3000" 
 }
