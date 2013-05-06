@@ -16,20 +16,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/* Modules */
 var express = require('express')
 , app = express()
 , fs = require('fs')
-, util = require('util')
 , XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 , downloader = require('downloader')
-, movielistpath = './public/movies/data/movieindex.js'
 , request = require("request")
 , ffmpeg = require('fluent-ffmpeg')
-, winston = require('winston')
 , rimraf = require('rimraf');
 
 exports.engine = 'jade';
 
+var movielistpath = './public/movies/data/movieindex.js'
 var configfile = []
 ,configfilepath = './configuration/setup.js'
 ,configfile = fs.readFileSync(configfilepath)
@@ -50,7 +49,13 @@ exports.index = function(req, res, next){
 };
 
 exports.play = function(req, res){
-	var stream = configfileResults.moviepath + req.params.filename	
+
+	var movieData = []
+	,moviedatapath = './public/movies/data/'+req.params.filename+'/data.js'
+	,movieData = fs.readFileSync(moviedatapath)
+	,movieDataResults = JSON.parse(movieData);
+
+	var stream = configfileResults.moviepath +'/'+movieDataResults.path;
 	, proc = new ffmpeg({ source: configfileResults.moviepath + req.params.filename, nolog: true, priority: 1, timeout:15000})
 		.toFormat('webm')
 		.withVideoBitrate('1024k')
@@ -78,17 +83,27 @@ exports.post = function(req, res, next){
 	, runtime = 'No data found...'
 	, overview = 'No data found...';
 
-	var movieRequest = req.body;
-	console.log('movierequest:', movieRequest.movieTitle)
+	var incommingFile = req.body
+	, incommingMovieTitle = incommingFile.movieTitle
+	, movieRequest = '';
+	
+	if (incommingMovieTitle.match(/\//)) { 
+		var strippingFile = incommingMovieTitle.split('/');
+		movieRequest = strippingFile[1];
+	}else{ 
+		movieRequest = incommingMovieTitle;
+	}
+	
+	console.log('Getting data for movie', movieRequest);
 	//Check if folder already exists
-	if (fs.existsSync('./public/movies/data/'+movieRequest.movieTitle)) {
-		if(fs.existsSync('./public/movies/data/'+movieRequest.movieTitle+'/data.js')){
-			fs.stat('./public/movies/data/'+movieRequest.movieTitle+'/data.js', function (err, stats) {
+	if (fs.existsSync('./public/movies/data/'+movieRequest)) {
+		if(fs.existsSync('./public/movies/data/'+movieRequest+'/data.js')){
+			fs.stat('./public/movies/data/'+movieRequest+'/data.js', function (err, stats) {
 				// If data file is created without data, we remove it (rm -rf using module RimRaf).
 				if(stats.size == 0){
-					rimraf('./public/movies/data/'+movieRequest.movieTitle, function (e) {
+					rimraf('./public/movies/data/'+movieRequest, function (e) {
 						if(!e){
-							console.log('Removed bad dir', movieRequest.movieTitle);
+							console.log('Removed bad dir', movieRequest);
 							res.redirect('/movies/')
 						} else {
 							console.log('Removing dir error:', e)
@@ -96,13 +111,13 @@ exports.post = function(req, res, next){
 					});
 				} else {
 					// Read cached file and send to client.
-					fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
+					fs.readFile('./public/movies/data/'+movieRequest+'/data.js', 'utf8', function (err, data) {
 						if(!err){
 							res.send(data);
 						}else if(err){
-							rimraf('./public/movies/data/'+movieRequest.movieTitle, function (e) {
+							rimraf('./public/movies/data/'+movieRequest, function (e) {
 								if(!e){
-									console.log('Removed bad dir', movieRequest.movieTitle);
+									console.log('Removed bad dir', movieRequest);
 									res.redirect('/movies/')
 								} else {
 									console.log('Removing dir error:', e)
@@ -113,9 +128,9 @@ exports.post = function(req, res, next){
 				}
 			});
 		} else {
-			rimraf('./public/movies/data/'+movieRequest.movieTitle, function (e) {
+			rimraf('./public/movies/data/'+movieRequest, function (e) {
 				if(!e){
-					console.log('Removed bad dir', movieRequest.movieTitle);
+					console.log('Removed bad dir', movieRequest);
 					res.redirect('/movies/')
 				} else {
 					console.log('Removing dir error:', e)
@@ -124,18 +139,18 @@ exports.post = function(req, res, next){
 		}
 	} else {
 		console.log('New movie, getting details')
-		fs.mkdir('./public/movies/data/'+movieRequest.movieTitle, 0777, function (err) {
+		fs.mkdir('./public/movies/data/'+movieRequest, 0777, function (err) {
 			if (err) {
 				console.log('Error creating folder',err);
 			} else {
-				console.log('Directory '+movieRequest.movieTitle+' created');
+				console.log('Directory '+movieRequest+' created');
 
 				// Building scraper url
-				var filename = movieRequest.movieTitle
+				var filename = movieRequest
 				, year = filename.match(/\(.*?([0-9]{4}).*?\)/)
 				, stripped = filename.replace(/\.|_|\/|\+|\-/g," ")
 				, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
-				, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|SER|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
+				, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
 				, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
 				, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
 				, noCD = noCountries.replace(/cd [1-9]|cd[1-9]/gi,"");
@@ -154,7 +169,7 @@ exports.post = function(req, res, next){
 
 							// Additional error check
 							if(typeof response){
-								var localImageDir = '/movies/data/'+movieRequest.movieTitle+'/';
+								var localImageDir = '/movies/data/'+movieRequest+'/';
 								
 								poster_path = localImageDir+requestInitialDetails.poster_path;
 								backdrop_path = localImageDir+requestInitialDetails.backdrop_path;
@@ -178,13 +193,13 @@ exports.post = function(req, res, next){
 									var scraperdata = new Array()
 									,scraperdataset = null;
 									
-									scraperdataset = { id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+									scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
 									scraperdata[scraperdata.length] = scraperdataset;
 									var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
 									
-									fs.writeFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', scraperdataJSON, function(e) {
+									fs.writeFile('./public/movies/data/'+movieRequest+'/data.js', scraperdataJSON, function(e) {
 										if (!e) {
-											fs.readFile('./public/movies/data/'+movieRequest.movieTitle+'/data.js', 'utf8', function (err, data) {
+											fs.readFile('./public/movies/data/'+movieRequest+'/data.js', 'utf8', function (err, data) {
 												if(!err){
 													res.send(data);
 												}else{
@@ -219,7 +234,7 @@ exports.post = function(req, res, next){
 			, poster_url = "http://cf2.imgobject.com/t/p/w342/"
 			, poster = poster_url+response.poster_path
 			, backdrop = backdrop_url+response.backdrop_path
-			, downloadDir = './public/movies/data/'+movieRequest.movieTitle+'/';
+			, downloadDir = './public/movies/data/'+movieRequest+'/';
 			
 			downloader.on('done', function(msg) { console.log('done', msg); });
 			downloader.on('error', function(msg) { console.log('error', msg); });
@@ -252,14 +267,13 @@ function xhrCall(url,callback) {
 
 
 
-//TODO: make update function a recursive search through directories
-
 function updateMovies(req, res, callback) { 
 	var movielistpath = './public/movies/data/movieindex.js'
-	, status = null;
+	, status = null
+	, dir = configfileResults.moviepath;
 	
-	console.log('Getting movies from:', configfileResults.moviepath)
-	fs.readdir(configfileResults.moviepath,function(err,files){
+	console.log('Getting movies from:', dir)
+	fs.readdir(dir,function(err,files){
 		if (err){
 			status = 'wrong or bad directory, please specify a existing directory';
 			console.log(status);
@@ -267,11 +281,18 @@ function updateMovies(req, res, callback) {
 		}else{
 			var allMovies = new Array();
 			files.forEach(function(file){
-				if (file.match(/\.(bmp|jpg|png|gif|mp3|sub|srt|txt|doc|docx|pdf|nfo|cbr|xml|idx|exe|rar|zip|7z|diz|par|torrent|par2|ppt|info|md|db)/)){
-					return
+				var fullPath = dir + file
+				stats = fs.lstatSync(fullPath);
+				if (stats.isDirectory(file)) {
+					var subPath = dir + file
+					, files = fs.readdirSync(subPath);
+					console.log('found subdir files', file+'/'+files)
+					allMovies.push(file+'/'+files);
 				} else {
-					movieFiles = file
-					allMovies[allMovies.length] = movieFiles;
+					if (file.match(/\.(avi|mkv|mp4|mpeg|mov)/)){
+						movieFiles = file
+						allMovies[allMovies.length] = movieFiles;
+					}
 				}
 			});
 			var allMoviesJSON = JSON.stringify(allMovies, null, 4);
@@ -286,57 +307,3 @@ function updateMovies(req, res, callback) {
 		};
 	});
 };
-
-
-/*
-//TODO: make update function a recursive search through directories
-function updateMovies(req, res, callback) { 
-	var movielistpath = './public/movies/data/movieindex.js'
-	var dir = configfileResults.moviepath
-	, status = null;
-	
-	console.log('Getting movies from:', configfileResults.moviepath)
-	fs.readdir(dir,function(err,files){
-		if (err){
-			status = 'wrong or bad directory, please specify a existing directory';
-			console.log(status);
-			callback(status);
-		}else{
-			var allMovies = new Array();
-			files.forEach(function(file){
-				var fullPath = dir + file;
-				fs.stat(file, function(err, stat) {
-					if (stat && stat.isDirectory(dir, err)) {
-						fs.readdir(fullPath,function(err,files){
-							console.log('subfiles', files);
-							allMovies.push(file);
-						});
-					} else {
-						console.log('files', file);
-						movieFiles = file
-						allMovies[allMovies.length] = movieFiles;
-					}
-				});
-			});
-				
-				//files.forEach(function(file){
-				//	if (file.match(/\.(bmp|jpg|png|gif|mp3|sub|srt|txt|doc|docx|pdf|nfo|cbr|xml|idx|exe|rar|zip|7z|diz|par|torrent|par2|ppt|info|md|db)/)){
-				//		return
-				//	} else {
-				//		movieFiles = file
-				//		allMovies[allMovies.length] = movieFiles;
-				//	}
-
-			var allMoviesJSON = JSON.stringify(allMovies, null, 4);
-			fs.writeFile(movielistpath, allMoviesJSON, function(e) {
-				if (!e) {
-					console.log('Updating movielist', allMoviesJSON);
-					callback(status);
-				}else{ 
-					console.log('Error getting movielist', e);
-				};
-			});
-		};
-	});
-};
-*/
