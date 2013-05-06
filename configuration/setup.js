@@ -1,11 +1,12 @@
 {
-    "moviepath": "F:/movies",
+    "moviepath": "",
     "highres": "yes",
     "musicpath": "tbd",
     "tvpath": "tbd",
-    "language": "nl",
+    "language": "",
     "onscreenkeyboard": "no",
-    "location": "Deurne",
+    "location": "",
     "screensaver": "dim",
-    "port": "3000"
+    "showdetails": "yes",
+    "port": ""
 }

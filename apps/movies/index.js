@@ -55,7 +55,7 @@ exports.play = function(req, res){
 	,movieData = fs.readFileSync(moviedatapath)
 	,movieDataResults = JSON.parse(movieData);
 
-	var stream = configfileResults.moviepath +'/'+movieDataResults.path;
+	var stream = configfileResults.moviepath +'/'+movieDataResults.path
 	, proc = new ffmpeg({ source: configfileResults.moviepath + req.params.filename, nolog: true, priority: 1, timeout:15000})
 		.toFormat('webm')
 		.withVideoBitrate('1024k')

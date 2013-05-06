@@ -295,7 +295,7 @@ p a:hover{text-decoration:none;}
 
 .row{
 	min-height:50px;
-	width:700px;
+	width:960px;
 	float:left;
 
 }
@@ -352,11 +352,12 @@ input[type=radio]{
 }
 
 em{
-	color: red;
+	color: #fff;
 	font-style: normal;
 	font-size: 11px;
 	display: block;
-	clear: both;
+	float:right;
+	margin-top:5px;
 }
 
 input[type=submit],
