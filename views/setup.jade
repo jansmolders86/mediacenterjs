@@ -7,14 +7,12 @@ html(lang="en")
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/plugins/jquery.prettyForm.js")
 		script(src="/core/js/plugins/validation/jquery.validate.min.js")
-		script(src="/core/js/plugins/jquery.keyboard.min.js")
 		script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
 		script(src="/core/js/plugins/validation/jquery.validate.rules.js")
 		script
 			$(document).ready(function() {
 				$('.validate-form').validate();
 				$("[type=checkbox], [type=radio]").prettyForm();
-				$('.keyboard').keyboard();
 			});
 	body
 		#wrapper
