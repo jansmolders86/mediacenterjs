@@ -7,10 +7,13 @@ var rules = [];
         return isValid;
 	};
     rules["path"] = function(value, element) {
-		if ( element.value.match(/(\{|\}|\=|\&|\#|\%|\^|\@|\*)/)  ) { return false; }
-		else if ( element.value === "" ) { return false; }
-		else if { element.value.match(/\/$/) return true; }
-		else {
+		if ( element.value.match(/(\{|\}|\=|\&|\#|\%|\^|\@|\*)/)  ) { 
+			return false; 
+		} else if ( element.value === "" ) { 
+			return false; 
+		} else if ( element.value.match(/\/$/) ){ 
+			return true; 
+		} else {
 			return false; 
 		}
 	};
