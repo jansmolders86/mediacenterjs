@@ -97,7 +97,8 @@ User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-ins
 
 Install NodeJS: http://nodejs.org/download/
 
-The program wil boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000
+The program wil boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
+After the initial setup has been completed, restart the server. MediacenterJS will be available on the port you have specified and eventually the language you have chosen.
 
 How should I format my movie library and files?
 -------------
