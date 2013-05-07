@@ -57,6 +57,12 @@
 	function _initpages(o, $that){
 		$(".backdropimg").addClass("fadein");
 	
+		// If stated in config and if the plugin is present, add a onscreen keyboard
+		if(jQuery().keyboard) {
+			if ( o.usekeyboard == 'yes' ){
+				$('.keyboard').keyboard();
+			}
+		}	
 
 		//TODO: Add multilanguage
 		/*// Set up i18n translation

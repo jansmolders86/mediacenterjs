@@ -266,6 +266,8 @@ p a:hover{text-decoration:none;}
 	top: 15px;
 }
 
+#hiddenSetting{visibility:hidden; width:0; height:0;}
+
 /***** -----------------   DATE AND TIME  ---------------------- *****/
 
 #dateandtime {

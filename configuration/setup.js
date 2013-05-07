@@ -7,6 +7,5 @@
     "onscreenkeyboard": "no",
     "location": "eindhoven",
     "screensaver": "dim",
-    "showdetails": "yes",
     "port": "3000"
 }
