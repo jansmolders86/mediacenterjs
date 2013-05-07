@@ -99,6 +99,28 @@ Install NodeJS: http://nodejs.org/download/
 
 The program wil boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000
 
+How should I format my movie library and files?
+-------------
+
+MediacenterJS will look in the specified directory for video files. It will look in subdirectories of the specified dir for additional videofiles.
+on the basis of the name of the file, the system will try to get the movie details. To specify the movie, you can add the year after the title in brackets. Like so:
+	
+	Fight Club (1999).avi
+	
+Messy filenames will be cleaned up as good as possible. for instance filenames with releasegroupnames or filetype will be filtered out of the filename on the server.
+so:
+	Fight-Club-iMMORTALS(1999)-xvid.avi 
+	
+will become 
+
+	Fight Club (1999).avi
+	
+But it is best to avoid messy names in the first place to prevent confusion.
+If a movies is split into multiple pieces, you can specify it in the filename as well. It is best to format it like this:
+
+	Fight Club (1999) CD1.avi
+
+
 What is a MCJS App and how will it work?
 -------------
 
