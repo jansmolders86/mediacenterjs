@@ -13,6 +13,7 @@ html(lang="en")
 			$(document).ready(function() {
 				$('.validate-form').validate();
 				$("[type=checkbox], [type=radio]").prettyForm();
+				$('.keyboard').keyboard();
 			});
 	body
 		#wrapper
@@ -21,7 +22,7 @@ html(lang="en")
 			form#setup.validate-form(action='/setuppost',method='post')
 				.row
 					label Specify movielocation
-					input(name="movielocation",type="text",placeholder="C:/temp or /mnt/media/hdd/movies", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+					input.keyboard(name="movielocation",type="text",placeholder="C:/temp or /mnt/media/hdd/movies", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 				.row	
 					span.info 
 						span.quote &ldquo;
@@ -46,10 +47,10 @@ html(lang="en")
 					input(name="language",type="text",placeholder="ie nl or en",data-rule-required="true", data-rule-language="true",  data-msg-language="Only NL and EN are currently supported")
 				.row
 					label You current location (city)
-					input(name="location",type="text",placeholder="ie london or amsterdam",data-rule-required="true")
+					input.keyboard(name="location",type="text",placeholder="ie london or amsterdam",data-rule-required="true")
 				.row
 					label Port
-					input(name="port",type="text",placeholder="ie 3000 or 1337",data-rule-required="true")
+					input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337",data-rule-required="true")
 				.row
 					input(type="submit",value="Submit")
 					input(name="screensaver",type="text",value="dim",style="visibility:hidden;")
