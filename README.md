@@ -114,19 +114,20 @@ or
 	specifiedPath/f/fight club.avi
 	
 ###Filename conventions###
-on the basis of the name of the file, the system will try to get the movie details. To specify the movie, you can add the year after the title in brackets. Like so:
+On the basis of the name of the file, MCJS will try to get the movie details. This way the server does not have to look inside the files to get the metadata, which speeds up the process.
+To specify the movie, you can add the year after the title in brackets. Like so:
 	
 	Fight Club (1999).avi
 	
-Messy filenames will be cleaned up as good as possible. for instance filenames with releasegroupnames or filetype will be filtered out of the filename on the server.
+Messy filenames will be cleaned up. Additional text like releasegroup names,dividers,filetype or quality will be filtered out of the filename on the server.
 so:
-	Fight-Club-iMMORTALS(1999)-xvid.avi 
+	Fight.Club.iMMORTALS.(1999).xvid-R5.torrent.avi 
 	
 will become 
 
 	Fight Club (1999).avi
 	
-But it is best to avoid messy names in the first place to prevent confusion.
+But it is best to avoid messy names in the first place.
 If a movies is split into multiple pieces, you can specify it in the filename as well. It is best to format it like this:
 
 	Fight Club (1999) CD1.avi
@@ -165,7 +166,7 @@ If you want your app to show up in the dashboard, all you need to do is add a ti
 
 So in theory, you can make a background app that hooks on an existing app, or just runs in the background, without having it showing up in the dashboard simply by not adding the tile.
 
-__route.js__
+__route.js (Still WIP)__ 
 
 You can extend the basic routing table with your own custom routes by adding them in this file. The syntax of the route file is as follows:
 
