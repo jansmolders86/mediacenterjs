@@ -102,7 +102,18 @@ The program wil boot in setup mode, being accessible on localhost:3000 or 'IP of
 How should I format my movie library and files?
 -------------
 
-MediacenterJS will look in the specified directory for video files. It will look in subdirectories of the specified dir for additional videofiles.
+###Directory conventions###
+
+MediacenterJS will look in the specified directory for video files. It will look in subdirectories of the specified dir for additional videofiles. But only one level deep to keep preformance up.
+so the possible directories can be:
+
+	specifiedPath/fight club.avi
+	
+or  
+
+	specifiedPath/f/fight club.avi
+	
+###Filename conventions###
 on the basis of the name of the file, the system will try to get the movie details. To specify the movie, you can add the year after the title in brackets. Like so:
 	
 	Fight Club (1999).avi
