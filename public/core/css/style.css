@@ -379,8 +379,9 @@ a.btn{
 
 
 /* keyboard - jQuery UI Widget */
+.ui-keyboard-keyset-default{float:left;background-color: #999;}
 .ui-keyboard { padding: .3em; position: absolute; left: 0; top: 0; z-index: 16000; }
-.ui-keyboard-has-focus { z-index: 16001; background-color: #444;}
+.ui-keyboard-has-focus { z-index: 16001; background-color: #999; top:0px!important; left: 400px!important;}
 .ui-keyboard div { font-size: 1.1em; }
 .ui-keyboard-button { 
 	height: 2em; 
@@ -401,7 +402,7 @@ a.btn{
 .ui-keyboard-space { width: 15em; }
 .ui-keyboard-space span { font: 0/0 a; text-shadow: none; color: transparent; } /* see http://nicolasgallagher.com/another-css-image-replacement-technique/ */
 .ui-keyboard-preview-wrapper { text-align: center; }
-.ui-keyboard-preview { text-align: left; margin: 0 0 3px 0; display: inline; width: 99%;} /* width is calculated in IE, since 99% = 99% full browser width =( */ 
+.ui-keyboard-preview { text-align: left; margin: 0 0 3px 0; display: inline; width: 95%;} /* width is calculated in IE, since 99% = 99% full browser width =( */ 
 .ui-keyboard-keyset { text-align: center; white-space: nowrap; }
 .ui-keyboard-input { text-align: left; }
 .ui-keyboard-input-current { -moz-box-shadow: 1px 1px 10px #00f; -webkit-box-shadow: 1px 1px 10px #00f; box-shadow: 1px 1px 10px #00f; }

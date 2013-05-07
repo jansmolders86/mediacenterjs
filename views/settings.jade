@@ -18,12 +18,9 @@ html(lang="en")
 				$("[type=checkbox], [type=radio]").prettyForm();
 				
 				var usekeyboard= $('#hiddenSetting').find('p').html();
-				
-				if(jQuery().keyboard) {
-					if ( usekeyboard == 'yes' ){
-						$('.keyboard').keyboard();
-					}
-				}	
+				if ( usekeyboard == 'yes' ){
+					$('.keyboard').keyboard();
+				}
 			});
 	body
 		#hiddenSetting
@@ -49,7 +46,7 @@ html(lang="en")
 								label(for="detailsno") No
 					.row
 						label Specify movielocation
-						input(name="movielocation",type="text",placeholder="C:/temp or /mnt/media/hdd/movies", value= moviepath, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+						input.keyboard(name="movielocation",type="text",placeholder="C:/temp or /mnt/media/hdd/movies", value= moviepath, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row
 						span.label Use high res images (720 or 1080)
 						.checkgroup
@@ -91,13 +88,13 @@ html(lang="en")
 								label(for="nokeyboard") No
 					.row
 						label Language
-						input(name="language",type="text",placeholder="ie nl or gb", value= language ,data-rule-required="true", data-rule-language="true",  data-msg-language="Only NL and EN are currently supported")
+						input.keyboard(name="language",type="text",placeholder="ie nl or gb", value= language ,data-rule-required="true", data-rule-language="true",  data-msg-language="Only NL and EN are currently supported")
 					.row
 						label You current location (city)
-						input(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")
+						input.keyboard(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")
 					.row
 						label Port
-						input(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
+						input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
 					.row
 						input(type="submit",value="Submit")		
 						input(name="musiclocation",type="text",value="tbd",style="visibility:hidden;")
