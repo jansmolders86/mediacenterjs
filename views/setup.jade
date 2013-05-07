@@ -7,6 +7,7 @@ html(lang="en")
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/plugins/jquery.prettyForm.js")
 		script(src="/core/js/plugins/validation/jquery.validate.min.js")
+		script(src="/core/js/plugins/jquery.keyboard.min.js")
 		script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
 		script(src="/core/js/plugins/validation/jquery.validate.rules.js")
 		script
@@ -44,7 +45,7 @@ html(lang="en")
 						label(for="nokeyboard") No
 				.row
 					label Language
-					input(name="language",type="text",placeholder="ie nl or en",data-rule-required="true", data-rule-language="true",  data-msg-language="Only NL and EN are currently supported")
+					input.keyboard(name="language",type="text",placeholder="ie nl or en",data-rule-required="true", data-rule-language="true",  data-msg-language="Only NL and EN are currently supported")
 				.row
 					label You current location (city)
 					input.keyboard(name="location",type="text",placeholder="ie london or amsterdam",data-rule-required="true")
