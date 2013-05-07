@@ -121,6 +121,7 @@ To specify the movie, you can add the year after the title in brackets. Like so:
 	
 Messy filenames will be cleaned up. Additional text like releasegroup names,dividers,filetype or quality will be filtered out of the filename on the server.
 so:
+
 	Fight.Club.iMMORTALS.(1999).xvid-R5.torrent.avi 
 	
 will become 
