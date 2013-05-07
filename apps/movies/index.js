@@ -51,14 +51,35 @@ exports.index = function(req, res, next){
 exports.play = function(req, res){
 
 	var movieData = []
-	,moviedatapath = './public/movies/data/'+req.params.filename+'/data.js'
-	,movieData = fs.readFileSync(moviedatapath)
-	,movieDataResults = JSON.parse(movieData);
+	, moviedatapath = './public/movies/data/'+req.params.filename+'/data.js'
+	, movieData = fs.readFileSync(moviedatapath)
+	, movieDataResults = JSON.parse(movieData)
+	, stream = configfileResults.moviepath +'/'+movieDataResults.path;
+	
+	/*
+	var fullPath = stream.replace(/[^/]*$/, "");
+	
+	TODO: make subtitles work
+	fs.readdir(fullPath,function(err,files){
+		if (err){
+			console.log(status);
+		}else{
+			var allMovies = new Array();
+			files.forEach(function(file){
+				if (file.match(/\.(srt)/)){
+					res.send(file)
+				}
+			});
+		}
+	});
+	*/
 
-	var stream = configfileResults.moviepath +'/'+movieDataResults.path
-	, proc = new ffmpeg({ source: configfileResults.moviepath + req.params.filename, nolog: true, priority: 1, timeout:15000})
+	var  proc = new ffmpeg({ source: configfileResults.moviepath + req.params.filename, nolog: true, priority: 1, timeout:15000})
 		.toFormat('webm')
 		.withVideoBitrate('1024k')
+		.bufferSize('183k')
+		//.chunkSize('14336')
+		// Option srt handler? .addInput('soundtrack.mp3')
 		.writeToStream(res, function(retcode, error){
 		if (!error){
 			console.log('file has been converted succesfully',retcode);

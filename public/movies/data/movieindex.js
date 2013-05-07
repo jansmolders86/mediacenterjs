@@ -1,4 +1,3 @@
 [
-    "Escape from Planet Earth.avi",
-    "ZXZx/avatar.mp4"
+    "avatar.avi"
 ]
