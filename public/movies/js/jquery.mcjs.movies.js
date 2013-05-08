@@ -159,7 +159,7 @@
 			
 			visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
 			
-			if(movieData[0].cdNumber !== null && $('.cdNumber').length < 1){
+			if(movieData[0].cdNumber !== null){
 				visibleMovie.find("> a.play").append('<div class="cdNumber"><span>'+movieData[0].cdNumber+'</span><div>');
 			}
 		});
