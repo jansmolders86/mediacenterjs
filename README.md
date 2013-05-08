@@ -53,11 +53,11 @@ What's the MCJS?
 
 MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques and languages (HTML5/CSS/Javascript).
 The backend is based on Nodejs/ExpressJS 3x with jade templates producing easy to use code. 
-The goal is to make it possible to add an 'app' to MCJS even with limited knowlegde of said frontend techniques. 
+The goal is to make it possible to add an 'app' to MCJS even with limited knowledge of said frontend techniques. 
 
-Basic featurelist:
+Basic feature list:
 
-* Multiple apps like youtube, weather stopify etc.
+* Multiple apps like YouTube, weather, Spotify etc.
 * Movie, tv and music database with information and playback
 * Easy to use app framework
 
@@ -72,8 +72,8 @@ What do I need to have installed to run this?
 What can the movie browser/player do? 
 -------------
 
-Once you specify the location of your movies, the movie browser can get all the information you might need including runtime, plot, genre, backdrop and movieposter (more to come). 
-Once you browse your movie collection, the system will download all the information and store it locally. This means that the building of the movielist index only takes a couple of miliseconds.
+Once you specify the location of your movies, the movie browser can get all the information you might need including runtime, plot, genre, backdrop and movie poster (more to come). 
+Once you browse your movie collection, the system will download all the information and store it locally. This means that the building of the movie list index only takes a couple of milliseconds.
 After that the only slight loading time the system has, is when a movie is requested for the first time (because the data has to be downloaded).
 
 When a playback is requested, the server transcodes the movie to the webm open standard so the html5 player can play the movie in the browser.
@@ -97,7 +97,7 @@ User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-ins
 
 Install NodeJS: http://nodejs.org/download/
 
-The program wil boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
+The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 After the initial setup has been completed, restart the server. MediacenterJS will be available on the port you have specified and eventually the language you have chosen.
 
 How should I format my movie library and files?
@@ -105,7 +105,7 @@ How should I format my movie library and files?
 
 ###Directory conventions###
 
-MediacenterJS will look in the specified directory for video files. It will look in subdirectories of the specified dir for additional videofiles. But only one level deep to keep preformance up.
+MediacenterJS will look in the specified directory for video files. It will look in subdirectories of the specified dir for additional video files. But only one level deep to keep performance up.
 so the possible directories can be:
 
 	specifiedPath/fight club.avi
@@ -120,7 +120,7 @@ To specify the movie, you can add the year after the title in brackets. Like so:
 	
 	Fight Club (1999).avi
 	
-Messy filenames will be cleaned up. Additional text like releasegroup names,dividers,filetype or quality will be filtered out of the filename on the server.
+Messy filenames will be cleaned up. Additional text like release group names,dividers,file type or quality will be filtered out of the filename on the server.
 so:
 
 	Fight.Club.iMMORTALS.(1999).xvid-R5.torrent.avi 
@@ -130,7 +130,7 @@ will become
 	Fight Club (1999).avi
 	
 But it is best to avoid messy names in the first place.
-If a movies is split into multiple pieces, you can specify it in the filename as well. It is best to format it like this:
+If a movie is split into multiple pieces, you can specify it in the filename as well. It is best to format it like this:
 
 	Fight Club (1999) CD1.avi
 
@@ -143,7 +143,7 @@ An 'app' in this case is basically a wrapper for a feature you can use within MC
 An App consists of two parts. A public part and a Model View Controller. When you look in the root of MCJS you'll see a folder calls 'Apps'. 
 In this folder you can create a new folder or copy the hello world example and rename it.
 
-This is the MVC of your app. With and index.js file to control all the incomming route requests, a folder called Views which contains the actual clientside HTML. 
+This is the MVC of your app. With and index.js file to control all the incoming route requests, a folder called Views which contains the actual client side HTML. 
 And finally you can extend the basic routing with the route.js file.
 
 __index.js__
@@ -193,7 +193,7 @@ Even if you are only adding a single addition to the routing table please use th
 	
 __Building an App__
 
-There are thousands of usefull node libraries you can use to build your app. Simply install the module you want with NPM and start using it. 
+There are thousands of useful node libraries you can use to build your app. Simply install the module you want with NPM and start using it. 
 In the future there will be a handy package installer to export your app with and I will add example apps.
 
 ###Credits###
@@ -208,11 +208,11 @@ This app makes heavy use of:
 What is the beta version going to have?
 =======================================
 
-On the todolist for MCJS are:
+On the todo list for MCJS are:
 
 * UPNP
 * Fast transcoding 
-* Crossbrowser compatibility
+* Cross Browser compatibility
 * Easy to add/change themes
 * And a set of ready made apps like youtube and google music.
 * Multilanguage support
@@ -221,7 +221,7 @@ On the todolist for MCJS are:
 This application will run on Windows and Linux based systems. 
 There will be a specific Linux distro for raspberry pi using a kiosk, debian distro.
 
-I'm building MCJS in my free time so if you want to encourage me to continue this enourmous project, feel free to do so.
+I'm building MCJS in my free time so if you want to encourage me to continue this enormous project, feel free to do so.
 
 [![Donate] (screenshots/paypal-donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
 
