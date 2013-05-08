@@ -36,6 +36,7 @@
 .caroufredsel_wrapper{
 	height: 350px !important;
 	bottom:0 !important;
+	left: 35px!important;
 }
 
 #next, #prev{ 
