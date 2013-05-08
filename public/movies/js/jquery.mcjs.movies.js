@@ -92,6 +92,7 @@
 	
 
 	// Needs plugin jquery.carouFredSel-6.1.0-packed.js
+	//TODO: handle long key press to scroll faster
 	function _carousel(o){
 		$('.movieposters').find(".movieposter:first").addClass("focused");
 		$('.movieposters').carouFredSel({
@@ -105,7 +106,8 @@
 			},
 			scroll  : {
 				onBefore : function (){
-					_hideDetails();
+					var currentMovie = $(this);
+					_hideDetails(currentMovie);
 				},
 				onAfter : function( data ) {
 					data.items.visible.each(function() { 
@@ -115,7 +117,8 @@
 					});
 				},
 				fx : "scroll",
-				easing  : "swing"
+				easing  : "swing",
+				items: 1
 			},
 			prev: {
 				key : "left",
