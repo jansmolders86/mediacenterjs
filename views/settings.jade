@@ -46,7 +46,10 @@ html(lang="en")
 								label(for="detailsno") No
 					.row
 						label Specify movielocation
-						input.keyboard(name="movielocation",type="text",placeholder="C:/temp or /mnt/media/hdd/movies", value= moviepath, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+						input.keyboard(name="movielocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= moviepath, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+					.row
+						label Specify musiclocation
+						input.keyboard(name="musiclocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")	
 					.row
 						span.label Use high res images (720 or 1080)
 						.checkgroup
@@ -97,5 +100,4 @@ html(lang="en")
 						input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
 					.row
 						input(type="submit",value="Submit")		
-						input(name="musiclocation",type="text",value="tbd",style="visibility:hidden;")
 						input(name="tvlocation",type="text",value="tbd",style="visibility:hidden;")

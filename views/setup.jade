@@ -21,12 +21,15 @@ html(lang="en")
 			form#setup.validate-form(action='/setuppost',method='post')
 				.row
 					label Specify movielocation
-					input.keyboard(name="movielocation",type="text",placeholder="C:/temp or /mnt/media/hdd/movies", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+					input.keyboard(name="movielocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 				.row	
 					span.info 
 						span.quote &ldquo;
 						span MediaCenterJS will index all the moviefiles in this initial folder. <br/> You can add or change a location later in the settings.
-						span.quote &rdquo; 						
+						span.quote &rdquo; 		
+				.row
+					label Specify musiclocation
+					input.keyboard(name="musiclocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")							
 				.row
 					span.label Use high res images (needs more diskspace) 
 					.checkgroup
@@ -53,6 +56,5 @@ html(lang="en")
 				.row
 					input(type="submit",value="Submit")
 					input(name="screensaver",type="text",value="dim",style="visibility:hidden;")
-					input(name="musiclocation",type="text",value="tbd",style="visibility:hidden;")
 					input(name="tvlocation",type="text",value="tbd",style="visibility:hidden;")
 					input(name="showdetails",type="text",value="yes",style="visibility:hidden;")
