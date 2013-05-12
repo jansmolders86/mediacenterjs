@@ -19,25 +19,37 @@
 
 ul.music{
 	list-style:none; 
-	width:960px;
+	width:700px;
 	height:700px;
 }
 
 
 ul.music li img{
-	width:120px;
-	height:120px;
+	width:100px;
+	height:100px;
 	float:left;
+	margin-right:20px;
 }
 
 ul.music li{
-	width:120px;
+	width:700px;
 	float:left;
 	padding:5px;
 }
 
 ul.music li a{	
-	width:120px;
+	width:550px;
 	float:left;
 	font-size:14px;
+	font-weight:bold;
 }
+
+#next, #prev{ 
+	width:47px;
+	height:69px;
+	position:absolute; 	
+	left:50%;
+	z-index:8;
+}
+#next{	background: url("img/carousel-sprite.png") no-repeat left bottom; 	bottom:50px; }
+#prev{	background: url("img/carousel-sprite.png") no-repeat left top; 	top:50px; }

@@ -34,9 +34,9 @@
 			
 			_carousel(o);
 			
-			$('a.play').click(function(e) {
+			$('ul.music').find('li').click(function(e) {
 				e.preventDefault();	
-				var url = $(this).html();
+				var url = $(this).find('.title').html();
 				_getAlbum(url)
 			});
 			
@@ -52,6 +52,7 @@
 		$('ul.music').find(".li:first").addClass("focused");
 		$('ul.music').carouFredSel({
 			auto: false,
+			height:700, 
 			onCreate: function( data ) {
 				data.items.each(function() { 
 					var title = $(this).find('.title').html();
@@ -59,11 +60,8 @@
 					_handleVisibleMovies(o, title, visibleMovie);
 				});
 			},
+			direction   : "up",
 			scroll  : {
-				onBefore : function (){
-					var currentMovie = $(this);
-					_hideDetails(currentMovie);
-				},
 				onAfter : function( data ) {
 					data.items.visible.each(function() { 
 						var title = $(this).find('.title').html();
@@ -107,9 +105,10 @@
 	}
 	
 	function _getAlbum(url){
+		console.log('getting album info', url)
 		$.ajax({
 			url: '/music/getAlbum/', 
-			type: 'get'
+			type: 'get',
 			data: {album : url}
 		}).done(function(data){
 			var albumData = $.parseJSON(data);

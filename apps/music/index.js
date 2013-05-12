@@ -22,15 +22,14 @@ exports.engine = 'jade';
 
 // Render the indexpage
 exports.index = function(req, res, next){	
-	updateMusic(req, res, function(status){
+	var dir = configfileResults.musicpath;
+	var path = './public/music/data/musicindex.js'
+	
+	updateMusic(req, res, dir, path, function(status){
 		var musicfiles = []
 		,musicfilepath = './public/music/data/musicindex.js'
 		,musicfiles = fs.readFileSync(musicfilepath)
 		,musicfileResults = JSON.parse(musicfiles)	
-		
-		//client.artist('Marcus Price', function(err, artist) {
-		//	console.log(artist.name); // Marcus Price
-		//});
 		
 		res.render('music',{
 			music: musicfileResults,
@@ -40,8 +39,24 @@ exports.index = function(req, res, next){
 };
 
 // Render the indexpage
-exports.getAlbum = function(req, res, next){	
+exports.getAlbum = function(req, res, next){
+	console.log('req',req.body)
+	var incommingFile = req.body
+	, dir = incommingFile.album
+	, path = './public/music/'+dir+'/album.js'
 	
+	console.log(incommingFile)
+	updateMusic(req, res, dir, path, function(status){
+		var musicfiles = []
+		,musicfilepath = path
+		,musicfiles = fs.readFileSync(musicfilepath)
+		,musicfileResults = JSON.parse(musicfiles)	
+		
+		res.send('music',{
+			music: musicfileResults,
+			status:status
+		});
+	});
 };
 
 exports.post = function(req, res, next){	
@@ -173,10 +188,8 @@ exports.post = function(req, res, next){
 
 
 //TODO: Make this a generic helper function
-function updateMusic(req, res, callback) { 
-	var musiclistpath = './public/music/data/musicindex.js'
-	, status = null
-	, dir = configfileResults.musicpath;
+function updateMusic(req, res, dir, path, callback) { 
+	var	status = null
 	
 	console.log('Getting music from:', dir)
 	fs.readdir(dir,function(err,files){
@@ -195,14 +208,11 @@ function updateMusic(req, res, callback) {
 					console.log('found album', file)
 					allMusic.push(file);
 				} else {
-					if (file.match(/\.(mp3)/)){
-						musicFiles = file
-						allMusic[allMusic.length] = musicFiles;
-					}
+					allMusic.push(file);
 				}
 			});
 			var allMusicJSON = JSON.stringify(allMusic, null, 4);
-			fs.writeFile(musiclistpath, allMusicJSON, function(e) {
+			fs.writeFile(path, allMusicJSON, function(e) {
 				if (!e) {
 					console.log('Updating musiclist', allMusicJSON);
 					callback(status);
