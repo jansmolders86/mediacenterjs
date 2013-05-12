@@ -6,8 +6,8 @@ var express = require('express')
 , XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 , downloader = require('downloader')
 , request = require("request")
-, discogs = require('discogs')
-, client = discogs({api_key: 'qXZoSCiTdtLSWknszOtk'});
+//, discogs = require('discogs')
+//, client = discogs({api_key: 'qXZoSCiTdtLSWknszOtk'});
 
 exports.engine = 'jade';
 
