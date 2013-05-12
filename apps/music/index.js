@@ -3,11 +3,9 @@
 var express = require('express')
 , app = express()
 , fs = require('fs')
-, XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 , downloader = require('downloader')
 , request = require("request")
-//, discogs = require('discogs')
-//, client = discogs({api_key: 'qXZoSCiTdtLSWknszOtk'});
+, helper = require('../../lib/helpers.js');
 
 exports.engine = 'jade';
 
@@ -22,10 +20,13 @@ exports.engine = 'jade';
 
 // Render the indexpage
 exports.index = function(req, res, next){	
-	var dir = configfileResults.musicpath;
-	var path = './public/music/data/musicindex.js'
+
+
+	var dir = configfileResults.musicpath
+	, writePath = './public/music/data/musicindex.js'
+	, getDir = true;
 	
-	updateMusic(req, res, dir, path, function(status){
+	helper.getLocalFiles(req, res, dir, writePath, getDir, function(status){
 		var musicfiles = []
 		,musicfilepath = './public/music/data/musicindex.js'
 		,musicfiles = fs.readFileSync(musicfilepath)
@@ -40,13 +41,15 @@ exports.index = function(req, res, next){
 
 // Render the indexpage
 exports.getAlbum = function(req, res, next){
+
 	console.log('req',req.body)
 	var incommingFile = req.body
 	, dir = incommingFile.album
-	, path = './public/music/'+dir+'/album.js'
+	, writePath = './public/music/'+dir+'/album.js'
+	, getDir = false;
 	
 	console.log(incommingFile)
-	updateMusic(req, res, dir, path, function(status){
+	helper.getLocalFiles(req, res, dir, writePath, getDir, function(status){
 		var musicfiles = []
 		,musicfilepath = path
 		,musicfiles = fs.readFileSync(musicfilepath)
@@ -128,98 +131,42 @@ exports.post = function(req, res, next){
 				, noCountries = noyear.replace(/320kbps|192kbps|128kbps|mp3|00/g,"")
 				, albumTitle = noCountries.replace(/cd [1-9]|cd[1-9]/gi,"");
 				
-				xhrCall("http://api.discogs.com/database/search?q="+albumTitle+"&type=release&callback=", function(response) {
-					if (response != 'Not Found') {
+				helper.xhrCall("http://api.discogs.com/database/search?q="+albumTitle+"&type=release&callback=", function(response) {
+					if (typeof response) {
 						var requestResponse = JSON.parse(response)
-						,requestInitialDetails = requestResponse.results[0]
-						
-						console.log('response',requestInitialDetails)
-						
+						,requestInitialDetails = requestResponse.results[0];
+					
 						title = requestInitialDetails.title
 						thumb = requestInitialDetails.thumb
 						year = requestInitialDetails.year
 						genre = requestInitialDetails.genre
+					}
 					
-						//Setting up array for writing
-						var scraperdata = new Array()
-						,scraperdataset = null;
-						
-						scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}
-						scraperdata[scraperdata.length] = scraperdataset;
-						var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-						
-						fs.writeFile('./public/music/data/'+albumRequest+'/data.js', scraperdataJSON, function(e) {
-							if (!e) {
-								fs.readFile('./public/music/data/'+albumRequest+'/data.js', 'utf8', function (err, data) {
-									if(!err){
-										res.send(data);
-									}else{
-										console.log('Cannot read scraper data', err)
-									}
-								});
-							}else{ 
-								console.log('Error getting movielist', e);
-							};
-						});
-					};
+					//Setting up array for writing
+					var scraperdata = new Array()
+					,scraperdataset = null;
+				
+					scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}
+					scraperdata[scraperdata.length] = scraperdataset;
+					var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+					
+					fs.writeFile('./public/music/data/'+albumRequest+'/data.js', scraperdataJSON, function(e) {
+						if (!e) {
+							fs.readFile('./public/music/data/'+albumRequest+'/data.js', 'utf8', function (err, data) {
+								if(!err){
+									res.send(data);
+								}else{
+									console.log('Cannot read scraper data', err)
+								}
+							});
+						}else{ 
+							console.log('Error getting movielist', e);
+						};
+					});
+					
 					
 				});
 			}
 		});
 	};
-	
-	function xhrCall(url,callback) { 
-		request({
-			url: url,
-			headers: {"Accept": "application/json"},
-			method: "GET"
-		}, function (error, response, body) {
-			if(!error){
-				callback(body);
-			}else{
-				console.log('XHR Error',error);
-			}
-		});
-	};
-	
-
-};
-
-
-
-//TODO: Make this a generic helper function
-function updateMusic(req, res, dir, path, callback) { 
-	var	status = null
-	
-	console.log('Getting music from:', dir)
-	fs.readdir(dir,function(err,files){
-		if (err){
-			status = 'wrong or bad directory, please specify a existing directory';
-			console.log(status);
-			callback(status);
-		}else{
-			var allMusic = new Array();
-			files.forEach(function(file){
-				var fullPath = dir + file
-				stats = fs.lstatSync(fullPath);
-				if (stats.isDirectory(file)) {
-					var subPath = dir + file
-					, files = fs.readdirSync(subPath);
-					console.log('found album', file)
-					allMusic.push(file);
-				} else {
-					allMusic.push(file);
-				}
-			});
-			var allMusicJSON = JSON.stringify(allMusic, null, 4);
-			fs.writeFile(path, allMusicJSON, function(e) {
-				if (!e) {
-					console.log('Updating musiclist', allMusicJSON);
-					callback(status);
-				}else{ 
-					console.log('Error getting musiclist', e);
-				};
-			});
-		};
-	});
 };
