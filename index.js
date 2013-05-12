@@ -133,7 +133,7 @@ function writeSettings(req, res, callback){
 
 // Open App socket
 if (configfileResults.port == "" || configfileResults.port == undefined ){
-	console.log('Error parsing configfile, failing back to default port')
+	console.log('Error parsing configfile, falling back to default port')
 	app.listen(parseInt(3000));
 } else{
 	app.listen(parseInt(configfileResults.port));

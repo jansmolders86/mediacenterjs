@@ -20,7 +20,6 @@
 var express = require('express')
 , app = express()
 , fs = require('fs')
-, XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 , downloader = require('downloader')
 , request = require("request")
 , ffmpeg = require('fluent-ffmpeg')
