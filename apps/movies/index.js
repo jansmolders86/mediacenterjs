@@ -24,7 +24,11 @@ var express = require('express')
 , request = require("request")
 , ffmpeg = require('fluent-ffmpeg')
 , rimraf = require('rimraf')
-, helper = require('../../lib/helpers.js');
+, helper = require('../../lib/helpers.js')
+, Encoder = require('node-html-encoder').Encoder;
+
+// entity type encoder
+var encoder = new Encoder('entity');
 
 exports.engine = 'jade';
 
@@ -58,9 +62,10 @@ exports.play = function(req, res){
 	, moviedatapath = './public/movies/data/'+req.params.filename+'/data.js'
 	, movieData = fs.readFileSync(moviedatapath)
 	, movieDataResults = JSON.parse(movieData)
-	, stream = configfileResults.moviepath +'/'+movieDataResults.path;
+	, stream = configfileResults.moviepath +'/'+movieDataResults.path
+	, movieTitle = encoder.htmlDecode(req.params.filename);
 
-	var  proc = new ffmpeg({ source: configfileResults.moviepath + req.params.filename, nolog: true, priority: 1, timeout:15000})
+	var  proc = new ffmpeg({ source: configfileResults.moviepath + movieTitle, nolog: true, priority: 1, timeout:15000})
 		.toFormat('webm')
 		.withVideoBitrate('1024k')
 		//.bufferSize('183k')
