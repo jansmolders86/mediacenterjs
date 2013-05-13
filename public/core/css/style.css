@@ -33,7 +33,7 @@ body{
 	height: 100%;
 	width:100%;
 	border:0;
-	overflow:hidden;
+	overflow-x:hidden;
 	position:relative;
 	color:#f5f5f5;
 }
@@ -166,7 +166,7 @@ h3 a{
  #settings .back{ 
 	display:block; 
 	float:left; 
-	margin-top:48px; 
+	margin-top:43px; 
 	margin-right:30px;
 	width: 32px;
 	height:32px;
