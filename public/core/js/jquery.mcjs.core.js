@@ -63,17 +63,23 @@
 				$('.keyboard').keyboard();
 			}
 		}	
+		
+		$.ajax({
+			url: '/core/configuration/', 
+			type: 'get'
+		}).done(function(data){
+			//Set up i18n translation
+			console.log(data)
+			$.i18n.properties({
+				name: 'translation', 
+				path:'/core/translations/', 
+				mode:'map',
+				language: data.language,
+				extension: 'js',
+				loadBaseFile: false  
+			});	
+		});	
 
-		//TODO: Add multilanguage
-		/*// Set up i18n translation
-		$.i18n.properties({
-			name: 'translations', 
-			path:'/translations/', 
-			mode:'map',
-			language: o.defaultLang,
-			extension: 'js',
-			loadBaseFile: false  
-		});	*/
 	}
 	
 	// Resize background image according to viewport

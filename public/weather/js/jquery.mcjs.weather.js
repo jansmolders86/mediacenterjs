@@ -56,7 +56,6 @@
 				url : "http://api.wunderground.com/api/68a6ea8f6013979c/geolookup/conditions/lang:"+o.LANG+"/q/"+ o.language +"/"+ o.location+".json",
 				dataType : "jsonp",
 				success : function(parsed_json) {
-					console.log(parsed_json)
 					if (parsed_json['response']['error']){
 						var errorMessage = parsed_json['response']['error']['description']
 						$("#weather").find("h1").html(errorMessage);
@@ -75,19 +74,19 @@
 
 						var weathertypeset = $('.weathertype').text()
 				
-						if ( weathertypeset.match(/bewolkt|Bewolkt/i) ){
+						if ( weathertypeset.match(/bewolkt/gi) ){
 							$(".backdropimg").attr('src', "/weather/img/clouds.jpg").addClass("fadein");
-						}else if( weathertypeset.match(/mist|Mist/i) ){
+						}else if( weathertypeset.match(/mist/gi) ){
 							$(".backdropimg").attr('src', "/weather/img/misty.jpg").addClass("fadein");
-						}else if( weathertypeset.match(/helder|Helder/i) ){
+						}else if( weathertypeset.match(/helder/gi) ){
 							$(".backdropimg").attr('src', "/weather/img/clear.jpg").addClass("fadein");
-						}else if( weathertypeset.match(/zon|Zon/i) ){
+						}else if( weathertypeset.match(/zon/gi) ){
 							$(".backdropimg").attr('src', "/weather/img/sunny.jpg").addClass("fadein");
-						}else if( weathertypeset.match(/regen|Regen/i) ){
+						}else if( weathertypeset.match(/regen/gi) ){
 							$(".backdropimg").attr('src', "/weather/img/rainy.jpg").addClass("fadein");
-						}else if( weathertypeset.match(/sneeuw|Sneeuw/i) ){
+						}else if( weathertypeset.match(/sneeuw/gi) ){
 							$(".backdropimg").attr('src', "/weather/img/snowy.jpg").addClass("fadein");
-						}else if( weathertypeset.match(/storm|Strom/i) ){
+						}else if( weathertypeset.match(/storm/gi) ){
 							$(".backdropimg").attr('src', "/weather/img/stormy.jpg").addClass("fadein");
 						}else {
 							$(".backdropimg").attr('src', "/weather/img/default.jpg").addClass("fadein");
