@@ -23,7 +23,8 @@ var express = require('express')
 , downloader = require('downloader')
 , request = require("request")
 , ffmpeg = require('fluent-ffmpeg')
-, rimraf = require('rimraf');
+, rimraf = require('rimraf')
+, helper = require('../../lib/helpers.js');
 
 exports.engine = 'jade';
 
@@ -34,7 +35,11 @@ var configfile = []
 ,configfileResults = JSON.parse(configfile);	
 
 exports.index = function(req, res, next){	
-	updateMovies(req, res, function(status){
+
+	var writePath = './public/movies/data/movieindex.js'
+	, getDir = false
+	, dir = configfileResults.moviepath;
+	helper.getLocalFiles(req, res, dir, writePath, getDir, function(status){
 		var moviefiles = []
 		,moviefilepath = './public/movies/data/movieindex.js'
 		,moviefiles = fs.readFileSync(moviefilepath)
@@ -179,7 +184,7 @@ exports.post = function(req, res, next){
 				movieTitle = noCD.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight();
 				if (year == null) year = ''
 				
-				xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&year="+ year +"&language="+configfileResults.language+"&=", function(response) {
+				helper.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&year="+ year +"&language="+configfileResults.language+"&=", function(response) {
 					if (response != 'Nothing found.') {
 					
 						var requestResponse = JSON.parse(response)
@@ -196,7 +201,7 @@ exports.post = function(req, res, next){
 								id = requestInitialDetails.id;
 								original_name = requestInitialDetails.original_title;
 									
-								xhrCall("http://api.themoviedb.org/3/movie/" + id + "?api_key="+api_key+"&=", function(response) {
+								helper.xhrCall("http://api.themoviedb.org/3/movie/" + id + "?api_key="+api_key+"&=", function(response) {
 								
 									var secondRequestResponse = JSON.parse(response);
 									
@@ -239,8 +244,6 @@ exports.post = function(req, res, next){
 		});
 	};
 	
-
-	
 	function downloadCache(response,callback){
 		if(typeof response){
 			var size = "w1920";
@@ -267,63 +270,4 @@ exports.post = function(req, res, next){
 		callback(poster,backdrop);
 	};
 
-};
-
-
-
-function xhrCall(url,callback) { 
-	request({
-		url: url,
-		headers: {"Accept": "application/json"},
-		method: "GET"
-	}, function (error, response, body) {
-		if(!error){
-			callback(body);
-		}else{
-			console.log('XHR Error',error);
-		}
-	});
-};
-
-
-
-function updateMovies(req, res, callback) { 
-	var movielistpath = './public/movies/data/movieindex.js'
-	, status = null
-	, dir = configfileResults.moviepath;
-	
-	console.log('Getting movies from:', dir)
-	fs.readdir(dir,function(err,files){
-		if (err){
-			status = 'wrong or bad directory, please specify a existing directory';
-			console.log(status);
-			callback(status);
-		}else{
-			var allMovies = new Array();
-			files.forEach(function(file){
-				var fullPath = dir + file
-				stats = fs.lstatSync(fullPath);
-				if (stats.isDirectory(file)) {
-					var subPath = dir + file
-					, files = fs.readdirSync(subPath);
-					console.log('found subdir files', file+'/'+files)
-					allMovies.push(file+'/'+files);
-				} else {
-					if (file.match(/\.(avi|mkv|mp4|mpeg|mov)/)){
-						movieFiles = file
-						allMovies[allMovies.length] = movieFiles;
-					}
-				}
-			});
-			var allMoviesJSON = JSON.stringify(allMovies, null, 4);
-			fs.writeFile(movielistpath, allMoviesJSON, function(e) {
-				if (!e) {
-					console.log('Updating movielist', allMoviesJSON);
-					callback(status);
-				}else{ 
-					console.log('Error getting movielist', e);
-				};
-			});
-		};
-	});
 };
