@@ -112,6 +112,7 @@
 			data: {album : title}
 		}).done(function(data){
 			$('#musicWrapper').hide();
+			$('.backlink').attr('href','/music')
 			$('body').append('<div id="tracklist"><h2>'+title+'</h2><ul id="tracks"></ul></div>')
 			
 			for (var i = 0; i < data.length; i++) {
