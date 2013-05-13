@@ -48,10 +48,6 @@ exports.album = function(req, res, next){
 	, dir = configfileResults.musicpath+incomingFile.album+'/'
 	, writePath = './public/music/data/'+incomingFile.album+'/album.js'
 	, getDir = false;
-	
-	console.log('incoming', dir)
-	console.log('writePath', writePath)
-	console.log('getDir', getDir)
 
 	helper.getLocalFiles(req, res, dir, writePath, getDir, function(status){
 		var musicfiles = []
@@ -66,9 +62,14 @@ exports.album = function(req, res, next){
 exports.track = function(req, res, next){
 	console.log('sending track for playback:',req.params.track)
 	
-	var encodeTrack = encoder.htmlDecode(req.params.track)
-	, track = configfileResults.musicpath+req.params.album+'/'+encodeTrack
-	, stat = fs.statSync(track);
+	var decodeTrack = encoder.htmlDecode(req.params.track)
+	
+	if (req.params.album === 'none'){
+		var track = configfileResults.musicpath+decodeTrack
+	}else {
+		var track = configfileResults.musicpath+req.params.album+'/'+decodeTrack
+	}
+	var stat = fs.statSync(track);
 	
 	var proc = new ffmpeg({ source: track, nolog: true, priority: 1, timeout:15000})
 		.withAudioCodec('libvorbis')

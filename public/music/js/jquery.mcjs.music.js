@@ -37,8 +37,16 @@
 			$('ul.music').find('li').click(function(e) {
 				e.preventDefault();	
 				$(this).addClass('selected');
-				var title = $(this).find('.title').html();
-				_getAlbum(title)
+				var album = $(this).find('.title').html();
+				
+				if(album.match(/\.[0-9a-z]{1,5}$/i)){
+					var track = '/music/track/none/'+album
+					, album = 'none';
+					_hideOtherAlbums();
+					_playTrack(track,album)
+				}else {
+					_getAlbum(album);
+				}
 			});
 			
 		});
@@ -93,7 +101,6 @@
 	}
 
 	function _handleVisibleMovies(o, title, visibleMovie){
-		console.log(title)
 		$.ajax({
 			url: '/music/post/', 
 			type: 'post',
@@ -105,15 +112,14 @@
 		});
 	}
 	
-	function _getAlbum(title){
+	function _getAlbum(album){
 		$.ajax({
 			url: '/music/album/', 
 			type: 'post',
-			data: {album : title}
+			data: {album : album}
 		}).done(function(data){
-			$('#musicWrapper, #prev, #next').hide();
-			$('.backlink').attr('href','/music')
-			$('body').append('<div id="tracklist"><h2>'+title+'</h2><ul id="tracks"></ul></div>')
+			_hideOtherAlbums();
+			$('body').append('<div id="tracklist"><h2>'+album+'</h2><ul id="tracks"></ul></div>')
 			
 			for (var i = 0; i < data.length; i++) {
 				$('#tracks').append('<li>'+data[i]+'</li>')
@@ -121,21 +127,26 @@
 			
 			$('#tracklist').find('li').click(function(e) {
 				e.preventDefault();	
-				var track = '/music/track/'+title+'/'+$(this).html();
-				_playTrack(track,title)
+				var track = '/music/track/'+album+'/'+$(this).html();
+				_playTrack(track,album)
 			});
 			
 		});	
 	}
 	
-	function _playTrack(track,title){
+	function _hideOtherAlbums(){
+		$('#musicWrapper, #prev, #next').hide();
+		$('.backlink').attr('href','/music')
+	}
+	
+	function _playTrack(track,album){
 		if( $('#player').length) $('#player').remove();
 		$.ajax({
 			url: track, 
 			type: 'get' 
 		})
 
-		$('body').append('<video id="player" class="video-js vjs-default-skin" style="position: absolute; bottom: 20px; left:0px width:300px; height:200px; z-index:9;" controls poster="/movies/img/loading-video.png" width="100%" height="100%"><source src="'+track+'" type="audio/ogg"></video>');
+		$('body').append('<video id="player" class="video-js vjs-default-skin" style="position: absolute; bottom: 20px; left:0px width:200px; height:200px; z-index:9;" controls poster="/movies/img/loading-video.png" width="100%" height="100%"><source src="'+track+'" type="audio/ogg"></video>');
 	}
 
 	
