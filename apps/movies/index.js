@@ -59,31 +59,13 @@ exports.play = function(req, res){
 	, movieData = fs.readFileSync(moviedatapath)
 	, movieDataResults = JSON.parse(movieData)
 	, stream = configfileResults.moviepath +'/'+movieDataResults.path;
-	
-	/*
-	var fullPath = stream.replace(/[^/]*$/, "");
-	
-	TODO: make subtitles work
-	fs.readdir(fullPath,function(err,files){
-		if (err){
-			console.log(status);
-		}else{
-			var allMovies = new Array();
-			files.forEach(function(file){
-				if (file.match(/\.(srt)/)){
-					res.send(file)
-				}
-			});
-		}
-	});
-	*/
 
 	var  proc = new ffmpeg({ source: configfileResults.moviepath + req.params.filename, nolog: true, priority: 1, timeout:15000})
 		.toFormat('webm')
 		.withVideoBitrate('1024k')
-		.bufferSize('183k')
+		//.bufferSize('183k')
 		//.chunkSize('14336')
-		// Option srt handler? .addInput('soundtrack.mp3')
+		// Option srt handler? .addInput('')
 		.writeToStream(res, function(retcode, error){
 		if (!error){
 			console.log('file has been converted succesfully',retcode);

@@ -36,8 +36,9 @@
 			
 			$('ul.music').find('li').click(function(e) {
 				e.preventDefault();	
-				var url = $(this).find('.title').html();
-				_getAlbum(url)
+				$(this).addClass('selected');
+				var title = $(this).find('.title').html();
+				_getAlbum(title)
 			});
 			
 		});
@@ -104,19 +105,48 @@
 		});
 	}
 	
-	function _getAlbum(url){
-		console.log('getting album info', url)
+	function _getAlbum(title){
 		$.ajax({
-			url: '/music/getAlbum/', 
-			type: 'get',
-			data: {album : url}
+			url: '/music/album/', 
+			type: 'post',
+			data: {album : title}
 		}).done(function(data){
-			var albumData = $.parseJSON(data);
-			console.log('ertert',albumData)
-		//	$('body').append('<video id="player" class="video-js vjs-default-skin" style="position: absolute; top: 0; left:0px width:100%; height:100%; z-index:9;" controls poster="/movies/img/loading-video.png" width="100%" height="100%"><source src="'+url+'" type="video/webm"></video>');
+			$('#musicWrapper').hide();
+			$('body').append('<div id="tracklist"><h2>'+title+'</h2><ul id="tracks"></ul></div>')
+			
+			for (var i = 0; i < data.length; i++) {
+				$('#tracks').append('<li>'+data[i]+'</li>')
+			}	
+			
+			$('#tracklist').find('li').click(function(e) {
+				console.log('play track')
+				
+				e.preventDefault();	
+				var track = '/music/track/'+title+'/'+$(this).html();
+				_playTrack(track,title)
+			});
+			
 		});	
 	}
+	
+	function _playTrack(track,title){
+		if( $('#player').length) $('#player').remove();
+		
+		console.log('going to play track'+track)
+		$.ajax({
+			url: track, 
+			type: 'get' 
+		})
 
+		$('body').append('<video id="player" class="video-js vjs-default-skin" style="position: absolute; bottom: 20px; left:0px width:300px; height:200px; z-index:9;" controls poster="/movies/img/loading-video.png" width="100%" height="100%"><source src="'+track+'" type="audio/ogg"></video>');
+	}
+
+	
+	function _colorBackground(){
+		//TODO: Color background according to albumArt
+	}
+	
+	
 	/**** End of custom functions ***/
 	
 	$.fn.mcjsm = function( method ) {

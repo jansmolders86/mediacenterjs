@@ -4,8 +4,13 @@ var express = require('express')
 , app = express()
 , fs = require('fs')
 , downloader = require('downloader')
+, ffmpeg = require('fluent-ffmpeg')
 , request = require("request")
-, helper = require('../../lib/helpers.js');
+, helper = require('../../lib/helpers.js')
+, Encoder = require('node-html-encoder').Encoder;
+
+// entity type encoder
+var encoder = new Encoder('entity');
 
 exports.engine = 'jade';
 
@@ -17,10 +22,8 @@ var configfile = []
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
 
-
 // Render the indexpage
 exports.index = function(req, res, next){	
-
 
 	var dir = configfileResults.musicpath
 	, writePath = './public/music/data/musicindex.js'
@@ -39,40 +42,62 @@ exports.index = function(req, res, next){
 	});
 };
 
-// Render the indexpage
-exports.getAlbum = function(req, res, next){
+exports.album = function(req, res, next){
 
-	console.log('req',req.body)
-	var incommingFile = req.body
-	, dir = incommingFile.album
-	, writePath = './public/music/'+dir+'/album.js'
+	var incomingFile = req.body
+	, dir = configfileResults.musicpath+incomingFile.album+'/'
+	, writePath = './public/music/data/'+incomingFile.album+'/album.js'
 	, getDir = false;
 	
-	console.log(incommingFile)
+	console.log('incoming', dir)
+	console.log('writePath', writePath)
+	console.log('getDir', getDir)
+
 	helper.getLocalFiles(req, res, dir, writePath, getDir, function(status){
 		var musicfiles = []
-		,musicfilepath = path
+		,musicfilepath = writePath
 		,musicfiles = fs.readFileSync(musicfilepath)
 		,musicfileResults = JSON.parse(musicfiles)	
 		
-		res.send('music',{
-			music: musicfileResults,
-			status:status
-		});
+		res.send(musicfileResults);
+	});
+};
+
+exports.track = function(req, res, next){
+	console.log('sending track for playback:',req.params.track)
+	
+	var encodeTrack = encoder.htmlDecode(req.params.track)
+	, track = configfileResults.musicpath+req.params.album+'/'+encodeTrack
+	, stat = fs.statSync(track);
+	
+	var proc = new ffmpeg({ source: track, nolog: true, priority: 1, timeout:15000})
+		.withAudioCodec('libvorbis')
+		.toFormat('ogg')
+		.withAudioBitrate('320k')
+		.onProgress(function(progress) {
+			console.log(progress);
+		})
+		.writeToStream(res, function(retcode, error){
+		if (!error){
+			console.log('file has been converted succesfully',retcode);
+		}else{
+			console.log('file conversion error',error);
+		}
 	});
 };
 
 exports.post = function(req, res, next){	
+
+	var incomingFile = req.body
+	, incomingalbumTitle = incomingFile.albumTitle
+	, albumRequest = incomingalbumTitle;
+	
 	var albumTitle = null
 	, title = 'No data found...'
 	, thumb = '/movies/css/img/nodata.jpg'
 	, year = 'No data found...'
 	, genre = 'No data found...';
 
-	var incommingFile = req.body
-	, incommingalbumTitle = incommingFile.albumTitle
-	, albumRequest = incommingalbumTitle;
-	
 	console.log('Getting data for album', albumRequest);
 	//Check if folder already exists
 	if (fs.existsSync('./public/music/data/'+albumRequest)) {
