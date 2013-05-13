@@ -111,7 +111,7 @@
 			type: 'post',
 			data: {album : title}
 		}).done(function(data){
-			$('#musicWrapper').hide();
+			$('#musicWrapper, #prev, #next').hide();
 			$('.backlink').attr('href','/music')
 			$('body').append('<div id="tracklist"><h2>'+title+'</h2><ul id="tracks"></ul></div>')
 			
@@ -120,8 +120,6 @@
 			}	
 			
 			$('#tracklist').find('li').click(function(e) {
-				console.log('play track')
-				
 				e.preventDefault();	
 				var track = '/music/track/'+title+'/'+$(this).html();
 				_playTrack(track,title)
@@ -132,8 +130,6 @@
 	
 	function _playTrack(track,title){
 		if( $('#player').length) $('#player').remove();
-		
-		console.log('going to play track'+track)
 		$.ajax({
 			url: track, 
 			type: 'get' 

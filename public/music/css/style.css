@@ -68,7 +68,7 @@ ul.music li a{
 	line-height:25px;
 }
 
-#tracklist li{ font-family:arial; color:#f5f5f5; }
+#tracklist li{ font-family:arial; color:#f5f5f5; font-size:14px;}
 
 #player{
 	postion:absolute;
