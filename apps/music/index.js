@@ -27,9 +27,10 @@ exports.index = function(req, res, next){
 
 	var dir = configfileResults.musicpath
 	, writePath = './public/music/data/musicindex.js'
-	, getDir = true;
+	, getDir = true
+	, fileTypes = new RegExp("\.(mp3)","g");
 	
-	helper.getLocalFiles(req, res, dir, writePath, getDir, function(status){
+	helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes, function(status){
 		var musicfiles = []
 		,musicfilepath = './public/music/data/musicindex.js'
 		,musicfiles = fs.readFileSync(musicfilepath)
@@ -47,9 +48,10 @@ exports.album = function(req, res, next){
 	var incomingFile = req.body
 	, dir = configfileResults.musicpath+incomingFile.album+'/'
 	, writePath = './public/music/data/'+incomingFile.album+'/album.js'
-	, getDir = false;
+	, getDir = false
+	, fileTypes = new RegExp("\.(mp3)","g");
 
-	helper.getLocalFiles(req, res, dir, writePath, getDir, function(status){
+	helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes, function(status){
 		var musicfiles = []
 		,musicfilepath = writePath
 		,musicfiles = fs.readFileSync(musicfilepath)

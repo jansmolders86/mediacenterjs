@@ -42,8 +42,10 @@ exports.index = function(req, res, next){
 
 	var writePath = './public/movies/data/movieindex.js'
 	, getDir = false
-	, dir = configfileResults.moviepath;
-	helper.getLocalFiles(req, res, dir, writePath, getDir, function(status){
+	, dir = configfileResults.moviepath
+	, fileTypes = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");;
+	
+	helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes,  function(status){
 		var moviefiles = []
 		,moviefilepath = './public/movies/data/movieindex.js'
 		,moviefiles = fs.readFileSync(moviefilepath)
