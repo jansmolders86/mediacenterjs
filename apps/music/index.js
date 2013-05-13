@@ -154,8 +154,8 @@ exports.post = function(req, res, next){
 				, year = filename.match(/\(.*?([0-9]{4}).*?\)/)
 				, stripped = filename.replace(/\.|_|\/|\-|\[|\]|\-/g," ")
 				, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
-				, noCountries = noyear.replace(/320kbps|192kbps|128kbps|mp3|00/g,"")
-				, albumTitle = noCountries.replace(/cd [1-9]|cd[1-9]/gi,"");
+				, types = noyear.replace(/320kbps|192kbps|128kbps|mp3|320|192|128|Deluxe version|Limited edition/gi,"")
+				, albumTitle = types.replace(/cd [1-9]|cd[1-9]/gi,"");
 				
 				helper.xhrCall("http://api.discogs.com/database/search?q="+albumTitle+"&type=release&callback=", function(response) {
 					if (typeof response) {
