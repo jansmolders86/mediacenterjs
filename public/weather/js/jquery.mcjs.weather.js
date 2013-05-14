@@ -33,7 +33,16 @@
 				$that: $that,
 				language : $('body').find('.language').html(),
 				LANG : $('body').find('.language').html().toUpperCase(),
-				location : $('body').find('.location').html()
+				location : $('body').find('.location').html(),
+				cloudy : '',
+				mist : '',
+				clear : '',
+				sunny : '',
+				rain : '',
+				snow : '',
+				storm : '',
+				feelsLike : '',
+				tempIndicator  : '&#8451;' 
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -51,6 +60,35 @@
 	// Get Current weather
 	//TODO: Make multilanguage
 	function _currentweather(o, $that){
+		 
+		$.ajax({
+			url: '/configuration/', 
+			type: 'get'
+		}).done(function(data){
+			//Set up i18n translation
+			$.i18n.properties({
+				name: 'translation', 
+				path:'/core/translations/', 
+				mode:'map',
+				language: data.language,
+				extension: 'js',
+				loadBaseFile: false ,
+				callback: function() {
+				
+					o.cloudy = new RegExp($.i18n.prop('weather_cloudy'),"gi")
+					o.mist = new RegExp($.i18n.prop('weather_mist'),"gi")
+					o.clear = new RegExp($.i18n.prop('weather_clear'),"gi")
+					o.sunny = new RegExp($.i18n.prop('weather_sunny'),"gi")
+					o.rain = new RegExp($.i18n.prop('weather_rain'),"gi")
+					o.snow = new RegExp($.i18n.prop('weather_snow'),"gi")
+					o.storm = new RegExp($.i18n.prop('weather_storm'),"gi")
+					o.feelsLike = $.i18n.prop('feelsLike')
+					
+			
+				}
+			});	
+		}); 
+		 
 		if ( $('body').hasClass('weather') || $('body').find('h1') == '' ){
 			$.ajax({
 				url : "http://api.wunderground.com/api/68a6ea8f6013979c/geolookup/conditions/lang:"+o.LANG+"/q/"+ o.language +"/"+ o.location+".json",
@@ -64,29 +102,36 @@
 						var country = parsed_json['location']['country'];
 						var weathertype = parsed_json['current_observation']['weather'];
 						var weathericon = parsed_json['current_observation']['icon_url'];
-						var feelslike_c = parsed_json['current_observation']['feelslike_c'];
-						var temp_c = parsed_json['current_observation']['temp_c'];
 						
+						if (o.language === 'nl'){
+							var feelslike_c = parsed_json['current_observation']['feelslike_c'];
+							var temp_c = parsed_json['current_observation']['temp_c'];
+						}else if (o.language === 'en'){
+							var feelslike_c = parsed_json['current_observation']['feelslike_f'];
+							var temp_c = parsed_json['current_observation']['temp_f'];
+							o.tempIndicator  = '&#8457;' 
+						}
+	
 						$("#weather").find("h1").html( locations +", "+ country);
 						$("#weather").find(".weathertype").html(weathertype);
-						$("#weather").find(".degrees").html( temp_c + " <sup>&#8451;</sup>");
-						$("#weather").find(".feelslike").html( "Gevoelstemperatuur: " + feelslike_c + " <sup>&#8451;</sup>");
-
+						$("#weather").find(".degrees").html( temp_c + " <sup>"+o.tempIndicator+"</sup>");
+						$("#weather").find(".feelslike").html( o.feelsLike +" "+ feelslike_c + " <sup>"+o.tempIndicator+"</sup>");
+	
 						var weathertypeset = $('.weathertype').text()
 				
-						if ( weathertypeset.match(/bewolkt/gi) ){
+						if ( weathertypeset.match(o.cloudy) ){
 							$(".backdropimg").attr('src', "/weather/img/clouds.jpg").addClass("fadein");
-						}else if( weathertypeset.match(/mist/gi) ){
+						}else if( weathertypeset.match(o.mist) ){
 							$(".backdropimg").attr('src', "/weather/img/misty.jpg").addClass("fadein");
-						}else if( weathertypeset.match(/helder/gi) ){
+						}else if( weathertypeset.match(o.clear) ){
 							$(".backdropimg").attr('src', "/weather/img/clear.jpg").addClass("fadein");
-						}else if( weathertypeset.match(/zon/gi) ){
+						}else if( weathertypeset.match(o.sunny) ){
 							$(".backdropimg").attr('src', "/weather/img/sunny.jpg").addClass("fadein");
-						}else if( weathertypeset.match(/regen/gi) ){
+						}else if( weathertypeset.match(o.rain) ){
 							$(".backdropimg").attr('src', "/weather/img/rainy.jpg").addClass("fadein");
-						}else if( weathertypeset.match(/sneeuw/gi) ){
+						}else if( weathertypeset.match(o.snow) ){
 							$(".backdropimg").attr('src', "/weather/img/snowy.jpg").addClass("fadein");
-						}else if( weathertypeset.match(/storm/gi) ){
+						}else if( weathertypeset.match(o.storm) ){
 							$(".backdropimg").attr('src', "/weather/img/stormy.jpg").addClass("fadein");
 						}else {
 							$(".backdropimg").attr('src', "/weather/img/default.jpg").addClass("fadein");

@@ -98,6 +98,10 @@ app.post('/setuppost', function(req, res){
 	});
 });
 
+app.get('/configuration', function(req, res){
+	res.send(configfileResults)
+});
+	
 app.post('/submit', function(req, res){
 	writeSettings(req, res, function(){
 		res.redirect('/');
