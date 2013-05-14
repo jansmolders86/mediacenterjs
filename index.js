@@ -19,7 +19,8 @@
 var express = require('express')
 , app = express()
 , fs = require ('fs')
-, dateFormat = require('dateformat');
+, dateFormat = require('dateformat')
+, lingua = require('lingua');
 
 
 var configfile = []
@@ -31,6 +32,10 @@ app.configure(function(){
 	app.set('view engine', 'jade');
 	app.set('views', __dirname + '/views');
 	app.setMaxListeners(100);
+	app.use(lingua(app, {
+		defaultLocale: 'translation_'+configfileResults.language,
+		path: __dirname + '/public/translations/'
+	}));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(express.static(__dirname + '/public'));

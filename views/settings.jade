@@ -28,75 +28,75 @@ html(lang="en")
 		#wrapper
 			a.backlink(href="/") 
 				img(src="/core/icons/back.png")
-			h1 Settings
+			h1  #{lingua.settings}
 			#settings
 				form#setup.validate-form(action='/submit',method='post')
 					.row
-						span.label Show moviedetails
+						span.label #{lingua.setting_details}
 						.checkgroup
 							if showdetails === 'yes'
 								input#detailsyes(name="details",type="radio",value="yes",checked) 
-								label(for="detailsyes") Yes
+								label(for="detailsyes") #{lingua.setting_yes}
 								input#detailsno(name="details",type="radio",value="no") 
-								label(for="detailsno") No
+								label(for="detailsno") #{lingua.setting_no}
 							else
 								input#detailsyes(name="details",type="radio",value="yes") 
-								label(for="detailsyes") Yes
+								label(for="detailsyes") #{lingua.setting_yes}
 								input#detailsno(name="details",type="radio",value="no",checked) 
-								label(for="detailsno") No
+								label(for="detailsno") #{lingua.setting_no}
 					.row
-						label Specify movielocation
+						label #{lingua.setting_movielocation}
 						input.keyboard(name="movielocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= moviepath, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row
-						label Specify musiclocation
+						label #{lingua.setting_musiclocation}
 						input.keyboard(name="musiclocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")	
 					.row
-						span.label Use high res images (720 or 1080)
+						span.label #{lingua.setting_highres}
 						.checkgroup
 							if highres === 'yes'
 								input#highresyes(name="highres",type="radio",value="yes",checked) 
-								label(for="highresyes") Yes
+								label(for="highresyes") #{lingua.setting_yes}
 								input#highresno(name="highres",type="radio",value="no") 
 								label(for="highresno") No
 							else
 								input#highresyes(name="highres",type="radio",value="yes") 
-								label(for="highresyes") Yes
+								label(for="highresyes") #{lingua.setting_yes}
 								input#highresno(name="highres",type="radio",value="no",checked) 
-								label(for="highresno") No
+								label(for="highresno") #{lingua.setting_no}
 					.row
-						span.label Dim screen on inactivity
+						span.label #{lingua.setting_screensaver}
 						.checkgroup
 							if screensaver === 'dim'
 								input#dimYes(name="screensaver",type="radio",value="dim",checked) 
-								label(for="dimYes") Yes
+								label(for="dimYes") #{lingua.setting_yes}
 								input#dimNo(name="screensaver",type="radio",value="off") 
-								label(for="dimNo") No
+								label(for="dimNo") #{lingua.setting_no}
 							else 
 								input#dimYes(name="screensaver",type="radio",value="dim") 
-								label(for="dimYes") Yes
+								label(for="dimYes") #{lingua.setting_yes}
 								input#dimNo(name="screensaver",type="radio",value="off",checked) 
-								label(for="dimNo") No
+								label(for="dimNo") #{lingua.setting_no}
 					.row
-						span.label Use onscreen keyboard
+						span.label #{lingua.setting_keyboard}
 						.checkgroup
 							if onscreenkeyboard === 'yes'
 								input#yeskeyboard(name="usekeyboard",type="radio",value="yes",checked) 
-								label(for="yeskeyboard") Yes
+								label(for="yeskeyboard") #{lingua.setting_yes}
 								input#nokeyboard(name="usekeyboard",type="radio",value="no") 
-								label(for="nokeyboard") No
+								label(for="nokeyboard") #{lingua.setting_no}
 							else
 								input#yeskeyboard(name="usekeyboard",type="radio",value="yes") 
-								label(for="yeskeyboard") Yes
+								label(for="yeskeyboard") #{lingua.setting_yes}
 								input#nokeyboard(name="usekeyboard",type="radio",value="no",checked) 
-								label(for="nokeyboard") No
+								label(for="nokeyboard") #{lingua.setting_no}
 					.row
-						label Language
+						label #{lingua.setting_language}
 						input.keyboard(name="language",type="text",placeholder="ie nl or gb", value= language ,data-rule-required="true", data-rule-language="true",  data-msg-language="Only NL and EN are currently supported")
 					.row
-						label You current location (city)
+						label #{lingua.setting_location}
 						input.keyboard(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")
 					.row
-						label Port
+						label #{lingua.setting_port}
 						input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
 					.row
 						input(type="submit",value="Submit")		

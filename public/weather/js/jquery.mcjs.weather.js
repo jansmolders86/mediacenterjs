@@ -68,7 +68,7 @@
 			//Set up i18n translation
 			$.i18n.properties({
 				name: 'translation', 
-				path:'/core/translations/', 
+				path:'/translations/', 
 				mode:'map',
 				language: data.language,
 				extension: 'js',

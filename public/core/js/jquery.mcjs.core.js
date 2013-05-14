@@ -63,28 +63,6 @@
 				$('.keyboard').keyboard();
 			}
 		}	
-
-		$.ajax({
-			url: '/configuration/', 
-			type: 'get'
-		}).done(function(data){
-			//Set up i18n translation
-			$.i18n.properties({
-				name: 'translation', 
-				path:'/core/translations/', 
-				mode:'map',
-				language: data.language,
-				extension: 'js',
-				loadBaseFile: false ,
-				callback: function() {
-				
-					$(".settingslink").find('a').html($.i18n.prop('settings'))
-			
-				}
-			});	
-		}); 
-		
-
 	}
 	
 	// Resize background image according to viewport
