@@ -5,6 +5,7 @@ var express = require('express')
 , fs = require('fs')
 , downloader = require('downloader')
 , ffmpeg = require('fluent-ffmpeg')
+, rimraf = require('rimraf')
 , request = require("request")
 , helper = require('../../lib/helpers.js')
 , Encoder = require('node-html-encoder').Encoder;
@@ -65,7 +66,6 @@ exports.track = function(req, res, next){
 	console.log('sending track for playback:',req.params.track)
 	
 	var decodeTrack = encoder.htmlDecode(req.params.track)
-	
 	if (req.params.album === 'none'){
 		var track = configfileResults.musicpath+decodeTrack
 	}else {
@@ -76,10 +76,6 @@ exports.track = function(req, res, next){
 	var proc = new ffmpeg({ source: track, nolog: true, priority: 1, timeout:15000})
 		.withAudioCodec('libvorbis')
 		.toFormat('ogg')
-		.withAudioBitrate('320k')
-		.onProgress(function(progress) {
-			console.log(progress);
-		})
 		.writeToStream(res, function(retcode, error){
 		if (!error){
 			console.log('file has been converted succesfully',retcode);
@@ -160,7 +156,7 @@ exports.post = function(req, res, next){
 				, albumTitle = types.replace(/cd [1-9]|cd[1-9]/gi,"");
 				
 				helper.xhrCall("http://api.discogs.com/database/search?q="+albumTitle+"&type=release&callback=", function(response) {
-					if (typeof response) {
+					if (response.results !== undefined && response.results !== null && response.results !== '' ) {
 						var requestResponse = JSON.parse(response)
 						,requestInitialDetails = requestResponse.results[0];
 					

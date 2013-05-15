@@ -32,7 +32,6 @@ var encoder = new Encoder('entity');
 
 exports.engine = 'jade';
 
-var movielistpath = './public/movies/data/movieindex.js'
 var configfile = []
 ,configfilepath = './configuration/setup.js'
 ,configfile = fs.readFileSync(configfilepath)
