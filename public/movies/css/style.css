@@ -143,12 +143,12 @@ span.title{visibility:hidden;}
 
 #moviedetails{
 	position: absolute;
-	left: 500px;
+	right: 80px;
 	top: 0px;
 	width:700px; 
 	opacity:0;
 	background: url(img/overlay.png) repeat;
-	min-height:250px;
+	min-height:350px;
 	z-index:7;
 }
 
@@ -157,7 +157,7 @@ span.title{visibility:hidden;}
 	color:#ddd; 
 	width:650px; 
 	margin-right:5px;
-	height:180px;
+	min-height:180px;
 	line-height:24px;
 	padding:20px;
 }
