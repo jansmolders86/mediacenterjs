@@ -1,7 +1,17 @@
-/*var upnp = require('upnp-device');
-var mediaServer = upnp.createDevice('MediaServer', 'MediacenterJS');
+var express = require('express')
+, app = express()
+, fs = require('fs')
+, upnp = require('upnp-device')
+, mediaServer = upnp.createDevice('MediaServer', 'MediacenterJS');
 
-console.log('Upnp server status:', mediaServer)
+var configfile = []
+, configfilepath = './configuration/setup.js'
+, configfile = fs.readFileSync(configfilepath)
+, configfileResults = JSON.parse(configfile);
+
+
+console.log('UPNP starting up')
+
 mediaServer.on('ready', function() {
 	console.log('UPNP server ready')
     mediaServer.addMedia(0, media, function(err, id) {
@@ -17,5 +27,3 @@ mediaServer.on('ready', function() {
 mediaServer.on('error', function(err) {
 	console.log('error starting upnp server', err)
 });
-
-*/
