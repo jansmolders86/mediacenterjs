@@ -171,26 +171,7 @@ So in theory, you can make a background app that hooks on an existing app, or ju
 
 __route.js (Still WIP)__ 
 
-You can extend the basic routing table with your own custom routes by adding them in this file. The syntax of the route file is as follows:
-
-	module.exports = function(obj, name) {
-		for (var key in obj) {
-			switch (key) {	
-				case 'routinghook':
-				method = 'get';
-				path = '/' + name + '/url';
-				break;
-			}
-		}
-	}
-
-Even if you are only adding a single addition to the routing table please use this syntax. 
-* The 'Case' is the hook string you use in your index.js file. For instance:
-
-	exports.routinghook = function(req, res, next){
-	
-* The method is can be GET, POST or PUT
-* The path is the url. The variable 'name' will be replaced by your app name. You can add this to avoid collisions with other apps.
+You can extend the basic routing table with your own custom routes by adding them in this file.
 	
 __Building an App__
 
