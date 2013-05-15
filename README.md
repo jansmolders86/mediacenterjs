@@ -31,17 +31,18 @@ What currently works?
 * Basic keyboard controls
 * Onscreen keyboard
 * Movie indexing
+* multi-language support
 * Display movies with Poster, Backdrop and information 
 * Local caching of information and images
 * Basic transcoding and playback
-* Weather information (Only in Dutch)
+* Weather information based on location
+* basic transcoing of movies and music
 
 What's coming up
 =================
 
-* Handle the writing of settings properly
+* better transcoding handeling
 * Activate Screensaver (dimming mode)
-* Better movie playback
 
 What's not working
 ==================
@@ -195,6 +196,10 @@ __Building an App__
 
 There are thousands of useful node libraries you can use to build your app. Simply install the module you want with NPM and start using it. 
 In the future there will be a handy package installer to export your app with and I will add example apps.
+
+Translation
+-------------
+For now, all the translation files are stored in the public/translation folder.
 
 ###Credits###
 

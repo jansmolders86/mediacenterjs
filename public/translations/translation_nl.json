@@ -1,14 +1,14 @@
 {
 "settings" : "Instellingen",
-"setting_details" : "Show moviedetails",
-"setting_yes" : "Yes",
-"setting_no" : "No",
-"setting_movielocation" : "Specify movielocation",
-"setting_musiclocation" : "Specify musiclocation",
-"setting_highres" : "Use high res images",
-"setting_screensaver" : "Dim screen on inactivity",
-"setting_keyboard" : "Use onscreen keyboard",
-"setting_language" : "Language",
-"setting_location" : "You current location (city)",
-"setting_port" : "Port"
+"setting_details" : "Toon filmdetails",
+"setting_yes" : "Ja",
+"setting_no" : "Nee",
+"setting_movielocation" : "Specificeer filmlocatie",
+"setting_musiclocation" : "Specificeer muzieklocatie",
+"setting_highres" : "Gebruik hoge kwaliteit afbeeldingen",
+"setting_screensaver" : "Dim het scherm bij inactiviteit",
+"setting_keyboard" : "Gebruik schermtoetsenbord",
+"setting_language" : "Taal",
+"setting_location" : "Uw locatie",
+"setting_port" : "Poort"
 }
