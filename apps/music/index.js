@@ -25,7 +25,6 @@ exports.engine = 'jade';
 
 // Render the indexpage
 exports.index = function(req, res, next){	
-
 	var dir = configfileResults.musicpath
 	, writePath = './public/music/data/musicindex.js'
 	, getDir = true
@@ -45,7 +44,6 @@ exports.index = function(req, res, next){
 };
 
 exports.album = function(req, res, next){
-
 	var incomingFile = req.body
 	, dir = configfileResults.musicpath+incomingFile.album+'/'
 	, writePath = './public/music/data/'+incomingFile.album+'/album.js'
@@ -63,8 +61,6 @@ exports.album = function(req, res, next){
 };
 
 exports.track = function(req, res, next){
-	console.log('sending track for playback:',req.params.track)
-	
 	var decodeTrack = encoder.htmlDecode(req.params.track)
 	if (req.params.album === 'none'){
 		var track = configfileResults.musicpath+decodeTrack
@@ -72,7 +68,6 @@ exports.track = function(req, res, next){
 		var track = configfileResults.musicpath+req.params.album+'/'+decodeTrack
 	}
 	var stat = fs.statSync(track);
-	
 	var proc = new ffmpeg({ source: track, nolog: true, priority: 1, timeout:15000})
 		.withAudioCodec('libvorbis')
 		.toFormat('ogg')
@@ -146,7 +141,7 @@ exports.post = function(req, res, next){
 			if (err) {
 				console.log('Error creating folder',err);
 			} else {
-				console.log('Directory '+albumRequest+' created');
+				console.log('Directory for '+albumRequest+' created');
 
 				var filename = albumRequest
 				, year = filename.match(/\(.*?([0-9]{4}).*?\)/)
@@ -186,8 +181,7 @@ exports.post = function(req, res, next){
 						}else{ 
 							console.log('Error getting movielist', e);
 						};
-					});
-					
+					});	
 					
 				});
 			}
