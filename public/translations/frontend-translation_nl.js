@@ -6,3 +6,4 @@ weather_clear = helder
 weather_snow = sneeuw
 weather_storm = storm
 feelsLike = Gevoelstemperatuur
+error_weather =  Kies een grotere stad.

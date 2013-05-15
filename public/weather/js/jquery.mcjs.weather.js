@@ -42,7 +42,8 @@
 				snow : '',
 				storm : '',
 				feelsLike : '',
-				tempIndicator  : '&#8451;' 
+				tempIndicator  : '&#8451;',
+				error  : '' 
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -58,33 +59,29 @@
 	
 	
 	// Get Current weather
-	//TODO: Make multilanguage
 	function _currentweather(o, $that){
-		 
 		$.ajax({
 			url: '/configuration/', 
 			type: 'get'
 		}).done(function(data){
 			//Set up i18n translation
 			$.i18n.properties({
-				name: 'translation', 
+				name: 'frontend-translation', 
 				path:'/translations/', 
 				mode:'map',
 				language: data.language,
 				extension: 'js',
 				loadBaseFile: false ,
 				callback: function() {
-				
-					o.cloudy = new RegExp($.i18n.prop('weather_cloudy'),"gi")
-					o.mist = new RegExp($.i18n.prop('weather_mist'),"gi")
-					o.clear = new RegExp($.i18n.prop('weather_clear'),"gi")
-					o.sunny = new RegExp($.i18n.prop('weather_sunny'),"gi")
-					o.rain = new RegExp($.i18n.prop('weather_rain'),"gi")
-					o.snow = new RegExp($.i18n.prop('weather_snow'),"gi")
-					o.storm = new RegExp($.i18n.prop('weather_storm'),"gi")
-					o.feelsLike = $.i18n.prop('feelsLike')
-					
-			
+					o.cloudy = new RegExp($.i18n.prop('weather_cloudy'),"gi");
+					o.mist = new RegExp($.i18n.prop('weather_mist'),"gi");
+					o.clear = new RegExp($.i18n.prop('weather_clear'),"gi");
+					o.sunny = new RegExp($.i18n.prop('weather_sunny'),"gi");
+					o.rain = new RegExp($.i18n.prop('weather_rain'),"gi");
+					o.snow = new RegExp($.i18n.prop('weather_snow'),"gi");
+					o.storm = new RegExp($.i18n.prop('weather_storm'),"gi");
+					o.feelsLike = $.i18n.prop('feelsLike');
+					o.error = $.i18n.prop('error_weather');
 				}
 			});	
 		}); 
@@ -140,7 +137,7 @@
 					}
 				},
 				error : function() {
-					$("#weather").find("h1").html( 'Can not get weather of location' + o.location + '<br/> Please specify a larger city.');
+					$("#weather").find("h1").html( 'Error: ' + o.location + '<br/>' + o.error);
 				}
 			})
 		} else {

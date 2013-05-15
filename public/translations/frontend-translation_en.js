@@ -6,3 +6,4 @@ weather_clear = clear
 weather_snow = snow
 weather_storm = storm
 feelsLike = Feels like
+error_weather =  Please specify a larger city.
