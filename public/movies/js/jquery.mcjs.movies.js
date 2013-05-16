@@ -124,7 +124,7 @@
 	}
 	
 	function _playMovie(url){
-		$('#wrapper, #moviedetails, #backdrop').hide();
+		$('#wrapper, #moviedetails, #backdrop, #header').hide();
 		$('body').css('backgroundColor','#000');
 		$('body').append('<video id="player" class="video-js vjs-default-skin" style="position: absolute; top: 0; left:0px width:100%; height:100%; z-index:9;" controls poster="/movies/img/loading-video.png" width="100%" height="100%"><source src="'+url+'" type="video/webm"></video>');
 	}
