@@ -1,11 +1,11 @@
 {
-    "moviepath": "",
+    "moviepath": "C:/temp/",
     "highres": "yes",
-    "musicpath": "",
+    "musicpath": "C:/Users/jan.smolders/Music/",
     "tvpath": "tbd",
-    "language": "",
+    "language": "nl",
     "onscreenkeyboard": "no",
-    "location": "",
+    "location": "eindhoven",
     "screensaver": "dim",
-    "port": ""
+    "port": "3000"
 }

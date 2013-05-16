@@ -44,17 +44,20 @@ html(lang="en")
 	body
 		#backdrop
 			img.backdropimg(src="/core/css/img/homepage.jpg")	
+		#header
+			h1 MediacenterJS
+			ul.settingslink
+				li
+					a(href="/settings") #{lingua.settings}
+			#dateandtime
+				.time=time
+				.date=date	
 		#wrapper
-			#header
-				h1 MediacenterJS
-				ul.settingslink
-					li
-						a(href="/settings") #{lingua.settings}
-				#dateandtime
-					.time=time
-					.date=date	
 			ul#tiles
 				each item in apps
 					li.tile
 						a(href="/"+item)
 							img(src="/"+item+"/tile.png")
+						h2 Lorem ipsum dolor sit amet
+						.info
+							Consectetur adipiscing elit. Proin quis libero mauris, in porttitor metus. Quisque commodo sodales eros ac ultrices. 

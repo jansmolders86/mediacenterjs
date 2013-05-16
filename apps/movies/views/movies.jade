@@ -10,7 +10,7 @@ html(lang="en")
 		
 		link (rel='stylesheet', href='/core/css/video-js.css')
 		script (src="/core/js/plugins/video-js.js")
-		script(src="/core/js/plugins/jquery.carouFredSel-6.1.0-packed.js")
+		//script(src="/core/js/plugins/jquery.carouFredSel-6.1.0-packed.js")
 		
 		// App specific
 		link(rel='stylesheet', href='/movies/css/style.css')
@@ -25,10 +25,11 @@ html(lang="en")
 	body
 		#backdrop
 			img.backdropimg(src="/core/css/img/homepage.jpg")	
-		#wrapper
+		#header
 			a.backlink(href="/") 
 				img(src="/core/icons/back.png")
-			h1 #{lingua.movies}
+			h1 #{lingua.movies}		
+		#wrapper
 			#moviebrowser
 				if status !== null
 					p.gui= status
@@ -41,6 +42,3 @@ html(lang="en")
 										img(src="/movies/img/loading.gif").movieposter							
 									span.original_name	Loading...
 									span.title= movie		
-			a#prev
-			a#next	
-			

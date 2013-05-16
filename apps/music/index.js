@@ -81,7 +81,6 @@ exports.track = function(req, res, next){
 };
 
 exports.post = function(req, res, next){	
-
 	var incomingFile = req.body
 	, incomingalbumTitle = incomingFile.albumTitle
 	, albumRequest = incomingalbumTitle;

@@ -25,10 +25,11 @@ html(lang="en")
 	body
 		#hiddenSetting
 			p= onscreenkeyboard
-		#wrapper
+		#header
 			a.backlink(href="/") 
 				img(src="/core/icons/back.png")
-			h1  #{lingua.settings}
+			h1  #{lingua.settings}		
+		#wrapper
 			#settings
 				form#setup.validate-form(action='/submit',method='post')
 					.row
