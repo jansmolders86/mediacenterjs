@@ -45,10 +45,10 @@ html(lang="en")
 		#backdrop
 			img.backdropimg(src="/core/css/img/homepage.jpg")	
 		#header
+			img.logo(src="/core/css/img/logo.png")
 			h1 MediacenterJS
-			ul.settingslink
-				li
-					a(href="/settings") #{lingua.settings}
+			.settingslink
+				a(href="/settings") #{lingua.settings}
 			#dateandtime
 				.time=time
 				.date=date	
@@ -58,6 +58,7 @@ html(lang="en")
 					li.tile
 						a(href="/"+item)
 							img(src="/"+item+"/tile.png")
-						h2 Lorem ipsum dolor sit amet
 						.info
-							Consectetur adipiscing elit. Proin quis libero mauris, in porttitor metus. Quisque commodo sodales eros ac ultrices. 
+							.remove
+								img(src="/core/css/img/remove.png") 
+								a(href="/"+item) Remove

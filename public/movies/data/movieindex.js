@@ -1,15 +1,10 @@
 [
-    "avatar.avi",
-    "buried cd1.avi",
-    "buried cd2.avi",
-    "fight club.avi",
-    "finding nemo.avi",
-    "flushed away.avi",
-    "once upon a time in mexico.avi",
-    "ray.avi",
-    "rise of the planet of the apes.avi",
-    "the croods.avi",
-    "the incredibles.avi",
+    "Despicable Me .avi",
+    "Escape from Planet Earth.avi",
+    "rango.avi",
+    "rio.avi",
     "up.avi",
-    "wreck it ralph.avi"
+    "wall-e.avi",
+    "wreck-it ralph.avi",
+    "ZXZx/avatar.mp4"
 ]

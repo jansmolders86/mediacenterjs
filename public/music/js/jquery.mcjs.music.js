@@ -54,49 +54,11 @@
 	
 	/**** Start of custom functions ***/
 
-
-	// Needs plugin jquery.carouFredSel-6.1.0-packed.js
-	//TODO: handle long key press to scroll faster
 	function _carousel(o){
-		$('ul.music').find(".li:first").addClass("focused");
-		$('ul.music').carouFredSel({
-			auto: false,
-			height:700, 
-			onCreate: function( data ) {
-				data.items.each(function() { 
-					var title = $(this).find('.title').html();
-					var visibleMovie = $(this);
-					_handleVisibleMovies(o, title, visibleMovie);
-				});
-			},
-			direction   : "up",
-			scroll  : {
-				onAfter : function( data ) {
-					data.items.visible.each(function() { 
-						var title = $(this).find('.title').html();
-						var visibleMovie = $(this);
-						_handleVisibleMovies(o, title, visibleMovie );
-					});
-				},
-				fx : "scroll",
-				easing  : "swing",
-				items: 1
-			},
-			prev: {
-				key : "left",
-				button : "#prev"
-			},
-			next: {
-				key : "right",
-				button : "#next"
-			},
-			mousewheel: true,
-			swipe: {
-				onMouse: true,
-				onTouch: true,
-				fx : "scroll",
-				easing  : "swing"
-			}
+		$('ul.music').find(".li").each(function() { 
+			var title = $(this).find('.title').html();
+			var visibleMovie = $(this);
+			_handleVisibleMovies(o, title, visibleMovie);
 		});
 	}
 

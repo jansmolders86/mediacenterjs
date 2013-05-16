@@ -23,9 +23,7 @@ html(lang="en")
 				}
 			});
 	body
-		#hiddenSetting
-			p= onscreenkeyboard
-		#header
+		#header.settings
 			a.backlink(href="/") 
 				img(src="/core/icons/back.png")
 			h1  #{lingua.settings}		
@@ -102,3 +100,5 @@ html(lang="en")
 					.row
 						input(type="submit",value="Submit")		
 						input(name="tvlocation",type="text",value="tbd",style="visibility:hidden;")
+		#hiddenSetting
+			p= onscreenkeyboard

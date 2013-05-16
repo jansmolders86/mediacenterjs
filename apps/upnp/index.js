@@ -1,4 +1,4 @@
-var express = require('express')
+	/*var express = require('express')
 , app = express()
 , fs = require('fs')
 , upnp = require('upnp-device')
@@ -14,6 +14,7 @@ console.log('UPNP starting up')
 
 mediaServer.on('ready', function() {
 	console.log('UPNP server ready')
+
     mediaServer.addMedia(0, media, function(err, id) {
 		if(!err){
 			console.log("Added new media with ID:" + id);
@@ -27,3 +28,4 @@ mediaServer.on('ready', function() {
 mediaServer.on('error', function(err) {
 	console.log('error starting upnp server', err)
 });
+*/

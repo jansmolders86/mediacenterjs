@@ -1,15 +1,19 @@
+
+body,html{overflow:hidden;}
+
 #weatherwrapper{
 	height: 100%;
 	width: 100%;
 	background: url(img/overlay.png) repeat;
 }
 
+h1{
+	margin-top:12px;
+}
+
 #weather{  
 	color:#fff; 
-	-webkit-animation: fade-in 2s; 
-	-moz-animation:  fade-in 2s; 
-    -o-animation: fade-in 2s; 
-    animation: fade-in 2s; 
+
 }
 #weather .degrees{ font-size:48px; }
 #weather .degrees.getsucces{	

@@ -53,59 +53,49 @@
 				$('.movieposters').find("li:first").removeClass("focused");
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(this).addClass("focused");
+				
+				/*
+				if( $('.movieposter').hasClass('focused')){
+					$('.movieposter.focused').css('opacity',1)
+				}else{
+					$('.movieposter').css('opacity',0.7)
+				}
+				*/
+				
+				
 				$(".backdropimg").attr("src", newBackground).addClass('fadein');
-				var currentMovieTitle = $(this).find('span.title').html();
-				var currentMovie = $(this);
-				_showDetails(o,currentMovie, currentMovieTitle);
 			},
 			mouseleave: function() {
 				$(".backdropimg").removeClass("fadein");
 				if ($('.movieposter.focused').length > 1){
 					$('.movieposter').removeClass("focused");
 				}
-				var currentMovie = $(this);
-				_hideDetails(currentMovie);
 			},			
 			focus: function() {				
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(".backdropimg").attr("src", newBackground).addClass('fadein');
-				
-				var currentMovieTitle = $(this).find('.title');
-				var currentMovie = $(this);
-				_showDetails(o,currentMovie, currentMovieTitle);		
 			},
 			focusout: function() {
 				$(".backdropimg").removeClass("fadein");
-				var currentMovie = $(this);
-				_hideDetails(currentMovie);
 			}
 		});	
 		
 		if ($('.movieposter.focused')){
 			var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 			$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');		
-		} else if($('.movieposter.focused').length < 1){
-			var currentMovie = $(this);
-			_hideDetails(currentMovie);
-		}		
+		} 	
 	}
 	
 
-	// Needs plugin jquery.carouFredSel-6.1.0-packed.js
-	//TODO: handle long key press to scroll faster
 	function _carousel(o){
 		//$('.movieposters').find(".movieposter:first").addClass("focused");
 		$(".movieposter").each(function() { 
 			var title = $(this).find('span.title').html();
 			var visibleMovie = $(this);
-			
-			console.log('title',title)
-			console.log('visibleMovie',visibleMovie)
 			_handleVisibleMovies(o, title, visibleMovie);
 		});
 	}
 
-	
 	
 	function _handleVisibleMovies(o, title, visibleMovie){
 		$.ajax({
@@ -122,6 +112,7 @@
 			setTimeout(function(){
 				visibleMovie.find("img.movieposter").attr('src','');	
 				visibleMovie.find("img.movieposter").attr('src',movieData[0].poster).addClass('coverfound');							
+				visibleMovie.append('<div id="overview"><h1>'+movieData[0].original_name+'</h1><p class="summary">'+movieData[0].overview+'</p><p><strong> Genre:</strong> '+movieData[0].genre+'</p><p><strong> Runtime:</strong> '+movieData[0].runtime+' min</p></div>').addClass('showDetails fadein');;
 			},400);
 			
 			visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
@@ -130,23 +121,6 @@
 				visibleMovie.find("> a.play").append('<div class="cdNumber"><span>'+movieData[0].cdNumber+'</span><div>');
 			}
 		});
-	}
-	
-	
-	function _showDetails(o, currentMovie, currentMovieTitle){
-		$.ajax({
-			url: '/movies/data/'+currentMovieTitle+'/data.js', 
-			type: 'get'
-		}).done(function(data){
-			var movieData = $.parseJSON(data);
-			currentMovie.append('<div id="overview"><h1>'+movieData[0].original_name+'</h1><p>'+movieData[0].overview+'</p><p><strong> Genre:</strong> '+movieData[0].genre+'</p><p><strong> Runtime:</strong> '+movieData[0].runtime+' min</p></div>').addClass('showDetails fadein');;
-		});
-	}
-	
-	
-	function _hideDetails(currentMovie){
-		$('#overview').remove();
-		currentMovie.removeClass('showDetails')
 	}
 	
 	function _playMovie(url){
