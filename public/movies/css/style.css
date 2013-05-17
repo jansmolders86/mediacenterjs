@@ -149,10 +149,13 @@ span.title{visibility:hidden; width:0; height:0;}
 	text-align:center;
 	width:140px;
 	margin:10px 0px 0 20px;
+	cursor:pointer;
 }
 
 .movieposter.showDetails .playbtn:hover{
 	background-color:#FB8521;
+	color:#fff;
+	border:0;
 } 
 
 .overview{
