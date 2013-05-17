@@ -31,10 +31,10 @@ What currently works?
 * Basic keyboard controls
 * Onscreen keyboard
 * Movie indexing
-* multi-language support
+* multi-language support (English and Dutch)
 * Display movies with Poster, Backdrop and information 
 * Local caching of information and images
-* Basic transcoding and playback
+* Basic transcoding and playback of movies and music
 * Weather information based on location
 * basic transcoing of movies and music
 
@@ -99,7 +99,7 @@ User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-ins
 Install NodeJS: http://nodejs.org/download/
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
-After the initial setup has been completed, restart the server. MediacenterJS will be available on the port you have specified and eventually the language you have chosen.
+After the initial setup has been completed, restart the server. MediacenterJS will be available on the port you have specified and the language you have chosen.
 
 How should I format my movie library and files?
 -------------
