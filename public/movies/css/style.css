@@ -152,6 +152,10 @@ span.title{visibility:hidden; width:0; height:0;}
 	cursor:pointer;
 }
 
+a.backlink{
+	margin-top:11px;
+}
+
 .movieposter.showDetails .playbtn:hover{
 	background-color:#FB8521;
 	color:#fff;
