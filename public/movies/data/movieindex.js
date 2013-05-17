@@ -1,10 +1,15 @@
 [
-    "Despicable Me .avi",
-    "Escape from Planet Earth.avi",
+    "avatar.avi",
+    "buried cd1.avi",
+    "buried cd2.avi",
+    "fight club.avi",
+    "finding nemo.avi",
+    "flushed away.avi",
     "rango.avi",
-    "rio.avi",
+    "ray.avi",
+    "rise of the planet of the apes.avi",
+    "the croods.avi",
+    "the incredibles.avi",
     "up.avi",
-    "wall-e.avi",
-    "wreck-it ralph.avi",
-    "ZXZx/avatar.mp4"
+    "wreck it ralph.avi"
 ]

@@ -112,7 +112,8 @@
 			setTimeout(function(){
 				visibleMovie.find("img.movieposter").attr('src','');	
 				visibleMovie.find("img.movieposter").attr('src',movieData[0].poster).addClass('coverfound');							
-				visibleMovie.append('<div id="overview"><h1>'+movieData[0].original_name+'</h1><p class="summary">'+movieData[0].overview+'</p><p><strong> Genre:</strong> '+movieData[0].genre+'</p><p><strong> Runtime:</strong> '+movieData[0].runtime+' min</p></div>').addClass('showDetails fadein');;
+				visibleMovie.find('.overview').append('<h1>'+movieData[0].original_name+'</h1><p class="summary">'+movieData[0].overview+'</p><p><strong> Genre:</strong> '+movieData[0].genre+'</p><p><strong> Runtime:</strong> '+movieData[0].runtime+' min</p>');
+				visibleMovie.addClass('showDetails fadein');
 			},400);
 			
 			visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);

@@ -130,11 +130,27 @@ span.title{visibility:hidden; width:0; height:0;}
 	-moz-box-shadow: 0 2px 10px #888;
 	-webkit-box-shadow: 0 2px 10px #888;
 	box-shadow: 0 2px 10px #888;
+	position:relative;
 }
 
 .movieposter.showDetails a{ float:left; }
 
-#overview{
+.movieposter.showDetails .playbtn{ 
+	position:absolute;
+	right:15px;
+	bottom:12px;
+	background-color:#FB8521;
+	color:#fff;
+	font-size:14px;
+	padding:10px 20px;
+	border-radius:3px;
+	min-height:20px;
+	text-align:center;
+	width:140px;
+	margin:10px 0px 0 20px;
+}
+
+.overview{
 	float: left;
 	color: #444;
 	margin:0px 0 0 10px;
@@ -142,39 +158,24 @@ span.title{visibility:hidden; width:0; height:0;}
 	width: 180px;
 }
 
-#overview p.summary{
+.overview p.summary{
 	max-height:150px; 
 	overflow:hidden;
 	margin-bottom:10px
 }
 
-#additional{
+.additional{
 	margin: 0px 0px 0;
 	float: left;
 }
 
-#overview h1{ margin:0px 0 10px 0; font-size:14px;}
-#overview p{font-size:12px; margin:0px;}
+.overview h1{ margin:0px 0 10px 0; font-size:14px;}
+.overview p{font-size:12px; margin:0px;}
 
 #poster{
 	float:left;
 	width:185px;
 	padding:20px;
-}
-
-#additional > div{
-	float:left;
-	font-size:13px;
-	margin-left:40px;	
-}
-
-#additional > div > p{
-	margin:0;
-	padding:50px 0 30px 0;
-} 
-
-#additional > div:first-child{
-	margin-left:20px;
 }
 
 #moviedetails a.backlink{margin-top:23px; height:50px}
