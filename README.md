@@ -5,9 +5,10 @@ __A NodeJS based Mediacenter__
 
 Screenshots (Pre-Alpha GUI): 
 
-![Dashboard] (screenshots/interface.jpg)
+![Dashboard] (screenshots/dashboard.png)
 
-![Movies] (screenshots/movies.jpg)
+![Movies] (screenshots/moviesbrowser.png)
+![Movies] (screenshots/moviesbrowser2.png)
 
 Status: 
 =======
