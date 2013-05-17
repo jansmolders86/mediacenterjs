@@ -8,7 +8,6 @@ Screenshots (Pre-Alpha GUI):
 ![Dashboard] (screenshots/dashboard.png)
 
 ![Movies] (screenshots/moviebrowser.png)
-![Movies] (screenshots/moviebrowser2.png)
 
 Status: 
 =======
