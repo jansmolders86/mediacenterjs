@@ -9,6 +9,8 @@ Screenshots (Pre-Alpha GUI):
 
 ![Movies] (screenshots/movie.png)
 
+![Movies] (screenshots/movie2.png)
+
 Status: 
 =======
 
