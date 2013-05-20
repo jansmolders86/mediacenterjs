@@ -9,18 +9,23 @@ html(lang="en")
 		script(src="/core/js/jquery.mcjs.core.js")
 		
 		link (rel='stylesheet', href='/core/css/video-js.css')
-		script (src="/core/js/plugins/video-js.js")
-		//script(src="/core/js/plugins/jquery.carouFredSel-6.1.0-packed.js")
+		script(src="/core/js/plugins/video-js.js")
+		
+		
+		link(rel='stylesheet', href='/core/css/jquery.jscrollpane.css')
+		script(src="/core/js/plugins/jquery.jscrollpane.min.js")
+		script(src="/core/js/plugins/jquery.mousewheel.min.js")
 		
 		// App specific
 		link(rel='stylesheet', href='/movies/css/style.css')
 		script(src="/movies/js/jquery.mcjs.movies.js")
 
-
+		
 		script
 			$(document).ready(function(){
+				$('#moviebrowser').jScrollPane();
 				$('body').mcjs();
-				$('body').mcjsm();
+				$('body').mcjsm();	
 			});
 	body
 		#backdrop
@@ -34,12 +39,11 @@ html(lang="en")
 				if status !== null
 					p.gui= status
 				else
-					.posterview
-						ul.movieposters
-							each movie in movies
-								li.movieposter 
-									a.play(data-movie= movie)
-										img(src="/movies/img/loading.gif").movieposter							
-									span.title= movie		
-									.overview
-									.playbtn Play
+					ul.movies
+						each movie in movies
+							li.movieposter 
+								a.play(data-movie= movie)
+									img(src="/movies/img/loading.gif").movieposter							
+								span.title= movie		
+								.overview
+								.playbtn Play

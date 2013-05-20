@@ -39,21 +39,15 @@ body,html{
 }
 
 #moviebrowser{
-	soverflow-y:scroll;
 	width:100%;
-	height:800px;
-	margin-top: 100px;
+	height:600px;
+	margin: 0 20px;
+	overflow:hidden;
 }
 
 .movieposter.focused{ border:0;}
 
-.posterview{
-	width: 100%;
-	height:100%;
-	position:relative;
-	margin: 0 auto;
-}
-.movieposters{ 
+.movies{ 
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -65,19 +59,12 @@ body,html{
 .movieposter{ 
 	float:left; 
 	height:290px; 
-	padding:0 10px;
 	list-style:none;
 	z-index:3;
 	position:relative;
 	width:180px;
-}
-
-.posterview li {
 	padding: 0px;
 	margin: 0px 7px 20px;
-	position:relative;
-	display: block;
-	float: left;
 }
 
 
@@ -184,7 +171,7 @@ a.backlink{
 	color: #444;
 	margin:0px 0 0 10px;
 	line-height: 19px;
-	width: 180px;
+	width: 170px;
 }
 
 .overview p.summary{
