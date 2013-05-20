@@ -33,8 +33,7 @@
 			$.data(this, ns, $.extend(true, {}, o));
 			
 			_focusedItem(o);
-			_carousel(o);
-			
+			_loadMovies(o);
 			
 			$('a.play').click(function(e) {
 				e.preventDefault();	
@@ -53,16 +52,6 @@
 				$('.movieposters').find("li:first").removeClass("focused");
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(this).addClass("focused");
-				
-				/*
-				if( $('.movieposter').hasClass('focused')){
-					$('.movieposter.focused').css('opacity',1)
-				}else{
-					$('.movieposter').css('opacity',0.7)
-				}
-				*/
-				
-				
 				$(".backdropimg").attr("src", newBackground).addClass('fadein');
 			},
 			mouseleave: function() {
@@ -87,8 +76,7 @@
 	}
 	
 
-	function _carousel(o){
-		//$('.movieposters').find(".movieposter:first").addClass("focused");
+	function _loadMovies(o){
 		$(".movieposter").each(function() { 
 			var title = $(this).find('span.title').html();
 			var visibleMovie = $(this);
@@ -98,7 +86,6 @@
 
 	
 	function _handleVisibleMovies(o, title, visibleMovie){
-	
 		if(title !== undefined){
 			$.ajax({
 				url: '/movies/post/', 
@@ -113,8 +100,9 @@
 				
 				setTimeout(function(){
 					visibleMovie.find("img.movieposter").attr('src','');	
-					visibleMovie.find("img.movieposter").attr('src',movieData[0].poster).addClass('coverfound');							
-					visibleMovie.find('.overview').append('<h1>'+movieData[0].original_name+'</h1><p class="summary">'+movieData[0].overview+'</p><p><strong> Genre:</strong> '+movieData[0].genre+'</p><p><strong> Runtime:</strong> '+movieData[0].runtime+' min</p>');
+					visibleMovie.find("img.movieposter").attr('src',movieData[0].poster).addClass('coverfound');		
+					/*<p class="summary">'+movieData[0].overview+'</p>*/
+					visibleMovie.find('.overview').append('<h1>'+movieData[0].original_name+'</h1><p><strong> Genre:</strong> '+movieData[0].genre+'</p><p><strong> Runtime:</strong> '+movieData[0].runtime+' min</p>');
 					visibleMovie.addClass('showDetails fadein');
 				},400);
 				

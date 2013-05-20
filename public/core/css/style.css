@@ -405,8 +405,8 @@ a.btn{
 	width:123px;
 	border:0;
 }
-/***** Keyboard *****/
 
+/***** Keyboard *****/
 
 /* keyboard - jQuery UI Widget */
 .ui-keyboard-keyset-default{float:left;background-color: #999;}
