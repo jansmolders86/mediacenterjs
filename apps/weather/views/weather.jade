@@ -18,13 +18,14 @@ html(lang="en")
 				$('body').mcjsw();
 			});
 	body#weather.weather
+		#header
+			a.backlink(href="/") 
+				img(src="/core/icons/back.png")
+			h1	
 		#backdrop
 			img.backdropimg(src="/core/css/img/homepage.jpg")
 		#weatherwrapper
 			#wrapper
-				a.backlink(href="/") 
-					img(src="/core/icons/back.png")
-				h1
 				.current
 					.degrees
 					.feelslike
