@@ -50,7 +50,6 @@
 			$.data(this, ns, $.extend(true, {}, o));
 	
 			_currentweather(o, $(this))
-			_forecastweather(o, $(this))
 			
 		});
 	}
@@ -87,98 +86,95 @@
 					o.storm = new RegExp($.i18n.prop('weather_storm'),"gi");
 					o.feelsLike = $.i18n.prop('feelsLike');
 					o.error = $.i18n.prop('error_weather');
+	
+		 
+					if ( $('body').hasClass('weather') || $('body').find('h1') == '' ){
+						$.ajax({
+							url : "http://api.wunderground.com/api/68a6ea8f6013979c/geolookup/conditions/lang:"+o.LANG+"/q/"+ o.language +"/"+ o.location+".json",
+							dataType : "jsonp",
+							success : function(parsed_json) {
+								if (parsed_json['response']['error']){
+									var errorMessage = parsed_json['response']['error']['description']
+									$("#weather").find("h1").html(errorMessage);
+								}else {
+									var locations = parsed_json['location']['city'];
+									var country = parsed_json['location']['country'];
+									var weathertype = parsed_json['current_observation']['weather'];
+									var weathericon = parsed_json['current_observation']['icon_url'];
+									
+									if (o.language === 'nl'){
+										var feelslike_c = parsed_json['current_observation']['feelslike_c'];
+										var temp_c = parsed_json['current_observation']['temp_c'];
+									}else if (o.language === 'en'){
+										var feelslike_c = parsed_json['current_observation']['feelslike_f'];
+										var temp_c = parsed_json['current_observation']['temp_f'];
+										o.tempIndicator  = '&#8457;' 
+									}
+				
+									$("#weather").find("h1").html( locations +", "+ country);
+									$("#weather").find(".weathertype").html(weathertype);
+									$("#weather").find(".degrees").html( temp_c + " <sup>"+o.tempIndicator+"</sup>");
+									$("#weather").find(".feelslike").html( o.feelsLike +" "+ feelslike_c + " <sup>"+o.tempIndicator+"</sup>");
+				
+									var weathertypeset = $('.weathertype').text()
+							
+									if ( weathertypeset.match(o.cloudy) ){
+										$(".backdropimg").attr('src', "/weather/img/clouds.jpg").addClass("fadein");
+									}else if( weathertypeset.match(o.mist) ){
+										$(".backdropimg").attr('src', "/weather/img/misty.jpg").addClass("fadein");
+									}else if( weathertypeset.match(o.clear) ){
+										$(".backdropimg").attr('src', "/weather/img/clear.jpg").addClass("fadein");
+									}else if( weathertypeset.match(o.sunny) ){
+										$(".backdropimg").attr('src', "/weather/img/sunny.jpg").addClass("fadein");
+									}else if( weathertypeset.match(o.rain) ){
+										$(".backdropimg").attr('src', "/weather/img/rainy.jpg").addClass("fadein");
+									}else if( weathertypeset.match(o.snow) ){
+										$(".backdropimg").attr('src', "/weather/img/snowy.jpg").addClass("fadein");
+									}else if( weathertypeset.match(o.storm) ){
+										$(".backdropimg").attr('src', "/weather/img/stormy.jpg").addClass("fadein");
+									}else {
+										$(".backdropimg").attr('src', "/weather/img/default.jpg").addClass("fadein");
+									}
+									$('#weatherwrapper').addClass('fadeinslow');
+								}
+							},
+							error : function() {
+								$("#weather").find("h1").html( 'Error: ' + o.location + '<br/>' + o.error);
+							}
+						})
+					} else {
+						return
+					};	
+					
+					if ( $('body').hasClass('weather') || $('body').find('h1') == '' ){
+						$(".forecast").find("ul").remove()
+						$.ajax({
+							url : "http://api.wunderground.com/api/68a6ea8f6013979c/forecast/lang:"+o.LANG+"/q/"+o.language+"/"+o.location+".json",
+							dataType : "jsonp",
+							success : function(forecast_data) {
+								var forecastday = forecast_data['forecast']['simpleforecast']['forecastday'];
+								$.each(forecastday, function (index, value) {	
+									var day = value;
+									// for each day in the week (which is 4 )
+									var daycount = 1;
+									for(var i = 0; i < daycount; i++) {
+										var weekday = day.date.weekday							
+										var conditions = day.conditions
+										var mintemp = day.low.celsius	
+										var maxtemp = day.high.celsius
+										$("#weather").find(".forecast").append('<ul> <li class="weekday">'+ weekday +'</li> <li class="conditions">'+ conditions +'</li>  <li class="mintemp"> Min: '+ mintemp +'</li>  <li class="maxtemp"> Max:'+ maxtemp +'</li> </ul>');	
+									}
+								})
+							}
+						})
+					} else {
+						return
+					};		
 				}
 			});	
 		}); 
-		 
-		if ( $('body').hasClass('weather') || $('body').find('h1') == '' ){
-			$.ajax({
-				url : "http://api.wunderground.com/api/68a6ea8f6013979c/geolookup/conditions/lang:"+o.LANG+"/q/"+ o.language +"/"+ o.location+".json",
-				dataType : "jsonp",
-				success : function(parsed_json) {
-					if (parsed_json['response']['error']){
-						var errorMessage = parsed_json['response']['error']['description']
-						$("#weather").find("h1").html(errorMessage);
-					}else {
-						var locations = parsed_json['location']['city'];
-						var country = parsed_json['location']['country'];
-						var weathertype = parsed_json['current_observation']['weather'];
-						var weathericon = parsed_json['current_observation']['icon_url'];
-						
-						if (o.language === 'nl'){
-							var feelslike_c = parsed_json['current_observation']['feelslike_c'];
-							var temp_c = parsed_json['current_observation']['temp_c'];
-						}else if (o.language === 'en'){
-							var feelslike_c = parsed_json['current_observation']['feelslike_f'];
-							var temp_c = parsed_json['current_observation']['temp_f'];
-							o.tempIndicator  = '&#8457;' 
-						}
-	
-						$("#weather").find("h1").html( locations +", "+ country);
-						$("#weather").find(".weathertype").html(weathertype);
-						$("#weather").find(".degrees").html( temp_c + " <sup>"+o.tempIndicator+"</sup>");
-						$("#weather").find(".feelslike").html( o.feelsLike +" "+ feelslike_c + " <sup>"+o.tempIndicator+"</sup>");
-	
-						var weathertypeset = $('.weathertype').text()
-				
-						if ( weathertypeset.match(o.cloudy) ){
-							$(".backdropimg").attr('src', "/weather/img/clouds.jpg").addClass("fadein");
-						}else if( weathertypeset.match(o.mist) ){
-							$(".backdropimg").attr('src', "/weather/img/misty.jpg").addClass("fadein");
-						}else if( weathertypeset.match(o.clear) ){
-							$(".backdropimg").attr('src', "/weather/img/clear.jpg").addClass("fadein");
-						}else if( weathertypeset.match(o.sunny) ){
-							$(".backdropimg").attr('src', "/weather/img/sunny.jpg").addClass("fadein");
-						}else if( weathertypeset.match(o.rain) ){
-							$(".backdropimg").attr('src', "/weather/img/rainy.jpg").addClass("fadein");
-						}else if( weathertypeset.match(o.snow) ){
-							$(".backdropimg").attr('src', "/weather/img/snowy.jpg").addClass("fadein");
-						}else if( weathertypeset.match(o.storm) ){
-							$(".backdropimg").attr('src', "/weather/img/stormy.jpg").addClass("fadein");
-						}else {
-							$(".backdropimg").attr('src', "/weather/img/default.jpg").addClass("fadein");
-						}
-						$('#weatherwrapper').addClass('fadeinslow');
-					}
-				},
-				error : function() {
-					$("#weather").find("h1").html( 'Error: ' + o.location + '<br/>' + o.error);
-				}
-			})
-		} else {
-			return
-		};	
 	}
 
-	
-	// Get Forecast
-	function _forecastweather(o, $that){
-		if ( $('body').hasClass('weather') || $('body').find('h1') == '' ){
-			$(".forecast").find("ul").remove()
-			$.ajax({
-				url : "http://api.wunderground.com/api/68a6ea8f6013979c/forecast/lang:"+o.LANG+"/q/"+o.language+"/"+o.location+".json",
-				dataType : "jsonp",
-				success : function(forecast_data) {
-					var forecastday = forecast_data['forecast']['simpleforecast']['forecastday'];
-					$.each(forecastday, function (index, value) {	
-						var day = value;
-						// for each day in the week (which is 4 )
-						var daycount = 1;
-						for(var i = 0; i < daycount; i++) {
-							var weekday = day.date.weekday							
-							var conditions = day.conditions
-							var mintemp = day.low.celsius	
-							var maxtemp = day.high.celsius
-							$("#weather").find(".forecast").append('<ul> <li class="weekday">'+ weekday +'</li> <li class="conditions">'+ conditions +'</li>  <li class="mintemp"> Min: '+ mintemp +'</li>  <li class="maxtemp"> Max:'+ maxtemp +'</li> </ul>');	
-						}
-					})
-				}
-			})
-		} else {
-			return
-		};		
-	}
-	
 
 	/**** End of custom functions ***/
 	
