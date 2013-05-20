@@ -98,30 +98,33 @@
 
 	
 	function _handleVisibleMovies(o, title, visibleMovie){
-		$.ajax({
-			url: '/movies/post/', 
-			type: 'post',
-			data: {movieTitle : title}
-		}).done(function(data){
-			var movieData = $.parseJSON(data);
-			visibleMovie.find('.original_name').html(movieData[0].original_name);
-			
-			// Give the plugin time to load the (new) images.
-			// Is need for chrome bug with image loading..
-			
-			setTimeout(function(){
-				visibleMovie.find("img.movieposter").attr('src','');	
-				visibleMovie.find("img.movieposter").attr('src',movieData[0].poster).addClass('coverfound');							
-				visibleMovie.find('.overview').append('<h1>'+movieData[0].original_name+'</h1><p class="summary">'+movieData[0].overview+'</p><p><strong> Genre:</strong> '+movieData[0].genre+'</p><p><strong> Runtime:</strong> '+movieData[0].runtime+' min</p>');
-				visibleMovie.addClass('showDetails fadein');
-			},400);
-			
-			visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
-			
-			if(movieData[0].cdNumber !== null){
-				visibleMovie.find("> a.play").append('<div class="cdNumber"><span>'+movieData[0].cdNumber+'</span><div>');
-			}
-		});
+	
+		if(title !== undefined){
+			$.ajax({
+				url: '/movies/post/', 
+				type: 'post',
+				data: {movieTitle : title}
+			}).done(function(data){
+				var movieData = $.parseJSON(data);
+				visibleMovie.find('.original_name').html(movieData[0].original_name);
+				
+				// Give the plugin time to load the (new) images.
+				// Is need for chrome bug with image loading..
+				
+				setTimeout(function(){
+					visibleMovie.find("img.movieposter").attr('src','');	
+					visibleMovie.find("img.movieposter").attr('src',movieData[0].poster).addClass('coverfound');							
+					visibleMovie.find('.overview').append('<h1>'+movieData[0].original_name+'</h1><p class="summary">'+movieData[0].overview+'</p><p><strong> Genre:</strong> '+movieData[0].genre+'</p><p><strong> Runtime:</strong> '+movieData[0].runtime+' min</p>');
+					visibleMovie.addClass('showDetails fadein');
+				},400);
+				
+				visibleMovie.find("img.movieposter").attr('data-backdrop',movieData[0].backdrop);
+				
+				if(movieData[0].cdNumber !== null){
+					visibleMovie.find("> a.play").append('<div class="cdNumber"><span>'+movieData[0].cdNumber+'</span><div>');
+				}
+			});
+		}		
 	}
 	
 	function _playMovie(url){

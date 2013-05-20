@@ -107,6 +107,7 @@ exports.post = function(req, res, next){
 		movieRequest = incommingMovieTitle;
 	}
 	
+	
 	console.log('Getting data for movie', movieRequest);
 	//Check if folder already exists
 	if (fs.existsSync('./public/movies/data/'+movieRequest)) {
