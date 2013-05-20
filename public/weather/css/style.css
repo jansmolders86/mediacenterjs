@@ -4,7 +4,7 @@ body,html{overflow:hidden;}
 #weatherwrapper{
 	height: 100%;
 	width: 100%;
-	background: url(img/overlay.png) repeat;
+	xxbackground: url(img/overlay.png) repeat;
 }
 
 h1{

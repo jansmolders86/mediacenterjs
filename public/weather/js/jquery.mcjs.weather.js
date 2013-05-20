@@ -31,9 +31,9 @@
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
 				$that: $that,
-				language : $('body').find('.language').html(),
-				LANG : $('body').find('.language').html().toUpperCase(),
-				location : $('body').find('.location').html(),
+				language : '',
+				LANG : '',
+				location : '',
 				cloudy : '',
 				mist : '',
 				clear : '',
@@ -64,6 +64,11 @@
 			url: '/configuration/', 
 			type: 'get'
 		}).done(function(data){
+		
+			o.location = data.location
+			o.language = data.language
+			o.LANG = o.language.toUpperCase()
+		
 			//Set up i18n translation
 			$.i18n.properties({
 				name: 'frontend-translation', 
