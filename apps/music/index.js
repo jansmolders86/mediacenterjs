@@ -85,6 +85,8 @@ exports.post = function(req, res, next){
 	, incomingalbumTitle = incomingFile.albumTitle
 	, albumRequest = incomingalbumTitle;
 	
+	console.log('Getting info from', incomingalbumTitle)
+	
 	var albumTitle = null
 	, title = 'No data found...'
 	, thumb = '/movies/css/img/nodata.jpg'
@@ -149,39 +151,41 @@ exports.post = function(req, res, next){
 				, types = noyear.replace(/320kbps|192kbps|128kbps|mp3|320|192|128|Deluxe version|Limited edition/gi,"")
 				, albumTitle = types.replace(/cd [1-9]|cd[1-9]/gi,"");
 				
-				helper.xhrCall("http://api.discogs.com/database/search?q="+albumTitle+"&type=release&callback=", function(response) {
-					if (response.results !== undefined && response.results !== null && response.results !== '' ) {
-						var requestResponse = JSON.parse(response)
-						,requestInitialDetails = requestResponse.results[0];
+				// mandatory timeout from discogs api
+				setTimeout(function(){
+					helper.xhrCall("http://api.discogs.com/database/search?q="+albumTitle+"&type=release&callback=", function(response) {
+						if (response.results !== undefined ) {
+							var requestResponse = JSON.parse(response)
+							,requestInitialDetails = requestResponse.results[0];
+						
+							title = requestInitialDetails.title
+							thumb = requestInitialDetails.thumb
+							year = requestInitialDetails.year
+							genre = requestInitialDetails.genre
+						}
+						
+						//Setting up array for writing
+						var scraperdata = new Array()
+						,scraperdataset = null;
 					
-						title = requestInitialDetails.title
-						thumb = requestInitialDetails.thumb
-						year = requestInitialDetails.year
-						genre = requestInitialDetails.genre
-					}
-					
-					//Setting up array for writing
-					var scraperdata = new Array()
-					,scraperdataset = null;
-				
-					scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}
-					scraperdata[scraperdata.length] = scraperdataset;
-					var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-					
-					fs.writeFile('./public/music/data/'+albumRequest+'/data.js', scraperdataJSON, function(e) {
-						if (!e) {
-							fs.readFile('./public/music/data/'+albumRequest+'/data.js', 'utf8', function (err, data) {
-								if(!err){
-									res.send(data);
-								}else{
-									console.log('Cannot read scraper data', err)
-								}
-							});
-						}else{ 
-							console.log('Error getting movielist', e);
-						};
-					});	
-					
+						scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}
+						scraperdata[scraperdata.length] = scraperdataset;
+						var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+						
+						fs.writeFile('./public/music/data/'+albumRequest+'/data.js', scraperdataJSON, function(e) {
+							if (!e) {
+								fs.readFile('./public/music/data/'+albumRequest+'/data.js', 'utf8', function (err, data) {
+									if(!err){
+										res.send(data);
+									}else{
+										console.log('Cannot read scraper data', err)
+									}
+								});
+							}else{ 
+								console.log('Error getting movielist', e);
+							};
+						});	
+					}, 2000);	
 				});
 			}
 		});

@@ -32,7 +32,7 @@
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
 			
-			_carousel(o);
+			_getMusicDetials(o);
 			
 			$('ul.music').find('li').click(function(e) {
 				e.preventDefault();	
@@ -54,23 +54,24 @@
 	
 	/**** Start of custom functions ***/
 
-	function _carousel(o){
-		$('ul.music').find(".li").each(function() { 
+	function _getMusicDetials(o){
+		$('ul.music').find("li").each(function() { 
 			var title = $(this).find('.title').html();
-			var visibleMovie = $(this);
-			_handleVisibleMovies(o, title, visibleMovie);
+			var cover = $(this).find('.cover');
+			_handleMusic(o, title, cover);
 		});
 	}
 
-	function _handleVisibleMovies(o, title, visibleMovie){
+	function _handleMusic(o, title, cover){
+		console.log(title)
 		$.ajax({
 			url: '/music/post/', 
 			type: 'post',
 			data: {albumTitle : title}
 		}).done(function(data){
 			var albumData = $.parseJSON(data);
-			visibleMovie.find("img").attr('src','');	
-			visibleMovie.find("img").attr('src',albumData[0].thumb).addClass('coverfound');
+			cover.attr('src','');	
+			cover.attr('src',albumData[0].thumb).addClass('coverfound');
 		});
 	}
 	

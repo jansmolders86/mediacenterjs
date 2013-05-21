@@ -10,8 +10,7 @@ html(lang="en")
 		
 		link (rel='stylesheet', href='/core/css/video-js.css')
 		script (src="/core/js/plugins/video-js.js")
-		script(src="/core/js/plugins/jquery.carouFredSel-6.1.0-packed.js")
-		
+
 		// App specific
 		link(rel='stylesheet', href='/music/css/style.css')
 		script(src="/music/js/jquery.mcjs.music.js")
@@ -36,5 +35,5 @@ html(lang="en")
 					ul.music
 						each album in music
 							li
-								img(src="/movies/img/loading.gif").movieposter
+								img(src="/movies/img/loading.gif").cover
 								a.title= album	

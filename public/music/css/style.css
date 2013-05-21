@@ -19,8 +19,8 @@
 
 ul.music{
 	list-style:none; 
-	width:700px;
-	height:700px;
+	width:100%;
+	min-height:700px;
 }
 
 ul.music li img{
@@ -31,29 +31,29 @@ ul.music li img{
 }
 
 ul.music li{
-	width:700px;
-	float:left;
-	padding:5px;
+	background:#fff;
+	padding:0px;
+	width:100px;
+	height:150px;
+	border-radius:2px; 
+	-moz-box-shadow: 0 2px 5px #888;
+	-webkit-box-shadow: 0 2px 5px #888;
+	box-shadow: 0 2px 5px #888;
+	position:relative;
+	margin:0 20px 20px 0;
 	cursor:pointer;
+	float:left;
 }
 
 ul.music li a{	
-	width:550px;
+	width:90px;
+	height:32px;
 	float:left;
-	font-size:14px;
-	font-weight:bold;
+	font-size:12px;
+	margin:5px 0 0 5px;
+	font-family:arial;
+	overflow:hidden;
 }
-
-#next, #prev{ 
-	width:47px;
-	height:69px;
-	position:absolute; 	
-	left:50%;
-	z-index:8;
-}
-
-#next{	background: url("img/carousel-sprite.png") no-repeat left bottom; 	bottom:50px; }
-#prev{	background: url("img/carousel-sprite.png") no-repeat left top; 	top:50px; }
 
 #tracklist{
 	color: #fff;
