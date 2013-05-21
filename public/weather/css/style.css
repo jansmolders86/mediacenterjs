@@ -1,15 +1,8 @@
 
 body,html{overflow:hidden;}
 
-#weatherwrapper{
-	height: 100%;
-	width: 100%;
-}
-
-h1{
-	margin-top:10px;
-}
-
+#weatherwrapper{ height: 100%; width: 100%; }
+h1{ margin-top:13px !important; }
 
 #weather .degrees{ font-size:48px; }
 #weather .degrees.getsucces{	
@@ -23,7 +16,7 @@ h1{
 
 #weather .current { 
 	position: absolute;
-	bottom: 50px;
+	bottom: 40px;
 	right: 25px;
 	height: 190px;
 	width: 300px;
@@ -39,7 +32,6 @@ h1{
 #weather .weathertype {font-size:26px;}
 #weather .feelslike {font-size:20px; padding:10px 0;}
 
-
 #weather .forecast{ 
 	position: absolute;
 	width: 100%;
@@ -48,7 +40,7 @@ h1{
 	bottom: 80px;
 	padding-top: 5px;
 	padding-left: 100px;
-	background:#ccc;
+	background:#fff;
 }
 
 #weather .forecast ul{ 
@@ -67,5 +59,3 @@ h1{
 	font-weight: bold;
 	line-height: 40px;
 } 
-
-#weather #config{visibility:hidden; height:0; width:0;}
