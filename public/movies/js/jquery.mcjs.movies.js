@@ -53,6 +53,13 @@
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(this).addClass("focused");
 				$(".backdropimg").attr("src", newBackground).addClass('fadein');
+				
+				setTimeout(function(){
+					$(".backdropimg").animate({marginTop:'-800px'}, 80000, 'linear');
+					if($(".backdropimg").css({marginTop:'-800px'})){
+						$(".backdropimg").animate({marginTop:'0px'}, 80000, 'linear');
+					}
+				},3000);	
 			},
 			mouseleave: function() {
 				$(".backdropimg").removeClass("fadein");
@@ -63,6 +70,13 @@
 			focus: function() {				
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(".backdropimg").attr("src", newBackground).addClass('fadein');
+				
+				setTimeout(function(){
+					$(".backdropimg").animate({marginTop:'-800px'}, 80000, 'linear');
+					if($(".backdropimg").css({marginTop:'-800px'})){
+						$(".backdropimg").animate({marginTop:'0px'}, 80000, 'linear');
+					}
+				},3000);	
 			},
 			focusout: function() {
 				$(".backdropimg").removeClass("fadein");
@@ -74,9 +88,11 @@
 			$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
 			
 			setTimeout(function(){
-				$(".backdropimg").animate({marginTop:'-800px'}, 70000, 'linear')
-			},3000);
-			
+				$(".backdropimg").animate({marginTop:'-800px'}, 80000, 'linear');
+				if($(".backdropimg").css({marginTop:'-800px'})){
+					$(".backdropimg").animate({marginTop:'0px'}, 80000, 'linear');
+				}
+			},3000);	
 		} 	
 	}
 	
