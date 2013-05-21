@@ -65,9 +65,9 @@
 		}	
 	}
 	
-	// Resize background image according to viewport
+	// Resize background image according to viewport if the image has class fullscreen
 	function _resizeviewport(o, $that){
-		var $img = $(".backdropimg");
+		var $img = $(".fullscreen");
 		$(window).resize(function() {
 			var viewport = {
 				width   : o.viewportWidth,

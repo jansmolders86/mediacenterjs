@@ -54,12 +54,7 @@
 				$(this).addClass("focused");
 				$(".backdropimg").attr("src", newBackground).addClass('fadein');
 				
-				setTimeout(function(){
-					$(".backdropimg").animate({marginTop:'-800px'}, 80000, 'linear');
-					if($(".backdropimg").css({marginTop:'-800px'})){
-						$(".backdropimg").animate({marginTop:'0px'}, 80000, 'linear');
-					}
-				},3000);	
+				_scrollBackdrop();
 			},
 			mouseleave: function() {
 				$(".backdropimg").removeClass("fadein");
@@ -71,12 +66,7 @@
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(".backdropimg").attr("src", newBackground).addClass('fadein');
 				
-				setTimeout(function(){
-					$(".backdropimg").animate({marginTop:'-800px'}, 80000, 'linear');
-					if($(".backdropimg").css({marginTop:'-800px'})){
-						$(".backdropimg").animate({marginTop:'0px'}, 80000, 'linear');
-					}
-				},3000);	
+				_scrollBackdrop();
 			},
 			focusout: function() {
 				$(".backdropimg").removeClass("fadein");
@@ -87,12 +77,7 @@
 			var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 			$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
 			
-			setTimeout(function(){
-				$(".backdropimg").animate({marginTop:'-800px'}, 80000, 'linear');
-				if($(".backdropimg").css({marginTop:'-800px'})){
-					$(".backdropimg").animate({marginTop:'0px'}, 80000, 'linear');
-				}
-			},3000);	
+			_scrollBackdrop();
 		} 	
 	}
 	
@@ -103,6 +88,19 @@
 			var visibleMovie = $(this);
 			_handleVisibleMovies(o, title, visibleMovie);
 		});
+	}
+	
+	function _scrollBackdrop(){
+		if($(".backdropimg").attr('src') !== '/movies/img/backdrop.jpg'){
+			$(".backdropimg").each( function() {
+				setTimeout(function(){
+					$(".backdropimg").animate({marginTop:'-490px'}, 80000, 'linear');
+					if($(".backdropimg").css({marginTop:'-490px'})){
+						$(".backdropimg").animate({marginTop:'0px'}, 80000, 'linear');
+					}
+				},3000);
+			});	
+		}
 	}
 
 	

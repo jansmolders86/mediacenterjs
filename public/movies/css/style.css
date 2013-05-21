@@ -17,15 +17,10 @@
 */
 
 
-body,html{
-	overflow-y:auto;
-	overflow-x:hidden;
-}
+body,html{ overflow-y:auto; overflow-x:hidden; }
 
-#header{
-	background:none;
-	box-shadow:none;
-}
+#header{ background:none; box-shadow:none; padding-top:50px; }
+#wrapper{ padding-top:0; }
 
 #backdrop{
 	height:200px;
@@ -53,8 +48,8 @@ body,html{
 	list-style: none;
 	display: block;
 	position: relative;
-	width:100%;
-	height:1000px;
+	width:95%;
+	min-height:1000px;
 	overflow:hidden;
 }
 
