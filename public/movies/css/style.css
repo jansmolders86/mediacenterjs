@@ -47,13 +47,13 @@ body,html{
 .movieposter.focused{ border:0;}
 
 .movies{ 
-	margin: 0;
+	margin: 0 auto;
 	padding: 0;
 	list-style: none;
 	display: block;
 	position: relative;
-	width:100%;
-	height:500px;
+	width:1200px;
+	height:600px;
 	overflow:hidden;
 }
 

@@ -236,7 +236,7 @@ p a:hover{text-decoration:none;}
 	width:1050px;
 	height:100%;
 	position:relative;
-	float:left;
+	margin:0 auto;
 }
 
 .tile{
