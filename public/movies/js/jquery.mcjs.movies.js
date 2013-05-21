@@ -71,7 +71,12 @@
 		
 		if ($('.movieposter.focused')){
 			var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
-			$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');		
+			$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
+			
+			setTimeout(function(){
+				$(".backdropimg").animate({marginTop:'-800px'}, 70000, 'linear')
+			},3000);
+			
 		} 	
 	}
 	
