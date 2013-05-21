@@ -135,18 +135,13 @@
 									}else {
 										$(".backdropimg").attr('src', "/weather/img/default.jpg").addClass("fadein");
 									}
-									$('#weatherwrapper').addClass('fadeinslow');
 								}
 							},
 							error : function() {
 								$("#weather").find("h1").html( 'Error: ' + o.location + '<br/>' + o.error);
 							}
-						})
-					} else {
-						return
-					};	
-					
-					if ( $('body').hasClass('weather') || $('body').find('h1') == '' ){
+						});
+						
 						$(".forecast").find("ul").remove()
 						$.ajax({
 							url : "http://api.wunderground.com/api/68a6ea8f6013979c/forecast/lang:"+o.LANG+"/q/"+o.language+"/"+o.location+".json",
@@ -160,16 +155,25 @@
 									for(var i = 0; i < daycount; i++) {
 										var weekday = day.date.weekday							
 										var conditions = day.conditions
-										var mintemp = day.low.celsius	
-										var maxtemp = day.high.celsius
+										
+										if (o.language === 'nl'){
+											var mintemp = day.low.celsius	
+											var maxtemp = day.high.celsius
+										}else if (o.language === 'en'){
+											var mintemp = day.low.fahrenheit	
+											var maxtemp = day.high.fahrenheit
+										}
+
 										$("#weather").find(".forecast").append('<ul> <li class="weekday">'+ weekday +'</li> <li class="conditions">'+ conditions +'</li>  <li class="mintemp"> Min: '+ mintemp +'</li>  <li class="maxtemp"> Max:'+ maxtemp +'</li> </ul>');	
 									}
 								})
 							}
-						})
+						});
+					
 					} else {
 						return
-					};		
+					};	
+					
 				}
 			});	
 		}); 
