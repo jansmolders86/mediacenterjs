@@ -17,7 +17,7 @@ h1{ margin-top:13px !important; }
 #weather .current { 
 	position: absolute;
 	bottom: 40px;
-	right: 25px;
+	right: -40px;
 	height: 190px;
 	width: 300px;
 	padding: 20px;
@@ -39,14 +39,14 @@ h1{ margin-top:13px !important; }
 	left: 0px;
 	bottom: 80px;
 	padding-top: 5px;
-	padding-left: 100px;
+	padding-left: 60px;
 	background:#fff;
 }
 
 #weather .forecast ul{ 
 	list-style:none;
 	float:left;
-	width: 155px;
+	width: 115px;
 	height: 110px;
 }
 

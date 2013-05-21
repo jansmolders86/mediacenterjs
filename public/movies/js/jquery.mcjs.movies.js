@@ -35,7 +35,7 @@
 			_focusedItem(o);
 			_loadMovies(o);
 			
-			$('a.play').click(function(e) {
+			$('.playbtn').click(function(e) {
 				e.preventDefault();	
 				var url = '/movies/video/' + $(this).attr('data-movie')
 				_playMovie(url)

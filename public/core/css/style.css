@@ -717,27 +717,5 @@ button.ui-keyboard-accept.ui-keyboard-invalid-input:hover { background: #a00; }
 
 @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
   /* For landscape layouts only */
-    .movieposter,
-	.movieposter img{  }
-	
-	.movieposter:hover,
-	.movieposter:focus,
-	.movieposter.focused{
-		margin-top:0px;
-	}
-	
-	.movieposter:hover,
-	.movieposter:focus,
-	.movieposter.focused,
-	.movieposter:hover img.coverfound,
-	.movieposter:focus img.coverfound,
-	.movieposter.focused img.coverfound{
-		width:150px !important; 
-		height:220px !important; 
-		margin:0 !important; 
-	} 
-	
-	.movieposter .info{ display:block; }
-	
-	.posterview li { margin:25px; )
+  
 }
