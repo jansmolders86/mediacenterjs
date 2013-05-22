@@ -7,7 +7,7 @@ Screenshots (Pre-Alpha GUI):
 
 ![Dashboard] (screenshots/dashboard.png)
 
-![Movies] (screenshots/movie.png)
+![Movies] (screenshots/movies.png)
 
 ![Weather] (screenshots/weather.png)
 
