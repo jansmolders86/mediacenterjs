@@ -9,6 +9,8 @@ Screenshots (Pre-Alpha GUI):
 
 ![Movies] (screenshots/movies.png)
 
+![Music] (screenshots/music.png)
+
 ![Weather] (screenshots/weather.png)
 
 Status: 

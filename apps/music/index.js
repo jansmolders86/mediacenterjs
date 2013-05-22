@@ -149,16 +149,14 @@ exports.post = function(req, res, next){
 				, types = noyear.replace(/320kbps|192kbps|128kbps|mp3|320|192|128/gi,"")
 				, albumTitle = types.replace(/cd [1-9]|cd[1-9]/gi,"");
 				
-				console.log('using album title', albumTitle)
 				// mandatory timeout from discogs api
 				setTimeout(function(){
 					helper.xhrCall("http://api.discogs.com/database/search?q="+albumTitle+"&type=release&callback=", function(response) {
-						console.log('got response', response)
 						
 						var requestResponse = JSON.parse(response)
 						,requestInitialDetails = requestResponse.results[0];
 						
-						if (requestResponse !== undefined ) {
+						if (requestInitialDetails !== undefined && requestInitialDetails !== '' && requestInitialDetails !== null) {
 							title = requestInitialDetails.title
 							thumb = requestInitialDetails.thumb
 							year = requestInitialDetails.year
