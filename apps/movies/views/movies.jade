@@ -42,7 +42,7 @@ html(lang="en")
 					ul.movies
 						each movie in movies
 							li.movieposter 
-								img(src="/movies/img/loading.gif").movieposter							
+								img(src="/movies/img/loading.gif").movieposter
+								.overlay(data-movie= movie)							
 								span.title= movie		
 								.overview
-								.playbtn(data-movie= movie) Play

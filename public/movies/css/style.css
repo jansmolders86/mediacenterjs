@@ -40,8 +40,6 @@ body,html{ overflow-y:auto; overflow-x:hidden; }
 	margin: 100px 0;
 }
 
-.movieposter.focused{ border:0;}
-
 .movies{ 
 	margin: 0 auto;
 	padding: 0;
@@ -64,6 +62,20 @@ body,html{ overflow-y:auto; overflow-x:hidden; }
 	margin: 0px 0px 20px;
 }
 
+.movieposter.focused {
+	border:0;
+}
+.movieposter.focused .overlay,
+.movieposter:hover .overlay{
+	background:url(img/cover-overlay.png) no-repeat;
+	width:185px;
+	height:278px;
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:6;
+	cursor:pointer;
+} 
 
 .movieposter .cdNumber{
 	width:90px;
@@ -92,12 +104,14 @@ body,html{ overflow-y:auto; overflow-x:hidden; }
 	float:left; 
 	width:32px;
 	height:32px;
+	border:0;
 } 
 
 .movieposter img.coverfound{
 	width:185px;
 	height:278px;
 	padding:0;
+	border:0;
 }
 
 .movieposter span{ 
@@ -123,7 +137,7 @@ span.title{visibility:hidden; width:0; height:0;}
 	background:#fff;
 	padding:0px;
 	width:185px;
-	height:440px;
+	height:400px;
 	border-radius:2px; 
 	-moz-box-shadow: 0 2px 10px #888;
 	-webkit-box-shadow: 0 2px 10px #888;
@@ -151,15 +165,16 @@ span.title{visibility:hidden; width:0; height:0;}
 	cursor:pointer;
 }
 
-a.backlink{
-	margin-top:11px;
-}
 
 .movieposter.showDetails .playbtn:hover{
 	background-color:#FB8521;
 	color:#fff;
 	border:0;
 } 
+
+a.backlink{
+	margin-top:11px;
+}
 
 .overview{
 	float: left;

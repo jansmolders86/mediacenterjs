@@ -24,8 +24,8 @@ ul.music{
 }
 
 ul.music li img{
-	width:100px;
-	height:100px;
+	width:150px;
+	height:150px;
 	float:left;
 	margin-right:20px;
 }
@@ -33,8 +33,8 @@ ul.music li img{
 ul.music li{
 	background:#fff;
 	padding:0px;
-	width:100px;
-	height:150px;
+	width:150px;
+	height:200px;
 	border-radius:2px; 
 	-moz-box-shadow: 0 2px 5px #888;
 	-webkit-box-shadow: 0 2px 5px #888;
@@ -43,6 +43,15 @@ ul.music li{
 	margin:0 20px 20px 0;
 	cursor:pointer;
 	float:left;
+}
+
+ul.music li:hover .overlay{
+	position:absolute;
+	top:0;
+	left:0;
+	width:150px;
+	height:150px;
+	background:url(img/cover-overlay.png) no-repeat;
 }
 
 ul.music li a{	

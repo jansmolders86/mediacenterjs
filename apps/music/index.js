@@ -6,6 +6,7 @@ var express = require('express')
 , downloader = require('downloader')
 , ffmpeg = require('fluent-ffmpeg')
 , rimraf = require('rimraf')
+, discogs = require('discogs')
 , request = require("request")
 , helper = require('../../lib/helpers.js')
 , Encoder = require('node-html-encoder').Encoder;
@@ -82,11 +83,8 @@ exports.track = function(req, res, next){
 
 exports.post = function(req, res, next){	
 	var incomingFile = req.body
-	, incomingalbumTitle = incomingFile.albumTitle
-	, albumRequest = incomingalbumTitle;
-	
-	console.log('Getting info from', incomingalbumTitle)
-	
+	, albumRequest = incomingFile.albumTitle
+
 	var albumTitle = null
 	, title = 'No data found...'
 	, thumb = '/movies/css/img/nodata.jpg'
@@ -95,6 +93,7 @@ exports.post = function(req, res, next){
 
 	console.log('Getting data for album', albumRequest);
 	//Check if folder already exists
+
 	if (fs.existsSync('./public/music/data/'+albumRequest)) {
 		if(fs.existsSync('./public/music/data/'+albumRequest+'/data.js')){
 			fs.stat('./public/music/data/'+albumRequest+'/data.js', function (err, stats) {
@@ -148,16 +147,19 @@ exports.post = function(req, res, next){
 				, year = filename.match(/\(.*?([0-9]{4}).*?\)/)
 				, stripped = filename.replace(/\.|_|\/|\-|\[|\]|\-/g," ")
 				, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
-				, types = noyear.replace(/320kbps|192kbps|128kbps|mp3|320|192|128|Deluxe version|Limited edition/gi,"")
+				, types = noyear.replace(/320kbps|192kbps|128kbps|mp3|320|192|128/gi,"")
 				, albumTitle = types.replace(/cd [1-9]|cd[1-9]/gi,"");
 				
+				console.log('using album title', albumTitle)
 				// mandatory timeout from discogs api
 				setTimeout(function(){
 					helper.xhrCall("http://api.discogs.com/database/search?q="+albumTitle+"&type=release&callback=", function(response) {
-						if (response.results !== undefined ) {
-							var requestResponse = JSON.parse(response)
-							,requestInitialDetails = requestResponse.results[0];
+						console.log('got response', response)
 						
+						var requestResponse = JSON.parse(response)
+						,requestInitialDetails = requestResponse.results[0];
+						
+						if (requestResponse !== undefined ) {
 							title = requestInitialDetails.title
 							thumb = requestInitialDetails.thumb
 							year = requestInitialDetails.year

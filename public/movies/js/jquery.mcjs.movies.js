@@ -35,7 +35,7 @@
 			_focusedItem(o);
 			_loadMovies(o);
 			
-			$('.playbtn').click(function(e) {
+			$('.overlay').click(function(e) {
 				e.preventDefault();	
 				var url = '/movies/video/' + $(this).attr('data-movie')
 				_playMovie(url)
@@ -92,14 +92,12 @@
 	
 	function _scrollBackdrop(){
 		if($(".backdropimg").attr('src') !== '/movies/img/backdrop.jpg'){
-			$(".backdropimg").each( function() {
-				setTimeout(function(){
-					$(".backdropimg").animate({marginTop:'-490px'}, 80000, 'linear');
-					if($(".backdropimg").css({marginTop:'-490px'})){
-						$(".backdropimg").animate({marginTop:'0px'}, 80000, 'linear');
-					}
-				},3000);
-			});	
+			setTimeout(function(){
+				$(".backdropimg").animate({marginTop:'-490px'}, 80000, 'linear');
+				if($(".backdropimg").css({marginTop:'-490px'})){
+					$(".backdropimg").animate({marginTop:'0px'}, 80000, 'linear');
+				}
+			},3000);
 		}
 	}
 
