@@ -71,6 +71,7 @@ exports.track = function(req, res, next){
 	var proc = new ffmpeg({ source: track, nolog: true, priority: 1, timeout:15000})
 		.withAudioCodec('libvorbis')
 		.toFormat('ogg')
+		.addOptions(['-probesize 900000', '-analyzeduration 0' ])
 		.writeToStream(res, function(retcode, error){
 		if (!error){
 			console.log('file has been converted succesfully',retcode);
