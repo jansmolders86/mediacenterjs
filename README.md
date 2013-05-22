@@ -40,13 +40,13 @@ What currently works?
 * Local caching of information and images
 * Basic transcoding and playback of movies and music
 * Weather information based on location
-* basic transcoding of movies and music
+* Basic transcoding of movies and music
+* Basic screensaver
 
 What's coming up
 =================
 
 * better transcoding handeling
-* Activate Screensaver (dimming mode)
 
 What's not working
 ==================

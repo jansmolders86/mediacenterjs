@@ -41,6 +41,7 @@
 	
 			_resizeviewport(o, $(this)); 	// Strech bg to fullscreen
 			_keyevents(o,$(this)); 			// init keys
+			_screensaver(o, $(this));
 			
 			if(o.debug == false){
 				$(document).bind("contextmenu", function(e) {
@@ -133,6 +134,28 @@
 				case 32 : 
 					//spacebar
 				break;
+			}
+		});
+	}
+	
+	
+	// Set idletimer for movieplayer to switch to fullscreen. Needs plugin - jquery.idletimer.js
+	function _screensaver(o, $that){
+		$.ajax({
+			url: '/configuration/', 
+			type: 'get'
+		}).done(function(data){
+			if (data.screensaver === 'dim'){
+				var timeout = 600000; //10 min //TODO: make editable
+				$(document).bind("idle.idleTimer", function(){
+					$("html, body, #wrapper, #header").addClass("dim")
+				});
+
+				$(document).bind("active.idleTimer", function(){
+				   $("html, body, #wrapper, #header").removeClass("dim")
+				});
+
+				$.idleTimer(timeout);
 			}
 		});
 	}
