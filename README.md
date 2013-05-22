@@ -38,7 +38,7 @@ What currently works?
 * Local caching of information and images
 * Basic transcoding and playback of movies and music
 * Weather information based on location
-* basic transcoing of movies and music
+* basic transcoding of movies and music
 
 What's coming up
 =================
