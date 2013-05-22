@@ -6,7 +6,6 @@ var express = require('express')
 , downloader = require('downloader')
 , ffmpeg = require('fluent-ffmpeg')
 , rimraf = require('rimraf')
-, discogs = require('discogs')
 , request = require("request")
 , helper = require('../../lib/helpers.js')
 , Encoder = require('node-html-encoder').Encoder;
