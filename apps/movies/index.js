@@ -69,9 +69,7 @@ exports.play = function(req, res){
 	var  proc = new ffmpeg({ source: configfileResults.moviepath + movieTitle, nolog: true, priority: 1, timeout:15000})
 		.toFormat('webm')
 		.withVideoBitrate('1024k')
-		//.bufferSize('183k')
-		//.chunkSize('14336')
-		// Option srt handler? .addInput('')
+		.addOptions(['-flags', '-bufsize 2M', '-probesize 900000', '-analyzeduration 0' ])
 		.writeToStream(res, function(retcode, error){
 		if (!error){
 			console.log('file has been converted succesfully',retcode);
