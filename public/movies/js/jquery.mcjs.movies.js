@@ -135,7 +135,12 @@
 	function _playMovie(url){
 		$('#wrapper, #moviedetails, #backdrop, #header').hide();
 		$('body').css('backgroundColor','#000');
-		$('body').append('<video id="player" class="video-js vjs-default-skin" style="position: absolute; top: 0; left:0px width:100%; height:100%; z-index:9;" controls poster="/movies/img/loading-video.png" width="100%" height="100%"><source src="'+url+'" type="video/webm"></video>');
+		$('body').find('#player').addClass('active');
+		
+		// Init player
+		if($('#player').length) $('#player').remove();
+		$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" poster="my_video_poster.png" data-setup="{}"> <source src="'+url+'" type="video/webm"></video>');
+		_V_("player", {}, function(){});
 	}
 
 	/**** End of custom functions ***/

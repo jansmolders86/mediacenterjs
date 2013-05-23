@@ -104,7 +104,8 @@
 	
 	function _playTrack(track,album){
 		if($('#player').length) $('#player').remove();
-		$('body').append('<video id="player" class="video-js vjs-default-skin" style="position: absolute; bottom: 20px; left:0px width:200px; height:200px; z-index:9;" controls poster="/movies/img/loading-video.png" ><source src="'+track+'" type="audio/ogg"></video>');
+		$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" poster="" data-setup="{}"> <source src="'+track+'" type="audio/ogg"></video>');
+		_V_("player", {}, function(){});
 	}
 
 	

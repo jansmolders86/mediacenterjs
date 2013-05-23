@@ -402,6 +402,18 @@ a.btn{
 	border:0;
 }
 
+
+/***** Player ******/
+
+#player{
+	position:absolute;
+	bottom:0;
+	left:0;
+}
+
+.vjs-play-progress, 
+.vjs-volume-level { background-color: #de640b!important; }
+
 /***** Keyboard *****/
 
 /* keyboard - jQuery UI Widget */
