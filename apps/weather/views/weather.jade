@@ -18,17 +18,16 @@ html(lang="en")
 				$('body').mcjs();
 				$('body').mcjsw();
 			});
-	body#weather.weather
+	body
 		#backdrop
 			img.backdropimg.fullscreen(src="/core/css/img/homepage.jpg")
 		#header
 			a.backlink(href="/") 
 				img(src="/core/icons/back.png")
 			h1	
-		#weatherwrapper
-			#wrapper
-				.current
-					.degrees
-					.feelslike
-					.weathertype
-				.forecast
+		#wrapper
+			.current
+				.degrees
+				.feelslike
+				.weathertype
+		.forecast
