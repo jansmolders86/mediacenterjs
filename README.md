@@ -37,7 +37,7 @@ What currently works?
 * Basic keyboard controls
 * Onscreen keyboard
 * Movie indexing
-* multi-language support (English and Dutch)
+* Multi-language support (English and Dutch)
 * Display movies with Poster, Backdrop and information 
 * Local caching of information and images
 * Basic transcoding and playback of movies and music
@@ -48,7 +48,8 @@ What currently works?
 What's coming up
 =================
 
-* better transcoding handeling
+* Better transcoding handling
+* More thorough error handling
 
 What's not working
 ==================
