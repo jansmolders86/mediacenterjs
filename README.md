@@ -50,6 +50,7 @@ What's coming up
 
 * Better transcoding handling
 * More thorough error handling
+* Music styling and playback features
 
 What's not working
 ==================
