@@ -411,8 +411,9 @@ a.btn{
 	left:0;
 }
 
-.vjs-play-progress, 
-.vjs-volume-level { background-color: #de640b!important; }
+.vjs-play-progress, .vjs-volume-level { background-color: #50bdc4!important; }
+.vjs-control-bar, .vjs-big-play-button { background: rgba(150,150,150,0.7)!important; }
+.vjs-slider { background: rgba(150,150,150,0.2333333333333333)!important; }
 
 /***** Keyboard *****/
 
