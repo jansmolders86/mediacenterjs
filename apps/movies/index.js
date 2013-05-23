@@ -64,11 +64,38 @@ exports.play = function(req, res){
 	, movieData = fs.readFileSync(moviedatapath)
 	, movieDataResults = JSON.parse(movieData)
 	, stream = configfileResults.moviepath +'/'+movieDataResults.path
-	, movieTitle = encoder.htmlDecode(req.params.filename);
+	, movieTitle = encoder.htmlDecode(req.params.filename)
+	, movie = configfileResults.moviepath + movieTitle;
+	
+	var stat = fs.statSync(movie);
 
-	var  proc = new ffmpeg({ source: configfileResults.moviepath + movieTitle, nolog: true, priority: 1, timeout:15000})
+	var start = 0;
+	var end = 0;
+	var range = req.header('Range');
+	if (range != null) {
+	start = parseInt(range.slice(range.indexOf('bytes=')+6,
+	  range.indexOf('-')));
+	end = parseInt(range.slice(range.indexOf('-')+1,
+	  range.length));
+	}
+	if (isNaN(end) || end == 0) end = stat.size-1;
+	if (start > end) return;
+	
+	console.log('start',start)
+	console.log('end',end)
+	
+	res.writeHead(206, { // NOTE: a partial http response
+		'Connection':'close',
+		'Content-Type':'video/webm',
+		'Content-Length':end - start,
+		'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
+		'Transfer-Encoding':'chunked'
+	});
+
+	var  proc = new ffmpeg({ source: movie, nolog: true, priority: 1, timeout:15000})
 		.toFormat('webm')
 		.withVideoBitrate('1024k')
+		// add duration -t duration
 		.addOptions(['-probesize 900000', '-analyzeduration 0', '-bufsize 14000'])
 		.writeToStream(res, function(retcode, error){
 		if (!error){
@@ -77,6 +104,7 @@ exports.play = function(req, res){
 			console.log('file conversion error',error);
 		}
 	});
+	
 }
 
 exports.post = function(req, res, next){	
