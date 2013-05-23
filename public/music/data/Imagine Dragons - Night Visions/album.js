@@ -1,0 +1,20 @@
+[
+    "01 Imagine Dragons - Radioactive.mp3",
+    "02 Imagine Dragons - Tiptoe.mp3",
+    "03 Imagine Dragons - It's Time.mp3",
+    "04 Imagine Dragons - Demons.mp3",
+    "05 Imagine Dragons - On Top of the World.mp3",
+    "06 Imagine Dragons - Amsterdam.mp3",
+    "07 Imagine Dragons - Hear Me.mp3",
+    "08 Imagine Dragons - Every Night.mp3",
+    "09 Imagine Dragons - Bleeding Out.mp3",
+    "10 Imagine Dragons - Underdog.mp3",
+    "11 Imagine Dragons - Nothing Left To Say - Rocks.mp3",
+    "12 Imagine Dragons - Working Man.mp3",
+    "13 Imagine Dragons - Fallen.mp3",
+    "14 Imagine Dragons - My Fault.mp3",
+    "15 Imagine Dragons - Round and Round.mp3",
+    "16 Imagine Dragons - The River.mp3",
+    "17 Imagine Dragons - America.mp3",
+    "18 Imagine Dragons - Selene.mp3"
+]

@@ -68,6 +68,30 @@ exports.track = function(req, res, next){
 		var track = configfileResults.musicpath+req.params.album+'/'+decodeTrack
 	}
 	var stat = fs.statSync(track);
+	
+	var start = 0;
+	var end = 0;
+	var range = req.header('Range');
+	if (range != null) {
+	start = parseInt(range.slice(range.indexOf('bytes=')+6,
+	  range.indexOf('-')));
+	end = parseInt(range.slice(range.indexOf('-')+1,
+	  range.length));
+	}
+	if (isNaN(end) || end == 0) end = stat.size-1;
+	if (start > end) return;
+	
+	console.log('start',start)
+	console.log('end',end)
+	
+	res.writeHead(206, { // NOTE: a partial http response
+		'Connection':'close',
+		'Content-Type':'audio/ogg',
+		'Content-Length':end - start,
+		'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
+		'Transfer-Encoding':'chunked'
+	});
+
 	var proc = new ffmpeg({ source: track, nolog: true, priority: 1, timeout:15000})
 		.withAudioCodec('libvorbis')
 		.toFormat('ogg')
@@ -79,6 +103,7 @@ exports.track = function(req, res, next){
 			console.log('file conversion error',error);
 		}
 	});
+
 };
 
 exports.post = function(req, res, next){	
