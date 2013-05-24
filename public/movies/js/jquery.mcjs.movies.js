@@ -133,14 +133,23 @@
 	}
 	
 	function _playMovie(url){
+		var myPlayer
 		$('#wrapper, #moviedetails, #backdrop, #header').hide();
 		$('body').css('backgroundColor','#000');
 		$('body').find('#player').addClass('active');
 		
 		// Init player
 		if($('#player').length) $('#player').remove();
-		$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" poster="my_video_poster.png" data-setup="{}"> <source src="'+url+'" type="video/webm"></video>');
-		_V_("player", {}, function(){});
+		$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="metadata" width="100%" height="100%" data-setup="{}"> <source src="'+url+'" type="video/webm"></video>');
+	
+		_V_("player").ready(function(){
+			myPlayer = this
+		});
+		/*
+		myPlayer.on("loadedmetadata", function(){
+		  console.log('loadedmetadata',this.loadedmetadata());
+		});
+		*/
 	}
 
 	/**** End of custom functions ***/
