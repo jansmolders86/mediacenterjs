@@ -16,6 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+exports.engine = 'jade';
+
 /* Modules */
 var express = require('express')
 , app = express()
@@ -23,27 +25,25 @@ var express = require('express')
 , downloader = require('downloader')
 , request = require("request")
 , ffmpeg = require('fluent-ffmpeg')
+, Metalib = require('fluent-ffmpeg').Metadata
 , rimraf = require('rimraf')
+, util = require('util')
 , helper = require('../../lib/helpers.js')
-, Encoder = require('node-html-encoder').Encoder;
+, Encoder = require('node-html-encoder').Encoder
+, encoder = new Encoder('entity');
 
-// entity type encoder
-var encoder = new Encoder('entity');
-
-exports.engine = 'jade';
-
+/* Get Config */
 var configfile = []
 ,configfilepath = './configuration/setup.js'
 ,configfile = fs.readFileSync(configfilepath)
 ,configfileResults = JSON.parse(configfile);	
 
 exports.index = function(req, res, next){	
-
 	var writePath = './public/movies/data/movieindex.js'
 	, getDir = false
 	, dir = configfileResults.moviepath
 	, fileTypes = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");;
-	
+
 	helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes,  function(status){
 		var moviefiles = []
 		,moviefilepath = './public/movies/data/movieindex.js'
@@ -58,45 +58,54 @@ exports.index = function(req, res, next){
 };
 
 exports.play = function(req, res){
-
 	var movieData = []
 	, moviedatapath = './public/movies/data/'+req.params.filename+'/data.js'
 	, movieData = fs.readFileSync(moviedatapath)
-	, movieDataResults = JSON.parse(movieData)
-	, stream = configfileResults.moviepath +'/'+movieDataResults.path
+	, movieDataResults = JSON.parse(movieData);
+	
+	var stream = configfileResults.moviepath +'/'+movieDataResults.path
 	, movieTitle = encoder.htmlDecode(req.params.filename)
 	, movie = configfileResults.moviepath + movieTitle;
-	
-	var stat = fs.statSync(movie);
 
-	var start = 0;
-	var end = 0;
-	var range = req.header('Range');
+	/*
+	// Fallback to runtime provided by scraper if metadata is empty
+	if(movieDataResults.duration === 0){	
+		if (movieDataResults.runtime === 'No data found...'){
+			duration = ''
+		} else {
+			var runtime = movieDataResults.runtime * 60;
+			console.log('runtime', runtime)
+			duration = 't '+runtime;
+		}	
+	} else {
+		duration = 't '+movieDataResults.duration;
+	}
+	*/
+
+		
+	var stat = fs.statSync(movie)
+	, start = 0
+	, end = 0
+	, range = req.header('Range');
+	
 	if (range != null) {
-	start = parseInt(range.slice(range.indexOf('bytes=')+6,
-	  range.indexOf('-')));
-	end = parseInt(range.slice(range.indexOf('-')+1,
-	  range.length));
+		start = parseInt(range.slice(range.indexOf('bytes=')+6, range.indexOf('-')));
+		end = parseInt(range.slice(range.indexOf('-')+1, range.length));
 	}
 	if (isNaN(end) || end == 0) end = stat.size-1;
 	if (start > end) return;
 	
-	console.log('start',start)
-	console.log('end',end)
-	
-	res.writeHead(206, { // NOTE: a partial http response
-		'Connection':'close',
-		'Content-Type':'video/webm',
-		'Content-Length':end - start,
+	// Partial http response
+	res.writeHead(206, {
+		'Accept-Ranges': 'bytes',
+		'Content-Length': end - start,
 		'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
-		'Transfer-Encoding':'chunked'
+		'Content-Type':'video/webm'
 	});
 
-	var  proc = new ffmpeg({ source: movie, nolog: true, priority: 1, timeout:15000})
+	var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000})
 		.toFormat('webm')
-		.withVideoBitrate('1024k')
-		// add duration -t duration
-		.addOptions(['-probesize 900000', '-analyzeduration 0', '-bufsize 14000'])
+		.addOptions(['-probesize 900000', '-analyzeduration 0'])
 		.writeToStream(res, function(retcode, error){
 		if (!error){
 			console.log('file has been converted succesfully',retcode);
@@ -104,13 +113,13 @@ exports.play = function(req, res){
 			console.log('file conversion error',error);
 		}
 	});
-	
 }
 
 exports.post = function(req, res, next){	
 	var movieTitle = null
 	, api_key = '7983694ec277523c31ff1212e35e5fa3'
 	, cdNumber = null
+	, duration = null
 	, id = 'No data found...'
 	, poster_path = '/movies/css/img/nodata.jpg'
 	, backdrop_path = '/movies/css/img/overlay.png'
@@ -121,6 +130,9 @@ exports.post = function(req, res, next){
 	, genre = 'No data found...'
 	, runtime = 'No data found...'
 	, overview = 'No data found...';
+	
+	var scraperdata = new Array()
+	,scraperdataset = null;
 
 	var incommingFile = req.body
 	, incommingMovieTitle = incommingFile.movieTitle
@@ -132,8 +144,7 @@ exports.post = function(req, res, next){
 	}else{ 
 		movieRequest = incommingMovieTitle;
 	}
-	
-	
+
 	console.log('Getting data for movie', movieRequest);
 	//Check if folder already exists
 	if (fs.existsSync('./public/movies/data/'+movieRequest)) {
@@ -200,7 +211,7 @@ exports.post = function(req, res, next){
 				if (year == null) year = ''
 				
 				helper.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&year="+ year +"&language="+configfileResults.language+"&=", function(response) {
-					if (response != 'Nothing found.') {
+					if (response !== 'Nothing found.' && response !== undefined && response !== '' && response !== null) {
 					
 						var requestResponse = JSON.parse(response)
 						,requestInitialDetails = requestResponse.results[0]
@@ -208,7 +219,7 @@ exports.post = function(req, res, next){
 						 downloadCache(requestInitialDetails,function(poster, backdrop) {
 
 							// Additional error check
-							if(typeof response){
+							if (requestInitialDetails !== undefined && requestInitialDetails !== '' && requestInitialDetails !== null) {
 								var localImageDir = '/movies/data/'+movieRequest+'/';
 								
 								poster_path = localImageDir+requestInitialDetails.poster_path;
@@ -228,39 +239,60 @@ exports.post = function(req, res, next){
 									// certification = requestInitialDetails.certification;
 									overview = secondRequestResponse.overview;
 
-									
-									//Setting up array for writing
-									var scraperdata = new Array()
-									,scraperdataset = null;
-									
-									scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
-									scraperdata[scraperdata.length] = scraperdataset;
-									var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-									
-									fs.writeFile('./public/movies/data/'+movieRequest+'/data.js', scraperdataJSON, function(e) {
-										if (!e) {
-											fs.readFile('./public/movies/data/'+movieRequest+'/data.js', 'utf8', function (err, data) {
-												if(!err){
-													res.send(data);
-												}else{
-													console.log('Cannot read scraper data', err)
-												}
-											});
-										}else{ 
-											console.log('Error getting movielist', e);
-										};
+									var metaObject = new Metalib(configfileResults.moviepath + movieRequest);
+									metaObject.get(function(metadata, err) {
+										if (err){
+											console.log('Error getting metadata of videofile', err)
+										} else {
+											//console.log('Metadata of file', metadata)
+											duration = metadata.durationsec
+											
+											scraperdataset = { duration:duration, path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+											scraperdata[scraperdata.length] = scraperdataset;
+											var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+											writeToFile(scraperdataJSON);	
+										}
 									});
 								});
-							};
+							} else {
+								//TODO: D.R.Y.
+								scraperdataset = { duration:duration, path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+								scraperdata[scraperdata.length] = scraperdataset;
+								var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+								writeToFile(scraperdataJSON);	
+							}
 						}); 
-					};
+					} else {
+						//TODO: D.R.Y.
+						scraperdataset = { duration:duration, path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+						scraperdata[scraperdata.length] = scraperdataset;
+						var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+						writeToFile(scraperdataJSON);	
+					}
 				});
 			}
 		});
 	};
 	
+	function writeToFile(scraperdataJSON){
+		fs.writeFile('./public/movies/data/'+movieRequest+'/data.js', scraperdataJSON, function(e) {
+			if (!e) {
+				fs.readFile('./public/movies/data/'+movieRequest+'/data.js', 'utf8', function (err, data) {
+					if(!err){
+						res.send(data);
+					}else{
+						console.log('Cannot read scraper data', err)
+					}
+				});
+			}else{ 
+				console.log('Error getting movielist', e);
+			};
+		});
+	}
+	
+	
 	function downloadCache(response,callback){
-		if(typeof response){
+		if (response !== undefined && response !== '' && response !== null) {
 			var size = "w1920";
 			if (configfileResults.highres === 'yes'){
 				size = "w1920"
@@ -279,8 +311,8 @@ exports.post = function(req, res, next){
 			downloader.download(poster, downloadDir);
 			downloader.download(backdrop, downloadDir);
 		}else{
-			var poster = posterpath
-			, backdrop = backdroppath;
+			var poster = poster_path
+			, backdrop = backdrop_path;
 		};
 		callback(poster,backdrop);
 	};

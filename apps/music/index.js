@@ -112,7 +112,7 @@ exports.post = function(req, res, next){
 
 	var albumTitle = null
 	, title = 'No data found...'
-	, thumb = '/movies/css/img/nodata.jpg'
+	, thumb = '/music/css/img/nodata.jpg'
 	, year = 'No data found...'
 	, genre = 'No data found...';
 
