@@ -52,3 +52,25 @@ h1{ margin-top:13px !important; }
 
 .forecast ul li{ line-height:25px;}
 .forecast ul li.weekday{ font-size: 20px; font-weight: bold; line-height: 40px; } 
+
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
+  /* For portrait layouts only */
+	.forecast ul{ 
+		list-style:none;
+		float:left;
+		width: 100px;
+		height: 110px;
+		font-size:12px;
+	}
+}
+
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
+  /* For landscape layouts only */
+	.forecast ul{ 
+		list-style:none;
+		float:left;
+		width: 100px;
+		height: 110px;
+		font-size:12px;
+	}
+}

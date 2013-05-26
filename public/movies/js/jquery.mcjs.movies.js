@@ -141,14 +141,16 @@
 		$('body').css('backgroundColor','#000');
 		$('body').find('#player').addClass('active');
 		
-		// Init player
-		if($('#player').length) $('#player').remove();
-		$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="metadata" width="100%" height="100%" data-setup="{}"> <source src="'+url+'" type="video/webm"></video>');
-	
-		videojs("player").ready(function(){
-			myPlayer = this;
-			myPlayer.play();
-		});
+		if($('#player').length > 1) {
+			$('#player').remove();
+		} else {
+			$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="metadata" width="100%" height="100%" data-setup="{}"> <source src="'+url+'" type="video/webm"></video>');
+		
+			videojs("player").ready(function(){
+				myPlayer = this;
+				myPlayer.play();
+			});
+		}
 	}
 
 	/**** End of custom functions ***/

@@ -25,7 +25,7 @@ var express = require('express')
 , downloader = require('downloader')
 , request = require("request")
 , ffmpeg = require('fluent-ffmpeg')
-, Metalib = require('fluent-ffmpeg').Metadata
+, probe = require('node-ffprobe')
 , rimraf = require('rimraf')
 , util = require('util')
 , helper = require('../../lib/helpers.js')
@@ -58,14 +58,9 @@ exports.index = function(req, res, next){
 };
 
 exports.play = function(req, res){
-
+	
 	var movieTitle = encoder.htmlDecode(req.params.filename)
 	, movie = configfileResults.moviepath + movieTitle;
-
-	var movieData = []
-	, moviedatapath = './public/movies/data/'+movieTitle+'/data.js'
-	, movieData = fs.readFileSync(moviedatapath)
-	, movieDataResults = JSON.parse(movieData);
 		
 	var stat = fs.statSync(movie)
 	, start = 0
@@ -79,29 +74,42 @@ exports.play = function(req, res){
 	if (isNaN(end) || end == 0) end = stat.size-1;
 	if (start > end) return;
 	
-	// Partial http response
-	res.writeHead(206, {
-		'Connection':'close',
-		'Content-Type':'video/webm',
-		'Content-Length':end - start,
-		'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
-		'Transfer-Encoding':'chunked'
-	});
+	probe(movie, function(err, probeData) {
+	
+		console.log(probeData)
+	
+		var durationProbe = JSON.stringify(probeData.streams[0].duration)
+		, totalSec = durationProbe
+		, hours = parseInt( totalSec / 3600 ) % 24
+		, minutes = parseInt( totalSec / 60 ) % 60
+		, seconds = parseInt(totalSec % 60, 10)
+		, result = "-t "+(hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
+			
+		// Partial http response
+		res.writeHead(206, {
+			'Connection':'close',
+			'Content-Type':'video/webm',
+			'Content-Length':end - start,
+			'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
+			'Transfer-Encoding':'chunked'
+		});
 
-	var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000})
-		.toFormat('webm')
-		.withVideoBitrate(1024)
-		.withVideoCodec('libvpx')
-		.addOptions(['-b:v 500k', '-qmin 10', '-qmax 42', '-maxrate 500k', '-bufsize 1000k'])
-		.withAudioBitrate('128k')
-		.withAudioChannels(2)
-		.withAudioCodec('libvorbis')
-		.writeToStream(res, function(retcode, error){
-		if (!error){
-			console.log('file has been converted succesfully',retcode);
-		}else{
-			console.log('file conversion error',error);
-		}
+		var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000})
+			.withVideoBitrate(1024)
+			.withVideoCodec('libvpx')
+			.addOptions(['-quality good', '-cpu-used 2', '-b:v 500k', '-qmin 10', '-qmax 42', '-maxrate 500k', '-bufsize 1000k', result])
+			.withAudioBitrate('128k')
+			.withAudioChannels(2)
+			.withAudioCodec('libvorbis')
+			.toFormat('webm')
+			.writeToStream(res, function(retcode, error){
+			if (!error){
+				console.log('file has been converted succesfully',retcode);
+			}else{
+				console.log('file conversion error',error);
+			}
+		});
+	
 	});
 }
 
@@ -109,7 +117,6 @@ exports.post = function(req, res, next){
 	var movieTitle = null
 	, api_key = '7983694ec277523c31ff1212e35e5fa3'
 	, cdNumber = null
-	, duration = null
 	, id = 'No data found...'
 	, poster_path = '/movies/css/img/nodata.jpg'
 	, backdrop_path = '/movies/css/img/overlay.png'
@@ -229,24 +236,19 @@ exports.post = function(req, res, next){
 									// certification = requestInitialDetails.certification;
 									overview = secondRequestResponse.overview;
 
-									var metaObject = new Metalib(configfileResults.moviepath + movieRequest);
-									metaObject.get(function(metadata, err) {
-										if (err){
-											console.log('Error getting metadata of videofile', err)
-										} else {
-											//console.log('Metadata of file', metadata)
-											duration = metadata.durationsec
-											
-											scraperdataset = { duration:duration, path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
-											scraperdata[scraperdata.length] = scraperdataset;
-											var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-											writeToFile(scraperdataJSON);	
-										}
-									});
+									//console.log('Metadata of file', metadata)
+									duration = metadata.durationsec
+									
+									scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+									scraperdata[scraperdata.length] = scraperdataset;
+									var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+									writeToFile(scraperdataJSON);	
+								
+									
 								});
 							} else {
 								//TODO: D.R.Y.
-								scraperdataset = { duration:duration, path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+								scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
 								scraperdata[scraperdata.length] = scraperdataset;
 								var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
 								writeToFile(scraperdataJSON);	
@@ -254,7 +256,7 @@ exports.post = function(req, res, next){
 						}); 
 					} else {
 						//TODO: D.R.Y.
-						scraperdataset = { duration:duration, path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+						scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
 						scraperdata[scraperdata.length] = scraperdataset;
 						var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
 						writeToFile(scraperdataJSON);	

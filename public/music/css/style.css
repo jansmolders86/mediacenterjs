@@ -126,4 +126,10 @@ body.tracklist{
 
 #player{
 	bottom:0px;
+	z-index:99;
+	visibility:hidden;
+}
+
+#player.show{
+	visibility:visible;
 }

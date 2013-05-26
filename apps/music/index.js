@@ -7,6 +7,7 @@ var express = require('express')
 , ffmpeg = require('fluent-ffmpeg')
 , rimraf = require('rimraf')
 , request = require("request")
+, probe = require('node-ffprobe')
 , helper = require('../../lib/helpers.js')
 , Encoder = require('node-html-encoder').Encoder;
 
@@ -61,6 +62,10 @@ exports.album = function(req, res, next){
 };
 
 exports.track = function(req, res, next){
+	
+	//First end any previous streams
+	//stream.close();
+
 	var decodeTrack = encoder.htmlDecode(req.params.track)
 	if (req.params.album === 'none'){
 		var track = configfileResults.musicpath+decodeTrack
@@ -81,27 +86,41 @@ exports.track = function(req, res, next){
 	if (isNaN(end) || end == 0) end = stat.size-1;
 	if (start > end) return;
 	
-	res.writeHead(206, { // NOTE: a partial http response
-		'Connection':'close',
-		'Content-Type':'audio/mp3',
-		'Content-Length':end - start,
-		'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
-		'Transfer-Encoding':'chunked'
-	});
+	probe(track, function(err, probeData) {
+	
+		var durationProbe = JSON.stringify(probeData.streams[0].duration)
+		, totalSec = durationProbe
+		, hours = parseInt( totalSec / 3600 ) % 24
+		, minutes = parseInt( totalSec / 60 ) % 60
+		, seconds = parseInt(totalSec % 60, 10)
+		, result = "-t "+(hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
+		
+		res.writeHead(206, { // NOTE: a partial http response
+			'Connection':'close',
+			'Content-Type':'audio/mp3',
+			'Content-Length':end - start,
+			'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
+			'Transfer-Encoding':'chunked'
+		});
 
-	var proc = new ffmpeg({ source: track, nolog: true, priority: 1, timeout:15000})
-		.toFormat('mp3')
-		.withAudioBitrate('128k')
-		.withAudioChannels(2)
-		.withAudioCodec('libmp3lame')
-		//.addOptions(['-probesize 900000', '-analyzeduration 0', '-minrate 1024k', '-maxrate 1024k', '-bufsize 1835k', '-t '+duration+' -ss'])
-		.writeToStream(res, function(retcode, error){
-		if (!error){
-			console.log('file has been converted succesfully',retcode);
-		}else{
-			console.log('file conversion error',error);
-		}
+		var proc = new ffmpeg({ source: track, nolog: true, priority: 1, timeout:15000})
+			.toFormat('mp3')
+			.addOptions([result])
+			.addOptions(['-vn', '-analyzeduration 0'])
+			.withAudioBitrate('128k')
+			.withAudioChannels(2)
+			.withAudioCodec('libmp3lame')
+			.writeToStream(res, function(retcode, error){
+			if (!error){
+				console.log('file has been converted succesfully',retcode);
+			}else{
+				console.log('file conversion error',error);
+			}
+		});
+		
 	});
+	
+	
 
 };
 
@@ -174,6 +193,7 @@ exports.post = function(req, res, next){
 				, types = noyear.replace(/320kbps|192kbps|128kbps|mp3|320|192|128/gi,"")
 				, albumTitle = types.replace(/cd [1-9]|cd[1-9]/gi,"");
 				
+				//TODO: Also look in dir for images
 				// mandatory timeout from discogs api
 				setTimeout(function(){
 					helper.xhrCall("http://api.discogs.com/database/search?q="+albumTitle+"&type=release&callback=", function(response) {
@@ -182,10 +202,17 @@ exports.post = function(req, res, next){
 						,requestInitialDetails = requestResponse.results[0];
 						
 						if (requestInitialDetails !== undefined && requestInitialDetails !== '' && requestInitialDetails !== null) {
-							title = requestInitialDetails.title
-							thumb = requestInitialDetails.thumb
-							year = requestInitialDetails.year
-							genre = requestInitialDetails.genre
+							downloadCache(requestInitialDetails,function(cover) {
+								
+								
+								var localImageDir = '/music/data/'+albumRequest+'/'
+								, localCover = cover.match(/[^/]+$/);
+
+								title = requestInitialDetails.title
+								thumb = localImageDir+localCover;
+								year = requestInitialDetails.year
+								genre = requestInitialDetails.genre
+							});
 						}
 						
 						//Setting up array for writing
@@ -213,5 +240,18 @@ exports.post = function(req, res, next){
 				});
 			}
 		});
+		
+		
+		function downloadCache(response,callback){	
+			var cover = response.thumb
+			, downloadDir = './public/music/data/'+albumRequest+'/';
+			
+			downloader.on('done', function(msg) { console.log('done', msg); });
+			downloader.on('error', function(msg) { console.log('error', msg); });
+			downloader.download(cover, downloadDir);
+			callback(cover);
+		};
+		
+		
 	};
 };

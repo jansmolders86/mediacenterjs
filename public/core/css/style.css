@@ -716,10 +716,7 @@ button.ui-keyboard-accept.ui-keyboard-invalid-input:hover { background: #a00; }
 	
 @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
   /* For portrait layouts only */
-	#homepage{display:none;}
-	#wrapper( background:none; background-color:#2C2C2C;)
-	.backdropimg{ display:none !important} 
-	#backdrop{ background:url(/css/img/flip.png) no-repeat #2C2C2C; 50% 50%}
+
 }
 
 @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {

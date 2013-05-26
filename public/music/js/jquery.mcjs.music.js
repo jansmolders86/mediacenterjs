@@ -56,6 +56,11 @@
 	/**** Start of custom functions ***/
 
 	function _getMusicDetials(o){
+	
+		if($("#player").hasClass('show')){
+			$("#player").removeClass('show')
+		};
+	
 		$('ul.music').find("li").each(function() { 
 			var title = $(this).find('.title').html()
 			, cover = $(this).find('.cover')
@@ -124,13 +129,13 @@
 				$('.cover').bind('load', function (event) {
 					//var dominantColor = getDominantColor('.cover')
 					//console.log(dominantColor);
-					//TODO: Make local images before being able to use this
 				});
 			});
 			
 			
 			$('#tracklist').find('li').click(function(e) {
 				e.preventDefault();	
+				$(this).addClass('selected');
 				var track = '/music/track/'+album+'/'+$(this).html();
 				_playTrack(track,album)
 			});
@@ -144,40 +149,25 @@
 	}
 	
 	function _playTrack(track,album){
-		if($('#player').length) $('#player').remove();
-		$('body').append('<audio id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="35" poster="" data-setup="{}"> <source src="'+track+'" type="audio/mp3"></audio>');
-
+		$("#player").addClass('show');
+		
 		videojs("player").ready(function(){
 			var myPlayer = this;
+			myPlayer.src(track)
 			myPlayer.play();
 			myPlayer.on("ended", nextTrack);
 		});
 	}
 	
 	function nextTrack(){
-		var currentTrack = $('ul.music').find('.selected');
-		currentTrack.removeClass('selected');
-		
-		var nextTrack =	currentTrack.next().addClass('selected');
-		
-		var album = nextTrack.find('.title').html();
-		
-		if(album.match(/\.[0-9a-z]{1,5}$/i)){
-			var track = '/music/track/none/'+album
-			, album = 'none';
-			_playTrack(track,album)
-		}else {
-			var track = '/music/track/'+album+'/'+$(this).html();
-			_playTrack(track,album)
-		}
+		var currentTrack = $('#tracklist').find('.selected').removeClass('selected')
+		, nextTrack =	currentTrack.next().addClass('selected').html()
+		, album = $('#tracklist').find('h2').html()
+		, track = '/music/track/'+album+'/'+nextTrack;
+
+		_playTrack(track,album)
 	}
 
-	
-	function _colorBackground(){
-		//TODO: Color background according to albumArt
-	}
-	
-	
 	/**** End of custom functions ***/
 	
 	$.fn.mcjsm = function( method ) {
