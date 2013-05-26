@@ -86,16 +86,17 @@ exports.track = function(req, res, next){
 	
 	res.writeHead(206, { // NOTE: a partial http response
 		'Connection':'close',
-		'Content-Type':'audio/ogg',
+		'Content-Type':'audio/mp3',
 		'Content-Length':end - start,
 		'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
 		'Transfer-Encoding':'chunked'
 	});
 
 	var proc = new ffmpeg({ source: track, nolog: true, priority: 1, timeout:15000})
-		.withAudioCodec('libvorbis')
-		.toFormat('ogg')
-		.addOptions(['-probesize 900000', '-analyzeduration 0' ])
+		.toFormat('mp3')
+		.withAudioBitrate('128k')
+		.withAudioChannels(2)
+		.withAudioCodec('libmp3lame')
 		.writeToStream(res, function(retcode, error){
 		if (!error){
 			console.log('file has been converted succesfully',retcode);
