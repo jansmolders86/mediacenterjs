@@ -82,7 +82,7 @@
 			data: {album : album}
 		}).done(function(data){
 			_hideOtherAlbums();
-			$('body').append('<div id="tracklist"><h2>'+album+'</h2><ul id="tracks"></ul></div>')
+			$('body').append('<div id="tracklist"><h2>'+album+'</h2><ul id="tracks"></ul></div>').addClass('tracklist')
 			
 			for (var i = 0; i < data.length; i++) {
 				$('#tracks').append('<li>'+data[i]+'</li>')
@@ -98,14 +98,37 @@
 	}
 	
 	function _hideOtherAlbums(){
-		$('#musicWrapper, #prev, #next').hide();
+		$('#musicWrapper').hide();
 		$('.backlink').attr('href','/music')
 	}
 	
 	function _playTrack(track,album){
 		if($('#player').length) $('#player').remove();
-		$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="200" poster="" data-setup="{}"> <source src="'+track+'" type="audio/mp3"></video>');
-		_V_("player", {}, function(){});
+		$('body').append('<audio id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="35" poster="" data-setup="{}"> <source src="'+track+'" type="audio/mp3"></audio>');
+
+		videojs("player").ready(function(){
+			var myPlayer = this;
+			myPlayer.play();
+			myPlayer.on("ended", nextTrack);
+		});
+	}
+	
+	function nextTrack(){
+		var currentTrack = $('ul.music').find('.selected');
+		currentTrack.removeClass('selected');
+		
+		var nextTrack =	currentTrack.next().addClass('selected');
+		
+		var album = nextTrack.find('.title').html();
+		
+		if(album.match(/\.[0-9a-z]{1,5}$/i)){
+			var track = '/music/track/none/'+album
+			, album = 'none';
+			_playTrack(track,album)
+		}else {
+			var track = '/music/track/'+album+'/'+$(this).html();
+			_playTrack(track,album)
+		}
 	}
 
 	
