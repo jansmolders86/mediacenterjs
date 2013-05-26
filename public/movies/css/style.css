@@ -65,8 +65,14 @@ body,html{ overflow-y:auto; overflow-x:hidden; }
 .movieposter.focused {
 	border:0;
 }
-.movieposter.focused .overlay,
-.movieposter:hover .overlay{
+
+.movieposter .overlay{
+	width:0;
+	height:0;
+}
+
+.movieposter.showDetails.focused .overlay,
+.movieposter.showDetails:hover .overlay{
 	background:url(img/cover-overlay.png) no-repeat;
 	width:185px;
 	height:278px;
