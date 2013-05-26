@@ -81,9 +81,6 @@ exports.track = function(req, res, next){
 	if (isNaN(end) || end == 0) end = stat.size-1;
 	if (start > end) return;
 	
-	console.log('start',start)
-	console.log('end',end)
-	
 	res.writeHead(206, { // NOTE: a partial http response
 		'Connection':'close',
 		'Content-Type':'audio/mp3',
@@ -97,6 +94,7 @@ exports.track = function(req, res, next){
 		.withAudioBitrate('128k')
 		.withAudioChannels(2)
 		.withAudioCodec('libmp3lame')
+		//.addOptions(['-probesize 900000', '-analyzeduration 0', '-minrate 1024k', '-maxrate 1024k', '-bufsize 1835k', '-t '+duration+' -ss'])
 		.writeToStream(res, function(retcode, error){
 		if (!error){
 			console.log('file has been converted succesfully',retcode);

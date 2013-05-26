@@ -49,7 +49,6 @@
 	function _focusedItem(o){
 		$('.movieposter').on({
 			mouseenter: function() {	
-				$('.movieposters').find("li:first").removeClass("focused");
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(this).addClass("focused");
 				$(".backdropimg").attr("src", newBackground).addClass('fadein');
@@ -62,7 +61,8 @@
 					$('.movieposter').removeClass("focused");
 				}
 			},			
-			focus: function() {				
+			focus: function() {		
+				$(this).addClass("focused");			
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(".backdropimg").attr("src", newBackground).addClass('fadein');
 				
@@ -70,6 +70,9 @@
 			},
 			focusout: function() {
 				$(".backdropimg").removeClass("fadein");
+				if ($('.movieposter.focused').length > 1){
+					$('.movieposter').removeClass("focused");
+				}
 			}
 		});	
 		
@@ -142,14 +145,10 @@
 		if($('#player').length) $('#player').remove();
 		$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="metadata" width="100%" height="100%" data-setup="{}"> <source src="'+url+'" type="video/webm"></video>');
 	
-		_V_("player").ready(function(){
-			myPlayer = this
+		videojs("player").ready(function(){
+			myPlayer = this;
+			myPlayer.play();
 		});
-		/*
-		myPlayer.on("loadedmetadata", function(){
-		  console.log('loadedmetadata',this.loadedmetadata());
-		});
-		*/
 	}
 
 	/**** End of custom functions ***/

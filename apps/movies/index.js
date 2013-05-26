@@ -58,30 +58,14 @@ exports.index = function(req, res, next){
 };
 
 exports.play = function(req, res){
-	var movieData = []
-	, moviedatapath = './public/movies/data/'+req.params.filename+'/data.js'
-	, movieData = fs.readFileSync(moviedatapath)
-	, movieDataResults = JSON.parse(movieData);
-	
-	var stream = configfileResults.moviepath +'/'+movieDataResults.path
-	, movieTitle = encoder.htmlDecode(req.params.filename)
+
+	var movieTitle = encoder.htmlDecode(req.params.filename)
 	, movie = configfileResults.moviepath + movieTitle;
 
-	/*
-	// Fallback to runtime provided by scraper if metadata is empty
-	if(movieDataResults.duration === 0){	
-		if (movieDataResults.runtime === 'No data found...'){
-			duration = ''
-		} else {
-			var runtime = movieDataResults.runtime * 60;
-			console.log('runtime', runtime)
-			duration = 't '+runtime;
-		}	
-	} else {
-		duration = 't '+movieDataResults.duration;
-	}
-	*/
-
+	var movieData = []
+	, moviedatapath = './public/movies/data/'+movieTitle+'/data.js'
+	, movieData = fs.readFileSync(moviedatapath)
+	, movieDataResults = JSON.parse(movieData);
 		
 	var stat = fs.statSync(movie)
 	, start = 0
@@ -97,15 +81,21 @@ exports.play = function(req, res){
 	
 	// Partial http response
 	res.writeHead(206, {
-		'Accept-Ranges': 'bytes',
-		'Content-Length': end - start,
+		'Connection':'close',
+		'Content-Type':'video/webm',
+		'Content-Length':end - start,
 		'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
-		'Content-Type':'video/webm'
+		'Transfer-Encoding':'chunked'
 	});
 
 	var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000})
 		.toFormat('webm')
-		.addOptions(['-probesize 900000', '-analyzeduration 0'])
+		.withVideoBitrate(1024)
+		.withVideoCodec('libvpx')
+		.addOptions(['-b:v 500k', '-qmin 10', '-qmax 42', '-maxrate 500k', '-bufsize 1000k'])
+		.withAudioBitrate('128k')
+		.withAudioChannels(2)
+		.withAudioCodec('libvorbis')
 		.writeToStream(res, function(retcode, error){
 		if (!error){
 			console.log('file has been converted succesfully',retcode);

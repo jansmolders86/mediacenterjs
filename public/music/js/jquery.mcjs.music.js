@@ -32,6 +32,7 @@
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
 			
+			_focusedItem(o);
 			_getMusicDetials(o);
 			
 			$('ul.music').find('li').click(function(e) {
@@ -56,23 +57,45 @@
 
 	function _getMusicDetials(o){
 		$('ul.music').find("li").each(function() { 
-			var title = $(this).find('.title').html();
-			var cover = $(this).find('.cover');
-			_handleMusic(o, title, cover);
+			var title = $(this).find('.title').html()
+			, cover = $(this).find('.cover')
+			, album = $(this);
+			_handleMusic(o, title, cover, album);
 		});
 	}
 
-	function _handleMusic(o, title, cover){
-		console.log(title)
+	function _handleMusic(o, title, cover, album){
 		$.ajax({
 			url: '/music/post/', 
 			type: 'post',
 			data: {albumTitle : title}
 		}).done(function(data){
 			var albumData = $.parseJSON(data);
+			album.addClass('coverfound')
 			cover.attr('src','');	
-			cover.attr('src',albumData[0].thumb).addClass('coverfound');
+			cover.attr('src',albumData[0].thumb);
 		});
+	}
+	
+	function _focusedItem(o){
+		$('ul.music').find('li').on({
+			mouseenter: function() {	
+				$(this).addClass("focused");
+			},
+			mouseleave: function() {
+				if ($('.movieposter.focused').length > 1){
+					$('.movieposter').removeClass("focused");
+				}
+			},			
+			focus: function() {				
+				$(this).addClass("focused");
+			},
+			focusout: function() {
+				if ($('.movieposter.focused').length > 1){
+					$('.movieposter').removeClass("focused");
+				}
+			}
+		});	
 	}
 	
 	function _getAlbum(album){
@@ -82,18 +105,36 @@
 			data: {album : album}
 		}).done(function(data){
 			_hideOtherAlbums();
-			$('body').append('<div id="tracklist"><h2>'+album+'</h2><ul id="tracks"></ul></div>').addClass('tracklist')
+
+			$('body').append('<div id="tracklist"><div class="info"><img src="" class="cover"/></div><h2>'+album+'</h2><ul id="tracks"></ul></div>').addClass('tracklist')
 			
 			for (var i = 0; i < data.length; i++) {
 				$('#tracks').append('<li>'+data[i]+'</li>')
 			}	
+			
+			$.ajax({
+				url: '/music/post/', 
+				type: 'post',
+				data: {albumTitle : album}
+			}).done(function(data){
+				var albumData = $.parseJSON(data);
+				$('#tracklist').find('img.cover').attr('src',albumData[0].thumb);
+				
+								
+				$('.cover').bind('load', function (event) {
+					//var dominantColor = getDominantColor('.cover')
+					//console.log(dominantColor);
+					//TODO: Make local images before being able to use this
+				});
+			});
+			
 			
 			$('#tracklist').find('li').click(function(e) {
 				e.preventDefault();	
 				var track = '/music/track/'+album+'/'+$(this).html();
 				_playTrack(track,album)
 			});
-			
+
 		});	
 	}
 	
