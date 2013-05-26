@@ -67,20 +67,27 @@ ul.music li a{
 #tracklist{
 	color: #fff;
 	position: absolute;
-	top: 200px;
+	top: 100px;
 	left: 100px;
+	height:350px;
+	width:100%;
+	overflow-y:auto;
 	z-index:9;
 }
 #tracklist ul{list-style:none; margin:0; padding: 0 3px;}
 #tracklist li{
 	cursor:pointer;
 	line-height:25px;
+	color:#747474;
+	margin-bottom:5px;
+	font-family:arial;  
+	font-size:14px;
 }
 
-#tracklist li{ font-family:arial; color:#f5f5f5; font-size:14px;}
+.tracklist h2{
+	color:#747474;
+}
 
 #player{
-	postion:absolute;
-	bottom:50px;
-	left:100px;
+	bottom:0px;
 }
