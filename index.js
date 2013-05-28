@@ -79,7 +79,7 @@ app.get("/", function(req, res, next) {
 });
 
 //	Handle settings. Because this is done in one place,
-//	I decided to keep it in the initial app.js file. 
+//	keep it in the initial app.js file. 
 //	TODO: Add extend to settings from app
 
 app.get("/settings", function(req, res, next) {  
@@ -129,7 +129,6 @@ function writeSettings(req, res, callback){
 	
 	fs.writeFile(configfilepath, JSON.stringify(myData, null, 4), function(e) {
 		if(e) {
-			// Respond to client with sever error
 			res.send(500);
 			console.log('Error wrting settings',err);
 		} else {
