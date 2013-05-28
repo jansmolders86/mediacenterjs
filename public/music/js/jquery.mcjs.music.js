@@ -145,7 +145,12 @@
 	
 	function _hideOtherAlbums(){
 		$('#musicWrapper').hide();
-		$('.backlink').attr('href','/music')
+		$('.backlink').click(function(e) {
+			// keeps the track playing but let's the user browse other albums
+			e.preventDefault();	
+			$('#tracklist').remove();
+			$('#musicWrapper').show();
+		});
 	}
 	
 	function _playTrack(track,album){
@@ -165,7 +170,11 @@
 		, album = $('#tracklist').find('h2').html()
 		, track = '/music/track/'+album+'/'+nextTrack;
 
-		_playTrack(track,album)
+		if (nextTrack !== undefined){
+			_playTrack(track,album)
+		}else{
+			return
+		}
 	}
 
 	/**** End of custom functions ***/
