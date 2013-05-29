@@ -400,6 +400,7 @@ a.btn{
 	font-size:18px;
 	width:123px;
 	border:0;
+	-webkit-appearance:none;
 }
 
 

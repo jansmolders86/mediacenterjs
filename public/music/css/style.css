@@ -73,6 +73,12 @@ ul.music li.focused{
 	border:0;
 }
 
+ul.music li.playing a{
+	background:url(img/playing.png) no-repeat left 8px;
+	padding-left:25px;
+	width:100px;
+}
+
 body.tracklist{
 	overflow:hidden;
 }
@@ -82,7 +88,7 @@ body.tracklist{
 	position: absolute;
 	top: 100px;
 	left: 100px;
-	height:100%;
+	height:80%;
 	width: 100%;
 	overflow-y:auto;
 	z-index:9;
@@ -99,7 +105,8 @@ body.tracklist{
 	list-style:none; 
 	margin:0; 
 	padding: 0 3px;
-	height:350px;
+	height:100%;
+	width:80%;
 	overflow-y:auto
 }
 
@@ -110,6 +117,11 @@ body.tracklist{
 	margin-bottom:5px;
 	font-family:arial;  
 	font-size:14px;
+	padding:5px 0 5px 35px;
+}
+
+#tracklist li.selected{
+	background:url(img/playing.png) no-repeat 10px 10px #ccc;
 }
 
 #tracklist .info{
@@ -122,6 +134,9 @@ body.tracklist{
 #tracklist h2{
 	color:#747474;
 	font-size:18px;
+	padding:5px 0 5px 35px;
+	display: block;
+	float: left;
 }
 
 #player{

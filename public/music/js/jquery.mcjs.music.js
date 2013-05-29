@@ -43,7 +43,8 @@
 				if(album.match(/\.[0-9a-z]{1,5}$/i)){
 					var track = '/music/track/none/'+album
 					, album = 'none';
-					_hideOtherAlbums();
+					
+					$(this).addClass('playing');
 					_playTrack(track,album)
 				}else {
 					_getAlbum(album);
@@ -135,6 +136,11 @@
 			
 			$('#tracklist').find('li').click(function(e) {
 				e.preventDefault();	
+				$('#tracklist').find('li').each(function(){
+					if ($(this).hasClass('selected')){
+						$(this).removeClass('selected');
+					}
+				});
 				$(this).addClass('selected');
 				var track = '/music/track/'+album+'/'+$(this).html();
 				_playTrack(track,album)
