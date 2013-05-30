@@ -76,8 +76,6 @@ exports.play = function(req, res){
 	
 	probe(movie, function(err, probeData) {
 	
-		console.log(probeData)
-	
 		var durationProbe = JSON.stringify(probeData.streams[0].duration)
 		, totalSec = durationProbe
 		, hours = parseInt( totalSec / 3600 ) % 24
@@ -94,12 +92,11 @@ exports.play = function(req, res){
 			'Transfer-Encoding':'chunked'
 		});
 
-		var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000})
-			.withVideoBitrate(1024)
+		
+		var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
 			.withVideoCodec('libvpx')
-			.addOptions(['-quality good', '-cpu-used 2', '-b:v 500k', '-qmin 10', '-qmax 42', '-maxrate 500k', '-bufsize 1000k', result])
-			.withAudioBitrate('128k')
-			.withAudioChannels(2)
+			.addOptions(['-bf 8','-bt 240k','-preset fast','-strict -2','-b:v 320K','-bufsize 62000', '-maxrate 620k','-movflags +empty_moov','-y'])
+			.withAudioBitrate('192k')
 			.withAudioCodec('libvorbis')
 			.toFormat('webm')
 			.writeToStream(res, function(retcode, error){
@@ -109,7 +106,21 @@ exports.play = function(req, res){
 				console.log('file conversion error',error);
 			}
 		});
-	
+		
+		/*
+		var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+			.addOptions(['-y','-vcodec libx264','-bf 8','-bt 240k','-preset fast','-strict -2','-b:v 320K','-bufsize 62000', '-maxrate 620k','-acodec aac','-ab 128k','-movflags +empty_moov'])
+			.toFormat('mp4')
+			.writeToStream(res, function(retcode, error){
+			if (!error){
+				console.log('file has been converted succesfully',retcode);
+			}else{
+				console.log('file conversion error',error);
+			}
+		});
+		*/
+		
+		
 	});
 }
 
