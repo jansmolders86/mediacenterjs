@@ -156,6 +156,8 @@
 				});
 
 				$.idleTimer(timeout);
+			} else if(data.screensaver === 'off'){
+				return;
 			}
 		});
 	}
