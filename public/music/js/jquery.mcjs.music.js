@@ -149,8 +149,7 @@
 		$('img.cover').bind('load', function (event) {
 			var image = event.target;
 			var dominantColor = getDominantColor(image);
-			console.log('dominantColor',dominantColor);
-			
+
 			$('#backdrop').css('backgroundImage','linear-gradient(top, rgb(233,233,233) 35%, rgb('+dominantColor+') 84%)');
 		});
 	}
