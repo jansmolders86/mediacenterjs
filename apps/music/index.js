@@ -105,9 +105,8 @@ exports.track = function(req, res, next){
 
 		var proc = new ffmpeg({ source: track, nolog: true, priority: 1, timeout:15000})
 			.toFormat('mp3')
-			.addOptions([result])
 			.addOptions(['-vn', '-analyzeduration 0'])
-			.withAudioBitrate('128k')
+			.withAudioBitrate('192k')
 			.withAudioChannels(2)
 			.withAudioCodec('libmp3lame')
 			.writeToStream(res, function(retcode, error){

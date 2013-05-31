@@ -1,0 +1,12 @@
+[
+    "01-the_basics-fear_of_failure.mp3",
+    "02-the_basics-with_this_ship.mp3",
+    "03-the_basics-the_day_mairead_goes_away.mp3",
+    "04-the_basics-home_again.mp3",
+    "05-the_basics-what_do_you_see_in_me.mp3",
+    "06-the_basics-the_no_1_cause_of_death_amongst_youth_today.mp3",
+    "07-the_basics-trouble_in_his_head.mp3",
+    "08-the_basics-the_executioner.mp3",
+    "09-the_basics-keep_the_door_open.mp3",
+    "10-the_basics-all_or_nothing.mp3"
+]

@@ -1,7 +1,7 @@
 {
     "moviepath": "C:/temp/",
     "highres": "yes",
-    "musicpath": "C:/Users/jan.smolders/Music/",
+    "musicpath": "C:/Users/Jan/Music/",
     "tvpath": "tbd",
     "language": "nl",
     "onscreenkeyboard": "no",

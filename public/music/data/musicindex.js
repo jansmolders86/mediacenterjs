@@ -1,3 +1,25 @@
 [
-    "Daft Punk - Random Access Memories"
+    "2005 - A Certain Trigger",
+    "2011 - Walkin Man (The Best of Seasick Steve)",
+    "Amon Tobin - ISAM (320kbps Mp3)",
+    "Bastille - bad blood",
+    "Bloc Party - Silent Alarm",
+    "Coldplay mylo xyloto",
+    "Crystal Fighters - Cave Rave (2013)",
+    "Daft Punk - Alive 2007",
+    "Daft Punk - Random Access Memories (2013) [MP3 192]",
+    "Deadmau5 - Album Title Goes Here",
+    "Deadmau5 - Deadmau5",
+    "Giorgio Moroder - Output - Brooklyn - N.Y.C - U.S.A - May 2013.mp3",
+    "Hugh Laurie - Didnt It Rain",
+    "Imagine Dragons - Night Visions",
+    "Kid Cudi - Indicud",
+    "Mark Knopfler - Sailing To Philadelphia",
+    "Mozes And The Firstborn",
+    "Our Earthly Pleasures",
+    "Richard Ashcroft - Human Conditions",
+    "Satellite Stories - Phrases To Break The Ice",
+    "Tenacious D - Rize Of The Fenix (2012) Disnoxxio 320kbs",
+    "Tenacious D - The Pick Of Destiny",
+    "The Basics -Keep Your Friends Close"
 ]
