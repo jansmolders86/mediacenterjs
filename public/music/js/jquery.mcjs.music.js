@@ -45,7 +45,11 @@
 					, album = 'none';
 					
 					$(this).addClass('playing');
-					_dominantColor();
+
+					var image = $('.playing').find('img')
+					, dominantColor = getDominantColor(image);
+					$('#backdrop').css('backgroundImage','linear-gradient(top, rgb(233,233,233) 35%, rgb('+dominantColor+') 84%)');
+					
 					_playTrack(track,album);
 				}else {
 					_getAlbum(album);
