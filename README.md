@@ -78,15 +78,6 @@ What do I need to have installed to run this?
 * A modern browser like Chrome or Firefox
 * An internet connection
 
-What can the movie browser/player do? 
--------------
-
-Once you specify the location of your movies, the movie browser can get all the information you might need including runtime, plot, genre, backdrop and movie poster (more to come). 
-Once you browse your movie collection, the system will download all the information and store it locally. This means that the building of the movie list index only takes a couple of milliseconds.
-After that the only slight loading time the system has, is when a movie is requested for the first time (because the data has to be downloaded).
-
-When a playback is requested, the server transcodes the movie to the webm open standard so the html5 player can play the movie in the browser.
-
 
 Partial documentation 
 ==========================
@@ -96,7 +87,7 @@ A complete documentation will be available when the project reaches Beta status.
 Setup
 -------------
 After you have downloaded MediacenterJS, click on the .bat file (in Windows) to start the project. 
-Or make sure you've browsed to the root of the server in the terminal/command prompt and type node index.
+Or make sure you have browsed to the root of MediaCenterJS in the terminal/command prompt and type 'node index'.
 
 __Please make sure you've installed NodeJS and FFmpeg first!__
 
@@ -108,6 +99,18 @@ Install NodeJS: http://nodejs.org/download/
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 After the initial setup has been completed, restart the server. MediacenterJS will be available on the port you have specified and the language you have chosen.
+
+
+What can the movie browser/player do? 
+-------------
+
+Once you specify the location of your movies, the movie browser can get all the information you might need including runtime, plot, genre, backdrop and movie poster (more to come). 
+Once you browse your movie collection, the system will download all the information and store it locally. This means that the building of the movie list index only takes a couple of milliseconds.
+After that the only slight loading time the system has, is when a movie is requested for the first time (because the data has to be downloaded).
+
+When a playback is requested, the server transcodes the movie to the webm open standard so the html5 player can play the movie in the browser.
+
+
 
 How should I format my movie library and files?
 -------------
@@ -142,6 +145,23 @@ But it is best to avoid messy names in the first place.
 If a movie is split into multiple pieces, you can specify it in the filename as well. It is best to format it like this:
 
 	Fight Club (1999) CD1.avi
+	
+What can the music player do? 
+-------------
+
+Once you specify the location of your music, the music will look in the specified directory for mp3 files. But like the movie payer only 2 levels deep. 
+If you add an image in the directory and name it  appropriatluy this image will be used by the music player.
+
+So if it is a single like a live recording or a mixtape, just add an image with exacly the same name as the mp3 in the same directory. For example:
+
+	01 - Giorgio Moroder - Output - Brooklyn - N.Y.C.jpg
+	
+If you have an album, the music player will look for a image file with the following names: "cover", "front", "album" or "art"
+This image will be copied to the cache of MCJS so it can be used without restrictions. So you can even delete the image in the local dir and as long as you don't clear the cache, the image will be used.
+
+If no image is provided, the player will contact the website Discogs and try to get the art there. 
+
+Once you start playback, the background will change according to the dominant color of the album art. 
 
 
 What is a MCJS App and how will it work?

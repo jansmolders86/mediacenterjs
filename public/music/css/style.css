@@ -16,25 +16,18 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-
 #backdrop{
 	background-image: linear-gradient(bottom, rgb(233,233,233) 31%, rgb(249,249,249) 66%);
 	background-image: -o-linear-gradient(bottom, rgb(233,233,233) 31%, rgb(249,249,249) 66%);
 	background-image: -moz-linear-gradient(bottom, rgb(233,233,233) 31%, rgb(249,249,249) 66%);
 	background-image: -webkit-linear-gradient(bottom, rgb(233,233,233) 31%, rgb(249,249,249) 66%);
 	background-image: -ms-linear-gradient(bottom, rgb(233,233,233) 31%, rgb(249,249,249) 66%);
-	opacity:0.5;
+	opacity:0.9;
 	width:100%;
 	height:100%;
 }
 
-ul.music{
-	list-style:none; 
-	width:100%;
-	min-height:700px;
-}
-
+ul.music{ list-style:none; width:100%; min-height:700px; }
 ul.music li img{
 	width:140px;
 	height:140px;
@@ -48,19 +41,16 @@ ul.music li{
 	width:140px;
 	height:180px;
 	border-radius:2px; 
-	-moz-box-shadow: 0 2px 5px #888;
-	-webkit-box-shadow: 0 2px 5px #888;
-	box-shadow: 0 2px 5px #888;
+	-moz-box-shadow: 0 2px 5px #a2a2a2;
+	-webkit-box-shadow: 0 2px 5px #a2a2a2;
+	box-shadow: 0 2px 5px #a2a2a2;
 	position:relative;
-	margin:0 20px 20px 0;
+	margin:0 10px 10px 0;
 	cursor:pointer;
 	float:left;
 }
 
-ul.music .overlay{
-	width:0;
-	height:0;
-}
+ul.music .overlay{ width:0; height:0; }
 
 ul.music li.coverfound:hover .overlay{
 	position:absolute;
@@ -81,19 +71,10 @@ ul.music li a{
 	overflow:hidden;
 }
 
-ul.music li.focused{
-	border:0;
-}
+ul.music li.focused{ border:0; }
+ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; padding-left:25px; width:100px; }
 
-ul.music li.playing a{
-	background:url(img/playing.png) no-repeat left 8px;
-	padding-left:25px;
-	width:100px;
-}
-
-body.tracklist{
-	overflow:hidden;
-}
+body.tracklist{ overflow:hidden; }
 
 #tracklist{
 	color: #fff;
@@ -132,13 +113,8 @@ body.tracklist{
 	padding:5px 0 5px 35px;
 }
 
-#tracklist li:hover{
-	background:#e5e5e5;
-}
-
-#tracklist li.selected{
-	background:url(img/playing.png) no-repeat 10px 10px #ccc;
-}
+#tracklist li:hover{ background:#e5e5e5; }
+#tracklist li.selected{	background:url(img/playing.png) no-repeat 10px 10px #ccc; }
 
 #tracklist .info{
 	height:350px;
@@ -155,12 +131,5 @@ body.tracklist{
 	float: left;
 }
 
-#player{
-	bottom:0px;
-	z-index:99;
-	visibility:hidden;
-}
-
-#player.show{
-	visibility:visible;
-}
+#player{ bottom:0px; z-index:99; visibility:hidden; }
+#player.show{ visibility:visible; }
