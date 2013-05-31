@@ -132,7 +132,12 @@
 					}
 				break;
 				case 32 : 
-					//spacebar
+					videojs("player").on("play", function(){
+						videojs("player").pause();
+					});
+					videojs("player").on("pause", function(){
+						videojs("player").play();
+					});
 				break;
 			}
 		});

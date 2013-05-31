@@ -122,7 +122,7 @@ body.tracklist{ overflow:hidden; }
 }
 
 #tracklist li:hover{ background:#e5e5e5; }
-#tracklist li.selected{	background:url(img/playing.png) no-repeat 10px 10px #ccc; }
+#tracklist li.selected{	background:url(img/playing.png) no-repeat 10px 10px #e5e5e5; }
 
 #tracklist .info{
 	height:350px;
@@ -138,6 +138,8 @@ body.tracklist{ overflow:hidden; }
 	display: block;
 	float: left;
 }
+
+a.backlink{margin-top:10px;}
 
 #player{ bottom:0px; z-index:99; visibility:hidden; }
 #player.show{ visibility:visible; }
