@@ -32,7 +32,6 @@ html(lang="en")
 				$('body').mcjsm();
 			});
 	body
-		#backdrop
 		#header
 			a.backlink(href="/") 
 				img(src="/core/icons/back.png")
@@ -47,6 +46,7 @@ html(lang="en")
 							li
 								img(src="").cover
 								.overlay
-								a.title= album	
+								a.title= album						
+		#eq						
 		video#player.video-js.vjs-default-skin(controls, preload="metadata", width="100%", height="33", data-setup="{}") %
 			source(src="",type="audio/mp3")

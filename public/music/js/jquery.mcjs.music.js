@@ -27,7 +27,10 @@
 			var o = $.extend(true, {}, opts, $that.data(opts.datasetKey));
 				
 			// add data to the defaults (e.g. $node caches etc)	
-			o = $.extend(true, o, { $that: $that, movielocation: undefined});
+			o = $.extend(true, o, { 
+				$that: $that, 
+				interval : null
+			});
 			
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
@@ -53,15 +56,13 @@
 				
 					$(this).addClass('playing');
 					$(this).addClass('selected');
-				
-					
+
 					var image = $('.playing').find('img')
-					, dominantColor = getDominantColor(image);
-					$('#backdrop').css('backgroundImage','linear-gradient(top, rgb(233,233,233) 35%, rgb('+dominantColor+') 84%)');
+					 _dominantColor(o,image);
 					
-					_playTrack(track,album);
+					_playTrack(o,track,album);
 				}else {
-					_getAlbum(album);
+					_getAlbum(o,album);
 				}
 			});
 			
@@ -118,13 +119,13 @@
 		});	
 	}
 	
-	function _getAlbum(album){
+	function _getAlbum(o,album){
 		$.ajax({
 			url: '/music/album/', 
 			type: 'post',
 			data: {album : album}
 		}).done(function(data){
-			_hideOtherAlbums();
+			_hideOtherAlbums(o);
 
 			$('body').append('<div id="tracklist"><div class="info"><img src="" class="cover"/></div><h2>'+album+'</h2><ul id="tracks"></ul></div>').addClass('tracklist')
 			
@@ -139,7 +140,10 @@
 			}).done(function(data){
 				var albumData = $.parseJSON(data);
 				$('#tracklist').find('img.cover').attr('src',albumData[0].thumb);
-				_dominantColor();
+				$('img.cover').bind('load', function (event) {
+					var image = event.target;
+					 _dominantColor(o,image);
+				});		
 			});
 			
 			
@@ -152,40 +156,61 @@
 				});
 				$(this).addClass('selected');
 				var track = '/music/track/'+album+'/'+$(this).html();
-				_playTrack(track,album)
+				_playTrack(o,track,album)
 			});
 
 		});	
 	}
 	
-	function _dominantColor(){
-		$('img.cover').bind('load', function (event) {
-			var image = event.target;
-			var dominantColor = getDominantColor(image);
-
-			$('#backdrop').css('backgroundImage','linear-gradient(top, rgb(233,233,233) 35%, rgb('+dominantColor+') 84%)');
-		});
-	}
-	
-	function _hideOtherAlbums(){
+	function _hideOtherAlbums(o){
 		$('#musicWrapper').hide();
 		$('.backlink').click(function(e) {
-			// keeps the track playing but let's the user browse other albums
-			e.preventDefault();	
-			$('#tracklist').remove();
-			$('#musicWrapper').show();
+			if ($('#tracklist').is(':hidden')){	
+				$(this).attr('href','/')
+			} else if ($('#tracklist').is(':visible')) {	
+				e.preventDefault();	
+				var play = false;
+				_fluctuate(o, play);
+				
+				// keeps the track playing but let's the user browse other albums
+				$('#eq').css('height',1)
+				$('#tracklist').remove();
+				$('body').removeClass('tracklist')
+				$('#musicWrapper').fadeIn();
+			}
 		});
 	}
 	
-	function _playTrack(track,album){
+	function _playTrack(o,track,album){
 		$("#player").addClass('show');
 		
 		videojs("player").ready(function(){
 			var myPlayer = this;
-			myPlayer.src(track)
+			myPlayer.src(track);
 			myPlayer.play();
+			
 			myPlayer.on("ended", _nextTrack);
+			
+			myPlayer.on("play", function(){
+				var play = true;
+				_fluctuate(o, play);
+			});
+
+			myPlayer.on("pause", function(){
+				var play = false;
+				_fluctuate(o, play);
+			});
+
+			$(document).keydown(function(e){
+				switch(e.keyCode) {
+					case 32 : 
+						myPlayer.pause();
+					break;
+				}
+			});
+			
 		});
+
 	}
 	
 	function _nextTrack(){
@@ -195,11 +220,36 @@
 		, track = '/music/track/'+album+'/'+nextTrack;
 
 		if (nextTrack !== undefined){
-			_playTrack(track,album)
+			_playTrack(o,track,album)
 		}else{
 			return
 		}
 	}
+	
+	
+	function _dominantColor(o,image){
+		var dominantColor = getDominantColor(image);
+		$('#eq').css('backgroundImage','linear-gradient(top, rgb(246,246,246) 35%, rgb('+dominantColor+') 75%)');
+		$('#header').css('borderBottom','5px solid rgb('+dominantColor+')');
+	}
+	
+	
+					
+	function _fluctuate(o,play){	
+		console.log(play)
+		var timerInterval = 150
+		if (play === false){
+			window.clearInterval(o.interval);	
+		} else {
+			o.interval = window.setInterval(timer, timerInterval);	
+		}
+		
+		function timer() {
+			var rand = Math.floor(Math.random()* 120);
+			$('#eq').animate({height:rand}, timerInterval);
+		}
+	}
+	
 
 	/**** End of custom functions ***/
 	

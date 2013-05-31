@@ -16,7 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#backdrop{
+body{position:relative;}
+
+#eq{
 	background-image: linear-gradient(bottom, rgb(233,233,233) 31%, rgb(249,249,249) 66%);
 	background-image: -o-linear-gradient(bottom, rgb(233,233,233) 31%, rgb(249,249,249) 66%);
 	background-image: -moz-linear-gradient(bottom, rgb(233,233,233) 31%, rgb(249,249,249) 66%);
@@ -24,8 +26,14 @@
 	background-image: -ms-linear-gradient(bottom, rgb(233,233,233) 31%, rgb(249,249,249) 66%);
 	opacity:0.9;
 	width:100%;
-	height:100%;
+	height:1px;
+	width:100%;
+	position:absolute;
+	bottom:0;
+	left:0;	
 }
+
+
 
 ul.music{ list-style:none; width:100%; min-height:700px; margin-top:50px; }
 ul.music li img{
@@ -133,3 +141,5 @@ body.tracklist{ overflow:hidden; }
 
 #player{ bottom:0px; z-index:99; visibility:hidden; }
 #player.show{ visibility:visible; }
+
+#header{border-bottom:5px solid #fff;}
