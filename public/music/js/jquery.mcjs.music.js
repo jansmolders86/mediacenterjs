@@ -37,15 +37,24 @@
 			
 			$('ul.music').find('li').click(function(e) {
 				e.preventDefault();	
-				$(this).addClass('selected');
+				
+				$('ul.music').find('li').each(function(){
+					if($('ul.music').find('li').hasClass('playing') || $('ul.music').find('li').hasClass('selected')){
+						$('ul.music').find('li').removeClass('playing');
+						$('ul.music').find('li').removeClass('selected');
+					}
+				});
+
 				var album = $(this).find('.title').html();
 				
 				if(album.match(/\.[0-9a-z]{1,5}$/i)){
 					var track = '/music/track/none/'+album
 					, album = 'none';
-					
+				
 					$(this).addClass('playing');
-
+					$(this).addClass('selected');
+				
+					
 					var image = $('.playing').find('img')
 					, dominantColor = getDominantColor(image);
 					$('#backdrop').css('backgroundImage','linear-gradient(top, rgb(233,233,233) 35%, rgb('+dominantColor+') 84%)');

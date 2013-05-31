@@ -27,7 +27,7 @@
 	height:100%;
 }
 
-ul.music{ list-style:none; width:100%; min-height:700px; }
+ul.music{ list-style:none; width:100%; min-height:700px; margin-top:50px; }
 ul.music li img{
 	width:140px;
 	height:140px;
@@ -89,8 +89,8 @@ body.tracklist{ overflow:hidden; }
 
 #tracklist img.cover{
 	float:left;
-	width:140px;
-	height:140px;
+	width:130px;
+	height:130px;
 	padding: 20px 20px 20px 0;
 }
 
