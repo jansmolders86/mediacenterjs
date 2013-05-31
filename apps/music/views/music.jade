@@ -18,7 +18,9 @@ html(lang="en")
 			.vjs-fade-out { opacity: 1 !important; visibility: visible !important; }
 			.vjs-fullscreen-control{visibility:hidden!important;}
 			
-		script(src="/music/js/plugins/color-thief.js")
+		script(src="/music/js/color-thief.js")
+		script(src="/music/js/quantize.js")
+		script(src="/music/js/jquery.css3finalize.min.js")
 
 		// App specific
 		link(rel='stylesheet', href='/music/css/style.css')
@@ -28,11 +30,9 @@ html(lang="en")
 			$(document).ready(function(){
 				$('body').mcjs();
 				$('body').mcjsm();
-
 			});
 	body
 		#backdrop
-			img.backdropimg(src="/core/css/img/homepage.jpg")
 		#header
 			a.backlink(href="/") 
 				img(src="/core/icons/back.png")

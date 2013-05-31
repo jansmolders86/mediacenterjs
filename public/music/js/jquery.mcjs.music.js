@@ -45,7 +45,8 @@
 					, album = 'none';
 					
 					$(this).addClass('playing');
-					_playTrack(track,album)
+					_dominantColor();
+					_playTrack(track,album);
 				}else {
 					_getAlbum(album);
 				}
@@ -125,12 +126,7 @@
 			}).done(function(data){
 				var albumData = $.parseJSON(data);
 				$('#tracklist').find('img.cover').attr('src',albumData[0].thumb);
-				
-								
-				$('.cover').bind('load', function (event) {
-					//var dominantColor = getDominantColor('.cover')
-					//console.log(dominantColor);
-				});
+				_dominantColor();
 			});
 			
 			
@@ -147,6 +143,16 @@
 			});
 
 		});	
+	}
+	
+	function _dominantColor(){
+		$('img.cover').bind('load', function (event) {
+			var image = event.target;
+			var dominantColor = getDominantColor(image);
+			console.log('dominantColor',dominantColor);
+			
+			$('#backdrop').css('backgroundImage','linear-gradient(top, rgb(233,233,233) 35%, rgb('+dominantColor+') 84%)');
+		});
 	}
 	
 	function _hideOtherAlbums(){
@@ -166,11 +172,11 @@
 			var myPlayer = this;
 			myPlayer.src(track)
 			myPlayer.play();
-			myPlayer.on("ended", nextTrack);
+			myPlayer.on("ended", _nextTrack);
 		});
 	}
 	
-	function nextTrack(){
+	function _nextTrack(){
 		var currentTrack = $('#tracklist').find('.selected').removeClass('selected')
 		, nextTrack =	currentTrack.next().addClass('selected').html()
 		, album = $('#tracklist').find('h2').html()
