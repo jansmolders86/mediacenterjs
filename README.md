@@ -49,7 +49,6 @@ What's coming up
 =================
 
 * Better transcoding handling
-* More thorough error handling
 * Music styling and playback features
 
 What's not working
@@ -149,7 +148,7 @@ If a movie is split into multiple pieces, you can specify it in the filename as 
 What can the music player do? 
 -------------
 
-Once you specify the location of your music, the music will look in the specified directory for mp3 files. But like the movie payer only 2 levels deep. 
+Once you specify the location of your music, the music will look in the specified directory for mp3 files. But like the movie payer only two levels deep. 
 If you add an image in the directory and name it  appropriatluy this image will be used by the music player.
 
 So if it is a single like a live recording or a mixtape, just add an image with exacly the same name as the mp3 in the same directory. For example:
