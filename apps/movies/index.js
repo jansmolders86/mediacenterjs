@@ -71,32 +71,26 @@ exports.play = function(req, res){
 		start = parseInt(range.slice(range.indexOf('bytes=')+6, range.indexOf('-')));
 		end = parseInt(range.slice(range.indexOf('-')+1, range.length));
 	}
-	if (isNaN(end) || end == 0) end = stat.size-1;
+	if (isNaN(end) || end === 0) end = stat.size-1;
 	if (start > end) return;
+
+	// Partial http response
+	res.writeHead(206, {
+		'Connection':'close',
+		'Content-Type':'video/flv',
+		'Content-Length':end - start,
+		'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
+		'Transfer-Encoding':'chunked'
+	});
 	
 	probe(movie, function(err, probeData) {
 	
-		var durationProbe = JSON.stringify(probeData.streams[0].duration)
-		, totalSec = durationProbe
-		, hours = parseInt( totalSec / 3600 ) % 24
-		, minutes = parseInt( totalSec / 60 ) % 60
-		, seconds = parseInt(totalSec % 60, 10)
-		, result = "-t "+(hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
-			
-		// Partial http response
-		res.writeHead(206, {
-			'Connection':'close',
-			'Content-Type':'video/webm',
-			'Content-Length':end - start,
-			'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
-			'Transfer-Encoding':'chunked'
-		});
-
-		
+		var duration =  '-metadata title="'+probeData.streams[0].duration+'"'
+		/*
 		var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
 			.withVideoCodec('libvpx')
-			.addOptions(['-bf 8','-bt 240k','-preset fast','-strict -2','-b:v 320K','-bufsize 62000', '-maxrate 620k','-movflags +empty_moov','-y'])
-			.withAudioBitrate('192k')
+			.addOptions(['-bf 8','-bt copy','-preset fast','-strict -2','-b:v copy','-bufsize 62000', '-maxrate 620k','-movflags +empty_moov','-y'])
+			.withAudioBitrate('copy')
 			.withAudioCodec('libvorbis')
 			.toFormat('webm')
 			.writeToStream(res, function(retcode, error){
@@ -107,9 +101,9 @@ exports.play = function(req, res){
 			}
 		});
 		
-		/*
+		
 		var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-			.addOptions(['-y','-vcodec libx264','-bf 8','-bt 240k','-preset fast','-strict -2','-b:v 320K','-bufsize 62000', '-maxrate 620k','-acodec aac','-ab 128k','-movflags +empty_moov'])
+			.addOptions(['-y','-vcodec libx264','-bt 320k','-strict -2','-b:v 320k','-bufsize 62000', '-maxrate 620k','-acodec aac','-ab 192k','-movflags +empty_moov'])
 			.toFormat('mp4')
 			.writeToStream(res, function(retcode, error){
 			if (!error){
@@ -119,13 +113,25 @@ exports.play = function(req, res){
 			}
 		});
 		*/
-		
-		
+		var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+			.addOptions(['-c:v libx264','-r 24','-preset fast','-profile:v baseline','-c:a aac','-strict -2','-b:a 192k','-bufsize 620k','-maxrate 620k','-f flv'])
+			.writeToStream(res, function(retcode, error){
+			if (!error){
+				console.log('file has been converted succesfully',retcode);
+			}else{
+				console.log('file conversion error',error);
+			}
+		});
+	
 	});
+	
 }
 
 exports.post = function(req, res, next){	
 	var movieTitle = null
+	, duration = null
+	, scraperURL = "http://api.themoviedb.org/3/search/movie?api_key="
+	, scraperDetailURL = "http://api.themoviedb.org/3/movie/"
 	, api_key = '7983694ec277523c31ff1212e35e5fa3'
 	, cdNumber = null
 	, id = 'No data found...'
@@ -218,7 +224,7 @@ exports.post = function(req, res, next){
 				movieTitle = noCD.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight();
 				if (year == null) year = ''
 				
-				helper.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&year="+ year +"&language="+configfileResults.language+"&=", function(response) {
+				helper.xhrCall(scraperURL+api_key+"&query="+movieTitle+"&year="+ year +"&language="+configfileResults.language+"&=", function(response) {
 					if (response !== 'Nothing found.' && response !== undefined && response !== '' && response !== null) {
 					
 						var requestResponse = JSON.parse(response)
@@ -235,7 +241,7 @@ exports.post = function(req, res, next){
 								id = requestInitialDetails.id;
 								original_name = requestInitialDetails.original_title;
 									
-								helper.xhrCall("http://api.themoviedb.org/3/movie/" + id + "?api_key="+api_key+"&=", function(response) {
+								helper.xhrCall(scraperDetailURL+id+"?api_key="+api_key+"&=", function(response) {
 								
 									var secondRequestResponse = JSON.parse(response);
 									
@@ -247,30 +253,53 @@ exports.post = function(req, res, next){
 									// certification = requestInitialDetails.certification;
 									overview = secondRequestResponse.overview;
 
-									//console.log('Metadata of file', metadata)
-									duration = metadata.durationsec
-									
-									scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
-									scraperdata[scraperdata.length] = scraperdataset;
-									var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-									writeToFile(scraperdataJSON);	
+									//TODO: Clean up code
+									probe(configfileResults.moviepath + movieRequest, function(err, probeData) {
+										if(err){
+											console.log('Error getting meta data', err)
+										} else {
+											duration = probeData.streams[0].duration
+										}
+										
+										scraperdataset = { duration:duration, path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+										scraperdata[scraperdata.length] = scraperdataset;
+										var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+										writeToFile(scraperdataJSON);	
+										
+									});
+
 								
-									
 								});
 							} else {
-								//TODO: D.R.Y.
-								scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
-								scraperdata[scraperdata.length] = scraperdataset;
-								var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-								writeToFile(scraperdataJSON);	
+									probe(configfileResults.moviepath + movieRequest, function(err, probeData) {
+										if(err){
+											console.log('Error getting meta data', err)
+										} else {
+											duration = probeData.streams[0].duration
+										}
+										
+										scraperdataset = { duration:duration, path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+										scraperdata[scraperdata.length] = scraperdataset;
+										var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+										writeToFile(scraperdataJSON);	
+										
+									});
 							}
 						}); 
 					} else {
-						//TODO: D.R.Y.
-						scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
-						scraperdata[scraperdata.length] = scraperdataset;
-						var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-						writeToFile(scraperdataJSON);	
+						probe(configfileResults.moviepath + movieRequest, function(err, probeData) {
+							if(err){
+								console.log('Error getting meta data', err)
+							} else {
+								duration = probeData.streams[0].duration
+							}
+							
+							scraperdataset = { duration:duration, path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+							scraperdata[scraperdata.length] = scraperdataset;
+							var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+							writeToFile(scraperdataJSON);	
+							
+						});
 					}
 				});
 			}
