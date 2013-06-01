@@ -34,6 +34,10 @@
 			
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
+			_setHeight();
+			$(window).resize(function() {
+				_setHeight();	
+			});
 			
 			_focusedItem();
 			_getMusicDetials();
@@ -71,6 +75,14 @@
 	
 	/**** Start of custom functions ***/
 
+	function _setHeight(){
+		var viewportHeight = $(window).height();
+		$('#musicWrapper').css('height',viewportHeight - 55);
+		if($('#tracks')){
+			$('#tracks').css('height',viewportHeight - 155);
+		}
+	}
+	
 	function _getMusicDetials(){
 	
 		if($("#player").hasClass('show')){
@@ -174,6 +186,8 @@
 				
 				// keeps the track playing but let's the user browse other albums
 				$('#eq').css('height',1)
+				
+				//TODO: rewrite code so player continues playing while brwosing
 				$('#tracklist').remove();
 				$('body').removeClass('tracklist')
 				$('#musicWrapper').fadeIn();

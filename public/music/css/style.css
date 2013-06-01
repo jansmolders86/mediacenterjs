@@ -91,7 +91,7 @@ ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; paddi
 	position: absolute;
 	top: 100px;
 	left: 100px;
-	height:100%;
+	height:80%;
 	width: 100%;
 	overflow-y:auto;
 	z-index:9;
@@ -105,7 +105,7 @@ ul.music{
 
 #musicWrapper {
 	overflow-y:auto;
-	height:700px;
+	height:600px;
 	width:95%;
 }
 
