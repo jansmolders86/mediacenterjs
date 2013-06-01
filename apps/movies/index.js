@@ -87,6 +87,8 @@ exports.play = function(req, res){
 	
 		var duration =  '-metadata title="'+probeData.streams[0].duration+'"'
 		/*
+		
+		//Webm prefix
 		var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
 			.withVideoCodec('libvpx')
 			.addOptions(['-bf 8','-bt copy','-preset fast','-strict -2','-b:v copy','-bufsize 62000', '-maxrate 620k','-movflags +empty_moov','-y'])
@@ -101,7 +103,7 @@ exports.play = function(req, res){
 			}
 		});
 		
-		
+		//h264 prefix
 		var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
 			.addOptions(['-y','-vcodec libx264','-bt 320k','-strict -2','-b:v 320k','-bufsize 62000', '-maxrate 620k','-acodec aac','-ab 192k','-movflags +empty_moov'])
 			.toFormat('mp4')
@@ -113,6 +115,7 @@ exports.play = function(req, res){
 			}
 		});
 		*/
+		// h264 flv prefix
 		var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
 			.addOptions(['-c:v libx264','-r 24','-preset fast','-profile:v baseline','-c:a aac','-strict -2','-b:a 192k','-bufsize 620k','-maxrate 620k','-f flv'])
 			.writeToStream(res, function(retcode, error){
