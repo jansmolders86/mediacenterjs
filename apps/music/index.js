@@ -46,28 +46,27 @@ exports.index = function(req, res, next){
 
 exports.album = function(req, res, next){
 	var incomingFile = req.body
-	, dir = configfileResults.musicpath+incomingFile.album+'/'
-	, writePath = './public/music/data/'+incomingFile.album+'/album.js'
+	, dir = configfileResults.musicpath+encoder.htmlDecode(incomingFile.album)+'/'
+	, writePath = './public/music/data/'+encoder.htmlEncode(incomingFile.album)+'/album.js'
 	, getDir = false
 	, fileTypes = new RegExp("\.(mp3)","g");
 
 	helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes, function(status){
 		var musicfiles = []
-		,musicfilepath = writePath
-		,musicfiles = fs.readFileSync(musicfilepath)
-		,musicfileResults = JSON.parse(musicfiles)	
+		, musicfiles = fs.readFileSync(writePath)
+		, musicfileResults = JSON.parse(musicfiles)	
 		
 		res.send(musicfileResults);
 	});
 };
 
 exports.track = function(req, res, next){
-	var bitrate = '192k'
+	var bitrate = '320k'
 	var decodeTrack = encoder.htmlDecode(req.params.track).replace(/\^/gi,"/")
 	if (req.params.album === 'none'){
 		var track = configfileResults.musicpath+decodeTrack
 	}else {
-		var track = configfileResults.musicpath+req.params.album+'/'+decodeTrack
+		var track = configfileResults.musicpath+encoder.htmlDecode(req.params.album)+'/'+decodeTrack
 		console.log('track',track)
 	}
 	
@@ -207,6 +206,12 @@ exports.post = function(req, res, next){
 						fs.readdir(dir,function(err,files){
 							if (err){
 								console.log('Error looking for album art',err);
+								discogs(albumTitle, function(title,thumb,year,genre){
+									scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}						
+									scraperdata[scraperdata.length] = scraperdataset;
+									var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+									writeToFile(scraperdataJSON);
+								});
 							}else{
 								files.forEach(function(file){
 									console.log('Found files', file)
