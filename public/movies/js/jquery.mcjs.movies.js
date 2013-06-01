@@ -136,29 +136,33 @@
 	}
 	
 	function _playMovie(url){
-		var myPlayer
-		$('#wrapper, #moviedetails, #backdrop, #header').hide();
-		$('body').css('backgroundColor','#000');
-		$('body').find('#player').addClass('active');
-		
-		if($('#player').length > 1) {
-			$('#player').remove();
-		} else {
-			$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/webm"></video>');
-		
-			videojs("player").ready(function(){
-				myPlayer = this;
-				myPlayer.play();
-				
-				myPlayer.on('error', function(e){
-					console.log('Error', e)
+	
+		$.ajax({
+			url: '/configuration/', 
+			type: 'get'
+		}).done(function(data){
+			var myPlayer
+			$('#wrapper, #moviedetails, #backdrop, #header').hide();
+			$('body').css('backgroundColor','#000');
+			$('body').find('#player').addClass('active');
+			
+			if($('#player').length > 1) {
+				$('#player').remove();
+			} else {
+				$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
+
+				videojs("player").ready(function(){
+
+					myPlayer = this;
+					myPlayer.play();
+					
+					myPlayer.on('error', function(e){
+						console.log('Error', e)
+					});
+					console.log('duration', myPlayer.duration())
 				});
-				
-				myPlayer.on('loadedmetadata', function(){
-					console.log('loadedmetadata', this)
-				});
-			});
-		}
+			}
+		});
 	}
 
 	/**** End of custom functions ***/

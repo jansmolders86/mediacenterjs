@@ -63,14 +63,12 @@ exports.album = function(req, res, next){
 
 exports.track = function(req, res, next){
 	var bitrate = '192k'
-	//First end any previous streams
-	//stream.close();
-
-	var decodeTrack = encoder.htmlDecode(req.params.track)
+	var decodeTrack = encoder.htmlDecode(req.params.track).replace(/\^/gi,"/")
 	if (req.params.album === 'none'){
 		var track = configfileResults.musicpath+decodeTrack
 	}else {
 		var track = configfileResults.musicpath+req.params.album+'/'+decodeTrack
+		console.log('track',track)
 	}
 	
 	var stat = fs.statSync(track)
@@ -97,7 +95,8 @@ exports.track = function(req, res, next){
 			'Transfer-Encoding':'chunked'
 		});
 		
-		if(probeData.streams[0].bit_rate !== 'N/A'){
+		var metaBitrate = probeData.streams[0].bit_rate
+		if( metaBitrate !== 'N/A' && metaBitrate < 48000){
 			var metadata = JSON.stringify(probeData.streams[0].bit_rate);
 			// Fix for conversion bug (needs 'k' instead of three zero's)
 			bitrate = metadata.replace(/[0]+$/,"k");
@@ -106,7 +105,7 @@ exports.track = function(req, res, next){
 
 		var proc = new ffmpeg({ source: track, nolog: true, priority: 1, timeout:15000})
 			.toFormat('mp3')
-			//.addOptions(['-vn', '-analyzeduration 0'])
+			.addOptions(['-vn', '-analyzeduration 0'])
 			.withAudioBitrate(bitrate)
 			.withAudioCodec('libmp3lame')
 			.writeToStream(res, function(retcode, error){
