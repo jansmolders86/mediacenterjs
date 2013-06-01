@@ -201,7 +201,7 @@ a.backlink{
 	float: left;
 }
 
-.overview h1{ margin:0px 0 5px 0; font-size:13px;}
+.overview h1{ margin:0px 0 5px 0; font-size:13px; max-width:165px;}
 .overview p{font-size:12px; margin:0px;}
 
 #poster{
