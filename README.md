@@ -97,6 +97,8 @@ Setup
 After you have downloaded MediacenterJS, click on the .bat file (in Windows) to start the project. 
 Or make sure you have browsed to the root of MediaCenterJS in the terminal/command prompt and type 'node index'.
 
+![Browse] (screenshots/browse_example)
+
 __Please make sure you've installed NodeJS and FFmpeg first!__
 
 User guide for installing FFmpeg on Windows: (http://www.wikihow.com/Install-FFmpeg-on-Windows)
