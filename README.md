@@ -235,7 +235,6 @@ What is the beta version going to have?
 
 On the todo list for MCJS are:
 
-* UPNP
 * Fast transcoding 
 * Cross Browser compatibility
 * Easy to add/change themes
