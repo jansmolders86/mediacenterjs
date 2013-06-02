@@ -13,6 +13,8 @@ Screenshots (Pre-Alpha GUI):
 
 ![Music] (screenshots/music.png)
 
+![Music_player] (screenshots/music_player.png)
+
 ![Weather] (screenshots/weather.png)
 
 Status: 
@@ -216,6 +218,7 @@ This app makes heavy use of:
 * Express (https://github.com/visionmedia/express)
 * Node-Fluent-FFmpeg (https://github.com/schaermu/node-fluent-ffmpeg)
 * Node-XMLHttpRequest (https://github.com/driverdan/node-XMLHttpRequest)
+* VideoJS (http://www.videojs.com/)
 
 
 What is the beta version going to have?
