@@ -53,7 +53,7 @@ What's coming up
 * Better transcoding handling
 * Music styling and playback features
 
-Known Issues
+Known issues
 ==================
 * Video duration is not passed on to the client
 * When the bitrate of music is unclear an assumption is made.
@@ -97,7 +97,7 @@ Setup
 After you have downloaded MediacenterJS, click on the .bat file (in Windows) to start the project. 
 Or make sure you have browsed to the root of MediaCenterJS in the terminal/command prompt and type 'node index'.
 
-![Browse] (screenshots/browse_example)
+![Browse] (screenshots/browse_example.jpg)
 
 __Please make sure you've installed NodeJS and FFmpeg first!__
 
