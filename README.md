@@ -53,7 +53,14 @@ What's coming up
 * Better transcoding handling
 * Music styling and playback features
 
-What's not working
+Known Issues
+==================
+* Video duration is not passed on to the client
+* When the bitrate of music is unclear an assumption is made.
+  which could cause the duration to be off.
+  
+  
+What still needs to be done
 ==================
 
 * The rest...
