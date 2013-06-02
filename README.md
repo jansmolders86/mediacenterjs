@@ -97,6 +97,8 @@ Setup
 After you have downloaded MediacenterJS, click on the .bat file (in Windows) to start the project. 
 Or make sure you have browsed to the root of MediaCenterJS in the terminal/command prompt and type 'node index'.
 
+If you close this window, MCJS will stop working. You can also see usefull information about what the server is doing, including error messages and other usefull information.
+
 ![Browse] (screenshots/browse_example.jpg)
 
 __Please make sure you've installed NodeJS and FFmpeg first!__
