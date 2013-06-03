@@ -106,7 +106,9 @@
 			var albumData = $.parseJSON(data);
 			album.addClass('coverfound')
 			cover.attr('src','');	
-			cover.attr('src',albumData[0].thumb);
+			setTimeout(function(){
+				cover.attr('src',albumData[0].thumb);
+			},1000);
 		});
 	}
 	
