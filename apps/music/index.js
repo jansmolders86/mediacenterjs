@@ -4,10 +4,8 @@ var express = require('express')
 , app = express()
 , fs = require('fs.extra')
 , downloader = require('downloader')
-, ffmpeg = require('fluent-ffmpeg')
 , rimraf = require('rimraf')
 , request = require("request")
-, probe = require('node-ffprobe')
 , helper = require('../../lib/helpers.js')
 , Encoder = require('node-html-encoder').Encoder;
 
@@ -65,57 +63,18 @@ exports.track = function(req, res, next){
 	var decodeTrack = encoder.htmlDecode(req.params.track).replace(/\^/gi,"/")
 	if (req.params.album === 'none'){
 		var track = configfileResults.musicpath+decodeTrack
-	}else {
+	}else { 
 		var track = configfileResults.musicpath+encoder.htmlDecode(req.params.album)+'/'+decodeTrack
-		console.log('track',track)
 	}
 	
 	var stat = fs.statSync(track)
-	, start = 0
-	, end = 0
-	, range = req.header('Range');
-	
-	if (range != null) {
-	start = parseInt(range.slice(range.indexOf('bytes=')+6,
-	  range.indexOf('-')));
-	end = parseInt(range.slice(range.indexOf('-')+1,
-	  range.length));
-	}
-	if (isNaN(end) || end === 0) end = stat.size-1;
-	if (start > end) return;
-	
-	probe(track, function(err, probeData) {
-	
-		res.writeHead(206, { // NOTE: a partial http response
-			'Connection':'close',
-			'Content-Type':'audio/mp3',
-			'Content-Length':end - start,
-			'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
-			'Transfer-Encoding':'chunked'
-		});
-		
-		var metaBitrate = probeData.streams[0].bit_rate
-		if( metaBitrate !== 'N/A' && metaBitrate < 48000){
-			var metadata = JSON.stringify(probeData.streams[0].bit_rate);
-			// Fix for conversion bug (needs 'k' instead of three zero's)
-			bitrate = metadata.replace(/[0]+$/,"k");
-		}
-		
 
-		var proc = new ffmpeg({ source: track, nolog: true, priority: 1, timeout:15000})
-			.toFormat('mp3')
-			.addOptions(['-vn', '-analyzeduration 0'])
-			.withAudioBitrate(bitrate)
-			.withAudioCodec('libmp3lame')
-			.writeToStream(res, function(retcode, error){
-			if (!error){
-				console.log('file has been converted succesfully',retcode);
-			}else{
-				console.log('file conversion error',error);
-			}
-		});
-		
+	res.writeHead(200, {
+		'Content-Type':'audio/mp3',
+		'Content-Length':stat.size
 	});
+	var stream = fs.createReadStream(track);
+	stream.pipe(res);
 };
 
 exports.post = function(req, res, next){	
