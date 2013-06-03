@@ -67,8 +67,8 @@ exports.track = function(req, res, next){
 		var track = configfileResults.musicpath+encoder.htmlDecode(req.params.album)+'/'+decodeTrack
 	}
 	
+	console.log('Streaming track:',track)
 	var stat = fs.statSync(track)
-
 	res.writeHead(200, {
 		'Content-Type':'audio/mp3',
 		'Content-Length':stat.size

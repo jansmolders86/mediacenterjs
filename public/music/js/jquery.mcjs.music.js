@@ -69,7 +69,7 @@
 					_getAlbum(album);
 				}
 			});
-			
+
 		});
 	}
 	
@@ -144,8 +144,12 @@
 			$('body').append('<div id="tracklist"><div class="info"><img src="" class="cover"/></div><h2>'+album+'</h2><ul id="tracks"></ul></div>').addClass('tracklist')
 			
 			for (var i = 0; i < data.length; i++) {
-				$('#tracks').append('<li>'+data[i]+'</li>')
+				$('#tracks').append('<li><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+data[i]+'</div></li>')
 			}	
+			
+			$(".bar").each(function() {
+				_fluctuate($(this));
+			});
 			
 			$.ajax({
 				url: '/music/post/', 
@@ -163,13 +167,15 @@
 			
 			$('#tracklist').find('li').click(function(e) {
 				e.preventDefault();	
+				var songTitle = $(this).find('.title').html();
 				$('#tracklist').find('li').each(function(){
 					if ($(this).hasClass('selected')){
 						$(this).removeClass('selected');
 					}
 				});
 				$(this).addClass('selected');
-				var track = '/music/track/'+album+'/'+$(this).html();
+				var track = '/music/track/'+album+'/'+songTitle;
+
 				_playTrack(track,album)
 			});
 
@@ -208,13 +214,9 @@
 			myPlayer.on("ended", _nextTrack);
 			
 			myPlayer.on("play", function(){
-				//var play = true;
-				//_fluctuate(o, play);
 			});
 
 			myPlayer.on("pause", function(){
-				//var play = false;
-				//_fluctuate(o, play);
 			});
 
 		});
@@ -236,25 +238,21 @@
 	
 	function _dominantColor(image){
 		var dominantColor = getDominantColor(image);
-		$('#eq').css('backgroundImage','linear-gradient(top, rgb(246,246,246) 35%, rgb('+dominantColor+') 75%)');
+		$('.bar').css('background','rgb('+dominantColor+')');
 		$('#header').css('borderBottom','5px solid rgb('+dominantColor+')');
 	}
 	
-	
-	/*			
-	function _fluctuate(o,play){	
-		var timerInterval = 150
-		if (play === false){
-			window.clearInterval(o.interval);	
-		} else {
-			o.interval = window.setInterval(timer, timerInterval);	
-		}
+	function _fluctuate(bar) {
+		var barHeight = Math.random() * 10;
+		barHeight += 1;
+		var randomHeight = barHeight * 30;
 		
-		function timer() {
-			var rand = Math.floor(Math.random()* 120);
-			$('#eq').animate({height:rand}, timerInterval);
-		}
-	}*/
+		bar.animate({
+			height: barHeight
+		}, randomHeight, function() {
+			_fluctuate($(this));
+		});
+	}
 	
 
 	/**** End of custom functions ***/

@@ -50,14 +50,12 @@ What currently works?
 What's coming up
 =================
 
-* Better transcoding handling
-* Music styling and playback features
+* Better movie transcoding handling
+* lazy loading of  movie and music items
 
 Known issues
 ==================
 * Video duration is not passed on to the client
-* When the bitrate of music is unclear an assumption is made.
-  which could cause the duration to be off.
   
   
 What still needs to be done
@@ -161,7 +159,7 @@ If a movie is split into multiple pieces, you can specify it in the filename as 
 What can the music player do? 
 -------------
 
-Once you specify the location of your music, the music will look in the specified directory for mp3 files. But like the movie payer only two levels deep. 
+Once you specify the location of your music, the music will look in the specified directory for mp3 files. But like the movie player only two levels deep. 
 If you add an image in the directory and name it  appropriatluy this image will be used by the music player.
 
 So if it is a single like a live recording or a mixtape, just add an image with exacly the same name as the mp3 in the same directory. For example:
@@ -173,7 +171,7 @@ This image will be copied to the cache of MCJS so it can be used without restric
 
 If no image is provided, the player will contact the website Discogs and try to get the art there. 
 
-Once you start playback, the background will change according to the dominant color of the album art. 
+Once you start playback, the eq icon and header will change their color according to the dominant color of the album art. 
 
 
 What is a MCJS App and how will it work?
