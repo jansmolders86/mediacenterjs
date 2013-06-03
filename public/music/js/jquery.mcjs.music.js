@@ -39,8 +39,8 @@
 				_setHeight();	
 			});
 			
-			_focusedItem();
-			_getMusicDetails();
+			$(window).scroll(_lazyload(o));
+			_lazyload(o);
 			
 			$('ul.music').find('li').click(function(e) {
 				e.preventDefault();	
@@ -83,19 +83,33 @@
 		}
 	}
 	
-	function _getMusicDetails(){
+	function _lazyload(o){
 	
 		if($("#player").hasClass('show')){
 			$("#player").removeClass('show')
 		};
-	
-		$('ul.music').find("li").each(function() { 
-			var title = $(this).find('.title').html()
-			, cover = $(this).find('.cover')
-			, album = $(this);
-			_handleMusic(title, cover, album);
-		});
+		
+		setTimeout(function(){
+			var wt = $(window).scrollTop();    //* top of the window
+			var wb = wt + $(window).height();  //* bottom of the window
+
+			$('ul.music').find("li").each(function(){
+				var ot = $(this).offset().top;  //* top of object (i.e. advertising div)
+				var ob = ot + $(this).height(); //* bottom of object
+
+				if(!$(this).attr("loaded") && wt<=ob && wb >= ot){
+					var title = $(this).find('.title').html()
+					, cover = $(this).find('.cover')
+					, album = $(this);
+					_handleMusic(title, cover, album);
+					$(this).attr("loaded",true);
+				}
+			});	
+		},500);		
 	}
+	
+	
+	
 
 	function _handleMusic(title, cover, album){
 		$.ajax({

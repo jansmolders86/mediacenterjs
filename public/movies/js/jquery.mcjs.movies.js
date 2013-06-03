@@ -33,7 +33,9 @@
 			$.data(this, ns, $.extend(true, {}, o));
 			
 			_focusedItem(o);
-			_loadMovies(o);
+
+			$(window).scroll(_lazyload(o));
+			_lazyload(o);
 			
 			$('.overlay').click(function(e) {
 				e.preventDefault();	
@@ -45,6 +47,25 @@
 	}
 	
 	/**** Start of custom functions ***/
+	
+	function _lazyload(o){
+		setTimeout(function(){
+			var wt = $(window).scrollTop();    //* top of the window
+			var wb = wt + $(window).height();  //* bottom of the window
+
+			$(".movieposter").each(function(){
+				var ot = $(this).offset().top;  //* top of object (i.e. advertising div)
+				var ob = ot + $(this).height(); //* bottom of object
+
+				if(!$(this).attr("loaded") && wt<=ob && wb >= ot){
+					var title = $(this).find('span.title').html();
+					var visibleMovie = $(this);
+					_handleVisibleMovies(o, title, visibleMovie)
+					$(this).attr("loaded",true);
+				}
+			});		
+		},500);		
+	}
 	
 	function _focusedItem(o){
 		$('.movieposter').on({
@@ -84,14 +105,6 @@
 		} 	
 	}
 	
-
-	function _loadMovies(o){
-		$(".movieposter").each(function() { 
-			var title = $(this).find('span.title').html();
-			var visibleMovie = $(this);
-			_handleVisibleMovies(o, title, visibleMovie);
-		});
-	}
 	
 	function _scrollBackdrop(){
 		if($(".backdropimg").attr('src') !== '/movies/img/backdrop.jpg'){
