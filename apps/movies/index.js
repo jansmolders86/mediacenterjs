@@ -63,69 +63,52 @@ exports.play = function(req, res){
 	, movie = configfileResults.moviepath + movieTitle;
 		
 	var stat = fs.statSync(movie)
-	, start = 0
-	, end = 0
-	, range = req.header('Range');
-	
-	if (range != null) {
-		start = parseInt(range.slice(range.indexOf('bytes=')+6, range.indexOf('-')));
-		end = parseInt(range.slice(range.indexOf('-')+1, range.length));
-	}
-	if (isNaN(end) || end === 0) end = stat.size-1;
-	if (start > end) return;
-
-	// Partial http response
-	res.writeHead(206, {
-		'Connection':'close',
+	res.writeHead(200, {
 		'Content-Type':'video/flv',
-		'Content-Length':end - start,
-		'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
-		'Transfer-Encoding':'chunked'
+		'Content-Length':stat.size,
+	});
+
+	/*
+	
+	//Webm prefix
+	var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+	.withVideoCodec('libvpx')
+	.addOptions(['-bf 8','-bt copy','-preset fast','-strict -2','-b:v copy','-bufsize 62000', '-maxrate 620k','-movflags +empty_moov','-y'])
+	.withAudioBitrate('copy')
+	.withAudioCodec('libvorbis')
+	.toFormat('webm')
+	.writeToStream(res, function(retcode, error){
+		if (!error){
+			console.log('file has been converted succesfully',retcode);
+		}else{
+			console.log('file conversion error',error);
+		}
 	});
 	
-	probe(movie, function(err, probeData) {
+	//h264 prefix
+	var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+	.addOptions(['-y','-vcodec libx264','-bt 320k','-strict -2','-b:v 320k','-bufsize 62000', '-maxrate 620k','-acodec aac','-ab 192k','-movflags +empty_moov'])
+	.toFormat('mp4')
+	.writeToStream(res, function(retcode, error){
+		if (!error){
+			console.log('file has been converted succesfully',retcode);
+		}else{
+			console.log('file conversion error',error);
+		}
+	});
 	
-		var duration =  '-metadata title="'+probeData.streams[0].duration+'"'
-		/*
-		
-		//Webm prefix
-		var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-			.withVideoCodec('libvpx')
-			.addOptions(['-bf 8','-bt copy','-preset fast','-strict -2','-b:v copy','-bufsize 62000', '-maxrate 620k','-movflags +empty_moov','-y'])
-			.withAudioBitrate('copy')
-			.withAudioCodec('libvorbis')
-			.toFormat('webm')
-			.writeToStream(res, function(retcode, error){
-			if (!error){
-				console.log('file has been converted succesfully',retcode);
-			}else{
-				console.log('file conversion error',error);
-			}
-		});
-		
-		//h264 prefix
-		var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-			.addOptions(['-y','-vcodec libx264','-bt 320k','-strict -2','-b:v 320k','-bufsize 62000', '-maxrate 620k','-acodec aac','-ab 192k','-movflags +empty_moov'])
-			.toFormat('mp4')
-			.writeToStream(res, function(retcode, error){
-			if (!error){
-				console.log('file has been converted succesfully',retcode);
-			}else{
-				console.log('file conversion error',error);
-			}
-		});
-		*/
-		// h264 flv prefix
-		var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-			.addOptions(['-c:v libx264','-r 24','-preset fast','-profile:v baseline','-c:a aac','-strict -2','-b:a 192k','-bufsize 620k','-maxrate 620k','-f flv'])
-			.writeToStream(res, function(retcode, error){
-			if (!error){
-				console.log('file has been converted succesfully',retcode);
-			}else{
-				console.log('file conversion error',error);
-			}
-		});
+	*/
 	
+	// h264 flv prefix
+	var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+	.addOptions(['-c:v libx264','-preset fast','-profile:v baseline','-c:a aac','-strict -2','-b:a 192k','-bufsize 128k','-maxrate 620k','-f flv'])
+	.writeToStream(res, function(retcode, error){
+		if (!error){
+			console.log('file has been converted succesfully',retcode);
+		}else{
+			console.log('file conversion error',error);
+		}
+
 	});
 	
 }
