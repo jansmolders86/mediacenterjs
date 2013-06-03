@@ -28,13 +28,20 @@ var configfile = []
 ,configfile = fs.readFileSync(configfilepath)
 ,configfileResults = JSON.parse(configfile);	
 
+var language = null
+if(configfileResults.language === ''){
+	language = 'en'
+} else {
+	language = configfileResults.language
+}
+
 app.configure(function(){
 	app.set('view engine', 'jade');
 	app.set('views', __dirname + '/views');
 	app.setMaxListeners(100);
 	app.use(lingua(app, {
-		defaultLocale: 'translation_'+configfileResults.language,
-		path: __dirname + '/public/translations/'
+		defaultLocale: 'translation_'+language,
+		path: __dirname+'/public/translations/'
 	}));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
