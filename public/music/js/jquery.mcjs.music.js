@@ -40,7 +40,7 @@
 			});
 			
 			_focusedItem();
-			_getMusicDetials();
+			_getMusicDetails();
 			
 			$('ul.music').find('li').click(function(e) {
 				e.preventDefault();	
@@ -83,7 +83,7 @@
 		}
 	}
 	
-	function _getMusicDetials(){
+	function _getMusicDetails(){
 	
 		if($("#player").hasClass('show')){
 			$("#player").removeClass('show')
@@ -108,7 +108,7 @@
 			cover.attr('src','');	
 			setTimeout(function(){
 				cover.attr('src',albumData[0].thumb);
-			},1000);
+			},500);
 		});
 	}
 	
