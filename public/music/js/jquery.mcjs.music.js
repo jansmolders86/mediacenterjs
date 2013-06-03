@@ -224,7 +224,7 @@
 	
 	function _nextTrack(){
 		var currentTrack = $('#tracklist').find('.selected').removeClass('selected')
-		, nextTrack =	currentTrack.next().addClass('selected').html()
+		, nextTrack =	currentTrack.next().addClass('selected').find('.title').html()
 		, album = $('#tracklist').find('h2').html()
 		, track = '/music/track/'+album+'/'+nextTrack;
 
