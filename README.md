@@ -57,7 +57,6 @@ What's coming up
 Known issues
 ==================
 * Music duration is not passed on to the client
-* Getting local images for music cover art is still buggy
   
   
 What still needs to be done

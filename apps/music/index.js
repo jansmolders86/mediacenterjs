@@ -159,7 +159,8 @@ exports.post = function(req, res, next){
 							single = true 
 							console.log('Found single', dir)
 						}else {
-							var dir = configfileResults.musicpath+albumRequest+'/';
+							var dir = configfileResults.musicpath+encoder.htmlDecode(albumRequest)+'/';
+							single = false 
 							console.log('Found album', dir)
 						}
 						fs.readdir(dir,function(err,files){
@@ -195,31 +196,26 @@ exports.post = function(req, res, next){
 												writeToFile(scraperdataJSON);
 											}
 										} else if (file.match(/cover|front|album|art|AlbumArtSmall/gi)){
-												console.log('local cover found',file);
+											console.log('local cover found',file);
 
-												fs.copy(configfileResults.musicpath+albumRequest+'/'+file, './public/music/data/'+albumRequest+'/'+file, function (err) {
-												  if (err) {
-													console.log('Error copying image to cache',err);
-												  }
-												  console.log('Copied succesfully');
-												});
-				
-												
-												thumb = '/music/data/'+albumRequest+'/'+file;
-												
-												scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}						
-												scraperdata[scraperdata.length] = scraperdataset;
-												var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-												writeToFile(scraperdataJSON);
+											fs.copy(dir+file, './public/music/data/'+albumRequest+'/'+file, function (err) {
+											  if (err) {
+												console.log('Error copying image to cache',err);
+											  }
+											  console.log('Copied succesfully');
+											});
+			
+											
+											thumb = '/music/data/'+albumRequest+'/'+file;
+											
+											scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}						
+											scraperdata[scraperdata.length] = scraperdataset;
+											var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+											writeToFile(scraperdataJSON);
 										} 
 									} 
 								});
-								discogs(albumTitle, function(title,thumb,year,genre){
-									scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}						
-									scraperdata[scraperdata.length] = scraperdataset;
-									var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-									writeToFile(scraperdataJSON);
-								});
+
 							};
 						});
 
@@ -230,7 +226,7 @@ exports.post = function(req, res, next){
 						var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
 						writeToFile(scraperdataJSON);	
 					}
-				}, 2000);	
+				}, 1200);	
 			};
 		});
 		
