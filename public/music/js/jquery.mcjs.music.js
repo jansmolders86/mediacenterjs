@@ -39,7 +39,9 @@
 				_setHeight();	
 			});
 			
-			$(window).scroll(_lazyload(o));
+			$('#musicWrapper').scroll( function(){
+				_lazyload(o)
+			});
 			_lazyload(o);
 			
 			$('ul.music').find('li').click(function(e) {
@@ -90,14 +92,14 @@
 		};
 		
 		setTimeout(function(){
-			var wt = $(window).scrollTop();    //* top of the window
-			var wb = wt + $(window).height();  //* bottom of the window
+			var WindowTop = $('#musicWrapper').scrollTop();
+			var WindowBottom = WindowTop + $('#musicWrapper').height();
 
 			$('ul.music').find("li").each(function(){
-				var ot = $(this).offset().top;  //* top of object (i.e. advertising div)
-				var ob = ot + $(this).height(); //* bottom of object
+				var offsetTop = $(this).offset().top;
+				var offsetBottom = offsetTop + $(this).height();
 
-				if(!$(this).attr("loaded") && wt<=ob && wb >= ot){
+				if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
 					var title = $(this).find('.title').html()
 					, cover = $(this).find('.cover')
 					, album = $(this);
@@ -108,9 +110,6 @@
 		},500);		
 	}
 	
-	
-	
-
 	function _handleMusic(title, cover, album){
 		$.ajax({
 			url: '/music/post/', 
@@ -159,17 +158,14 @@
 			
 			for (var i = 0; i < data.length; i++) {
 				$('#tracks').append('<li><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+data[i]+'</div></li>')
-			}	
-			
-			$(".bar").each(function() {
-				_fluctuate($(this));
-			});
+			}
 			
 			$.ajax({
 				url: '/music/post/', 
 				type: 'post',
 				data: {albumTitle : album}
 			}).done(function(data){
+
 				var albumData = $.parseJSON(data);
 				$('#tracklist').find('img.cover').attr('src',albumData[0].thumb);
 				$('img.cover').bind('load', function (event) {
@@ -178,14 +174,12 @@
 				});		
 			});
 			
-			
 			$('#tracklist').find('li').click(function(e) {
 				e.preventDefault();	
 				var songTitle = $(this).find('.title').html();
+				
 				$('#tracklist').find('li').each(function(){
-					if ($(this).hasClass('selected')){
-						$(this).removeClass('selected');
-					}
+					$(this).removeClass('selected');
 				});
 				$(this).addClass('selected');
 				var track = '/music/track/'+album+'/'+songTitle;
@@ -203,13 +197,7 @@
 				$(this).attr('href','/')
 			} else if ($('#tracklist').is(':visible')) {	
 				e.preventDefault();	
-				//var play = false;
-				//_fluctuate(o, play);
-				
 				// keeps the track playing but let's the user browse other albums
-				$('#eq').css('height',1)
-				
-				//TODO: rewrite code so player continues playing while brwosing
 				$('#tracklist').remove();
 				$('body').removeClass('tracklist')
 				$('#musicWrapper').fadeIn();
@@ -220,6 +208,11 @@
 	function _playTrack(track,album){
 		$("#player").addClass('show');
 		
+		$('li.selected').find(".bar").each(function() {
+			_fluctuate($(this));
+		});
+
+		
 		videojs("player").ready(function(){
 			var myPlayer = this;
 			myPlayer.src(track);
@@ -228,17 +221,24 @@
 			myPlayer.on("ended", _nextTrack);
 			
 			myPlayer.on("play", function(){
+				$(document).keydown(function(e){
+					switch(e.keyCode) {
+						case 32 : 
+							myPlayer.play();
+						break;
+					}
+				});
 			});
 
 			myPlayer.on("pause", function(){
 			});
-
 		});
 	}
 	
-	function _nextTrack(){
-		var currentTrack = $('#tracklist').find('.selected').removeClass('selected')
-		, nextTrack =	currentTrack.next().addClass('selected').find('.title').html()
+	function _nextTrack(selected){
+		$('li.selected').removeClass('selected').next().addClass('selected');
+	
+		var nextTrack = $('.selected').find('.title').html()
 		, album = $('#tracklist').find('h2').html()
 		, track = '/music/track/'+album+'/'+nextTrack;
 

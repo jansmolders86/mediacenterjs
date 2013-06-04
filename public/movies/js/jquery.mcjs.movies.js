@@ -34,7 +34,9 @@
 			
 			_focusedItem(o);
 
-			$(window).scroll(_lazyload(o));
+			$('body').scroll( function(){
+				_lazyload(o);
+			});
 			_lazyload(o);
 			
 			$('.overlay').click(function(e) {
@@ -50,14 +52,14 @@
 	
 	function _lazyload(o){
 		setTimeout(function(){
-			var wt = $(window).scrollTop();    //* top of the window
-			var wb = wt + $(window).height();  //* bottom of the window
+			var WindowTop = $('body').scrollTop();
+			var WindowBottom = WindowTop + $('body').height();
 
 			$(".movieposter").each(function(){
-				var ot = $(this).offset().top;  //* top of object (i.e. advertising div)
-				var ob = ot + $(this).height(); //* bottom of object
+				var offsetTop = $(this).offset().top;
+				var offsetBottom = offsetTop + $(this).height();
 
-				if(!$(this).attr("loaded") && wt<=ob && wb >= ot){
+				if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
 					var title = $(this).find('span.title').html();
 					var visibleMovie = $(this);
 					_handleVisibleMovies(o, title, visibleMovie)
@@ -165,7 +167,6 @@
 				$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
 
 				videojs("player").ready(function(){
-
 					myPlayer = this;
 					myPlayer.play();
 					
