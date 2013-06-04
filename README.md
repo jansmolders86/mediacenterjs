@@ -92,6 +92,13 @@ A complete documentation will be available when the project reaches Beta status.
 
 Setup
 -------------
+
+Download this appication with npm:
+
+	npm install mediacenterjs
+
+Or download it directly from github of course. 
+
 After you have downloaded MediacenterJS, click on the .bat file (in Windows) to start the project. 
 Or make sure you have browsed to the root of MediaCenterJS in the terminal/command prompt and type 'node index'.
 

@@ -1,5 +1,5 @@
 {
-	"name": "MediacenterJS",
+	"name": "mediacenterjs",
 	"description": "A node.js based mediacenter",
 	"homepage": "https://github.com/jansmolders86/mediacenterjs",
 	"author": {
@@ -10,7 +10,7 @@
 		"type": "GNU",
 		"url": "http://www.gnu.org/licenses"
 	}],
-	"version": "0.4",
+	"version": "0.0.1",
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",
