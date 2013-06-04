@@ -70,7 +70,7 @@ What's the MCJS?
 
 MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques and languages (HTML5/CSS/Javascript).
 The backend is based on Nodejs/ExpressJS 3x with jade templates producing easy to use code. 
-The goal is to make it possible to add an 'app' to MCJS even with limited knowledge of said frontend techniques. 
+The goal is to make it possible to add an 'app' to MCJS even with limited knowledge of said front end techniques. 
 
 Basic feature list:
 
@@ -107,7 +107,7 @@ After you have downloaded MediacenterJS, click on the .bat file (in Windows) to 
 Or browsed to the root directory of MediaCenterJS in the terminal/command prompt and type:
 	node index
 
-If you close this window, MCJS will stop working. You can also see usefull information about what the server is doing, including error messages and other usefull information.
+If you close this window, MCJS will stop working. You can also see useful information about what the server is doing, including error messages and other useful information.
 
 ![Browse] (screenshots/browse_example.jpg)
 
@@ -177,10 +177,13 @@ If a movie is split into multiple pieces, you can specify it in the filename as 
 What can the music player do? 
 -------------
 
-Once you specify the location of your music, the music will look in the specified directory for mp3 files. But like the movie player only two levels deep. 
-If you add an image in the directory and name it  appropriatluy this image will be used by the music player.
+Once you specify the location of your music, the music will look in the specified directory for mp3 files. 
+The idea behind the player is that it will use the folder name and file names to index the albums provided. This of course, has some advantages and disadvantages, 
+but it will mainly force you to use proper naming conventions and give you enormous freedom and transparency with what the system does and presents your files.
 
-So if it is a single like a live recording or a mixtape, just add an image with exacly the same name as the mp3 in the same directory. For example:
+If you add an image in the directory and name it appropriately this image will be used by the music player.
+
+So if it is a single like a live recording or a mixtape, just add an image with exactly the same name as the mp3 in the same directory. For example:
 
 	01 - Giorgio Moroder - Output - Brooklyn - N.Y.C.jpg
 	
@@ -197,7 +200,7 @@ What is a MCJS App and how will it work?
 
 An 'app' in this case is basically a wrapper for a feature you can use within MCJS.
 
-An App consists of two parts. A public part and a Model View Controller. When you look in the root of MCJS you'll see a folder calls 'Apps'. 
+An App consists of two parts. A public part and a Model View Controller. When you look in the root of MCJS you'll see a folder called 'Apps'. 
 In this folder you can create a new folder or copy the hello world example and rename it.
 
 This is the MVC of your app. With and index.js file to control all the incoming route requests, a folder called Views which contains the actual client side HTML. 
@@ -210,7 +213,7 @@ If we look at the hello world example, you will see the following contents
 	// Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 	exports.engine = 'jade';
 
-	// Render the indexpage
+	// Render the index page
 	exports.index = function(req, res, next){
 		res.render('hello');
 	};
