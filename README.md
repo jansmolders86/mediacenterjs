@@ -105,6 +105,7 @@ After you have downloaded MediacenterJS, click on the .bat file (in Windows) to 
 (make sure nodemon is properly installed. if not go to the directory of MediacenterJS in the terminal/command prompt and typ npm install nodemon ) 
 
 Or browsed to the root directory of MediaCenterJS in the terminal/command prompt and type:
+
 	node index
 
 If you close this window, MCJS will stop working. You can also see useful information about what the server is doing, including error messages and other useful information.
