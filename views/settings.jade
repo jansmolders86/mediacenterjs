@@ -33,19 +33,6 @@ html(lang="en")
 			#settings
 				form#setup.validate-form(action='/submit',method='post')
 					.row
-						span.label #{lingua.setting_details}
-						.checkgroup
-							if showdetails === 'yes'
-								input#detailsyes(name="details",type="radio",value="yes",checked) 
-								label(for="detailsyes") #{lingua.setting_yes}
-								input#detailsno(name="details",type="radio",value="no") 
-								label(for="detailsno") #{lingua.setting_no}
-							else
-								input#detailsyes(name="details",type="radio",value="yes") 
-								label(for="detailsyes") #{lingua.setting_yes}
-								input#detailsno(name="details",type="radio",value="no",checked) 
-								label(for="detailsno") #{lingua.setting_no}
-					.row
 						label #{lingua.setting_movielocation}
 						input.keyboard(name="movielocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= moviepath, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row
