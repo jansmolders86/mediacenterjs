@@ -46,16 +46,18 @@ What currently works?
 * Weather information based on location
 * Basic transcoding of movies and music
 * Basic screensaver
+* lazy loading of movie and music items
 
 What's coming up
 =================
 
 * Better movie transcoding handling
-* lazy loading of  movie and music items
+* Subtitle support
 
 Known issues
 ==================
-* Video duration is not passed on to the client
+* Music duration is not passed on to the client
+* Getting local images for music cover art is still buggy
   
   
 What still needs to be done
@@ -100,7 +102,10 @@ Download this appication with npm:
 Or download it directly from github of course. 
 
 After you have downloaded MediacenterJS, click on the .bat file (in Windows) to start the project. 
-Or make sure you have browsed to the root of MediaCenterJS in the terminal/command prompt and type 'node index'.
+(make sure nodemon is properly installed. if not go to the directory of MediacenterJS in the terminal/command prompt and typ npm install nodemon ) 
+
+Or browsed to the root directory of MediaCenterJS in the terminal/command prompt and type:
+	node index
 
 If you close this window, MCJS will stop working. You can also see usefull information about what the server is doing, including error messages and other usefull information.
 
@@ -115,9 +120,15 @@ User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-ins
 Install NodeJS: http://nodejs.org/download/
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
+
+
+Run MediacenterJS
+-------------
 After the initial setup has been completed, restart the server. MediacenterJS will be available on the port you have specified and the language you have chosen.
+If you don't want to restart the server every time you make a change in the settings, use nodemon to run the application with the following command:
 
-
+	nodemon -w configuration index.js 
+	
 What can the movie browser/player do? 
 -------------
 
@@ -250,7 +261,7 @@ On the todo list for MCJS are:
 * App import/export functionality
 
 This application will run on Windows and Linux based systems. 
-There will be a specific Linux distro for raspberry pi using a kiosk, debian distro.
+There will be a specific Linux distro using a kiosk, debian distro.
 
 I'm building MCJS in my free time so if you want to encourage me to continue this enormous project, feel free to do so.
 

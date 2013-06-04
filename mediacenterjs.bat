@@ -1,2 +1,2 @@
 cd %CD% 
-node index.js
+nodemon -w configuration index.js
