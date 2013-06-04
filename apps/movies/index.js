@@ -75,7 +75,7 @@ exports.play = function(req, res){
 			var metaDuration =  '-metadata duration="'+probeData.streams[0].duration+'"'
 			, tDuration =  '-t '+probeData.streams[0].duration
 			, proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-			.addOptions(['-y','-ss 0','-b 800k','-r 25','-vcodec libx264','-acodec mp3','-ab 128','-ar 44100','-bufsize 62000', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
+			.addOptions(['-y','-ss 0','-b 800k','-vcodec libx264','-acodec mp3','-ab 128','-ar 44100','-bufsize 62000', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
 			.writeToStream(res, function(retcode, error){
 				if (!error){
 					console.log('file has been converted succesfully',retcode);

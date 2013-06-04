@@ -1,9 +1,34 @@
 {
-  "name": "mediacenterjs",
-  "description": "mediacenterjs",
-  "version": "0.0.1",
-  "private": true,
-  "dependencies": {
-    "express": "3.x"
-  }
+	"name": "mediacenterjs",
+	"description": "A node.js based mediacenter",
+	"homepage": "https://github.com/jansmolders86/mediacenterjs",
+	"author": {
+		"name": "Jan Smolders",
+		"email": "jansmolders86@gmail.com"
+	},
+	"licenses": [
+		{
+		"type": "GNU",
+		"url": "http://www.gnu.org/licenses"
+		},
+	],
+	"version": "0.4",
+	"private": true,
+	"dependencies": {
+		"express": "3.x",
+		"fs.extra": "1.2.1",
+		"dateformat": "1.0.4-1.2.3",
+		"downloader": "0.1.2",
+		"fluent-ffmpeg": "1.3.3",
+		"jade": "0.27.7",
+		"lingua": "0.3.6",
+		"node-ffprobe": "1.2.2",
+		"node-html-encoder": "0.0.2",
+		"nodemon": "0.7.1",
+		"redis": "0.8.3",
+		"request": "2.16.6",
+		"require": "0.5.0",
+		"rimraf": "2.1.4",
+		"util": "0.4.9",
+	}
 }

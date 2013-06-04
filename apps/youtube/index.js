@@ -22,17 +22,17 @@ exports.engine = 'jade';
 //var youtube = require('youtube-feeds')
 
 // Render the indexpage
-var youtube = require('youtube-feeds')
+//var youtube = require('youtube-feeds')
 exports.index = function(req, res, next){
 
-	youtube.httpProtocol = 'https'
+	/*youtube.httpProtocol = 'https'
 	youtube.feeds.videos( {q:'keywords'}, function( err, data ) {
 		if( err instanceof Error ) {
 			console.log( 'Error searching Youtube', err )
 		} else {
 			console.log( 'Getting Youtube data', data )
 		}
-	});
+	});*/
 	
 	res.render('youtube');
 };
