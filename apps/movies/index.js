@@ -67,48 +67,23 @@ exports.play = function(req, res){
 		'Content-Type':'video/flv',
 		'Content-Length':stat.size,
 	});
-
-	/*
 	
-	//Webm prefix
-	var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-	.withVideoCodec('libvpx')
-	.addOptions(['-bf 8','-bt copy','-preset fast','-strict -2','-b:v copy','-bufsize 62000', '-maxrate 620k','-movflags +empty_moov','-y'])
-	.withAudioBitrate('copy')
-	.withAudioCodec('libvorbis')
-	.toFormat('webm')
-	.writeToStream(res, function(retcode, error){
-		if (!error){
-			console.log('file has been converted succesfully',retcode);
-		}else{
-			console.log('file conversion error',error);
+	probe(movie, function(err, probeData) {
+		if (err){
+			console.log('Can not probe movie for metadata', err)
+		} else {
+			var metaDuration =  '-metadata duration="'+probeData.streams[0].duration+'"'
+			, tDuration =  '-t '+probeData.streams[0].duration
+			, proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+			.addOptions(['-y','-ss 0','-b 800k','-r 25','-vcodec libx264','-acodec mp3','-ab 128','-ar 44100','-bufsize 62000', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
+			.writeToStream(res, function(retcode, error){
+				if (!error){
+					console.log('file has been converted succesfully',retcode);
+				}else{
+					console.log('file conversion error',error);
+				}
+			});
 		}
-	});
-	
-	//h264 prefix
-	var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-	.addOptions(['-y','-vcodec libx264','-bt 320k','-strict -2','-b:v 320k','-bufsize 62000', '-maxrate 620k','-acodec aac','-ab 192k','-movflags +empty_moov'])
-	.toFormat('mp4')
-	.writeToStream(res, function(retcode, error){
-		if (!error){
-			console.log('file has been converted succesfully',retcode);
-		}else{
-			console.log('file conversion error',error);
-		}
-	});
-	
-	*/
-	
-	// h264 flv prefix
-	var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-	.addOptions(['-c:v libx264','-preset fast','-profile:v baseline','-c:a aac','-strict -2','-b:a 192k','-bufsize 128k','-maxrate 620k','-f flv'])
-	.writeToStream(res, function(retcode, error){
-		if (!error){
-			console.log('file has been converted succesfully',retcode);
-		}else{
-			console.log('file conversion error',error);
-		}
-
 	});
 	
 }
