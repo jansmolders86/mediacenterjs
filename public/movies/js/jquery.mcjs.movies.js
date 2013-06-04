@@ -51,20 +51,23 @@
 	/**** Start of custom functions ***/
 	
 	function _lazyload(o){
-		var WindowTop = $('body').scrollTop()
-		, WindowBottom = WindowTop + $('body').height();
+		//Set timeout for fast scrolling
+		setTimeout(function(){
+			var WindowTop = $('body').scrollTop()
+			, WindowBottom = WindowTop + $('body').height();
 
-		$(".movieposter").each(function(){
-			var offsetTop = $(this).offset().top
-			, offsetBottom = offsetTop + $(this).height();
+			$(".movieposter").each(function(){
+				var offsetTop = $(this).offset().top
+				, offsetBottom = offsetTop + $(this).height();
 
-			if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
-				var title = $(this).find('span.title').html()
-				, visibleMovie = $(this);
-				_handleVisibleMovies(o, title, visibleMovie)
-				$(this).attr("loaded",true);
-			}
-		});			
+				if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
+					var title = $(this).find('span.title').html()
+					, visibleMovie = $(this);
+					_handleVisibleMovies(o, title, visibleMovie)
+					$(this).attr("loaded",true);
+				}
+			});	
+		},500);
 	}
 	
 	function _focusedItem(o){
