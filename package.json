@@ -11,7 +11,7 @@
 		"url": "http://www.gnu.org/licenses"
 	}],
 	"version": "0.4",
-	"private": true,
+	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",
 		"fs.extra": "1.2.1",
