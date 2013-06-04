@@ -21,6 +21,6 @@ exports.engine = 'jade';
 
 // Render the indexpage
 exports.index = function(req, res, next){
-	res.render('hello');
+	res.render('spotify');
 };
 
