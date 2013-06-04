@@ -51,22 +51,20 @@
 	/**** Start of custom functions ***/
 	
 	function _lazyload(o){
-		setTimeout(function(){
-			var WindowTop = $('body').scrollTop();
-			var WindowBottom = WindowTop + $('body').height();
+		var WindowTop = $('body').scrollTop()
+		, WindowBottom = WindowTop + $('body').height();
 
-			$(".movieposter").each(function(){
-				var offsetTop = $(this).offset().top;
-				var offsetBottom = offsetTop + $(this).height();
+		$(".movieposter").each(function(){
+			var offsetTop = $(this).offset().top
+			, offsetBottom = offsetTop + $(this).height();
 
-				if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
-					var title = $(this).find('span.title').html();
-					var visibleMovie = $(this);
-					_handleVisibleMovies(o, title, visibleMovie)
-					$(this).attr("loaded",true);
-				}
-			});		
-		},500);		
+			if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
+				var title = $(this).find('span.title').html()
+				, visibleMovie = $(this);
+				_handleVisibleMovies(o, title, visibleMovie)
+				$(this).attr("loaded",true);
+			}
+		});			
 	}
 	
 	function _focusedItem(o){
@@ -151,15 +149,16 @@
 	}
 	
 	function _playMovie(url){
-	
 		$.ajax({
 			url: '/configuration/', 
 			type: 'get'
 		}).done(function(data){
 			var myPlayer
 			$('#wrapper, #moviedetails, #backdrop, #header').hide();
-			$('body').css('backgroundColor','#000');
-			$('body').find('#player').addClass('active');
+			
+			$('body').animate({
+				backgroundColor: '#000'
+			},500);
 			
 			if($('#player').length > 1) {
 				$('#player').remove();
@@ -173,6 +172,11 @@
 					myPlayer.on('error', function(e){
 						console.log('Error', e)
 					});
+					
+					myPlayer.on('ended', function(e){
+						 window.location="/movies/";
+					});
+					
 					console.log('duration', myPlayer.duration())
 				});
 			}

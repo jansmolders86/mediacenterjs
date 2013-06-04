@@ -91,23 +91,21 @@
 			$("#player").removeClass('show')
 		};
 		
-		setTimeout(function(){
-			var WindowTop = $('#musicWrapper').scrollTop();
-			var WindowBottom = WindowTop + $('#musicWrapper').height();
+		var WindowTop = $('#musicWrapper').scrollTop()
+		, WindowBottom = WindowTop + $('#musicWrapper').height();
 
-			$('ul.music').find("li").each(function(){
-				var offsetTop = $(this).offset().top;
-				var offsetBottom = offsetTop + $(this).height();
+		$('ul.music').find("li").each(function(){
+			var offsetTop = $(this).offset().top
+			, offsetBottom = offsetTop + $(this).height();
 
-				if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
-					var title = $(this).find('.title').html()
-					, cover = $(this).find('.cover')
-					, album = $(this);
-					_handleMusic(title, cover, album);
-					$(this).attr("loaded",true);
-				}
-			});	
-		},500);		
+			if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
+				var title = $(this).find('.title').html()
+				, cover = $(this).find('.cover')
+				, album = $(this);
+				_handleMusic(title, cover, album);
+				$(this).attr("loaded",true);
+			}
+		});		
 	}
 	
 	function _handleMusic(title, cover, album){
