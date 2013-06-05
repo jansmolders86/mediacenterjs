@@ -180,9 +180,11 @@ exports.post = function(req, res, next){
 				
 				cdNumber = filename.match(/cd [1-9]|cd[1-9]/gi,"");
 				movieTitle = noCD.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight();
-				if (year[0] == null) year = ''
+				// TODO: Fix year param
+				//if (year.shift() == null) year = ''
+				//&year="+ year.shift() +
 
-				helper.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&year="+ year[0] +"&language="+configfileResults.language+"&=", function(response) {
+				helper.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&language="+configfileResults.language+"&=", function(response) {
 
 					var requestResponse = JSON.parse(response)
 					, requestInitialDetails = requestResponse.results[0];
