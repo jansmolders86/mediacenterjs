@@ -189,8 +189,6 @@ exports.post = function(req, res, next){
 					var requestResponse = JSON.parse(response)
 					, requestInitialDetails = requestResponse.results[0];
 					
-					console.log(requestInitialDetails)
-
 					downloadCache(requestInitialDetails,function(poster, backdrop) {
 
 						if (requestInitialDetails !== undefined && requestInitialDetails !== '' && requestInitialDetails !== null) {
@@ -221,12 +219,15 @@ exports.post = function(req, res, next){
 								writeToFile(scraperdataJSON);	
 
 							});
+						} else {
+															
+							scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+							scraperdata[scraperdata.length] = scraperdataset;
+							var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+							writeToFile(scraperdataJSON);	
+							
 						}
-						
-						scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
-						scraperdata[scraperdata.length] = scraperdataset;
-						var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-						writeToFile(scraperdataJSON);	
+
 					}); 
 
 				});

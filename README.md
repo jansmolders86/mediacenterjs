@@ -57,7 +57,9 @@ What's coming up
 Known issues
 ==================
 * Music duration is not passed on to the client
-  
+* Buffer size needs to be fixed for video playback
+* Subfolder support does not work yet
+
   
 What still needs to be done
 ==================

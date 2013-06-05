@@ -9,18 +9,14 @@ html(lang="en")
 		script(src="/core/js/plugins/jquery.idle-timer.js")
 		script(src="/core/js/jquery.mcjs.core.js")
 		
+		// App specific
 		link(href="http://vjs.zencdn.net/4.0/video-js.css", rel="stylesheet")
 		script(src="http://vjs.zencdn.net/4.0/video.js")
 		style(type="text/css")
 			.vjs-play-progress, .vjs-volume-level { background-color: #d96800!important; }
 			.vjs-control-bar, .vjs-big-play-button { background: rgba(171,171,171,0.7)!important; }
 			.vjs-slider { background: rgba(171,171,171,0.2333333333333333)!important; }
-
-		link(rel='stylesheet', href='/core/css/jquery.jscrollpane.css')
-		script(src="/core/js/plugins/jquery.jscrollpane.min.js")
-		script(src="/core/js/plugins/jquery.mousewheel.min.js")
 		
-		// App specific
 		link(rel='stylesheet', href='/movies/css/style.css')
 		script(src="/movies/js/jquery.mcjs.movies.js")
 
@@ -31,9 +27,10 @@ html(lang="en")
 				$('body').mcjsm();	
 			});
 	body
-		#backdrop
-			img.backdropimg(src="/movies/img/backdrop.jpg")	
+
 		#header
+			#backdrop
+				img.backdropimg(src="/movies/img/backdrop.jpg")	
 			a.backlink(href="/") 
 				img(src="/core/icons/back.png")
 			h1 #{lingua.movies}		
