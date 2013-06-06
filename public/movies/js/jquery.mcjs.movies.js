@@ -27,7 +27,9 @@
 			var o = $.extend(true, {}, opts, $that.data(opts.datasetKey));
 				
 			// add data to the defaults (e.g. $node caches etc)	
-			o = $.extend(true, o, { $that: $that, movielocation: undefined});
+			o = $.extend(true, o, { 
+				$that: $that
+			});
 			
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
@@ -38,6 +40,8 @@
 				_lazyload(o);
 			});
 			_lazyload(o);
+			
+			_scrollBackdrop();
 			
 			$('.overlay').click(function(e) {
 				e.preventDefault();	
@@ -76,8 +80,6 @@
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(this).addClass("focused");
 				$(".backdropimg").attr("src", newBackground).addClass('fadein');
-				
-				_scrollBackdrop();
 			},
 			mouseleave: function() {
 				$(".backdropimg").removeClass("fadein");
@@ -89,8 +91,6 @@
 				$(this).addClass("focused");			
 				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 				$(".backdropimg").attr("src", newBackground).addClass('fadein');
-				
-				_scrollBackdrop();
 			},
 			focusout: function() {
 				$(".backdropimg").removeClass("fadein");
@@ -103,21 +103,31 @@
 		if ($('.movieposter.focused')){
 			var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 			$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
-			
-			_scrollBackdrop();
 		} 	
 	}
 	
 	
 	function _scrollBackdrop(){
-		if($(".backdropimg").attr('src') !== '/movies/img/backdrop.jpg'){
-			setTimeout(function(){
-				$(".backdropimg").animate({marginTop:'-490px'}, 80000, 'linear');
-				if($(".backdropimg").css({marginTop:'-490px'})){
-					$(".backdropimg").animate({marginTop:'0px'}, 80000, 'linear');
-				}
-			},3000);
-		}
+		var duration = 40000
+		$(".backdropimg").animate({ 
+			top: '-490px'
+		},
+		{
+			easing: 'swing',
+			duration: duration,
+			complete: function(){
+				$(".backdropimg").animate({ 
+					top: '-0px'
+				},
+				{
+					easing: 'swing',
+					duration: duration,
+					complete: function(){
+						_scrollBackdrop()
+					}
+				});	
+			}
+		});		
 	}
 
 	
