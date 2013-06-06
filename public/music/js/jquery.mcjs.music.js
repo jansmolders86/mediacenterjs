@@ -182,9 +182,10 @@
 					$(this).removeClass('selected');
 				});
 				$(this).addClass('selected');
-				var track = '/music/track/'+album+'/'+songTitle;
+				var track = '/music/track/'+album+'/'+songTitle
+				, random = false;
 
-				_playTrack(track,album)
+				_playTrack(track,album,random)
 			});
 
 		});	
@@ -205,7 +206,7 @@
 		});
 	}
 	
-	function _playTrack(track,album){
+	function _playTrack(track,album,random){
 		$("#player").addClass('show');
 		
 		$('li.selected').find(".bar").each(function() {
@@ -215,10 +216,24 @@
 		
 		videojs("player").ready(function(){
 			var myPlayer = this;
+
 			myPlayer.src(track);
 			myPlayer.play();
 			
-			myPlayer.on("ended", _nextTrack);
+			$(".random").remove();
+			$("#player").append('<div class="random">Random</div>')
+			
+			$('.random').click(function(e) {
+				_randomTrack();
+			});
+			
+			myPlayer.on("ended", function(){
+				if(random === false){
+					_nextTrack();
+				} else if(random === true){
+					_randomTrack();
+				}
+			});
 			
 			myPlayer.on("play", function(){
 				$(document).keydown(function(e){
@@ -235,19 +250,44 @@
 		});
 	}
 	
-	function _nextTrack(selected){
-		$('li.selected').removeClass('selected').next().addClass('selected');
-	
+	function _nextTrack(){
+		var random = false
+		, currentSong = $('li.selected');
+		
+		currentSong.removeClass('selected').next('li').addClass('selected');
+		
 		var nextTrack = $('.selected').find('.title').html()
 		, album = $('#tracklist').find('h2').html()
 		, track = '/music/track/'+album+'/'+nextTrack;
 
 		if (nextTrack !== undefined){
-			_playTrack(track,album)
+			_playTrack(track,album,random)
 		}else{
 			return
 		}
 	}
+	
+	function _randomTrack(){
+	
+		$('#tracklist').find('li').each(function(){
+			$(this).removeClass('selected');
+		});
+	
+		var random = true
+		, list = $("#tracks li").toArray()
+		, elemLength = list.length
+		, randomNum = Math.floor(Math.random()*elemLength)
+		, randomItem = list[randomNum];
+		
+		$(randomItem).addClass('selected');
+		
+		var nextTrack = $('.selected').find('.title').html()
+		, album = $('#tracklist').find('h2').html()
+		, track = '/music/track/'+album+'/'+nextTrack;
+		
+		_playTrack(track,album,random)
+	}
+	
 	
 	
 	function _dominantColor(image){
