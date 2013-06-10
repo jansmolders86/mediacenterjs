@@ -392,15 +392,15 @@ em{
 
 input[type=submit],
 a.btn{
-	background-color:#50bdc4;
+	background-color:#fb8521;
 	padding:10px;
 	cursor:pointer;
+	font-family: 'Open Sans', sans-serif;
 	color:#fff;
 	text-align:center;
 	font-size:18px;
-	width:123px;
 	border:0;
-	-webkit-appearance:none;
+	border-radius:5px;
 }
 
 
