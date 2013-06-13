@@ -3,7 +3,7 @@ MediacenterJS
 
 __A NodeJS based Mediacenter__
 
-Website: (www.mediacenterjs.com)
+Website: http://www.mediacenterjs.com
 
 Screenshots (Pre-Alpha GUI): 
 ========
