@@ -29,7 +29,8 @@ var configfile = []
 ,configfileResults = JSON.parse(configfile);	
 
 var language = null
-if(configfileResults.language === ''){
+console.log(configfileResults.language)
+if(configfileResults.language === ""){
 	language = 'en'
 } else {
 	language = configfileResults.language
@@ -39,14 +40,20 @@ app.configure(function(){
 	app.set('view engine', 'jade');
 	app.set('views', __dirname + '/views');
 	app.setMaxListeners(100);
-	app.use(lingua(app, {
-		defaultLocale: 'translation_'+language,
-		path: __dirname+'/public/translations/'
-	}));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(express.static(__dirname + '/public'));
 	app.use(express.favicon(__dirname + '/public/core/favicon.ico'));
+	app.use(lingua(app, {
+		defaultLocale: 'translation_'+language,
+		storageKey: 'lang',
+		path: __dirname+'/public/translations/',
+		cookieOptions: {
+            httpOnly: false,        
+            expires: new Date(Date.now(-1)),  
+            secure: false
+        }
+	}));
 	app.use(app.router);
 });
 
