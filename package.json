@@ -1,7 +1,7 @@
 {
 	"name": "mediacenterjs",
 	"description": "A node.js based mediacenter",
-	"homepage": "https://github.com/jansmolders86/mediacenterjs",
+	"homepage": "http://www.mediacenterjs.com",
 	"author": {
 		"name": "Jan Smolders",
 		"email": "jansmolders86@gmail.com"
@@ -10,7 +10,7 @@
 		"type": "GNU",
 		"url": "http://www.gnu.org/licenses"
 	}],
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",
