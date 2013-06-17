@@ -78,6 +78,9 @@ h3 a{
 	padding:0;
 }
 
+ul,
+li{list-style:none; margin:0; padding:0;}
+
 .glinein{
 	-webkit-animation: glide-in 0.8s; 
 	-moz-animation: glide-in 0.8s; 
