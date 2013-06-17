@@ -241,7 +241,6 @@ exports.post = function(req, res, next){
 				if (requestInitialDetails !== undefined && requestInitialDetails !== '' && requestInitialDetails !== null) {
 					downloadCache(requestInitialDetails,function(cover) {
 						
-						
 						var localImageDir = '/music/data/'+albumRequest+'/'
 						, localCover = cover.match(/[^/]+$/)
 						, title = requestInitialDetails.title
