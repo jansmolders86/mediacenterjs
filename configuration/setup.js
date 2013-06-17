@@ -2,7 +2,7 @@
     "moviepath": "",
     "highres": "yes",
     "musicpath": "",
-    "tvpath": "tbd",
+    "tvpath": "",
     "language": "",
     "onscreenkeyboard": "no",
     "location": "",
