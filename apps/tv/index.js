@@ -137,23 +137,30 @@ exports.post = function(req, res, next){
 					if (err) {
 						console.log('error retrieving tvshwo info', err);
 					} else {
-						var tvSearchResult = result[0]
+						var tvSearchResult = result[0];
 						
-						downloadCache(tvSearchResult,function(banner) {
-								var localImageDir = '/tv/data/'+tvRequest+'/',
-								localCover = banner.match(/[^/]+$/);
-								
-								banner = localImageDir+localCover;
-								title = tvSearchResult.title
-								genre = tvSearchResult.genre
-								certification = tvSearchResult.certification
+						if (tvSearchResult !== undefined && tvSearchResult !== '' && tvSearchResult !== null) {
+							downloadCache(tvSearchResult,function(banner) {
+									var localImageDir = '/tv/data/'+tvRequest+'/',
+									localCover = banner.match(/[^/]+$/);
+									
+									banner = localImageDir+localCover;
+									title = tvSearchResult.title
+									genre = tvSearchResult.genre
+									certification = tvSearchResult.certification
 
-								scraperdataset = { title:title, genre:genre, certification:certification, banner:banner }
-								scraperdata[scraperdata.length] = scraperdataset;
-								var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-								writeToFile(scraperdataJSON);	
+									scraperdataset = { title:title, genre:genre, certification:certification, banner:banner }
+									scraperdata[scraperdata.length] = scraperdataset;
+									var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+									writeToFile(scraperdataJSON);	
 
-						}); 
+							}); 
+						} else {
+							scraperdataset = { title:title, genre:genre, certification:certification, banner:banner }
+							scraperdata[scraperdata.length] = scraperdataset;
+							var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
+							writeToFile(scraperdataJSON);	
+						}
 					}
 				});
 			}
@@ -180,13 +187,16 @@ exports.post = function(req, res, next){
 	
 	
 	function downloadCache(tvSearchResult,callback){
-		var banner = tvSearchResult.images.banner
-		, downloadDir = './public/tv/data/'+tvRequest+'/';
-		
-		downloader.on('done', function(msg) { console.log('done', msg); });
-		downloader.on('error', function(msg) { console.log('error', msg); });
-		downloader.download(banner, downloadDir);
-
+		if (typeof tvSearchResult){
+			var banner = tvSearchResult.images.banner
+			, downloadDir = './public/tv/data/'+tvRequest+'/';
+			
+			downloader.on('done', function(msg) { console.log('done', msg); });
+			downloader.on('error', function(msg) { console.log('error', msg); });
+			downloader.download(banner, downloadDir);
+		} else{
+			banner = '/tv/images/banner.png'
+		}
 		callback(banner);
 	};
 
