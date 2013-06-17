@@ -20,7 +20,7 @@ html(lang="en")
 		#wrapper
 			form#setup.validate-form(action='/setuppost',method='post')
 				.row
-					label Specify movielocation
+					label Specify movie location
 					input.keyboard(name="movielocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 				.row	
 					span.info 
@@ -28,8 +28,11 @@ html(lang="en")
 						span MediaCenterJS will index all the moviefiles in this initial folder. <br/> You can add or change a location later in the settings.
 						span.quote &rdquo; 		
 				.row
-					label Specify musiclocation
+					label Specify music location
 					input.keyboard(name="musiclocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")							
+				.row
+					label Specify tvshow location
+					input.keyboard(name="tvlocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")							
 				.row
 					span.label Use high res images (needs more diskspace) 
 					.checkgroup

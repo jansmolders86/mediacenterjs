@@ -39,6 +39,9 @@ html(lang="en")
 						label #{lingua.setting_musiclocation}
 						input.keyboard(name="musiclocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musicpath, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")	
 					.row
+						label #{lingua.setting_tvlocation}
+						input.keyboard(name="tvlocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvpath, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+					.row
 						span.label #{lingua.setting_highres}
 						.checkgroup
 							if highres === 'yes'
