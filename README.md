@@ -48,12 +48,14 @@ What currently works?
 * Basic transcoding and playback of movies and music
 * Weather information based on location
 * Basic transcoding of movies and music
+* Retrieving of tv show information
 * Basic screensaver
 * lazy loading of movie and music items
 
 What's coming up
 =================
 
+* Handling of tv shows
 * Better movie transcoding handling
 * Subtitle support
 
