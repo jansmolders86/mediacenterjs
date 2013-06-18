@@ -165,8 +165,6 @@ ul.music{
 	background:url(img/random-icon.png)no-repeat left bottom;
 }
 
-a.backlink{margin-top:10px;}
-
 #player{position:absolute; left:0; bottom:0px !important; z-index:99; visibility:hidden; }
 #player.show{ visibility:visible; }
 

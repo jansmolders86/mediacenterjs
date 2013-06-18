@@ -161,7 +161,6 @@ html.dim{background:#333; opacity:1;}
 	position:absolute;
 	top:0; 
 	left:0;
-	/*-webkit-filter: blur(1px);*/
 }
 
  a.backlink{ 
@@ -174,7 +173,7 @@ html.dim{background:#333; opacity:1;}
 }
 
 #header{
-	height:55px;
+	height:75px;
 	width:90%;
 	padding:10px 200px 15px 100px;
 	position:relative;
@@ -200,7 +199,7 @@ html.dim{background:#333; opacity:1;}
 	width:800px;
 	margin:0;
 	padding:0;
-	margin:10px 0 0 60px;
+	margin:14px 0 0 60px;
 }
 
 #content{

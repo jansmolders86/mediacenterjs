@@ -82,6 +82,7 @@
 				console.log(tvData[0])
 				setTimeout(function(){
 					visibleTv.find('img').attr('src',tvData[0].banner);		
+					visibleTv.addClass('coverfound');		
 				},400);
 			});
 		}		

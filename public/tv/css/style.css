@@ -1,11 +1,15 @@
-#header{ height:50px;}
+
 #wrapper{margin-top:50px;}
 .tvshow{
 	float:left;
 	margin:10px;
+
+}
+.tvshow.coverfound{
 	-moz-box-shadow: 0 0px 5px #888;
 	-webkit-box-shadow: 0 0px 5px #888;
 	box-shadow: 0 0px 5px #888;
+	background:#fff;
 }
 #tvshowBanners{max-width:1556px; margin:0 auto;}
 .info{margin:10px 5px 5px}
