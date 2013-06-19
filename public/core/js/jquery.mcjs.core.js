@@ -96,6 +96,7 @@
 			,subitem = $('.options:visible li')
 			,item = $('li')
 			,elid = $(document.activeElement).is("input:focus")
+			if (typeof e == 'undefined' && window.event) { e = window.event; }
 			
 			switch(e.keyCode) {
 				case 40 : //down
