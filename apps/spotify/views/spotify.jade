@@ -4,17 +4,26 @@ html(lang="en")
 		// Core inclusion
 		link(rel='stylesheet', href='/core/css/style.css')
 		script(src="/core/js/jquery-1.8.2.min.js")
+		script(src="/core/js/plugins/jquery.idle-timer.js")		
 		script(src="/core/js/jquery.mcjs.core.js")
 
-		title Grooveshark
+		title Spotify
+		
+		link(rel='stylesheet', href='/spotify/css/style.css')
+		script(src="/spotify/js/jquery.spotify.js")
+		
 		script
 			$(document).ready(function(){
 				$('body').mcjs();
+				$('body').spotify();
 			});
+			
+
 	body
-		#backdrop
-			img.backdropimg(src="")
-		#wrapper
+		#header
 			a.backlink(href="/") 
 				img(src="/core/icons/back.png")
-			h1 This is a placeholder for the Spotify app.
+			h1 Spotify
+		#wrapper
+			#searchWrapper
+				.search(contenteditable)

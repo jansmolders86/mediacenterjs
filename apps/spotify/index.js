@@ -19,8 +19,32 @@
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
 
+var spotify = require('spotify');
+
 // Render the indexpage
 exports.index = function(req, res, next){
 	res.render('spotify');
 };
 
+exports.post = function(req, res, next){
+	var incomingFile = req.body
+	, searchQuery = incomingFile.track
+	
+	findTrack(searchQuery, function(){
+		res.render('tracks',{
+			tracks : data
+		});
+	})
+};
+
+
+function findTrack(searchQuery, callback){
+	spotify.search({ type: 'track', query: searchQuery }, function(err, data) {
+		if ( err ) {
+			console.log('Error occurred: ' + err);
+			return;
+		} else {
+			callback(data)
+		}
+	});
+}

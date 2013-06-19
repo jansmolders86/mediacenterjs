@@ -1,0 +1,15 @@
+body{background:#7CC110;}
+
+#searchWrapper{
+	width:600px;
+	margin:0 auto;
+}
+.search{
+	width:600px; 
+	border-radius:5px; 
+	background:#fff; 
+	border:1px solid #ccc;
+	height:40px;
+}
+
+#wrapper{margin-top:50px;}
