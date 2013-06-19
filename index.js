@@ -20,7 +20,8 @@ var express = require('express')
 , app = express()
 , fs = require ('fs')
 , dateFormat = require('dateformat')
-, lingua = require('lingua');
+, lingua = require('lingua')
+, geoip = require('geoip-lite');
 
 
 var configfile = []
@@ -70,7 +71,18 @@ app.configure('production', function(){
 require('./lib/routing')(app,{ verbose: !module.parent });
 app.get("/", function(req, res, next) {  
 	if(	configfileResults.moviepath == '' && configfileResults.language == '' && configfileResults.location == '' || configfileResults.moviepath == null || configfileResults.moviepath == undefined){
-		res.render('setup');	
+	
+		var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
+		, locationFound = 'unknown';
+		
+		if( ip !== '127.0.0.1'){
+			var geo = geoip.lookup(ip);
+			if(geo !== null) locationFound = geo.city
+		} 
+		res.render('setup',{
+			location: locationFound
+		});	
+
 	} else {
 		var apps = []
 		//Search app folder for apps and check if tile icon is present
