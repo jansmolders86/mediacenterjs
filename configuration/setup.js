@@ -1,11 +1,10 @@
 {
     "moviepath": "",
-    "highres": "yes",
     "musicpath": "",
-    "tvpath": "",
+    "tvpath":  "",
     "language": "",
-    "onscreenkeyboard": "no",
     "location": "",
     "screensaver": "off",
-    "port": "3000"
+    "showdetails": "yes",
+    "port": ""
 }
