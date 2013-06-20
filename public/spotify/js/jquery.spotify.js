@@ -34,17 +34,18 @@
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
 			
-			$('.search').bind("keydown", function(e){
-				if(e.keyCode == 13){
+			$('.search').keypress(function(e) {
+				if(e.keyCode == 13) {
 					e.preventDefault();
-					var track = $(this).value();
-					e.preventDefault();
-					_getTrack(o, track)
-				} else{
-					return
+					_getTrack(o);
+					return false;
 				}
 			});
 			
+			$('#searchWrapper').bind('submit', function(e) {
+				_getTrack(o);
+				return false;
+			});
 		});
 	}
 	
@@ -52,14 +53,17 @@
 	
 	
 	function _getTrack(o,track){
+		var track = $('.search').attr('value');
 		if(track !== undefined){
 			$.ajax({
 				url: '/spotify/post/', 
 				type: 'post',
 				data: {track : track}
 			}).done(function(data){
-				var trackdata = $.parseJSON(data);
-				console.log(trackdata[0])
+				var trackdata = data.tracks;
+				$(trackdata).each(function(data){
+					console.log(data)
+				});
 			});
 		}		
 	}

@@ -25,5 +25,7 @@ html(lang="en")
 				img(src="/core/icons/back.png")
 			h1 Spotify
 		#wrapper
-			#searchWrapper
-				.search(contenteditable)
+			form#searchWrapper(method="post") 
+				h1 Zoek tracks
+				input.search(type="text")
+				input.btn(type="submit")
