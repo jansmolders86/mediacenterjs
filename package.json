@@ -10,7 +10,7 @@
 		"type": "GNU",
 		"url": "http://www.gnu.org/licenses"
 	}],
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",
@@ -31,6 +31,7 @@
 		"util": "0.4.9",
 		"trakt": "0.0.5-2",
 		"geoip-lite":"1.0.10",
-		"spotify":"0.2.0"
+		"spotify":"0.2.0",
+		"colors":"0.6.0-1"
 	}
 }
