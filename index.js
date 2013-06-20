@@ -21,7 +21,8 @@ var express = require('express')
 , fs = require ('fs')
 , dateFormat = require('dateformat')
 , lingua = require('lingua')
-, geoip = require('geoip-lite');
+, geoip = require('geoip-lite')
+, colors = require('colors');
 
 
 var configfile = []
@@ -156,7 +157,7 @@ function writeSettings(req, res, callback){
 	fs.writeFile(configfilepath, JSON.stringify(myData, null, 4), function(e) {
 		if(e) {
 			res.send(500);
-			console.log('Error wrting settings',err);
+			console.log('Error wrting settings',err .red);
 		} else {
 			setTimeout(function(){
 				callback();
@@ -167,11 +168,11 @@ function writeSettings(req, res, callback){
 
 // Open App socket
 if (configfileResults.port == "" || configfileResults.port == undefined ){
-	console.log('Error parsing configfile, falling back to default port')
+	console.log('Error parsing configfile, falling back to default port' .red)
 	app.listen(parseInt(3000));
 } else{
 	app.listen(parseInt(configfileResults.port));
 }
 
 
-console.log("MediacenterJS listening on port:", configfileResults.port); 
+console.log("MediacenterJS listening on port:", configfileResults.port .green); 
