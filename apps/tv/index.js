@@ -32,7 +32,8 @@ var express = require('express')
 , Encoder = require('node-html-encoder').Encoder
 , encoder = new Encoder('entity')
 , Trakt = require('trakt')
-, trakt = new Trakt({username: 'mediacenterjs', password: 'mediacenterjs'}); 
+, trakt = new Trakt({username: 'mediacenterjs', password: 'mediacenterjs'})
+, colors = require('colors'); 
 
 /* Get Config */
 var configfile = []
@@ -76,66 +77,44 @@ exports.post = function(req, res, next){
 	var incommingFile = req.body
 	, tvRequest = incommingFile.tvTitle
 
-	console.log('Getting data for tv show', tvRequest);
 	//Check if folder already exists
 	if (fs.existsSync('./public/tv/data/'+tvRequest)) {
 		if(fs.existsSync('./public/tv/data/'+tvRequest+'/data.js')){
 			fs.stat('./public/tv/data/'+tvRequest+'/data.js', function (err, stats) {
 				// If data file is created without data, we remove it (rm -rf using module RimRaf).
 				if(stats.size == 0){
-					rimraf('./public/tv/data/'+tvRequest, function (e) {
-						if(!e){
-							console.log('Removed bad dir', tvRequest);
-							res.redirect('/tv/')
-						} else {
-							console.log('Removing dir error:', e)
-						}
-					});
+					removeBadDir(tvRequest)
 				} else {
 					// Read cached file and send to client.
 					fs.readFile('./public/tv/data/'+tvRequest+'/data.js', 'utf8', function (err, data) {
 						if(!err){
 							res.send(data);
 						}else if(err){
-							rimraf('./public/tv/data/'+tvRequest, function (e) {
-								if(!e){
-									console.log('Removed bad dir', tvRequest);
-									res.redirect('/tv/')
-								} else {
-									console.log('Removing dir error:', e)
-								}
-							});
+							removeBadDir(tvRequest)
 						}
 					});
 				}
 			});
 		} else {
-			rimraf('./public/tv/data/'+tvRequest, function (e) {
-				if(!e){
-					console.log('Removed bad dir', tvRequest);
-					res.redirect('/tv/')
-				} else {
-					console.log('Removing dir error:', e)
-				}
-			});
+			removeBadDir(tvRequest)
 		}
 	} else {
-		console.log('New movie, getting details')
 		fs.mkdir('./public/tv/data/'+tvRequest, 0777, function (err) {
 			if (err) {
-				console.log('Error creating folder',err);
+				console.log('Error creating folder',err .red);
 			
 				scraperdataset = { title:title, genre:genre, certification:certification, banner:banner }
 				scraperdata[scraperdata.length] = scraperdataset;
 				var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
 				writeToFile(scraperdataJSON);	
+				
 			} else {
 				console.log('Directory '+tvRequest+' created');
 
 				var options = { query: tvRequest }
 				trakt.request('search', 'shows', options, function(err, result) {
 					if (err) {
-						console.log('error retrieving tvshwo info', err);
+						console.log('error retrieving tvshow info', err .red);
 					} else {
 						var tvSearchResult = result[0];
 						
@@ -175,11 +154,11 @@ exports.post = function(req, res, next){
 						if(!err){
 							res.send(data);
 						}else{
-							console.log('Cannot read scraper data', err)
+							console.log('Cannot read scraper data', err .red)
 						}
 					});
 				}else{ 
-					console.log('Error getting movielist', e);
+					console.log('Error getting movielist', e .red);
 				};
 			});
 		},1000);	
@@ -191,13 +170,25 @@ exports.post = function(req, res, next){
 			var banner = tvSearchResult.images.banner
 			, downloadDir = './public/tv/data/'+tvRequest+'/';
 			
-			downloader.on('done', function(msg) { console.log('done', msg); });
-			downloader.on('error', function(msg) { console.log('error', msg); });
+			downloader.on('done', function(msg) { console.log('done', msg .green); });
+			downloader.on('error', function(msg) { console.log('error', msg .red); });
 			downloader.download(banner, downloadDir);
 		} else{
 			banner = '/tv/images/banner.png'
 		}
 		callback(banner);
 	};
+	
+		
+	function removeBadDir(tvRequest){
+		rimraf('./public/tv/data/'+tvRequest, function (e) {
+			if(!e){
+				console.log('Removed bad dir', tvRequest .blue);
+				res.redirect('/tv/')
+			} else {
+				console.log('Removing dir error:', e .red)
+			}
+		});
+	}
 
 };

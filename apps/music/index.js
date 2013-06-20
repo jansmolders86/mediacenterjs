@@ -7,7 +7,8 @@ var express = require('express')
 , rimraf = require('rimraf')
 , request = require("request")
 , helper = require('../../lib/helpers.js')
-, Encoder = require('node-html-encoder').Encoder;
+, Encoder = require('node-html-encoder').Encoder
+, colors = require('colors');
 
 // entity type encoder
 var encoder = new Encoder('entity');
@@ -91,7 +92,6 @@ exports.post = function(req, res, next){
 	var scraperdata = new Array()
 	,scraperdataset = null;
 
-	console.log('Getting data for album', albumRequest);
 	//Check if folder already exists
 
 	if (fs.existsSync('./public/music/data/'+albumRequest)) {
@@ -99,49 +99,27 @@ exports.post = function(req, res, next){
 			fs.stat('./public/music/data/'+albumRequest+'/data.js', function (err, stats) {
 				// If data file is created without data, we remove it (rm -rf using module RimRaf).
 				if(stats.size == 0){
-					rimraf('./public/music/data/'+albumRequest, function (e) {
-						if(!e){
-							console.log('Removed bad dir', albumRequest);
-							res.redirect('/music/')
-						} else {
-							console.log('Removing dir error:', e)
-						}
-					});
+					removeBadDir(albumRequest)
 				} else {
 					// Read cached file and send to client.
 					fs.readFile('./public/music/data/'+albumRequest+'/data.js', 'utf8', function (err, data) {
 						if(!err){
 							res.send(data);
 						}else if(err){
-							rimraf('./public/music/data/'+albumRequest, function (e) {
-								if(!e){
-									console.log('Removed bad dir', albumRequest);
-									res.redirect('/music/')
-								} else {
-									console.log('Removing dir error:', e)
-								}
-							});
+							removeBadDir(albumRequest)
 						}
 					});
 				}
 			});
 		} else {
-			rimraf('./public/music/data/'+albumRequest, function (e) {
-				if(!e){
-					console.log('Removed bad dir', albumRequest);
-					res.redirect('/music/')
-				} else {
-					console.log('Removing dir error:', e)
-				}
-			});
+			removeBadDir(albumRequest)
 		}
 	} else {
-		console.log('New album, getting details')
 		fs.mkdir('./public/music/data/'+albumRequest, 0777, function (err) {
 			if (err) {
-				console.log('Error creating folder',err);
+				console.log('Error creating folder',err .red);
 			} else {
-				console.log('Directory for '+albumRequest+' created');
+				console.log('Directory for '+albumRequest+' created' .green);
 
 				var filename = albumRequest
 				, year = filename.match(/\(.*?([0-9]{4}).*?\)/)
@@ -157,15 +135,13 @@ exports.post = function(req, res, next){
 						if (albumRequest.match(/\.(mp3)/gi)){
 							var dir = configfileResults.musicpath;
 							single = true 
-							console.log('Found single', dir)
 						}else {
 							var dir = configfileResults.musicpath+encoder.htmlDecode(albumRequest)+'/';
 							single = false 
-							console.log('Found album', dir)
 						}
 						fs.readdir(dir,function(err,files){
 							if (err){
-								console.log('Error looking for album art',err);
+								console.log('Error looking for album art',err .red);
 								discogs(albumTitle, function(title,thumb,year,genre){
 									scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}						
 									scraperdata[scraperdata.length] = scraperdataset;
@@ -174,18 +150,15 @@ exports.post = function(req, res, next){
 								});
 							}else{
 								files.forEach(function(file){
-									console.log('Found files', file)
 									if (file.match(/\.(jpg|jpeg|png)/gi)){
 										if (single == true){
 											var title = albumRequest.replace(/\.(mp3)/gi,"")
 											if (file.match(title,"g")){
-												console.log('local cover found', file);
-	
 												fs.copy(configfileResults.musicpath+file, './public/music/data/'+albumRequest+'/'+file, function (err) {
 												  if (err) {
-													console.log('Error copying image to cache',err);
+													console.log('Error copying image to cache',err .red);
 												  }
-												  console.log('Copied succesfully');
+												  console.log('Copied cover to cache succesfull' .green);
 												});
 												
 												thumb = '/music/data/'+albumRequest+'/'+file;
@@ -200,9 +173,9 @@ exports.post = function(req, res, next){
 
 											fs.copy(dir+file, './public/music/data/'+albumRequest+'/'+file, function (err) {
 											  if (err) {
-												console.log('Error copying image to cache',err);
+												console.log('Error copying image to cache',err .red);
 											  }
-											  console.log('Copied succesfully');
+											  console.log('Copied cover to cache succesfull' .green);
 											});
 			
 											
@@ -220,7 +193,7 @@ exports.post = function(req, res, next){
 						});
 
 					}else {
-						console.log('Unknown file or album, writing fallback',albumRequest)
+						console.log('Unknown file or album, writing fallback',albumRequest .blue)
 						scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}						
 						scraperdata[scraperdata.length] = scraperdataset;
 						var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
@@ -283,14 +256,25 @@ exports.post = function(req, res, next){
 						if(!err){
 							res.send(data);
 						}else{
-							console.log('Cannot read scraper data', err)
+							console.log('Cannot read scraper data', err .red)
 						}
 					});
 				}else{ 
-					console.log('Error getting movielist', e);
+					console.log('Error getting movielist', e .red);
 				};
 			});	
 		};
+		
+		function removeBadDir(albumRequest){
+			rimraf('./public/music/data/'+albumRequest, function (e) {
+				if(!e){
+					console.log('Removed bad dir', albumRequest .blue);
+					res.redirect('/music/')
+				} else {
+					console.log('Removing dir error:', e .red)
+				}
+			});
+		}
 		
 		
 	};

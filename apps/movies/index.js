@@ -30,7 +30,8 @@ var express = require('express')
 , util = require('util')
 , helper = require('../../lib/helpers.js')
 , Encoder = require('node-html-encoder').Encoder
-, encoder = new Encoder('entity');
+, encoder = new Encoder('entity')
+, colors = require('colors');
 
 /* Get Config */
 var configfile = []
@@ -70,7 +71,7 @@ exports.play = function(req, res){
 	
 	probe(movie, function(err, probeData) {
 		if (err){
-			console.log('Can not probe movie for metadata', err)
+			console.log('Can not probe movie for metadata', err .red)
 		} else {
 			var metaDuration =  '-metadata duration="'+probeData.streams[0].duration+'"'
 			, tDuration =  '-t '+probeData.streams[0].duration
@@ -78,9 +79,9 @@ exports.play = function(req, res){
 			.addOptions(['-y','-ss 0','-b 800k','-vcodec libx264','-acodec mp3','-ab 128','-ar 44100','-bufsize 62000', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
 			.writeToStream(res, function(retcode, error){
 				if (!error){
-					console.log('file has been converted succesfully',retcode);
+					console.log('file has been converted succesfully',retcode .green);
 				}else{
-					console.log('file conversion error',error);
+					console.log('file conversion error',error .red);
 				}
 			});
 		}
@@ -117,56 +118,34 @@ exports.post = function(req, res, next){
 		movieRequest = incommingMovieTitle;
 	}
 
-	console.log('Getting data for movie', movieRequest);
+	console.log('Getting data for movie', movieRequest .green);
 	//Check if folder already exists
 	if (fs.existsSync('./public/movies/data/'+movieRequest)) {
 		if(fs.existsSync('./public/movies/data/'+movieRequest+'/data.js')){
 			fs.stat('./public/movies/data/'+movieRequest+'/data.js', function (err, stats) {
 				// If data file is created without data, we remove it (rm -rf using module RimRaf).
 				if(stats.size == 0){
-					rimraf('./public/movies/data/'+movieRequest, function (e) {
-						if(!e){
-							console.log('Removed bad dir', movieRequest);
-							res.redirect('/movies/')
-						} else {
-							console.log('Removing dir error:', e)
-						}
-					});
+					removeBadDir(movieRequest)
 				} else {
 					// Read cached file and send to client.
 					fs.readFile('./public/movies/data/'+movieRequest+'/data.js', 'utf8', function (err, data) {
 						if(!err){
 							res.send(data);
 						}else if(err){
-							rimraf('./public/movies/data/'+movieRequest, function (e) {
-								if(!e){
-									console.log('Removed bad dir', movieRequest);
-									res.redirect('/movies/')
-								} else {
-									console.log('Removing dir error:', e)
-								}
-							});
+							removeBadDir(movieRequest)
 						}
 					});
 				}
 			});
 		} else {
-			rimraf('./public/movies/data/'+movieRequest, function (e) {
-				if(!e){
-					console.log('Removed bad dir', movieRequest);
-					res.redirect('/movies/')
-				} else {
-					console.log('Removing dir error:', e)
-				}
-			});
+			removeBadDir(movieRequest)
 		}
 	} else {
-		console.log('New movie, getting details')
 		fs.mkdir('./public/movies/data/'+movieRequest, 0777, function (err) {
 			if (err) {
-				console.log('Error creating folder',err);
+				console.log('Error creating folder',err .red);
 			} else {
-				console.log('Directory '+movieRequest+' created');
+				console.log('Directory '+movieRequest+' created' .green);
 
 				// Building scraper url
 				var filename = movieRequest
@@ -243,11 +222,11 @@ exports.post = function(req, res, next){
 						if(!err){
 							res.send(data);
 						}else{
-							console.log('Cannot read scraper data', err)
+							console.log('Cannot read scraper data', err .red)
 						}
 					});
 				}else{ 
-					console.log('Error getting movielist', e);
+					console.log('Error getting movielist', e .red);
 				};
 			});
 		},1000);	
@@ -279,5 +258,17 @@ exports.post = function(req, res, next){
 		};
 		callback(poster,backdrop);
 	};
+	
+		
+	function removeBadDir(movieRequest){
+		rimraf('./public/movies/data/'+movieRequest, function (e) {
+			if(!e){
+				console.log('Removed bad dir', movieRequest .blue);
+				res.redirect('/movies/')
+			} else {
+				console.log('Removing dir error:', e .red)
+			}
+		});
+	}
 
 };
