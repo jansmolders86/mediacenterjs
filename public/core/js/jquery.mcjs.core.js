@@ -124,7 +124,9 @@
 					}
 				break;
 				case 13 : //enter
-					document.location = focused.find('a').attr('href');
+					if (!elid){
+						document.location = focused.find('a').attr('href');
+					}
 				break;
 				case 8  : //backspace
 					if (!elid){
@@ -133,12 +135,14 @@
 					}
 				break;
 				case 32 : 
-					videojs("player").on("play", function(){
-						videojs("player").pause();
-					});
-					videojs("player").on("pause", function(){
-						videojs("player").play();
-					});
+					if (!elid){
+						videojs("player").on("play", function(){
+							videojs("player").pause();
+						});
+						videojs("player").on("pause", function(){
+							videojs("player").play();
+						});
+					}
 				break;
 			}
 		});
