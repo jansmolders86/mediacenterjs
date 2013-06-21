@@ -148,16 +148,15 @@ exports.post = function(req, res, next){
 												var writePath = './public/music/data/'+albumRequest+'/data.js'
 												helper.writeToFile(req,res,writePath,dataToWrite)
 											}
-										} else if (file.match(/cover|front|album|art|AlbumArtSmall/gi)){
+										} else if (file.match(/cover|front|album|art/gi)){
 											console.log('local cover found',file);
-
+											
 											fs.copy(dir+file, './public/music/data/'+albumRequest+'/'+file, function (err) {
 											  if (err) {
 												console.log('Error copying image to cache',err .red);
 											  }
 											  console.log('Copied cover to cache succesfull' .green);
 											});
-			
 											
 											thumb = '/music/data/'+albumRequest+'/'+file;
 											
