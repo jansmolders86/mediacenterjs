@@ -223,24 +223,23 @@ exports.post = function(req, res, next){
 	
 	function checkDirForCorruptedFiles(movieRequest){
 		var checkDir = './public/movies/data/'+movieRequest
-		, redirectUrl = '/movies/';
-		
+
 		if(fs.existsSync('./public/movies/data/'+movieRequest+'/data.js')){
 			fs.stat('./public/movies/data/'+movieRequest+'/data.js', function (err, stats) {		
 				if(stats.size == 0){
-					helper.removeBadDir(req, res, checkDir, redirectUrl)
+					helper.removeBadDir(req, res, checkDir)
 				} else {
 					fs.readFile('./public/movies/data/'+movieRequest+'/data.js', 'utf8', function (err, data) {
 						if(!err){
 							res.send(data);
 						}else if(err){
-							helper.removeBadDir(req, res, checkDir, redirectUrl)
+							helper.removeBadDir(req, res, checkDir)
 						}
 					});
 				}
 			});
 		} else {
-			helper.removeBadDir(req, res, checkDir, redirectUrl)
+			helper.removeBadDir(req, res, checkDir)
 		}
 	}
 

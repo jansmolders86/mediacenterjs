@@ -78,12 +78,16 @@
 				type: 'post',
 				data: {tvTitle : title}
 			}).done(function(data){
-				var tvData = $.parseJSON(data);
-				console.log(tvData[0])
-				setTimeout(function(){
-					visibleTv.find('img').attr('src',tvData[0].banner);		
-					visibleTv.addClass('coverfound');		
-				},400);
+				if (data == 'bad dir'){
+					_handlevisibleTVShows(o, title, visibleTv)
+				} else {
+					var tvData = $.parseJSON(data);
+					console.log(tvData[0])
+					setTimeout(function(){
+						visibleTv.find('img').attr('src',tvData[0].banner);		
+						visibleTv.addClass('coverfound');		
+					},400);
+				}
 			});
 		}		
 	}

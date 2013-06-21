@@ -147,25 +147,24 @@ exports.post = function(req, res, next){
 	};
 
 	function checkDirForCorruptedFiles(tvRequest){
-		var checkDir = './public/music/data/'+tvRequest
-		, redirectUrl = '/music/';
+		var checkDir = './public/tv/data/'+tvRequest
 		
-		if(fs.existsSync('./public/music/data/'+tvRequest+'/data.js')){
-			fs.stat('./public/music/data/'+tvRequest+'/data.js', function (err, stats) {		
+		if(fs.existsSync('./public/tv/data/'+tvRequest+'/data.js')){
+			fs.stat('./public/tv/data/'+tvRequest+'/data.js', function (err, stats) {		
 				if(stats.size == 0){
-					helper.removeBadDir(req, res, checkDir, redirectUrl)
+					helper.removeBadDir(req, res, checkDir)
 				} else {
-					fs.readFile('./public/music/data/'+tvRequest+'/data.js', 'utf8', function (err, data) {
+					fs.readFile('./public/tv/data/'+tvRequest+'/data.js', 'utf8', function (err, data) {
 						if(!err){
 							res.send(data);
 						}else if(err){
-							helper.removeBadDir(req, res, checkDir, redirectUrl)
+							helper.removeBadDir(req, res, checkDir)
 						}
 					});
 				}
 			});
 		} else {
-			helper.removeBadDir(req, res, checkDir, redirectUrl)
+			helper.removeBadDir(req, res, checkDir)
 		}
 	}
 

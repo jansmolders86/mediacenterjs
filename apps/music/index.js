@@ -60,7 +60,6 @@ exports.album = function(req, res, next){
 };
 
 exports.track = function(req, res, next){
-	var bitrate = '320k'
 	var decodeTrack = encoder.htmlDecode(req.params.track).replace(/\^/gi,"/")
 	if (req.params.album === 'none'){
 		var track = configfileResults.musicpath+decodeTrack
@@ -81,8 +80,7 @@ exports.track = function(req, res, next){
 exports.post = function(req, res, next){	
 	var incomingFile = req.body
 	, albumRequest = incomingFile.albumTitle
-
-	var albumTitle = null
+	, albumTitle = null
 	
 	var title = 'No data found...'
 	, thumb = '/music/css/img/nodata.jpg'
@@ -91,8 +89,6 @@ exports.post = function(req, res, next){
 	
 	var scraperdata = new Array()
 	,scraperdataset = null;
-
-	//Check if folder already exists
 
 	if (fs.existsSync('./public/music/data/'+albumRequest)) {
 		checkDirForCorruptedFiles(albumRequest)
@@ -236,24 +232,23 @@ exports.post = function(req, res, next){
 	
 		function checkDirForCorruptedFiles(albumRequest){
 			var checkDir = './public/music/data/'+albumRequest
-			, redirectUrl = '/music/';
-			
+
 			if(fs.existsSync('./public/music/data/'+albumRequest+'/data.js')){
 				fs.stat('./public/music/data/'+albumRequest+'/data.js', function (err, stats) {		
 					if(stats.size == 0){
-						helper.removeBadDir(req, res, checkDir, redirectUrl)
+						helper.removeBadDir(req, res, checkDir)
 					} else {
 						fs.readFile('./public/music/data/'+albumRequest+'/data.js', 'utf8', function (err, data) {
 							if(!err){
 								res.send(data);
 							}else if(err){
-								helper.removeBadDir(req, res, checkDir, redirectUrl)
+								helper.removeBadDir(req, res, checkDir)
 							}
 						});
 					}
 				});
 			} else {
-				helper.removeBadDir(req, res, checkDir, redirectUrl)
+				helper.removeBadDir(req, res, checkDir)
 			}
 		}
 		

@@ -116,12 +116,16 @@
 			type: 'post',
 			data: {albumTitle : title}
 		}).done(function(data){
-			var albumData = $.parseJSON(data);
-			album.addClass('coverfound')
-			cover.attr('src','');	
-			setTimeout(function(){
-				cover.attr('src',albumData[0].thumb);
-			},500);
+			if (data == 'bad dir'){
+				_handleMusic(title, cover, album)
+			} else {
+				var albumData = $.parseJSON(data);
+				album.addClass('coverfound')
+				cover.attr('src','');	
+				setTimeout(function(){
+					cover.attr('src',albumData[0].thumb);
+				},500);
+			}
 		});
 	}
 	
@@ -152,42 +156,45 @@
 			type: 'post',
 			data: {album : album}
 		}).done(function(data){
-			_hideOtherAlbums();
+			if (data == 'bad dir'){
+				_getAlbum(album)
+			} else {
+				_hideOtherAlbums();
 
-			$('body').append('<div id="tracklist"><div class="info"><img src="" class="cover"/></div><h2>'+album+'</h2><ul id="tracks"></ul></div>').addClass('tracklist')
-			
-			for (var i = 0; i < data.length; i++) {
-				$('#tracks').append('<li><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+data[i]+'</div></li>')
-			}
-			
-			$.ajax({
-				url: '/music/post/', 
-				type: 'post',
-				data: {albumTitle : album}
-			}).done(function(data){
-
-				var albumData = $.parseJSON(data);
-				$('#tracklist').find('img.cover').attr('src',albumData[0].thumb);
-				$('img.cover').bind('load', function (event) {
-					var image = event.target;
-					 _dominantColor(image);
-				});		
-			});
-			
-			$('#tracklist').find('li').click(function(e) {
-				e.preventDefault();	
-				var songTitle = $(this).find('.title').html();
+				$('body').append('<div id="tracklist"><div class="info"><img src="" class="cover"/></div><h2>'+album+'</h2><ul id="tracks"></ul></div>').addClass('tracklist')
 				
-				$('#tracklist').find('li').each(function(){
-					$(this).removeClass('selected');
+				for (var i = 0; i < data.length; i++) {
+					$('#tracks').append('<li><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+data[i]+'</div></li>')
+				}
+				
+				$.ajax({
+					url: '/music/post/', 
+					type: 'post',
+					data: {albumTitle : album}
+				}).done(function(data){
+
+					var albumData = $.parseJSON(data);
+					$('#tracklist').find('img.cover').attr('src',albumData[0].thumb);
+					$('img.cover').bind('load', function (event) {
+						var image = event.target;
+						 _dominantColor(image);
+					});		
 				});
-				$(this).addClass('selected');
-				var track = '/music/track/'+album+'/'+songTitle
-				, random = false;
+				
+				$('#tracklist').find('li').click(function(e) {
+					e.preventDefault();	
+					var songTitle = $(this).find('.title').html();
+					
+					$('#tracklist').find('li').each(function(){
+						$(this).removeClass('selected');
+					});
+					$(this).addClass('selected');
+					var track = '/music/track/'+album+'/'+songTitle
+					, random = false;
 
-				_playTrack(track,album,random)
-			});
-
+					_playTrack(track,album,random)
+				});
+			}
 		});	
 	}
 	
