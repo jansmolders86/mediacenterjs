@@ -95,25 +95,7 @@ exports.post = function(req, res, next){
 	//Check if folder already exists
 
 	if (fs.existsSync('./public/music/data/'+albumRequest)) {
-		if(fs.existsSync('./public/music/data/'+albumRequest+'/data.js')){
-			fs.stat('./public/music/data/'+albumRequest+'/data.js', function (err, stats) {
-				// If data file is created without data, we remove it (rm -rf using module RimRaf).
-				if(stats.size == 0){
-					removeBadDir(albumRequest)
-				} else {
-					// Read cached file and send to client.
-					fs.readFile('./public/music/data/'+albumRequest+'/data.js', 'utf8', function (err, data) {
-						if(!err){
-							res.send(data);
-						}else if(err){
-							removeBadDir(albumRequest)
-						}
-					});
-				}
-			});
-		} else {
-			removeBadDir(albumRequest)
-		}
+		checkDirForCorruptedFiles(albumRequest)
 	} else {
 		fs.mkdir('./public/music/data/'+albumRequest, 0777, function (err) {
 			if (err) {
@@ -145,8 +127,9 @@ exports.post = function(req, res, next){
 								discogs(albumTitle, function(title,thumb,year,genre){
 									scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}						
 									scraperdata[scraperdata.length] = scraperdataset;
-									var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-									writeToFile(scraperdataJSON);
+									var dataToWrite = JSON.stringify(scraperdata, null, 4);
+									var writePath = './public/music/data/'+albumRequest+'/data.js'
+									helper.writeToFile(req,res,writePath,dataToWrite)
 								});
 							}else{
 								files.forEach(function(file){
@@ -165,8 +148,9 @@ exports.post = function(req, res, next){
 												
 												scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}						
 												scraperdata[scraperdata.length] = scraperdataset;
-												var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-												writeToFile(scraperdataJSON);
+												var dataToWrite = JSON.stringify(scraperdata, null, 4);
+												var writePath = './public/music/data/'+albumRequest+'/data.js'
+												helper.writeToFile(req,res,writePath,dataToWrite)
 											}
 										} else if (file.match(/cover|front|album|art|AlbumArtSmall/gi)){
 											console.log('local cover found',file);
@@ -183,8 +167,9 @@ exports.post = function(req, res, next){
 											
 											scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}						
 											scraperdata[scraperdata.length] = scraperdataset;
-											var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-											writeToFile(scraperdataJSON);
+											var dataToWrite = JSON.stringify(scraperdata, null, 4);
+											var writePath = './public/music/data/'+albumRequest+'/data.js'
+											helper.writeToFile(req,res,writePath,dataToWrite)
 										} 
 									} 
 								});
@@ -196,8 +181,9 @@ exports.post = function(req, res, next){
 						console.log('Unknown file or album, writing fallback',albumRequest .blue)
 						scraperdataset = { title:title, thumb:thumb, year:year, genre:genre}						
 						scraperdata[scraperdata.length] = scraperdataset;
-						var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-						writeToFile(scraperdataJSON);	
+						var dataToWrite = JSON.stringify(scraperdata, null, 4);
+						var writePath = './public/music/data/'+albumRequest+'/data.js'
+						helper.writeToFile(req,res,writePath,dataToWrite)
 					}
 				}, 1200);	
 			};
@@ -205,7 +191,6 @@ exports.post = function(req, res, next){
 		
 		
 		function discogs(albumTitle, callback){		
-		
 			helper.xhrCall("http://api.discogs.com/database/search?q="+albumTitle+"&type=release&callback=", function(response) {
 
 				var requestResponse = JSON.parse(response)
@@ -248,34 +233,29 @@ exports.post = function(req, res, next){
 			downloader.download(cover, downloadDir);
 			callback(cover);
 		};
-		
-		function writeToFile(scraperdataJSON){
-			fs.writeFile('./public/music/data/'+albumRequest+'/data.js', scraperdataJSON, function(e) {
-				if (!e) {
-					fs.readFile('./public/music/data/'+albumRequest+'/data.js', 'utf8', function (err, data) {
-						if(!err){
-							res.send(data);
-						}else{
-							console.log('Cannot read scraper data', err .red)
-						}
-					});
-				}else{ 
-					console.log('Error getting movielist', e .red);
-				};
-			});	
-		};
-		
-		function removeBadDir(albumRequest){
-			rimraf('./public/music/data/'+albumRequest, function (e) {
-				if(!e){
-					console.log('Removed bad dir', albumRequest .blue);
-					res.redirect('/music/')
-				} else {
-					console.log('Removing dir error:', e .red)
-				}
-			});
+	
+		function checkDirForCorruptedFiles(albumRequest){
+			var checkDir = './public/music/data/'+albumRequest
+			, redirectUrl = '/music/';
+			
+			if(fs.existsSync('./public/music/data/'+albumRequest+'/data.js')){
+				fs.stat('./public/music/data/'+albumRequest+'/data.js', function (err, stats) {		
+					if(stats.size == 0){
+						helper.removeBadDir(req, res, checkDir, redirectUrl)
+					} else {
+						fs.readFile('./public/music/data/'+albumRequest+'/data.js', 'utf8', function (err, data) {
+							if(!err){
+								res.send(data);
+							}else if(err){
+								helper.removeBadDir(req, res, checkDir, redirectUrl)
+							}
+						});
+					}
+				});
+			} else {
+				helper.removeBadDir(req, res, checkDir, redirectUrl)
+			}
 		}
-		
 		
 	};
 };

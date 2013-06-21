@@ -79,25 +79,7 @@ exports.post = function(req, res, next){
 
 	//Check if folder already exists
 	if (fs.existsSync('./public/tv/data/'+tvRequest)) {
-		if(fs.existsSync('./public/tv/data/'+tvRequest+'/data.js')){
-			fs.stat('./public/tv/data/'+tvRequest+'/data.js', function (err, stats) {
-				// If data file is created without data, we remove it (rm -rf using module RimRaf).
-				if(stats.size == 0){
-					removeBadDir(tvRequest)
-				} else {
-					// Read cached file and send to client.
-					fs.readFile('./public/tv/data/'+tvRequest+'/data.js', 'utf8', function (err, data) {
-						if(!err){
-							res.send(data);
-						}else if(err){
-							removeBadDir(tvRequest)
-						}
-					});
-				}
-			});
-		} else {
-			removeBadDir(tvRequest)
-		}
+		checkDirForCorruptedFiles(tvRequest)
 	} else {
 		fs.mkdir('./public/tv/data/'+tvRequest, 0777, function (err) {
 			if (err) {
@@ -105,8 +87,9 @@ exports.post = function(req, res, next){
 			
 				scraperdataset = { title:title, genre:genre, certification:certification, banner:banner }
 				scraperdata[scraperdata.length] = scraperdataset;
-				var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-				writeToFile(scraperdataJSON);	
+				var dataToWrite = JSON.stringify(scraperdata, null, 4);
+				var writePath = './public/tv/data/'+tvRequest+'/data.js'
+				helper.writeToFile(req,res,writePath,dataToWrite)				
 				
 			} else {
 				console.log('Directory '+tvRequest+' created');
@@ -130,39 +113,23 @@ exports.post = function(req, res, next){
 
 									scraperdataset = { title:title, genre:genre, certification:certification, banner:banner }
 									scraperdata[scraperdata.length] = scraperdataset;
-									var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-									writeToFile(scraperdataJSON);	
+									var dataToWrite = JSON.stringify(scraperdata, null, 4);
+									var writePath = './public/tv/data/'+tvRequest+'/data.js'
+									helper.writeToFile(req,res,writePath,dataToWrite)	
 
 							}); 
 						} else {
 							scraperdataset = { title:title, genre:genre, certification:certification, banner:banner }
 							scraperdata[scraperdata.length] = scraperdataset;
-							var scraperdataJSON = JSON.stringify(scraperdata, null, 4);
-							writeToFile(scraperdataJSON);	
+							var dataToWrite = JSON.stringify(scraperdata, null, 4);
+							var writePath = './public/tv/data/'+tvRequest+'/data.js'
+							helper.writeToFile(req,res,writePath,dataToWrite)	
 						}
 					}
 				});
 			}
 		});
 	};
-	
-	function writeToFile(scraperdataJSON){
-		setTimeout(function(){
-			fs.writeFile('./public/tv/data/'+tvRequest+'/data.js', scraperdataJSON, function(e) {
-				if (!e) {
-					fs.readFile('./public/tv/data/'+tvRequest+'/data.js', 'utf8', function (err, data) {
-						if(!err){
-							res.send(data);
-						}else{
-							console.log('Cannot read scraper data', err .red)
-						}
-					});
-				}else{ 
-					console.log('Error getting movielist', e .red);
-				};
-			});
-		},1000);	
-	}
 	
 	
 	function downloadCache(tvSearchResult,callback){
@@ -178,17 +145,28 @@ exports.post = function(req, res, next){
 		}
 		callback(banner);
 	};
-	
+
+	function checkDirForCorruptedFiles(tvRequest){
+		var checkDir = './public/music/data/'+tvRequest
+		, redirectUrl = '/music/';
 		
-	function removeBadDir(tvRequest){
-		rimraf('./public/tv/data/'+tvRequest, function (e) {
-			if(!e){
-				console.log('Removed bad dir', tvRequest .blue);
-				res.redirect('/tv/')
-			} else {
-				console.log('Removing dir error:', e .red)
-			}
-		});
+		if(fs.existsSync('./public/music/data/'+tvRequest+'/data.js')){
+			fs.stat('./public/music/data/'+tvRequest+'/data.js', function (err, stats) {		
+				if(stats.size == 0){
+					helper.removeBadDir(req, res, checkDir, redirectUrl)
+				} else {
+					fs.readFile('./public/music/data/'+tvRequest+'/data.js', 'utf8', function (err, data) {
+						if(!err){
+							res.send(data);
+						}else if(err){
+							helper.removeBadDir(req, res, checkDir, redirectUrl)
+						}
+					});
+				}
+			});
+		} else {
+			helper.removeBadDir(req, res, checkDir, redirectUrl)
+		}
 	}
 
 };
