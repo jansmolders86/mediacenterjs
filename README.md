@@ -51,6 +51,7 @@ What currently works?
 * Retrieving of tv show information
 * Basic screensaver
 * lazy loading of movie and music items
+* Automatically loading of location if available during setup
 
 What's coming up
 =================
@@ -135,6 +136,8 @@ After the initial setup has been completed, restart the server. MediacenterJS wi
 If you don't want to restart the server every time you make a change in the settings, use nodemon to run the application with the following command:
 
 	nodemon -w configuration index.js 
+	
+If you are new to nodemon, it might be needed to restart you command prompt or shell before being able to use nodemon properly.	
 	
 What can the movie browser/player do? 
 -------------
@@ -256,6 +259,30 @@ This app makes heavy use of:
 * Node-Fluent-FFmpeg (https://github.com/schaermu/node-fluent-ffmpeg)
 * Node-XMLHttpRequest (https://github.com/driverdan/node-XMLHttpRequest)
 * VideoJS (http://www.videojs.com/)
+
+
+This app also makes use of the following modules:
+
+* express
+* fs.extra
+* dateformat
+* downloader
+* fluent-ffmpeg
+* jade
+* lingua
+* node-ffprobe
+* node-html-encoder
+* nodemon
+* redis
+* request
+* require
+* rimraf
+* feedparser
+* util
+* trakt
+* geoip-lite
+* spotify
+* colors
 
 
 What is the beta version going to have?
