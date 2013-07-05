@@ -25,6 +25,15 @@ Status:
 
 __Heavy work in progress, pre-alpha, not ready for use__
 
+Changelog 
+=================
+
+__version 0.013 (Small fixes)__
+
+- Better music thumbnail quality
+- Improved/cleaned up code for music, tv and movies
+- Improved loading of music content
+
 Why use it (once it is ready)?
 ===========
 * Lightning fast
@@ -63,10 +72,10 @@ What's coming up
 Known issues
 ==================
 * Music duration is not passed on to the client
-* Buffer size needs to be fixed for video playback
+* Movie Buffer size needs tweaking
 * Subfolder support does not work yet
 
-  
+
 What still needs to be done
 ==================
 
@@ -92,7 +101,6 @@ What do I need to have installed to run this?
 * NodeJS installed
 * A modern browser like Chrome or Firefox
 * An internet connection
-
 
 Partial documentation 
 ==========================
