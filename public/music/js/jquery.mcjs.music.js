@@ -120,7 +120,7 @@
 				_handleMusic(title, cover, album)
 			} else {
 				var albumData = $.parseJSON(data);
-				album.addClass('coverfound')
+				album.addClass('coverfound').fadeIn();
 				cover.attr('src','');	
 				setTimeout(function(){
 					cover.attr('src',albumData[0].thumb);

@@ -38,6 +38,7 @@ ul.music li{
 	margin:0 10px 10px 0;
 	cursor:pointer;
 	float:left;
+	display:none;
 }
 
 ul.music .overlay{ width:0; height:0; }
