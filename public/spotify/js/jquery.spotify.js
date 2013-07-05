@@ -60,9 +60,9 @@
 				type: 'post',
 				data: {track : track}
 			}).done(function(data){
-				var trackdata = data.tracks;
-				$(trackdata).each(function(data){
-					console.log(data)
+				$(data.tracks).each(function(index, item){
+					console.log(item)
+					$('#results').append('<li><ul><li>Artitst: '+item.artists[0].name+'</li><li>Album: '+item.album.name+'</li><li></li><li><a href="'+item.href+'">play track</a><li></ul></li>');
 				});
 			});
 		}		

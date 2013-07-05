@@ -1,9 +1,14 @@
 body{background:#fff;}
 
-#searchWrapper{
-	width:700px;
-	margin:0 auto;
+#searchWrapper,
+#results{
+	width: 700px;
+	margin: 0 auto;
+	clear: both;
+	position: relative;
+	overflow: hidden;
 }
+#results{margin-top:40px;}
 #searchWrapper h1{ color:#7ab800;}
 .search{
 	width:500px; 
@@ -47,3 +52,10 @@ input[type=submit].btn:hover{
 }
 
 #wrapper{margin-top:50px;}
+
+#results > li{
+	padding:10px 0;
+	border-bottom:1px solid #e5e5e5;
+}
+
+#results li:odd{ background:#ccc;}
