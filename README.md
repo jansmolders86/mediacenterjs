@@ -33,6 +33,7 @@ __version 0.013 (Small fixes)__
 - Better music thumbnail quality
 - Improved/cleaned up code for music, tv and movies
 - Improved loading of music content
+- Continued work on Spotify app 
 
 Why use it (once it is ready)?
 ===========
