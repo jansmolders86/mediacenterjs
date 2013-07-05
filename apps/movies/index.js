@@ -168,23 +168,12 @@ exports.post = function(req, res, next){
 									// rating = secondRequestResponse.rating;
 									// certification = requestInitialDetails.certification;
 									overview = secondRequestResponse.overview;
-								}
-									
-								scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
-								scraperdata[scraperdata.length] = scraperdataset;
-								var dataToWrite = JSON.stringify(scraperdata, null, 4);
-								var writePath = './public/movies/data/'+movieRequest+'/data.js'
-								helper.writeToFile(req,res,writePath,dataToWrite)	
+								};
+								writeData(path,id,genre,runtime,original_name,imdb_id,rating,certification,overview,poster,backdrop,cdNumber);
 
 							});
 						} else {
-															
-							scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
-							scraperdata[scraperdata.length] = scraperdataset;
-							var dataToWrite = JSON.stringify(scraperdata, null, 4);
-							var writePath = './public/movies/data/'+movieRequest+'/data.js'
-							helper.writeToFile(req,res,writePath,dataToWrite)	
-							
+							writeData(path,id,genre,runtime,original_name,imdb_id,rating,certification,overview,poster,backdrop,cdNumber);
 						}
 
 					}); 
@@ -239,8 +228,21 @@ exports.post = function(req, res, next){
 				}
 			});
 		} else {
-			helper.removeBadDir(req, res, checkDir)
+			helper.removeBadDir(req, res, checkDir);
 		}
-	}
+	};
+	
+	function writeData(path,id,genre,runtime,original_name,imdb_id,rating,certification,overview,poster,backdrop,cdNumber){		
+		var scraperdata = new Array()
+		,scraperdataset = null;
+		
+		scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+		scraperdata[scraperdata.length] = scraperdataset;
+		var dataToWrite = JSON.stringify(scraperdata, null, 4);
+		var writePath = './public/movies/data/'+movieRequest+'/data.js'
+		
+		helper.writeToFile(req,res,writePath,dataToWrite);
+							
+	};
 
 };

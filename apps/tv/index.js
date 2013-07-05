@@ -84,13 +84,7 @@ exports.post = function(req, res, next){
 		fs.mkdir('./public/tv/data/'+tvRequest, 0777, function (err) {
 			if (err) {
 				console.log('Error creating folder',err .red);
-			
-				scraperdataset = { title:title, genre:genre, certification:certification, banner:banner }
-				scraperdata[scraperdata.length] = scraperdataset;
-				var dataToWrite = JSON.stringify(scraperdata, null, 4);
-				var writePath = './public/tv/data/'+tvRequest+'/data.js'
-				helper.writeToFile(req,res,writePath,dataToWrite)				
-				
+				writeData(title,genre,certification,banner);			
 			} else {
 				console.log('Directory '+tvRequest+' created');
 
@@ -111,21 +105,13 @@ exports.post = function(req, res, next){
 									genre = tvSearchResult.genre
 									certification = tvSearchResult.certification
 
-									scraperdataset = { title:title, genre:genre, certification:certification, banner:banner }
-									scraperdata[scraperdata.length] = scraperdataset;
-									var dataToWrite = JSON.stringify(scraperdata, null, 4);
-									var writePath = './public/tv/data/'+tvRequest+'/data.js'
-									helper.writeToFile(req,res,writePath,dataToWrite)	
+									writeData(title,genre,certification,banner);	
 
 							}); 
 						} else {
-							scraperdataset = { title:title, genre:genre, certification:certification, banner:banner }
-							scraperdata[scraperdata.length] = scraperdataset;
-							var dataToWrite = JSON.stringify(scraperdata, null, 4);
-							var writePath = './public/tv/data/'+tvRequest+'/data.js'
-							helper.writeToFile(req,res,writePath,dataToWrite)	
-						}
-					}
+							writeData(title,genre,certification,banner);
+						};
+					};
 				});
 			}
 		});
@@ -141,7 +127,7 @@ exports.post = function(req, res, next){
 			downloader.on('error', function(msg) { console.log('error', msg .red); });
 			downloader.download(banner, downloadDir);
 		} else{
-			banner = '/tv/images/banner.png'
+			banner = '/tv/images/banner.png';
 		}
 		callback(banner);
 	};
@@ -158,14 +144,27 @@ exports.post = function(req, res, next){
 						if(!err){
 							res.send(data);
 						}else if(err){
-							helper.removeBadDir(req, res, checkDir)
+							helper.removeBadDir(req, res, checkDir);
 						}
 					});
 				}
 			});
 		} else {
-			helper.removeBadDir(req, res, checkDir)
+			helper.removeBadDir(req, res, checkDir);
 		}
-	}
+	};
+	
+	function writeData(title,genre,certification,banner){		
+		var scraperdata = new Array()
+		,scraperdataset = null;
+		
+		scraperdataset = { title:title, genre:genre, certification:certification, banner:banner }
+		scraperdata[scraperdata.length] = scraperdataset;
+		var dataToWrite = JSON.stringify(scraperdata, null, 4);
+		var writePath = './public/tv/data/'+tvRequest+'/data.js'
+		
+		helper.writeToFile(req,res,writePath,dataToWrite);
+							
+	};
 
 };
