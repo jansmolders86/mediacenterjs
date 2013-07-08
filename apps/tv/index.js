@@ -56,6 +56,7 @@ exports.index = function(req, res, next){
 		
 		res.render('tv',{
 			tvshows:tvfileResults,
+			selectedTheme: configfileResults.theme,
 			status:status
 		});
 	});

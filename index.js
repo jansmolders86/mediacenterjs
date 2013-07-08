@@ -30,12 +30,11 @@ var configfile = []
 ,configfile = fs.readFileSync(configfilepath)
 ,configfileResults = JSON.parse(configfile);	
 
-var language = null
-console.log(configfileResults.language)
+var language = null;
 if(configfileResults.language === ""){
-	language = 'en'
+	language = 'en';
 } else {
-	language = configfileResults.language
+	language = configfileResults.language;
 }
 
 app.configure(function(){
@@ -72,7 +71,6 @@ app.configure('production', function(){
 require('./lib/routing')(app,{ verbose: !module.parent });
 app.get("/", function(req, res, next) {  
 	if(	configfileResults.moviepath == '' && configfileResults.language == '' && configfileResults.location == '' || configfileResults.moviepath == null || configfileResults.moviepath == undefined){
-	
 		var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
 		, locationFound = 'unknown';
 		
@@ -83,7 +81,6 @@ app.get("/", function(req, res, next) {
 		res.render('setup',{
 			location: locationFound
 		});	
-
 	} else {
 		var apps = []
 		//Search app folder for apps and check if tile icon is present
@@ -98,6 +95,7 @@ app.get("/", function(req, res, next) {
 		req.setMaxListeners(0)
 		res.render('index', {
 			title: 'Homepage',
+			selectedTheme: configfileResults.theme,
 			time: time,
 			date: date,
 			apps: apps
@@ -110,18 +108,35 @@ app.get("/", function(req, res, next) {
 //	TODO: Add extend to settings from app
 
 app.get("/settings", function(req, res, next) {  
-	res.render('settings',{
-		moviepath: configfileResults.moviepath,
-		musicpath : configfileResults.musicpath,
-		tvpath : configfileResults.tvpath,
-		highres: configfileResults.highres,
-		language: configfileResults.language,
-		onscreenkeyboard: configfileResults.onscreenkeyboard,
-		location: configfileResults.location,
-		screensaver: configfileResults.screensaver,
-		showdetails: configfileResults.showdetails,
-		port: configfileResults.port
-	});	
+
+	var allThemes = new Array();
+	
+	fs.readdir('./public/themes/',function(err,files){
+		if (err){
+			console.log('Could not get themes',err .red);
+		}else{
+			files.forEach(function(file){
+				allThemes.push(file);
+			});
+
+			res.render('settings',{
+				moviepath: configfileResults.moviepath,
+				selectedTheme: configfileResults.theme,
+				musicpath : configfileResults.musicpath,
+				tvpath : configfileResults.tvpath,
+				highres: configfileResults.highres,
+				language: configfileResults.language,
+				onscreenkeyboard: configfileResults.onscreenkeyboard,
+				location: configfileResults.location,
+				screensaver: configfileResults.screensaver,
+				showdetails: configfileResults.showdetails,
+				themes:allThemes,
+				port: configfileResults.port
+			});	
+			
+		}	
+	});
+	
 });
 
 app.post('/setuppost', function(req, res){
@@ -142,16 +157,17 @@ app.post('/submit', function(req, res){
 
 function writeSettings(req, res, callback){
 	var myData = {
-		moviepath : req.body.movielocation
-		,highres: req.body.highres
-		,musicpath : req.body.musiclocation
-		,tvpath : req.body.tvlocation
-		,language : req.body.language
-		,onscreenkeyboard: req.body.usekeyboard
-		,location: req.body.location
-		,screensaver: req.body.screensaver
-		,showdetails: req.body.showdetails
-		,port: req.body.port
+		moviepath : req.body.movielocation,
+		highres: req.body.highres,
+		musicpath : req.body.musiclocation,
+		tvpath : req.body.tvlocation,
+		language : req.body.language,
+		onscreenkeyboard: req.body.usekeyboard,
+		location: req.body.location,
+		screensaver: req.body.screensaver,
+		theme: req.body.selectedTheme,
+		showdetails: req.body.showdetails,
+		port: req.body.port
 	}
 	
 	fs.writeFile(configfilepath, JSON.stringify(myData, null, 4), function(e) {

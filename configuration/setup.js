@@ -1,10 +1,12 @@
 {
     "moviepath": "",
+    "highres": "yes",
     "musicpath": "",
-    "tvpath":  "",
+    "tvpath": "",
     "language": "",
+    "onscreenkeyboard": "no",
     "location": "",
-    "screensaver": "off",
-    "showdetails": "yes",
-    "port": ""
+    "screensaver": "dim",
+    "theme": "wigo.css",
+    "port": "3000"
 }

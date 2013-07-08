@@ -38,6 +38,7 @@ exports.index = function(req, res, next){
 		
 		res.render('music',{
 			music: musicfileResults,
+			selectedTheme: configfileResults.theme,
 			status:status
 		});
 	});

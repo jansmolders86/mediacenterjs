@@ -17,19 +17,27 @@
 */
 
 
+
+/*
+	PLEASE READ:
+	
+	You do not have/need to edit this file. 
+	If you want to override this CSS please do so in your own theme.
+	
+*/
+
+
 html{
 	margin:0; 
 	padding:0;
 	height: 100%;
 	width:100%;
 	border:0;
-	background-color:#f6f6f6;
 	position:relative;
 	overflow-x:hidden;
 }
 
 body{ 
-    font-family: 'Open Sans', sans-serif;
 	margin: 0;
 	padding: 0;
 	height: 100%;
@@ -37,84 +45,14 @@ body{
 	border:0;
 	overflow-x:hidden;
 	position:relative;
-	color: #747474;
 }
 
-a{
-	cursor:pointer; 
-	text-decoration:none;
-	color:#444;
-}
-a:hover{
-	color:#333;
-}
+a{ cursor:pointer;  text-decoration:none; }
+
+
 img{border:0;}
-*:focus  {  outline: none !important;  } 
+*:focus { outline: none !important; } 
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6{
-	font-family: 'Open Sans Condensed', sans-serif;
-	letter-spacing:2px;
-	text-transform:uppercase;
-}
-
-h1{ font-size:36px; }
-h2{ font-size:30px; }
-h3 {
-	margin:0;
-	margin-top:-20px;
-	padding:0;
-	font-weight:normal;
-	font-size:24px; 
-}
-h3 a{
-	font-size:24px; 
-	text-decoration:none;
-	margin:0;
-	padding:0;
-}
-
-ul,
-li{list-style:none; margin:0; padding:0;}
-
-.glinein{
-	-webkit-animation: glide-in 0.8s; 
-	-moz-animation: glide-in 0.8s; 
-    -o-animation: glide-in 0.8s; 
-    animation: glide-in 0.8s; 
-}
-
-.fadein{
-	-webkit-animation: fade-in 2s; 
-	-moz-animation:  fade-in 2s; 
-    -o-animation: fade-in 2s; 
-    animation: fade-in 2s; 
-}
-
-.fadeinslow{
-	-webkit-animation: fade-in 3s; 
-	-moz-animation:  fade-in 3s; 
-    -o-animation: fade-in 3s; 
-    animation: fade-in 3s; 
-}
-
-.fadeout{
-	-webkit-animation: fade-out 3s; 
-	-moz-animation:  fade-out 3s; 
-    -o-animation: fade-out 3s; 
-    animation: fade-out 3s; 
-}
-
-.flipin{ 
-	-webkit-animation: flip-in 2s; 
-	-moz-animation: flip-in 2s; 
-    -o-animation: flip-in 2s; 
-    animation: flip-in 2s; 
-}
 
 #wrapper{
 	padding: 50px;
@@ -134,6 +72,7 @@ li{list-style:none; margin:0; padding:0;}
 	float:left;
 }
 
+/* Screensaver */ 
 body.dim,
 html.dim{background:#333; opacity:1;}
 #header.dim{ background:#333; opacity:0.4; }
@@ -163,52 +102,6 @@ html.dim{background:#333; opacity:1;}
 	left:0;
 }
 
- a.backlink{ 
-	display:block; 
-	float:left; 
-	margin-top:13px; 
-	margin-right:30px;
-	width: 32px;
-	height:32px;
-}
-
-#header{
-	height:75px;
-	width:90%;
-	padding:10px 200px 15px 100px;
-	position:relative;
-	float:left;
-	overflow:hidden;
-	-webkit-animation: glide-in 0.5s; 
-	-moz-animation: glide-in 0.5s; 
-    -o-animation: glide-in 0.5s; 
-    animation: glide-in 0.5s; 
-	background:#fff;
-	-moz-box-shadow: 0 0px 5px #888;
-	-webkit-box-shadow: 0 0px 5px #888;
-	box-shadow: 0 0px 5px #888;
-}
-
-#header .logo{
-	float:left;
-	height:45px;
-	margin: 12px 10px 0 0px;
-}
-
-#header h1{
-	width:800px;
-	margin:0;
-	padding:0;
-	margin:14px 0 0 60px;
-}
-
-#content{
-	width:800px;
-	margin:0;
-	padding:0;
-	margin-left:60px;
-}
-
 .settingslink{
 	position: absolute;
 	top: 20px;
@@ -217,18 +110,8 @@ html.dim{background:#333; opacity:1;}
 	list-style:none;
 }
 
-.settingslink a{
-	background:url(/core/icons/settings.png) no-repeat;
-	padding-left:50px;
-	height:50px;
-	display:block;
-	line-height:32px;
-	font-family:sans-serif;
-}
 
-p{ font-size:20px; margin:40px 0;}
-p a{color:#444; text-decoration:none; font-size:20px;}
-p a:hover{text-decoration:none;}
+/********* HOMEPAGE ************/
 
 #tiles{
 	width:100%;
@@ -236,101 +119,39 @@ p a:hover{text-decoration:none;}
 	position:relative;
 	margin:50px auto 0;
 }
-
 .tile{
 	width:160px;
 	height:210px;
 	float:left;
 	margin:2px 10px 10px 2px;
-	list-style:none;
 	display:none;
-	-moz-box-shadow: 0 2px 6px #888;
-	-webkit-box-shadow: 0 2px 6px #888;
-	box-shadow: 0 2px 6px #888;
-	background:#fff;
-	border-radius:2px;
 }
+.tile .info{ float:left; width:100%; }
 
-.tile .info{
-	font-size:14px;
-	border-top:1px solid #eee;
-	padding-top:6px;
-	float:left;
-	width:100%;
-}
-
-.tile .info .remove{
-	float:right; 
-	font-size:12px;
-}
-
+.tile .info .remove{ float:right; font-size:12px; }
 .tile .info .remove img{
 	width:12px;
 	height:12px;
 	float:left;
 	margin:2px 5px 0 0;
 }
+.tile img{ width:160px; height:169px;}
+.tile a{ float:left; padding:0 10px 10px 0; display:block; }
+.tile:hover{ cursor:pointer; }
 
-.tile img{
-	width:160px;
-	height:169px;
-}
-
-.tile a{
-	float:left;
-	padding:0 10px 10px 0;
-	display:block;
-}
-
-.tile h2{
-	font-size:13px;
-	font-family:arial;
-}
-
-.tile:hover{
-	cursor:pointer;
-}
-
-.focused{
-	border:2px solid #ddd;
-	cursor:pointer;
-}
-
-#hiddenSetting{visibility:hidden; width:0; height:0;}
+.focused{ border:2px solid #ddd; cursor:pointer; }
 
 /***** -----------------   DATE AND TIME  ---------------------- *****/
 
-#dateandtime {
-	position:absolute;
-	right:250px;
-	top:10px;
-}
+#dateandtime { position:absolute; right:250px; top:10px; }
 
-#dateandtime .date,
-#dateandtime .time{	
-	text-align:right; 
-	font-size:20px; 
-	font-family: 'Open Sans Condensed', sans-serif;
-}
-/***** -----------------   FORM ELEMENTS  ---------------------- *****/
+/***** -----------------   FORM ELEMENTS / SETTINGS ---------------------- *****/
 
-#settingsbox{
-	margin:50px 0 0 0px;
-	width:450px;
-}
+#settingsbox{ margin:50px 0 0 0px; width:450px; }
+#setup{ margin:50px 0 0 60px; width:700px; height:500px; }
+#hiddenSetting{visibility:hidden; width:0; height:0;}
 
-#setup{
-	margin:50px 0 0 60px;
-	width:700px;
-	height:500px;
-}
-
-.row{
-	min-height:50px;
-	width:960px;
-	float:left;
-
-}
+.row{ min-height:50px; width:960px; float:left; }
 
 span.info{
 	display:block;
@@ -351,22 +172,10 @@ span.quote{
 }
 
 label,
-.label{
-	display:block;
-	width:400px;
-	float:left;
-	font-size:16px;
-	font-family: 'Open Sans', sans-serif;
-}
+.label{ display:block; width:400px; float:left; }
 
 input,
-select{
-	display:block;
-	width:200px;
-	float:left;
-	padding:5px 10px
-}
-
+select{ float:left; }
 
 input[type=radio]{
 	width:auto;
@@ -383,20 +192,20 @@ input[type=radio]{
 	padding-top:2px;
 }
 
-em{
-	color: red;
-	font-style: normal;
-	font-size: 13px;
-	display: block !important;
-	float:right;
-	margin-top:5px;
-}
+em{ display: block !important; float:right; margin-top:5px; }
+
+input[type=submit],
+a.btn{ cursor:pointer; }
+
+/* Form elements please edit this in your own theme. */
+
+label,
+.label{ font-size:16px; font-family: 'Open Sans', sans-serif; }
 
 input[type=submit],
 a.btn{
 	background-color:#fb8521;
 	padding:10px;
-	cursor:pointer;
 	font-family: 'Open Sans', sans-serif;
 	color:#fff;
 	text-align:center;
@@ -405,20 +214,47 @@ a.btn{
 	border-radius:5px;
 }
 
+em{ color: red; font-style: normal; font-size: 13px; }
 
-/***** Player ******/
+input,
+select{ display:block; width:200px; padding:5px 10px; }
 
-#player{
-	position:absolute;
-	bottom:0;
-	left:0;
+
+/* Checkboxes */
+
+.type-checkbox.pretty{background: url(img/checkbox.png) no-repeat;}
+.type-checkbox.pretty{background-position: 0 -5px;}
+.type-checkbox.pretty.has-focus{background-position: 0 -36px;}
+.type-checkbox.pretty.checked{background-position: 0 -99px;}
+.type-checkbox.pretty.checked.has-focus{background-position: 0 -66px;}
+
+/**** Radio buttons ****/
+
+.type-radio.pretty{background: url(img/radio.png) no-repeat;}
+.type-radio.pretty{background-position: 0 -5px;}
+.type-radio.pretty.has-focus{background-position: 0 -36px;}
+.type-radio.pretty.checked{background-position: 0 -99px;}
+.type-radio.pretty.checked.has-focus{background-position: 0 -66px;}
+
+.ym-columnar .ym-form .pretty input{ margin: 0; }
+.ym-columnar .pretty{ margin-left: 200px; }
+
+
+/* Custom selectboxes */
+
+.pretty{
+	width: 22px;
+	height: 21px;
+	display: inline-block;
+	float:left;
+	margin-right:5px;
 }
 
+.ym-form .pretty input{ margin: 0; }
 
 
-/***** Keyboard *****/
+/***** KEYBOARD *****/
 
-/* keyboard - jQuery UI Widget */
 .ui-keyboard-keyset-default{float:left;background-color: #999;}
 .ui-keyboard { padding: .3em; position: absolute; left: 0; top: 0; z-index: 16000; }
 .ui-keyboard-has-focus { z-index: 16001; background-color: #999; top:0px!important; left: 400px!important; }
@@ -440,253 +276,38 @@ a.btn{
 .ui-keyboard-button-endrow { clear: left; }
 .ui-keyboard-widekey { min-width: 4em; width: auto; }
 .ui-keyboard-space { width: 15em; }
-.ui-keyboard-space span { font: 0/0 a; text-shadow: none; color: transparent; } /* see http://nicolasgallagher.com/another-css-image-replacement-technique/ */
+.ui-keyboard-space span { font: 0/0 a; text-shadow: none; color: transparent; }
 .ui-keyboard-preview-wrapper { text-align: center; }
-.ui-keyboard-preview { text-align: left; margin: 0 0 3px 0; display: inline; width: 95%;} /* width is calculated in IE, since 99% = 99% full browser width =( */ 
+.ui-keyboard-preview { text-align: left; margin: 0 0 3px 0; display: inline; width: 95%;}
 .ui-keyboard-keyset { text-align: center; white-space: nowrap; }
 .ui-keyboard-input { text-align: left; }
 .ui-keyboard-input-current { -moz-box-shadow: 1px 1px 10px #00f; -webkit-box-shadow: 1px 1px 10px #00f; box-shadow: 1px 1px 10px #00f; }
 .ui-keyboard-placeholder { color: #888; }
-.ui-keyboard-nokeyboard { color: #888; border-color: #888; } /* disabled or readonly inputs, or use input[disabled='disabled'] { color: #f00; } */
-.ui-keyboard-button.disabled { opacity: 0.5; filter: alpha(opacity=50); } /* used by the acceptValid option to make the accept button appear faded */
+.ui-keyboard-nokeyboard { color: #888; border-color: #888; }
+.ui-keyboard-button.disabled { opacity: 0.5; filter: alpha(opacity=50); }
 .ui-keyboard-spacer { display: inline-block; width: 1px; height: 0; }
 
-
 button.ui-keyboard-accept,
-button.ui-keyboard-cancel{
-	background:none;
-	background-color:#22799A;
-}
-
-/* combo key styling - toggles diacritics on/off */
+button.ui-keyboard-cancel{ background:none; background-color:#22799A; }
 .ui-keyboard-button.ui-keyboard-combo.ui-state-default { border-color: #ffaf0f; }
-
-/* (in)valid inputs */
 button.ui-keyboard-accept.ui-keyboard-valid-input { border-color: #0c0; background: #080; color: #fff; }
 button.ui-keyboard-accept.ui-keyboard-valid-input:hover { background: #0a0; }
 button.ui-keyboard-accept.ui-keyboard-invalid-input { border-color: #c00; background: #800; color: #fff; }
 button.ui-keyboard-accept.ui-keyboard-invalid-input:hover { background: #a00; }
 
-/*** jQuery Mobile definitions ***/
-/* jQuery Mobile styles - need wider buttons because of font size and text-overflow:ellipsis */
 .ui-bar .ui-keyboard-button { width: 3em; display: inline-block; }
 .ui-bar .ui-keyboard-widekey { width: 5.5em; }
 .ui-bar .ui-keyboard-space { width: 15em; }
-.ui-bar .ui-keyboard-space span { visibility: hidden; } /* hides the ellipsis */
+.ui-bar .ui-keyboard-space span { visibility: hidden; }
 .ui-bar .ui-keyboard-keyset { line-height: 0.5em; }
 .ui-bar input.ui-input-text, .ui-bar textarea.ui-input-text { width: 95%; }
-
-/* over-ride padding set by mobile ui theme - needed because the mobile script wraps button text with several more spans */
 .ui-bar .ui-btn-inner { height: 2em; padding: 0.2em 0; margin: 0; }
-.ui-bar .ui-btn { margin: 0; font-size: 13px; } /* mobile default size is 13px */
+.ui-bar .ui-btn { margin: 0; font-size: 13px; }
 
-
-/** Custom selectboxes **/
-
-.pretty{
-	width: 22px;
-	height: 21px;
-	display: inline-block;
-	float:left;
-	margin-right:5px;
-}
-
-.ym-form .pretty input{
-	margin: 0;
-}
-
-/* Checkboxes */
-.type-checkbox.pretty{background: url(img/checkbox.png) no-repeat;}
-.type-checkbox.pretty{background-position: 0 -5px;}
-.type-checkbox.pretty.has-focus{background-position: 0 -36px;}
-.type-checkbox.pretty.checked{background-position: 0 -99px;}
-.type-checkbox.pretty.checked.has-focus{background-position: 0 -66px;}
-
-/**** Radio buttons ****/
-.type-radio.pretty{background: url(img/radio.png) no-repeat;}
-/* not selected */
-.type-radio.pretty{background-position: 0 -5px;}
-/* not selected with focus */
-.type-radio.pretty.has-focus{background-position: 0 -36px;}
-/* selected */
-.type-radio.pretty.checked{background-position: 0 -99px;}
-/* selected with focus */
-.type-radio.pretty.checked.has-focus{background-position: 0 -66px;}
-
-/* YAML specific overwrites */
-.ym-columnar .ym-form .pretty input{
-	margin: 0;
-}
-.ym-columnar .pretty{
-	margin-left: 200px;
-}
-
-.ie7 .ym-columnar .pretty{
-	position: relative;
-	bottom: 3px;
-}
-
-/***** -----------------   ANIMATIONS  ---------------------- *****/
-
-@-webkit-keyframes flip-in {
-	0%  { 
-		opacity: 0.0; 
-		-webkit-transform: perspective(600px) rotateY(50deg);
-		-moz-transform: perspective(600px) rotateY(50deg);
-		-ms-transform: perspective(600px) rotateY(50deg);
-		transform: perspective(600px) rotateY(50deg);
-		-webkit-transform-origin: 100% 20%;
-		-moz-transform-origin: 100% 20%;
-		-ms-transform-origin: 100% 20%;
-		transform-origin: 100% 20%;
-	}
-	100% { 
-		opacity: 1.0; 
-		-webkit-transform: perspective(0px) rotateY(0deg);
-		-moz-transform: perspective(0px) rotateY(0deg);
-		-ms-transform: perspective(0px) rotateY(0deg);
-		transform: perspective(0px) rotateY(0deg);
-		-webkit-transform-origin: 100% 100%;
-		-moz-transform-origin: 100% 100%;
-		-ms-transform-origin: 100% 100%;
-		transform-origin: 100% 100%;
-	}
-}
-@-moz-keyframes flip-in {
-	0%  { 
-		opacity: 0.0; 
-		-webkit-transform: perspective(600px) rotateY(50deg);
-		-moz-transform: perspective(600px) rotateY(50deg);
-		-ms-transform: perspective(600px) rotateY(50deg);
-		transform: perspective(600px) rotateY(50deg);
-		-webkit-transform-origin: 100% 20%;
-		-moz-transform-origin: 100% 20%;
-		-ms-transform-origin: 100% 20%;
-		transform-origin: 100% 20%;
-	}
-	100% { 
-		opacity: 1.0; 
-		-webkit-transform: perspective(0px) rotateY(0deg);
-		-moz-transform: perspective(0px) rotateY(0deg);
-		-ms-transform: perspective(0px) rotateY(0deg);
-		transform: perspective(0px) rotateY(0deg);
-		-webkit-transform-origin: 100% 100%;
-		-moz-transform-origin: 100% 100%;
-		-ms-transform-origin: 100% 100%;
-		transform-origin: 100% 100%;
-	}
-}
-@-o-keyframes flip-in {
-	0%  { 
-		opacity: 0.0; 
-		-webkit-transform: perspective(600px) rotateY(50deg);
-		-moz-transform: perspective(600px) rotateY(50deg);
-		-ms-transform: perspective(600px) rotateY(50deg);
-		transform: perspective(600px) rotateY(50deg);
-		-webkit-transform-origin: 100% 20%;
-		-moz-transform-origin: 100% 20%;
-		-ms-transform-origin: 100% 20%;
-		transform-origin: 100% 20%;
-	}
-	100% { 
-		opacity: 1.0; 
-		-webkit-transform: perspective(0px) rotateY(0deg);
-		-moz-transform: perspective(0px) rotateY(0deg);
-		-ms-transform: perspective(0px) rotateY(0deg);
-		transform: perspective(0px) rotateY(0deg);
-		-webkit-transform-origin: 100% 100%;
-		-moz-transform-origin: 100% 100%;
-		-ms-transform-origin: 100% 100%;
-		transform-origin: 100% 100%;
-	}
-}
-@keyframes flip-in {
-	0%  { 
-		opacity: 0.0; 
-		-webkit-transform: perspective(600px) rotateY(50deg);
-		-moz-transform: perspective(600px) rotateY(50deg);
-		-ms-transform: perspective(600px) rotateY(50deg);
-		transform: perspective(600px) rotateY(50deg);
-		-webkit-transform-origin: 100% 20%;
-		-moz-transform-origin: 100% 20%;
-		-ms-transform-origin: 100% 20%;
-		transform-origin: 100% 20%;
-	}
-	100% { 
-		opacity: 1.0; 
-		-webkit-transform: perspective(0px) rotateY(0deg);
-		-moz-transform: perspective(0px) rotateY(0deg);
-		-ms-transform: perspective(0px) rotateY(0deg);
-		transform: perspective(0px) rotateY(0deg);
-		-webkit-transform-origin: 100% 100%;
-		-moz-transform-origin: 100% 100%;
-		-ms-transform-origin: 100% 100%;
-		transform-origin: 100% 100%;
-	}
-}
-
-
-
-@-webkit-keyframes fade-in {
-	0%  { opacity: 0.0; }
-	100% { opacity: 1.0; }
-}
-@-moz-keyframes fade-in {
-	0%  { opacity: 0.0; }
-	100% { opacity: 1.0; }
-}
-@-o-keyframes fade-in {
-	0%  { opacity: 0.0; }
-	100% { opacity: 1.0; }
-}
-@keyframes fade-in {
-	0%  { opacity: 0.0; }
-	100% { opacity: 1.0; }
-}
-
-@-webkit-keyframes glide-in {
-	0%{margin-left:-30px; opacity: 0.0;} 
-	100%{margin-left:0; opacity: 1.0;}
-}	
-@-moz-keyframes glide-in {
-	0%{margin-left:-30px; opacity: 0.0;} 
-	100%{margin-left:0; opacity: 1.0;}
-}
-@-o-keyframes glide-in {
-	0%{margin-left:-30px; opacity: 0.0;} 
-	100%{margin-left:0; opacity: 1.0;}
-}
-@keyframes glide-in {
-	0%{margin-left:-30px; opacity: 0.0;} 
-	100%{margin-left:0; opacity: 1.0;}
-}
-
-
-@-webkit-keyframes fade-out {
-	0%  { opacity: 1.0; }
-	100% { opacity: 0.0; }
-}
-@-moz-keyframes fade-out {
-	0%  { opacity: 1.0; }
-	100% { opacity: 0.0; }
-}
-@-o-keyframes fade-out {
-	0%  { opacity: 1.0; }
-	100% { opacity: 0.0; }
-}
-@keyframes fade-out {
-	0%  { opacity: 1.0; }
-	100% { opacity: 0.0; }
-}
-
-
-
-/* Media Queries (optimized for jQuery UI themes; may be slightly off in jQuery Mobile themes) */
 /* 240 x 320 (small phone)  */
 @media all and (max-width: 319px) {
 	.ui-keyboard div { font-size: 9px; }
 	.ui-keyboard .ui-keyboard-input { font-size: 12px; }
-	/* I don't own an iPhone so I have no idea how small this really is... is it even clickable with your finger? */
 	.ui-bar .ui-btn { margin: 0; font-size: 9px; }
 	.ui-bar .ui-keyboard-button { width: 1.8em; height: 2.5em; }
 	.ui-bar .ui-keyboard-widekey { width: 4em; }
@@ -698,7 +319,6 @@ button.ui-keyboard-accept.ui-keyboard-invalid-input:hover { background: #a00; }
 @media all and (min-width: 320px) and (max-width: 479px) {
 	.ui-keyboard div { font-size: 9px; }
 	.ui-keyboard .ui-keyboard-input { font-size: 14px; }
-	/* I don't own an iPhone so I have no idea how small this really is... is it even clickable with your finger? */
 	.ui-bar .ui-btn { margin: 0; font-size: 11px; }
 	.ui-bar .ui-keyboard-button { width: 1.8em; height: 3em; }
 	.ui-bar .ui-keyboard-widekey { width: 4.5em; }

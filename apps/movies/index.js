@@ -52,6 +52,7 @@ exports.index = function(req, res, next){
 		
 		res.render('movies',{
 			movies: moviefileResults,
+			selectedTheme: configfileResults.theme,
 			status:status
 		});
 	});

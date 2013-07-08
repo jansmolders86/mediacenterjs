@@ -5,6 +5,7 @@ html(lang="en")
 		
 		// Core inclusion
 		link(rel='stylesheet', href='/core/css/style.css')
+		link(rel='stylesheet', href='/theme/css/'+selectedTheme)
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/plugins/jquery.idle-timer.js")
 		script(src="/core/js/jquery.mcjs.core.js")
@@ -38,7 +39,7 @@ html(lang="en")
 				else
 					ul.tvbanners
 						each tvshow in tvshows
-							li.tvshow 
+							li.tvshow.boxed
 								img(src="")
 								.overlay(data-tvshow= tvshow)	
 								.info

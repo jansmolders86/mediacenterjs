@@ -5,6 +5,7 @@ html(lang="en")
 		// Core inclusion
 		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
 		link(rel='stylesheet', href='/core/css/style.css')
+		link(rel='stylesheet', href='/themes/'+selectedTheme)
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/plugins/jquery.idle-timer.js")
 		script(src="/core/js/jquery.mcjs.core.js")
@@ -86,6 +87,11 @@ html(lang="en")
 					.row
 						label #{lingua.setting_location}
 						input.keyboard(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")
+					.row
+						label #{lingua.setting_theme}
+						select#theme(name="selectedTheme")
+							for theme in themes
+								option(selected=theme) #{theme}
 					.row
 						label #{lingua.setting_port}
 						input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
