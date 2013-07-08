@@ -10,7 +10,7 @@
 		"type": "GNU",
 		"url": "http://www.gnu.org/licenses"
 	}],
-	"version": "0.0.13",
+	"version": "0.0.14",
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",

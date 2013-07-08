@@ -28,6 +28,12 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
+__version 0.014 (Small fixes and theming)__
+
+- Small bugfixes
+- Added theme implementation
+- Added default theme: WiGo (a mix between Metro and Google ui)
+
 __version 0.013 (Small fixes)__
 
 - Better music thumbnail quality
