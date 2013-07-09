@@ -24,6 +24,12 @@ html(lang="en")
 				if ( usekeyboard == 'yes' ){
 					$('.keyboard').keyboard();
 				}
+				
+				$('#theme').find('option').each(function(){
+					var cleanedThemeName = $(this).html().replace(/\.(css)/i,"");
+					$(this).text(cleanedThemeName)
+				});
+				
 			});
 	body
 		#header.settings
