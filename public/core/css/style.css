@@ -50,16 +50,11 @@ body{
 	color: #747474;
 }
 
-a{ cursor:pointer;  text-decoration:none; color:#444;}
-a:hover{color:#333;}
-
 img{border:0;}
 *:focus { outline: none !important; } 
 
 html{ background-color:#f6f6f6; }
 body{ font-family: 'Open Sans', sans-serif; color: #747474; }
-a{ color:#444;}
-a:hover{color:#333;}
 
 h1,
 h2,
@@ -86,6 +81,9 @@ h3 a{
 
 ul,
 li{list-style:none; margin:0; padding:0;}
+
+a{ cursor:pointer;  text-decoration:none; color:#444;}
+a:hover{color:#333;}
 
 p{ font-size:20px; margin:40px 0;}
 p a{color:#444; text-decoration:none; font-size:20px;}
@@ -128,17 +126,6 @@ p a:hover{text-decoration:none;}
 	box-shadow: 0 0px 5px #888;
 }
 
-.boxed{
-	-moz-box-shadow: 0 2px 6px #888;
-	-webkit-box-shadow: 0 2px 6px #888;
-	box-shadow: 0 2px 6px #888;
-	background:#fff;
-	border-radius:2px;
-	padding:0;
-	position:relative;
-}
-
-
 #header .logo{ float:left; height:45px; margin: 12px 10px 0 0px; }
 
 #header h1{
@@ -154,23 +141,6 @@ p a:hover{text-decoration:none;}
 	padding:0;
 	margin-left:60px;
 }
-
-.settingslink a{
-	background:url(/core/icons/settings.png) no-repeat;
-	padding-left:50px;
-	height:50px;
-	display:block;
-	line-height:32px;
-	font-family:sans-serif;
-}
-
-
-/* Screensaver */ 
-body.dim,
-html.dim{background:#333; opacity:1;}
-#header.dim{ background:#333; opacity:0.4; }
-.dim { background: url(img/overlay.png) repeat; opacity:0.4; }
-.dim *{ opacity:0.4; }
 
 #backdrop{
 	width:100%;
@@ -195,15 +165,41 @@ html.dim{background:#333; opacity:1;}
 	left:0;
 }
 
-.settingslink{
-	position: absolute;
-	top: 20px;
-	right:450px;
-	height:50px;
-	list-style:none;
+
+a.backlink{ 
+	display:block; 
+	float:left; 
+	margin-top:13px; 
+	margin-right:30px;
+	width: 32px;
+	height:32px;
 }
 
-/* Homepage Tiles */
+
+/* Generic classes */
+
+.boxed{
+	-moz-box-shadow: 0 2px 6px #888;
+	-webkit-box-shadow: 0 2px 6px #888;
+	box-shadow: 0 2px 6px #888;
+	background:#fff;
+	border-radius:2px;
+	padding:0;
+	position:relative;
+}
+
+.focused{ border:2px solid #ddd; cursor:pointer; }
+
+
+/* Screensaver */ 
+body.dim,
+html.dim{background:#333; opacity:1;}
+#header.dim{ background:#333; opacity:0.4; }
+.dim { background: url(img/overlay.png) repeat; opacity:0.4; }
+.dim *{ opacity:0.4; }
+
+
+/* Homepage */
 
 .tile{
 	width:160px;
@@ -242,7 +238,22 @@ html.dim{background:#333; opacity:1;}
 .tile a{ float:left; padding:0 10px 10px 0; display:block; }
 .tile:hover{ cursor:pointer; }
 
-.focused{ border:2px solid #ddd; cursor:pointer; }
+.settingslink{
+	position: absolute;
+	top: 20px;
+	right:450px;
+	height:50px;
+	list-style:none;
+}
+
+.settingslink a{
+	background:url(/core/icons/settings.png) no-repeat;
+	padding-left:50px;
+	height:50px;
+	display:block;
+	line-height:32px;
+	font-family:sans-serif;
+}
 
 /***** -----------------   DATE AND TIME  ---------------------- *****/
 
@@ -251,6 +262,7 @@ html.dim{background:#333; opacity:1;}
 #dateandtime .time{	text-align:right; font-size:20px; font-family: 'Open Sans Condensed', sans-serif;}
 
 /***** -----------------   FORM ELEMENTS / SETTINGS ---------------------- *****/
+/* 						Please edit this in your own theme. 					*/
 
 #settingsbox{ margin:50px 0 0 0px; width:450px; }
 #setup{ margin:50px 0 0 60px; width:700px; height:500px; }
@@ -291,12 +303,11 @@ input[type=radio]{
 	padding-top:2px;
 }
 
-em{ display: block !important; float:right; margin-top:5px; color: red; font-style: normal; font-size: 13px;}
-
-/* Form elements please edit this in your own theme. */
-
 label,
 .label{ font-size:16px; font-family: 'Open Sans', sans-serif; display:block; width:400px; float:left;  }
+
+input,
+select{ display:block; width:200px; padding:5px 10px; float:left;}
 
 input[type=submit],
 a.btn{
@@ -311,8 +322,8 @@ a.btn{
 	border-radius:5px;
 }
 
-input,
-select{ display:block; width:200px; padding:5px 10px; float:left;}
+/* Error (Validation)*/
+em{ display: block !important; float:right; margin-top:5px; color: red; font-style: normal; font-size: 13px;}
 
 
 /* Checkboxes */
