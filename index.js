@@ -136,7 +136,31 @@ app.get("/settings", function(req, res, next) {
 			
 		}	
 	});
+});
+
+app.post('/removeModule', function(req, res){
+	var rimraf = require('rimraf')
+	, incommingModule = req.body
+	, module = incommingModule.module
+	, appDir = './apps/'+module+'/'
+	, appPublicDir = './public/'+module+'/';
 	
+	rimraf(appDir, function (e) {
+		if(!e){ 
+			console.log('Removed module app folder', module .green);
+		} else {
+			console.log('Error removing module', e .red)
+		}
+	});
+	
+	rimraf(appPublicDir, function (e) {
+		if(!e){
+			console.log('Removed module public folder', module .green);
+			res.redirect('/');
+		} else {
+			console.log('Error removing module', e .red)
+		}
+	});
 });
 
 app.post('/setuppost', function(req, res){
@@ -189,6 +213,5 @@ if (configfileResults.port == "" || configfileResults.port == undefined ){
 } else{
 	app.listen(parseInt(configfileResults.port));
 }
-
 
 console.log("MediacenterJS listening on port:", configfileResults.port .green); 

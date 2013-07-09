@@ -43,6 +43,21 @@
 			_keyevents(o,$(this)); 			// init keys
 			_screensaver(o, $(this));
 			
+			
+			$('.remove').click(function(e){
+				e.preventDefault();
+				var module = $(this).find('a').attr('href');
+				
+				$.ajax({
+					url: '/removeModule', 
+					type: 'post',
+					data: {module : module}
+				}).done(function(data){
+					if (data = 'done') window.location.href = '/';
+				});
+			});
+		
+			
 			if(o.debug == false){
 				$(document).bind("contextmenu", function(e) {
 					return false;

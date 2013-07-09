@@ -28,7 +28,13 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
-__version 0.014 (Small fixes and theming)__
+__version 0.015 (Small fixes & removing modules)__
+
+- Styling bugfixes and new styling
+- Added functionality to remove modules from dashboard
+- Better styling representation in settings menu
+
+__version 0.014 (Small fixes & theming)__
 
 - Small bugfixes
 - Added theme implementation

@@ -61,6 +61,7 @@ html(lang="en")
 						a(href="/"+item)
 							img(src="/"+item+"/tile.png")
 						.info
-							.remove
-								img(src="/core/css/img/remove.png") 
-								a(href="/"+item) Remove
+							if item !== 'movies' && item !== 'music' && item !== 'weather' && item !== 'tv'
+								.remove
+									img(src="/core/css/img/remove.png") 
+									a(href=item) Remove
