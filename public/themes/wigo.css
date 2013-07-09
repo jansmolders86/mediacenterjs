@@ -152,6 +152,7 @@ em{ color: red; font-style: normal; font-size: 13px; }
 
 input,
 select{ display:block; width:200px; padding:5px 10px; }
+select{ width: 223px; }
 
 /* Player */
 
