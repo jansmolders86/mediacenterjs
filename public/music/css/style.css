@@ -93,7 +93,7 @@ ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; paddi
 	float:left;
 	width:120px;
 	height:120px;
-	padding: 20px 20px 20px 0;
+	padding: 20px 0px 20px 0;
 }
 
 #tracklist ul{
@@ -113,6 +113,7 @@ ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; paddi
 	font-family:arial;  
 	font-size:14px;
 	padding:5px 0 5px 5px;
+	border-bottom:1px solid #D9D9D9;
 }
 
 #tracklist li:hover{ background:#e5e5e5; }
@@ -120,20 +121,25 @@ ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; paddi
 #tracklist li.selected .eq{visibility:visible;}
 
 #tracklist .info{
-	height:350px;
 	position:relative;
 	overflow:hidden;
 	float:left;
+	padding-left:10px;
 }
 
-#tracklist h2{
+
+#tracklist .info h2{
 	color:#444;
 	font-size:22px;
-	padding:5px 0 5px 35px;
+	padding:5px 0 5px 20px;
+	margin-bottom:5px;
 	display: block;
 	float: left;
 	max-width:700px;
 }
+
+#tracklist .info .year,
+#tracklist .info .genre{ color:#333; padding-left: 140px; font-size:14px; }
 
 .eq{
 	visibility:hidden;
