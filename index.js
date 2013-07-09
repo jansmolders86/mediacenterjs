@@ -165,7 +165,7 @@ function writeSettings(req, res, callback){
 		onscreenkeyboard: req.body.usekeyboard,
 		location: req.body.location,
 		screensaver: req.body.screensaver,
-		theme: req.body.selectedTheme,
+		theme: req.body.theme,
 		showdetails: req.body.showdetails,
 		port: req.body.port
 	}
