@@ -17,10 +17,10 @@
 */
 
 
+/* Default override */
 body,html{ overflow-y:auto; overflow-x:hidden;}
 
 #header{ 
-	background:#fff; 
 	box-shadow:none; 
 	padding: 10px 0 0 100px;
 	position:fixed;
@@ -36,21 +36,14 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 #header h1{z-index:777;}
 #wrapper{ padding-top:150px; }
 
-#backdrop{
-	height:200px;
-	overflow:hidden;
-	width:100%;
-	z-index:-1;
-}
+#backdrop{ height:200px; overflow:hidden; width:100%; z-index:-1; }
 
 #backdrop img{	height:auto; }
 a.backlink { margin-top: 11px; z-index:777; }
 
-#moviebrowser{
-	width:100%;
-	height:100%;
-	margin: 60px 0;
-}
+/* Movie App styling */
+
+#moviebrowser{ width:100%; height:100%; margin: 60px 0; }
 
 .movies{ 
 	margin: 0 auto;
@@ -74,14 +67,8 @@ a.backlink { margin-top: 11px; z-index:777; }
 	margin: 0px 0px 20px;
 }
 
-.movieposter.focused {
-	border:0;
-}
-
-.movieposter .overlay{
-	width:0;
-	height:0;
-}
+.movieposter.focused { border:0; }
+.movieposter .overlay{ width:0; height:0; }
 
 .movieposter.showDetails.focused .overlay,
 .movieposter.showDetails:hover .overlay{
@@ -141,15 +128,7 @@ a.backlink { margin-top: 11px; z-index:777; }
 	text-transform:capitalize;
 }
 
-#configuration{
-	height:0;
-	width:0;
-	visibility:hidden;
-}
-
 span.title{visibility:hidden; width:0; height:0;}
-
-/***** -----------------   MOVIE DETAILS  ---------------------- *****/
 
 .movieposter.showDetails{
 	background:#fff;
@@ -166,34 +145,6 @@ span.title{visibility:hidden; width:0; height:0;}
 
 .movieposter.showDetails a{ float:left; }
 
-.movieposter.showDetails .playbtn{ 
-	position:absolute;
-	right:5px;
-	bottom:12px;
-	background-color:#f5f5f5;
-	border:1px solid #ccc;
-	color:#737373;
-	font-size:14px;
-	padding:10px 20px;
-	border-radius:3px;
-	min-height:20px;
-	text-align:center;
-	width:132px;
-	margin:0px 0px 0 20px;
-	cursor:pointer;
-}
-
-
-.movieposter.showDetails .playbtn:hover{
-	background-color:#FB8521;
-	color:#fff;
-	border:0;
-} 
-
-a.backlink{
-	margin-top:11px;
-}
-
 .overview{
 	float: left;
 	color: #444;
@@ -202,29 +153,10 @@ a.backlink{
 	width: 185px;
 }
 
-.overview p.summary{
-	max-height:150px; 
-	overflow:hidden;
-	margin-bottom:5px
-}
-
-.additional{
-	margin: 0px 0px 0;
-	float: left;
-}
-
 .overview h1{ margin:0px 0 5px 0; font-size:13px; max-width:165px;}
 .overview p{font-size:12px; margin:0px;}
 
-#poster{
-	float:left;
-	width:185px;
-	padding:20px;
-}
-
-#moviedetails a.backlink{margin-top:23px; height:50px}
-#moviedetails h1{font-size:32px; line-height:36px;}
-
+/*
 .imdbrating{
 	color:#ddd;
 	font-size:14px;
@@ -232,10 +164,7 @@ a.backlink{
 	width:80px;
 	float:left;
 }
-.imdbrating p{
-	margin:10px 0 20px 0;
-}
-
+.imdbrating p{ margin:10px 0 20px 0; }
 .imdbrating h3{font-size:30px;}
 
 .certification{
@@ -251,3 +180,4 @@ a.backlink{
 	text-align:center;
 	padding:3px 5px;
 }
+*/
