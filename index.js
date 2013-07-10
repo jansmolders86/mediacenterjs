@@ -22,7 +22,8 @@ var express = require('express')
 , dateFormat = require('dateformat')
 , lingua = require('lingua')
 , geoip = require('geoip-lite')
-, colors = require('colors');
+, colors = require('colors')
+, rimraf = require('rimraf');
 
 
 var configfile = []
@@ -139,27 +140,45 @@ app.get("/settings", function(req, res, next) {
 });
 
 app.post('/removeModule', function(req, res){
-	var rimraf = require('rimraf')
-	, incommingModule = req.body
+	var incommingModule = req.body
 	, module = incommingModule.module
 	, appDir = './apps/'+module+'/'
-	, appPublicDir = './public/'+module+'/';
+	, publicdir = './public/'+module+'/';
 	
-	rimraf(appDir, function (e) {
-		if(!e){ 
-			console.log('Removed module app folder', module .green);
+	rimraf(appDir, function (e) { 
+		if(e){
+			console.log('Error removing module', e .red) 
+		};
+	});
+	
+	rimraf(publicdir, function (e) { 
+		if(e) {
+			console.log('Error removing module', e .red);
 		} else {
-			console.log('Error removing module', e .red)
+			res.redirect('/')
 		}
 	});
 	
-	rimraf(appPublicDir, function (e) {
-		if(!e){
-			console.log('Removed module public folder', module .green);
-			res.redirect('/');
-		} else {
-			console.log('Error removing module', e .red)
-		}
+	removeDirectory(req,res,rmdir);
+});
+
+app.post('/clearCache', function(req, res){
+	var incommingCache = req.body
+	, cache = incommingCache.cache
+	, rmdir = './public/'+cache+'/data/';
+	
+	fs.readdir(rmdir,function(err,dirs){
+		dirs.forEach(function(dir){
+			var dataFolder = rmdir+dir
+			stats = fs.lstatSync(dataFolder);
+			if (stats.isDirectory()) {
+				rimraf(dataFolder, function (e) { 		
+					if(e){
+						console.log('Error removing module', e .red) 
+					};
+				});
+			};
+		});		
 	});
 });
 

@@ -5,18 +5,25 @@ html(lang="en")
 		// Core inclusion
 		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
 		link(rel='stylesheet', href='/core/css/style.css')
+		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css')
 		link(rel='stylesheet', href='/themes/'+selectedTheme)
+		
 		script(src="/core/js/jquery-1.8.2.min.js")
+		script(src="/core/js/jquery-ui-1.10.3.min.js")
+		
 		script(src="/core/js/plugins/jquery.idle-timer.js")
 		script(src="/core/js/jquery.mcjs.core.js")
+		
 		script(src="/core/js/plugins/jquery.prettyForm.js")
 		script(src="/core/js/plugins/jquery.keyboard.min.js")
+		
 		script(src="/core/js/plugins/validation/jquery.validate.min.js")
 		script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
 		script(src="/core/js/plugins/validation/jquery.validate.rules.js")
 		
 		script
 			$(document).ready(function() {
+				$('body').mcjs();
 				$('.validate-form').validate();
 				$("[type=checkbox], [type=radio]").prettyForm();
 				
@@ -37,6 +44,16 @@ html(lang="en")
 				img(src="/core/icons/back.png")
 			h1  #{lingua.settings}		
 		#wrapper
+		
+			.ui-widget
+				.ui-state-error.ui-corner-all(style="padding:0.7em;")
+					p
+						span.ui-icon.ui-icon-alert(style="float: left; margin-right: .3em;")
+							.message 
+			.row
+				a.btn.cachelink(href="",data-cachelink="movies") Clear movie cache 
+				a.btn.cachelink(href="",data-cachelink="music") Clear music cache
+				a.btn.cachelink(href="",data-cachelink="tv") Clear tv cache
 			#settings
 				form#setup.validate-form(action='/submit',method='post')
 					.row
@@ -104,5 +121,6 @@ html(lang="en")
 					.row
 						input(type="submit",value="Submit")		
 						input(name="tvlocation",type="text",value="tbd",style="visibility:hidden;")
+						
 		#hiddenSetting
 			p= onscreenkeyboard

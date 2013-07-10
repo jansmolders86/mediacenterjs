@@ -15,5 +15,6 @@
 "setting_keyboard" : "Use onscreen keyboard",
 "setting_language" : "Language",
 "setting_location" : "You current location (city)",
+"setting_theme" : "Pick a theme",
 "setting_port" : "Port"
 }

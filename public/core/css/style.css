@@ -263,12 +263,13 @@ html.dim{background:#333; opacity:1;}
 
 /***** -----------------   FORM ELEMENTS / SETTINGS ---------------------- *****/
 /* 						Please edit this in your own theme. 					*/
-
+#settings{margin-top:200px;}
 #settingsbox{ margin:50px 0 0 0px; width:450px; }
 #setup{ margin:50px 0 0 60px; width:700px; height:500px; }
 #hiddenSetting{visibility:hidden; width:0; height:0;}
 
 .row{ min-height:50px; width:960px; float:left; }
+.row a.cachelink{ margin:0 0 10px 60px; float:left; clear:both;}
 
 span.info{
 	display:block;
@@ -322,8 +323,13 @@ a.btn{
 	border-radius:5px;
 }
 
+.floatright{ float:right; }
+.floatleft{ float:left; }
+
+.cachelink{z-index:99; position:relative; overflow:hidden;)
+
 /* Error (Validation)*/
-em{ display: block !important; float:right; margin-top:5px; color: red; font-style: normal; font-size: 13px;}
+em{ display: block !important; float:left; margin:5px 0 0 5px; color: red; font-style: normal; font-size: 13px;}
 
 
 /* Checkboxes */

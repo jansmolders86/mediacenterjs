@@ -42,21 +42,36 @@
 			_resizeviewport(o, $(this)); 	// Strech bg to fullscreen
 			_keyevents(o,$(this)); 			// init keys
 			_screensaver(o, $(this));
-			
+
+			$('a.cachelink').click(function(e){
+				e.preventDefault();
+				var cacheLink = $(this).attr('data-cachelink');
+				var message = 'Are you sure you want to clear this cache?'
+				var action = $.ajax({
+						url: '/clearCache', 
+						type: 'post',
+						data: {cache : cacheLink}
+					}).done(function(){
+						$(".ui-widget").find('.message').html('Cache cleared succesfully');
+						$(".ui-widget").show();
+					});
+					
+				_modalpopup(o, message, action);
+			});
+		
 			
 			$('.remove').click(function(e){
 				e.preventDefault();
 				var module = $(this).find('a').attr('href');
-				
-				$.ajax({
-					url: '/removeModule', 
-					type: 'post',
-					data: {module : module}
-				}).done(function(data){
-					if (data = 'done') window.location.href = '/';
-				});
+				var message = 'Are you sure you want to delete this module?'
+				var action = $.ajax({
+						url: '/removeModule', 
+						type: 'post',
+						data: {module : module}
+					});
+					
+				_modalpopup(o, message, action);
 			});
-		
 			
 			if(o.debug == false){
 				$(document).bind("contextmenu", function(e) {
@@ -71,6 +86,8 @@
 	/**** Start of custom functions ***/
 	
 	function _initpages(o, $that){
+		$(".ui-widget").hide();
+		
 		$(".backdropimg").addClass("fadein");
 	
 		// If stated in config and if the plugin is present, add a onscreen keyboard
@@ -79,6 +96,22 @@
 				$('.keyboard').keyboard();
 			}
 		}	
+	}
+	
+	function _modalpopup(o, message, action){
+		$('<div>' + message + '</div>').dialog({
+			resizable: false,
+			modal: true,
+			buttons: {
+				"Yes": function() {
+					action
+					$(this).dialog("close");
+				},
+				Cancel: function() {
+					$(this).dialog("close");
+				}
+			}
+		});
 	}
 	
 	// Resize background image according to viewport if the image has class fullscreen
