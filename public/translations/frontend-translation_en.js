@@ -1,3 +1,4 @@
+succesMessage = Succesfully executed.
 weather_cloudy = cloudy
 weather_sunny = sunny
 weather_rain = rain
@@ -7,6 +8,4 @@ weather_snow = snow
 weather_storm = storm
 feelsLike = Feels like
 error_weather =  Please specify a larger city.
-cacheMessage = Are you sure you want to clear this cache?
-cacheSucces = Cache cleared succesfully
-moduleMessage = Are you sure you want to delete this module? 
+confirmMessage = Are you sure you want to do this? This action can not be undone.
