@@ -161,6 +161,10 @@ app.post('/clearCache', function(req, res){
 				rimraf(dataFolder, function (e) { 		
 					if(e){
 						console.log('Error removing module', e .red) 
+						res.send('Error clearing cache', e)
+					} else{
+						console.log('done') 
+						res.send('done')
 					};
 				});
 			};

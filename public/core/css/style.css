@@ -364,7 +364,7 @@ em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red;
 
 .ym-form .pretty input{ margin: 0; }
 
-/* Player */
+/* Player default positioning */
 
 #player{
 	position:absolute;
@@ -372,6 +372,11 @@ em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red;
 	left:0;
 }
 
+/** jQuery UI additions**/
+
+.ui-widget{margin-bottom:20px;}
+.ui-state-highlight{padding:15px 10px;}
+.ui-icon.ui-icon-alert{float: left; margin:5px 20px 0 0;}
 
 /***** KEYBOARD *****/
 

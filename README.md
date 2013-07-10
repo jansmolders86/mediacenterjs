@@ -32,8 +32,9 @@ __version 0.016 (jQuery UI and cache clearing)__
 
 - Added full jquery ui library
 - Added cache clearing fucntionality
-- Added modal dialogs
 - Added translations
+- Drastically uncreased stability
+- Added defaults for jQuery UI modal dialogs and notification
 
 __version 0.015 (Small fixes & removing modules)__
 

@@ -34,63 +34,65 @@
 				$that: $that
 				,viewportWidth	: $(window).width()
 				,viewportHeight	: $(window).height()
+				,confirmMessage : undefined
+				,succesMessage : undefined
 			});
 			
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
-	
+			
+			_initpages(o, $(this))
 			_resizeviewport(o, $(this)); 	// Strech bg to fullscreen
 			_keyevents(o,$(this)); 			// init keys
 			_screensaver(o, $(this));
 
 			$('a.cachelink').click(function(e){
 				e.preventDefault();
-				var cacheLink = $(this).attr('data-cachelink');
-				var message = 'Are you sure you want to clear this cache?'
-				var action = $.ajax({
-						url: '/clearCache', 
-						type: 'post',
-						data: {cache : cacheLink}
-					}).done(function(){
-						$(".ui-widget").find('.message').html('Cache cleared succesfully');
-						$(".ui-widget").show();
-					});
-					
-				_modalpopup(o, message, action);
+				var cacheLink = $(this).attr('data-cachelink')
+				, data = {cache : cacheLink}
+				, url = '/clearCache';
+				_GenericModal(o,url,data)
 			});
 		
-			
 			$('.remove').click(function(e){
 				e.preventDefault();
-				var module = $(this).find('a').attr('href');
-				var message = 'Are you sure you want to delete this module?'
-				var action = $.ajax({
-						url: '/removeModule', 
-						type: 'post',
-						data: {module : module}
-					});
-					
-				_modalpopup(o, message, action);
+				var moduleLink = $(this).find('a').attr('href')
+				, data = {module : moduleLink}
+				, url = '/removeModule';
+				_GenericModal(o,url,data)
 			});
-			
-			if(o.debug == false){
-				$(document).bind("contextmenu", function(e) {
-					return false;
-				});
-			}
-			
-			_initpages(o, $(this))
 		});
 	}
 	
 	/**** Start of custom functions ***/
 	
 	function _initpages(o, $that){
+		// Setup frontend validation
+		$.ajax({
+			url: '/configuration/', 
+			type: 'get'
+		}).done(function(data){
+			$.i18n.properties({
+				name: 'frontend-translation', 
+				path:'/translations/', 
+				mode:'map',
+				language: data.language,
+				extension: 'js',
+				loadBaseFile: false ,
+				callback: function() {
+					o.confirmMessage = $.i18n.prop('confirmMessage')
+					o.succesMessage = $.i18n.prop('succesMessage')
+				}
+			})
+		});
+	
+		// Hide all ui boxes
 		$(".ui-widget").hide();
 		
+		// Add fade effect
 		$(".backdropimg").addClass("fadein");
-	
-		// If stated in config and if the plugin is present, add a onscreen keyboard
+		
+		// Init Keyboard
 		if(jQuery().keyboard) {
 			if ( o.usekeyboard == 'yes' ){
 				$('.keyboard').keyboard();
@@ -98,23 +100,39 @@
 		}	
 	}
 	
-	function _modalpopup(o, message, action){
-		$('<div>' + message + '</div>').dialog({
+	function _GenericModal(o, url, data){
+		var dialog = null
+		dialog = $('<div>' + o.confirmMessage + '</div>').dialog({
 			resizable: false,
 			modal: true,
-			buttons: {
-				"Yes": function() {
-					action
-					$(this).dialog("close");
+			buttons: [{
+				text: "Ok",
+				"id": "btnOk",
+				click: function () {
+					$.ajax({
+						url: url, 
+						type: 'post',
+						data: data
+					}).done(function(data){
+						if(data == 'done'){
+							$(".ui-widget").find('.message').html(o.succesMessage);
+							$(".ui-widget").show();
+						}
+						dialog.dialog('close');
+					});
 				},
-				Cancel: function() {
-					$(this).dialog("close");
-				}
-			}
+
+			}, {
+				text: "Cancel",
+				click: function () {
+					dialog.dialog('close');
+				},
+			}]
 		});
+		dialog.dialog('open');
 	}
 	
-	// Resize background image according to viewport if the image has class fullscreen
+	
 	function _resizeviewport(o, $that){
 		var $img = $(".fullscreen");
 		$(window).resize(function() {
