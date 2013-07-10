@@ -16,5 +16,9 @@
 "setting_language" : "Language",
 "setting_location" : "You current location (city)",
 "setting_theme" : "Pick a theme",
-"setting_port" : "Port"
+"setting_port" : "Port",
+"setting_submit" : "Submit",
+"settings_clear_cache_movies" : "Clear movie cache",
+"settings_clear_cache_music" : "Clear music cache",
+"settings_clear_cache_tv" : "Clear tv cache"
 }

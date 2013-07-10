@@ -16,5 +16,9 @@
 "setting_language" : "Taal",
 "setting_location" : "Uw locatie",
 "setting_theme" : "Kies het thema",
-"setting_port" : "Poort"
+"setting_port" : "Poort",
+"setting_submit" : "Verzenden",
+"settings_clear_cache_movies" : "Wis speelfilm database",
+"settings_clear_cache_music" : "Wis muziek database",
+"settings_clear_cache_tv" : "Wis tv database"
 }

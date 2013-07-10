@@ -51,9 +51,9 @@ html(lang="en")
 					span.ui-icon.ui-icon-alert
 					.message 
 			.row
-				a.btn.cachelink(href="",data-cachelink="movies") Clear movie cache 
-				a.btn.cachelink(href="",data-cachelink="music") Clear music cache
-				a.btn.cachelink(href="",data-cachelink="tv") Clear tv cache
+				a.btn.cachelink(href="",data-cachelink="movies") #{lingua.settings_clear_cache_movies}
+				a.btn.cachelink(href="",data-cachelink="music") #{lingua.settings_clear_cache_music}
+				a.btn.cachelink(href="",data-cachelink="tv") #{lingua.settings_clear_cache_tv}
 			#settings
 				form#setup.validate-form(action='/submit',method='post')
 					.row
@@ -119,7 +119,7 @@ html(lang="en")
 						label #{lingua.setting_port}
 						input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
 					.row
-						input(type="submit",value="Submit")		
+						input(type="submit",value="#{lingua.setting_submit}")		
 						
 		#hiddenSetting
 			p= onscreenkeyboard
