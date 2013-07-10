@@ -46,6 +46,7 @@
 				_getTrack(o);
 				return false;
 			});
+
 		});
 	}
 	
@@ -62,8 +63,20 @@
 			}).done(function(data){
 				$(data.tracks).each(function(index, item){
 					console.log(item)
-					$('#results').append('<li><ul><li>Artitst: '+item.artists[0].name+'</li><li>Album: '+item.album.name+'</li><li></li><li><a href="'+item.href+'">play track</a><li></ul></li>');
+					$('#results').append('<li><ul><li>Artitst: '+item.artists[0].name+'</li><li>Album: '+item.album.name+'</li><li></li><li><a class="play" href="'+item.href+'">play track</a><li></ul></li>');
 				});
+					
+				$('.play').click(function(e) {
+					e.preventDefault();
+					var playSong = $(this).attr('href');
+					if ($('#spotifyPlayer').length === 0){
+						$('body').append('<iframe src="http://embed.spotify.com/?uri='+playSong+'" id="spotifyPlayer" width="640",height="380" frameborder="0" allowtransparency="true"></iframe>')
+					} else {
+						$('#spotifyPlayer').remove();
+						$('body').append('<iframe src="http://embed.spotify.com/?uri='+playSong+'" id="spotifyPlayer" width="640",height="380" frameborder="0" allowtransparency="true"></iframe>')
+					}
+				});
+				
 			});
 		}		
 	}
