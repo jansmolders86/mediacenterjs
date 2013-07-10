@@ -136,9 +136,7 @@ app.post('/removeModule', function(req, res){
 	, publicdir = './public/'+module+'/';
 	
 	rimraf(appDir, function (e) { 
-		if(e){
-			console.log('Error removing module', e .red) 
-		};
+		if(e)console.log('Error removing module', e .red) 
 	});
 	
 	rimraf(publicdir, function (e) { 
@@ -148,8 +146,6 @@ app.post('/removeModule', function(req, res){
 			res.redirect('/')
 		}
 	});
-	
-	removeDirectory(req,res,rmdir);
 });
 
 app.post('/clearCache', function(req, res){
@@ -189,6 +185,7 @@ app.post('/submit', function(req, res){
 });
 
 function writeSettings(req, res, callback){
+	var themeName = req.body.theme+'.css'
 	var myData = {
 		moviepath : req.body.movielocation,
 		highres: req.body.highres,
@@ -198,7 +195,7 @@ function writeSettings(req, res, callback){
 		onscreenkeyboard: req.body.usekeyboard,
 		location: req.body.location,
 		screensaver: req.body.screensaver,
-		theme: req.body.theme,
+		theme: themeName,
 		showdetails: req.body.showdetails,
 		port: req.body.port
 	}

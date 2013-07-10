@@ -7,3 +7,6 @@ weather_snow = sneeuw
 weather_storm = storm
 feelsLike = Gevoelstemperatuur
 error_weather =  Kies een grotere stad.
+cacheMessage = Weet u zeker dat u deze cache wilt legen?
+cacheSucces = Cache is succesvol geleegd
+moduleMessage = Weet u zeker dat u deze module wilt verwijderen?

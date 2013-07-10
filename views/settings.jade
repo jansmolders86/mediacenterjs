@@ -5,13 +5,14 @@ html(lang="en")
 		// Core inclusion
 		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
 		link(rel='stylesheet', href='/core/css/style.css')
-		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css')
+		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css') 
 		link(rel='stylesheet', href='/themes/'+selectedTheme)
 		
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/jquery-ui-1.10.3.min.js")
 		
 		script(src="/core/js/plugins/jquery.idle-timer.js")
+		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
 		script(src="/core/js/jquery.mcjs.core.js")
 		
 		script(src="/core/js/plugins/jquery.prettyForm.js")
@@ -112,7 +113,7 @@ html(lang="en")
 						input.keyboard(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")
 					.row
 						label #{lingua.setting_theme}
-						select#theme(name="selectedTheme")
+						select#theme(name="theme")
 							for theme in themes
 								option(selected=theme) #{theme}
 					.row
