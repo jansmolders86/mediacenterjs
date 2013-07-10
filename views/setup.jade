@@ -52,10 +52,7 @@ html(lang="en")
 					input.keyboard(name="language",type="text",placeholder="ie nl or en",data-rule-required="true", data-rule-language="true",  data-msg-language="Only NL and EN are currently supported")
 				.row
 					label You current location (city)
-					if location !== 'unknown'
-						input.keyboard(name="location",type="text",value= location,data-rule-required="true")
-					else 
-						input.keyboard(name="location",type="text",placeholder="ie london or amsterdam",data-rule-required="true")
+					input.keyboard(name="location",type="text",placeholder="ie london or amsterdam",data-rule-required="true")
 				.row
 					label Port
 					input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337",data-rule-required="true")
