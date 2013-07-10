@@ -35,7 +35,8 @@ exports.index = function(req, res, next){
 	
 	res.render('weather',{
 		userLanguage: jsondata.language,
-		userLocation: jsondata.location
+		userLocation: jsondata.location,
+		selectedTheme: jsondata.theme
 	});
 };
 
