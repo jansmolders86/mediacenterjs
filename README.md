@@ -80,7 +80,6 @@ What currently works?
 * Retrieving of tv show information
 * Basic screensaver
 * lazy loading of movie and music items
-* Automatically loading of location if available during setup
 
 What's coming up
 =================
