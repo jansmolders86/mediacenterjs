@@ -28,6 +28,13 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
+__version 0.016 (jQuery UI and cache clearing)__
+
+- Added full jquery ui library
+- Added cache clearing fucntionality
+- Added modal dialogs
+- Added translations
+
 __version 0.015 (Small fixes & removing modules)__
 
 - Styling bugfixes and new styling
