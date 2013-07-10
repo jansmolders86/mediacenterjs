@@ -326,7 +326,7 @@ a.btn{
 .floatright{ float:right; }
 .floatleft{ float:left; }
 
-.cachelink{z-index:99; position:relative; overflow:hidden;)
+.cachelink{z-index:99; position:relative; overflow:hidden;}
 
 /* Error (Validation)*/
 em{ display: block !important; float:left; margin:5px 0 0 5px; color: red; font-style: normal; font-size: 13px;}
