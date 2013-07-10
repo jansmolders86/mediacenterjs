@@ -148,7 +148,7 @@ a.btn{
 	border-radius:5px;
 }
 
-em{ color: red; font-style: normal; font-size: 13px; }
+em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red; font-style: normal; font-size: 13px;}
 
 input,
 select{ display:block; width:200px; padding:5px 10px; }
