@@ -53,7 +53,7 @@ body{
 body.homepage{ overflow:hidden; }
 
 img{border:0;}
-*:focus { outline: none !important; } 
+*:focus { color:#fb8521; outline:none !important;} 
 
 h1,
 h2,
