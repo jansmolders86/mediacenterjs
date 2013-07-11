@@ -50,11 +50,10 @@ body{
 	color: #747474;
 }
 
+body.homepage{ overflow:hidden; }
+
 img{border:0;}
 *:focus { outline: none !important; } 
-
-html{ background-color:#f6f6f6; }
-body{ font-family: 'Open Sans', sans-serif; color: #747474; }
 
 h1,
 h2,
@@ -225,6 +224,7 @@ html.dim{background:#333; opacity:1;}
 	height:100%;
 	position:relative;
 	margin:50px auto 0;
+	overflow:hidden;
 }
 
 .tile .info .remove{ float:right; font-size:12px; }

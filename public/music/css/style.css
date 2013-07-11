@@ -21,6 +21,7 @@
 
 body{position:relative; min-height:100%; overflow:hidden; overflow-y:auto;}
 #header{ border-bottom:5px solid #fff; }
+#wrapper{padding:50px 100px;}
 
 /* Music App */
 
@@ -78,10 +79,9 @@ ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; paddi
 	position:relative;
 	float:left;
 	height:80%;
-	width: 100%;
+	width:100%;
 	overflow-y:auto;
 	z-index:9;
-	margin:0 auto;
 }
 
 #tracklist img.cover{
@@ -96,7 +96,7 @@ ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; paddi
 	margin:0 0 20px 0; 
 	padding: 0 3px 20px;
 	height:80%;
-	width:80%;
+	width:99%;
 	overflow-y:auto
 }
 
