@@ -19,16 +19,10 @@
 
 /* Default override */
 
-body{position:relative; min-height:100%; overflow:hidden;}
+body{position:relative; min-height:100%; overflow:hidden; overflow-y:auto;}
 #header{ border-bottom:5px solid #fff; }
 
 /* Music App */
-
-#musicWrapper {
-	overflow-y:auto;
-	height:600px;
-	width:95%;
-}
 
 ul.music{ list-style:none; height:100%; width: 100%; }
 ul.music li img{
@@ -80,13 +74,14 @@ ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; paddi
 
 #tracklist{
 	color: #fff;
-	position: absolute;
-	top: 100px;
-	left: 100px;
+	display:none;
+	position:relative;
+	float:left;
 	height:80%;
 	width: 100%;
 	overflow-y:auto;
 	z-index:9;
+	margin:0 auto;
 }
 
 #tracklist img.cover{
@@ -120,14 +115,14 @@ ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; paddi
 #tracklist li.selected {background:#e5e5e5;}
 #tracklist li.selected .eq{visibility:visible;}
 
-#tracklist .info{
+#albumInfo{
 	position:relative;
 	overflow:hidden;
 	float:left;
 	padding-left:10px;
 }
 
-#tracklist .info h2{
+#albumInfo h2{
 	color:#444;
 	font-size:22px;
 	padding:5px 0 5px 20px;
@@ -137,8 +132,8 @@ ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; paddi
 	max-width:700px;
 }
 
-#tracklist .info .year,
-#tracklist .info .genre{ color:#333; padding-left: 140px; font-size:14px; }
+#albumInfo .year,
+#albumInfo .genre{ color:#333; padding-left: 140px; font-size:14px; }
 
 .eq{
 	visibility:hidden;
@@ -169,7 +164,7 @@ ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; paddi
 .random:hover,
 .random.active{ background:url(img/random-icon.png)no-repeat left bottom; }
 
-#player{position:absolute; left:0; bottom:0px !important; z-index:99; visibility:hidden; }
+#player{position:fixed; left:0; bottom:0px !important; z-index:99; visibility:hidden; }
 #player.show{ visibility:visible; }
 
 

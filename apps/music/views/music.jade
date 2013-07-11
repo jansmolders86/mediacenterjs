@@ -52,7 +52,13 @@ html(lang="en")
 							li.boxed
 								img(src="").cover
 								.overlay
-								a.title= album						
-		#eq						
+								a.title= album
+			#tracklist
+				#albumInfo
+					img.cover(src="")					
+					h2
+					.genre
+					.year
+				ul#tracks					
 		video#player.video-js.vjs-default-skin(controls, preload="metadata", width="100%", height="33", data-setup="{}") %
 			source(src="",type="audio/mp3")
