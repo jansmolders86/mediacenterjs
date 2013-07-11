@@ -165,28 +165,16 @@
 			if (typeof e == 'undefined' && window.event) { e = window.event; }
 			
 			switch(e.keyCode) {
-				case 40 : //down
+				case 39 : //next
 					focused.removeClass('focused').next().addClass('focused');
 					if (focused.next().length == 0) {
 						item.eq(0).addClass('focused')
 					}
 				break;
-				case 38 : //up
+				case 37 : //prev
 					focused.removeClass('focused').prev().addClass('focused');
 					if (item.prev().length == 0) {
 						item.eq(-1).addClass('focused')
-					}
-				break;
-				case 37 : //left
-					subitemFocused.removeClass('focused').prev().addClass('focused');
-					if (subitemFocused.prev().length == 0) {
-						subitem.eq(-1).addClass('focused')
-					}
-				break;
-				case 39 : //right
-					subitemFocused.removeClass('focused').next().addClass('focused');
-					if (subitemFocused.next().length == 0) {
-						subitem.eq(0).addClass('focused')
 					}
 				break;
 				case 13 : //enter
