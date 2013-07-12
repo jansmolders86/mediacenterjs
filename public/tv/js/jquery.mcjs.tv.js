@@ -84,8 +84,8 @@
 					var tvData = $.parseJSON(data);
 					console.log(tvData[0])
 					setTimeout(function(){
-						visibleTv.find('img').attr('src',tvData[0].banner);		
-						visibleTv.addClass('coverfound');		
+						visibleTv.find('img').attr('src', '');
+						visibleTv.find('img').attr('src',tvData[0].banner).addClass('coverfound');		
 					},400);
 				}
 			});

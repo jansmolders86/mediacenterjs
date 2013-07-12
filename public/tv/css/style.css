@@ -3,11 +3,24 @@
 	margin:10px;
 
 }
-.tvshow.coverfound{
+.tvshow{
 	-moz-box-shadow: 0 0px 5px #888;
 	-webkit-box-shadow: 0 0px 5px #888;
 	box-shadow: 0 0px 5px #888;
 	background:#fff;
 }
+
+.tvshow img{
+	width:32px;
+	height:32px;
+	margin:20px 0 0 40px;
+}
+
+.tvshow img.coverfound{
+	width:758px;
+	height:140px;
+	margin:0;
+}
+
 #tvshowBanners{max-width:1556px; margin:0 auto;}
 .info{margin:10px 5px 5px}

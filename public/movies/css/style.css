@@ -110,9 +110,11 @@ a.backlink { margin-top: 11px; z-index:777; }
 	width:32px;
 	height:32px;
 	border:0;
+	margin:50px 0 0 70px;
 } 
 
 .movieposter img.coverfound{
+	margin:0 0 20px 0;
 	width:185px;
 	height:278px;
 	padding:0;
@@ -131,6 +133,7 @@ a.backlink { margin-top: 11px; z-index:777; }
 span.title{visibility:hidden; width:0; height:0;}
 
 .movieposter.showDetails{
+	display:block;
 	background:#fff;
 	padding:0px;
 	width:185px;

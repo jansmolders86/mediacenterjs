@@ -27,10 +27,10 @@ body{position:relative; min-height:100%; overflow:hidden; overflow-y:auto;}
 
 ul.music{ list-style:none; height:100%; width: 100%; }
 ul.music li img{
-	width:120px;
-	height:120px;
+	width:32px;
+	height:32px;
 	float:left;
-	margin-right:20px;
+	margin:20px 0 0 40px;
 }
 
 ul.music li{
@@ -46,10 +46,15 @@ ul.music li{
 	margin:0 10px 10px 0;
 	cursor:pointer;
 	float:left;
-	display:none;
 }
 
 ul.music .overlay{ width:0; height:0; }
+
+ul.music li img.coverfound{
+	width:120px;
+	height:120px;
+	margin:0px;
+} 
 
 ul.music li.coverfound:hover .overlay{
 	position:absolute;

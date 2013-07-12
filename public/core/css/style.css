@@ -52,7 +52,7 @@ body{
 
 body.homepage{ overflow:hidden; }
 
-img{border:0;}
+img{border:0; display:block;}
 *:focus { color:#fb8521; outline:none !important;} 
 
 h1,
@@ -173,7 +173,6 @@ a.backlink{
 	width: 32px;
 	height:32px;
 }
-
 
 /* Generic classes */
 

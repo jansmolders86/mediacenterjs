@@ -101,7 +101,6 @@
 	}
 	
 	function _lazyload(o){
-	
 		if($("#player").hasClass('show')){
 			$("#player").removeClass('show')
 		};
@@ -135,10 +134,10 @@
 				_handleMusic(title, cover, album)
 			} else {
 				var albumData = $.parseJSON(data);
-				album.addClass('coverfound').fadeIn();
+				album.fadeIn();
 				cover.attr('src','');	
 				setTimeout(function(){
-					cover.attr('src',albumData[0].thumb);
+					cover.attr('src',albumData[0].thumb).addClass('coverfound');
 				},500);
 			}
 		});
@@ -191,7 +190,7 @@
 				}).done(function(data){
 
 					var albumData = $.parseJSON(data);
-					$('#tracklist').find('img.cover').attr('src',albumData[0].thumb);
+					$('#tracklist').find('img.cover').attr('src',albumData[0].thumb).addClass('coverfound');
 					$('#tracklist').find('.year').html(albumData[0].year);
 					$('#tracklist').find('.genre').html(albumData[0].genre[0]);
 					$('img.cover').bind('load', function (event) {
