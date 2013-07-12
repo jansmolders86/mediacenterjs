@@ -48,7 +48,7 @@ body,html{overflow:hidden; position:relative;}
 .forecast ul{ 
 	list-style:none;
 	float:left;
-	width: 140px;
+	width: 250px;
 	height: 110px;
 }
 
