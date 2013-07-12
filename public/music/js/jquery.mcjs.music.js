@@ -76,12 +76,12 @@
 				switch(e.keyCode) {
 					case 32 : 
 
-							player().on("play", function(){
-								videojs("player").player().pause();
-							});
-							player().on("pause", function(){
-								$("player").player().play();
-							});
+						player().on("play", function(){
+							videojs("player").player().pause();
+						});
+						player().on("pause", function(){
+							$("player").player().play();
+						});
 	
 					break;
 				}
@@ -182,6 +182,8 @@
 				for (var i = 0; i < data.length; i++) {
 					$('#tracks').append('<li><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+data[i]+'</div></li>')
 				}
+				
+				$('#tracks').find('li:odd').addClass('odd')
 				
 				$.ajax({
 					url: '/music/post/', 
