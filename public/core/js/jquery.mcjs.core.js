@@ -107,8 +107,8 @@
 			modal: true,
 			buttons: [{
 				text: "Ok",
-				"id": "btnOk",
 				click: function () {
+					dialog.dialog('destroy').remove();
 					$.ajax({
 						url: url, 
 						type: 'post',
@@ -117,15 +117,14 @@
 						if(data == 'done'){
 							$(".ui-widget").find('.message').html(o.succesMessage);
 							$(".ui-widget").show();
-						}
-						dialog.dialog('close');
+						} 
 					});
 				},
 
 			}, {
 				text: "Cancel",
 				click: function () {
-					dialog.dialog('close');
+					dialog.dialog('destroy').remove();
 				},
 			}]
 		});
