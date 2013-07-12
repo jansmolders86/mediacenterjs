@@ -95,9 +95,10 @@
 	function _setHeight(){
 		var viewportHeight = $(window).height();
 		$('#musicWrapper').css('height',viewportHeight - 55);
-		if($('#tracks')){
-			$('#tracks').css('height',viewportHeight - 155);
-		}
+		$('#tracklist').css('height',viewportHeight - 400);
+		
+		var parentHeight = $('#tracklist').height();
+		$('#tracks').css('height',parentHeight - 200);
 	}
 	
 	function _lazyload(o){
@@ -199,7 +200,9 @@
 						var image = event.target;
 						 _dominantColor(image);
 					});	
-
+					
+					$('#tracks').perfectScrollbar();
+					
 					$('#tracklist').show();					
 				});
 				

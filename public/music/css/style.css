@@ -19,7 +19,7 @@
 
 /* Default override */
 
-body{position:relative; min-height:100%; overflow:hidden; overflow-y:auto;}
+body{position:relative; min-height:100%; overflow:hidden;}
 #header{ border-bottom:5px solid #fff; }
 #wrapper{padding:50px 100px;}
 
@@ -85,11 +85,11 @@ ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; paddi
 	display:none;
 	position:relative;
 	float:left;
-	height:50%;
 	width:100%;
-	overflow-y:auto;
 	z-index:9;
 	padding:20px;
+	margin-bottom:40px;
+	overflow:hidden;
 }
 
 #tracklist img.cover{
@@ -102,11 +102,14 @@ ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; paddi
 
 #tracklist ul{
 	list-style:none; 
-	margin:0 0 20px 0; 
+	margin:0 0 50px 0; 
 	padding: 0 3px 20px;
+	width:100%;
+	clear: both;
 	height:100%;
-	width:99%;
-	overflow-y:auto
+	float:left;
+	position:relative;
+	overflow:hidden;
 }
 
 #tracklist li{
