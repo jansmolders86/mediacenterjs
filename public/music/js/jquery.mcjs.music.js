@@ -95,10 +95,7 @@
 	function _setHeight(){
 		var viewportHeight = $(window).height();
 		$('#musicWrapper').css('height',viewportHeight - 55);
-		$('#tracklist').css('height',viewportHeight - 400);
-		
-		var parentHeight = $('#tracklist').height();
-		$('#tracks').css('height',parentHeight - 200);
+		$('#tracklist').css('height',viewportHeight - 200);
 	}
 	
 	function _lazyload(o){
@@ -179,12 +176,16 @@
 				$('#tracklist').find('h2').html(album);
 				$('#tracks').find('h2').html(album);
 
-				$('#tracks').empty();
-				for (var i = 0; i < data.length; i++) {
-					$('#tracks').append('<li><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+data[i]+'</div></li>')
+				if($('#tracks').length == 0){
+					$('#tracklist').append('<ul id="tracks"></ul>')
+				} else{
+					$('#tracks').remove();
+					$('#tracklist').append('<ul id="tracks"></ul>')
 				}
 				
-				$('#tracks').find('li:odd').addClass('odd')
+				for (var i = 0; i < data.length; i++) {
+					$('#tracks').append('<li><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+data[i]+'</div></li>')
+				}	
 				
 				$.ajax({
 					url: '/music/post/', 
@@ -201,9 +202,14 @@
 						 _dominantColor(image);
 					});	
 					
-					$('#tracks').perfectScrollbar();
+		
+					var parentHeight = $('#tracklist').height();
+					$('#tracks').css('height',parentHeight - 200);
 					
-					$('#tracklist').show();					
+					$('#tracklist').show();		
+					$('#tracks').perfectScrollbar();
+					$('#tracks').find('li:odd').addClass('odd')
+				
 				});
 				
 				$('#tracklist').find('li').click(function(e) {
