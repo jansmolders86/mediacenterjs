@@ -34,6 +34,7 @@ __version 0.017 (JSON based routing)__
  The default routes are stored in the configuration folder.
  An app specific route can be added in the root of the app folder.
  This way it's a lot easier to extend the routing. See documentation below. 
+- Fixed bug preventing movie cache to be written
 
 __version 0.016 (jQuery UI and cache clearing)__
 
