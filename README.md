@@ -28,6 +28,13 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
+__version 0.017 (JSON based routing)__
+
+- Routes are defined in json objects. 
+ The default routes are stored in the configuration folder.
+ An app specific route can be added in the root of the app folder.
+ This way it's a lot easier to extend the routing. See documentation below. 
+
 __version 0.016 (jQuery UI and cache clearing)__
 
 - Added full jquery ui library
@@ -35,6 +42,7 @@ __version 0.016 (jQuery UI and cache clearing)__
 - Added translations
 - Drastically uncreased stability
 - Added defaults for jQuery UI modal dialogs and notification
+- Basic Spotify track playback works
 
 __version 0.015 (Small fixes & removing modules)__
 
@@ -89,12 +97,14 @@ What's coming up
 * Better movie transcoding handling
 * Subtitle support
 
-Known issues
+Known issues (Updated)
 ==================
-* Music duration is not passed on to the client
+* Music duration is not passed on to the client ( It's a direct pipe of a stream. not yet implemented node lame/speaker because of Windows bug during install)
 * Movie Buffer size needs tweaking
-* Subfolder support does not work yet
-
+* Subfolder support is laking (App setup needs to be more RESTfull)
+* Music and videos need to be based on arrays instead of the current DOM dependencies
+* MongoDB support needs to be implemented
+* Current Ffmpeg setup is not crossdevice (currently based on flash because WebM has a bug, not parsing the duration)
 
 What still needs to be done
 ==================
@@ -258,6 +268,7 @@ If we look at the hello world example, you will see the following contents
 	
 * The render engine is the way the view is written down. Currently only JADE is supported.
 * The exports.index is the initial route to the app. And in this case will render the hello.jade file in the views folder.
+* The 'index' is the key used by the routing to assign te proper handeling. Another example is 'post'.
 
 __The public part of an App / Making it public__
 
@@ -266,9 +277,21 @@ If you want your app to show up in the dashboard, all you need to do is add a ti
 
 So in theory, you can make a background app that hooks on an existing app, or just runs in the background, without having it showing up in the dashboard simply by not adding the tile.
 
-__route.js (Still WIP)__ 
+__route.js__ 
 
-You can extend the basic routing table with your own custom routes by adding them in this file.
+You can extend the basic routing table with your own custom routes by adding this JSON file and defining your routes. 
+The 'NAME' will be replaced with the app name (folder name). You do not have to hardcode it. For Example:
+
+	{
+		"track": [{
+			"method": "get",
+			"path": "/NAME/track/:album/:track"
+		}],
+		"album": [{
+			"method":"post",
+			"path": "/NAME/album"
+		}]
+	}
 	
 __Building an App__
 
@@ -308,7 +331,6 @@ This app also makes use of the following modules:
 * feedparser
 * util
 * trakt
-* geoip-lite
 * spotify
 * colors
 
