@@ -91,6 +91,7 @@ exports.play = function(req, res){
 
 exports.post = function(req, res, next){	
 	var movieTitle = null
+	, path = './public/movies/data/'
 	, api_key = '7983694ec277523c31ff1212e35e5fa3'
 	, cdNumber = null
 	, id = 'No data found...'
