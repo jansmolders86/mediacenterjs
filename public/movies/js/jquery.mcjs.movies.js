@@ -45,7 +45,7 @@
 			
 			$('.overlay').click(function(e) {
 				e.preventDefault();	
-				var url = '/movies/video/' + $(this).attr('data-movie')
+				var url = '/movies/file/' + $(this).attr('data-movie')
 				_playMovie(url)
 			});
 			

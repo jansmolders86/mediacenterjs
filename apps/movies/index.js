@@ -59,9 +59,10 @@ exports.index = function(req, res, next){
 };
 
 exports.play = function(req, res){
-	
 	var movieTitle = encoder.htmlDecode(req.params.filename)
 	, movie = configfileResults.moviepath + movieTitle;
+	
+	console.log('Getting ready to play', movie .green)
 		
 	var stat = fs.statSync(movie)
 	res.writeHead(200, {
