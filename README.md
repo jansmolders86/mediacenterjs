@@ -281,7 +281,7 @@ So in theory, you can make a background app that hooks on an existing app, or ju
 __route.js__ 
 
 You can extend the basic routing table with your own custom routes by adding this JSON file and defining your routes. 
-The 'NAME' will be replaced with the app name (folder name). You do not have to hardcode it. For Example:
+The 'NAME' will be replaced with the app name (folder name). You do not have to hardcode it. But you can also add route outside your app namespace. For Example:
 
 	{
 		"track": [{
@@ -291,6 +291,10 @@ The 'NAME' will be replaced with the app name (folder name). You do not have to 
 		"album": [{
 			"method":"post",
 			"path": "/NAME/album"
+		}],
+		"lookup": [{
+			"method":"get",
+			"path": "/configuration"
 		}]
 	}
 	

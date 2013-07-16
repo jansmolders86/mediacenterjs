@@ -20,5 +20,8 @@
 "setting_submit" : "Verzenden",
 "settings_clear_cache_movies" : "Wis speelfilm database",
 "settings_clear_cache_music" : "Wis muziek database",
-"settings_clear_cache_tv" : "Wis tv database"
+"settings_clear_cache_tv" : "Wis tv database",
+"404_notFound" : "Niet gevonden!",
+"404_header" : "Aangevraagde pagina niet gevonden. Wellicht een kapotte link?",
+"404_txt" : "U wordt terugverwezen naar de homepage in 5 seconde"
 }

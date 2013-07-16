@@ -129,15 +129,17 @@ app.get("/settings", function(req, res, next) {
 	});
 });
 
+app.use(function(req, res) {
+    res.status(404).render('404',{ selectedTheme: configfileResults.theme});
+});
+
 app.post('/removeModule', function(req, res){
 	var incommingModule = req.body
 	, module = incommingModule.module
 	, appDir = './apps/'+module+'/'
 	, publicdir = './public/'+module+'/';
 	
-	rimraf(appDir, function (e) { 
-		if(e)console.log('Error removing module', e .red) 
-	});
+	rimraf(appDir, function (e){if(e)console.log('Error removing module', e .red)});
 	
 	rimraf(publicdir, function (e) { 
 		if(e) {
