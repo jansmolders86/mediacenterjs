@@ -135,18 +135,16 @@ A complete documentation will be available when the project reaches Beta status.
 Setup
 -------------
 
-Download this appication with npm:
+Download this application with NPM:
 
 	npm install mediacenterjs
 
-Or download it directly from github of course. 
+Or download it directly from Github of course. 
 
 After you have downloaded MediacenterJS, click on the .bat file (in Windows) to start the project. 
-(make sure nodemon is properly installed. if not go to the directory of MediacenterJS in the terminal/command prompt and typ npm install nodemon ) 
-
 Or browsed to the root directory of MediaCenterJS in the terminal/command prompt and type:
 
-	node index
+	node server
 
 If you close this window, MCJS will stop working. You can also see useful information about what the server is doing, including error messages and other useful information.
 
@@ -165,12 +163,9 @@ The program will boot in setup mode, being accessible on localhost:3000 or 'IP o
 
 Run MediacenterJS
 -------------
-After the initial setup has been completed, restart the server. MediacenterJS will be available on the port you have specified and the language you have chosen.
-If you don't want to restart the server every time you make a change in the settings, use nodemon to run the application with the following command:
-
-	nodemon -w configuration index.js 
-	
-If you are new to nodemon, it might be needed to restart you command prompt or shell before being able to use nodemon properly.	
+After the initial setup has been completed MediacenterJS will be available on the port you have specified and the language you have chosen.
+the server.js will make sure you do not have to restart the actual application (index.js) every time the configuration file changes.
+Of course, if you change the port, you need to use that port after the initial setup.
 	
 What can the movie browser/player do? 
 -------------
@@ -179,7 +174,7 @@ Once you specify the location of your movies, the movie browser can get all the 
 Once you browse your movie collection, the system will download all the information and store it locally. This means that the building of the movie list index only takes a couple of milliseconds.
 After that the only slight loading time the system has, is when a movie is requested for the first time (because the data has to be downloaded).
 
-When a playback is requested, the server transcodes the movie to the webm open standard so the html5 player can play the movie in the browser.
+When a playback is requested, the server transcodes the movie so the HTML5 player can play the movie in the browser.
 
 
 
@@ -275,7 +270,7 @@ So in theory, you can make a background app that hooks on an existing app, or ju
 __route.js__ 
 
 You can extend the basic routing table with your own custom routes by adding this JSON file and defining your routes. 
-The 'NAME' will be replaced with the app name (folder name). You do not have to hardcode it. But you can also add route outside your app namespace. For Example:
+The 'NAME' will be replaced with the app name (folder name). You do not have to hard code it. But you can also add route outside your app namespace. For Example:
 
 	{
 		"track": [{
