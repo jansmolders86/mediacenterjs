@@ -229,6 +229,7 @@ function stripAds (str) {
             .replace(/<img[^>]*?src=("|')http:\/\/[^>]*?\.?fmpub\.net\/adserver\/[^>]*?\1[\s\S]*?>/gi, '')
             .replace(/<img[^>]*?src=("|')http:\/\/[^>]*?\.?pheedo\.com\/[^>]*?\1[\s\S]*?>/gi, '')
             .replace(/<img[^>]*?src=("|')http:\/\/stats\.wordpress\.com\/[\w]\.gif\?[^>]*?\1[\s\S]*?>/gi, '')
+            .replace(/<img[^>]*?src=("|')http:\/\/feeds\.wired\.com\/c\/[^>]*?\1.*?>.*$/gim, '')
             .replace(/<p><strong><em>Crunch Network[\s\S]*?<\/p>/gi, '')
             .replace(/<embed[^>]*?castfire_player[\s\S]*?> *?(<\/embed>)?/gi, '')
             .replace(/<embed[^>]*?src=("|')[^>]*?castfire\.com[^>]+?\1[\s\S]*?> *?(<\/embed>)?/gi, '')

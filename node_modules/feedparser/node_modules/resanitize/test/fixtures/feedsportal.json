@@ -1,0 +1,4 @@
+{
+  "original": "<p>Lorem ipsum dolor sit amet</p> <img width=\"1\" height=\"1\" src=\"http://feeds.washingtonpost.com/c/34656/f/636635/s/2487ac6f/mf.gif\" border=\"0\"><br><br><a href=\"http://da.feedsportal.com/r/144545015554/u/31/f/636635/c/34656/s/2487ac6f/a2.htm\"><img src=\"http://da.feedsportal.com/r/144545015554/u/31/f/636635/c/34656/s/2487ac6f/a2.img\" border=\"0\"></a><img width=\"1\" height=\"1\" src=\"http://pi.feedsportal.com/r/144545015554/u/31/f/636635/c/34656/s/2487ac6f/a2t.img\" border=\"0\">",
+  "expected": "<p>Lorem ipsum dolor sit amet</p>"
+}
