@@ -10,7 +10,7 @@
 		"type": "GNU",
 		"url": "http://www.gnu.org/licenses"
 	}],
-	"version": "0.0.17",
+	"version": "0.0.18",
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",
@@ -22,7 +22,6 @@
 		"lingua": "0.3.6",
 		"node-ffprobe": "1.2.2",
 		"node-html-encoder": "0.0.2",
-		"nodemon": "0.7.1",
 		"redis": "0.8.3",
 		"request": "2.16.6",
 		"require": "0.5.0",

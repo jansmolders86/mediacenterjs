@@ -120,7 +120,6 @@ app.get("/settings", function(req, res, next) {
 				onscreenkeyboard: configfileResults.onscreenkeyboard,
 				location: configfileResults.location,
 				screensaver: configfileResults.screensaver,
-				showdetails: configfileResults.showdetails,
 				themes:allThemes,
 				port: configfileResults.port
 			});	
@@ -190,7 +189,15 @@ app.post('/submit', function(req, res){
 });
 
 function writeSettings(req, res, callback){
-	var themeName = req.body.theme+'.css'
+	var incommingTheme = req.body.theme
+	if (incommingTheme.match(/\.(css)/)){
+		themeName = incommingTheme 
+	} else {
+		themeName = incommingTheme+'.css'
+	}
+	
+	console.log()
+	
 	var myData = {
 		moviepath : req.body.movielocation,
 		highres: req.body.highres,
@@ -201,7 +208,6 @@ function writeSettings(req, res, callback){
 		location: req.body.location,
 		screensaver: req.body.screensaver,
 		theme: themeName,
-		showdetails: req.body.showdetails,
 		port: req.body.port
 	}
 	
@@ -212,7 +218,7 @@ function writeSettings(req, res, callback){
 		} else {
 			setTimeout(function(){
 				callback();
-			},1000);			
+			},200);			
 		}
 	}); 
 }

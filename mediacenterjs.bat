@@ -1,2 +1,3 @@
+@ECHO OFF
 cd %CD% 
-node index.js
+node server.js

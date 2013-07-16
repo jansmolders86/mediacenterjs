@@ -28,6 +28,14 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
+__version 0.018(No longer dependent on nodemon)__
+
+- Added 404 handling
+- No longer dependent on nodemon to restart server on configfile change
+- Fixed several small bugs
+- Updated all the modules to the latest version (This has introduced a non fatal error comming from JADE. I'm still looking for the cause though)
+- Added EXE file for Windows users. (A direct port of the bat file)
+
 __version 0.017 (JSON based routing)__
 
 - Routes are defined in json objects. 
@@ -50,19 +58,6 @@ __version 0.015 (Small fixes & removing modules)__
 - Styling bugfixes and new styling
 - Added functionality to remove modules from dashboard
 - Better styling representation in settings menu
-
-__version 0.014 (Small fixes & theming)__
-
-- Small bugfixes
-- Added theme implementation
-- Added default theme: WiGo (a mix between Metro and Google ui)
-
-__version 0.013 (Small fixes)__
-
-- Better music thumbnail quality
-- Improved/cleaned up code for music, tv and movies
-- Improved loading of music content
-- Continued work on Spotify app 
 
 Why use it (once it is ready)?
 ===========
