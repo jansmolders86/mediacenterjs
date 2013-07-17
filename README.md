@@ -28,6 +28,11 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
+__version 0.019(Music player works)__
+
+- Music is now seekable!
+
+
 __version 0.018(No longer dependent on nodemon)__
 
 - Added 404 handling
