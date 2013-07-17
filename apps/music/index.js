@@ -61,22 +61,41 @@ exports.album = function(req, res, next){
 };
 
 exports.track = function(req, res, next){
-	var decodeTrack = encoder.htmlDecode(req.params.track).replace(/\^/gi,"/")
+	var decodeTrack = encoder.htmlDecode(req.params.track)
 	if (req.params.album === 'none'){
 		var track = configfileResults.musicpath+decodeTrack
-	}else { 
-		var track = configfileResults.musicpath+encoder.htmlDecode(req.params.album)+'/'+decodeTrack
+	}else {
+		var track = configfileResults.musicpath+req.params.album+'/'+decodeTrack
 	}
-	
-	console.log('Streaming track:',track)
+
 	var stat = fs.statSync(track)
-	res.writeHead(200, {
+	, start = 0
+	, end = 0
+	, range = req.header('Range');
+
+	if (range != null) {
+	start = parseInt(range.slice(range.indexOf('bytes=')+6,
+		range.indexOf('-')));
+	end = parseInt(range.slice(range.indexOf('-')+1,
+		range.length));
+	}
+	if (isNaN(end) || end === 0) end = stat.size-1;
+	if (start > end) return;
+
+
+	res.writeHead(206, { // NOTE: a partial http response
+		'Connection':'close',
 		'Content-Type':'audio/mp3',
-		'Content-Length':stat.size
+		'Content-Length':end - start,
+		'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
+		'Transfer-Encoding':'chunked'
 	});
+
 	var stream = fs.createReadStream(track);
 	stream.pipe(res);
+
 };
+
 
 exports.post = function(req, res, next){	
 	var incomingFile = req.body
