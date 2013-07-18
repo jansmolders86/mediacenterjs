@@ -20,7 +20,22 @@
 (function($){
 
 	var ns = 'mcjs'
-	,methods = {}
+    ,methods = {
+		/**
+			This public function allows you to use a modal dialog 
+			with a ajax call with a generic conformation message
+			@param url 			AJAX url	(ie '/setup')
+			@param data			AJAX data	(ie {module : moduleLink})
+			@param type 		AJAX type  	(ie  'post' or 'get')
+		*/
+		modalDialog : function modalDialog(url, type,data) {
+			return this.each(function() {
+				var o = $.data(this, ns);
+				_modalDialog(o, url, type,data)
+			});
+		}
+		
+    }
 
 	function _init(options) {
 
@@ -50,16 +65,18 @@
 				e.preventDefault();
 				var cacheLink = $(this).attr('data-cachelink')
 				, data = {cache : cacheLink}
-				, url = '/clearCache';
-				_GenericModal(o,url,data)
+				, url = '/clearCache'
+				, type = 'post';
+				_modalDialog(o, url, type,data)
 			});
 		
 			$('.remove').click(function(e){
 				e.preventDefault();
 				var moduleLink = $(this).find('a').attr('href')
 				, data = {module : moduleLink}
-				, url = '/removeModule';
-				_GenericModal(o,url,data)
+				, url = '/removeModule'
+				, type = 'post';				
+				_modalDialog(o, url, type,data)
 			});
 		});
 	}
@@ -100,7 +117,7 @@
 		}	
 	}
 	
-	function _GenericModal(o, url, data){
+	function _modalDialog(o, url, data){
 		var dialog = null
 		dialog = $('<div>' + o.confirmMessage + '</div>').dialog({
 			resizable: false,
@@ -111,7 +128,7 @@
 					dialog.dialog('destroy').remove();
 					$.ajax({
 						url: url, 
-						type: 'post',
+						type: type,
 						data: data
 					}).done(function(data){
 						if(data == 'done'){
@@ -201,8 +218,6 @@
 		});
 	}
 	
-	
-	// Set idletimer for movieplayer to switch to fullscreen. Needs plugin - jquery.idletimer.js
 	function _screensaver(o, $that){
 		$.ajax({
 			url: '/configuration/', 
