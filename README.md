@@ -25,13 +25,16 @@ Status:
 
 __Heavy work in progress, pre-alpha, not ready for use__
 
+If you want to have a say in what should be implemented first, Please check out MediacenterJS's Trello page.
+You can vote on the things you find important. https://trello.com/b/czjyYsFi/mediacenterjs
+
 Changelog 
 =================
 
 __version 0.019(Music player works)__
 
 - Music is now seekable!
-
+- Added settings as an 'app' instead of a seperate link to imporve keyboard accessibility.
 
 __version 0.018(No longer dependent on nodemon)__
 
@@ -39,7 +42,6 @@ __version 0.018(No longer dependent on nodemon)__
 - No longer dependent on nodemon to restart server on configfile change
 - Fixed several small bugs
 - Updated all the modules to the latest version (This has introduced a non fatal error comming from JADE. I'm still looking for the cause though)
-- Added settings as an 'app' instead of a seperate link to imporve keyboard accessibility.
 
 __version 0.017 (JSON based routing)__
 

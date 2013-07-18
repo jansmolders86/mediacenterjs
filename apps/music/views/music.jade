@@ -55,14 +55,14 @@ html(lang="en")
 					ul.music
 						each album in music
 							li.boxed
-								img(src="/core/css/img/ajax-loader.gif").cover
+								img.cover(src="/core/css/img/ajax-loader.gif")
 								.overlay
-								a.title= album
+									a.title= album
 			#tracklist
 				#albumInfo
 					img.cover(src="/core/css/img/ajax-loader.gif")			
 					h2
 					.genre
 					.year				
-		video#player.video-js.vjs-default-skin(controls, preload="metadata", width="100%", height="33", data-setup="{}") %
+		video#player.video-js.vjs-default-skin(controls, preload="metadata", width="100%", height="33", data-setup="{}")
 			source(src="",type="audio/mp3")
