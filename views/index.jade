@@ -55,8 +55,6 @@ html(lang="en")
 		#header
 			img.logo(src="/core/css/img/logo.png")
 			h1 MediacenterJS
-			.settingslink
-				a(href="/settings") #{lingua.settings}
 			#dateandtime
 				.time=time
 				.date=date	
@@ -67,7 +65,7 @@ html(lang="en")
 						a(href="/"+item)
 							img(src="/"+item+"/tile.png")
 						.info
-							if item !== 'movies' && item !== 'music' && item !== 'weather' && item !== 'tv'
+							if item !== 'movies' && item !== 'music' && item !== 'weather' && item !== 'tv' && item !== 'settings'
 								.remove
 									img(src="/core/css/img/remove.png") 
 									a(href=item) Remove

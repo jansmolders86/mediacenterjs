@@ -94,40 +94,6 @@ app.get("/", function(req, res, next) {
 	}
 });
 
-//	Handle settings. Because this is done in one place,
-//	keep it in the initial app.js file. 
-//	TODO: Add extend to settings from app
-
-app.get("/settings", function(req, res, next) {  
-
-	var allThemes = new Array();
-	
-	fs.readdir('./public/themes/',function(err,files){
-		if (err){
-			console.log('Could not get themes',err .red);
-		}else{
-			files.forEach(function(file){
-				allThemes.push(file);
-			});
-
-			res.render('settings',{
-				moviepath: configfileResults.moviepath,
-				selectedTheme: configfileResults.theme,
-				musicpath : configfileResults.musicpath,
-				tvpath : configfileResults.tvpath,
-				highres: configfileResults.highres,
-				language: configfileResults.language,
-				onscreenkeyboard: configfileResults.onscreenkeyboard,
-				location: configfileResults.location,
-				screensaver: configfileResults.screensaver,
-				themes:allThemes,
-				port: configfileResults.port
-			});	
-			
-		}	
-	});
-});
-
 app.use(function(req, res) {
     res.status(404).render('404',{ selectedTheme: configfileResults.theme});
 });
