@@ -34,7 +34,7 @@ Changelog
 __version 0.019(Music player works)__
 
 - Music is now seekable!
-- Added settings as an 'app' instead of a seperate link to imporve keyboard accessibility.
+- Added settings as an 'app' instead of a seperate link to improve keyboard accessibility.
 
 __version 0.018(No longer dependent on nodemon)__
 
