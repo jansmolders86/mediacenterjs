@@ -51,17 +51,25 @@ exports.album = function(req, res, next){
 	, getDir = false
 	, fileTypes = new RegExp("\.(mp3)","g");
 
-	helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes, function(err,status){
-		if(err){
-			console.log('error writing files to disk', err)
-		}else {
-			var musicfiles = []
-			, musicfiles = fs.readFileSync(writePath)
-			, musicfileResults = JSON.parse(musicfiles)	
-			
-			res.send(musicfileResults);
-		}
-	});
+	if (fs.existsSync(writePath)) {
+		var musicfiles = []
+		, musicfiles = fs.readFileSync(writePath)
+		, musicfileResults = JSON.parse(musicfiles)	
+		
+		res.send(musicfileResults);
+	} else {
+		helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes, function(err,status){
+			if(err){
+				console.log('error writing files to disk', err)
+			}else {
+				var musicfiles = []
+				, musicfiles = fs.readFileSync(writePath)
+				, musicfileResults = JSON.parse(musicfiles)	
+				
+				res.send(musicfileResults);
+			}
+		});
+	}
 };
 
 exports.track = function(req, res, next){
