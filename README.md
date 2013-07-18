@@ -31,10 +31,11 @@ You can vote on the things you find important. https://trello.com/b/czjyYsFi/med
 Changelog 
 =================
 
-__version 0.019(Music player works)__
+__version 0.019(Music player & Settings)__
 
 - Music is now seekable!
 - Added settings as an 'app' instead of a seperate link to improve keyboard accessibility.
+- Fixed undefined error when playing music
 
 __version 0.018(No longer dependent on nodemon)__
 
