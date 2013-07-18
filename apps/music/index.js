@@ -74,10 +74,11 @@ exports.album = function(req, res, next){
 
 exports.track = function(req, res, next){
 	var decodeTrack = encoder.htmlDecode(req.params.track)
+	, decodeAlbum = encoder.htmlDecode(req.params.album)
 	if (req.params.album === 'none'){
 		var track = configfileResults.musicpath+decodeTrack
 	}else {
-		var track = configfileResults.musicpath+req.params.album+'/'+decodeTrack
+		var track = configfileResults.musicpath+decodeAlbum+'/'+decodeTrack
 	}
 
 	var stat = fs.statSync(track)
