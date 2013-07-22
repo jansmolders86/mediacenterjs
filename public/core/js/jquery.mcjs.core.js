@@ -117,7 +117,7 @@
 		}	
 	}
 	
-	function _modalDialog(o, url, data){
+	function _modalDialog(o, url, type, data){
 		var dialog = null
 		dialog = $('<div>' + o.confirmMessage + '</div>').dialog({
 			resizable: false,

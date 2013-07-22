@@ -49,11 +49,11 @@ exports.album = function(req, res, next){
 	, dir = configfileResults.musicpath+encoder.htmlDecode(incomingFile.album)+'/'
 	, writePath = './public/music/data/'+encoder.htmlEncode(incomingFile.album)+'/album.js'
 	, getDir = false
-	, fileTypes = new RegExp("\.(mp3)","g");
+	, fileTypes = new RegExp("\.(mp3)","g")
+	, musicfiles = [];
 
 	if (fs.existsSync(writePath)) {
-		var musicfiles = []
-		, musicfiles = fs.readFileSync(writePath)
+		var musicfiles = fs.readFileSync(writePath)
 		, musicfileResults = JSON.parse(musicfiles)	
 		
 		res.send(musicfileResults);
@@ -62,8 +62,7 @@ exports.album = function(req, res, next){
 			if(err){
 				console.log('error writing files to disk', err)
 			}else {
-				var musicfiles = []
-				, musicfiles = fs.readFileSync(writePath)
+				var musicfiles = fs.readFileSync(writePath)
 				, musicfileResults = JSON.parse(musicfiles)	
 				
 				res.send(musicfileResults);
@@ -174,10 +173,6 @@ exports.post = function(req, res, next){
 												writeData(title,thumb,year,genre);
 											});
 										} 
-									} else{
-										discogs(albumTitle, function(title,thumb,year,genre){
-											writeData(title,thumb,year,genre);
-										});
 									}
 								});
 								discogs(albumTitle, function(title,thumb,year,genre){
@@ -258,11 +253,8 @@ exports.post = function(req, res, next){
 			, downloadDir = './public/music/data/'+albumRequest+'/'
 			, cover = responseImage.replace(/-90-/,"-150-");
 			
-			console.log('cover', cover)
-			
-			downloader.on('done', function(msg) { console.log('done', msg); });
-			downloader.on('error', function(msg) { console.log('error', msg); });
 			downloader.download(cover, downloadDir);
+			downloader.on('error', function(msg) { console.log('error', msg); });
 			callback(cover);
 		};
 	

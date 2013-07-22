@@ -12,6 +12,15 @@ html(lang="en")
 		link(rel='stylesheet', href='/spotify/css/style.css')
 		script(src="/spotify/js/jquery.spotify.js")
 		
+		link(href="http://vjs.zencdn.net/4.0/video-js.css", rel="stylesheet")
+		script(src="http://vjs.zencdn.net/4.0/video.js")
+		style(type="text/css")
+			.vjs-play-progress, .vjs-volume-level { background-color: #d96800!important; }
+			.vjs-control-bar, .vjs-big-play-button { background: rgba(171,171,171,0.7)!important; }
+			.vjs-slider { background: rgba(171,171,171,0.2333333333333333)!important; }
+			.vjs-fade-out { opacity: 1 !important; visibility: visible !important; }
+			.vjs-fullscreen-control{visibility:hidden!important;}
+		
 		script
 			$(document).ready(function(){
 				$('body').mcjs();
@@ -31,3 +40,6 @@ html(lang="en")
 				input.btn(type="submit",value="Search")
 				
 			ul#results
+			
+			video#player.video-js.vjs-default-skin(controls, preload="metadata", width="100%", height="33")
+				source(src="",type="audio/mp3")

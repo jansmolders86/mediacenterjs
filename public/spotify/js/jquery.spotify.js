@@ -68,13 +68,13 @@
 					
 				$('.play').click(function(e) {
 					e.preventDefault();
-					var playSong = $(this).attr('href');
-					if ($('#spotifyPlayer').length === 0){
-						$('body').append('<iframe src="http://embed.spotify.com/?uri='+playSong+'" id="spotifyPlayer" width="640",height="380" frameborder="0" allowtransparency="true"></iframe>')
-					} else {
-						$('#spotifyPlayer').remove();
-						$('body').append('<iframe src="http://embed.spotify.com/?uri='+playSong+'" id="spotifyPlayer" width="640",height="380" frameborder="0" allowtransparency="true"></iframe>')
-					}
+					var playSong = $(this).attr('href')
+					, track = '/spotify/file/'+playSong;
+					videojs("player").ready(function(){
+						var myPlayer = this;
+						myPlayer.src(track);
+						myPlayer.play();
+					});
 				});
 				
 			});

@@ -37,6 +37,8 @@ if(configfileResults.language === ""){
 	language = configfileResults.language;
 }
 
+process.env.NODE_ENV = 'development';
+
 app.configure(function(){
 	app.set('view engine', 'jade');
 	app.set('views', __dirname + '/views');
@@ -119,6 +121,8 @@ app.post('/clearCache', function(req, res){
 	var incommingCache = req.body
 	, cache = incommingCache.cache
 	, rmdir = './public/'+cache+'/data/';
+	
+	console.log('clearing '+cache+' cache');
 	
 	fs.readdir(rmdir,function(err,dirs){
 		dirs.forEach(function(dir){

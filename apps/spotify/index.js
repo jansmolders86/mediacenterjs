@@ -18,7 +18,7 @@
 
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
-var spotify = require('spotify')
+var spotify = require('spotify');
 
 // Render the indexpage
 exports.index = function(req, res, next){
@@ -47,12 +47,19 @@ function findTrack(searchQuery, callback){
 }
 
 exports.play = function(req, res, next){
-	var incommingUri = req.params.track
+	var incommingUri = req.params.filename
 	var uri = process.argv[2] || incommingUri;
 	var type = Spotify.uriType(uri);
-
+	
+	if ('track' != type) {
+	  throw new Error('Must pass a "track" URI, got ' + JSON.stringify(type));
+	}
+	
+	var username = process.env.USERNAME;
+	var password = process.env.PASSWORD;
+	
 	// initiate the Spotify session
-	Spotify.login('test', 'passwrd', function (err, spotify) {
+	Spotify.login(username, password, function (err, spotify) {
 		if (err) throw err;
 
 		// first get a "Track" instance from the track URI
