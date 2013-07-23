@@ -49,21 +49,45 @@ exports.album = function(req, res, next){
 	, dir = configfileResults.musicpath+encoder.htmlDecode(incomingFile.album)+'/'
 	, writePath = './public/music/data/'+encoder.htmlEncode(incomingFile.album)+'/album.js'
 	, getDir = false
-	, fileTypes = new RegExp("\.(mp3)","g")
-	, musicfiles = [];
+	, fileTypes = new RegExp("\.(mp3)","g");
 
 	if (fs.existsSync(writePath)) {
-		var musicfiles = fs.readFileSync(writePath)
-		, musicfileResults = JSON.parse(musicfiles)	
-		
-		res.send(musicfileResults);
+		fs.stat(writePath, function (err, stats) {		
+			if(stats.size == 0){
+				rimraf(writePath, function (e) {
+					if(e){
+						console.log('Removing dir error:', e .red)
+					} else{
+						helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes, function(err,status){
+							if(err){
+								console.log('error writing files to disk', err)
+							}else {
+								var musicfiles = []
+								, musicfiles = fs.readFileSync(writePath)
+								, musicfileResults = JSON.parse(musicfiles);
+								
+								res.send(musicfileResults);
+							}
+						});					
+					}
+				});
+			} else {
+
+				var musicfiles = []
+				, musicfiles = fs.readFileSync(writePath)
+				, musicfileResults = JSON.parse(musicfiles);
+				
+				res.send(musicfileResults);
+			}
+		});
 	} else {
 		helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes, function(err,status){
 			if(err){
 				console.log('error writing files to disk', err)
 			}else {
-				var musicfiles = fs.readFileSync(writePath)
-				, musicfileResults = JSON.parse(musicfiles)	
+				var musicfiles = []
+				, musicfiles = fs.readFileSync(writePath)
+				, musicfileResults = JSON.parse(musicfiles);
 				
 				res.send(musicfileResults);
 			}
