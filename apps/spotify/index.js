@@ -18,7 +18,12 @@
 
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
-var spotify = require('spotify');
+
+// Modules
+var Spotify = require('spotify')
+, express = require('express')
+, app = express()
+, fs = require('fs');
 
 // Render the indexpage
 exports.index = function(req, res, next){
@@ -36,69 +41,44 @@ exports.post = function(req, res, next){
 
 
 function findTrack(searchQuery, callback){
-	spotify.search({ type: 'track', query: searchQuery }, function(err, data) {
+	Spotify.search({ type: 'track', query: searchQuery }, function(err, data) {
 		if ( err ) {
 			console.log('Error occurred: ' + err);
 			return;
 		} else {
-			callback(data)
+			callback(data);
 		}
 	});
 }
 
+
 exports.play = function(req, res, next){
-	var incommingUri = req.params.filename
-	var uri = process.argv[2] || incommingUri;
-	var type = Spotify.uriType(uri);
+	var uri = req.params.filename
+	, username= ''
+	, password = '';
 	
-	if ('track' != type) {
-	  throw new Error('Must pass a "track" URI, got ' + JSON.stringify(type));
-	}
-	
-	var username = process.env.USERNAME;
-	var password = process.env.PASSWORD;
-	
-	// initiate the Spotify session
-	Spotify.login(username, password, function (err, spotify) {
-		if (err) throw err;
-
-		// first get a "Track" instance from the track URI
-		spotify.get(uri, function (err, track) {
-			if (err) throw err;
-			console.log('Playing: %s - %s', track.artist[0].name, track.name);
-			
-			var stat = fs.statSync(track)
-			, start = 0
-			, end = 0
-			, range = req.header('Range');
-
-			if (range != null) {
-			start = parseInt(range.slice(range.indexOf('bytes=')+6,
-				range.indexOf('-')));
-			end = parseInt(range.slice(range.indexOf('-')+1,
-				range.length));
-			}
-			if (isNaN(end) || end === 0) end = stat.size-1;
-			if (start > end) return;
-
-			res.writeHead(206, { // NOTE: a partial http response
-				'Connection':'close',
-				'Content-Type':'audio/mp3',
-				'Content-Length':end - start,
-				'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
-				'Transfer-Encoding':'chunked'
-			});
-	
-			var stream = fs.createReadStream(track);
-			stream.pipe(res, function(err){
-				if(err){
-					console.log('error pipe', err)
-				}
-			});
-
-		});
-	});
+	spotifyLogin(username, password, uri);
 };
+
+
+function spotifyLogin(username, password, uri){
+	Spotify.login(username, password, function (err, spotify) {
+		if (err) {
+			console.log('Error occurred: ' + err);
+			return;
+		} else {
+			spotify.get(uri, function (err, track) {
+				var stream = fs.createReadStream(track);
+				stream.pipe(res, function(err){
+					if(err){
+						console.log('error pipe', err)
+					}
+				});
+
+			});
+		}
+	});
+}
 
 
 

@@ -42,9 +42,9 @@ html(lang="en")
 			h1 #{lingua.movies}		
 		#wrapper
 			#moviebrowser
-				if status !== null
+				- if(status !== null)
 					p.gui= status
-				else
+				- else
 					ul.movies
 						each movie in movies
 							li.movieposter.boxed

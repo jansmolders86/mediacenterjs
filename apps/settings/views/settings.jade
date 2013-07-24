@@ -68,12 +68,12 @@ html(lang="en")
 					.row
 						span.label #{lingua.setting_highres}
 						.checkgroup
-							if highres === 'yes'
+							- if(highres === 'yes')
 								input#highresyes(name="highres",type="radio",value="yes",checked) 
 								label(for="highresyes") #{lingua.setting_yes}
 								input#highresno(name="highres",type="radio",value="no") 
 								label(for="highresno") No
-							else
+							- else
 								input#highresyes(name="highres",type="radio",value="yes") 
 								label(for="highresyes") #{lingua.setting_yes}
 								input#highresno(name="highres",type="radio",value="no",checked) 
@@ -81,12 +81,12 @@ html(lang="en")
 					.row
 						span.label #{lingua.setting_screensaver}
 						.checkgroup
-							if screensaver === 'dim'
+							- if(screensaver === 'dim')
 								input#dimYes(name="screensaver",type="radio",value="dim",checked) 
 								label(for="dimYes") #{lingua.setting_yes}
 								input#dimNo(name="screensaver",type="radio",value="off") 
 								label(for="dimNo") #{lingua.setting_no}
-							else 
+							- else 
 								input#dimYes(name="screensaver",type="radio",value="dim") 
 								label(for="dimYes") #{lingua.setting_yes}
 								input#dimNo(name="screensaver",type="radio",value="off",checked) 
@@ -94,19 +94,19 @@ html(lang="en")
 					.row
 						span.label #{lingua.setting_keyboard}
 						.checkgroup
-							if onscreenkeyboard === 'yes'
+							- if(onscreenkeyboard === 'yes')
 								input#yeskeyboard(name="usekeyboard",type="radio",value="yes",checked) 
 								label(for="yeskeyboard") #{lingua.setting_yes}
 								input#nokeyboard(name="usekeyboard",type="radio",value="no") 
 								label(for="nokeyboard") #{lingua.setting_no}
-							else
+							- else
 								input#yeskeyboard(name="usekeyboard",type="radio",value="yes") 
 								label(for="yeskeyboard") #{lingua.setting_yes}
 								input#nokeyboard(name="usekeyboard",type="radio",value="no",checked) 
 								label(for="nokeyboard") #{lingua.setting_no}
 					.row
 						label #{lingua.setting_language}
-						input.keyboard(name="language",type="text",placeholder="ie nl or gb", value= language ,data-rule-required="true", data-rule-language="true",  data-msg-language="Only NL and EN are currently supported")
+						input.keyboard(name="language",type="text",placeholder="ie nl or gb", value= language ,data-rule-required="true", data-rule-language="true", data-msg-language="Only NL and EN are currently supported")
 					.row
 						label #{lingua.setting_location}
 						input.keyboard(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")
@@ -119,7 +119,6 @@ html(lang="en")
 						label #{lingua.setting_port}
 						input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
 					.row
-						input(type="submit",value="#{lingua.setting_submit}")		
-						
+						input(type="submit",value="#{lingua.setting_submit}")	
 		#hiddenSetting
 			p= onscreenkeyboard

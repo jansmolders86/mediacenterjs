@@ -52,6 +52,10 @@ exports.album = function(req, res, next){
 	, fileTypes = new RegExp("\.(mp3)","g");
 
 	if (fs.existsSync(writePath)) {
+		var musicfiles = []
+		, musicfiles = fs.readFileSync(writePath)
+		, musicfileResults = JSON.parse(musicfiles);
+		
 		fs.stat(writePath, function (err, stats) {		
 			if(stats.size == 0){
 				rimraf(writePath, function (e) {
@@ -62,9 +66,8 @@ exports.album = function(req, res, next){
 							if(err){
 								console.log('error writing files to disk', err)
 							}else {
-								var musicfiles = []
-								, musicfiles = fs.readFileSync(writePath)
-								, musicfileResults = JSON.parse(musicfiles);
+								musicfiles = fs.readFileSync(writePath)
+								musicfileResults = JSON.parse(musicfiles);
 								
 								res.send(musicfileResults);
 							}
@@ -72,11 +75,6 @@ exports.album = function(req, res, next){
 					}
 				});
 			} else {
-
-				var musicfiles = []
-				, musicfiles = fs.readFileSync(writePath)
-				, musicfileResults = JSON.parse(musicfiles);
-				
 				res.send(musicfileResults);
 			}
 		});
@@ -93,6 +91,7 @@ exports.album = function(req, res, next){
 			}
 		});
 	}
+	
 };
 
 exports.track = function(req, res, next){

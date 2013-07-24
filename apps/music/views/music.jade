@@ -49,7 +49,7 @@ html(lang="en")
 			h1 #{lingua.music}
 		#wrapper
 			#musicWrapper
-				if status !== null
+				- if(status !== null)
 					p.gui= status
 				else
 					ul.music

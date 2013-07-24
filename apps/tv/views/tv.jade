@@ -39,9 +39,9 @@ html(lang="en")
 			h1 #{lingua.tvshows}		
 		#wrapper
 			#tvshowBanners
-				if status !== null
+				- if(status !== null)
 					p.gui= status
-				else
+				- else
 					ul.tvbanners
 						each tvshow in tvshows
 							li.tvshow.boxed
