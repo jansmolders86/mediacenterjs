@@ -1,7 +1,7 @@
 MediacenterJS
 =============
 
-__A NodeJS based Mediacenter__
+__A NodeJS based Mediacenter__ ![dependencies] (screenshots/dependencies.png)
 
 Website: http://www.mediacenterjs.com
 
@@ -14,19 +14,12 @@ Screenshots (Pre-Alpha GUI):
 
 ![Player] (screenshots/player.png)
 
-![Music] (screenshots/music.png)
-
-![Music_player] (screenshots/music_player.png)
-
-![Weather] (screenshots/weather.png)
+More screenshots in the screenshot folder.
 
 Status: 
 =======
 
 __Heavy work in progress, pre-alpha, not ready for use__
-
-If you want to have a say in what should be implemented first, Please check out MediacenterJS's Trello page.
-You can vote on the things you find important. https://trello.com/b/czjyYsFi/mediacenterjs
 
 Changelog 
 =================
@@ -51,21 +44,6 @@ __version 0.017 (JSON based routing)__
  An app specific route can be added in the root of the app folder.
  This way it's a lot easier to extend the routing. See documentation below. 
 - Fixed bug preventing movie cache to be written
-
-__version 0.016 (jQuery UI and cache clearing)__
-
-- Added full jquery ui library
-- Added cache clearing fucntionality
-- Added translations
-- Drastically uncreased stability
-- Added defaults for jQuery UI modal dialogs and notification
-- Basic Spotify track playback works
-
-__version 0.015 (Small fixes & removing modules)__
-
-- Styling bugfixes and new styling
-- Added functionality to remove modules from dashboard
-- Better styling representation in settings menu
 
 Why use it (once it is ready)?
 ===========
@@ -113,7 +91,7 @@ Known issues (Updated)
 What still needs to be done
 ==================
 
-* The rest...
+* Full progress and todo list: https://trello.com/b/czjyYsFi/mediacenterjs
 
 What's the MCJS?
 =========================
@@ -146,7 +124,7 @@ Setup
 
 Download this application with NPM:
 
-	npm install mediacenterjs
+[![NPM](https://nodei.co/npm/mediacenterjs.png?downloads=true)](https://nodei.co/npm/mediacenterjs/)
 
 Or download it directly from Github of course. 
 
@@ -169,6 +147,27 @@ Install NodeJS: http://nodejs.org/download/
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 
+Setup MongoDB on windows
+------------------
+Before being able to create a database, mongodb needs to be installed on the pc. Please view the first proption of ([this article][http://blog.gvm-it.eu/post/20462477195/getting-started-with-mongodb-and-node-js-on-windows]) to install mongodb
+
+Setup issues
+-----------------
+
+If installing of a Module fails (especially on Windows), it usually is an issue due to the depenceny of node-gyp and the depencendy it has. 
+On Windows you need to have installed ([Microsoft Visual Studio C++ 2010 Express][http://go.microsoft.com/?linkid=9709949] ) according to the node-gyp documentation.
+
+But using the link above you will install the 2012 version. So you need to tell node-gyp you use the 2012 version. 
+An example of how to accomplish this:
+
+	npm install mongodb --msvs_version=2012
+	
+The following modules have a node-gyp dependency:
+
+* sqlite3  -> note: Have Python installed and added to your environment variable PATH
+* lame
+
+For more information please check the ([Node-Gyp documentation] [https://github.com/TooTallNate/node-gyp])
 
 Run MediacenterJS
 -------------
@@ -184,7 +183,6 @@ Once you browse your movie collection, the system will download all the informat
 After that the only slight loading time the system has, is when a movie is requested for the first time (because the data has to be downloaded).
 
 When a playback is requested, the server transcodes the movie so the HTML5 player can play the movie in the browser.
-
 
 
 How should I format my movie library and files?
