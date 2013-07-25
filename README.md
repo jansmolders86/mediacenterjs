@@ -322,7 +322,6 @@ This app also makes use of the following modules:
 * lingua
 * node-ffprobe
 * node-html-encoder
-* nodemon
 * redis
 * request
 * require
@@ -332,6 +331,8 @@ This app also makes use of the following modules:
 * trakt
 * spotify
 * colors
+* lame
+* sqlite3
 
 
 What is the beta version going to have?
