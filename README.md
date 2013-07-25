@@ -135,8 +135,6 @@ Or browsed to the root directory of MediaCenterJS in the terminal/command prompt
 
 If you close this window, MCJS will stop working. You can also see useful information about what the server is doing, including error messages and other useful information.
 
-![Browse] (screenshots/browse_example.jpg)
-
 __Please make sure you've installed NodeJS and FFmpeg first!__
 
 User guide for installing FFmpeg on Windows: (http://www.wikihow.com/Install-FFmpeg-on-Windows)
