@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\lib">
+      <UniqueIdentifier>{2739B19F-16DF-601C-060A-FF86F6A40045}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\lib\win32">
+      <UniqueIdentifier>{789FEF16-EFE7-512E-F91B-DF7E0D72FB79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\lib\win32\wrappers">
+      <UniqueIdentifier>{A1BEBFA1-4840-FEE0-33E7-9A586D7303A8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\binding.gyp">
+      <Filter>..</Filter>
+    </None>
+    <ClCompile Include="..\lib\win32\kerberos.cc">
+      <Filter>..\lib\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\win32\kerberos_sspi.c">
+      <Filter>..\lib\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\win32\base64.c">
+      <Filter>..\lib\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\win32\worker.cc">
+      <Filter>..\lib\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\win32\wrappers\security_credentials.cc">
+      <Filter>..\lib\win32\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\win32\wrappers\security_buffer.cc">
+      <Filter>..\lib\win32\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\win32\wrappers\security_buffer_descriptor.cc">
+      <Filter>..\lib\win32\wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\win32\wrappers\security_context.cc">
+      <Filter>..\lib\win32\wrappers</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
