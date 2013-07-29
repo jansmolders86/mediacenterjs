@@ -39,10 +39,10 @@ exports.index = function(req, res, next){
 			});
 
 			res.render('settings',{
-				moviepath: configfileResults.moviepath,
+				movielocation: configfileResults.moviepath,
 				selectedTheme: configfileResults.theme,
-				musicpath : configfileResults.musicpath,
-				tvpath : configfileResults.tvpath,
+				musiclocation : configfileResults.musicpath,
+				tvlocation : configfileResults.tvpath,
 				highres: configfileResults.highres,
 				language: configfileResults.language,
 				onscreenkeyboard: configfileResults.onscreenkeyboard,
