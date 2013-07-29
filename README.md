@@ -75,9 +75,8 @@ What currently works?
 What's coming up
 =================
 
-* Handling of tv shows
-* Better movie transcoding handling
-* Subtitle support
+* Real databse integration (MongoDB)
+* More restful interface
 
 Known issues (Updated)
 ==================
@@ -158,11 +157,11 @@ On Windows you need to have installed ([Microsoft Visual Studio C++ 2010 Express
 But using the link above you will install the 2012 version. So you need to tell node-gyp you use the 2012 version. 
 An example of how to accomplish this:
 
-	npm install mongodb --msvs_version=2012
+	npm install mongoose --msvs_version=2012
 	
 The following modules have a node-gyp dependency:
 
-* sqlite3  -> note: Have Python installed and added to your environment variable PATH
+* mongoose
 * lame
 
 For more information please check the ([Node-Gyp documentation] [https://github.com/TooTallNate/node-gyp])
