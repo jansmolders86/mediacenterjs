@@ -2,7 +2,6 @@ doctype 5
 html(lang="en")
 	head
 		title MediacenterJS - Settings
-		// Core inclusion
 		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
 		link(rel='stylesheet', href='/core/css/style.css')
 		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css') 
@@ -22,7 +21,7 @@ html(lang="en")
 		script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
 		script(src="/core/js/plugins/validation/jquery.validate.rules.js")
 		
-		script
+		script(type='text/javascript').
 			$(document).ready(function() {
 				$('body').mcjs();
 				$('.validate-form').validate();
@@ -40,6 +39,8 @@ html(lang="en")
 				
 			});
 	body
+		#hiddenSetting
+			p= onscreenkeyboard
 		#header.settings
 			a.backlink(href="/") 
 				img(src="/core/icons/back.png")
@@ -58,26 +59,13 @@ html(lang="en")
 				form#setup.validate-form(action='/submit',method='post')
 					.row
 						label #{lingua.setting_movielocation}
-						input.keyboard(name="movielocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= moviepath, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+						input.keyboard(name="movielocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row
 						label #{lingua.setting_musiclocation}
-						input.keyboard(name="musiclocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musicpath, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")	
+						input.keyboard(name="musiclocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")	
 					.row
 						label #{lingua.setting_tvlocation}
-						input.keyboard(name="tvlocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvpath, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-					.row
-						span.label #{lingua.setting_highres}
-						.checkgroup
-							- if(highres === 'yes')
-								input#highresyes(name="highres",type="radio",value="yes",checked) 
-								label(for="highresyes") #{lingua.setting_yes}
-								input#highresno(name="highres",type="radio",value="no") 
-								label(for="highresno") No
-							- else
-								input#highresyes(name="highres",type="radio",value="yes") 
-								label(for="highresyes") #{lingua.setting_yes}
-								input#highresno(name="highres",type="radio",value="no",checked) 
-								label(for="highresno") #{lingua.setting_no}
+						input.keyboard(name="tvlocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row
 						span.label #{lingua.setting_screensaver}
 						.checkgroup
@@ -109,16 +97,20 @@ html(lang="en")
 						input.keyboard(name="language",type="text",placeholder="ie nl or gb", value= language ,data-rule-required="true", data-rule-language="true", data-msg-language="Only NL and EN are currently supported")
 					.row
 						label #{lingua.setting_location}
-						input.keyboard(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")
+						input.keyboard(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")					
+					.row
+						label Spotify Username
+						input.keyboard(name="spotifyUser",type="text")					
+					.row
+						label Spotify Password
+						input.keyboard(name="spotifyPass",type="password")	
 					.row
 						label #{lingua.setting_theme}
 						select#theme(name="theme")
-							for theme in themes
+							- for theme in themes
 								option(selected=theme) #{theme}
 					.row
 						label #{lingua.setting_port}
 						input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
 					.row
 						input(type="submit",value="#{lingua.setting_submit}")	
-		#hiddenSetting
-			p= onscreenkeyboard

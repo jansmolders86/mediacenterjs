@@ -21,6 +21,7 @@ exports.engine = 'jade';
 
 // Modules
 var Spotify = require('spotify')
+, lame = require('lame')
 , express = require('express')
 , app = express()
 , fs = require('fs');
@@ -54,29 +55,34 @@ function findTrack(searchQuery, callback){
 
 exports.play = function(req, res, next){
 	var uri = req.params.filename
-	, username= ''
-	, password = '';
+	//TODO: Store username and password encrypted in DB
+	var configfile = []
+	,configfilepath = './configuration/setup.js'
+	,configfile = fs.readFileSync(configfilepath)
+	,configfileResults = JSON.parse(configfile);	
+	
+	var username = configfileResults.spotifyUser
+	var password = configfileResults.spotifyPass
 	
 	spotifyLogin(username, password, uri);
 };
 
 
 function spotifyLogin(username, password, uri){
-	Spotify.login(username, password, function (err, spotify) {
-		if (err) {
-			console.log('Error occurred: ' + err);
-			return;
-		} else {
-			spotify.get(uri, function (err, track) {
-				var stream = fs.createReadStream(track);
-				stream.pipe(res, function(err){
-					if(err){
-						console.log('error pipe', err)
-					}
-				});
+	Spotify.login(login.username, login.password, function (err, spotify) {
+	  if (err) throw err;
 
-			});
-		}
+	  // first get a "Track" instance from the track URI
+	  spotify.get(uri, function (err, track) {
+		if (err) throw err;
+		console.log('Playing: %s - %s', track.artist[0].name, track.name);
+
+		track.play()
+		  .pipe(new lame.Decoder())
+		  .on('finish', function () {
+			spotify.disconnect();
+		  });
+	  });
 	});
 }
 
