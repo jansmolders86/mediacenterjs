@@ -129,6 +129,12 @@ exports.track = function(req, res, next){
 	var stream = fs.createReadStream(track);
 	stream.pipe(res);
 
+	var lame = require('lame');
+	var Speaker = require('speaker');
+
+	fs.createReadStream(track)
+	  .pipe(new lame.Decoder)
+	
 };
 
 
