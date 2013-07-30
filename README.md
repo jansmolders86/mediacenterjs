@@ -166,7 +166,7 @@ For more information please check the ([Node-Gyp documentation] [https://github.
 
 **x64**
 
-If you get errors that the 64-bit compilers are not installed you may also need the [http://www.microsoft.com/en-us/download/details.aspx?id=4422]
+If you get errors that the 64-bit compilers are not installed you may also need the [http://www.microsoft.com/en-us/download/details.aspx?id=8279]
 
 **Lame**
 
