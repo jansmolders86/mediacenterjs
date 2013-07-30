@@ -148,7 +148,7 @@ The program will boot in setup mode, being accessible on localhost:3000 or 'IP o
 Setup issues
 -----------------
 
-**Lame and SQLite3**
+**Windows and node-gyp**
 
 When you download this application through git (Either through zip or a GIT clone) It's possible you will get an error when trying to start the application.
 This is due to the fact that some modules have dependencies that need to be installed. So you need to run the install again. 
