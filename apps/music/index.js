@@ -8,24 +8,21 @@ var express = require('express')
 , request = require("request")
 , helper = require('../../lib/helpers.js')
 , Encoder = require('node-html-encoder').Encoder
-, colors = require('colors');
+, colors = require('colors')
+, ini = require('ini')
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
 // entity type encoder
 var encoder = new Encoder('entity');
 
 exports.engine = 'jade';
-
-var configfile = []
-,configfilepath = './configuration/setup.js'
-,configfile = fs.readFileSync(configfilepath)
-,configfileResults = JSON.parse(configfile);	
  
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
 
 // Render the indexpage
 exports.index = function(req, res, next){	
-	var dir = configfileResults.musicpath
+	var dir = config.musicpath
 	, writePath = './public/music/data/musicindex.js'
 	, getDir = true
 	, fileTypes = new RegExp("\.(mp3)","g");
@@ -38,7 +35,7 @@ exports.index = function(req, res, next){
 		
 		res.render('music',{
 			music: musicfileResults,
-			selectedTheme: configfileResults.theme,
+			selectedTheme: config.theme,
 			status:status
 		});
 	});
@@ -46,7 +43,7 @@ exports.index = function(req, res, next){
 
 exports.album = function(req, res, next){
 	var incomingFile = req.body
-	, dir = configfileResults.musicpath+encoder.htmlDecode(incomingFile.album)+'/'
+	, dir = config.musicpath+encoder.htmlDecode(incomingFile.album)+'/'
 	, writePath = './public/music/data/'+encoder.htmlEncode(incomingFile.album)+'/album.js'
 	, getDir = false
 	, fileTypes = new RegExp("\.(mp3)","g");
@@ -98,9 +95,9 @@ exports.track = function(req, res, next){
 	var decodeTrack = encoder.htmlDecode(req.params.track)
 	, decodeAlbum = encoder.htmlDecode(req.params.album)
 	if (req.params.album === 'none'){
-		var track = configfileResults.musicpath+decodeTrack
+		var track = config.musicpath+decodeTrack
 	}else {
-		var track = configfileResults.musicpath+decodeAlbum+'/'+decodeTrack
+		var track = config.musicpath+decodeAlbum+'/'+decodeTrack
 	}
 
 	var stat = fs.statSync(track)
@@ -168,10 +165,10 @@ exports.post = function(req, res, next){
 					var single = false
 					if (albumRequest !== undefined ){
 						if (albumRequest.match(/\.(mp3)/gi)){
-							var dir = configfileResults.musicpath;
+							var dir = config.musicpath;
 							single = true 
 						}else {
-							var dir = configfileResults.musicpath+encoder.htmlDecode(albumRequest)+'/';
+							var dir = config.musicpath+encoder.htmlDecode(albumRequest)+'/';
 							single = false 
 						}
 						fs.readdir(dir,function(err,files){
@@ -186,7 +183,7 @@ exports.post = function(req, res, next){
 										if (single == true){
 											var title = albumRequest.replace(/\.(mp3)/gi,"")
 											if (file.match(title,"g")){
-												var localDir = configfileResults.musicpath+file
+												var localDir = config.musicpath+file
 												copyImageFileToCache(localDir,albumRequest,file, function(){
 													writeData(title,thumb,year,genre);
 												});

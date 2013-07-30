@@ -22,19 +22,15 @@ var express = require('express')
 , dateFormat = require('dateformat')
 , lingua = require('lingua')
 , colors = require('colors')
-, rimraf = require('rimraf');
-
-
-var configfile = []
-,configfilepath = './configuration/setup.js'
-,configfile = fs.readFileSync(configfilepath)
-,configfileResults = JSON.parse(configfile);	
+, rimraf = require('rimraf')
+, ini = require('ini')
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));	
 
 var language = null;
-if(configfileResults.language === ""){
+if(config.language === ""){
 	language = 'en';
 } else {
-	language = configfileResults.language;
+	language = config.language;
 }
 
 process.env.NODE_ENV = 'development';
@@ -72,7 +68,7 @@ app.configure('production', function(){
 
 require('./lib/routing')(app,{ verbose: !module.parent });
 app.get("/", function(req, res, next) {  
-	if(	configfileResults.moviepath == '' && configfileResults.language == '' && configfileResults.location == '' || configfileResults.moviepath == null || configfileResults.moviepath == undefined){
+	if(	config.moviepath == '' && config.language == '' && config.location == '' || config.moviepath == null || config.moviepath == undefined){
 		res.render('setup');	
 	} else {
 		var apps = []
@@ -88,7 +84,7 @@ app.get("/", function(req, res, next) {
 		req.setMaxListeners(0)
 		res.render('index', {
 			title: 'Homepage',
-			selectedTheme: configfileResults.theme,
+			selectedTheme: config.theme,
 			time: time,
 			date: date,
 			apps: apps
@@ -97,7 +93,7 @@ app.get("/", function(req, res, next) {
 });
 
 app.use(function(req, res) {
-    res.status(404).render('404',{ selectedTheme: configfileResults.theme});
+    res.status(404).render('404',{ selectedTheme: config.theme});
 });
 
 app.post('/removeModule', function(req, res){
@@ -149,7 +145,7 @@ app.post('/setuppost', function(req, res){
 });
 
 app.get('/configuration', function(req, res){
-	res.send(configfileResults)
+	res.send(config)
 });
 	
 app.post('/submit', function(req, res){
@@ -166,39 +162,32 @@ function writeSettings(req, res, callback){
 		themeName = incommingTheme+'.css'
 	}
 	
-	console.log()
+    config.moviepath = req.body.movielocation,
+	config.musicpath = req.body.musiclocation,
+	config.tvpath = req.body.tvlocation,
+	config.language = req.body.language,
+	config.onscreenkeyboard = req.body.usekeyboard,
+	config.location = req.body.location,
+	config.screensaver = req.body.screensaver,
+	config.theme = themeName,
+	config.port = req.body.port
 	
-	var myData = {
-		moviepath : req.body.movielocation,
-		highres: req.body.highres,
-		musicpath : req.body.musiclocation,
-		tvpath : req.body.tvlocation,
-		language : req.body.language,
-		onscreenkeyboard: req.body.usekeyboard,
-		location: req.body.location,
-		screensaver: req.body.screensaver,
-		theme: themeName,
-		port: req.body.port
-	}
-	
-	fs.writeFile(configfilepath, JSON.stringify(myData, null, 4), function(e) {
-		if(e) {
-			res.send(500);
-			console.log('Error wrting settings',err .red);
-		} else {
-			setTimeout(function(){
-				callback();
-			},200);			
-		}
-	}); 
+    console.log(config)
+    fs.writeFile('./configuration/config.ini', ini.stringify(config), function(err){
+        if(err){
+            console.log('Error writing INI file.',err);  
+        } else{
+         res.redirect('/');
+        }
+    });
 }
 
 // Open App socket
-if (configfileResults.port == "" || configfileResults.port == undefined ){
-	console.log('Error parsing configfile, falling back to default port' .red)
+if (config.port == "" || config.port == undefined ){
+	console.log('First run, Setup running on localhost:3000' .yellow.bold)
 	app.listen(parseInt(3000));
 } else{
-	app.listen(parseInt(configfileResults.port));
+	app.listen(parseInt(config.port));
 }
 
-console.log("MediacenterJS listening on port:", configfileResults.port .green); 
+console.log("MediacenterJS listening on port:", config.port .green.bold); 

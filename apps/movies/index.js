@@ -30,18 +30,14 @@ var express = require('express')
 , helper = require('../../lib/helpers.js')
 , Encoder = require('node-html-encoder').Encoder
 , encoder = new Encoder('entity')
-, colors = require('colors');
-
-/* Get Config */
-var configfile = []
-,configfilepath = './configuration/setup.js'
-,configfile = fs.readFileSync(configfilepath)
-,configfileResults = JSON.parse(configfile);	
+, colors = require('colors')
+, ini = require('ini')
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
 exports.index = function(req, res, next){	
 	var writePath = './public/movies/data/movieindex.js'
 	, getDir = false
-	, dir = configfileResults.moviepath
+	, dir = config.moviepath
 	, fileTypes = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");;
 
 	helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes,  function(status){
@@ -52,7 +48,7 @@ exports.index = function(req, res, next){
 		
 		res.render('movies',{
 			movies: moviefileResults,
-			selectedTheme: configfileResults.theme,
+			selectedTheme: config.theme,
 			status:status
 		});
 	});
@@ -60,7 +56,7 @@ exports.index = function(req, res, next){
 
 exports.play = function(req, res){
 	var movieTitle = encoder.htmlDecode(req.params.filename)
-	, movie = configfileResults.moviepath + movieTitle;
+	, movie = config.moviepath + movieTitle;
 	
 	console.log('Getting ready to play', movie .green)
 		
@@ -144,7 +140,7 @@ exports.post = function(req, res, next){
 				//if (year.shift() == null) year = ''
 				//&year="+ year.shift() +
 
-				helper.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&language="+configfileResults.language+"&=", function(response) {
+				helper.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&language="+config.language+"&=", function(response) {
 
 					var requestResponse = JSON.parse(response)
 					, requestInitialDetails = requestResponse.results[0];
@@ -188,14 +184,8 @@ exports.post = function(req, res, next){
 	
 	function downloadCache(response,callback){
 		if (response !== undefined && response !== '' && response !== null) {
-			var size = "w1920";
-			if (configfileResults.highres === 'yes'){
-				size = "w1920"
-			} else if (configfileResults.highres === 'no'){
-				size = "w1280"
-			};
-				
-			var backdrop_url = "http://cf2.imgobject.com/t/p/"+size+"/"
+
+			var backdrop_url = "http://cf2.imgobject.com/t/p/w1920/"
 			, poster_url = "http://cf2.imgobject.com/t/p/w342/"
 			, poster = poster_url+response.poster_path
 			, backdrop = backdrop_url+response.backdrop_path

@@ -10,7 +10,7 @@
 		"type": "GNU",
 		"url": "http://www.gnu.org/licenses"
 	}],
-	"version": "0.0.19",
+	"version": "0.0.20",
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",
@@ -32,6 +32,7 @@
 		"trakt": "0.0.5-2",
 		"spotify":"0.2.0",
 		"colors":"0.6.0-1",
+		"ini":"1.1.0",
 		"sqlite3":"2.1.14",
 		"lame":"1.0.2"
 	}

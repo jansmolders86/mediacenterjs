@@ -20,23 +20,18 @@
 var express = require('express')
 , app = express()
 , fs = require ('fs')
+, ini = require('ini')
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));	
 
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
 
 // Render the indexpage
 exports.index = function(req, res, next){
-
-	// Parse JSON for file location
-	var configfile = []
-	,configfilepath = './configuration/setup.js'
-	,configfile = fs.readFileSync(configfilepath)
-	,jsondata = JSON.parse(configfile);
-	
 	res.render('weather',{
-		userLanguage: jsondata.language,
-		userLocation: jsondata.location,
-		selectedTheme: jsondata.theme
+		userLanguage: config.language,
+		userLocation: config.location,
+		selectedTheme: config.theme
 	});
 };
 

@@ -31,14 +31,13 @@ html(lang="en")
 		//Custom scrollbars
 		script(src="/core/js/plugins/jquery.mousewheel.min.js")
 		script(src="/core/js/plugins/perfect-scrollbar.js")
-		link(rel='stylesheet', href='/core/css/)
 
 		// App specific
 		link(rel='stylesheet', href='/music/css/style.css')
 		script(src="/music/js/jquery.mcjs.music.js")
 		
 		script.
-			$(document).ready(function(){
+			$(function(){
 				$('body').mcjs();
 				$('body').mcjsm();
 			});

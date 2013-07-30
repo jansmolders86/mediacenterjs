@@ -20,12 +20,9 @@ exports.engine = 'jade';
 
 var express = require('express')
 , app = express()
-, fs = require('fs');
-
-var configfile = []
-,configfilepath = './configuration/setup.js'
-,configfile = fs.readFileSync(configfilepath)
-,configfileResults = JSON.parse(configfile);
+, fs = require('fs')
+, ini = require('ini')
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
 exports.index = function(req, res, next){	
 	var allThemes = new Array();
@@ -39,17 +36,16 @@ exports.index = function(req, res, next){
 			});
 
 			res.render('settings',{
-				movielocation: configfileResults.moviepath,
-				selectedTheme: configfileResults.theme,
-				musiclocation : configfileResults.musicpath,
-				tvlocation : configfileResults.tvpath,
-				highres: configfileResults.highres,
-				language: configfileResults.language,
-				onscreenkeyboard: configfileResults.onscreenkeyboard,
-				location: configfileResults.location,
-				screensaver: configfileResults.screensaver,
+				movielocation: config.moviepath,
+				selectedTheme: config.theme,
+				musiclocation : config.musicpath,
+				tvlocation : config.tvpath,
+				language: config.language,
+				onscreenkeyboard: config.onscreenkeyboard,
+				location: config.location,
+				screensaver: config.screensaver,
 				themes:allThemes,
-				port: configfileResults.port
+				port: config.port
 			});	
 			
 		}	

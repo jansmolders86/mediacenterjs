@@ -24,7 +24,9 @@ var Spotify = require('spotify')
 , lame = require('lame')
 , express = require('express')
 , app = express()
-, fs = require('fs');
+, fs = require('fs')
+, ini = require('ini')
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
 // Render the indexpage
 exports.index = function(req, res, next){
@@ -55,14 +57,9 @@ function findTrack(searchQuery, callback){
 
 exports.play = function(req, res, next){
 	var uri = req.params.filename
-	//TODO: Store username and password encrypted in DB
-	var configfile = []
-	,configfilepath = './configuration/setup.js'
-	,configfile = fs.readFileSync(configfilepath)
-	,configfileResults = JSON.parse(configfile);	
 	
-	var username = configfileResults.spotifyUser
-	var password = configfileResults.spotifyPass
+	var username = config.spotifyUser
+	var password = config.spotifyPass
 	
 	spotifyLogin(username, password, uri);
 };

@@ -33,19 +33,14 @@ var express = require('express')
 , encoder = new Encoder('entity')
 , Trakt = require('trakt')
 , trakt = new Trakt({username: 'mediacenterjs', password: 'mediacenterjs'})
-, colors = require('colors'); 
-
-/* Get Config */
-var configfile = []
-,configfilepath = './configuration/setup.js'
-,configfile = fs.readFileSync(configfilepath)
-,configfileResults = JSON.parse(configfile);	
+, colors = require('colors')
+, ini = require('ini')
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));	
 
 exports.index = function(req, res, next){	
-
 	var writePath = './public/tv/data/tvindex.js'
 	, getDir = true
-	, dir = configfileResults.tvpath
+	, dir = config.tvpath
 	, fileTypes = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");;
 
 	helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes,  function(status){
@@ -56,7 +51,7 @@ exports.index = function(req, res, next){
 		
 		res.render('tv',{
 			tvshows:tvfileResults,
-			selectedTheme: configfileResults.theme,
+			selectedTheme: config.theme,
 			status:status
 		});
 	});
