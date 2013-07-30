@@ -3,12 +3,12 @@ exports.get = function(belowFn) {
   Error.stackTraceLimit = Infinity;
 
   var dummyObject = {};
-  Error.captureStackTrace(dummyObject, belowFn || exports.get);
 
   var v8Handler = Error.prepareStackTrace;
   Error.prepareStackTrace = function(dummyObject, v8StackTrace) {
     return v8StackTrace;
   };
+  Error.captureStackTrace(dummyObject, belowFn || exports.get);
 
   var v8StackTrace = dummyObject.stack;
   Error.prepareStackTrace = v8Handler;

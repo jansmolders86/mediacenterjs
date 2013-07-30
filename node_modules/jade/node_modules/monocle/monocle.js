@@ -134,9 +134,54 @@ module.exports = function() {
     }
   }
 
+  // distinguish be files and directories
+  // return am object of two arrays
+
+  function distinguishPathes(pathes) {
+    pathes = Array.isArray(pathes) ? pathes : [pathes];
+    var result = {
+      directories: [],
+      files: []
+    };
+    pathes.forEach(function(name) {
+      if (fs.statSync(name).isDirectory()) {
+        result.directories.push(name);
+      } else {
+        result.files.push(name);
+      }
+    });
+    return result;
+  };
+
+  // for functions accepts an object as paramter
+  // copy the object and modify with attributes
+  function extend(prototype, attributes) {
+    var object = {};
+    Object.keys(prototype).forEach(function(key) {
+      object[key] = prototype[key];
+    });
+    Object.keys(attributes).forEach(function(key) {
+      object[key] = attributes[key];
+    });
+    return object;
+  };
+
+  // watch files if the pathes refer to files, or directories
+  function watchPathes(args) {
+    var result = distinguishPathes(args.path)
+    if (result.directories.length) {
+      result.directories.forEach(function(directory) {
+        watchDirectory(extend(args, {root: directory}));
+      });
+    }
+    if (result.files.length)
+      watchFiles(extend(args, {files: result.files}));
+  }
+
   return {
     watchDirectory: watchDirectory,
     watchFiles: watchFiles,
+    watchPathes: watchPathes,
     unwatchAll: unwatchAll
   };
 }
