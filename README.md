@@ -152,10 +152,10 @@ Setup issues
 If installing of a Module fails (especially on Windows), it usually is an issue due to the depenceny of node-gyp and the depencendy it has. 
 On Windows you need to have installed ([Microsoft Visual Studio C++ 2010 Express][http://go.microsoft.com/?linkid=9709949] ) according to the node-gyp documentation.
 
-But using the link above you will install the 2012 version. So you need to tell node-gyp you use the 2012 version. 
-An example of how to accomplish this:
+If for some reason you installed or already have installed a different version if visual studio, you need to add a parameter to the install.
+An example of installing lame with visual studio 2012 on Windows:
 
-	npm install mongoose --msvs_version=2012
+	npm install lame --msvs_version=2012
 	
 The following modules have a node-gyp dependency:
 
