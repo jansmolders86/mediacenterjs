@@ -331,7 +331,8 @@ This app also makes use of the following modules:
 * spotify
 * colors
 * lame
-* sqlite3
+* tungus
+* mongoose
 
 
 What is the beta version going to have?
