@@ -144,11 +144,8 @@ Install NodeJS: http://nodejs.org/download/
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 
-Setup MongoDB on windows
-------------------
-Before being able to create a database, mongodb needs to be installed on the pc. Please view the first proption of ([this article][http://blog.gvm-it.eu/post/20462477195/getting-started-with-mongodb-and-node-js-on-windows]) to install mongodb
 
-Setup issues
+Setup issues on Windows
 -----------------
 
 If installing of a Module fails (especially on Windows), it usually is an issue due to the depenceny of node-gyp and the depencendy it has. 
@@ -161,7 +158,7 @@ An example of how to accomplish this:
 	
 The following modules have a node-gyp dependency:
 
-* mongoose
+* sqlite3
 * lame
 
 For more information please check the ([Node-Gyp documentation] [https://github.com/TooTallNate/node-gyp])
@@ -331,8 +328,7 @@ This app also makes use of the following modules:
 * spotify
 * colors
 * lame
-* tungus
-* mongoose
+* sqlite3
 
 
 What is the beta version going to have?
