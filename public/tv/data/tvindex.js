@@ -1,4 +1,3 @@
 [
-    "american dad",
-    "the simpsons"
+
 ]
