@@ -187,7 +187,6 @@ if (config.port == "" || config.port == undefined ){
 	console.log('First run, Setup running on localhost:3000' .yellow.bold)
 	app.listen(parseInt(3000));
 } else{
+	console.log("MediacenterJS listening on port:", config.port .green.bold); 
 	app.listen(parseInt(config.port));
 }
-
-console.log("MediacenterJS listening on port:", config.port .green.bold); 
