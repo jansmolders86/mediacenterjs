@@ -24,6 +24,13 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
+__version 0.020(INI)__
+
+- Config is stored in INI file
+- Updated all the modules
+- Fixed Jade warnings
+- Added Spotify credentials to settings
+
 __version 0.019(Music player & Settings)__
 
 - Music is now seekable!
