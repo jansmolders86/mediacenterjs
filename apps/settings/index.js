@@ -44,6 +44,8 @@ exports.index = function(req, res, next){
 				onscreenkeyboard: config.onscreenkeyboard,
 				location: config.location,
 				screensaver: config.screensaver,
+				spotifyUser: config.spotifyUser,
+				spotifyPass: config.spotifyPass,
 				themes:allThemes,
 				port: config.port
 			});	
