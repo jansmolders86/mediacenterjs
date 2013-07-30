@@ -145,23 +145,32 @@ Install NodeJS: http://nodejs.org/download/
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 
 
-Setup issues on Windows
+Setup issues
 -----------------
 
-If installing of a Module fails (especially on Windows), it usually is an issue due to the depenceny of node-gyp and the depencendy it has. 
-On Windows you need to have installed ([Microsoft Visual Studio C++ 2010 Express][http://go.microsoft.com/?linkid=9709949] ) according to the node-gyp documentation.
+**Lame and SQLite3**
 
-But using the link above you will install the 2012 version. So you need to tell node-gyp you use the 2012 version. 
-An example of how to accomplish this:
+When you download this application through git (Either through zip or a GIT clone) It's possible you will get an error when trying to start the application.
+This is due to the fact that some modules have dependencies that need to be installed. So you need to run the install again. 
 
-	npm install mongoose --msvs_version=2012
+	npm install lame 
+	or/and
+	npm install sqlite3
 	
-The following modules have a node-gyp dependency:
+If you run Windows it's likely this install will fail. Especially on a x64 machine because to install the dependencies, NPM uses a module called node-gyp.
+Which, in it's turn has dependencies as well. You need to install the following:
 
-* sqlite3
-* lame
+Windows 32 bits needs Microsoft Visual Studio C++ 2010 Express. Download here: (http://go.microsoft.com/?linkid=9709949)
 
-For more information please check the ([Node-Gyp documentation] [https://github.com/TooTallNate/node-gyp])
+Windows (7/8) 64 bits needs Microsoft Windows SDK 7.1 which includes visual studio. Download here: (http://www.microsoft.com/en-us/download/details.aspx?id=8279)
+	
+If you continue to have trouble installing the modules, Please read the documentation: (https://github.com/TooTallNate/node-gyp)
+
+**I Already have visual studio installed but it's a different version than 2010**
+
+An example of installing lame with visual studio 2012 on Windows:
+
+	npm install lame --msvs_version=2012
 
 Run MediacenterJS
 -------------
