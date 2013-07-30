@@ -148,34 +148,28 @@ The program will boot in setup mode, being accessible on localhost:3000 or 'IP o
 Setup issues
 -----------------
 
-**Windows & Node-Gyp**
-If installing of a Module fails (especially on Windows), it usually is an issue due to the depenceny of node-gyp and the depencendy it has. 
-On Windows you need to have installed ([Microsoft Visual Studio C++ 2010 Express][http://go.microsoft.com/?linkid=9709949] ) according to the node-gyp documentation.
+**Lame and SQLite3**
 
-If for some reason you installed or already have installed a different version if visual studio, you need to add a parameter to the install.
+When you download this application through git (Either through zip or a GIT clone) It's possible you will get an error when trying to start the application.
+This is due to the fact that some modules have dependencies that need to be installed. So you need to run the install again. 
+
+	npm install lame 
+	or/and
+	npm install sqlite3
+	
+If you run Windows it's likely this install will fail. Especially on a x64 machine because to install the dependencies, NPM uses a module called node-gyp.
+Which, in it's turn has dependencies as well. You need to install the following:
+
+	Windows 32 bits: ([Microsoft Visual Studio C++ 2010 Express][http://go.microsoft.com/?linkid=9709949] )
+	Windows 64 bits: ([Microsoft Windows SDK 7.1 which includes visual studio][http://www.microsoft.com/en-us/download/details.aspx?id=8279])
+	
+If you continue to have trouble installing the modules, Please read the documentation: ([Node-Gyp documentation] [https://github.com/TooTallNate/node-gyp])
+
+**I Already have visual studio installed but it's a different version than 2010**
+
 An example of installing lame with visual studio 2012 on Windows:
 
 	npm install lame --msvs_version=2012
-	
-The following modules have a node-gyp dependency:
-
-* sqlite3
-* lame
-
-For more information please check the ([Node-Gyp documentation] [https://github.com/TooTallNate/node-gyp])
-
-**x64**
-
-If you get errors that the 64-bit compilers are not installed you may also need the [http://www.microsoft.com/en-us/download/details.aspx?id=8279]
-
-**Lame**
-
-When you download this application through git (Either through zip or a GIT clone) It's possible you will get an error when trying to start the application.
-This is due to the fact the lame module has some os dependencies. So you need to run the install again. 
-
-	npm install lame
-	
-If this install fails please check the above section about Windows and node-gyp.
 
 Run MediacenterJS
 -------------
