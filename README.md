@@ -160,10 +160,10 @@ This is due to the fact that some modules have dependencies that need to be inst
 If you run Windows it's likely this install will fail. Especially on a x64 machine because to install the dependencies, NPM uses a module called node-gyp.
 Which, in it's turn has dependencies as well. You need to install the following:
 
-	Windows 32 bits: ([Microsoft Visual Studio C++ 2010 Express][http://go.microsoft.com/?linkid=9709949] )
-	Windows 64 bits: ([Microsoft Windows SDK 7.1 which includes visual studio][http://www.microsoft.com/en-us/download/details.aspx?id=8279])
+	Windows 32 bits needs Microsoft Visual Studio C++ 2010 Express. Download here: http://go.microsoft.com/?linkid=9709949
+	Windows (7/8) 64 bits needs Microsoft Windows SDK 7.1 which includes visual studio. Download here: http://www.microsoft.com/en-us/download/details.aspx?id=8279])
 	
-If you continue to have trouble installing the modules, Please read the documentation: ([Node-Gyp documentation] [https://github.com/TooTallNate/node-gyp])
+If you continue to have trouble installing the modules, Please read the documentation: https://github.com/TooTallNate/node-gyp
 
 **I Already have visual studio installed but it's a different version than 2010**
 
