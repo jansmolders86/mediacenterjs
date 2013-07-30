@@ -145,9 +145,10 @@ Install NodeJS: http://nodejs.org/download/
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 
 
-Setup issues on Windows
+Setup issues
 -----------------
 
+**Windows & Node-Gyp**
 If installing of a Module fails (especially on Windows), it usually is an issue due to the depenceny of node-gyp and the depencendy it has. 
 On Windows you need to have installed ([Microsoft Visual Studio C++ 2010 Express][http://go.microsoft.com/?linkid=9709949] ) according to the node-gyp documentation.
 
@@ -162,6 +163,15 @@ The following modules have a node-gyp dependency:
 * lame
 
 For more information please check the ([Node-Gyp documentation] [https://github.com/TooTallNate/node-gyp])
+
+**Lame**
+
+When you download this application through git (Either through zip or a GIT clone) It's possible you will get an error when trying to start the application.
+This is due to the fact the lame module has some os dependencies. So you need to run the install again. 
+
+	npm install lame
+	
+If this install fails please check the above section about Windows and node-gyp.
 
 Run MediacenterJS
 -------------
