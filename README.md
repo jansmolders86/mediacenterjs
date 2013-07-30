@@ -164,6 +164,10 @@ The following modules have a node-gyp dependency:
 
 For more information please check the ([Node-Gyp documentation] [https://github.com/TooTallNate/node-gyp])
 
+**x64**
+
+If you get errors that the 64-bit compilers are not installed you may also need the [http://www.microsoft.com/en-us/download/details.aspx?id=4422]
+
 **Lame**
 
 When you download this application through git (Either through zip or a GIT clone) It's possible you will get an error when trying to start the application.
