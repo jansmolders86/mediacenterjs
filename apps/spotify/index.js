@@ -21,7 +21,9 @@ exports.engine = 'jade';
 
 // Modules
 var Spotify = require('spotify')
+, spotifyPlay = require('spotify-web')
 , lame = require('lame')
+, Speaker = require('speaker')
 , express = require('express')
 , app = express()
 , fs = require('fs')
@@ -57,20 +59,22 @@ function findTrack(searchQuery, callback){
 
 exports.play = function(req, res, next){
 	var uri = req.params.filename
-	
-	var username = config.spotifyUser
-	var password = config.spotifyPass
-	
-	// first get a "Track" instance from the track URI
-	Spotify.login(username, password, function (err, spotify) {
+	, username = config.spotifyUser
+	, password = config.spotifyPass;
+
+	spotifyPlay.login(username, password, function (err, result) {
 		if (err) {
 			console.log('Spotify error',err);
 		} else {
-			console.log('Playing: %s - %s', track.artist[0].name, track.name);
-			track.play()
-			.pipe(new lame.Decoder())
-			.on('finish', function () {
-				spotify.disconnect();
+			result.get(uri, function (err, track) {
+				console.log('Playing: %s - %s', track.artist[0].name, track.name);
+
+				track.play()
+				.pipe(new lame.Decoder())
+				.pipe(new Speaker())
+				.on('finish', function () {
+					result.disconnect();
+				});
 			});
 		}
 	  });

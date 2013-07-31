@@ -124,11 +124,9 @@ exports.track = function(req, res, next){
 		'Transfer-Encoding':'chunked'
 	});
 
-	var stream = fs.createReadStream(track);
+	var stream = fs.createReadStream(track)
+	//.pipe(new lame.Decoder);
 	stream.pipe(res);
-
-	fs.createReadStream(track)
-	  .pipe(new lame.Decoder)
 	
 };
 

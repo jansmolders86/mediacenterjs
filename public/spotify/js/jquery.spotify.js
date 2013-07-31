@@ -70,6 +70,7 @@
 					e.preventDefault();
 					var playSong = $(this).attr('href')
 					, track = '/spotify/file/'+playSong;
+					
 					videojs("player").ready(function(){
 						var myPlayer = this;
 						myPlayer.src(track);

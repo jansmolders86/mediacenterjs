@@ -1,0 +1,18 @@
+Name: Protocol Buffers
+Short Name: protobuf
+URL: http://protobuf.googlecode.com/svn/trunk
+License: BSD
+License File: COPYING.txt
+Version: unknown
+Revision: r423
+Security Critical: yes
+
+Local files (not taken from upstream):
+README.chromium
+config.h
+descriptor2_pb.py
+
+A protobuf.gyp file has been added for building with Chromium.
+
+This code has been patched to support unknown field retention in protobuf-lite.
+See r62331 for the patch.

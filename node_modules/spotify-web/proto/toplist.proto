@@ -1,0 +1,3 @@
+message Toplist {
+  repeated string items = 1;
+}
