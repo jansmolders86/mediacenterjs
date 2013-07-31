@@ -6,6 +6,7 @@ var express = require('express')
 , downloader = require('downloader')
 , rimraf = require('rimraf')
 , request = require("request")
+, lame = require('lame')
 , helper = require('../../lib/helpers.js')
 , Encoder = require('node-html-encoder').Encoder
 , colors = require('colors')
@@ -125,9 +126,6 @@ exports.track = function(req, res, next){
 
 	var stream = fs.createReadStream(track);
 	stream.pipe(res);
-
-	var lame = require('lame');
-	var Speaker = require('speaker');
 
 	fs.createReadStream(track)
 	  .pipe(new lame.Decoder)
