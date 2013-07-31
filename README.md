@@ -77,12 +77,11 @@ What's coming up
 
 Known issues (Updated)
 ==================
-* Music duration is not passed on to the client ( It's a direct pipe of a stream. not yet implemented node lame/speaker because of Windows bug during install)
 * Movie Buffer size needs tweaking
 * Subfolder support is laking (App setup needs to be more RESTfull)
-* Music and videos need to be based on arrays instead of the current DOM dependencies
-* MongoDB support needs to be implemented
-* Current Ffmpeg setup is not crossdevice (currently based on flash because WebM has a bug, not parsing the duration)
+* Music and videos need to be based on arrays/DB entries instead of the current DOM dependencies
+* Database support needs to be implemented
+* Current Movie encoding setup is not crossdevice (currently based on flash because WebM has a bug, not parsing the duration)
 
 What still needs to be done
 ==================
