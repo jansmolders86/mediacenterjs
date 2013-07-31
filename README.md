@@ -72,8 +72,8 @@ What currently works?
 What's coming up
 =================
 
-* Real databse integration (MongoDB)
-* More restful interface
+* Database integration
+* More RESTfull interface
 
 Known issues (Updated)
 ==================
