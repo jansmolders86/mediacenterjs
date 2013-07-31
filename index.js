@@ -168,11 +168,12 @@ function writeSettings(req, res, callback){
 	config.language = req.body.language,
 	config.onscreenkeyboard = req.body.usekeyboard,
 	config.location = req.body.location,
+	config.theme = themeName,	
 	config.screensaver = req.body.screensaver,
-	config.theme = themeName,
+	config.spotifyName = req.body.spotifyName,
+	config.spotifyPass = req.body.spotifyPass,
 	config.port = req.body.port
 	
-    console.log(config)
     fs.writeFile('./configuration/config.ini', ini.stringify(config), function(err){
         if(err){
             console.log('Error writing INI file.',err);  
