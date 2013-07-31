@@ -71,10 +71,9 @@
 					var playSong = $(this).attr('href')
 					, track = '/spotify/file/'+playSong;
 					
-					videojs("player").ready(function(){
-						var myPlayer = this;
-						myPlayer.src(track);
-						myPlayer.play();
+					$.ajax({
+						url: '/spotify/file/'+playSong, 
+						type: 'get'
 					});
 				});
 				
