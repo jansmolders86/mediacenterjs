@@ -170,7 +170,7 @@ function writeSettings(req, res, callback){
 	config.location = req.body.location,
 	config.theme = themeName,	
 	config.screensaver = req.body.screensaver,
-	config.spotifyName = req.body.spotifyName,
+	config.spotifyUser= req.body.spotifyUser,
 	config.spotifyPass = req.body.spotifyPass,
 	config.port = req.body.port
 	
