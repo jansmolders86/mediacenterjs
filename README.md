@@ -170,7 +170,7 @@ An example of installing lame with visual studio 2012 on Windows:
 	npm install lame --msvs_version=2012
 	
 	
-** version mismatch **
+**Version mismatch**
 
 If you get the following message:
 
