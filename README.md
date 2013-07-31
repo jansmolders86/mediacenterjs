@@ -24,6 +24,11 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
+__version 0.021(Spotify works)__
+
+- Basic spotify playback is working now. You can add your credentials in the settings menu and tracks will play directly through the speakers.
+  Playback controls and song information will be inplemented later.
+
 __version 0.020(INI)__
 
 - Config is stored in INI file
@@ -36,21 +41,6 @@ __version 0.019(Music player & Settings)__
 - Music is now seekable!
 - Added settings as an 'app' instead of a seperate link to improve keyboard accessibility.
 - Fixed undefined error when playing music
-
-__version 0.018(No longer dependent on nodemon)__
-
-- Added 404 handling
-- No longer dependent on nodemon to restart server on configfile change
-- Fixed several small bugs
-- Updated all the modules to the latest version (This has introduced a non fatal error comming from JADE. I'm still looking for the cause though)
-
-__version 0.017 (JSON based routing)__
-
-- Routes are defined in json objects. 
- The default routes are stored in the configuration folder.
- An app specific route can be added in the root of the app folder.
- This way it's a lot easier to extend the routing. See documentation below. 
-- Fixed bug preventing movie cache to be written
 
 Why use it (once it is ready)?
 ===========
