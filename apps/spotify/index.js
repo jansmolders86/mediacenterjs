@@ -61,27 +61,23 @@ exports.play = function(req, res, next){
 	var username = config.spotifyUser
 	var password = config.spotifyPass
 	
-	spotifyLogin(username, password, uri);
+	// first get a "Track" instance from the track URI
+	Spotify.login(username, password, function (err, spotify) {
+		if (err) {
+			console.log('Spotify error',err);
+		} else {
+			console.log('Playing: %s - %s', track.artist[0].name, track.name);
+			track.play()
+			.pipe(new lame.Decoder())
+			.on('finish', function () {
+				spotify.disconnect();
+			});
+		}
+	  });
 };
 
 
-function spotifyLogin(username, password, uri){
-	Spotify.login(login.username, login.password, function (err, spotify) {
-	  if (err) throw err;
 
-	  // first get a "Track" instance from the track URI
-	  spotify.get(uri, function (err, track) {
-		if (err) throw err;
-		console.log('Playing: %s - %s', track.artist[0].name, track.name);
-
-		track.play()
-		  .pipe(new lame.Decoder())
-		  .on('finish', function () {
-			spotify.disconnect();
-		  });
-	  });
-	});
-}
 
 
 
