@@ -76,7 +76,13 @@ ul.music li a{
 }
 
 ul.music li.focused{ border:0; }
-ul.music li.playing a{ background:url(img/playing.png) no-repeat left 8px; padding-left:25px; width:100px; }
+ul.music li.playing a{ 
+	background:url(img/playing.png) no-repeat left 8px; 
+	padding-left:25px; 
+	width:85px; 
+	position:relative;
+	overflow:hidden;
+}
 
 #tracklist{
 	background:#fff;
