@@ -37,12 +37,27 @@
 			$('.search').keypress(function(e) {
 				if(e.keyCode == 13) {
 					e.preventDefault();
+					if ($('#results').find('li').length > 1) $('#results').empty();
 					_getTrack(o);
 					return false;
 				}
 			});
 			
+			$('.stop').click(function(e) {
+				console.log('Stop Playing')
+				e.preventDefault();
+				event = 'stopPlaying'
+				$.ajax({
+					url: '/spotify/file/stopPlaying', 
+					type: 'get',
+				}).done(function(data){
+				
+					
+				});
+			});			
+			
 			$('#searchWrapper').bind('submit', function(e) {
+				if ($('#results').find('li').length > 1) $('#results').empty();
 				_getTrack(o);
 				return false;
 			});
@@ -59,10 +74,9 @@
 			$.ajax({
 				url: '/spotify/post/', 
 				type: 'post',
-				data: {track : track}
+				data: {post : track}
 			}).done(function(data){
 				$(data.tracks).each(function(index, item){
-					console.log(item)
 					$('#results').append('<li><ul><li>Artitst: '+item.artists[0].name+'</li><li>Album: '+item.album.name+'</li><li></li><li><a class="play" href="'+item.href+'">play track</a><li></ul></li>');
 				});
 					
@@ -74,6 +88,8 @@
 					$.ajax({
 						url: '/spotify/file/'+playSong, 
 						type: 'get'
+					}).done(function(data){
+						console.log(data)
 					});
 				});
 				

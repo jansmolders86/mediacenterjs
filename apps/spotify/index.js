@@ -28,7 +28,10 @@ var Spotify = require('spotify')
 , app = express()
 , fs = require('fs')
 , ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
+, songStream
+, username = config.spotifyUser
+, password = config.spotifyPass
 
 // Render the indexpage
 exports.index = function(req, res, next){
@@ -36,29 +39,53 @@ exports.index = function(req, res, next){
 };
 
 exports.post = function(req, res, next){
-	var incomingFile = req.body
-	, searchQuery = incomingFile.track
-
-	findTrack(searchQuery, function(data){
-		res.send(data)
-	})
-};
-
-
-function findTrack(searchQuery, callback){
-	Spotify.search({ type: 'track', query: searchQuery }, function(err, data) {
+	var incommingPost = req.body.post	
+	Spotify.search({ type: 'track', query: incommingPost }, function(err, data) {
 		if ( err ) {
 			console.log('Error occurred: ' + err);
 			return;
 		} else {
-			callback(data);
+			res.send(data);
 		}
 	});
-}
-
+};
 
 exports.play = function(req, res, next){
-	var uri = req.params.filename
+	var uri = req.params.filename;
+	switch( uri ) {
+		/*case('stopPlaying'):
+			console.log('Stopping song', songStream);
+			songStreamon('onopen', function () {
+				this.disconnect();
+				this.close();
+			});
+		break;*/
+		default:
+			spotifyPlay.login(username, password, function (err, result) {
+				if (err) {
+					console.log('Spotify error',err);
+				} else {
+					result.get(uri, function (err, track) {
+						console.log('Playing: %s - %s', track.artist[0].name, track.name);
+
+						songStream = result
+						
+						track.play()
+							.pipe(new lame.Decoder())
+							.pipe(new Speaker())
+							.on('finish', function () {
+								result.disconnect();
+							});
+					});
+				}
+			  });
+		break;	
+	}
+};
+
+
+exports.album = function(req, res, next){
+	var uri = req.params.album
 	, username = config.spotifyUser
 	, password = config.spotifyPass;
 
@@ -66,19 +93,17 @@ exports.play = function(req, res, next){
 		if (err) {
 			console.log('Spotify error',err);
 		} else {
-			result.get(uri, function (err, track) {
-				console.log('Playing: %s - %s', track.artist[0].name, track.name);
+			console.log('Album Art URIs for "%s - %s"', album.artist[0].name, album.name);
 
-				track.play()
-				.pipe(new lame.Decoder())
-				.pipe(new Speaker())
-				.on('finish', function () {
-					result.disconnect();
-				});
+			album.cover.forEach(function (image) {
+				console.log('%s: %s', image.size, image.uri);
 			});
 		}
-	  });
+	});
 };
+
+
+
 
 
 
