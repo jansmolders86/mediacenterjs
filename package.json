@@ -1,6 +1,6 @@
 {
 	"name": "mediacenterjs",
-	"description": "A node.js based mediacenter",
+	"description": "A NodeJS based mediacenter for your browser",
 	"homepage": "http://www.mediacenterjs.com",
 	"author": {
 		"name": "Jan Smolders",
@@ -10,7 +10,7 @@
 		"type": "GNU",
 		"url": "http://www.gnu.org/licenses"
 	}],
-	"version": "0.0.20",
+	"version": "0.0.21",
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",

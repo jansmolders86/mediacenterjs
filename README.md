@@ -24,6 +24,11 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
+__version 0.021(Spotify works)__
+
+- Basic spotify playback is working now. You can add your credentials in the settings menu and tracks will play directly through the speakers.
+  Playback controls and song information will be inplemented later.
+
 __version 0.020(INI)__
 
 - Config is stored in INI file
@@ -36,21 +41,6 @@ __version 0.019(Music player & Settings)__
 - Music is now seekable!
 - Added settings as an 'app' instead of a seperate link to improve keyboard accessibility.
 - Fixed undefined error when playing music
-
-__version 0.018(No longer dependent on nodemon)__
-
-- Added 404 handling
-- No longer dependent on nodemon to restart server on configfile change
-- Fixed several small bugs
-- Updated all the modules to the latest version (This has introduced a non fatal error comming from JADE. I'm still looking for the cause though)
-
-__version 0.017 (JSON based routing)__
-
-- Routes are defined in json objects. 
- The default routes are stored in the configuration folder.
- An app specific route can be added in the root of the app folder.
- This way it's a lot easier to extend the routing. See documentation below. 
-- Fixed bug preventing movie cache to be written
 
 Why use it (once it is ready)?
 ===========
@@ -82,17 +72,16 @@ What currently works?
 What's coming up
 =================
 
-* Real databse integration (MongoDB)
-* More restful interface
+* Database integration
+* More RESTfull interface
 
 Known issues (Updated)
 ==================
-* Music duration is not passed on to the client ( It's a direct pipe of a stream. not yet implemented node lame/speaker because of Windows bug during install)
 * Movie Buffer size needs tweaking
 * Subfolder support is laking (App setup needs to be more RESTfull)
-* Music and videos need to be based on arrays instead of the current DOM dependencies
-* MongoDB support needs to be implemented
-* Current Ffmpeg setup is not crossdevice (currently based on flash because WebM has a bug, not parsing the duration)
+* Music and videos need to be based on arrays/DB entries instead of the current DOM dependencies
+* Database support needs to be implemented
+* Current Movie encoding setup is not crossdevice (currently based on flash because WebM has a bug, not parsing the duration)
 
 What still needs to be done
 ==================
@@ -178,11 +167,39 @@ If you continue to have trouble installing the modules, Please read the document
 An example of installing lame with visual studio 2012 on Windows:
 
 	npm install lame --msvs_version=2012
+	
+	
+**Version mismatch**
 
-Run MediacenterJS
+If you get the following message:
+
+	Error: Module version mismatch. Expected 11, got 1.
+	
+You are running a different version of nodeJs then a certain module expects. You simply need to reinstall the module giving the error.
+for example:
+
+	Error: Module version mismatch. Expected 11, got 1.
+	    at Module.load (module.js:356:32)
+	    at Function.Module._load (module.js:312:12)
+	    at Module.require (module.js:364:17)
+	    at require (module.js:380:17)
+	    at bindings (C:\Users\Jan\Documents\GitHub\mediacenterjs\node_modules\lame\node_modules\bindings\bindings.js:76:44)
+	    at Object.<anonymous> (C:\Users\Jan\Documents\GitHub\mediacenterjs\node_modules\lame\lib\bindings.js:1:99)
+	    at Module._compile (module.js:456:26)
+	    at Object.Module._extensions..js (module.js:474:10)
+	    at Module.load (module.js:356:32)
+	    at Function.Module._load (module.js:312:12
+
+Indicates that the module Lame is generating the error. so simply type the following to reinstall the module:
+
+	npm install lame
+	
+
+Running MediacenterJS
 -------------
 After the initial setup has been completed MediacenterJS will be available on the port you have specified and the language you have chosen.
 the server.js will make sure you do not have to restart the actual application (index.js) every time the configuration file changes.
+
 Of course, if you change the port, you need to use that port after the initial setup.
 	
 What can the movie browser/player do? 
