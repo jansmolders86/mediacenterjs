@@ -75,14 +75,12 @@
 			$(document).keydown(function(e){
 				switch(e.keyCode) {
 					case 32 : 
-
 						player().on("play", function(){
 							videojs("player").player().pause();
 						});
 						player().on("pause", function(){
 							$("player").player().play();
 						});
-	
 					break;
 				}
 			});
@@ -124,9 +122,8 @@
 	
 	function _handleMusic(title, cover, album){
 		$.ajax({
-			url: '/music/post/', 
-			type: 'post',
-			data: {albumTitle : title}
+			url: '/music/'+title+'/info/', 
+			type: 'get'
 		}).done(function(data){
 			if (data == 'bad dir'){
 				_handleMusic(title, cover, album)
@@ -164,9 +161,8 @@
 	
 	function _getAlbum(album){
 		$.ajax({
-			url: '/music/album/', 
-			type: 'post',
-			data: {album : album}
+			url: '/music/'+album+'/album/', 
+			type: 'get',
 		}).done(function(data){
 			if (data == 'bad dir'){
 				_getAlbum(album)
@@ -199,7 +195,7 @@
 					$('#tracklist').find('.genre').html(albumData[0].genre[0]);
 					$('img.cover').bind('load', function (event) {
 						var image = event.target;
-						 _dominantColor(image);
+						_dominantColor(image);
 					});	
 					
 		
@@ -220,7 +216,7 @@
 						$(this).removeClass('selected');
 					});
 					$(this).addClass('selected');
-					var track = '/music/track/'+album+'/'+songTitle
+					var track = '/music/'+album+'/'+songTitle+'/play'
 					, random = false;
 
 					_playTrack(track,album,songTitle,random)
@@ -248,12 +244,11 @@
 		$('li.selected').find(".bar").each(function() {
 			_fluctuate($(this));
 		});
-
 		
 		videojs("player").ready(function(){
 			var myPlayer = this;
 
-			myPlayer.src(track);
+			myPlayer.src();
 			myPlayer.play();
 			
 			$(".random").remove();

@@ -36,7 +36,13 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 #header h1{z-index:777;}
 #wrapper{ padding-top:150px; }
 
-#backdrop{ height:200px; overflow:hidden; width:100%; z-index:-1; }
+#backdrop{ 
+	height:200px; 
+	overflow:hidden; 
+	width:100%; 
+	z-index:-1; 
+	background:url(img/backdrop.png) repeat-x;
+}
 
 #backdrop img{	height:auto; }
 a.backlink { margin-top: 11px; z-index:777; }

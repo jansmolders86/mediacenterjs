@@ -1,14 +1,26 @@
 {
     "index": [{
         "method": "get",
-        "path": "/NAME"
+        "path": "/NAME/"
 	}],
     "post": [{
         "method":"post",
-        "path": "/NAME/post"
+        "path": "/NAME/:id*"
     }],
-    "play": [{
-        "method": "get",
-        "path": "/NAME/file/:filename"
-	}]	
+    "get": [{
+        "method":"get",
+        "path": "/NAME/:id*"
+    }],	
+	"handle": [{
+        "method":"get",
+        "path": "/NAME/:id/:subid*"
+    }],
+	"delete": [{
+        "method":"delete",
+        "path": "/NAME/:id*"
+    }],
+	"put": [{
+        "method":"put",
+        "path": "/NAME/:id*"
+    }]
 }

@@ -36,7 +36,7 @@ html(lang="en")
 
 		#header
 			#backdrop
-				img.backdropimg(src="/movies/img/backdrop.jpg")	
+				img.backdropimg(src="/movies/css/img/backdrop.png")	
 			a.backlink(href="/") 
 				img(src="/core/icons/back.png")
 			h1 #{lingua.movies}		
@@ -45,7 +45,7 @@ html(lang="en")
 					ul.movies
 						each movie in movies
 							li.movieposter.boxed
-								img(src="/core/css/img/ajax-loader.gif").movieposter
+								img.movieposter(src="/core/css/img/ajax-loader.gif")
 								.overlay(data-movie= movie)							
 								span.title= movie		
 								.overview

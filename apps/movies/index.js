@@ -33,6 +33,8 @@ var express = require('express')
 , colors = require('colors')
 , ini = require('ini')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
+//, sqlite3 = require('sqlite3').verbose()
+//, db = new sqlite3.Database(__dirname +'data/MCJS');
 
 exports.index = function(req, res, next){	
 	var writePath = './public/movies/data/movieindex.js'
@@ -54,41 +56,71 @@ exports.index = function(req, res, next){
 	});
 };
 
-exports.play = function(req, res){
-	var movieTitle = encoder.htmlDecode(req.params.filename)
-	, movie = config.moviepath + movieTitle;
-	
-	console.log('Getting ready to play', movie .green)
-		
-	var stat = fs.statSync(movie)
-	res.writeHead(200, {
-		'Content-Type':'video/flv',
-		'Content-Length':stat.size,
-	});
-	
-	probe(movie, function(err, probeData) {
-		if (err){
-			console.log('Can not probe movie for metadata', err .red)
-		} else {
-			var metaDuration =  '-metadata duration="'+probeData.streams[0].duration+'"'
-			, tDuration =  '-t '+probeData.streams[0].duration
-			, proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-			.addOptions(['-y','-ss 0','-b 800k','-vcodec libx264','-acodec mp3','-ab 128','-ar 44100','-bufsize 62000', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
-			.writeToStream(res, function(retcode, error){
-				if (!error){
-					console.log('file has been converted succesfully',retcode .green);
-				}else{
-					console.log('file conversion error',error .red);
-				}
-			});
-		}
-	});
-	
+exports.handle = function(req, res, next){	
+	var movieRequest = req.params.id
+	, action = req.params.subid;
+
+	switch(action) {
+		case('play'):
+			playMovie(req, res, movieRequest);
+		break;
+		case('info'):
+			getInfo(req, res, movieRequest);
+		break;	
+		default:
+			res.render('movies')
+		break;		
+	}
+
 }
 
-exports.post = function(req, res, next){	
+
+function playMovie(req, res, movieRequest){
+	var movie = null;
+	fs.readdir(config.moviepath,function(err,files){
+		if (err){
+			console.log('error checking location of file:',err .red);
+		}else{
+			var allFiles = new Array();
+			files.forEach(function(file){
+				if (file.match(movieRequest)){
+					movie = config.moviepath+file;
+
+					console.log('Getting ready to play', movie);
+							
+					var stat = fs.statSync(movie);
+					
+					res.writeHead(200, {
+						'Content-Type':'video/flv',
+						'Content-Length':stat.size,
+					});
+					
+					probe(movie, function(err, probeData) {
+						if (err){
+							console.log('Can not probe movie for metadata', err .red)
+						} else {
+							var metaDuration =  '-metadata duration="'+probeData.streams[0].duration+'"'
+							, tDuration =  '-t '+probeData.streams[0].duration
+							, proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+							.addOptions(['-y','-ss 0','-b 800k','-vcodec libx264','-acodec mp3','-ab 128','-ar 44100','-bufsize 62000', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
+							.writeToStream(res, function(retcode, error){
+								if (!error){
+									console.log('file has been converted succesfully',retcode .green);
+								}else{
+									console.log('file conversion error',error .red);
+								}
+							});
+						}
+					});
+				}
+			});
+		};
+	});
+};
+
+
+function getInfo(req, res, movieRequest){
 	var movieTitle = null
-	, path = './public/movies/data/'
 	, api_key = '7983694ec277523c31ff1212e35e5fa3'
 	, cdNumber = null
 	, id = 'No data found...'
@@ -105,19 +137,8 @@ exports.post = function(req, res, next){
 	var scraperdata = new Array()
 	,scraperdataset = null;
 
-	var incommingFile = req.body
-	, incommingMovieTitle = incommingFile.movieTitle
-	, movieRequest = '';
-	
-	if (incommingMovieTitle.match(/\//)) { 
-		var strippingFile = incommingMovieTitle.split('/');
-		movieRequest = strippingFile[1];
-	}else{ 
-		movieRequest = incommingMovieTitle;
-	}
-
 	if (fs.existsSync('./public/movies/data/'+movieRequest)) {
-		checkDirForCorruptedFiles(movieRequest)
+		checkDirForCorruptedFiles(movieRequest);
 	} else {
 		fs.mkdir('./public/movies/data/'+movieRequest, 0777, function (err) {
 			if (err) {
@@ -132,16 +153,14 @@ exports.post = function(req, res, next){
 				, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
 				, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
 				, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
-				, noCD = noCountries.replace(/cd [1-9]|cd[1-9]/gi,"");
+				, movieTitle = noCountries.replace(/cd [1-9]|cd[1-9]/gi,"").trimRight();
 				
 				cdNumber = filename.match(/cd [1-9]|cd[1-9]/gi,"");
-				movieTitle = noCD.replace(/avi|mkv|mpeg|mpg|mov|mp4|wmv|txt/gi,"").trimRight();
 				// TODO: Fix year param
 				//if (year.shift() == null) year = ''
 				//&year="+ year.shift() +
 
 				helper.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&language="+config.language+"&=", function(response) {
-
 					var requestResponse = JSON.parse(response)
 					, requestInitialDetails = requestResponse.results[0];
 					
@@ -167,12 +186,13 @@ exports.post = function(req, res, next){
 									// rating = secondRequestResponse.rating;
 									// certification = requestInitialDetails.certification;
 									overview = secondRequestResponse.overview;
+									
 								};
-								writeData(path,id,genre,runtime,original_name,imdb_id,rating,certification,overview,poster,backdrop,cdNumber);
+								writeData(id,genre,runtime,original_name,imdb_id,rating,certification,overview,poster,backdrop,cdNumber);
 
 							});
 						} else {
-							writeData(path,id,genre,runtime,original_name,imdb_id,rating,certification,overview,poster,backdrop,cdNumber);
+							writeData(id,genre,runtime,original_name,imdb_id,rating,certification,overview,poster,backdrop,cdNumber);
 						}
 
 					}); 
@@ -225,11 +245,11 @@ exports.post = function(req, res, next){
 		}
 	};
 	
-	function writeData(path,id,genre,runtime,original_name,imdb_id,rating,certification,overview,poster,backdrop,cdNumber){		
+	function writeData(id,genre,runtime,original_name,imdb_id,rating,certification,overview,poster,backdrop,cdNumber){		
 		var scraperdata = new Array()
 		,scraperdataset = null;
 		
-		scraperdataset = { path:incommingMovieTitle, id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
+		scraperdataset = {id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
 		scraperdata[scraperdata.length] = scraperdataset;
 		var dataToWrite = JSON.stringify(scraperdata, null, 4);
 		var writePath = './public/movies/data/'+movieRequest+'/data.js'

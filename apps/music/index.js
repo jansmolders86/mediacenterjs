@@ -15,8 +15,6 @@ var express = require('express')
 
 // entity type encoder
 var encoder = new Encoder('entity');
-
-exports.engine = 'jade';
  
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
@@ -42,10 +40,31 @@ exports.index = function(req, res, next){
 	});
 };
 
-exports.album = function(req, res, next){
-	var incomingFile = req.body
-	, dir = config.musicpath+encoder.htmlDecode(incomingFile.album)+'/'
-	, writePath = './public/music/data/'+encoder.htmlEncode(incomingFile.album)+'/album.js'
+
+exports.handle = function(req, res, next){	
+	var infoRequest = req.params.id
+	, action = req.params.subid;
+
+	switch(action) {
+		case('play'):
+			playTrack(req, res, infoRequest);
+		break;
+		case('info'):
+			getInfo(req, res, infoRequest);
+		break;	
+		case('album'):
+			getAlbum(req, res, infoRequest);
+		break;	
+		default:
+			res.render('spotify');
+		break;		
+	}
+}
+
+function getAlbum(req, res, infoRequest){
+	var incomingFile = infoRequest
+	, dir = config.musicpath+encoder.htmlDecode(incomingFile)+'/'
+	, writePath = './public/music/data/'+encoder.htmlEncode(incomingFile)+'/album.js'
 	, getDir = false
 	, fileTypes = new RegExp("\.(mp3)","g");
 
@@ -92,48 +111,9 @@ exports.album = function(req, res, next){
 	
 };
 
-exports.track = function(req, res, next){
-	var decodeTrack = encoder.htmlDecode(req.params.track)
-	, decodeAlbum = encoder.htmlDecode(req.params.album)
-	if (req.params.album === 'none'){
-		var track = config.musicpath+decodeTrack
-	}else {
-		var track = config.musicpath+decodeAlbum+'/'+decodeTrack
-	}
 
-	var stat = fs.statSync(track)
-	, start = 0
-	, end = 0
-	, range = req.header('Range');
-
-	if (range != null) {
-	start = parseInt(range.slice(range.indexOf('bytes=')+6,
-		range.indexOf('-')));
-	end = parseInt(range.slice(range.indexOf('-')+1,
-		range.length));
-	}
-	if (isNaN(end) || end === 0) end = stat.size-1;
-	if (start > end) return;
-
-
-	res.writeHead(206, { // NOTE: a partial http response
-		'Connection':'close',
-		'Content-Type':'audio/mp3',
-		'Content-Length':end - start,
-		'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
-		'Transfer-Encoding':'chunked'
-	});
-
-	var stream = fs.createReadStream(track)
-	//.pipe(new lame.Decoder);
-	stream.pipe(res);
-	
-};
-
-
-exports.post = function(req, res, next){	
-	var incomingFile = req.body
-	, albumRequest = incomingFile.albumTitle
+function getInfo(req, res, infoRequest){
+	var albumRequest = infoRequest
 	, albumTitle = null
 	, title = 'No data found...'
 	, thumb = '/music/css/img/nodata.jpg'
@@ -286,21 +266,65 @@ exports.post = function(req, res, next){
 			if(fs.existsSync('./public/music/data/'+albumRequest+'/data.js')){
 				fs.stat('./public/music/data/'+albumRequest+'/data.js', function (err, stats) {		
 					if(stats.size == 0){
-						helper.removeBadDir(req, res, checkDir)
+						helper.removeBadDir(req, res, checkDir);
 					} else {
 						fs.readFile('./public/music/data/'+albumRequest+'/data.js', 'utf8', function (err, data) {
 							if(!err){
 								res.send(data);
 							}else if(err){
-								helper.removeBadDir(req, res, checkDir)
+								helper.removeBadDir(req, res, checkDir);
 							}
 						});
 					}
 				});
 			} else {
-				helper.removeBadDir(req, res, checkDir)
+				helper.removeBadDir(req, res, checkDir);
 			}
 		};
 		
 	};
+};
+
+
+
+
+function playTrack(req, res, infoRequest){
+
+	//TODO: handle album & Track
+	
+	var decodeTrack = encoder.htmlDecode(req.params.track)
+	, decodeAlbum = encoder.htmlDecode(req.params.album)
+	if (req.params.album === 'none'){
+		var track = config.musicpath+decodeTrack
+	}else {
+		var track = config.musicpath+decodeAlbum+'/'+decodeTrack
+	}
+
+	var stat = fs.statSync(track)
+	, start = 0
+	, end = 0
+	, range = req.header('Range');
+
+	if (range != null) {
+	start = parseInt(range.slice(range.indexOf('bytes=')+6,
+		range.indexOf('-')));
+	end = parseInt(range.slice(range.indexOf('-')+1,
+		range.length));
+	}
+	if (isNaN(end) || end === 0) end = stat.size-1;
+	if (start > end) return;
+
+
+	res.writeHead(206, { // NOTE: a partial http response
+		'Connection':'close',
+		'Content-Type':'audio/mp3',
+		'Content-Length':end - start,
+		'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
+		'Transfer-Encoding':'chunked'
+	});
+
+	var stream = fs.createReadStream(track)
+	//.pipe(new lame.Decoder);
+	stream.pipe(res);
+	
 };

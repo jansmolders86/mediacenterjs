@@ -45,8 +45,11 @@
 			
 			$('.overlay').click(function(e) {
 				e.preventDefault();	
-				var url = '/movies/file/' + $(this).attr('data-movie')
-				_playMovie(url)
+				
+				var movieTitle = $(this).attr('data-movie').replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv|txt)/gi,"")
+				, url = '/movies/'+movieTitle+'/play/';
+				
+				_playMovie(url);
 			});
 			
 		});
@@ -65,9 +68,15 @@
 				, offsetBottom = offsetTop + $(this).height();
 
 				if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
-					var title = $(this).find('span.title').html()
-					, visibleMovie = $(this);
-					_handleVisibleMovies(o, title, visibleMovie)
+					var title = $(this).find('span.title').html();
+					
+					if (title !== undefined){
+						var movieTitle = title.replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv|txt)/gi,"")
+						, visibleMovie = $(this);
+						
+						_handleVisibleMovies(o, movieTitle, visibleMovie);
+					}
+					
 					$(this).attr("loaded",true);
 				}
 			});	
@@ -132,11 +141,12 @@
 
 	
 	function _handleVisibleMovies(o, title, visibleMovie){
+		var url = '/movies/'+title+'/info';
+		console.log(url);
 		if(title !== undefined){
 			$.ajax({
-				url: '/movies/post/', 
-				type: 'post',
-				data: {movieTitle : title}
+				url: url, 
+				type: 'get'
 			}).done(function(data){
 				if (data == 'bad dir'){
 					_handleVisibleMovies(o, title, visibleMovie)
@@ -172,10 +182,7 @@
 		}).done(function(data){
 			var myPlayer
 			$('#wrapper, #moviedetails, #backdrop, #header').hide();
-			
-			$('body').animate({
-				backgroundColor: '#000'
-			},500);
+			$('body').animate({backgroundColor: '#000'},500);
 			
 			if($('#player').length > 1) {
 				$('#player').remove();

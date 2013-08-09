@@ -67,6 +67,12 @@ app.configure('production', function(){
 });   
 
 require('./lib/routing')(app,{ verbose: !module.parent });
+
+app.use(function(req, res) {
+    res.status(404).render('404',{ selectedTheme: config.theme});
+    res.status(500).render('404',{ selectedTheme: config.theme});
+});
+
 app.get("/", function(req, res, next) {  
 	if(	config.moviepath == '' && config.language == '' && config.location == '' || config.moviepath == null || config.moviepath == undefined){
 		res.render('setup');	
@@ -92,9 +98,6 @@ app.get("/", function(req, res, next) {
 	}
 });
 
-app.use(function(req, res) {
-    res.status(404).render('404',{ selectedTheme: config.theme});
-});
 
 app.post('/removeModule', function(req, res){
 	var incommingModule = req.body
@@ -145,7 +148,7 @@ app.post('/setuppost', function(req, res){
 });
 
 app.get('/configuration', function(req, res){
-	res.send(config)
+	res.send(config);
 });
 	
 app.post('/submit', function(req, res){
@@ -178,7 +181,7 @@ function writeSettings(req, res, callback){
         if(err){
             console.log('Error writing INI file.',err);  
         } else{
-         res.redirect('/');
+			res.redirect('/');
         }
     });
 }

@@ -72,9 +72,8 @@
 		var track = $('.search').attr('value');
 		if(track !== undefined){
 			$.ajax({
-				url: '/spotify/post/', 
-				type: 'post',
-				data: {post : track}
+				url: '/spotify/'+track+'/info/', 
+				type: 'get'
 			}).done(function(data){
 				$(data.tracks).each(function(index, item){
 					$('#results').append('<li><ul><li>Artitst: '+item.artists[0].name+'</li><li>Album: '+item.album.name+'</li><li></li><li><a class="play" href="'+item.href+'">play track</a><li></ul></li>');
@@ -83,10 +82,10 @@
 				$('.play').click(function(e) {
 					e.preventDefault();
 					var playSong = $(this).attr('href')
-					, track = '/spotify/file/'+playSong;
+					, track = '/spotify/'+playSong+'/play/';
 					
 					$.ajax({
-						url: '/spotify/file/'+playSong, 
+						url: '/spotify/'+playSong+'/play/', 
 						type: 'get'
 					}).done(function(data){
 						console.log(data)
