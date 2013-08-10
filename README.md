@@ -236,33 +236,10 @@ If you want your app to show up in the dashboard, all you need to do is add a ti
 
 So in theory, you can make a background app that hooks on an existing app, or just runs in the background, without having it showing up in the dashboard simply by not adding the tile.
 
-__route.js__ 
+Routing
+-------------
 
-Although the basic routing is pretty generic, you can extend the basic routing table with your own custom routes by adding this JSON file and defining your routes. 
-The 'NAME' will be replaced with the app name (folder name). You do not have to hard code it. But you can also add route outside your app namespace. For Example:
-
-	{
-		"track": [{
-			"method": "get",
-			"path": "/NAME/track/:album/:track"
-		}],
-		"album": [{
-			"method":"post",
-			"path": "/NAME/album"
-		}],
-		"lookup": [{
-			"method":"get",
-			"path": "/configuration"
-		}]
-	}
-
-	
-__Building an App__
-
-There are thousands of useful node libraries you can use to build your app. Simply install the module you want with NPM and start using it. 
-In the future there will be a handy package installer to export your app with and I will add example apps.
-
-__Routing__
+__Basic routing__
 
 I tried to implement the routing as RESTfull as possible. This means if your app frontend sends a GET request, it can do so in three layers. A required base level with for instance an ID, a optional second level with a subid for example or an action and finally a third level with usually an action.
 Which results in a get handler which could look something like this:
@@ -291,6 +268,32 @@ Which results in a get handler which could look something like this:
 
 Of course this is just a basic layer. 
 You can extend this in your own route.js file in your app folder.
+
+__route.js__ 
+
+Although the basic routing is pretty generic, you can extend the basic routing table with your own custom routes by adding this JSON file and defining your routes. 
+The 'NAME' will be replaced with the app name (folder name). You do not have to hard code it. But you can also add route outside your app namespace. For Example:
+
+	{
+		"track": [{
+			"method": "get",
+			"path": "/NAME/track/:album/:track"
+		}],
+		"album": [{
+			"method":"post",
+			"path": "/NAME/album"
+		}],
+		"lookup": [{
+			"method":"get",
+			"path": "/configuration"
+		}]
+	}
+
+	
+__Building an App__
+
+There are thousands of useful node libraries you can use to build your app. Simply install the module you want with NPM and start using it. 
+In the future there will be a handy package installer to export your app with and I will add example apps.
 
 Translation
 -------------
