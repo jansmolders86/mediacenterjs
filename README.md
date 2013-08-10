@@ -290,7 +290,8 @@ The 'NAME' will be replaced with the app name (folder name). You do not have to 
 	}
 
 	
-__Building an App__
+Building an App
+-------------
 
 There are thousands of useful node libraries you can use to build your app. Simply install the module you want with NPM and start using it. 
 In the future there will be a handy package installer to export your app with and I will add example apps.
