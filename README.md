@@ -24,23 +24,13 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
-__version 0.021(Spotify works)__
+__version 0.022(Code overhaul)__
 
-- Basic spotify playback is working now. You can add your credentials in the settings menu and tracks will play directly through the speakers.
-  Playback controls and song information will be inplemented later.
+- Moved Spotify app out to separate repo due to the dependencies to GYP of the modules used. See: https://github.com/jansmolders86/mediacenterjs-spotify-app
+- Pretty big code overhaul separating functions from route handlers.
+- Routing has been rewritten (again) making it much 'RESTfull'. This will make it possible to create a API layer to the apps of needed.
+- Removed dependencies to sqlite3 and introduced dblite. Which runs without any os dependencies. Which is needed if this needs to run on the Raspberry Pi. For the same reason Spotify has been moved.
 
-__version 0.020(INI)__
-
-- Config is stored in INI file
-- Updated all the modules
-- Fixed Jade warnings
-- Added Spotify credentials to settings
-
-__version 0.019(Music player & Settings)__
-
-- Music is now seekable!
-- Added settings as an 'app' instead of a seperate link to improve keyboard accessibility.
-- Fixed undefined error when playing music
 
 Why use it (once it is ready)?
 ===========
@@ -78,7 +68,7 @@ What's coming up
 Known issues (Updated)
 ==================
 * Movie Buffer size needs tweaking
-* Subfolder support is laking (App setup needs to be more RESTfull)
+* Subfolder support is not working yet 
 * Music and videos need to be based on arrays/DB entries instead of the current DOM dependencies
 * Database support needs to be implemented
 * Current Movie encoding setup is not crossdevice (currently based on flash because WebM has a bug, not parsing the duration)
@@ -139,61 +129,6 @@ User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-ins
 Install NodeJS: http://nodejs.org/download/
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
-
-
-Setup issues
------------------
-
-**Windows and node-gyp**
-
-When you download this application through git (Either through zip or a GIT clone) It's possible you will get an error when trying to start the application.
-This is due to the fact that some modules have dependencies that need to be installed. So you need to run the install again. 
-
-	npm install lame 
-	or/and
-	npm install sqlite3
-	
-If you run Windows it's likely this install will fail. Especially on a x64 machine because to install the dependencies, NPM uses a module called node-gyp.
-Which, in it's turn has dependencies as well. You need to install the following:
-
-Windows 32 bits needs Microsoft Visual Studio C++ 2010 Express. Download here: (http://go.microsoft.com/?linkid=9709949)
-
-Windows (7/8) 64 bits needs Microsoft Windows SDK 7.1 which includes visual studio. Download here: (http://www.microsoft.com/en-us/download/details.aspx?id=8279)
-	
-If you continue to have trouble installing the modules, Please read the documentation: (https://github.com/TooTallNate/node-gyp)
-
-**I Already have visual studio installed but it's a different version than 2010**
-
-An example of installing lame with visual studio 2012 on Windows:
-
-	npm install lame --msvs_version=2012
-	
-	
-**Version mismatch**
-
-If you get the following message:
-
-	Error: Module version mismatch. Expected 11, got 1.
-	
-You are running a different version of nodeJs then a certain module expects. You simply need to reinstall the module giving the error.
-for example:
-
-	Error: Module version mismatch. Expected 11, got 1.
-	    at Module.load (module.js:356:32)
-	    at Function.Module._load (module.js:312:12)
-	    at Module.require (module.js:364:17)
-	    at require (module.js:380:17)
-	    at bindings (C:\Users\Jan\Documents\GitHub\mediacenterjs\node_modules\lame\node_modules\bindings\bindings.js:76:44)
-	    at Object.<anonymous> (C:\Users\Jan\Documents\GitHub\mediacenterjs\node_modules\lame\lib\bindings.js:1:99)
-	    at Module._compile (module.js:456:26)
-	    at Object.Module._extensions..js (module.js:474:10)
-	    at Module.load (module.js:356:32)
-	    at Function.Module._load (module.js:312:12
-
-Indicates that the module Lame is generating the error. so simply type the following to reinstall the module:
-
-	npm install lame
-	
 
 Running MediacenterJS
 -------------
@@ -356,12 +291,10 @@ This app also makes use of the following modules:
 * require
 * rimraf
 * feedparser
-* util
+* ini
 * trakt
-* spotify
 * colors
-* lame
-* sqlite3
+* dblite
 
 
 What is the beta version going to have?
