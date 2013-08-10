@@ -24,7 +24,7 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
-__version 0.022(Code overhaul)__
+__version 0.0.22(Code overhaul)__
 
 - Moved Spotify app out to separate repo due to the dependencies to GYP of the modules used. See: https://github.com/jansmolders86/mediacenterjs-spotify-app
 - Pretty big code overhaul separating functions from route handlers.
@@ -238,7 +238,7 @@ So in theory, you can make a background app that hooks on an existing app, or ju
 
 __route.js__ 
 
-You can extend the basic routing table with your own custom routes by adding this JSON file and defining your routes. 
+Although the basic routing is pretty generic, you can extend the basic routing table with your own custom routes by adding this JSON file and defining your routes. 
 The 'NAME' will be replaced with the app name (folder name). You do not have to hard code it. But you can also add route outside your app namespace. For Example:
 
 	{
@@ -255,15 +255,47 @@ The 'NAME' will be replaced with the app name (folder name). You do not have to 
 			"path": "/configuration"
 		}]
 	}
+
 	
 __Building an App__
 
 There are thousands of useful node libraries you can use to build your app. Simply install the module you want with NPM and start using it. 
 In the future there will be a handy package installer to export your app with and I will add example apps.
 
+__Routing__
+
+I tried to implement the routing as RESTfull as possible. This means if your app frontend sends a GET request, it can do so in three layers. A required base level with for instance an ID, a optional second level with a subid for example or an action and finally a third level with usually an action.
+Which results in a get handler which could look something like this:
+
+	exports.get = function(req, res, next){		
+		var requiredId = req.params.id  		//Initial param after base name. example: /movies/12
+		, optionalParam = req.params.optionalParam	//Second param after initial param. example: /movies/12/info
+		, action = req.params.action;			//Third param example: /music/muse/bliss/info
+		
+		if(!action){
+			//No third route
+			switch(optionalParam) {
+				case('play'):
+					//Do something with root/action in this case 'play'
+				break;
+				default:
+					//Do nothing 
+				break;		
+			}
+		} else if (!optionalParam && !action){
+			//Do something with root id, no second route
+		} else if(action === 'play') {
+			//Do something with root/subid/action
+		};
+	}
+
+Of course this is just a basic layer. 
+You can extend this in your own route.js file in your app folder.
+
 Translation
 -------------
 For now, all the translation files are stored in the public/translation folder.
+Feel free to contribute by translating.
 
 ###Credits###
 
@@ -271,9 +303,7 @@ This app makes heavy use of:
 
 * Express (https://github.com/visionmedia/express)
 * Node-Fluent-FFmpeg (https://github.com/schaermu/node-fluent-ffmpeg)
-* Node-XMLHttpRequest (https://github.com/driverdan/node-XMLHttpRequest)
 * VideoJS (http://www.videojs.com/)
-
 
 This app also makes use of the following modules:
 
