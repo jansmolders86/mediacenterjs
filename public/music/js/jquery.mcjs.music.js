@@ -40,7 +40,7 @@
 			});
 			
 			$('#musicWrapper').scroll( function(){
-				_lazyload(o)
+				_lazyload(o);
 			});
 			_lazyload(o);
 			
@@ -57,7 +57,7 @@
 				var album = $(this).find('.title').html();
 				
 				if(album.match(/\.[0-9a-z]{1,5}$/i)){
-					var track = '/music/track/none/'+album
+					var track = '/music/none/'+album+'/play'
 					, album = 'none';
 				
 					$(this).addClass('playing');
@@ -176,7 +176,7 @@
 					$('#tracklist').append('<ul id="tracks"></ul>')
 				} else{
 					$('#tracks').remove();
-					$('#tracklist').append('<ul id="tracks"></ul>')
+					$('#tracklist').append('<ul id="tracks"></ul>');
 				}
 				
 				for (var i = 0; i < data.length; i++) {
@@ -184,9 +184,8 @@
 				}	
 				
 				$.ajax({
-					url: '/music/post/', 
-					type: 'post',
-					data: {albumTitle : album}
+					url: '/music/data/'+album+'/data.js', 
+					type: 'get'
 				}).done(function(data){
 
 					var albumData = $.parseJSON(data);
@@ -197,7 +196,6 @@
 						var image = event.target;
 						_dominantColor(image);
 					});	
-					
 		
 					var parentHeight = $('#tracklist').height();
 					$('#tracks').css('height',parentHeight - 200);
@@ -216,10 +214,10 @@
 						$(this).removeClass('selected');
 					});
 					$(this).addClass('selected');
-					var track = '/music/'+album+'/'+songTitle+'/play'
+					var track = '/music/'+album+'/'+songTitle+'/play/'
 					, random = false;
 
-					_playTrack(track,album,songTitle,random)
+					_playTrack(track,album,songTitle,random);
 				});
 			}
 		});	
@@ -248,7 +246,7 @@
 		videojs("player").ready(function(){
 			var myPlayer = this;
 
-			myPlayer.src();
+			myPlayer.src(track);
 			myPlayer.play();
 			
 			$(".random").remove();

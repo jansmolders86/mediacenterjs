@@ -66,7 +66,7 @@ app.configure('production', function(){
 	app.use(express.errorHandler()); 
 });   
 
-require('./lib/routing')(app,{ verbose: !module.parent });
+require('./lib/routing/routing')(app,{ verbose: !module.parent });
 
 app.use(function(req, res) {
     res.status(404).render('404',{ selectedTheme: config.theme});

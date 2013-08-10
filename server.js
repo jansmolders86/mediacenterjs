@@ -35,12 +35,12 @@ server = {
 
     "restart": function() {
         this.restarting = true;
-        sys.debug('Stopping server for restart' .yellow.bold);
+        console.log('Stopping server for restart' .yellow.bold);
         this.process.kill();
     },
     "start": function() {
         var that = this;
-        sys.debug('Starting server' .green.bold);
+        console.log('Starting server' .green.bold);
         that.watchFile();
 
         this.process = child_process.spawn(process.argv[0], ['index.js']);
@@ -54,7 +54,7 @@ server = {
         });
 
         this.process.addListener('exit', function (code) {
-            sys.debug('Child process exited' .yellow.bold);
+            console.log('Child process exited' .yellow.bold);
             this.process = null;
             if (that.restarting) {
                 that.restarting = true;
@@ -65,7 +65,7 @@ server = {
     "watchFile": function() {
 		fs.watchFile('./configuration/config.ini', {interval : 500}, function(curr, prev) {
 			if (curr.mtime.valueOf() != prev.mtime.valueOf() || curr.ctime.valueOf() != prev.ctime.valueOf()) {
-				sys.debug('Restarting because of changed file' .yellow.bold);
+				console.log('Restarting because of changed file' .yellow.bold);
 				// give browser time to load finsh page
 				setTimeout(function(){
 					server.restart();
