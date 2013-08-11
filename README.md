@@ -28,7 +28,7 @@ __version 0.0.22(Code overhaul)__
 
 - Moved Spotify app out to separate repo due to the dependencies to GYP of the modules used. See: https://github.com/jansmolders86/mediacenterjs-spotify-app
 - Pretty big code overhaul separating functions from route handlers.
-- Routing has been rewritten (again) making it much 'RESTfull'. This will make it possible to create a API layer to the apps of needed.
+- Routing has been rewritten (again) making it much more 'RESTfull'. This will make it possible to create a API layer to the apps of needed.
 - Removed dependencies to sqlite3 and introduced dblite. Which runs without any os dependencies. Which is needed if this needs to run on the Raspberry Pi. For the same reason Spotify has been moved.
 
 
