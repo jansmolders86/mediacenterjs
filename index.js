@@ -24,11 +24,7 @@ var express = require('express')
 , colors = require('colors')
 , rimraf = require('rimraf')
 , ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
-, dblite = require('dblite');
-
-dblite.bin = "./lib/database/sqlite3";
-db = dblite('./lib/database/mcjs.sqlite');
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
 var language = null;
 if(config.language === ""){

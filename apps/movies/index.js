@@ -58,11 +58,10 @@ exports.get = function(req, res, next){
 				functions.playMovie(req, res, infoRequest);
 			break;
 			case('info'):
-				functions.getInfo(req, res, infoRequest);
+				functions.handler(req, res, infoRequest);
 			break;	
 			default:
-				//Do nothing
-				return;
+				functions.handler(req, res, infoRequest);
 			break;		
 		}
 	} else if (!optionalParam){

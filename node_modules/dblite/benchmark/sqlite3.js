@@ -1,6 +1,7 @@
 var startTime = Date.now(),
     sqlite3 = require('sqlite3'),
     db = new sqlite3.Database('./bench.sqlite3.db');
+    // db = new sqlite3.Database(':memory:');
 
 db.serialize(function() {
   db.run('BEGIN');

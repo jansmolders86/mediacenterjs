@@ -24,6 +24,11 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
+__version 0.0.23(The Movie Database)__
+
+- First app (Movies) has been ported to a database (sqlite3) Thanks to Andrea Giammarchi for his help! 
+Although some code refactoring still is needed, and I still need to test this with larger numbers, the basic features work with a database instead of local storage.
+
 __version 0.0.22(Code overhaul)__
 
 - Moved Spotify app out to separate repo due to the dependencies to GYP of the modules used. See: https://github.com/jansmolders86/mediacenterjs-spotify-app

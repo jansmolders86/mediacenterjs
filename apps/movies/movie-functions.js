@@ -51,26 +51,24 @@ module.exports = {
 			};
 		});
 	},
-	getInfo: function (req, res, movieRequest){
-		var express = require('express')
-		, app = express()
-		, fs = require('fs')
+	handler: function (req, res, infoRequest){
+		//Modules
+		var fs = require('fs')
 		, downloader = require('downloader')
 		, helper = require('../../lib/helpers.js')
-		, Encoder = require('node-html-encoder').Encoder
-		, encoder = new Encoder('entity')
 		, colors = require('colors')
 		, ini = require('ini')
-		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
-	
-	
-		var movieTitle = null
+		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
+		, dblite = require('dblite');
+
+		// Variable defaults
+		var movieRequest = infoRequest
+		, movieTitle = null
 		, api_key = '7983694ec277523c31ff1212e35e5fa3'
 		, cdNumber = null
-		, id = 'No data found...'
+		, original_name = 'No data found...'
 		, poster_path = '/movies/css/img/nodata.jpg'
 		, backdrop_path = '/movies/css/img/backdrop.png'
-		, original_name = 'No data found...'
 		, imdb_id = 'No data found...'
 		, rating = 'No data found...'
 		, certification = 'No data found...'
@@ -78,129 +76,154 @@ module.exports = {
 		, runtime = 'No data found...'
 		, overview = 'No data found...';
 		
-		var scraperdata = new Array()
-		,scraperdataset = null;
+		// Init Database
+		dblite.bin = "./lib/database/sqlite3";
+		var db = dblite('./lib/database/mcjs.sqlite');
+		db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT)");
 
-		if (fs.existsSync('./public/movies/data/'+movieRequest)) {
-			checkDirForCorruptedFiles(movieRequest);
-		} else {
-			fs.mkdir('./public/movies/data/'+movieRequest, 0777, function (err) {
-				if (err) {
-					console.log('Error creating folder',err .red);
-				} else {
-					console.log('Directory '+movieRequest+' created' .green);
-
-					var filename = movieRequest
-					, year = filename.match(/19\d{2}|20\d{2/)
-					, stripped = filename.replace(/\.|_|\/|\+|\-/g," ")
-					, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
-					, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
-					, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
-					, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
-					, movieTitle = noCountries.replace(/cd [1-9]|cd[1-9]/gi,"").trimRight();
-					
-					cdNumber = filename.match(/cd [1-9]|cd[1-9]/gi,"");
-					// TODO: Fix year param
-					//if (year.shift() == null) year = ''
-					//&year="+ year.shift() +
-
-					helper.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&language="+config.language+"&=", function(response) {
-						var requestResponse = JSON.parse(response)
-						, requestInitialDetails = requestResponse.results[0];
-						
-						downloadCache(requestInitialDetails,function(poster, backdrop) {
-
-							if (requestInitialDetails !== undefined && requestInitialDetails !== '' && requestInitialDetails !== null) {
-								var localImageDir = '/movies/data/'+movieRequest+'/';
-								
-								poster_path = localImageDir+requestInitialDetails.poster_path;
-								backdrop_path = localImageDir+requestInitialDetails.backdrop_path;
-								id = requestInitialDetails.id;
-								original_name = requestInitialDetails.original_title;
-									
-								helper.xhrCall("http://api.themoviedb.org/3/movie/"+id+"?api_key="+api_key+"&=", function(response) {
-								
-									if (response !== 'Nothing found.' && response !== undefined && response !== '' && response !== null) {
-										var secondRequestResponse = JSON.parse(response);
-										
-										genre = secondRequestResponse.genres[0].name;
-										runtime = secondRequestResponse.runtime;
-										imdb_id = secondRequestResponse.imdb_id;
-										// Needs seperate call
-										// rating = secondRequestResponse.rating;
-										// certification = requestInitialDetails.certification;
-										overview = secondRequestResponse.overview;
-										
-									};
-									writeData(id,genre,runtime,original_name,imdb_id,rating,certification,overview,poster,backdrop,cdNumber);
-
-								});
-							} else {
-								writeData(id,genre,runtime,original_name,imdb_id,rating,certification,overview,poster,backdrop,cdNumber);
-							}
-
-						}); 
-
-					});
-				}
-			});
-		};
+		db.on('info', function (text) { console.log(text) });
+		db.on('error', function (err) { console.error('Database error: ' + err) });
 		
-		function downloadCache(response,callback){
+		console.log('Searching for '+movieRequest+' in database');
+		getStoredData(movieRequest);
+		
+		
+		//Get data if new movie
+		function getData(movieRequest){
+			//Check if folder exists
+			if (fs.existsSync('./public/movies/data/'+movieRequest)) {
+				console.log('dir already created',movieRequest .green);
+			}else{
+				fs.mkdir('./public/movies/data/'+movieRequest, 0777, function (err) {
+					if (err) console.log('Error creating folder',err .red);
+				});
+			}
+					
+			var filename = movieRequest
+			, year = filename.match(/19\d{2}|20\d{2/)
+			, stripped = filename.replace(/\.|_|\/|\+|\-/g," ")
+			, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
+			, releasegroups = noyear.replace(/FxM|aAF|arc|AAC|MLR|AFO|TBFA|WB|ARAXIAL|UNiVERSAL|ToZoon|PFa|SiRiUS|Rets|BestDivX|NeDiVx|ESPiSE|iMMORTALS|QiM|QuidaM|COCAiN|DOMiNO|JBW|LRC|WPi|NTi|SiNK|HLS|HNR|iKA|LPD|DMT|DvF|IMBT|LMG|DiAMOND|DoNE|D0PE|NEPTUNE|TC|SAPHiRE|PUKKA|FiCO|PAL|aXXo|VoMiT|ViTE|ALLiANCE|mVs|XanaX|FLAiTE|PREVAiL|CAMERA|VH-PROD|BrG|replica|FZERO/g, "")
+			, movietype = releasegroups.replace(/dvdrip|multi9|xxx|web|hdtv|vhs|embeded|embedded|ac3|dd5 1|m sub|x264|dvd5|dvd9|multi sub|non sub|subs|ntsc|ingebakken|torrent|torrentz|bluray|brrip|sample|xvid|cam|camrip|wp|workprint|telecine|ppv|ppvrip|scr|screener|dvdscr|bdscr|ddc|R5|telesync|telesync|pdvd|1080p|hq|sd|720p|hdrip/gi, "")
+			, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
+			, movieTitle = noCountries.replace(/cd [1-9]|cd[1-9]/gi,"").trimRight();
+			
+			cdNumber = filename.match(/cd [1-9]|cd[1-9]/gi,"");
+			// TODO: Fix year param
+			//if (year.shift() == null) year = ''
+			//&year="+ year.shift() +
+
+			helper.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&language="+config.language+"&=", function(response) {
+				var requestResponse = JSON.parse(response)
+				, requestInitialDetails = requestResponse.results[0];
+				
+				downloadCache(requestInitialDetails,movieRequest,function(poster, backdrop) {
+					if (requestInitialDetails !== undefined && requestInitialDetails !== '' && requestInitialDetails !== null) {
+						var localImageDir = '/movies/data/'+movieRequest;
+						
+						poster_path = localImageDir+requestInitialDetails.poster_path;
+						backdrop_path = localImageDir+requestInitialDetails.backdrop_path;
+						id = requestInitialDetails.id;
+						original_name = requestInitialDetails.original_title;
+							
+						helper.xhrCall("http://api.themoviedb.org/3/movie/"+id+"?api_key="+api_key+"&=", function(response) {
+						
+							if (response !== 'Nothing found.' && response !== undefined && response !== '' && response !== null) {
+								var secondRequestResponse = JSON.parse(response);
+								genre = secondRequestResponse.genres[0].name;
+								runtime = secondRequestResponse.runtime;
+								imdb_id = secondRequestResponse.imdb_id;
+								overview = secondRequestResponse.overview;
+								// Needs seperate call
+								// rating = secondRequestResponse.rating;
+								// certification = requestInitialDetails.certification;
+							};
+							writeData(original_name,poster_path,backdrop_path,imdb_id,rating,certification,genre,runtime,overview, function(){
+								getStoredData(movieRequest);
+							});
+
+						});
+					} else {
+						writeData(original_name,poster_path,backdrop_path,imdb_id,rating,certification,genre,runtime,overview, function(){
+							getStoredData(movieRequest);
+						});
+					}
+				}); 
+			});
+
+		}
+		
+		
+		function getStoredData(movieRequest){
+			db.query(
+				'SELECT * FROM movies WHERE local_name =? ', [movieRequest],{
+					local_name 		: String,
+					original_name  	: String, 
+					poster_path  	: String, 
+					backdrop_path  	: String, 
+					imdb_id  		: String, 
+					rating  		: String, 
+					certification  	: String, 
+					genre  			: String, 
+					runtime  		: String,
+					overview  : String
+				},
+				function(rows) {
+					if (typeof rows !== 'undefined' && rows.length > 0){
+						console.log('found info for movie' .green);
+						res.json(rows);
+					} else {
+						console.log('new movie' .green);
+						getData(movieRequest);
+					}
+				}
+			);
+		}
+	
+		function downloadCache(response,movieRequest,callback){
 			if (response !== undefined && response !== '' && response !== null) {
 
 				var backdrop_url = "http://cf2.imgobject.com/t/p/w1920/"
 				, poster_url = "http://cf2.imgobject.com/t/p/w342/"
 				, poster = poster_url+response.poster_path
 				, backdrop = backdrop_url+response.backdrop_path
-				, downloadDir = './public/movies/data/'+movieRequest+'/';
+				, downloadDir = './public/movies/data/'+movieRequest;
 				
-				downloader.on('done', function(msg) { console.log('done', msg); });
-				downloader.on('error', function(msg) { console.log('error', msg); });
-				downloader.download(poster, downloadDir);
-				downloader.download(backdrop, downloadDir);
+				if (fs.existsSync(downloadDir+response.poster_path) === true && fs.existsSync(downloadDir+response.backdrop_path) === true) {
+					return callback(poster,backdrop);
+				} else {
+					downloader.on('done', function(msg) { console.log('done', msg); });
+					downloader.on('error', function(msg) { console.log('error', msg); });
+					downloader.download(poster, downloadDir);
+					downloader.download(backdrop, downloadDir);
+					
+					return callback(poster,backdrop);
+				}
 			}else{
 				var poster = poster_path
 				, backdrop = backdrop_path;
+				
+				return callback(poster,backdrop);
 			};
-			callback(poster,backdrop);
 		};
 		
-		
-		function checkDirForCorruptedFiles(movieRequest){
-			var checkDir = './public/movies/data/'+movieRequest
-
-			if(fs.existsSync('./public/movies/data/'+movieRequest+'/data.js')){
-				fs.stat('./public/movies/data/'+movieRequest+'/data.js', function (err, stats) {		
-					if(stats.size == 0){
-						helper.removeBadDir(req, res, checkDir)
-					} else {
-						fs.readFile('./public/movies/data/'+movieRequest+'/data.js', 'utf8', function (err, data) {
-							if(!err){
-								res.send(data);
-							}else if(err){
-								helper.removeBadDir(req, res, checkDir)
-							}
-						});
-					}
-				});
-			} else {
-				helper.removeBadDir(req, res, checkDir);
-			}
-		};
-		
-		function writeData(id,genre,runtime,original_name,imdb_id,rating,certification,overview,poster,backdrop,cdNumber){		
-			var scraperdata = new Array()
-			,scraperdataset = null;
-			
-			scraperdataset = {id:id, genre:genre, runtime:runtime, original_name:original_name, imdb_id:imdb_id, rating:rating, certification:certification, overview:overview, poster:poster_path, backdrop:backdrop_path, cdNumber:cdNumber }
-			scraperdata[scraperdata.length] = scraperdataset;
-			var dataToWrite = JSON.stringify(scraperdata, null, 4);
-			var writePath = './public/movies/data/'+movieRequest+'/data.js'
-			
-			helper.writeToFile(req,res,writePath,dataToWrite);
-								
-		};
-
+		function writeData(original_name,poster_path,backdrop_path,imdb_id,rating,certification,genre,runtime,overview,callback){
+			console.log('Writing data to table for',movieRequest .green);			
+			db.query(
+				'INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?)', [
+					movieRequest,
+					original_name,
+					poster_path,
+					backdrop_path,
+					imdb_id,
+					rating,
+					certification,
+					genre,
+					runtime,
+					overview
+				]
+			);
+			callback();
+		}
 	}
 }

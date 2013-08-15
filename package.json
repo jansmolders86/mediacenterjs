@@ -10,7 +10,7 @@
 		"type": "GNU",
 		"url": "http://www.gnu.org/licenses"
 	}],
-	"version": "0.0.22",
+	"version": "0.0.23",
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",
@@ -30,6 +30,6 @@
 		"trakt": "0.0.5-2",
 		"colors":"0.6.0-1",
 		"ini":"1.1.0",
-		"dblite":"0.1.9"
+		"dblite":">=0.2.1"
 	}
 }
