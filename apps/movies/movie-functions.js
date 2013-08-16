@@ -187,7 +187,7 @@ module.exports = {
 				, poster_url = "http://cf2.imgobject.com/t/p/w342/"
 				, poster = poster_url+response.poster_path
 				, backdrop = backdrop_url+response.backdrop_path
-				, downloadDir = './public/movies/data/'+movieRequest;
+				, downloadDir = './public/movies/data/'+movieRequest+'/';
 				
 				if (fs.existsSync(downloadDir+response.poster_path) === true && fs.existsSync(downloadDir+response.backdrop_path) === true) {
 					return callback(poster,backdrop);
