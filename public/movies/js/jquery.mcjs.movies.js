@@ -36,19 +36,15 @@
 			
 			_focusedItem(o);
 
-			$('body').scroll( function(){
-				_lazyload(o);
-			});
-			_lazyload(o);
+			$('body').scroll( function(){ _lazyload(o); });
 			
+			_lazyload(o);
 			_scrollBackdrop();
 			
 			$('.overlay').click(function(e) {
 				e.preventDefault();	
-				
 				var movieTitle = $(this).attr('data-movie').replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv|txt)/gi,"")
 				, url = '/movies/'+movieTitle+'/play/';
-				
 				_playMovie(url);
 			});
 			
@@ -69,14 +65,11 @@
 
 				if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
 					var title = $(this).find('span.title').html();
-					
 					if (title !== undefined){
 						var movieTitle = title.replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv|txt)/gi,"")
 						, visibleMovie = $(this);
-						
 						_handleVisibleMovies(o, movieTitle, visibleMovie);
 					}
-					
 					$(this).attr("loaded",true);
 				}
 			});	
@@ -142,7 +135,6 @@
 	
 	function _handleVisibleMovies(o, title, visibleMovie){
 		var url = '/movies/'+title+'/info';
-		console.log(url);
 		if(title !== undefined){
 			$.ajax({
 				url: url, 
@@ -195,13 +187,8 @@
 					myPlayer = this;
 					myPlayer.play();
 					
-					myPlayer.on('error', function(e){
-						console.log('Error', e)
-					});
-					
-					myPlayer.on('ended', function(e){
-						 window.location="/movies/";
-					});
+					myPlayer.on('error', function(e){ console.log('Error', e) });
+					myPlayer.on('ended', function(e){ window.location="/movies/"; });
 				});
 			}
 		});
