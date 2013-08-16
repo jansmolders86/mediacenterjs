@@ -119,7 +119,7 @@ Download this application with NPM:
 Or download it directly from Github of course. 
 
 After you have downloaded MediacenterJS, click on the .bat file (in Windows) to start the project. 
-Or browsed to the root directory of MediaCenterJS in the terminal/command prompt and type:
+Or browse to the root directory of MediaCenterJS in the terminal/command prompt and type:
 
 	node server
 
