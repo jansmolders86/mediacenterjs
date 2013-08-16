@@ -63,9 +63,9 @@ module.exports = {
 
 		// Variable defaults
 		var movieRequest = infoRequest
-		, movieTitle = null
+		, movieTitle = 'No data found...'
 		, api_key = '7983694ec277523c31ff1212e35e5fa3'
-		, cdNumber = null
+		, cd_number = 'No data found...'
 		, original_name = 'No data found...'
 		, poster_path = '/movies/css/img/nodata.jpg'
 		, backdrop_path = '/movies/css/img/backdrop.png'
@@ -79,7 +79,7 @@ module.exports = {
 		// Init Database
 		dblite.bin = "./lib/database/sqlite3";
 		var db = dblite('./lib/database/mcjs.sqlite');
-		db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cdNumber INTEGER)");
+		db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number VARCHAR)");
 
 		db.on('info', function (text) { console.log(text) });
 		db.on('error', function (err) { console.error('Database error: ' + err) });
@@ -108,12 +108,17 @@ module.exports = {
 			, noCountries = movietype.replace(/NL|SWE|SWESUB|ENG|JAP|BRAZIL|TURKIC|slavic|SLK|ITA|HEBREW|HEB|ESP|RUS|DE|german|french|FR|ESPA|dansk|HUN/g,"")
 			, movieTitle = noCountries.replace(/cd [1-9]|cd[1-9]/gi,"").trimRight();
 			
-			cdNumber = filename.match(/cd [1-9]|cd[1-9]/gi,"");
-			// TODO: Fix year param
-			//if (year.shift() == null) year = ''
-			//&year="+ year.shift() +
+			hasCdinTitle = filename.match(/cd [1-9]|cd[1-9]/gi);
+			
+			if(hasCdinTitle !== undefined && hasCdinTitle !== null) cd_number = hasCdinTitle.toString();
 
-			helper.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&language="+config.language+"&=", function(response) {
+			if(year !== undefined && year !== null){
+				year.toString();
+			} else {
+				year = ''; 
+			}
+
+			helper.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&language="+config.language+"&year="+year+"&=", function(response) {
 				var requestResponse = JSON.parse(response)
 				, requestInitialDetails = requestResponse.results[0];
 				
@@ -167,7 +172,7 @@ module.exports = {
 					genre  			: String, 
 					runtime  		: String,
 					overview  		: String,
-					cdNumber  		: Number
+					cd_number  		: String
 				},
 				function(rows) {
 					if (typeof rows !== 'undefined' && rows.length > 0){
@@ -222,7 +227,7 @@ module.exports = {
 					genre,
 					runtime,
 					overview,
-					cdNumber
+					cd_number
 				]
 			);
 			callback();

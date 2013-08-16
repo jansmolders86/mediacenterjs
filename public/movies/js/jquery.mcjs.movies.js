@@ -143,7 +143,7 @@
 				, genre 		= movieData.genre
 				, runtime 		= movieData.runtime
 				, overview 		= movieData.overview
-				, cdNumber 		= movieData.cdNumber;
+				, cdNumber 		= movieData.cd_number;
 				
 				visibleMovie.find('.original_name').html(orginal_name);
 				
@@ -159,7 +159,7 @@
 				
 				visibleMovie.find("img.movieposter").attr('data-backdrop',backdropImage);
 				
-				if(cdNumber !== null && cdNumber !== 0) visibleMovie.append('<div class="cdNumber"><span>'+cdNumber+'</span><div>');
+				if(cdNumber !== 'No data found...' && cdNumber !== undefined && cdNumber !== '') visibleMovie.append('<div class="cdNumber"><span>'+cdNumber+'</span><div>');
 			});
 		}		
 	}
