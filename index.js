@@ -24,7 +24,12 @@ var express = require('express')
 , colors = require('colors')
 , rimraf = require('rimraf')
 , ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
+, dblite = require('dblite');
+
+// Init Database
+dblite.bin = "./lib/database/sqlite3";
+var db = dblite('./lib/database/mcjs.sqlite');
 
 var language = null;
 if(config.language === ""){
@@ -133,7 +138,12 @@ app.post('/clearCache', function(req, res){
 						console.log('Error removing module', e .red) 
 						res.send('Error clearing cache', e)
 					} else{
-						res.send('done')
+						db.query('DROP TABLE IF EXISTS '+cache);
+						
+						db.on('info', function (text) { console.log(text) });
+						db.on('error', function (err) { console.error('Database error: ' + err) });
+						
+						res.send('done');
 					};
 				});
 			};

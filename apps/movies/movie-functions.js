@@ -79,7 +79,7 @@ module.exports = {
 		// Init Database
 		dblite.bin = "./lib/database/sqlite3";
 		var db = dblite('./lib/database/mcjs.sqlite');
-		db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT)");
+		db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cdNumber INTEGER)");
 
 		db.on('info', function (text) { console.log(text) });
 		db.on('error', function (err) { console.error('Database error: ' + err) });
@@ -166,7 +166,8 @@ module.exports = {
 					certification  	: String, 
 					genre  			: String, 
 					runtime  		: String,
-					overview  : String
+					overview  		: String,
+					cdNumber  		: Number
 				},
 				function(rows) {
 					if (typeof rows !== 'undefined' && rows.length > 0){
@@ -210,7 +211,7 @@ module.exports = {
 		function writeData(original_name,poster_path,backdrop_path,imdb_id,rating,certification,genre,runtime,overview,callback){
 			console.log('Writing data to table for',movieRequest .green);			
 			db.query(
-				'INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?)', [
+				'INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?,?)', [
 					movieRequest,
 					original_name,
 					poster_path,
@@ -220,7 +221,8 @@ module.exports = {
 					certification,
 					genre,
 					runtime,
-					overview
+					overview,
+					cdNumber
 				]
 			);
 			callback();

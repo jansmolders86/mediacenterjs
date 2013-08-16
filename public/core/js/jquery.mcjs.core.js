@@ -111,14 +111,12 @@
 		
 		// Init Keyboard
 		if(jQuery().keyboard) {
-			if ( o.usekeyboard == 'yes' ){
-				$('.keyboard').keyboard();
-			}
+			if ( o.usekeyboard == 'yes' ) $('.keyboard').keyboard();
 		}	
 	}
 	
 	function _modalDialog(o, url, type, data){
-		var dialog = null
+		var dialog = null;
 		dialog = $('<div>' + o.confirmMessage + '</div>').dialog({
 			resizable: false,
 			modal: true,
@@ -177,26 +175,21 @@
 			,subitemFocused = $('.options:visible li.focused')
 			,subitem = $('.options:visible li')
 			,item = $('li')
-			,elid = $(document.activeElement).is("input:focus")
+			,elid = $(document.activeElement).is("input:focus");
+			
 			if (typeof e == 'undefined' && window.event) { e = window.event; }
 			
 			switch(e.keyCode) {
 				case 39 : //next
 					focused.removeClass('focused').next().addClass('focused');
-					if (focused.next().length == 0) {
-						item.eq(0).addClass('focused')
-					}
+					if (focused.next().length == 0) item.eq(0).addClass('focused');
 				break;
 				case 37 : //prev
 					focused.removeClass('focused').prev().addClass('focused');
-					if (item.prev().length == 0) {
-						item.eq(-1).addClass('focused')
-					}
+					if (item.prev().length == 0) item.eq(-1).addClass('focused');
 				break;
 				case 13 : //enter
-					if (!elid){
-						document.location = focused.find('a').attr('href');
-					}
+					if (!elid) document.location = focused.find('a').attr('href');
 				break;
 				case 8  : //backspace
 					if (!elid){

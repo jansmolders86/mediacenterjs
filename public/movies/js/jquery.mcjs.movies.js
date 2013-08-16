@@ -85,9 +85,7 @@
 			},
 			mouseleave: function() {
 				$(".backdropimg").removeClass("fadein");
-				if ($('.movieposter.focused').length > 1){
-					$('.movieposter').removeClass("focused");
-				}
+				if ($('.movieposter.focused').length > 1) $('.movieposter').removeClass("focused");
 			},			
 			focus: function() {		
 				$(this).addClass("focused");			
@@ -96,16 +94,14 @@
 			},
 			focusout: function() {
 				$(".backdropimg").removeClass("fadein");
-				if ($('.movieposter.focused').length > 1){
-					$('.movieposter').removeClass("focused");
-				}
+				if ($('.movieposter.focused').length > 1) $('.movieposter').removeClass("focused");
 			}
 		});	
 		
 		if ($('.movieposter.focused')){
 			var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
 			$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
-		} 	
+		}
 	}
 	
 	
@@ -163,8 +159,7 @@
 				
 				visibleMovie.find("img.movieposter").attr('data-backdrop',backdropImage);
 				
-				if(cdNumber !== null) visibleMovie.find("> a.play").append('<div class="cdNumber"><span>'+cdNumber+'</span><div>');
-
+				if(cdNumber !== null && cdNumber !== 0) visibleMovie.append('<div class="cdNumber"><span>'+cdNumber+'</span><div>');
 			});
 		}		
 	}
@@ -182,11 +177,9 @@
 				$('#player').remove();
 			} else {
 				$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
-
 				videojs("player").ready(function(){
 					myPlayer = this;
 					myPlayer.play();
-					
 					myPlayer.on('error', function(e){ console.log('Error', e) });
 					myPlayer.on('ended', function(e){ window.location="/movies/"; });
 				});
