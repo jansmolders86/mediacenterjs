@@ -24,6 +24,11 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
+__version 0.0.24(The Music Database)__
+
+- The music app has been ported to a database. Music app todo's are: The handeling of the tracklist and subfolder support. 
+- The scrollbar is hidden if not needed.
+
 __version 0.0.23(The Movie Database)__
 
 - First app (Movies) has been ported to a database (sqlite3) Thanks to Andrea Giammarchi for his help! 
