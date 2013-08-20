@@ -40,10 +40,8 @@ module.exports = {
 				},
 				function(rows) {
 					if (typeof rows !== 'undefined' && rows.length > 0){
-						console.log('found info for album' .green);
 						return res.json(rows);
 					} else {
-						console.log('new album' .green);
 						getData(albumRequest);
 					}
 				}
@@ -51,8 +49,6 @@ module.exports = {
 		}
 		
 		function writeData(albumRequest,filename,title,cover,year,genre,tracks,callback){	
-			console.log('Writing data to table for',albumRequest .green);
-
 			var dir = config.musicpath+encoder.htmlDecode(albumRequest)+'/'
 			, fileTypes = new RegExp("\.(mp3)","g");
 
@@ -97,7 +93,6 @@ module.exports = {
 
 		//Get data if new album
 		function getData(albumRequest){
-			//Check if folder exists
 			if (fs.existsSync('./public/music/data/'+albumRequest)) {
 				console.log('dir already created',albumRequest .green);
 			}else{
@@ -144,7 +139,6 @@ module.exports = {
 										if (file.match(title,"g")){
 											var localDir = config.musicpath+file;
 											discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
-												console.log('copied local file '+ cover +' and '+filename+' and '+title+' and '+year+' and '+genre+' and '+tracks );
 												writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
 													getStoredData(albumRequest);
 												});
@@ -156,7 +150,6 @@ module.exports = {
 										foundLocal = true;
 										
 										discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
-											console.log('copied local file '+ cover +' and '+filename+' and '+title+' and '+year+' and '+genre+' and '+tracks );
 											writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
 												getStoredData(albumRequest);
 											});
@@ -165,7 +158,6 @@ module.exports = {
 								}
 							});
 							discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
-								console.log('copied local file '+ cover +' and '+filename+' and '+title+' and '+year+' and '+genre+' and '+tracks );
 								writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
 									getStoredData(albumRequest);
 								});
@@ -175,7 +167,6 @@ module.exports = {
 				} else {
 					console.log('Unknown file or album, writing fallback',albumRequest .yellow);
 					discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
-						console.log('copied local file '+ cover +' and '+filename+' and '+title+' and '+year+' and '+genre+' and '+tracks );
 						writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
 							getStoredData(albumRequest);
 						});
@@ -223,7 +214,6 @@ module.exports = {
 					genre = 'No data found...';
 					
 					callback(title,cover,year,genre);		
-	
 				}
 			});	
 		}
@@ -239,29 +229,6 @@ module.exports = {
 			downloader.on('error', function(msg) { console.log('error', msg); });
 			callback(cover);
 		}
-		
-		function checkDirForCorruptedFiles(albumRequest){
-			var rimraf = require('rimraf');
-			
-			var checkDir = './public/music/data/'+albumRequest
-			if(fs.existsSync('./public/music/data/'+albumRequest+'/data.js')){
-				fs.stat('./public/music/data/'+albumRequest+'/data.js', function (err, stats) {		
-					if(stats.size == 0){
-						helper.removeBadDir(req, res, checkDir);
-					} else {
-						fs.readFile('./public/music/data/'+albumRequest+'/data.js', 'utf8', function (err, data) {
-							if(!err){
-								res.send(data);
-							}else if(err){
-								helper.removeBadDir(req, res, checkDir);
-							}
-						});
-					}
-				});
-			} else {
-				helper.removeBadDir(req, res, checkDir);
-			}
-		};
 	},
 	playTrack: function(req, res, infoRequest, optionalParam){
 		var fs = require('fs.extra')
