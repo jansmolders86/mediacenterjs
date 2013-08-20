@@ -41,11 +41,8 @@ exports.get = function(req, res, next){
 			case('info'):
 				functions.getInfo(req, res, infoRequest);
 			break;	
-			case('album'):
-				functions.getAlbum(req, res, infoRequest);
-			break;	
 			default:
-				//Do nothing
+				functions.getInfo(req, res, infoRequest);
 				return;
 			break;		
 		}
