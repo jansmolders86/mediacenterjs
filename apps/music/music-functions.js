@@ -41,7 +41,7 @@ module.exports = {
 				function(rows) {
 					if (typeof rows !== 'undefined' && rows.length > 0){
 						console.log('found info for album' .green);
-						res.json(rows);
+						return res.json(rows);
 					} else {
 						console.log('new album' .green);
 						getData(albumRequest);
@@ -89,7 +89,7 @@ module.exports = {
 			});
 		}
 
-		//Get data if new movie
+		//Get data if new album
 		function getData(albumRequest){
 			//Check if folder exists
 			if (fs.existsSync('./public/music/data/'+albumRequest)) {
@@ -105,7 +105,10 @@ module.exports = {
 			, stripped = filename.replace(/\.|_|\/|\-|\[|\]|\-/g," ")
 			, noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g,"")
 			, types = noyear.replace(/320kbps|192kbps|128kbps|mp3|320|192|128/gi,"")
-			, albumTitle = types.replace(/cd [1-9]|cd[1-9]/gi,"");
+			, albumTitle = types.replace(/cd [1-9]|cd[1-9]/gi,"")
+			, localDir = null
+			, localFile = null
+			, foundLocal = false;
 
 			// mandatory timeout from discogs api
 			setTimeout(function(){
@@ -121,101 +124,100 @@ module.exports = {
 					fs.readdir(dir,function(err,files){
 						if (err){
 							console.log('Error looking for album art',err .red);
-							discogs(albumTitle, function(title,cover,year,genre){
+							discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
+								console.log('copied local file '+ cover +' and '+filename+' and '+title+' and '+year+' and '+genre+' and '+tracks );
 								writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
 									getStoredData(albumRequest);
 								});
-							});
+							});	
 						}else{
-						/*	files.forEach(function(file){
+							files.forEach(function(file){
 								if (file.match(/\.(jpg|jpeg|png|gif)/gi)){
 									if (single == true){
 										var title = albumRequest.replace(/\.(mp3)/gi,"")
 										if (file.match(title,"g")){
-											var localDir = config.musicpath+file
-											copyImageFileToCache(localDir,albumRequest,file, function(){
-												writeData(filename,title,cover,year,genre,tracks,function(){
+											var localDir = config.musicpath+file;
+											discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
+												console.log('copied local file '+ cover +' and '+filename+' and '+title+' and '+year+' and '+genre+' and '+tracks );
+												writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
 													getStoredData(albumRequest);
 												});
-											});
+											});	
 										}
 									} else if (file.match(/cover|front/gi)){
-										var localDir = dir+file
-										copyImageFileToCache(localDir,albumRequest,file, function(){
-											writeData(filename,title,cover,year,genre,tracks,function(){
+										localDir = dir+file;
+										localFile = file; 
+										foundLocal = true;
+										
+										discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
+											console.log('copied local file '+ cover +' and '+filename+' and '+title+' and '+year+' and '+genre+' and '+tracks );
+											writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
 												getStoredData(albumRequest);
 											});
-										});
-									} else if (file.match(/\bAlbumArt|Large/gi)){
-										var localDir = dir+file
-										copyImageFileToCache(localDir,albumRequest,file, function(){
-											writeData(filename,title,cover,year,genre,tracks,function(){
-												getStoredData(albumRequest);
-											});
-										});
+										});	
 									}
 								}
-							}); */
-							discogs(albumTitle, function(title,cover,year,genre){
+							});
+							discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
+								console.log('copied local file '+ cover +' and '+filename+' and '+title+' and '+year+' and '+genre+' and '+tracks );
 								writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
 									getStoredData(albumRequest);
 								});
-							});
+							});	
 						};
 					});
-
-				}else {
-					console.log('Unknown file or album, writing fallback',albumRequest .yellow)
-					discogs(albumTitle, function(title,cover,year,genre){
+				} else {
+					console.log('Unknown file or album, writing fallback',albumRequest .yellow);
+					discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
+						console.log('copied local file '+ cover +' and '+filename+' and '+title+' and '+year+' and '+genre+' and '+tracks );
 						writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
 							getStoredData(albumRequest);
 						});
-					});
+					});	
 				}
 			}, 1200);	
 		};
-
-			
-		function copyImageFileToCache(localDir,albumRequest,file, callback){
-			console.log('local cover found',file);
-			fs.copy(localDir, './public/music/data/'+albumRequest+'/'+file, function (err) {
-			  if (err) {
-				console.log('Error copying image to cache',err .red);
-			  }
-			  console.log('Copied cover to cache succesfull' .green);
-			});		
-			cover = '/music/data/'+albumRequest+'/'+file;	
-			callback(cover);	
-		}
 		
-		function discogs(albumTitle, callback){		
+		function discogs(albumRequest, albumTitle, foundLocal, localDir, localFile, callback){	
 			helper.xhrCall("http://api.discogs.com/database/search?q="+albumTitle+"&type=release&callback=", function(response) {
 
 				var requestResponse = JSON.parse(response)
 				,requestInitialDetails = requestResponse.results[0];
 				
 				if (requestInitialDetails !== undefined && requestInitialDetails !== '' && requestInitialDetails !== null) {
-					downloadCache(requestInitialDetails,function(cover) {
-						
-						var localImageDir = '/music/data/'+albumRequest+'/'
-						, localCover = cover.match(/[^/]+$/)
-						, title = requestInitialDetails.title
-						, cover = localImageDir+localCover
-						, year = requestInitialDetails.year
-						, genre = requestInitialDetails.genre[0]
-					
-						callback(title,cover,year,genre);						
-					});
+				
+					title = requestInitialDetails.title;
+					cover = '/music/css/img/nodata.jpg';
+					year = requestInitialDetails.year;
+					genre = requestInitialDetails.genre[0];
+				
+					if (foundLocal = true && localDir !== null && localFile !== null){
+						fs.copy(localDir, './public/music/data/'+albumRequest+'/'+localFile, function (err) {
+							if (err) console.log('Error copying image to cache',err .red);
+							console.log('Copied cover to cache succesfull' .green);
+						});		
+						cover = '/music/data/'+albumRequest+'/'+localFile;	
+						callback(title,cover,year,genre);		
+					} else {
+						downloadCache(requestInitialDetails, function(cover) {
+							var localImageDir = '/music/data/'+albumRequest+'/'
+							, localCover = cover.match(/[^/]+$/);
+
+							cover = localImageDir+localCover;
+							callback(title,cover,year,genre);						
+						});
+					}
 
 				} else {
 					console.log('Unknown file or album, writing fallback' .yellow)
 					
-					var title = 'No data found...'
-					, cover = '/music/css/img/nodata.jpg'
-					, year = 'No data found...'
-					, genre = 'No data found...';
+					title = 'No data found...';
+					cover = '/music/css/img/nodata.jpg';
+					year = 'No data found...';
+					genre = 'No data found...';
 					
 					callback(title,cover,year,genre);		
+	
 				}
 			});	
 		}
