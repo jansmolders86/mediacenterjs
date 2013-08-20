@@ -64,10 +64,16 @@ module.exports = {
 					files.forEach(function(file){
 						var fullPath = dir + file
 						stats = fs.lstatSync(fullPath);
+						
+						//TODO handle subfolder
 						if (stats.isDirectory(file)) {
 							var subdir = file
 							, subPath = dir + file
-							, files = fs.readdirSync(subPath);
+							fs.readdirSync(subPath,function(err,files){
+								files.forEach(function(file){
+									if (file.match(fileTypes)) allFiles.push(file); 
+								});
+							});
 						} else { 
 							if (file.match(fileTypes)) allFiles.push(file); 
 						}
