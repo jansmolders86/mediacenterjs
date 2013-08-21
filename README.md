@@ -70,10 +70,9 @@ What currently works?
 * lazy loading of movie and music items
 
 What's coming up
-=================
-
-* Database integration
-* More RESTfull interface
+==================
+* Better music handeling
+* frontend will be ported to angular
 
 Known issues (Updated)
 ==================
