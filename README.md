@@ -204,7 +204,10 @@ So if it is a single like a live recording or a mixtape, just add an image with 
 
 	01 - Giorgio Moroder - Output - Brooklyn - N.Y.C.jpg
 	
-If you have an album, the music player will look for a image file with the following names: "cover", "front", "album" or "art"
+If you have an album, the music player will look for a image file with the following names: 
+
+	"cover" and "front"
+	
 This image will be copied to the cache of MCJS so it can be used without restrictions. So you can even delete the image in the local dir and as long as you don't clear the cache, the image will be used.
 
 If no image is provided, the player will contact the website Discogs and try to get the art there. 
