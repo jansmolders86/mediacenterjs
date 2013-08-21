@@ -8,9 +8,9 @@ Website: http://www.mediacenterjs.com
 Screenshots (Pre-Alpha GUI): 
 ========
 
-![Dashboard] (screenshots/dashboard.png)
+![Dashboard] (screenshots/dashboard.jpg)
 
-![Movies] (screenshots/movies.png)
+![Movies] (screenshots/movies.jpg)
 
 ![Player] (screenshots/player.png)
 
