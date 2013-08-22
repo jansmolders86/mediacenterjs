@@ -67,7 +67,7 @@ module.exports = {
 							, subPath = dir + file
 							fs.readdirSync(subPath,function(err,files){
 								files.forEach(function(file){
-									if (file.match(fileTypes)) allFiles.push(file); 
+									if (file.match(fileTypes)) allFiles.push(subdir+file); 
 								});
 							});
 						} else { 
@@ -93,13 +93,6 @@ module.exports = {
 
 		//Get data if new album
 		function getData(albumRequest){
-			if (fs.existsSync('./public/music/data/'+albumRequest)) {
-				console.log('dir already created',albumRequest .green);
-			}else{
-				fs.mkdir('./public/music/data/'+albumRequest, 0777, function (err) {
-					if (err) console.log('Error creating folder',err .red);
-				});
-			}
 
 			var filename = albumRequest
 			, year = filename.match(/\(.*?([0-9]{4}).*?\)/)
@@ -132,6 +125,7 @@ module.exports = {
 								});
 							});	
 						}else{
+							// Check for local covers.
 							files.forEach(function(file){
 								if (file.match(/\.(jpg|jpeg|png|gif)/gi)){
 									if (single == true){
@@ -219,6 +213,15 @@ module.exports = {
 		}
 		
 		function downloadCache(response,callback){	
+			// Create dir to store images if needed.
+			if (fs.existsSync('./public/music/data/'+albumRequest)) {
+				console.log('dir already created',albumRequest .green);
+			}else{
+				fs.mkdir('./public/music/data/'+albumRequest, 0777, function (err) {
+					if (err) console.log('Error creating folder',err .red);
+				});
+			}
+		
 			var downloader = require('downloader');
 			
 			var responseImage = response.thumb
