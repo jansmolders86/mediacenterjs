@@ -51,6 +51,22 @@ exports.get = function(req, res, next){
 	var infoRequest = req.params.id
 	, optionalParam = req.params.optionalParam
 	, action = req.params.action;
+
+	if(infoRequest === 'filter'){
+		functions.filter(req, res, optionalParam);
+	} else if (optionalParam === undefined){
+		switch(infoRequest) {
+			case('getGenres'):
+				functions.getGenres(req, res);
+			break;
+			case('filter'):
+				functions.getGenres(req, res);
+			break;
+			default:
+				return;
+			break;		
+		}	
+	}
 	
 	if(!action){
 		switch(optionalParam) {
@@ -61,14 +77,13 @@ exports.get = function(req, res, next){
 				functions.handler(req, res, infoRequest);
 			break;	
 			default:
-				functions.handler(req, res, infoRequest);
+				//Default
+				return;
 			break;		
 		}
-	} else if (!optionalParam){
-		//Do nothing
-		return;
 	} else if(action === 'play') {
 		playMovie(req, res, movieRequest);
 	};
+
 }
 

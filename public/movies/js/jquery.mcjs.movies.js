@@ -40,12 +40,21 @@
 			
 			_lazyload(o);
 			_scrollBackdrop();
+			_showAndFilterAvailableGenres(o);
 			
 			$('.overlay').click(function(e) {
 				e.preventDefault();	
 				var movieTitle = $(this).attr('data-movie').replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv|txt)/gi,"")
 				, url = '/movies/'+movieTitle+'/play/';
 				_playMovie(url);
+			});
+			
+			$(window).scroll(function(){
+				if($(this).scrollTop() > 200){
+					$('#header').addClass('scrolling');   
+				} else if ($(this).scrollTop() < 200){
+					$('#nav').removeClass('scrolling');   
+				}
 			});
 			
 		});
@@ -144,9 +153,7 @@
 				, runtime 		= movieData.runtime
 				, overview 		= movieData.overview
 				, cdNumber 		= movieData.cd_number;
-				
-				visibleMovie.find('.original_name').html(orginal_name);
-				
+
 				// Give the plugin time to load the (new) images.
 				// Is need for chrome bug with image loading..
 				setTimeout(function(){
@@ -160,8 +167,64 @@
 				visibleMovie.find("img.movieposter").attr('data-backdrop',backdropImage);
 				
 				if(cdNumber !== 'No data found...' && cdNumber !== undefined && cdNumber !== '') visibleMovie.append('<div class="cdNumber"><span>'+cdNumber+'</span><div>');
+				
 			});
 		}		
+	}
+	
+	function _showAndFilterAvailableGenres(o){
+		console.log('in show filter function')
+		$.ajax({
+			url: '/movies/getGenres/', 
+			type: 'get'
+		}).done(function(data){
+				if($('#genres').length == 0){
+					$('#header').append('<ul id="genres"></ul>')
+				} else{
+					$('#genres').remove();
+					$('#header').append('<ul id="genres"></ul>');
+				}
+
+				// Sort array and remove duplicates.
+				data.sort();
+				for ( var i = 1; i < data.length; i++ ) {
+					if ( data[i] === data[ i - 1 ] ) data.splice( i--, 1 );
+				}
+
+				// Print sorted array
+				data.forEach(function(value, index) {
+					if (value !== '"nodata"') $('#genres').append('<li> <a href="'+value+'" class="genrelink">'+value+'</a></li>');
+				});
+				
+				$('.genrelink').click(function(e) {
+					e.preventDefault();	
+					var selectedGenre = $(this).attr('href');
+					
+					var filterUrl = '/movies/filter/'+selectedGenre;
+					$.ajax({
+						url: filterUrl,
+						type: 'get'
+					}).done(function(data){
+						var movieArray = new Array()
+						, filteredMovieTitle = data[0].local_name
+						, currentMovies = $('ul.movies').find('li');
+						
+						movieArray.push(filteredMovieTitle);
+						currentMovies.each(function(){ 
+							$(this).remove() 
+						});
+								
+						movieArray.forEach(function(value, item){
+							var title = value;
+							$('ul.movies').append('<li class="movieposter boxed"><img src="/core/css/img/ajax-loader.gif" class="movieposter"/><div class="overlay" data-movie="'+title+'"><span class="title">'+title+'</span><div class="overview"></div></li>');
+						});
+						
+						_lazyload(o);
+					});
+				});
+		});
+		
+	
 	}
 	
 	function _playMovie(url){

@@ -232,5 +232,44 @@ module.exports = {
 			);
 			callback();
 		}
+	},
+	getGenres: function (req, res){
+		var dblite = require('dblite');
+		dblite.bin = "./lib/database/sqlite3";
+		var db = dblite('./lib/database/mcjs.sqlite');
+
+		db.on('info', function (text) { console.log(text) });
+		db.on('error', function (err) { console.error('Database error: ' + err) });
+		
+		db.query(
+			'SELECT genre FROM movies',
+			function(rows) {
+				var cleanGenres = rows[0][0].replace("No data found...","nodata")
+				, allGenres = cleanGenres.replace(/\r\n|\r|\n| /g,",")
+				, genreArray = allGenres.split(',');
+
+				if (typeof genreArray !== 'undefined' && genreArray.length > 0) res.json(genreArray);
+			}
+		);
+	},
+	filter: function (req, res, infoRequest){
+		var dblite = require('dblite');
+		dblite.bin = "./lib/database/sqlite3";
+		var db = dblite('./lib/database/mcjs.sqlite');
+
+		db.on('info', function (text) { console.log(text) });
+		db.on('error', function (err) { console.error('Database error: ' + err) });
+		
+		db.query(
+			'SELECT * FROM movies WHERE genre =?',[infoRequest],{
+				local_name 		: String
+			},
+			function(rows) {
+				if (typeof rows !== 'undefined' && rows.length > 0){
+					console.log('found filtered movie' .green);
+					res.json(rows);
+				}
+			}
+		);
 	}
 }
