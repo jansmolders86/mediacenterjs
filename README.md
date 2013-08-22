@@ -24,6 +24,11 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
+__version 0.0.25(Movie and bug fixes)__
+
+- Added basic genre support
+- Music bugfixes
+
 __version 0.0.24(The Music Database)__
 
 - The music app has been ported to a database. Music app todo's are: The handeling of the tracklist and subfolder support. 
@@ -33,14 +38,6 @@ __version 0.0.23(The Movie Database)__
 
 - First app (Movies) has been ported to a database (sqlite3) Thanks to Andrea Giammarchi for his help! 
 Although some code refactoring still is needed, and I still need to test this with larger numbers, the basic features work with a database instead of local storage.
-
-__version 0.0.22(Code overhaul)__
-
-- Moved Spotify app out to separate repo due to the dependencies to GYP of the modules used. See: https://github.com/jansmolders86/mediacenterjs-spotify-app
-- Pretty big code overhaul separating functions from route handlers.
-- Routing has been rewritten (again) making it much more 'RESTfull'. This will make it possible to create an API layer to the apps of needed.
-- Removed dependencies to sqlite3 and introduced dblite. Which runs without any os dependencies. Which is needed if this needs to run on the Raspberry Pi. For the same reason, Spotify has been moved.
-
 
 Why use it (once it is ready)?
 ===========
