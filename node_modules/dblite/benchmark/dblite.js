@@ -1,6 +1,6 @@
 var startTime = Date.now(),
     db = require('../build/dblite.node.js')('./bench.dblite.db');
-    // db = require('../build/dblite.node.js')(':memory:');
+    //db = require('../build/dblite.node.js')(':memory:');
 
 db.query('BEGIN');
 db.query('CREATE TABLE IF NOT EXISTS users_login (id INTEGER PRIMARY KEY, name TEXT, pass TEXT)');

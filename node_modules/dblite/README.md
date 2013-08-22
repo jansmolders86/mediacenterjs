@@ -13,6 +13,9 @@ db.query('SELECT * FROM table', function(rows) {
 More in [the related blogpost](http://webreflection.blogspot.com/2013/07/dblite-sqlite3-for-nodejs-made-easy.html) and here too :-)
 
 
+[![NPM](https://nodei.co/npm/dblite.png?downloads=true)](https://nodei.co/npm/dblite/)
+
+
 ### The What And The Why
 I've created `dblite` module because there's still not a simple and straight forward or standard way to have [sqlite](http://www.sqlite.org) in [node.js](http://nodejs.org) without requiring to re-compile, re-build, download sources a part or install dependencies instead of simply `apt-get install sqlite3` or `pacman -S sqlite` in your \*nix system.
 

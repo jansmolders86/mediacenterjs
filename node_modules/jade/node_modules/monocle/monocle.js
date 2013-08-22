@@ -134,16 +134,16 @@ module.exports = function() {
     }
   }
 
-  // distinguish be files and directories
-  // return am object of two arrays
+  // distinguish between files and directories
+  // @returns {Object} contains directories and files array
 
-  function distinguishPathes(pathes) {
-    pathes = Array.isArray(pathes) ? pathes : [pathes];
+  function distinguishPaths(paths) {
+    paths = Array.isArray(paths) ? paths : [paths];
     var result = {
       directories: [],
       files: []
     };
-    pathes.forEach(function(name) {
+    paths.forEach(function(name) {
       if (fs.statSync(name).isDirectory()) {
         result.directories.push(name);
       } else {
@@ -166,9 +166,9 @@ module.exports = function() {
     return object;
   };
 
-  // watch files if the pathes refer to files, or directories
-  function watchPathes(args) {
-    var result = distinguishPathes(args.path)
+  // watch files if the paths refer to files, or directories
+  function watchPaths(args) {
+    var result = distinguishPaths(args.path)
     if (result.directories.length) {
       result.directories.forEach(function(directory) {
         watchDirectory(extend(args, {root: directory}));
@@ -181,7 +181,7 @@ module.exports = function() {
   return {
     watchDirectory: watchDirectory,
     watchFiles: watchFiles,
-    watchPathes: watchPathes,
+    watchPaths: watchPaths,
     unwatchAll: unwatchAll
   };
 }

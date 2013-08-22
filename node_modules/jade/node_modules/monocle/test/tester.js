@@ -47,7 +47,7 @@ describe("file changes", function() {
   });
 
   it("should detect a change", function(complete) {
-    monocle.watchPathes({
+    monocle.watchPaths({
       path: sample_dir,
       listener: function(f) { cb_helper('longbow.js', f, complete); },
       complete: function() { complete_helper('/sample_files/longbow.js'); }
@@ -98,7 +98,7 @@ describe("file added", function() {
   });
 
   it("should detect another file added", function(complete) {
-    monocle.watchPathes({
+    monocle.watchPaths({
       path: sample_dir,
       listener: function(f) {
         cb_helper("creation2.txt", f, complete);
@@ -110,7 +110,7 @@ describe("file added", function() {
   });
 
   it("should detect another file added but passed as list", function(complete) {
-    monocle.watchPathes({
+    monocle.watchPaths({
       path: [sample_dir],
       listener: function(f) {
         cb_helper("creation2.txt", f, complete);
@@ -202,15 +202,15 @@ describe("files watched", function() {
 
 
 //
-// watch an array of pathes
+// watch an array of paths
 //
-describe("pathes watched", function() {
+describe("paths watched", function() {
   it("should detect a file changed of multiple", function(complete) {
     complete_helper('/sample_files/creation.txt');
     complete_helper('/sample_files/creation2.txt');
     complete_helper('/sample_files/creation3.txt');
 
-    monocle.watchPathes({
+    monocle.watchPaths({
       path: [__dirname+"/sample_files/creation.txt", __dirname+"/sample_files/creation2.txt"],
       listener: function(f) {
         cb_helper("creation2.txt", f, complete)
@@ -223,7 +223,7 @@ describe("pathes watched", function() {
 
   it("should detect a file changed (delayed)", function(complete) {
     complete_helper('/sample_files/creation3.txt');
-    monocle.watchPathes({
+    monocle.watchPaths({
       path: [__dirname+"/sample_files/creation3.txt"],
       listener: function(f) {
         setTimeout(function() {
@@ -238,7 +238,7 @@ describe("pathes watched", function() {
 
   it("should detect a file changed (short delayed)", function(complete) {
     complete_helper('/sample_files/creation4.txt');
-    monocle.watchPathes({
+    monocle.watchPaths({
       path: [__dirname+"/sample_files/creation4.txt"],
       listener: function(f) {
         setTimeout(function() {
@@ -253,7 +253,7 @@ describe("pathes watched", function() {
 
   it("should detect a file changed", function(complete) {
     complete_helper('/sample_files/creation.txt');
-    monocle.watchPathes({
+    monocle.watchPaths({
       path: [__dirname+"/sample_files/creation.txt"],
       listener: function(f) {
         cb_helper("creation.txt", f, complete)
@@ -266,7 +266,7 @@ describe("pathes watched", function() {
 
   it("should not bomb when no callback is passed", function(complete) {
     complete_helper('/sample_files/creation5.txt');
-    monocle.watchPathes({
+    monocle.watchPaths({
       path: [__dirname+"/sample_files/creation5.txt"],
       complete: function() {
         complete_helper('/sample_files/creation5.txt');
@@ -279,13 +279,13 @@ describe("pathes watched", function() {
 });
 
 //
-// watchPathes should be eager to accept string and arrays
+// watchPaths should accept a string or an array
 //
 
-describe("different parameters of watchPathes", function() {
+describe("different parameters of watchPaths", function() {
 
-  it("may be a file", function(complete) {
-    monocle.watchPathes({
+  it("can be a file", function(complete) {
+    monocle.watchPaths({
       path: sample_dir + "/foo.txt",
       listener: function(f) {
         cb_helper("foo.txt", f, complete);
@@ -296,8 +296,8 @@ describe("different parameters of watchPathes", function() {
     });
   });
 
-  it("may be a string of a directory", function(complete) {
-    monocle.watchPathes({
+  it("can be a directory", function(complete) {
+    monocle.watchPaths({
       path: sample_dir,
       listener: function(f) {
         cb_helper("foo.txt", f, complete);
@@ -308,8 +308,8 @@ describe("different parameters of watchPathes", function() {
     });
   });
 
-  it("may be a list of directories", function(complete) {
-    monocle.watchPathes({
+  it("can be a list of directories", function(complete) {
+    monocle.watchPaths({
       path: [sample_dir],
       listener: function(f) {
         cb_helper("foo.txt", f, complete);
@@ -320,8 +320,8 @@ describe("different parameters of watchPathes", function() {
     });
   });
 
-  it("may be a list of directory and file", function(complete) {
-    monocle.watchPathes({
+  it("can be a list of directories and a file", function(complete) {
+    monocle.watchPaths({
       path: [sample_dir + "/nestedDir", sample_dir + "/foo.txt"],
       listener: function(f) {
         cb_helper("foo.txt", f, complete);
@@ -332,8 +332,8 @@ describe("different parameters of watchPathes", function() {
     });
   });
 
-  it("may be a list of file and directory", function(complete) {
-    monocle.watchPathes({
+  it("can be a list of files and a directory", function(complete) {
+    monocle.watchPaths({
       path: [sample_dir + "/foo.txt", sample_dir + "/nestedDir"],
       listener: function(f) {
         cb_helper("servent.txt", f, complete);
