@@ -35,6 +35,11 @@
 			$.data(this, ns, $.extend(true, {}, o));
 			
 			_focusedItem(o);
+			
+			$("ul.movies li").sort(asc_sort).appendTo('ul.movies');
+			function asc_sort(a, b){
+				return ($(b).text()) < ($(a).text()) ? 1 : -1;    
+			}
 
 			$('body').scroll( function(){ _lazyload(o); });
 			
@@ -178,53 +183,57 @@
 			url: '/movies/getGenres/', 
 			type: 'get'
 		}).done(function(data){
-				if($('#genres').length == 0){
-					$('#header').append('<ul id="genres"></ul>')
-				} else{
-					$('#genres').remove();
-					$('#header').append('<ul id="genres"></ul>');
-				}
+			if($('#genres').length == 0){
+				$('#wrapper').append('<ul id="genres"></ul>')
+			} else{
+				$('#genres').remove();
+				$('#wrapper').append('<ul id="genres"></ul>');
+			}
+			
+			// Sort array and remove duplicates.
+			data.sort();
+			for ( var i = 1; i < data.length; i++ ) {
+				if ( data[i] === data[ i - 1 ] ) data.splice( i--, 1 );
+			}
 
-				// Sort array and remove duplicates.
-				data.sort();
-				for ( var i = 1; i < data.length; i++ ) {
-					if ( data[i] === data[ i - 1 ] ) data.splice( i--, 1 );
-				}
+			// Print sorted array
+			data.forEach(function(value, index) {
+				$('#genres').append('<li> <a href="'+value+'" class="genrelink">'+value+'</a></li>');
+			});
+			$('#genres').append('<li> <a href="" class="showAll">All movies</a></li>');
+			
+			$('.genrelink').click(function(e) {
+				e.preventDefault();	
+				var selectedGenre = $(this).attr('href')
+				, filterUrl = '/movies/filter/'+selectedGenre;
 
-				// Print sorted array
-				data.forEach(function(value, index) {
-					if (value !== '"nodata"') $('#genres').append('<li> <a href="'+value+'" class="genrelink">'+value+'</a></li>');
-				});
-				
-				$('.genrelink').click(function(e) {
-					e.preventDefault();	
-					var selectedGenre = $(this).attr('href');
-					
-					var filterUrl = '/movies/filter/'+selectedGenre;
-					$.ajax({
-						url: filterUrl,
-						type: 'get'
-					}).done(function(data){
-						var movieArray = new Array()
-						, filteredMovieTitle = data[0].local_name
-						, currentMovies = $('ul.movies').find('li');
-						
-						movieArray.push(filteredMovieTitle);
-						currentMovies.each(function(){ 
-							$(this).remove() 
-						});
-								
-						movieArray.forEach(function(value, item){
-							var title = value;
-							$('ul.movies').append('<li class="movieposter boxed"><img src="/core/css/img/ajax-loader.gif" class="movieposter"/><div class="overlay" data-movie="'+title+'"><span class="title">'+title+'</span><div class="overview"></div></li>');
-						});
-						
-						_lazyload(o);
+				$.ajax({
+					url: filterUrl,
+					type: 'get'
+				}).done(function(data){
+					$('ul.movies').find('li').each(function(){ 
+						$(this).remove();
 					});
+				
+					$.each(data, function() {
+						var title = $(this)[0].local_name;
+						$('ul.movies').append('<li class="movieposter boxed"><img src="/core/css/img/ajax-loader.gif" class="movieposter"/><div class="overlay" data-movie="'+title+'"></div><span class="title">'+title+'</span><div class="overview"></div></li>');
+					});
+					
+					$("ul.movies li").sort(asc_sort).appendTo('ul.movies');
+					function asc_sort(a, b){
+						return ($(b).text()) < ($(a).text()) ? 1 : -1;    
+					}
+
+					_lazyload(o);
 				});
+			});
+			
+			$('.showAll').click(function(e) {
+				e.preventDefault();	
+				window.location.href = '/movies';
+			});
 		});
-		
-	
 	}
 	
 	function _playMovie(url){

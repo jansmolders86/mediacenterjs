@@ -72,7 +72,7 @@ module.exports = {
 		, imdb_id = 'No data found...'
 		, rating = 'No data found...'
 		, certification = 'No data found...'
-		, genre = 'No data found...'
+		, genre = null
 		, runtime = 'No data found...'
 		, overview = 'No data found...';
 		
@@ -244,11 +244,11 @@ module.exports = {
 		db.query(
 			'SELECT genre FROM movies',
 			function(rows) {
-				var cleanGenres = rows[0][0].replace("No data found...","nodata")
-				, allGenres = cleanGenres.replace(/\r\n|\r|\n| /g,",")
-				, genreArray = allGenres.split(',');
-
-				if (typeof genreArray !== 'undefined' && genreArray.length > 0) res.json(genreArray);
+				if (typeof rows !== 'undefined' && rows.length > 0){
+					var allGenres = rows[0][0].replace(/\r\n|\r|\n| /g,",")
+					, genreArray = allGenres.split(',');				
+					res.json(genreArray);
+				}
 			}
 		);
 	},
@@ -262,13 +262,10 @@ module.exports = {
 		
 		db.query(
 			'SELECT * FROM movies WHERE genre =?',[infoRequest],{
-				local_name 		: String
+				local_name 	: String
 			},
 			function(rows) {
-				if (typeof rows !== 'undefined' && rows.length > 0){
-					console.log('found filtered movie' .green);
-					res.json(rows);
-				}
+				if (typeof rows !== 'undefined' && rows.length > 0) res.json(rows);
 			}
 		);
 	}
