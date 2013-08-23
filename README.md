@@ -24,6 +24,11 @@ __Heavy work in progress, pre-alpha, not ready for use__
 Changelog 
 =================
 
+__version 0.0.26(Patchup)__
+- Fixed bugs introduced by genre support 
+- Added sorting
+- Sorting code cleanup
+
 __version 0.0.25(Movie and bug fixes)__
 
 - Added basic genre support
@@ -33,11 +38,6 @@ __version 0.0.24(The Music Database)__
 
 - The music app has been ported to a database. Music app todo's are: The handeling of the tracklist and subfolder support. 
 - The scrollbar is hidden if not needed.
-
-__version 0.0.23(The Movie Database)__
-
-- First app (Movies) has been ported to a database (sqlite3) Thanks to Andrea Giammarchi for his help! 
-Although some code refactoring still is needed, and I still need to test this with larger numbers, the basic features work with a database instead of local storage.
 
 Why use it (once it is ready)?
 ===========
@@ -104,6 +104,11 @@ What do I need to have installed to run this?
 * NodeJS installed
 * A modern browser like Chrome or Firefox
 * An internet connection
+
+Additonal Apps
+===========
+* Simple Spotify player: https://github.com/jansmolders86/mediacenterjs-spotify-app
+
 
 Partial documentation 
 ==========================
