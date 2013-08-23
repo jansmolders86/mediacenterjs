@@ -26,7 +26,6 @@ Changelog
 
 __version 0.0.26(Patchup)__
 - Fixed bugs introduced by genre support 
-- Added sorting
 - Sorting code cleanup
 
 __version 0.0.25(Movie and bug fixes)__
