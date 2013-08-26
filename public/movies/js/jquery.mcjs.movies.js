@@ -248,7 +248,7 @@
 			if($('#player').length > 1) {
 				$('#player').remove();
 			} else {
-				$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
+				$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%"> <source src="'+url+'" type="video/mp4"></video>');
 				videojs("player").ready(function(){
 					myPlayer = this;
 					myPlayer.play();
