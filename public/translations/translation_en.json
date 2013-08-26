@@ -21,7 +21,7 @@
 "settings_clear_cache_movies" : "Clear movie cache",
 "settings_clear_cache_music" : "Clear music cache",
 "settings_clear_cache_tv" : "Clear tv cache",
-"404_notFound" : "Not found!",
-"404_header" : "Requested page not found. Maybe a bad link?",
-"404_txt" : "Redirecting to the homepage in 5 seconds"
+"pagenotFound" : "Page not found!",
+"pagenotFound_header" : "Requested page not found. Maybe a bad link?",
+"pagenotFound_txt" : "Redirecting to the homepage in 5 seconds"
 }
