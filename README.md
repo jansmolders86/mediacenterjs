@@ -8,11 +8,7 @@ Website: http://www.mediacenterjs.com
 Screenshots (Pre-Alpha GUI): 
 ========
 
-![Dashboard] (screenshots/dashboard.jpg)
-
-![Movies] (screenshots/movies.jpg)
-
-![Player] (screenshots/player.png)
+![Dashboard] (screenshots/screen1.png)
 
 More screenshots in the screenshot folder.
 
@@ -342,6 +338,8 @@ This app also makes use of the following modules:
 * trakt
 * colors
 * dblite
+
+Icons by: P.J. Onori
 
 
 What is the beta version going to have?
