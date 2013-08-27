@@ -39,9 +39,6 @@ ul.music li{
 	width:120px;
 	height:160px;
 	border-radius:2px; 
-	-moz-box-shadow: 0 2px 5px #a2a2a2;
-	-webkit-box-shadow: 0 2px 5px #a2a2a2;
-	box-shadow: 0 2px 5px #a2a2a2;
 	position:relative;
 	margin:0 10px 10px 0;
 	cursor:pointer;
