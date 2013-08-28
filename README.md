@@ -1,7 +1,7 @@
 ![logo] (screenshots/logo.png) MediacenterJS
 =============
 
-__A NodeJS based Mediacenter__ ![dependencies] (screenshots/dependencies.png)
+__A NodeJS based Mediacenter__ 
 
 Website: http://www.mediacenterjs.com
 
