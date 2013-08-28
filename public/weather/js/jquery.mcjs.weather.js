@@ -161,9 +161,31 @@
 										var mintemp = day.low.fahrenheit	
 										var maxtemp = day.high.fahrenheit
 									}
-
-									$("body").find(".forecast").append('<ul> <li class="weekday">'+ weekday +'</li> <li class="conditions">'+ conditions +'</li>  <li class="mintemp"> Min: '+ mintemp +'</li>  <li class="maxtemp"> Max:'+ maxtemp +'</li> </ul>');	
+									$("body").find(".forecast").append('<ul> <li class="weekday">'+ weekday +'</li> <li class="conditions" style="" data-weatherType="'+conditions+'"></li>  <li class="mintemp"> Min: '+ mintemp +'</li>  <li class="maxtemp"> Max:'+ maxtemp +'</li> </ul>');	
 								}
+								
+								
+								$('.forecast').find('ul').each(function(){
+									var weatherType = $(this).find('.conditions').attr('data-weatherType');
+									
+									console.log(weatherType)
+									
+									if (weatherType.match(o.cloudy) ){
+										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -439px');
+									}else if( weatherType.match(o.mist) ){
+										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -197px');
+									}else if( weatherType.match(o.clear) ){
+										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -16px');
+									}else if( weatherType.match(o.sunny) ){
+										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -16px');
+									}else if( weatherType.match(o.rain) ){
+										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -349px');
+									}else if( weatherType.match(o.snow) ){
+										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -123px');
+									}else if( weatherType.match(o.storm) ){
+										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -507px');
+									}
+								});
 							})
 						}
 					});

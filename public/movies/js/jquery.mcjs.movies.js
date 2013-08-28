@@ -164,8 +164,11 @@
 				setTimeout(function(){
 					visibleMovie.find("img.movieposter").attr('src','');	
 					visibleMovie.find("img.movieposter").attr('src',posterImage).addClass('coverfound');		
-					/*<p class="summary">'+overview+'</p>*/
-					visibleMovie.find('.overview').append('<h1>'+orginal_name+'</h1><p><strong> Genre:</strong> '+genre+'</p><p><strong> Runtime:</strong> '+runtime+' min</p>');
+					visibleMovie.find('.overview').append('<h1>'+orginal_name+'</h1><p class="summary">'+overview+'</p>');
+					
+					if(orginal_name !== 'No data found...'){
+						visibleMovie.find('.specs').append('<p><strong> Genre:</strong> '+genre+'</p><p><strong> Runtime:</strong> '+runtime+' min</p>');
+					}
 					visibleMovie.addClass('showDetails fadein');
 				},400);
 				
@@ -178,7 +181,6 @@
 	}
 	
 	function _showAndFilterAvailableGenres(o){
-		console.log('in show filter function')
 		$.ajax({
 			url: '/movies/getGenres/', 
 			type: 'get'
@@ -248,7 +250,7 @@
 			if($('#player').length > 1) {
 				$('#player').remove();
 			} else {
-				$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%"> <source src="'+url+'" type="video/mp4"></video>');
+				$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="both" width="100%" height="100%"><source src="'+url+'" type="video/mp4"></video>');
 				videojs("player").ready(function(){
 					myPlayer = this;
 					myPlayer.play();

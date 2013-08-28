@@ -307,7 +307,7 @@ label,
 .label{ font-size:16px; font-family: 'Open Sans', sans-serif; display:block; width:400px; float:left;  }
 
 input,
-select{ display:block; width:200px; padding:5px 10px; float:left;}
+select{ display:block; width:200px; padding:5px 10px; float:left; -webkit-appearance: none;}
 
 input[type=submit],
 a.btn{

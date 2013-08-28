@@ -146,7 +146,7 @@ a.btn{
 em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red; font-style: normal; font-size: 13px;}
 
 input,
-select{ display:block; width:200px; padding:5px 10px; }
+select{ display:block; width:200px; padding:5px 10px; -webkit-appearance: none;}
 select{ width: 223px; }
 
 /* Player */

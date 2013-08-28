@@ -56,6 +56,8 @@
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
 			
+			window.scrollTo(0,0);
+			
 			_initpages(o, $(this))
 			_resizeviewport(o, $(this)); 	// Strech bg to fullscreen
 			_keyevents(o,$(this)); 			// init keys
