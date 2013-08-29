@@ -71,8 +71,7 @@ Known issues (Updated)
 * Movie Buffer size needs tweaking
 * Subfolder support is not working yet 
 * Music and videos need to be based on arrays/DB entries instead of the current DOM dependencies
-* Database support needs to be implemented
-* Current Movie encoding setup is not crossdevice (currently based on flash because WebM has a bug, not parsing the duration)
+* Current Movie encoding setup is buggy.
 
 What still needs to be done
 ==================
