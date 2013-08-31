@@ -122,7 +122,7 @@
 	function _scrollBackdrop(){
 		var duration = 40000
 		$(".backdropimg").animate({ 
-			top: '-490px'
+			top: '-380px'
 		},
 		{
 			easing: 'swing',
