@@ -1,6 +1,6 @@
 /*
 	MediaCenterJS - A NodeJS based mediacenter solution
-	
+
     Copyright (C) 2013 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -20,8 +20,8 @@
 /* Default override */
 body,html{ overflow-y:auto; overflow-x:hidden;}
 
-#backdrop{ 
-	box-shadow:none; 
+#backdrop{
+	box-shadow:none;
 	padding: 10px 0 0 100px;
 	position:fixed;
 	top:0;
@@ -38,10 +38,10 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 #header h1{z-index:4; margin-top:0px;}
 #wrapper{ padding-top:230px;z-index:1; }
 
-#backdrop{ 
-	height:200px; 
-	overflow:hidden; 
-	width:100%; 
+#backdrop{
+	height:200px;
+	overflow:hidden;
+	width:100%;
 	background:url(img/backdrop.png) repeat-x;
 }
 
@@ -52,7 +52,7 @@ a.backlink { margin-top: 0px; z-index:4; }
 
 #moviebrowser{ width:100%; height:100%; margin: 60px 0;}
 
-.movies{ 
+.movies{
 	margin: 0 auto;
 	padding: 0;
 	list-style: none;
@@ -63,22 +63,11 @@ a.backlink { margin-top: 0px; z-index:4; }
 	overflow:hidden;
 }
 
-.movieposter{ 
-	float:left; 
-	height:290px; 
-	list-style:none;
-	z-index:3;
-	position:relative;
-	width:180px;
-	padding: 0px;
-	margin: 0px 0px 20px;
-}
-
 .movieposter.focused { border:0; }
 .movieposter .overlay{ width:0; height:0; }
 
-.movieposter.showDetails.focused .overlay,
-.movieposter.showDetails:hover .overlay{
+.movieposter.focused .overlay,
+.movieposter:hover .overlay{
 	background:url(img/cover-overlay.png) no-repeat;
 	width:250px;
 	height:278px;
@@ -87,7 +76,7 @@ a.backlink { margin-top: 0px; z-index:4; }
 	left:0;
 	z-index:6;
 	cursor:pointer;
-} 
+}
 
 .movieposter .cdNumber{
 	width:90px;
@@ -106,31 +95,30 @@ a.backlink { margin-top: 0px; z-index:4; }
     -moz-transform: rotate(44.5deg);  /* Firefox 3.5-15 */
     -ms-transform: rotate(44.5deg);  /* IE 9 */
     -o-transform: rotate(44.5deg);  /* Opera 10.50-12.00 */
-	transform: rotate(44.5deg); 
+	transform: rotate(44.5deg);
 	font-weight:bold;
 	margin-left: 47px;
 	margin-top: 17px;
 }
 
-.movieposter img{ 
-	float:left; 
+.movieposter img{
+	margin:50px 0 0 90px ;
+    display:block;
 	width:32px;
 	height:32px;
+	padding:0;
 	border:0;
-	margin:50px 0 0 70px;
-} 
+}
 
 .movieposter img.coverfound{
 	margin:0 0 20px 0;
 	width:100%;
 	height:auto;
-	padding:0;
-	border:0;
 }
 
-.movieposter span{ 
-	display:block; 
-	float:left; 
+.movieposter span{
+	display:block;
+	float:left;
 	font-size: 14px;
 	color:#fff;
 	margin-top:10px;
@@ -139,33 +127,37 @@ a.backlink { margin-top: 0px; z-index:4; }
 
 span.title{visibility:hidden; width:0; height:0;}
 
-.movieposter.showDetails{
+.movieposter{
+	float:left;
+	height:550px;
+	list-style:none;
+	z-index:3;
+	position:relative;
+	width:250px;
+	padding: 0px;
+	margin: 0px 10px 20px 0;
+    border: 1px solid #e7e7e7;
+    border-radius:2px;
 	display:block;
 	background:#fff;
-	padding:0px;
-	width:250px;
-	height:550px;
-	border-radius:2px; 
-	border: 1px solid #e7e7e7;
-	position:relative;
-	margin-right:10px;
 }
 
-.movieposter.showDetails a{ float:left; }
 
-.movieposter.showDetails .imageWrapper {width:250px;  height:278px; overflow:hidden;}
-.movieposter.showDetails .overview{padding:10px;}
-.movieposter.showDetails .overview p{font-size:11px; line-height:17px; margin:0;}
+.movieposter a{ float:left; }
 
-.movieposter.showDetails .specs{
+.movieposter .imageWrapper {width:250px;  height:278px; overflow:hidden;}
+.movieposter .overview{padding:10px;}
+.movieposter .overview p{font-size:11px; line-height:17px; margin:0;}
+
+.movieposter .specs{
 	float: left;
 	color: #666;
 	line-height: 19px;
 	width: 250px;
-	background:#F6F1ED; 
-	height:35px; 
-	position:absolute; 
-	bottom:0; 
+	background:#F6F1ED;
+	height:35px;
+	position:absolute;
+	bottom:0;
 	left:0;
 	color:#9F9384;
 	border-top: 1px solid #e7e7e7;
@@ -196,7 +188,7 @@ span.title{visibility:hidden; width:0; height:0;}
 	font-family:Palatino;
 	font-weight:bold;
 	font-size:24px;
-	color:#000;	
+	color:#000;
 	display:inline-block;
 	float:right;
 	margin-top:10px;
