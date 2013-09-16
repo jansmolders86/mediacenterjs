@@ -21,22 +21,22 @@ module.exports = {
 						movie = config.moviepath+file;
 
 						console.log('Getting ready to play', movie);
-								
+
 						var stat = fs.statSync(movie);
-						
+
 						res.writeHead(200, {
-							'Content-Type':'video/mp4',
+							'Content-Type':'video/flv',
 							'Content-Length':stat.size,
 						});
-						
+
 						probe(movie, function(err, probeData) {
 							if (err){
 								console.log('Can not probe movie for metadata', err .red)
 							} else {
 								var metaDuration =  '-metadata duration="'+probeData.streams[0].duration+'"'
 								, tDuration =  '-t '+probeData.streams[0].duration
-								, proc = new ffmpeg({ source: movie, nolog: true, timeout:15000})							
-								.addOptions(['-y','-ss 0','-b 800k','-vcodec libx264','-acodec mp3','-ab 128','-ar 44100','-bufsize 62000', '-maxrate 620k',metaDuration,tDuration,'-f mp4','-movflags','frag_keyframe+empty_moov'])
+								, proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+								.addOptions(['-y','-ss 0','-b 800k','-vcodec libx264','-acodec mp3','-ab 128','-ar 44100','-bufsize 62000', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
 								.writeToStream(res, function(retcode, error){
 									if (!error){
 										console.log('file has been converted succesfully',retcode .green);
@@ -44,7 +44,6 @@ module.exports = {
 										console.log('file conversion error',error .red);
 									}
 								});
-								//proc.setFfmpegPath("./ffmpeg");	
 							}
 						});
 					}
