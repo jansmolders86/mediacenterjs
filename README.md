@@ -99,7 +99,7 @@ What do I need to have installed to run this?
 * A modern browser like Chrome or Firefox
 * An internet connection
 
-Additonal Apps
+Additional Apps
 ===========
 * Simple Spotify player: https://github.com/jansmolders86/mediacenterjs-spotify-app
 
