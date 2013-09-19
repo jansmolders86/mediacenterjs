@@ -15,6 +15,7 @@ module.exports = {
 		, cover = '/music/css/img/nodata.jpg'
 		, year = 'No data found...'
 		, genre = 'No data found...'
+		, single = false
 		, tracks = null;
 		
 		// Init Database
@@ -48,47 +49,64 @@ module.exports = {
 			);
 		}
 		
-		function writeData(albumRequest,filename,title,cover,year,genre,tracks,callback){	
-			var dir = config.musicpath+encoder.htmlDecode(albumRequest)+'/'
-			, fileTypes = new RegExp("\.(mp3)","g");
+		function writeData(albumRequest,filename,title,cover,year,genre,tracks,callback){
+		
+			if(single === true){
+				var allFilesJSON = JSON.stringify(albumRequest, null, 4);
+				db.query(
+					'INSERT OR REPLACE INTO music VALUES(?,?,?,?,?,?)', [
+						filename,
+						title,
+						cover,
+						year,
+						genre,
+						allFilesJSON
+					]
+				);
+				callback();
+			}else{
 
-			fs.readdir(dir,function(err,files){
-				if (err){
-					console.log('wrong or bad directory, please specify a existing directory',err .red);
-				}else{
-					var allFiles = new Array();
-					files.forEach(function(file){
-						var fullPath = dir + file
-						stats = fs.lstatSync(fullPath);
-						
-						//TODO handle subfolder
-						if (stats.isDirectory(file)) {
-							var subdir = file
-							, subPath = dir + file
-							fs.readdirSync(subPath,function(err,files){
-								files.forEach(function(file){
-									if (file.match(fileTypes)) allFiles.push(subdir+file); 
+				var dir = config.musicpath+encoder.htmlDecode(albumRequest)+'/'
+				, fileTypes = new RegExp("\.(mp3)","g");
+
+				fs.readdir(dir,function(err,files){
+					if (err){
+						console.log('wrong or bad directory, please specify a existing directory',err .red);
+					}else{
+						var allFiles = new Array();
+						files.forEach(function(file){
+							var fullPath = dir + file
+							stats = fs.lstatSync(fullPath);
+							
+							//TODO handle subfolder
+							if (stats.isDirectory(file)) {
+								var subdir = file
+								, subPath = dir + file
+								fs.readdirSync(subPath,function(err,files){
+									files.forEach(function(file){
+										if (file.match(fileTypes)) allFiles.push(subdir+file); 
+									});
 								});
-							});
-						} else { 
-							if (file.match(fileTypes)) allFiles.push(file); 
-						}
-					});
-					var allFilesJSON = JSON.stringify(allFiles, null, 4);
-					
-					db.query(
-						'INSERT OR REPLACE INTO music VALUES(?,?,?,?,?,?)', [
-							filename,
-							title,
-							cover,
-							year,
-							genre,
-							allFilesJSON
-						]
-					);
-					callback();
-				};
-			});
+							} else { 
+								if (file.match(fileTypes)) allFiles.push(file); 
+							}
+						});
+						var allFilesJSON = JSON.stringify(allFiles, null, 4);
+						
+						db.query(
+							'INSERT OR REPLACE INTO music VALUES(?,?,?,?,?,?)', [
+								filename,
+								title,
+								cover,
+								year,
+								genre,
+								allFilesJSON
+							]
+						);
+						callback();
+					};
+				});
+			}
 		}
 
 		//Get data if new album
@@ -106,7 +124,6 @@ module.exports = {
 
 			// mandatory timeout from discogs api
 			setTimeout(function(){
-				var single = false
 				if (albumRequest !== undefined ){
 					if (albumRequest.match(/\.(mp3)/gi)){
 						var dir = config.musicpath;
