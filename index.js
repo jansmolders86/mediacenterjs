@@ -59,6 +59,7 @@ app.configure(function(){
         }
 	}));
 	app.use(app.router);
+	app.locals.pretty = true;
 });
 
 app.configure('development', function(){   
