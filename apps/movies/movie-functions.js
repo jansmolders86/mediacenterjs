@@ -1,5 +1,5 @@
 module.exports = {
-	playMovie: function (req, res, movieRequest){
+	playMovie: function (req, res, ios, movieRequest){
 		var ffmpeg = require('fluent-ffmpeg')
 		, fs = require('fs')
 		, probe = require('node-ffprobe')
@@ -21,31 +21,47 @@ module.exports = {
 						movie = config.moviepath+file;
 
 						console.log('Getting ready to play', movie);
-
 						var stat = fs.statSync(movie);
 
-						res.writeHead(200, {
-							'Content-Type':'video/flv',
-							'Content-Length':stat.size,
-						});
+						if(ios === false){
+							res.writeHead(200, {
+								'Content-Type':'video/flv',
+								'Content-Length':stat.size,
+							});
 
-						probe(movie, function(err, probeData) {
-							if (err){
-								console.log('Can not probe movie for metadata', err .red)
-							} else {
-								var metaDuration =  '-metadata duration="'+probeData.streams[0].duration+'"'
-								, tDuration =  '-t '+probeData.streams[0].duration
-								, proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-								.addOptions(['-y','-ss 0','-b 800k','-vcodec libx264','-acodec mp3','-ab 128','-ar 44100','-bufsize 62000', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
-								.writeToStream(res, function(retcode, error){
-									if (!error){
-										console.log('file has been converted succesfully',retcode .green);
-									}else{
-										console.log('file conversion error',error .red);
-									}
-								});
-							}
-						});
+							probe(movie, function(err, probeData) {
+								if (err){
+									console.log('Can not probe movie for metadata', err .red)
+								} else {
+									var metaDuration =  '-metadata duration="'+probeData.streams[0].duration+'"'
+									, tDuration =  '-t '+probeData.streams[0].duration
+									, proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+									.addOptions(['-y','-ss 0','-threads 0','-vcodec libx264','-pix_fmt yuv420p','-profile:v main','-b:v 512k','-acodec mp3','-ab 128','-ar 44100','-rtbufsize 1000k', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
+									.writeToStream(res, function(retcode, error){
+										if (!error){
+											console.log('file has been converted succesfully',retcode .green);
+										}else{
+											console.log('file conversion error',error .red);
+										}
+									});
+								}
+							});
+						} else if(ios === true){
+							res.writeHead(200, {
+								'Content-Type':'application/x-mpegURL m3u8',
+								'Content-Length':stat.size,
+							});
+						
+							var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+							.addOptions(['-r 25','-b:v 128k','-c:v libx264','-x264opts level=41','-threads 4','-s 640x480','-map 0:v','-map 0:a:0','-c:a mp3','-r:a 44100','-b:a 160000','-ac 2','-f hls','-hls_time 10','-hls_list_size 6','-hls_wrap 18','-start_number 1'])
+							.writeToStream(res, function(retcode, error){
+								if (!error){
+									console.log('file has been converted succesfully',retcode .green);
+								}else{
+									console.log('file conversion error',error .red);
+								}
+							});
+						}
 					}
 				});
 			};

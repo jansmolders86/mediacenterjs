@@ -28,7 +28,8 @@
 				
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
-				$that: $that
+				$that: $that,
+				ios : false
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -50,8 +51,15 @@
 			$('.overlay').click(function(e) {
 				e.preventDefault();	
 				var movieTitle = $(this).attr('data-movie').replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv|txt)/gi,"")
-				, url = '/movies/'+movieTitle+'/play/';
-				_playMovie(url);
+				
+				if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
+					var url = '/movies/'+movieTitle+'/playios';
+					o.ios = true;
+				} else {
+					var url = '/movies/'+movieTitle+'/play';
+					o.ios = false;
+				}	
+				_playMovie(o, url);
 			});
 			
 			$(window).scroll(function(){
@@ -238,7 +246,7 @@
 		});
 	}
 	
-	function _playMovie(url){
+	function _playMovie(o,url){
 		$.ajax({
 			url: '/configuration/', 
 			type: 'get'
@@ -250,14 +258,18 @@
 			if($('#player').length > 1) {
 				$('#player').remove();
 			} else {
-				//$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="both" width="100%" height="100%"><source src="'+url+'" type="video/mp4"></video>');
-				$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
-				videojs("player").ready(function(){
-					myPlayer = this;
-					myPlayer.play();
-					myPlayer.on('error', function(e){ console.log('Error', e) });
-					myPlayer.on('ended', function(e){ window.location="/movies/"; });
-				});
+				if(o.ios === true){
+					$('body').append('<video  controls preload="auto" width="100%" height="100%"><source src="'+url+'" type="video/m3u8"></video>');
+				} else if(o.ios === false){
+					$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
+
+					videojs("player").ready(function(){
+						myPlayer = this;
+						myPlayer.play();
+						myPlayer.on('error', function(e){ console.log('Error', e) });
+						myPlayer.on('ended', function(e){ window.location="/movies/"; });
+					});
+				}
 			}
 		});
 	}
