@@ -78,8 +78,8 @@ body,html{overflow:hidden; position:relative;}
 	.forecast ul{ 
 		list-style:none;
 		float:left;
-		width: 100px;
-		height: 110px;
+		width: 130px;
+		height: 150px;
 		font-size:12px;
 	}
 }
@@ -89,8 +89,8 @@ body,html{overflow:hidden; position:relative;}
 	.forecast ul{ 
 		list-style:none;
 		float:left;
-		width: 100px;
-		height: 110px;
+		width: 130px;
+		height: 150px;
 		font-size:12px;
 	}
 }
