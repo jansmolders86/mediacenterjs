@@ -29,7 +29,8 @@
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
 				$that: $that,
-				ios : false
+				ios : false,
+				android : false
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -53,11 +54,13 @@
 				var movieTitle = $(this).attr('data-movie').replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv|txt)/gi,"")
 				
 				if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
-					var url = '/movies/'+movieTitle+'/playios';
 					o.ios = true;
-				} else {
+					var url = '/movies/'+movieTitle+'/play/ios';
+				} else if(navigator.platform === 'Android '){
+					o.android = true;
+					var url = '/movies/'+movieTitle+'/play/android';
+				}else {
 					var url = '/movies/'+movieTitle+'/play';
-					o.ios = false;
 				}	
 				_playMovie(o, url);
 			});
@@ -258,7 +261,7 @@
 			if($('#player').length > 1) {
 				$('#player').remove();
 			} else {
-				if(o.ios === true){
+				if(o.ios === true || o.android === true){
 					$('body').append('<video controls width="100%" height="100%"></video>');
 					
 					var myVideo = document.getElementsByTagName('video')[0];

@@ -1,5 +1,5 @@
 module.exports = {
-	playMovie: function (req, res, ios, movieRequest){
+	playMovie: function (req, res, ios, android, movieRequest){
 		var ffmpeg = require('fluent-ffmpeg')
 		, fs = require('fs')
 		, probe = require('node-ffprobe')
@@ -54,6 +54,23 @@ module.exports = {
 						
 							var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
 							.addOptions(['-vcodec libx264','-pix_fmt yuv420p','-s qvga','-segment_list_type m3u8','-threads 4','-map 0:v','-map 0:a:0','-c:a mp3', '-b:a 160000','-ac 2','-f hls','-hls_time 10','-hls_list_size 6','-hls_wrap 18','-start_number 1','-deinterlace'])							
+							.writeToStream(res, function(retcode, error){
+								if (!error){
+									console.log('file has been converted succesfully',retcode);
+								}else{
+									console.log('file conversion error',error .red);
+								}
+							});
+						} else if(android === true){
+							console.log('Getting ready to play on a android device');
+							console.log('Getting ready to play on a IOS device');
+							res.writeHead(200, {
+								'Content-Type':'video/mp4',
+								'Content-Length':stat.size,
+							});
+						
+							var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+							.addOptions(['-vcodec libx264','-pix_fmt yuv420p','-threads 4','-profile:v baseline','-b:v 512k','-s 640x432','-r:v 30','-acodec libfdk_aa','-b:a 128k','-deinterlace'])							
 							.writeToStream(res, function(retcode, error){
 								if (!error){
 									console.log('file has been converted succesfully',retcode);
