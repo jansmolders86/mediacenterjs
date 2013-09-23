@@ -15,24 +15,16 @@ More screenshots in the screenshot folder.
 Status: 
 =======
 
-__Heavy work in progress, pre-alpha, not ready for use__
+__Heavy work in progress, almost alpha, not ready for use__
 
 Changelog 
 =================
 
-__version 0.0.26(Patchup)__
-- Fixed bugs introduced by genre support 
-- Sorting code cleanup
-
-__version 0.0.25(Movie and bug fixes)__
-
-- Added basic genre support
-- Music bugfixes
-
-__version 0.0.24(The Music Database)__
-
-- The music app has been ported to a database. Music app todo's are: The handeling of the tracklist and subfolder support. 
-- The scrollbar is hidden if not needed.
+__version 0.0.26(Better playback)__
+- Playback works on IOS devices (Thanks to Matthew Szatmary (https://github.com/szatmary))
+- Playback in browsers improved  
+- Several small iPad fixes
+- Fixed several music player bugs
 
 Why use it (once it is ready)?
 ===========
@@ -64,14 +56,13 @@ What currently works?
 What's coming up
 ==================
 * Better music handeling
-* frontend will be ported to angular
 
 Known issues (Updated)
 ==================
-* Movie Buffer size needs tweaking
+* Movie playback on slower PC's needs tweaking
 * Subfolder support is not working yet 
 * Music and videos need to be based on arrays/DB entries instead of the current DOM dependencies
-* Current Movie encoding setup is buggy.
+* Code needs to be re-factored. Frontend will be ported to knockout or angular
 
 What still needs to be done
 ==================
@@ -207,7 +198,7 @@ This image will be copied to the cache of MCJS so it can be used without restric
 
 If no image is provided, the player will contact the website Discogs and try to get the art there. 
 
-Once you start playback, the eq icon and header will change their color according to the dominant color of the album art. 
+Once you start playback, the eq icon and header will change colour according to the dominant colour of the album art. 
 
 
 What is a MCJS App and how will it work?

@@ -259,7 +259,14 @@
 				$('#player').remove();
 			} else {
 				if(o.ios === true){
-					$('body').append('<video  controls preload="auto" width="100%" height="100%"><source src="'+url+'" type="video/m3u8"></video>');
+					$('body').append('<video controls width="100%" height="100%"></video>');
+					
+					var myVideo = document.getElementsByTagName('video')[0];
+					myVideo.src = url;
+					myVideo.load();
+					myVideo.play();
+					myVideo.onended = function(e){window.location="/movies/";}
+					
 				} else if(o.ios === false){
 					$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
 

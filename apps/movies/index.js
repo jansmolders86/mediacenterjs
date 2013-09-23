@@ -50,7 +50,8 @@ exports.index = function(req, res, next){
 exports.get = function(req, res, next){	
 	var infoRequest = req.params.id
 	, optionalParam = req.params.optionalParam
-	, action = req.params.action;
+	, action = req.params.action
+	, ios = false;
 
 	if(infoRequest === 'filter'){
 		functions.filter(req, res, optionalParam);
@@ -71,7 +72,11 @@ exports.get = function(req, res, next){
 	if(!action){
 		switch(optionalParam) {
 			case('play'):
-				functions.playMovie(req, res, infoRequest);
+				functions.playMovie(req, res,ios, infoRequest);
+			break;
+			case('playios'):
+				ios = true;
+				functions.playMovie(req, res,ios, infoRequest);
 			break;
 			case('info'):
 				functions.handler(req, res, infoRequest);

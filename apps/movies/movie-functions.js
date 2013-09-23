@@ -19,11 +19,10 @@ module.exports = {
 				files.forEach(function(file){
 					if (file.match(movieRequest)){
 						movie = config.moviepath+file;
-
-						console.log('Getting ready to play', movie);
 						var stat = fs.statSync(movie);
-
+						
 						if(ios === false){
+							console.log('Getting ready to play', movie);
 							res.writeHead(200, {
 								'Content-Type':'video/flv',
 								'Content-Length':stat.size,
@@ -36,10 +35,10 @@ module.exports = {
 									var metaDuration =  '-metadata duration="'+probeData.streams[0].duration+'"'
 									, tDuration =  '-t '+probeData.streams[0].duration
 									, proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-									.addOptions(['-y','-ss 0','-threads 0','-vcodec libx264','-pix_fmt yuv420p','-profile:v main','-b:v 512k','-acodec mp3','-ab 128','-ar 44100','-rtbufsize 1000k', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
+									.addOptions(['-y','-ss 0','-threads 4','-vcodec libx264','-pix_fmt yuv420p','-profile:v main','-b:v 512k','-acodec mp3','-ab 128','-ar 44100','-rtbufsize 1000k', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
 									.writeToStream(res, function(retcode, error){
 										if (!error){
-											console.log('file has been converted succesfully',retcode .green);
+											console.log('file has been converted succesfully',retcode);
 										}else{
 											console.log('file conversion error',error .red);
 										}
@@ -47,16 +46,17 @@ module.exports = {
 								}
 							});
 						} else if(ios === true){
+							console.log('Getting ready to play on a IOS device');
 							res.writeHead(200, {
-								'Content-Type':'application/x-mpegURL m3u8',
+								'Content-Type':'application/x-mpegURL',
 								'Content-Length':stat.size,
 							});
 						
 							var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-							.addOptions(['-r 25','-b:v 128k','-c:v libx264','-x264opts level=41','-threads 4','-s 640x480','-map 0:v','-map 0:a:0','-c:a mp3','-r:a 44100','-b:a 160000','-ac 2','-f hls','-hls_time 10','-hls_list_size 6','-hls_wrap 18','-start_number 1'])
+							.addOptions(['-vcodec libx264','-pix_fmt yuv420p','-s qvga','-segment_list_type m3u8','-threads 4','-map 0:v','-map 0:a:0','-c:a mp3', '-b:a 160000','-ac 2','-f hls','-hls_time 10','-hls_list_size 6','-hls_wrap 18','-start_number 1','-deinterlace'])							
 							.writeToStream(res, function(retcode, error){
 								if (!error){
-									console.log('file has been converted succesfully',retcode .green);
+									console.log('file has been converted succesfully',retcode);
 								}else{
 									console.log('file conversion error',error .red);
 								}
