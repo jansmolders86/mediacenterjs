@@ -63,7 +63,6 @@ module.exports = {
 							});
 						} else if(android === true){
 							console.log('Getting ready to play on a android device');
-							console.log('Getting ready to play on a IOS device');
 							res.writeHead(200, {
 								'Content-Type':'video/mp4',
 								'Content-Length':stat.size,
@@ -165,10 +164,13 @@ module.exports = {
 						original_name = requestInitialDetails.original_title;
 							
 						helper.xhrCall("http://api.themoviedb.org/3/movie/"+id+"?api_key="+api_key+"&=", function(response) {
-						
 							if (response !== 'Nothing found.' && response !== undefined && response !== '' && response !== null) {
 								var secondRequestResponse = JSON.parse(response);
-								genre = secondRequestResponse.genres[0].name;
+								var genresFound = secondRequestResponse.genres;
+								
+								if(genresFound.length){
+									genre = secondRequestResponse.genres[0].name;
+								}
 								runtime = secondRequestResponse.runtime;
 								imdb_id = secondRequestResponse.imdb_id;
 								overview = secondRequestResponse.overview;
