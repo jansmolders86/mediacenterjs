@@ -21,7 +21,7 @@ Changelog
 =================
 
 __version 0.0.26(Better playback)__
-- Playback works on IOS devices (Thanks to Matthew Szatmary (https://github.com/szatmary))
+- Playback works on IOS devices (Thanks to Matthew Szatmary (https://github.com/szatmary)
 - Playback in browsers improved  
 - Several small iPad fixes
 - Fixed several music player bugs
