@@ -1,5 +1,5 @@
 module.exports = {
-	playMovie: function (req, res, ios, android, movieRequest){
+	playMovie: function (req, res, platform, movieRequest){
 		var ffmpeg = require('fluent-ffmpeg')
 		, fs = require('fs')
 		, probe = require('node-ffprobe')
@@ -10,6 +10,7 @@ module.exports = {
 		, ini = require('ini')
 		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));	
 		
+		console.log(platform)
 		var movie = null;
 		fs.readdir(config.moviepath,function(err,files){
 			if (err){
@@ -21,7 +22,7 @@ module.exports = {
 						movie = config.moviepath+file;
 						var stat = fs.statSync(movie);
 						
-						if(ios === false){
+						if(platform = 'browser'){
 							console.log('Getting ready to play', movie);
 							res.writeHead(200, {
 								'Content-Type':'video/flv',
@@ -45,7 +46,7 @@ module.exports = {
 									});
 								}
 							});
-						} else if(ios === true){
+						} else if(platform = 'ios'){
 							console.log('Getting ready to play on a IOS device');
 							res.writeHead(200, {
 								'Content-Type':'application/x-mpegURL',
@@ -61,8 +62,8 @@ module.exports = {
 									console.log('file conversion error',error .red);
 								}
 							});
-						} else if(android === true){
-							console.log('Getting ready to play on a android device');
+						} else if(platform = 'android'){
+							console.log('Getting ready to play on a Android device');
 							res.writeHead(200, {
 								'Content-Type':'video/mp4',
 								'Content-Length':stat.size,

@@ -29,8 +29,7 @@
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
 				$that: $that,
-				ios : false,
-				android : false
+				platform : 'browser'
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -54,10 +53,10 @@
 				var movieTitle = $(this).attr('data-movie').replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv|txt)/gi,"")
 				
 				if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
-					o.ios = true;
+					o.platform = 'ios';
 					var url = '/movies/'+movieTitle+'/play/ios';
-				} else if(navigator.platform === 'Android '){
-					o.android = true;
+				} else if(navigator.platform === 'Android'){
+					o.platform = 'android';
 					var url = '/movies/'+movieTitle+'/play/android';
 				}else {
 					var url = '/movies/'+movieTitle+'/play';
@@ -261,7 +260,7 @@
 			if($('#player').length > 1) {
 				$('#player').remove();
 			} else {
-				if(o.ios === true || o.android === true){
+				if(o.platform === 'android' || o.platform === 'ios'){
 					$('body').append('<video controls width="100%" height="100%"></video>');
 					
 					var myVideo = document.getElementsByTagName('video')[0];
@@ -270,7 +269,7 @@
 					myVideo.play();
 					myVideo.onended = function(e){window.location="/movies/";}
 					
-				} else if(o.ios === false){
+				} else if(o.platform === 'browser'){
 					$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
 
 					videojs("player").ready(function(){

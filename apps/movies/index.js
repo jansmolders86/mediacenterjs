@@ -51,10 +51,7 @@ exports.get = function(req, res, next){
 	var infoRequest = req.params.id
 	, optionalParam = req.params.optionalParam
 	, action = req.params.action
-	, ios = false
-	, android = false;
-
-	console.log(optionalParam)
+	, platform = 'browser';
 	
 	if(infoRequest === 'filter'){
 		functions.filter(req, res, optionalParam);
@@ -75,7 +72,7 @@ exports.get = function(req, res, next){
 	if(!action){
 		switch(optionalParam) {
 			case('play'):
-				functions.playMovie(req, res,ios, android, infoRequest);
+				functions.playMovie(req, res, platform, infoRequest);
 			break;
 			case('info'):
 				functions.handler(req, res, infoRequest);
@@ -86,11 +83,11 @@ exports.get = function(req, res, next){
 			break;		
 		}
 	} else if(action === 'ios') {
-		ios = true;
-		functions.playMovie(req, res,ios, android, infoRequest);
+		platform = 'ios';
+		functions.playMovie(req, res, platform, infoRequest);
 	} else if(action === 'android') {
-		android = true;
-		functions.playMovie(req, res,ios, android, infoRequest);
+		platform = 'android';
+		functions.playMovie(req, res, platform, infoRequest);
 	} 
 
 }
