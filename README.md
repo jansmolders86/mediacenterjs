@@ -59,7 +59,8 @@ What's coming up
 
 Known issues (Updated)
 ==================
-* Movie playback on slower PC's needs tweaking
+* Movie playback on slower PC's needs tweaking 
+* Movie playback in browser has buffer bug. (Current quickfix is simply pause the video and let it buffer a bit)
 * Subfolder support is not working yet 
 * Music and videos need to be based on arrays/DB entries instead of the current DOM dependencies
 * Code needs to be re-factored. Frontend will be ported to knockout or angular
