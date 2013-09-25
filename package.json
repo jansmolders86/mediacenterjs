@@ -7,10 +7,10 @@
 		"email": "jansmolders86@gmail.com"
 	},
 	"licenses": [{
-		"type": "GNU",
+		"type": "GPLv3",
 		"url": "http://www.gnu.org/licenses"
 	}],
-	"version": "0.0.28",
+	"version": "0.0.29",
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",

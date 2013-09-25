@@ -20,11 +20,9 @@ __Heavy work in progress, almost alpha, not ready for use__
 Changelog 
 =================
 
-__version 0.0.26(Better playback)__
-- Playback works on IOS devices (Thanks to Matthew Szatmary https://github.com/szatmary)
-- Playback in browsers improved  
-- Several small iPad fixes
-- Fixed several music player bugs
+__version 0.0.28(Better playback)__
+- Playback works on Android devices
+- Several small fixes
 
 Why use it (once it is ready)?
 ===========
@@ -57,10 +55,17 @@ What's coming up
 ==================
 * Better music handeling
 
-Known issues (Updated)
+Known issues video playback
 ==================
-* Movie playback on slower PC's needs tweaking 
-* Movie playback in browser has buffer bug. (Current quickfix is simply pause the video and let it buffer a bit)
+
+These issues are known issues and current browser/platform limitations.
+
+* IOS:  Not seekable
+* Browser: Buffering does not work properly. (Current quickfix is simply pause the video and let it buffer a bit)
+* Android: Fullscreen mode not stable & Not seekable
+
+Known issues 
+==================
 * Subfolder support is not working yet 
 * Music and videos need to be based on arrays/DB entries instead of the current DOM dependencies
 * Code needs to be re-factored. Frontend will be ported to knockout or angular
@@ -119,11 +124,31 @@ If you close this window, MCJS will stop working. You can also see useful inform
 
 __Please make sure you've installed NodeJS and FFmpeg first!__
 
-User guide for installing FFmpeg on Windows: (http://www.wikihow.com/Install-FFmpeg-on-Windows)
+Ffmpeg binaries for Linux and Windows are included.
 
+User guide for installing FFmpeg on Windows: (http://www.wikihow.com/Install-FFmpeg-on-Windows)
 User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-install-ffmpeg-linux)
 
 Install NodeJS: http://nodejs.org/download/
+
+__Install node on Ubuntu/Debian__
+
+
+	Ubuntu: gksu software-properties-gtk (enable all software sources)
+
+	sudo apt-get update
+	sudo apt-get install python-software-properties python g++ make
+	sudo add-apt-repository ppa:chris-lea/node.js
+	sudo apt-get update
+	sudo apt-get install nodejs
+
+	// Git clone
+	sudo apt-get install git
+	git clone https://github.com/jansmolders86/mediacenterjs.git
+
+	// NPM install
+	npm install mediacenterjs
+
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 
