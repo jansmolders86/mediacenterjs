@@ -20,7 +20,7 @@ __Heavy work in progress, almost alpha, not ready for use__
 Changelog 
 =================
 
-__version 0.0.28(Better playback)__
+__version 0.0.29(Better playback)__
 - Playback works on Android devices
 - Several small fixes
 
