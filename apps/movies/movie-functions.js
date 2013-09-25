@@ -10,7 +10,6 @@ module.exports = {
 		, ini = require('ini')
 		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));	
 		
-		console.log(platform)
 		var movie = null;
 		fs.readdir(config.moviepath,function(err,files){
 			if (err){
@@ -22,8 +21,10 @@ module.exports = {
 						movie = config.moviepath+file;
 						var stat = fs.statSync(movie);
 						
-						if(platform = 'browser'){
-							console.log('Getting ready to play', movie);
+						console.log('Client platform is', platform);
+						
+						if(platform === 'browser'){
+							console.log('Getting ready to play in a browser');
 							res.writeHead(200, {
 								'Content-Type':'video/flv',
 								'Content-Length':stat.size,
@@ -46,7 +47,7 @@ module.exports = {
 									});
 								}
 							});
-						} else if(platform = 'ios'){
+						} else if(platform === 'ios'){
 							console.log('Getting ready to play on a IOS device');
 							res.writeHead(200, {
 								'Content-Type':'application/x-mpegURL',
@@ -62,15 +63,15 @@ module.exports = {
 									console.log('file conversion error',error .red);
 								}
 							});
-						} else if(platform = 'android'){
+						} else if(platform === 'android'){
 							console.log('Getting ready to play on a Android device');
 							res.writeHead(200, {
-								'Content-Type':'video/mp4',
+								'Content-Type':'video/webm',
 								'Content-Length':stat.size,
 							});
 						
 							var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-							.addOptions(['-vcodec libx264','-pix_fmt yuv420p','-threads 4','-profile:v baseline','-b:v 512k','-s 640x432','-r:v 30','-acodec libfdk_aa','-b:a 128k','-deinterlace'])							
+							.addOptions(['-vcodec libvpx','-vb 250k','-keyint_min 150','-g 150','-threads 4','-c:a libvorbis', '-b:a 160000','-ac 2','-f webm'])														
 							.writeToStream(res, function(retcode, error){
 								if (!error){
 									console.log('file has been converted succesfully',retcode);

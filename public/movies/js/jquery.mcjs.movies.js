@@ -55,7 +55,7 @@
 				if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
 					o.platform = 'ios';
 					var url = '/movies/'+movieTitle+'/play/ios';
-				} else if(navigator.platform === 'Android'){
+				} else if(navigator.userAgent.toLowerCase().indexOf("android") > -1){
 					o.platform = 'android';
 					var url = '/movies/'+movieTitle+'/play/android';
 				}else {
