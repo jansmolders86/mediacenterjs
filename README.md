@@ -55,16 +55,17 @@ What's coming up
 ==================
 * Better music handeling
 
-Known issues video playback
+Known issues: video playback
 ==================
 
 These issues are known issues and current browser/platform limitations.
+I'm trying to figure out how to get around these limitations.
 
-* IOS:  Not seekable
-* Browser: Buffering does not work properly. (Current quickfix is simply pause the video and let it buffer a bit)
+* IOS:  Video is not seekable
+* Browser: Video buffering does not work properly. (Current quickfix is simply pause the video and let it buffer a bit)
 * Android: Fullscreen mode not stable & Not seekable
 
-Known issues 
+Other known issues 
 ==================
 * Subfolder support is not working yet 
 * Music and videos need to be based on arrays/DB entries instead of the current DOM dependencies
