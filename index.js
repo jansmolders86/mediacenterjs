@@ -25,7 +25,8 @@ var express = require('express')
 , rimraf = require('rimraf')
 , ini = require('ini')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
-, dblite = require('dblite');
+, dblite = require('dblite')
+, http = require('http');
 
 // Init Database
 dblite.bin = "./lib/database/sqlite3";
@@ -203,7 +204,7 @@ app.set('port', process.env.PORT || 3000);
 if (config.port == "" || config.port == undefined ){
 	var defaultPort = app.get('port');
 	console.log('First run, Setup running on localhost:'+defaultPort);
-	app.listen(defaultPort);
+	app.listen(parseInt(defaultPort));
 } else{
 	console.log("MediacenterJS listening on port:", config.port .green.bold); 
 	app.listen(parseInt(config.port));
