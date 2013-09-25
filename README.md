@@ -49,7 +49,7 @@ What currently works?
 * Basic transcoding of movies and music
 * Retrieving of tv show information
 * Basic screensaver
-* lazy loading of movie and music items
+* Lazy loading of movie and music items
 
 What's coming up
 ==================
