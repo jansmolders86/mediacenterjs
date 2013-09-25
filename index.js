@@ -87,7 +87,7 @@ app.get("/", function(req, res, next) {
 		//Search app folder for apps and check if tile icon is present
 		fs.readdirSync(__dirname + '/apps').forEach(function(name){
 			if(fs.existsSync(__dirname + '/public/'+name+'/tile.png')){
-				apps.push(name)
+				apps.push(name);
 			}
 		});
 		var now = new Date();
@@ -117,7 +117,7 @@ app.post('/removeModule', function(req, res){
 		if(e) {
 			console.log('Error removing module', e .red);
 		} else {
-			res.redirect('/')
+			res.redirect('/');
 		}
 	});
 });
@@ -136,8 +136,8 @@ app.post('/clearCache', function(req, res){
 			if (stats.isDirectory()) {
 				rimraf(dataFolder, function (e) { 		
 					if(e){
-						console.log('Error removing module', e .red) 
-						res.send('Error clearing cache', e)
+						console.log('Error removing module', e .red);
+						res.send('Error clearing cache', e);
 					} else{
 						db.query('DROP TABLE IF EXISTS '+cache);
 						
@@ -171,9 +171,9 @@ app.post('/submit', function(req, res){
 function writeSettings(req, res, callback){
 	var incommingTheme = req.body.theme
 	if (incommingTheme.match(/\.(css)/)){
-		themeName = incommingTheme 
+		themeName = incommingTheme;
 	} else {
-		themeName = incommingTheme+'.css'
+		themeName = incommingTheme+'.css';
 	}
 	
     config.moviepath = req.body.movielocation,
@@ -197,10 +197,13 @@ function writeSettings(req, res, callback){
     });
 }
 
+app.set('port', process.env.PORT || 3000);
+
 // Open App socket
 if (config.port == "" || config.port == undefined ){
-	console.log('First run, Setup running on localhost:3000' .yellow.bold)
-	app.listen(parseInt(3000));
+	var defaultPort = app.get('port');
+	console.log('First run, Setup running on localhost:'+defaultPort);
+	app.listen(defaultPort);
 } else{
 	console.log("MediacenterJS listening on port:", config.port .green.bold); 
 	app.listen(parseInt(config.port));
