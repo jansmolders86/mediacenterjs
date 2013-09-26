@@ -5,7 +5,7 @@ __A NodeJS based Mediacenter__
 
 Website: http://www.mediacenterjs.com
 
-Screenshots (Pre-Alpha GUI): 
+Screenshots (Alpha GUI): 
 ========
 
 ![Dashboard] (screenshots/screen1.png)
