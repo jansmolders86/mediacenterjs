@@ -153,6 +153,12 @@ __Install node on Ubuntu/Debian__
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 
+If you get an 'EACCESS' error, please set the permissions of the entire app to read, write and execute and run the server using 'sudo'
+ 
+     sudo chmod -R a+rwx mediacenterjs/
+     
+     sudo node server
+
 Running MediacenterJS
 -------------
 After the initial setup has been completed MediacenterJS will be available on the port you have specified and the language you have chosen.
