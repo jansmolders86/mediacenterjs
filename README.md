@@ -81,7 +81,7 @@ What still needs to be done
 
 * Full progress and todo list: https://trello.com/b/czjyYsFi/mediacenterjs
 
-What's the MCJS?
+What is MediacenterJS?
 =========================
 
 MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques and languages (HTML5/CSS/Javascript).
@@ -97,9 +97,9 @@ Basic feature list:
 What do I need to have installed to run this? 
 ==========================
 
-* FFmpeg installed
+* FFmpeg installed (Linux and windows binaries are included)
 * NodeJS installed
-* A modern browser like Chrome or Firefox
+* A modern browser like Chrome
 * An internet connection
 
 Additional Apps
@@ -157,6 +157,12 @@ __Install node on Ubuntu/Debian__
 
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
+
+If you get an 'EACCESS' error, please set the permissions of the entire app to read, write and execute and run the server using 'sudo'
+ 
+     sudo chmod -R a+rwx mediacenterjs/
+     
+     sudo node server
 
 Running MediacenterJS
 -------------
