@@ -153,7 +153,7 @@ ul.music li.playing a{
 .eq{
 	visibility:hidden;
 	width: 25px;
-	height: 15px;
+	height: 31px;
 	float: left;
 	margin: -5px 5px 0 0;
 }
@@ -163,6 +163,12 @@ ul.music li.playing a{
     display: inline-block;
     vertical-align: bottom;
 	margin-right:1px;
+}
+.eq.pause {
+	background:url(img/pause-icon.png) no-repeat -2px 12px;
+}
+.eq.pause .bar {
+	visibility:hidden;
 }
 
 .random{

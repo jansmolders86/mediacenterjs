@@ -201,12 +201,11 @@
 				break;
 				case 32 : 
 					if (!elid){
-						videojs("player").on("play", function(){
-							videojs("player").pause();
-						});
-						videojs("player").on("pause", function(){
+						if(videojs("player").paused()){
 							videojs("player").play();
-						});
+						} else {
+							videojs("player").pause();
+						}
 					}
 				break;
 			}

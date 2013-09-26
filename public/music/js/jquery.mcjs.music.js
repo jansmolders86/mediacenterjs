@@ -70,16 +70,13 @@
 				}
 			});
 			
-			$(document).keydown(function(e){
-				switch(e.keyCode) {
-					case 32 : 
-						player().on("play", function(){
-							videojs("player").player().pause();
-						});
-						player().on("pause", function(){
-							$("player").player().play();
-						});
-					break;
+			$('.backlink').on('click',function(e) {
+				e.preventDefault();	
+				if ($('#tracklist').is(':hidden')){	
+					window.location = '/';
+				} else if ($('#tracklist').is(':visible')) {	
+					$('#tracklist').hide();
+					$('#musicWrapper').fadeIn();
 				}
 			});
 
@@ -181,22 +178,14 @@
 				$('#tracks').append('<li><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+value+'</div></li>')
 			});
 			
-			// Set height programmatically
-			var parentHeight = $('#tracklist').height();
-			$('#tracks').css('height',parentHeight - 200);
-			if($('#tracks').height() > 800) $('#tracks').perfectScrollbar();
+			_presentTracks();
 
 			$(window).resize(function() {
-				var parentHeight = $('#tracklist').height();
-				$('#tracks').css('height',parentHeight - 200);
-				if($('#tracks').height() > 800) $('#tracks').perfectScrollbar();
+				_presentTracks();
 			});
 			
 			$('#musicWrapper').hide();
 			$('#tracklist').show();		
-			
-			// Init scrollbar
-		
 				
 			// Styling
 			$('#tracks').find('li:odd').addClass('odd');
@@ -226,17 +215,14 @@
 		});			
 	}
 	
+	function _presentTracks(){
+		var parentHeight = $('#tracklist').height();
+		$('#tracks').css('height',parentHeight - 200);
+		$('#tracks').perfectScrollbar();
+	}
+	
 	function _hideOtherAlbums(){
 		$('#musicWrapper').hide();
-		$('.backlink').click(function(e) {
-			if ($('#tracklist').is(':hidden')){	
-				$(this).attr('href','/')
-			} else if ($('#tracklist').is(':visible')) {	
-				e.preventDefault();	
-				$('#tracklist').hide();
-				$('#musicWrapper').fadeIn();
-			}
-		});
 	}
 	
 	function _playTrack(track,album,songTitle,random){
@@ -257,6 +243,14 @@
 			
 			$('.random').click(function(e) {
 				_randomTrack();
+			});
+			
+			myPlayer.on("pause", function(){
+				$('.selected > .eq').addClass('pause');
+			});
+			
+			myPlayer.on("play", function(){
+				$('.selected > .eq').removeClass('pause');
 			});
 			
 			myPlayer.on("ended", function(){
