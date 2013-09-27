@@ -212,6 +212,8 @@
 		});
 	}
 	
+	/************ Screensaver ***************/
+	
 	function _screensaver(o, $that){
 		$.ajax({
 			url: '/configuration/', 
@@ -220,13 +222,18 @@
 			if (data.screensaver === 'dim'){
 				var timeout = 600000; //10 min //TODO: make editable
 				$(document).bind("idle.idleTimer", function(){
-					$("html, body, #wrapper, #header").addClass("dim")
+					if(videojs("player").paused()){
+						$("html, body, #wrapper, #header").addClass("dim")
+					} else{
+						return;
+					}
 				});
 
 				$(document).bind("active.idleTimer", function(){
 				   $("html, body, #wrapper, #header").removeClass("dim")
 				});
 
+				
 				$.idleTimer(timeout);
 			} else if(data.screensaver === 'off'){
 				return;

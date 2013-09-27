@@ -37,18 +37,20 @@
 			
 			_focusedItem(o);
 			
-			$("ul.movies li").sort(asc_sort).appendTo('ul.movies');
+			$(o.movieListSelector+"> li").sort(asc_sort).appendTo(o.movieListSelector);
 			function asc_sort(a, b){
 				return ($(b).text()) < ($(a).text()) ? 1 : -1;    
 			}
 
-			$('body').scroll( function(){ _lazyload(o); });
+			$('body').scroll( function(){ 
+				_lazyload(o);
+			});
 			
 			_lazyload(o);
-			_scrollBackdrop();
+			_scrollBackdrop(o);
 			_showAndFilterAvailableGenres(o);
 			
-			$('.overlay').click(function(e) {
+			$(o.overlayselector).on('click tap',function(e) {
 				e.preventDefault();	
 				var movieTitle = $(this).attr('data-movie').replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv|txt)/gi,"")
 				
@@ -66,9 +68,9 @@
 			
 			$(window).scroll(function(){
 				if($(this).scrollTop() > 200){
-					$('#header').addClass('scrolling');   
+					$(o.headerSelector).addClass(o.scrollingClass);   
 				} else if ($(this).scrollTop() < 200){
-					$('#nav').removeClass('scrolling');   
+					$(o.headerSelector).removeClass(o.scrollingClass);   
 				}
 			});
 			
@@ -83,7 +85,7 @@
 			var WindowTop = $('body').scrollTop()
 			, WindowBottom = WindowTop + $('body').height();
 
-			$(".movieposter").each(function(){
+			$(o.movieListSelector+' > li').each(function(){
 				var offsetTop = $(this).offset().top
 				, offsetBottom = offsetTop + $(this).height();
 
@@ -101,51 +103,51 @@
 	}
 	
 	function _focusedItem(o){
-		$('.movieposter').on({
+		$(o.movieListSelector+' > li').on({
 			mouseenter: function() {	
-				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
-				$(this).addClass("focused");
-				$(".backdropimg").attr("src", newBackground).addClass('fadein');
+				var newBackground = $(this).find("img."+o.posterClass).attr(o.backdrophandler);
+				$(this).addClass(o.focusedClass);
+				$(o.backdropSelector).attr("src", newBackground).addClass(o.fadeClass);
 			},
 			mouseleave: function() {
-				$(".backdropimg").removeClass("fadein");
-				if ($('.movieposter.focused').length > 1) $('.movieposter').removeClass("focused");
+				$(o.backdropSelector).removeClass(o.fadeClass);
+				if ($('.'+o.posterClass+o.focusedClass).length > 1) $("img."+o.posterClass).removeClass(o.focusedClass);
 			},			
 			focus: function() {		
-				$(this).addClass("focused");			
-				var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
-				$(".backdropimg").attr("src", newBackground).addClass('fadein');
+				$(this).addClass(o.focusedClass);			
+				var newBackground = $(this).find("img."+o.posterClass).attr(o.backdrophandler);
+				$(o.backdropSelector).attr("src", newBackground).addClass(o.fadeClass);
 			},
 			focusout: function() {
-				$(".backdropimg").removeClass("fadein");
-				if ($('.movieposter.focused').length > 1) $('.movieposter').removeClass("focused");
+				$(o.backdropSelector).removeClass(o.fadeClass);
+				if ($('.'+o.posterClass+o.focusedClass).length > 1) $("img."+posterClass).removeClass(o.focusedClass);
 			}
 		});	
 		
-		if ($('.movieposter.focused')){
-			var newBackground = $(this).find("img.movieposter").attr("data-backdrop");
-			$(".backdropimg").attr("src", newBackground).addClass('fadeinslow');
+		if ($(o.movieListSelector+' > li'+o.focusedClass)){
+			var newBackground = $(this).find("img."+o.posterClass).attr(o.backdrophandler);
+			$(o.backdropSelector).attr("src", newBackground).addClass(o.fadeSlowClass);
 		}
 	}
 	
 	
-	function _scrollBackdrop(){
+	function _scrollBackdrop(o){
 		var duration = 40000
-		$(".backdropimg").animate({ 
+		$(o.backdropSelector).animate({ 
 			top: '-380px'
 		},
 		{
 			easing: 'swing',
 			duration: duration,
 			complete: function(){
-				$(".backdropimg").animate({ 
+				$(o.backdropSelector).animate({ 
 					top: '-0px'
 				},
 				{
 					easing: 'swing',
 					duration: duration,
 					complete: function(){
-						_scrollBackdrop()
+						_scrollBackdrop(o)
 					}
 				});	
 			}
@@ -172,19 +174,21 @@
 				// Give the plugin time to load the (new) images.
 				// Is need for chrome bug with image loading..
 				setTimeout(function(){
-					visibleMovie.find("img.movieposter").attr('src','');	
-					visibleMovie.find("img.movieposter").attr('src',posterImage).addClass('coverfound');		
+					visibleMovie.find("img."+o.posterClass).attr('src','');	
+					visibleMovie.find("img."+o.posterClass).attr('src',posterImage).addClass('coverfound');		
 					visibleMovie.find('.overview').append('<h1>'+orginal_name+'</h1><p class="summary">'+overview+'</p>');
 					
 					if(orginal_name !== 'No data found...'){
 						visibleMovie.find('.specs').append('<p><strong> Genre:</strong> '+genre+'</p><p><strong> Runtime:</strong> '+runtime+' min</p>');
 					}
-					visibleMovie.addClass('showDetails fadein');
+					visibleMovie.addClass('showDetails '+o.fadeClass);
 				},400);
 				
-				visibleMovie.find("img.movieposter").attr('data-backdrop',backdropImage);
+				visibleMovie.find("img."+o.posterClass).attr(o.backdrophandler,backdropImage);
 				
-				if(cdNumber !== 'No data found...' && cdNumber !== undefined && cdNumber !== '') visibleMovie.append('<div class="cdNumber"><span>'+cdNumber+'</span><div>');
+				if(cdNumber !== 'No data found...' && cdNumber !== undefined && cdNumber !== '') {
+					visibleMovie.append('<div class="cdNumber"><span>'+cdNumber+'</span><div>');
+				}
 				
 			});
 		}		
@@ -195,11 +199,11 @@
 			url: '/movies/getGenres/', 
 			type: 'get'
 		}).done(function(data){
-			if($('#genres').length == 0){
-				$('#wrapper').append('<ul id="genres"></ul>')
+			if($('#'+o.genreSelector).length == 0){
+				$(o.wrapperSelector).append('<ul id="'+o.genreSelector+'"></ul>')
 			} else{
-				$('#genres').remove();
-				$('#wrapper').append('<ul id="genres"></ul>');
+				$(o.genreSelector).remove();
+				$(o.wrapperSelector).append('<ul id="'+o.genreSelector+'"></ul>');
 			}
 			
 			// Sort array and remove duplicates.
@@ -210,11 +214,11 @@
 
 			// Print sorted array
 			data.forEach(function(value, index) {
-				$('#genres').append('<li> <a href="'+value+'" class="genrelink">'+value+'</a></li>');
+				$('#'+o.genreSelector).append('<li> <a href="'+value+'" class="genrelink">'+value+'</a></li>');
 			});
-			$('#genres').append('<li> <a href="" class="showAll">All movies</a></li>');
+			$('#'+o.genreSelector).append('<li> <a href="" class="showAll">All movies</a></li>');
 			
-			$('.genrelink').click(function(e) {
+			$('.genrelink').on('click tap',function(e) {
 				e.preventDefault();	
 				var selectedGenre = $(this).attr('href')
 				, filterUrl = '/movies/filter/'+selectedGenre;
@@ -223,25 +227,28 @@
 					url: filterUrl,
 					type: 'get'
 				}).done(function(data){
-					$('ul.movies').find('li').each(function(){ 
+					$(o.movieListSelector).find('li').each(function(){ 
 						$(this).remove();
 					});
 				
 					$.each(data, function() {
-						var title = $(this)[0].local_name;
-						$('ul.movies').append('<li class="movieposter boxed"><img src="/core/css/img/ajax-loader.gif" class="movieposter"/><div class="overlay" data-movie="'+title+'"></div><span class="title">'+title+'</span><div class="overview"></div></li>');
+						var movieData 	= $(this)[0]
+						, local_name 	= movieData.local_name
+						
+						$(o.movieListSelector).append('<li class="'+o.posterClass+' boxed"><div class="imageWrapper"><img src="/core/css/img/ajax-loader.gif" '+o.backdrophandler+' class="'+o.posterClass+'"/></div><div class="overlay" data-movie="'+local_name+'"></div><span class="title">'+local_name+'</span><div class="overview"></div><div class="specs"></div></li>');
 					});
 					
-					$("ul.movies li").sort(asc_sort).appendTo('ul.movies');
+					$(o.movieListSelector+'>li').sort(asc_sort).appendTo(o.movieListSelector);
 					function asc_sort(a, b){
 						return ($(b).text()) < ($(a).text()) ? 1 : -1;    
 					}
-
+					
 					_lazyload(o);
+
 				});
 			});
 			
-			$('.showAll').click(function(e) {
+			$('.showAll').on('click tap',function(e) {
 				e.preventDefault();	
 				window.location.href = '/movies';
 			});
@@ -254,14 +261,14 @@
 			type: 'get'
 		}).done(function(data){
 			var myPlayer;
-			$('#wrapper, #moviedetails, #backdrop, #header').hide();
+			$(o.wrapperSelector+','+o.headerSelector+','+o.movieListSelector+','+o.backdropWrapperSelector).hide();
 			$('body').animate({backgroundColor: '#000'},500);
 			
-			if($('#player').length > 1) {
-				$('#player').remove();
+			if($(o.playerSelector).length > 1) {
+				$(o.playerSelector).remove();
 			} else {
 				if(o.platform === 'android' || o.platform === 'ios'){
-					$('body').append('<video controls width="100%" height="100%"></video>');
+					$('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
 					
 					var myVideo = document.getElementsByTagName('video')[0];
 					myVideo.src = url;
@@ -270,9 +277,9 @@
 					myVideo.onended = function(e){window.location="/movies/";}
 					
 				} else if(o.platform === 'browser'){
-					$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
+					$('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
 
-					videojs("player").ready(function(){
+					videojs(o.playerID).ready(function(){
 						myPlayer = this;
 						myPlayer.play();
 						myPlayer.on('error', function(e){ console.log('Error', e) });
@@ -296,6 +303,25 @@
 	};
 	
 	/* default values for this plugin */
-	$.fn.mcjsm.defaults = {};
+	$.fn.mcjsm.defaults = {		
+		datasetKey: 'mcjsmovies' //always lowercase
+		, movieListSelector: '.movies' 
+		, trackListSelector: '#tracklist' 
+		, backdropSelector: '.backdropimg' 
+		, backdrophandler: 'data-backdrop' 
+		, posterClass: 'movieposter' 
+		, playerSelector: '#player' 
+		, headerSelector: '#header' 
+		, wrapperSelector: '#wrapper' 
+		, backdropWrapperSelector: '#backdrop' 
+		, genreSelector: 'genres' 
+		, backLinkSelector: '.backlink' 
+		, playerID: 'player' 
+		, overlayselector : '.overlay'
+		, fadeClass: 'fadein' 
+		, fadeSlowClass: 'fadeinslow' 
+		, focusedClass: 'focused'
+		, scrollingClass: 'scrolling'
+	};
 
 })(jQuery);

@@ -20,6 +20,9 @@ __Heavy work in progress, almost alpha, not ready for use__
 Changelog 
 =================
 
+__version 0.0.31__
+- Improved frontend code 
+
 __version 0.0.30__
 - Back icon in music app let's you go back to the library when viewing a album
 - You can use the spacebar to pause and play video and music

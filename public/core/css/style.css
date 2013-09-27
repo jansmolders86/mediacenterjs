@@ -195,9 +195,9 @@ html.dim{background:#222;}
 	background:rgba(34,34,34,0.8) !important; 
 	border-color:#222 !important;
 	box-shadow:#222 !important;
-	opacity:0.1 !important;
+	opacity:0.8 !important;
 }
-.dim img{ opacity:0.1 !important;}
+.dim img{ opacity:0.8 !important;}
 
 /* Homepage */
 
