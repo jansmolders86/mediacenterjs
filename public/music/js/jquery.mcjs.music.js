@@ -185,8 +185,12 @@
 			// Styling
 			$(o.trackListSelector).find('li:odd').addClass('odd');
 			$(o.trackListSelector).find('img.cover').attr('src',thumbnail).addClass('coverfound');
-			$(o.trackListSelector).find('.year').html(year);
-			$(o.trackListSelector).find('.genre').html(genre);
+			if(year !== 'No data found...'){
+				$(o.trackListSelector).find('.year').html(year);
+			}
+			if(genre !== 'No data found...'){
+				$(o.trackListSelector).find('.genre').html(genre);
+			}
 			$('img.cover').bind('load', function (event) {
 				var image = event.target;
 				_dominantColor(o,image);
