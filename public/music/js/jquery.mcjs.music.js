@@ -263,16 +263,16 @@
 	
 	function _nextTrack(o,album,songTitle){		
 		var random = false
-		, currentSong = $('li'+o.selectedClass);
+		, currentSong = $('li.'+o.selectedClass);
 		
-		currentSong.removeClass(o.selectedClas).next('li').addClass(o.selectedClas);
+		currentSong.removeClass(o.selectedClass).next('li').addClass(o.selectedClass);
 		
-		var nextTrack = $('li'+o.selectedClass).find('.title').html()
+		var nextTrack = $('li.'+o.selectedClass).find('.title').html()
 		, album = $(o.trackListSelector).find('h2').html()
 		, track = '/music/'+album+'/'+nextTrack+'/play';
 
 		if (nextTrack !== undefined){
-			_playTrack(track,album,songTitle, random);
+			_playTrack(o,track,album,songTitle,random);
 		}else{
 			return;
 		}

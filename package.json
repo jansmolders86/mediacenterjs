@@ -10,7 +10,7 @@
 		"type": "GPLv3",
 		"url": "http://www.gnu.org/licenses"
 	}],
-	"version": "0.0.31",
+	"version": "0.0.32",
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",
