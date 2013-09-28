@@ -47,7 +47,7 @@ What currently works?
 
 What's coming up
 ==================
-* Better music handeling
+* Tv show app functionality
 
 Known issues: video playback
 ==================
@@ -62,8 +62,7 @@ I'm trying to figure out how to get around these limitations.
 Other known issues 
 ==================
 * Subfolder support is not working yet 
-* Music and videos need to be based on arrays/DB entries instead of the current DOM dependencies
-* Code needs to be re-factored. Frontend will be ported to knockout or angular
+* Code needs to be re-factored. Frontend will be ported to knockout (or angular)
 
 What still needs to be done
 ==================

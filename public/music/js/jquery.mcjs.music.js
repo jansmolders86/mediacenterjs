@@ -202,6 +202,7 @@
 			// Play song init
 			$(o.trackListSelector+' ul > li').on('click tap', function(e) {
 				e.preventDefault();	
+				$('.random').removeClass('active');
 				var songTitle = $(this).find('.title').html();
 				
 				$(o.trackListSelector+' ul > li').each(function(){
@@ -227,7 +228,11 @@
 	}
 	
 	function _playTrack(o,track,album,songTitle,random){
-	
+		if(!$('.random').length){
+			$(o.playerSelector).append('<div class="random hidden">Random</div>')
+		}
+		$('.random').removeClass('hidden');
+		
 		$(o.playerSelector).addClass('show');
 		$('li.'+o.selectedClass).find(".bar").each(function() {
 			_fluctuate(o,$(this));
@@ -239,10 +244,13 @@
 			myPlayer.src(track);
 			myPlayer.play();
 			
-			$(".random").remove();
-			$(o.playerSelector).append('<div class="random">Random</div>')
-			
 			$('.random').on('click tap', function(e) {
+				if($(this).hasClass('active')){
+					$(this).removeClass('active');
+				} else{
+					$(this).addClass('active');
+				}
+
 				_randomTrack(o);
 			});
 			
@@ -256,6 +264,7 @@
 			
 			myPlayer.on("ended", function(){
 				if(random === false){
+					$('.random').removeClass('active');
 					_nextTrack(o,album,songTitle);
 				} else if(random === true){
 					_randomTrack(o);
@@ -285,21 +294,17 @@
 	}
 	
 	function _randomTrack(o){
-		$(o.trackListSelector).find('li').each(function(){
-			$(this).removeClass(o.selectedClass);
-		});
+		$('li.'+o.selectedClass).removeClass(o.selectedClass);
 	
 		var random = true
-		, list = $(o.trackListSelector+'> ul > li').toArray()
-		, elemLength = list.length
+		, elemLength = o.tracks.length
 		, randomNum = Math.floor(Math.random()*elemLength)
-		, randomItem = list[randomNum];
+		, nextItem = o.tracks[randomNum];
 		
-		$(randomItem).addClass(o.selectedClass);
+		$(o.trackListSelector).find('li:contains('+nextItem+')').addClass(o.selectedClass);
 		
-		var nextTrack = $('.'+o.selectedClass).find('.title').html()
-		, album = $(o.trackListSelector).find('h2').html()
-		, track = '/music/'+album+'/'+nextTrack+'/play';
+		var album = $(o.trackListSelector).find('h2').html()
+		, track = '/music/'+album+'/'+nextItem+'/play';
 		
 		_playTrack(o,track,album,random);
 	}

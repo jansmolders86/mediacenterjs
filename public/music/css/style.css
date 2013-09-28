@@ -180,7 +180,10 @@ ul.music li.playing a{
 	cursor: pointer;
 	background:url(img/random-icon.png)no-repeat left top;
 	text-indent:-9999px;
+	display:block;
 }
+
+.random.hidden{display:none;}
 
 .random:hover,
 .random.active{ background:url(img/random-icon.png)no-repeat left bottom; }
