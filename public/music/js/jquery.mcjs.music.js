@@ -28,7 +28,8 @@
 				
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
-				$that : $that
+				$that : $that,
+				tracks : new Array
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -158,6 +159,8 @@
 			, year 			= 	data[0].year
 			, genre 		= 	data[0].genre
 			, tracks 		= 	data[0].tracks;
+			
+			o.tracks = tracks;
 		
 			$(o.trackListSelector).find('h2').html(album);
 
@@ -263,19 +266,22 @@
 	
 	function _nextTrack(o,album,songTitle){		
 		var random = false
-		, currentSong = $('li.'+o.selectedClass);
-		
-		currentSong.removeClass(o.selectedClass).next('li').addClass(o.selectedClass);
-		
-		var nextTrack = $('li.'+o.selectedClass).find('.title').html()
-		, album = $(o.trackListSelector).find('h2').html()
-		, track = '/music/'+album+'/'+nextTrack+'/play';
+		, currentSong = $('li.'+o.selectedClass).find('.title').text();
 
-		if (nextTrack !== undefined){
-			_playTrack(o,track,album,songTitle,random);
-		}else{
+		index = o.tracks.indexOf(currentSong);
+		if(index >= 0 && index < o.tracks.length - 1){
+		   nextItem = o.tracks[index + 1];
+		} else{
 			return;
-		}
+		}		
+
+		var album = $(o.trackListSelector).find('h2').html()
+		, track = '/music/'+album+'/'+nextItem+'/play';
+		
+		$('li.'+o.selectedClass).removeClass(o.selectedClass);
+		$(o.trackListSelector).find('li:contains('+nextItem+')').addClass(o.selectedClass);
+
+		_playTrack(o,track,album,songTitle,random);
 	}
 	
 	function _randomTrack(o){
