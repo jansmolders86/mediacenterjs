@@ -243,6 +243,7 @@
 						return ($(b).text()) < ($(a).text()) ? 1 : -1;    
 					}
 					
+					_focusedItem(o);
 					_lazyload(o);
 
 				});
