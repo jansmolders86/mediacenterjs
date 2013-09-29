@@ -43,7 +43,7 @@
 				storm : '',
 				feelsLike : '',
 				tempIndicator  : '&#8451;',
-				error  : '' 
+				error  : ''
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -117,21 +117,21 @@
 								var weathertypeset = $('.weathertype').text()
 						
 								if ( weathertypeset.match(o.cloudy) ){
-									$(".backdropimg").attr('src', "/weather/img/clouds.jpg").addClass("fadein");
+									$(o.backdropImageSelector).attr('src', "/weather/img/clouds.jpg").addClass("fadein");
 								}else if( weathertypeset.match(o.mist) ){
-									$(".backdropimg").attr('src', "/weather/img/misty.jpg").addClass("fadein");
+									$(o.backdropImageSelector).attr('src', "/weather/img/misty.jpg").addClass("fadein");
 								}else if( weathertypeset.match(o.clear) ){
-									$(".backdropimg").attr('src', "/weather/img/clear.jpg").addClass("fadein");
+									$(o.backdropImageSelector).attr('src', "/weather/img/clear.jpg").addClass("fadein");
 								}else if( weathertypeset.match(o.sunny) ){
-									$(".backdropimg").attr('src', "/weather/img/sunny.jpg").addClass("fadein");
+									$(o.backdropImageSelector).attr('src', "/weather/img/sunny.jpg").addClass("fadein");
 								}else if( weathertypeset.match(o.rain) ){
-									$(".backdropimg").attr('src', "/weather/img/rainy.jpg").addClass("fadein");
+									$(o.backdropImageSelector).attr('src', "/weather/img/rainy.jpg").addClass("fadein");
 								}else if( weathertypeset.match(o.snow) ){
-									$(".backdropimg").attr('src', "/weather/img/snowy.jpg").addClass("fadein");
+									$(o.backdropImageSelector).attr('src', "/weather/img/snowy.jpg").addClass("fadein");
 								}else if( weathertypeset.match(o.storm) ){
-									$(".backdropimg").attr('src', "/weather/img/stormy.jpg").addClass("fadein");
+									$(o.backdropImageSelector).attr('src', "/weather/img/stormy.jpg").addClass("fadein");
 								}else {
-									$(".backdropimg").attr('src', "/weather/img/default.jpg").addClass("fadein");
+									$(o.backdropImageSelector).attr('src', "/weather/img/default.jpg").addClass("fadein");
 								}
 							}
 						},
@@ -140,7 +140,7 @@
 						}
 					});
 					
-					$(".forecast").find("ul").remove()
+					$(o.forecastSelector).find("ul").remove()
 					$.ajax({
 						url : "http://api.wunderground.com/api/68a6ea8f6013979c/forecast/lang:"+o.LANG+"/q/"+o.language+"/"+o.location+".json",
 						dataType : "jsonp",
@@ -161,23 +161,23 @@
 										var mintemp = day.low.fahrenheit	
 										var maxtemp = day.high.fahrenheit
 									}
-									$("body").find(".forecast").append('<ul> <li class="weekday">'+ weekday +'</li> <li class="conditions" style="" data-weatherType="'+conditions+'"></li>  <li class="mintemp"> Min: '+ mintemp +'</li>  <li class="maxtemp"> Max:'+ maxtemp +'</li> </ul>');	
+									$(o.forecastSelector).append('<ul> <li class="weekday">'+ weekday +'</li> <li class="conditions" style="" data-weatherType="'+conditions+'"></li>  <li class="mintemp"> Min: '+ mintemp +'</li>  <li class="maxtemp"> Max:'+ maxtemp +'</li> </ul>');	
 								}
 								
 								
-								$('.forecast').find('ul').each(function(){
+								$(o.forecastSelector).find('ul').each(function(){
 									var weatherType = $(this).find('.conditions').attr('data-weatherType');
 									
 									console.log(weatherType)
 									
 									if (weatherType.match(o.cloudy) ){
-										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -439px');
-									}else if( weatherType.match(o.mist) ){
+										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -273px');
+									} else if( weatherType.match(o.mist) ){
 										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -197px');
 									}else if( weatherType.match(o.clear) ){
-										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -16px');
+										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -42px');
 									}else if( weatherType.match(o.sunny) ){
-										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -16px');
+										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -42px');
 									}else if( weatherType.match(o.rain) ){
 										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -349px');
 									}else if( weatherType.match(o.snow) ){
@@ -208,6 +208,11 @@
 	};
 	
 	/* default values for this plugin */
-	$.fn.mcjsw.defaults = {}
+	$.fn.mcjsw.defaults = {
+		datasetKey: 'mcjsweather' //always lowercase
+		, backdropImageSelector: '.backdropimg' 
+		, forecastSelector: '.forecast' 
+
+	};
 
 })(jQuery);
