@@ -111,7 +111,7 @@ module.exports = {
 		, overview = 'No data found...';
 		
 		// Init Database
-		dblite.bin = "./lib/database/sqlite3";
+		dblite.bin = "./bin/sqlite3/sqlite3";
 		var db = dblite('./lib/database/mcjs.sqlite');
 		db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number VARCHAR)");
 
@@ -272,7 +272,7 @@ module.exports = {
 	},
 	getGenres: function (req, res){
 		var dblite = require('dblite');
-		dblite.bin = "./lib/database/sqlite3";
+		dblite.bin = "./bin/sqlite3/sqlite3";
 		var db = dblite('./lib/database/mcjs.sqlite');
 
 		db.on('info', function (text) { console.log(text) });
@@ -291,7 +291,7 @@ module.exports = {
 	},
 	filter: function (req, res, infoRequest){
 		var dblite = require('dblite');
-		dblite.bin = "./lib/database/sqlite3";
+		dblite.bin = "./bin/sqlite3/sqlite3";
 		var db = dblite('./lib/database/mcjs.sqlite');
 
 		db.on('info', function (text) { console.log(text) });

@@ -19,7 +19,7 @@ module.exports = {
 		, tracks = null;
 		
 		// Init Database
-		dblite.bin = "./lib/database/sqlite3";
+		dblite.bin = "./bin/sqlite3/sqlite3";
 		var db = dblite('./lib/database/mcjs.sqlite');
 		db.query("CREATE TABLE IF NOT EXISTS music (filename TEXT PRIMARY KEY,title VARCHAR, cover VARCHAR, year VARCHAR, genre VARCHAR , tracks VARCHAR)");
 
