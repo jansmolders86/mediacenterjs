@@ -14,7 +14,7 @@ Status:
 
 __Heavy work in progress, Alpha version (0.0.35)__
 
-Why use it (once it is ready)?
+Why use it?
 ===========
 * Lightning fast
 * Extremely versatile
