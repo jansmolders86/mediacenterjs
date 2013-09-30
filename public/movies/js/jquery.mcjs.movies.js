@@ -38,6 +38,7 @@
 			_focusedItem(o);
 			
 			$(o.movieListSelector+"> li").sort(asc_sort).appendTo(o.movieListSelector);
+			
 			function asc_sort(a, b){
 				return ($(b).text()) < ($(a).text()) ? 1 : -1;    
 			}
@@ -111,7 +112,9 @@
 			},
 			mouseleave: function() {
 				$(o.backdropSelector).removeClass(o.fadeClass);
-				if ($('.'+o.posterClass+o.focusedClass).length > 1) $("img."+o.posterClass).removeClass(o.focusedClass);
+				if ($('li.'+o.posterClass+'.'+o.focusedClass).length) {
+					$('li.'+o.posterClass+'.'+o.focusedClass).removeClass(o.focusedClass);
+				}
 			},			
 			focus: function() {		
 				$(this).addClass(o.focusedClass);			
@@ -120,7 +123,9 @@
 			},
 			focusout: function() {
 				$(o.backdropSelector).removeClass(o.fadeClass);
-				if ($('.'+o.posterClass+o.focusedClass).length > 1) $("img."+posterClass).removeClass(o.focusedClass);
+				if ($('li.'+o.posterClass+'.'+o.focusedClass).length) {
+					$('li.'+o.posterClass+'.'+o.focusedClass).removeClass(o.focusedClass);
+				}
 			}
 		});	
 		
