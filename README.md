@@ -5,9 +5,6 @@ __A NodeJS based Mediacenter__
 
 Website: http://www.mediacenterjs.com
 
-Screenshots (Alpha GUI): 
-========
-
 ![Dashboard] (screenshots/screen1.png)
 
 More screenshots in the screenshot folder.
@@ -15,8 +12,7 @@ More screenshots in the screenshot folder.
 Status: 
 =======
 
-__Heavy work in progress, almost alpha, not ready for use__
-
+__Heavy work in progress, Alpha version (0.0.35)__
 
 Why use it (once it is ready)?
 ===========
@@ -62,7 +58,7 @@ I'm trying to figure out how to get around these limitations.
 Other known issues 
 ==================
 * Subfolder support is not working yet 
-* Code needs to be re-factored. Frontend will be ported to knockout (or angular)
+* Frontend will be ported to knockout (or angular)
 
 What still needs to be done
 ==================
@@ -73,7 +69,7 @@ What is MediacenterJS?
 =========================
 
 MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques and languages (HTML5/CSS/Javascript).
-The backend is based on Nodejs/ExpressJS 3x with jade templates producing easy to use code. 
+The backend is based on Node.JS with jade templates producing easy to use code. 
 The goal is to make it possible to add an 'app' to MCJS even with limited knowledge of said front end techniques. 
 
 Basic feature list:
