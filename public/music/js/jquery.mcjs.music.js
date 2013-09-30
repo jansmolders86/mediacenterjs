@@ -61,7 +61,7 @@
 					$(this).addClass(o.playingClass).addClass(o.selectedClass);
 					var image = $('.'+o.playingClass).find('img');
 					_dominantColor(o,image);
-					_playTrack(o,track,album);
+					_playTrack(o,track,album,songTitle,random);
 				}else {
 					_getAlbum(o, album);
 				}
@@ -274,12 +274,12 @@
 	}
 	
 	function _nextTrack(o,album,songTitle){		
-		var random = false
-		, currentSong = $('li.'+o.selectedClass).find('.title').text();
-
-		index = o.tracks.indexOf(currentSong);
+		var random = false;
+		
+		index = o.tracks.indexOf(songTitle);
 		if(index >= 0 && index < o.tracks.length - 1){
 		   nextItem = o.tracks[index + 1];
+		   songTitle = nextItem;
 		} else{
 			return;
 		}		
@@ -306,7 +306,7 @@
 		var album = $(o.trackListSelector).find('h2').html()
 		, track = '/music/'+album+'/'+nextItem+'/play';
 		
-		_playTrack(o,track,album,random);
+		_playTrack(o,track,album,songTitle,random);
 	}
 	
 	function _dominantColor(o,image){
