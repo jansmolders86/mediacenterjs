@@ -351,14 +351,13 @@ This app also makes use of the following modules:
 * colors
 * dblite
 
-* Icons by: P.J. Onori
-
 ###Special thanks to:###
 
-* Sylvain https://github.com/flyinva  For his Fench translation
-* Matthew Szatmary https://github.com/szatmary For is FFMPEG expertise
-* Richard Bernards https://github.com/RichardBernards For is architectural knowledge/support
-* Lucien Immink https://github.com/lucienimmink For is javascript knowledge/support
+* Sylvain https://github.com/flyinva  for his Fench translation
+* Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
+* Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
+* Lucien Immink https://github.com/lucienimmink for his javascript knowledge/support
+* P.J. Onori for his icons
 
 
 What is the beta version going to have?
