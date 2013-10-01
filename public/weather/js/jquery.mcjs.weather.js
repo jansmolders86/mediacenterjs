@@ -100,13 +100,13 @@
 								var weathertype = parsed_json['current_observation']['weather'];
 								var weathericon = parsed_json['current_observation']['icon_url'];
 								
-								if (o.language === 'nl'){
-									var feelslike_c = parsed_json['current_observation']['feelslike_c'];
-									var temp_c = parsed_json['current_observation']['temp_c'];
-								}else if (o.language === 'en'){
+								if (o.language === 'en'){
 									var feelslike_c = parsed_json['current_observation']['feelslike_f'];
 									var temp_c = parsed_json['current_observation']['temp_f'];
 									o.tempIndicator  = '&#8457;' 
+								} else{
+									var feelslike_c = parsed_json['current_observation']['feelslike_c'];
+									var temp_c = parsed_json['current_observation']['temp_c'];
 								}
 			
 								$("body").find("h1").html( locations +", "+ country);
@@ -154,12 +154,13 @@
 									var weekday = day.date.weekday							
 									var conditions = day.conditions
 									
-									if (o.language === 'nl'){
-										var mintemp = day.low.celsius	
-										var maxtemp = day.high.celsius
-									}else if (o.language === 'en'){
+									
+									if (o.language === 'en'){
 										var mintemp = day.low.fahrenheit	
 										var maxtemp = day.high.fahrenheit
+									} else {
+										var mintemp = day.low.celsius	
+										var maxtemp = day.high.celsius
 									}
 									$(o.forecastSelector).append('<ul> <li class="weekday">'+ weekday +'</li> <li class="conditions" style="" data-weatherType="'+conditions+'"></li>  <li class="mintemp"> Min: '+ mintemp +'</li>  <li class="maxtemp"> Max:'+ maxtemp +'</li> </ul>');	
 								}
