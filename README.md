@@ -12,7 +12,7 @@ More screenshots in the screenshot folder.
 Status: 
 =======
 
-__Heavy work in progress, Alpha version (0.0.35)__
+__Heavy work in progress, Alpha version (0.0.36)__
 
 Why use it?
 ===========
@@ -31,7 +31,7 @@ What currently works?
 * Basic keyboard controls
 * Onscreen keyboard
 * Movie indexing
-* Multi-language support (English and Dutch)
+* Multi-language support (English, French and Dutch)
 * Display movies with Poster, Backdrop and information 
 * Local caching of information and images
 * Basic transcoding and playback of movies and music
@@ -352,6 +352,13 @@ This app also makes use of the following modules:
 * dblite
 
 Icons by: P.J. Onori
+
+###Special thanks to:###
+
+Sylvain https://github.com/flyinva  For his Fench translation
+Matthew Szatmary https://github.com/szatmary For is FFMPEG expertise
+Richard Bernards https://github.com/RichardBernards For is architectural knowledge/support
+Lucien Immink https://github.com/lucienimmink For is javascript knowledge/support
 
 
 What is the beta version going to have?
