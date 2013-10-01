@@ -353,11 +353,11 @@ This app also makes use of the following modules:
 
 ###Special thanks to:###
 
-* Sylvain https://github.com/flyinva  For his Fench translation
-* Matthew Szatmary https://github.com/szatmary For his FFMPEG expertise
-* Richard Bernards https://github.com/RichardBernards For his architectural knowledge/support
-* Lucien Immink https://github.com/lucienimmink For his javascript knowledge/support
-* P.J. Onori For his icons
+* Sylvain https://github.com/flyinva  for his Fench translation
+* Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
+* Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
+* Lucien Immink https://github.com/lucienimmink for his javascript knowledge/support
+* P.J. Onori for his icons
 
 
 What is the beta version going to have?
