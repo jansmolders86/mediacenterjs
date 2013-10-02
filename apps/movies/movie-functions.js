@@ -35,7 +35,7 @@ module.exports = {
 								var metaDuration =  '-metadata duration="'+probeData.streams[0].duration+'"'
 								, tDuration =  '-t '+probeData.streams[0].duration
 								, proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-								.addOptions(['-y','-ss 0','-threads 4','-vcodec libx264','-pix_fmt yuv420p','-profile:v main','-b:v 512k','-acodec mp3','-ab 128','-ar 44100','-rtbufsize 1000k', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
+								.addOptions(['-y','-ss 0','-threads 4','-vcodec libx264','-pix_fmt yuv420p','-profile:v main','-b:v 512k','-acodec mp3','-ab 160000','-ar 44100','-rtbufsize 1000k', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
 								.writeToStream(res, function(retcode, error){
 									if (!error){
 										console.log('file has been converted succesfully',retcode);
