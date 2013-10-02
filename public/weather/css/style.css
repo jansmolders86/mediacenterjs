@@ -1,6 +1,6 @@
 /* Default override */
 
-body,html{overflow:hidden; position:relative;}
+body,html{overflow:hidden; position:relative; color:#333;}
 
 /* Weather app */
 #header{
@@ -48,6 +48,7 @@ body,html{overflow:hidden; position:relative;}
 	padding-top: 5px;
 	padding-left: 60px;
 	background:#ecf0f1;
+	opacity:0.8;
 }
 
 .forecast *{  
