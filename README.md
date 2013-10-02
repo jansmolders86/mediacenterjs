@@ -79,7 +79,7 @@ Basic feature list:
 * Movie, tv and music database with information and playback
 * Easy to use app framework
 
-What do I need to have installed to run this? 
+What do I need to have installed? 
 ==========================
 
 * FFmpeg installed (Linux and windows binaries are included)
