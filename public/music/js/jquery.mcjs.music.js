@@ -54,13 +54,17 @@
 					}
 				});
 
-				var album = $(this).find('.title').html();
-				if(album.match(/\.[0-9a-z]{1,5}$/i)){
+				var album = $(this).find('.title').text();
+				if(album.match("\.(mp3)","g")){
+					console.log('asd')
 					var track = '/music/none/'+album+'/play'
+					, songTitle = album
+					, random = false
 					, album = 'none';
 					$(this).addClass(o.playingClass).addClass(o.selectedClass);
 					var image = $('.'+o.playingClass).find('img');
 					_dominantColor(o,image);
+					
 					_playTrack(o,track,album,songTitle,random);
 				}else {
 					_getAlbum(o, album);
@@ -173,7 +177,7 @@
 			
 			// Populate tracks
 			tracks.forEach(function(value, index) {
-				$(o.trackListSelector +' > ul').append('<li><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+value+'</div></li>')
+				$(o.trackListSelector +' > ul').append('<li data-url="'+value+'"><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+value+'</div></li>')
 			});
 			
 			_presentTracks(o);
@@ -255,11 +259,19 @@
 			});
 			
 			myPlayer.on("pause", function(){
-				$('.'+o.selectedClass+' > .eq').addClass('pause');
+				if($('.boxed').hasClass('playing')){
+					$('.boxed.playing.selected').addClass('pause')
+				} else {
+					$('.'+o.selectedClass+' > .eq').addClass('pause');
+				}
 			});
 			
 			myPlayer.on("play", function(){
-				$('.'+o.selectedClass+' > .eq').removeClass('pause');
+				if($('.boxed').hasClass('playing')){
+					$('.boxed.playing.selected').removeClass('pause')
+				} else {
+					$('.'+o.selectedClass+' > .eq').removeClass('pause');
+				}
 			});
 			
 			myPlayer.on("ended", function(){

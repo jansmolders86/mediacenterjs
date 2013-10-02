@@ -10,7 +10,7 @@
 		"type": "GPLv3",
 		"url": "http://www.gnu.org/licenses"
 	}],
-	"version": "0.0.36",
+	"version": "0.0.40",
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",
@@ -30,6 +30,8 @@
 		"trakt": "0.0.5-2",
 		"colors":"0.6.0-1",
 		"ini":"1.1.0",
+		"async":"0.2.9",
+		"musicmetadata":"0.2.5",
 		"dblite":">=0.2.6"
 	}
 }

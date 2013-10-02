@@ -28,23 +28,37 @@ var express = require('express')
 , functions = require('./movie-functions');
 
 exports.index = function(req, res, next){	
-	var writePath = './public/movies/data/movieindex.js'
-	, getDir = false
-	, dir = config.moviepath
-	, fileTypes = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");;
+	var dir = config.moviepath
+	, suffix = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
 
-	helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes,  function(status){
-		var moviefiles = []
-		,moviefilepath = './public/movies/data/movieindex.js'
-		,moviefiles = fs.readFileSync(moviefilepath)
-		,moviefileResults = JSON.parse(moviefiles)	
+	helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+		var unique = {}, 
+		movies = [];
+		for(var i = 0, l = files.length; i < l; ++i){
+			var movieFiles = files[i].file;
+			var movieTitles = movieFiles.substring(movieFiles.lastIndexOf("/")).replace(/^\/|\/$/g, '');
+			
+			// filter movies on unique title
+			if(unique.hasOwnProperty(movieTitles)) {
+				continue;
+			}
+			
+			//single
+			if(movieTitles === '' && files[i].file !== undefined){
+				movieTitles = files[i].file;
+			}
+			
+			movies.push(movieTitles);
+			unique[movieTitles] = 1;
+		};
 		
 		res.render('movies',{
-			movies: moviefileResults,
+			movies: movies,
 			selectedTheme: config.theme,
-			status:status
 		});
 	});
+	
+	
 };
 
 exports.get = function(req, res, next){	

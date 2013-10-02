@@ -12,7 +12,7 @@ More screenshots in the screenshot folder.
 Status: 
 =======
 
-__Heavy work in progress, Alpha version (0.0.36)__
+__Heavy work in progress, Alpha version (0.0.40)__
 
 Why use it?
 ===========
@@ -44,6 +44,7 @@ What currently works?
 What's coming up
 ==================
 * Tv show app functionality
+* I3d tag support
 
 Known issues: video playback
 ==================
@@ -57,8 +58,8 @@ I'm trying to figure out how to get around these limitations.
 
 Other known issues 
 ==================
-* Subfolder support is not working yet 
-* Frontend will be ported to knockout (or angular)
+
+* Frontend needs to be ported to knockout (or angular)
 
 What still needs to be done
 ==================
@@ -170,7 +171,7 @@ How should I format my movie library and files?
 
 ###Directory conventions###
 
-MediacenterJS will look in the specified directory for video files. It will look in subdirectories of the specified dir for additional video files. But only one level deep to keep performance up.
+MediacenterJS will look in the specified directory for video files. It will look in subdirectories of the specified dir for additional video files.
 so the possible directories can be:
 
 	specifiedPath/fight club.avi
@@ -178,6 +179,10 @@ so the possible directories can be:
 or  
 
 	specifiedPath/f/fight club.avi
+	
+or  
+
+	specifiedPath/f/MyfavouriteMovies/fight club.avi
 	
 ###Filename conventions###
 On the basis of the name of the file, MCJS will try to get the movie details. This way the server does not have to look inside the files to get the metadata, which speeds up the process.
@@ -204,7 +209,7 @@ What can the music player do?
 
 Once you specify the location of your music, the music will look in the specified directory for mp3 files. 
 The idea behind the player is that it will use the folder name and file names to index the albums provided. This of course, has some advantages and disadvantages, 
-but it will mainly force you to use proper naming conventions and give you enormous freedom and transparency with what the system does and presents your files.
+but it will mainly force you to use proper naming conventions and give you enormous freedom and transparency with what the system does and presents your files. Although I3d Tag support is in the works.
 
 If you add an image in the directory and name it appropriately this image will be used by the music player.
 
@@ -217,11 +222,9 @@ If you have an album, the music player will look for a image file with the follo
 	"cover" and "front"
 	
 This image will be copied to the cache of MCJS so it can be used without restrictions. So you can even delete the image in the local dir and as long as you don't clear the cache, the image will be used.
-
 If no image is provided, the player will contact the website Discogs and try to get the art there. 
 
 Once you start playback, the eq icon and header will change colour according to the dominant colour of the album art. 
-
 
 What is a MCJS App and how will it work?
 -------------

@@ -9,80 +9,77 @@ module.exports = {
 		, colors = require('colors')
 		, ini = require('ini')
 		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));	
-		
-		var movie = null;
-		fs.readdir(config.moviepath,function(err,files){
-			if (err){
-				console.log('error checking location of file:',err .red);
-			}else{
-				var allFiles = new Array();
-				files.forEach(function(file){
-					if (file.match(movieRequest)){
-						movie = config.moviepath+file;
-						var stat = fs.statSync(movie);
-						
-						console.log('Client platform is', platform);
-						
-						if(platform === 'browser'){
-							console.log('Getting ready to play in a browser');
-							res.writeHead(200, {
-								'Content-Type':'video/flv',
-								'Content-Length':stat.size,
-							});
+	
+		var dir = config.moviepath
+		, suffix = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
 
-							probe(movie, function(err, probeData) {
-								if (err){
-									console.log('Can not probe movie for metadata', err .red)
-								} else {
-									var metaDuration =  '-metadata duration="'+probeData.streams[0].duration+'"'
-									, tDuration =  '-t '+probeData.streams[0].duration
-									, proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-									.addOptions(['-y','-ss 0','-threads 4','-vcodec libx264','-pix_fmt yuv420p','-profile:v main','-b:v 512k','-acodec mp3','-ab 128','-ar 44100','-rtbufsize 1000k', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
-									.writeToStream(res, function(retcode, error){
-										if (!error){
-											console.log('file has been converted succesfully',retcode);
-										}else{
-											console.log('file conversion error',error .red);
-										}
-									});
-								}
-							});
-						} else if(platform === 'ios'){
-							console.log('Getting ready to play on a IOS device');
-							res.writeHead(200, {
-								'Content-Type':'application/x-mpegURL',
-								'Content-Length':stat.size,
-							});
-						
-							var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-							.addOptions(['-vcodec libx264','-pix_fmt yuv420p','-s qvga','-segment_list_type m3u8','-threads 4','-map 0:v','-map 0:a:0','-c:a mp3', '-b:a 160000','-ac 2','-f hls','-hls_time 10','-hls_list_size 6','-hls_wrap 18','-start_number 1','-deinterlace'])							
-							.writeToStream(res, function(retcode, error){
-								if (!error){
-									console.log('file has been converted succesfully',retcode);
-								}else{
-									console.log('file conversion error',error .red);
-								}
-							});
-						} else if(platform === 'android'){
-							console.log('Getting ready to play on a Android device');
-							res.writeHead(200, {
-								'Content-Type':'video/webm',
-								'Content-Length':stat.size,
-							});
-						
-							var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-							.addOptions(['-vcodec libvpx','-vb 250k','-keyint_min 150','-g 150','-threads 4','-c:a libvorbis', '-b:a 160000','-ac 2','-f webm'])														
-							.writeToStream(res, function(retcode, error){
-								if (!error){
-									console.log('file has been converted succesfully',retcode);
-								}else{
-									console.log('file conversion error',error .red);
-								}
-							});
-						}
+		helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+			files.forEach(function(file){
+				if(file.file === movieRequest){
+					var movie = file.href;
+					var stat = fs.statSync(movie);
+					
+					console.log('Client platform is', platform);
+					
+					if(platform === 'browser'){
+						console.log('Getting ready to play in a browser');
+						res.writeHead(200, {
+							'Content-Type':'video/flv',
+							'Content-Length':stat.size,
+						});
+
+						probe(movie, function(err, probeData) {
+							if (err){
+								console.log('Can not probe movie for metadata', err .red)
+							} else {
+								var metaDuration =  '-metadata duration="'+probeData.streams[0].duration+'"'
+								, tDuration =  '-t '+probeData.streams[0].duration
+								, proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+								.addOptions(['-y','-ss 0','-threads 4','-vcodec libx264','-pix_fmt yuv420p','-profile:v main','-b:v 512k','-acodec mp3','-ab 128','-ar 44100','-rtbufsize 1000k', '-maxrate 620k',metaDuration,tDuration,'-f flv'])
+								.writeToStream(res, function(retcode, error){
+									if (!error){
+										console.log('file has been converted succesfully',retcode);
+									}else{
+										console.log('file conversion error',error .red);
+									}
+								});
+							}
+						});
+					} else if(platform === 'ios'){
+						console.log('Getting ready to play on a IOS device');
+						res.writeHead(200, {
+							'Content-Type':'application/x-mpegURL',
+							'Content-Length':stat.size,
+						});
+					
+						var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+						.addOptions(['-vcodec libx264','-pix_fmt yuv420p','-s qvga','-segment_list_type m3u8','-threads 4','-map 0:v','-map 0:a:0','-c:a mp3', '-b:a 160000','-ac 2','-f hls','-hls_time 10','-hls_list_size 6','-hls_wrap 18','-start_number 1','-deinterlace'])							
+						.writeToStream(res, function(retcode, error){
+							if (!error){
+								console.log('file has been converted succesfully',retcode);
+							}else{
+								console.log('file conversion error',error .red);
+							}
+						});
+					} else if(platform === 'android'){
+						console.log('Getting ready to play on a Android device');
+						res.writeHead(200, {
+							'Content-Type':'video/webm',
+							'Content-Length':stat.size,
+						});
+					
+						var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
+						.addOptions(['-vcodec libvpx','-vb 250k','-keyint_min 150','-g 150','-threads 4','-c:a libvorbis', '-b:a 160000','-ac 2','-f webm'])														
+						.writeToStream(res, function(retcode, error){
+							if (!error){
+								console.log('file has been converted succesfully',retcode);
+							}else{
+								console.log('file conversion error',error .red);
+							}
+						});
 					}
-				});
-			};
+				}
+			});
 		});
 	},
 	handler: function (req, res, infoRequest){

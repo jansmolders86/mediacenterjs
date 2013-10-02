@@ -67,32 +67,18 @@ module.exports = {
 			}else{
 
 				var dir = config.musicpath+encoder.htmlDecode(albumRequest)+'/'
-				, fileTypes = new RegExp("\.(mp3)","g");
+				, writePath = './public/music/data/musicindex.js'
+				, getDir = true
+				, suffix = new RegExp("\.(mp3)","g");
+				
+				helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+						var tracks = [];
+						for(var i = 0, l = files.length; i < l; ++i){
+							var track = files[i].file;
+							tracks.push(track);
+						};
 
-				fs.readdir(dir,function(err,files){
-					if (err){
-						console.log('wrong or bad directory, please specify a existing directory',err .red);
-					}else{
-						var allFiles = new Array();
-						files.forEach(function(file){
-							var fullPath = dir + file
-							stats = fs.lstatSync(fullPath);
-							
-							//TODO handle subfolder
-							if (stats.isDirectory(file)) {
-								var subdir = file
-								, subPath = dir + file
-								fs.readdirSync(subPath,function(err,files){
-									files.forEach(function(file){
-										if (file.match(fileTypes)) allFiles.push(subdir+file); 
-									});
-								});
-							} else { 
-								if (file.match(fileTypes)) allFiles.push(file); 
-							}
-						});
-						var allFilesJSON = JSON.stringify(allFiles, null, 4);
-						
+						var allFilesJSON = JSON.stringify(tracks, null, 4);
 						db.query(
 							'INSERT OR REPLACE INTO music VALUES(?,?,?,?,?,?)', [
 								filename,
@@ -104,7 +90,6 @@ module.exports = {
 							]
 						);
 						callback();
-					};
 				});
 			}
 		}
@@ -132,48 +117,39 @@ module.exports = {
 						var dir = config.musicpath+encoder.htmlDecode(albumRequest)+'/';
 						single = false 
 					}
-					fs.readdir(dir,function(err,files){
-						if (err){
-							console.log('Error looking for album art',err .red);
-							discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
-								console.log('copied local file '+ cover +' and '+filename+' and '+title+' and '+year+' and '+genre+' and '+tracks );
-								writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
-									getStoredData(albumRequest);
-								});
-							});	
-						}else{
-							// Check for local covers.
-							files.forEach(function(file){
-								if (file.match(/\.(jpg|jpeg|png|gif)/gi)){
-									if (single == true){
-										var title = albumRequest.replace(/\.(mp3)/gi,"")
-										if (file.match(title,"g")){
-											var localDir = config.musicpath+file;
-											discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
-												writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
-													getStoredData(albumRequest);
-												});
-											});	
-										}
-									} else if (file.match(/cover|front/gi)){
-										localDir = dir+file;
-										localFile = file; 
-										foundLocal = true;
-										
+					
+					var suffix = new RegExp("\.(mp3|jpg|jpeg|png|gif)","g");
+					helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+						files.forEach(function(file){
+							if (file.file.match(/\.(jpg|jpeg|png|gif)/gi)){
+								if (single == true){
+									var title = albumRequest.replace(/\.(mp3)/gi,"")
+									if (file.file.match(title,"g")){
+										var localDir = config.musicpath+file;
 										discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
 											writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
 												getStoredData(albumRequest);
 											});
 										});	
 									}
+								} else if (file.file.match(/cover|front/gi)){
+									localDir = file.dir+file;
+									localFile = file; 
+									foundLocal = true;
+									
+									discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
+										writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
+											getStoredData(albumRequest);
+										});
+									});	
 								}
+							}
+						});
+						discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
+							writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
+								getStoredData(albumRequest);
 							});
-							discogs(albumRequest,albumTitle, foundLocal, localDir, localFile, function(title,cover,year,genre){
-								writeData(albumRequest,filename,title,cover,year,genre,tracks,function(){
-									getStoredData(albumRequest);
-								});
-							});	
-						};
+						});	
 					});
 				} else {
 					console.log('Unknown file or album, writing fallback',albumRequest .yellow);
@@ -255,6 +231,7 @@ module.exports = {
 		, colors = require('colors')
 		, Encoder = require('node-html-encoder').Encoder
 		, encoder = new Encoder('entity')
+		, helper = require('../../lib/helpers.js')
 		, ini = require('ini')
 		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 		
@@ -262,36 +239,49 @@ module.exports = {
 		, decodeAlbum = encoder.htmlDecode(infoRequest);
 		
 		if (infoRequest === 'none'){
-			var track = config.musicpath+decodeTrack
-		}else {
-			var track = config.musicpath+decodeAlbum+'/'+decodeTrack
+			var track = config.musicpath+decodeTrack;
+			startplayback(track);
+		}else if(decodeAlbum !== undefined){
+			var dir = config.musicpath+decodeAlbum+'/';
+			var suffix = new RegExp();
+			helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+				files.forEach(function(file){
+					if(file.file === decodeTrack){
+						var track = file.href;
+						startplayback(track);
+					}
+				});
+			});
 		}
+		
+		
+		function startplayback(track){
+			var stat = fs.statSync(track)
+			, start = 0
+			, end = 0
+			, range = req.header('Range');
 
-		var stat = fs.statSync(track)
-		, start = 0
-		, end = 0
-		, range = req.header('Range');
+			if (range != null) {
+			start = parseInt(range.slice(range.indexOf('bytes=')+6,
+				range.indexOf('-')));
+			end = parseInt(range.slice(range.indexOf('-')+1,
+				range.length));
+			}
+			if (isNaN(end) || end === 0) end = stat.size-1;
+			if (start > end) return;
 
-		if (range != null) {
-		start = parseInt(range.slice(range.indexOf('bytes=')+6,
-			range.indexOf('-')));
-		end = parseInt(range.slice(range.indexOf('-')+1,
-			range.length));
+			console.log('Playing track', track .green)
+
+			res.writeHead(206, { // NOTE: a partial http response
+				'Connection':'close',
+				'Content-Type':'audio/mp3',
+				'Content-Length':end - start,
+				'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
+				'Transfer-Encoding':'chunked'
+			});
+
+			var stream = fs.createReadStream(track);
+			stream.pipe(res);
 		}
-		if (isNaN(end) || end === 0) end = stat.size-1;
-		if (start > end) return;
-
-		console.log('Playing track', track .green)
-
-		res.writeHead(206, { // NOTE: a partial http response
-			'Connection':'close',
-			'Content-Type':'audio/mp3',
-			'Content-Length':end - start,
-			'Content-Range':'bytes '+start+'-'+end+'/'+stat.size,
-			'Transfer-Encoding':'chunked'
-		});
-
-		var stream = fs.createReadStream(track);
-		stream.pipe(res);
 	}
 }

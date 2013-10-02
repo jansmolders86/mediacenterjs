@@ -53,7 +53,7 @@
 			
 			$(o.overlayselector).on('click tap',function(e) {
 				e.preventDefault();	
-				var movieTitle = $(this).attr('data-movie').replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv|txt)/gi,"")
+				var movieTitle = $(this).attr('data-movie');
 				
 				if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
 					o.platform = 'ios';

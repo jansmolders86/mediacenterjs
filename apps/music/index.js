@@ -13,20 +13,32 @@ exports.engine = 'jade';
 
 exports.index = function(req, res, next){	
 	var dir = config.musicpath
-	, writePath = './public/music/data/musicindex.js'
-	, getDir = true
-	, fileTypes = new RegExp("\.(mp3)","g");
+	, suffix = new RegExp("\.(mp3)","g");
 	
-	helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes, function(status){
-		var musicfiles = []
-		,musicfilepath = './public/music/data/musicindex.js'
-		,musicfiles = fs.readFileSync(musicfilepath)
-		,musicfileResults = JSON.parse(musicfiles)	
+	helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+		var unique = {}, 
+		albums = [];
+		for(var i = 0, l = files.length; i < l; ++i){
+			var albumDir = files[i].dir;
+			var albumTitles = albumDir.substring(albumDir.lastIndexOf("/")).replace(/^\/|\/$/g, '');
+			
+			// filter albums on unique title
+			if(unique.hasOwnProperty(albumTitles)) {
+				continue;
+			}
+			
+			//single
+			if(albumTitles === '' && files[i].file !== undefined){
+				albumTitles = files[i].file;
+			}
+			
+			albums.push(albumTitles);
+			unique[albumTitles] = 1;
+		};
 		
 		res.render('music',{
-			music: musicfileResults,
-			selectedTheme: config.theme,
-			status:status
+			music: albums,
+			selectedTheme: config.theme
 		});
 	});
 };

@@ -48,15 +48,12 @@ html(lang="en")
 			h1 #{lingua.music}
 		#wrapper
 			#musicWrapper
-				- if(status !== null)
-					p.gui= status
-				else
-					ul.music
-						each album in music
-							li.boxed
-								img.cover(src="/core/css/img/ajax-loader.gif")
-								.overlay
-									a.title= album
+				ul.music
+					each album in music
+						li.boxed
+							img.cover(src="/core/css/img/ajax-loader.gif")
+							.overlay
+								a.title= album
 			#tracklist
 				#albumInfo
 					img.cover(src="/core/css/img/ajax-loader.gif")			

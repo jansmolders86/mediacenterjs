@@ -164,8 +164,9 @@ ul.music li.playing a{
     vertical-align: bottom;
 	margin-right:1px;
 }
-.eq.pause {
-	background:url(img/pause-icon.png) no-repeat -2px 12px;
+.eq.pause,
+li.playing.pause a{
+	background:url(img/pause-icon.png) no-repeat -2px 12px !important;
 }
 .eq.pause .bar {
 	visibility:hidden;
