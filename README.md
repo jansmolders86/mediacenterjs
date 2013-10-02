@@ -357,6 +357,7 @@ This app also makes use of the following modules:
 ###Special thanks to:###
 
 * Sylvain https://github.com/flyinva  for his Fench translation
+* Jussi Vatjus https://github.com/jupe for his code support
 * Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
 * Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
 * Lucien Immink https://github.com/lucienimmink for his javascript knowledge/support
