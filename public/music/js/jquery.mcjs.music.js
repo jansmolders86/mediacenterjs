@@ -145,6 +145,7 @@
 			cover.attr('src','');	
 			setTimeout(function(){
 				cover.attr('src',thumbnail).addClass('coverfound');
+				album.addClass('coverfound');
 			},500);
 		});
 	}
