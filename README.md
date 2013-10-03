@@ -12,7 +12,7 @@ More screenshots in the screenshot folder.
 Status: 
 =======
 
-__Heavy work in progress, Alpha version (0.0.40)__
+__Heavy work in progress, Alpha version (0.0.41)__
 
 Why use it?
 ===========
@@ -40,11 +40,11 @@ What currently works?
 * Retrieving of tv show information
 * Basic screensaver
 * Lazy loading of movie and music items
+* I3d tag support
 
 What's coming up
 ==================
 * Tv show app functionality
-* I3d tag support
 
 Known issues: video playback
 ==================
@@ -208,9 +208,7 @@ What can the music player do?
 -------------
 
 Once you specify the location of your music, the music will look in the specified directory for mp3 files. 
-The idea behind the player is that it will use the folder name and file names to index the albums provided. This of course, has some advantages and disadvantages, 
-but it will mainly force you to use proper naming conventions and give you enormous freedom and transparency with what the system does and presents your files. Although I3d Tag support is in the works.
-
+The I3d Tag will be used to determine the correct album information. If no correct ID3tag is found, the folder name will be used to determine the artist/album.
 If you add an image in the directory and name it appropriately this image will be used by the music player.
 
 So if it is a single like a live recording or a mixtape, just add an image with exactly the same name as the mp3 in the same directory. For example:

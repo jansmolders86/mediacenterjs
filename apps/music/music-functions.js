@@ -194,46 +194,71 @@ module.exports = {
 		};
 		
 		function discogs(albumRequest, albumTitle, foundLocal, localDir, localFile, callback){	
-			helper.xhrCall("http://api.discogs.com/database/search?q="+albumTitle+"&type=release&callback=", function(response) {
+			var mm = require('musicmetadata');
+			var dir = config.musicpath+albumRequest+'/';
+			var suffix = new RegExp("\.(mp3)","g");
+			helper.getLocalFiles(req, res, dir, suffix, function(err,files){
 
-				var requestResponse = JSON.parse(response)
-				,requestInitialDetails = requestResponse.results[0];
-				
-				if (requestInitialDetails !== undefined && requestInitialDetails !== '' && requestInitialDetails !== null) {
-				
-					title = requestInitialDetails.title;
-					cover = '/music/css/img/nodata.jpg';
-					year = requestInitialDetails.year;
-					genre = requestInitialDetails.genre[0];
-				
-					if (foundLocal = true && localDir !== null && localFile !== null){
-						fs.copy(localDir, './public/music/data/'+albumRequest+'/'+localFile, function (err) {
-							if (err) console.log('Error copying image to cache',err .red);
-							console.log('Copied cover to cache succesfull' .green);
-						});		
-						cover = '/music/data/'+albumRequest+'/'+localFile;	
-						callback(title,cover,year,genre);		
-					} else {
-						downloadCache(requestInitialDetails, function(cover) {
-							var localImageDir = '/music/data/'+albumRequest+'/'
-							, localCover = cover.match(/[^/]+$/);
+				var parser = new mm(fs.createReadStream(files[0].href));
 
-							cover = localImageDir+localCover;
-							callback(title,cover,year,genre);						
-						});
+				console.log('Looking for ID3 tag info');	
+				//listen for the metadata event
+				parser.on('metadata', function (result) {
+					
+					var albumArtist = result.artist;
+					var albumName = result.album;
+					
+					if(albumArtist !== undefined && albumArtist !== null && albumArtist !== '' && albumName !== undefined && albumName !== null && albumName !== ''){
+						var albumString = albumArtist.toString() +' - '+albumName.toString();
+						console.log('Found ID3 tag info:', albumString);
+					}else{
+						var albumString = albumTitle;
+						console.log('No ID3 tag info, falling back:', albumString);
 					}
 
-				} else {
-					console.log('Unknown file or album, writing fallback' .yellow)
-					
-					title = 'No data found...';
-					cover = '/music/css/img/nodata.jpg';
-					year = 'No data found...';
-					genre = 'No data found...';
-					
-					callback(title,cover,year,genre);		
-				}
-			});	
+					helper.xhrCall("http://api.discogs.com/database/search?q="+albumString+"&type=release&callback=", function(response) {
+
+						var requestResponse = JSON.parse(response)
+						,requestInitialDetails = requestResponse.results[0];
+						
+						if (requestInitialDetails !== undefined && requestInitialDetails !== '' && requestInitialDetails !== null) {
+						
+							title = requestInitialDetails.title;
+							cover = '/music/css/img/nodata.jpg';
+							year = requestInitialDetails.year;
+							genre = requestInitialDetails.genre[0];
+						
+							if (foundLocal = true && localDir !== null && localFile !== null){
+								fs.copy(localDir, './public/music/data/'+albumRequest+'/'+localFile, function (err) {
+									if (err) console.log('Error copying image to cache',err .red);
+									console.log('Copied cover to cache succesfull' .green);
+								});		
+								cover = '/music/data/'+albumRequest+'/'+localFile;	
+								callback(title,cover,year,genre);		
+							} else {
+								downloadCache(requestInitialDetails, function(cover) {
+									var localImageDir = '/music/data/'+albumRequest+'/'
+									, localCover = cover.match(/[^/]+$/);
+
+									cover = localImageDir+localCover;
+									callback(title,cover,year,genre);						
+								});
+							}
+
+						} else {
+							console.log('Unknown file or album, writing fallback' .yellow)
+							
+							title = 'No data found...';
+							cover = '/music/css/img/nodata.jpg';
+							year = 'No data found...';
+							genre = 'No data found...';
+							
+							callback(title,cover,year,genre);		
+						}
+					});	
+				  
+				});
+			});
 		}
 		
 		function downloadCache(response,callback){	
@@ -274,7 +299,7 @@ module.exports = {
 			startplayback(track);
 		}else if(decodeAlbum !== undefined){
 			var dir = config.musicpath+decodeAlbum+'/';
-			var suffix = new RegExp();
+			var suffix = new RegExp("\.(mp3)","g");
 			helper.getLocalFiles(req, res, dir, suffix, function(err,files){
 				files.forEach(function(file){
 					if(file.file === decodeTrack){
