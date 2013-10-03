@@ -34,6 +34,9 @@
 			
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
+			
+			_loadItems(o);
+			
 			_setHeight(o);
 			$(window).resize(function() {
 				_setHeight(o);	
@@ -44,6 +47,32 @@
 			});
 			_lazyload(o);
 			
+			$(o.backLinkSelector).on('click tap',function(e) {
+				e.preventDefault();	
+				if ($(o.trackListSelector).is(':hidden')){	
+					window.location = '/';
+				} else if ($(o.trackListSelector).is(':visible')) {	
+					$(o.trackListSelector).hide();
+					$(o.musicListSelector).fadeIn();
+				}
+			});
+
+		});
+	}
+	
+	/**** Start of custom functions ***/
+	
+	function _loadItems(o){
+		$.ajax({
+			url: '/music/loadItems', 
+			type: 'get',
+			dataType: 'json'
+		}).done(function(data){	
+			console.log(data);
+			o.viewModel = ko.observableArray(data);
+			ko.applyBindings(o.viewModel,o.$that[0]);
+			
+			// TODO: click handler ko
 			$(o.musicListSelector+' ul > li').on('click tap', function(e) {
 				e.preventDefault();	
 				
@@ -71,20 +100,8 @@
 				}
 			});
 			
-			$(o.backLinkSelector).on('click tap',function(e) {
-				e.preventDefault();	
-				if ($(o.trackListSelector).is(':hidden')){	
-					window.location = '/';
-				} else if ($(o.trackListSelector).is(':visible')) {	
-					$(o.trackListSelector).hide();
-					$(o.musicListSelector).fadeIn();
-				}
-			});
-
-		});
+		});	
 	}
-	
-	/**** Start of custom functions ***/
 
 	function _setHeight(o){
 		var viewportHeight = $(window).height();

@@ -9,6 +9,7 @@ html(lang="en")
 		link(rel='stylesheet', href='/themes/'+selectedTheme)
 		
 		script(src="/core/js/jquery-1.8.2.min.js")
+		script(src="/core/js/plugins/knockout-2.3.0.js")
 		script(src="/core/js/jquery-ui-1.10.3.min.js")
 		
 		script(src="/core/js/plugins/jquery.idle-timer.js")
@@ -48,12 +49,11 @@ html(lang="en")
 			h1 #{lingua.music}
 		#wrapper
 			#musicWrapper
-				ul.music
-					each album in music
-						li.boxed
-							img.cover(src="/core/css/img/ajax-loader.gif")
-							.overlay
-								a.title= album
+				ul.music(data-bind="foreach:  $data")
+					li.boxed
+						img.cover(src="/core/css/img/ajax-loader.gif")
+						.overlay
+							a.title(data-bind="text:$data")
 			#tracklist
 				#albumInfo
 					img.cover(src="/core/css/img/ajax-loader.gif")			

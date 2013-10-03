@@ -29,7 +29,8 @@
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
 				$that: $that,
-				platform : 'browser'
+				platform : 'browser',
+				viewModel : {}
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -47,25 +48,11 @@
 				_lazyload(o);
 			});
 			
+			_loadItems(o);
+			
 			_lazyload(o);
 			_scrollBackdrop(o);
 			_showAndFilterAvailableGenres(o);
-			
-			$(o.overlayselector).on('click tap',function(e) {
-				e.preventDefault();	
-				var movieTitle = $(this).attr('data-movie');
-				
-				if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
-					o.platform = 'ios';
-					var url = '/movies/'+movieTitle+'/play/ios';
-				} else if(navigator.userAgent.toLowerCase().indexOf("android") > -1){
-					o.platform = 'android';
-					var url = '/movies/'+movieTitle+'/play/android';
-				}else {
-					var url = '/movies/'+movieTitle+'/play';
-				}	
-				_playMovie(o, url);
-			});
 			
 			$(window).scroll(function(){
 				if($(this).scrollTop() > 200){
@@ -79,6 +66,38 @@
 	}
 	
 	/**** Start of custom functions ***/
+	
+	function _loadItems(o){
+		$.ajax({
+			url: '/movies/loadItems', 
+			type: 'get',
+			dataType: 'json'
+		}).done(function(data){	
+			console.log(data);
+			o.viewModel = ko.observableArray(data);
+			ko.applyBindings(o.viewModel,o.$that[0]);
+			
+				
+			//TODO: make ko click
+			$(o.overlayselector).on('click tap',function(e) {
+				e.preventDefault();	
+				var movieTitle = $(this).attr('title');
+				
+				if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
+					o.platform = 'ios';
+					var url = '/movies/'+movieTitle+'/play/ios';
+				} else if(navigator.userAgent.toLowerCase().indexOf("android") > -1){
+					o.platform = 'android';
+					var url = '/movies/'+movieTitle+'/play/android';
+				}else {
+					var url = '/movies/'+movieTitle+'/play';
+				}	
+				
+				_playMovie(o, url);
+			});
+			
+		});	
+	}
 	
 	function _lazyload(o){
 		//Set timeout for fast scrolling
@@ -178,6 +197,8 @@
 
 				// Give the plugin time to load the (new) images.
 				// Is need for chrome bug with image loading..
+				
+				//TODO: load with ko
 				setTimeout(function(){
 					visibleMovie.find("img."+o.posterClass).attr('src','');	
 					visibleMovie.find("img."+o.posterClass).attr('src',posterImage).addClass('coverfound');		

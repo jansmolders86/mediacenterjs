@@ -9,6 +9,7 @@ html(lang="en")
 		link(rel='stylesheet', href='/themes/'+selectedTheme)
 		
 		script(src="/core/js/jquery-1.8.2.min.js")
+		script(src="/core/js/plugins/knockout-2.3.0.js")
 		script(src="/core/js/jquery-ui-1.10.3.min.js")
 		
 		script(src="/core/js/plugins/jquery.idle-timer.js")
@@ -28,7 +29,6 @@ html(lang="en")
 
 		script.
 			$(function(){
-				//$('.movies').jScrollPane();
 				$('body').mcjs();
 				$('body').mcjsm();	
 			});
@@ -43,12 +43,11 @@ html(lang="en")
 
 		#wrapper
 			#moviebrowser
-					ul.movies
-						each movie in movies
-							li.movieposter.boxed
-								.imageWrapper
-									img.movieposter(src="/core/css/img/ajax-loader.gif")
-								.overlay(data-movie= movie)							
-								span.title= movie		
-								.overview
-								.specs
+				ul.movies(data-bind="foreach:  $data")
+					li.movieposter.boxed
+						.imageWrapper
+							img.movieposter(src="/core/css/img/ajax-loader.gif")
+						.overlay(data-bind="attr:{title: $data}")			
+						span.title(data-bind="text:$data")	
+						.overview
+						.specs

@@ -28,37 +28,9 @@ var express = require('express')
 , functions = require('./movie-functions');
 
 exports.index = function(req, res, next){	
-	var dir = config.moviepath
-	, suffix = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
-
-	helper.getLocalFiles(req, res, dir, suffix, function(err,files){
-		var unique = {}, 
-		movies = [];
-		for(var i = 0, l = files.length; i < l; ++i){
-			var movieFiles = files[i].file;
-			var movieTitles = movieFiles.substring(movieFiles.lastIndexOf("/")).replace(/^\/|\/$/g, '');
-			
-			// filter movies on unique title
-			if(unique.hasOwnProperty(movieTitles)) {
-				continue;
-			}
-			
-			//single
-			if(movieTitles === '' && files[i].file !== undefined){
-				movieTitles = files[i].file;
-			}
-			
-			movies.push(movieTitles);
-			unique[movieTitles] = 1;
-		};
-		
-		res.render('movies',{
-			movies: movies,
-			selectedTheme: config.theme,
-		});
+	res.render('movies',{
+		selectedTheme: config.theme,
 	});
-	
-	
 };
 
 exports.get = function(req, res, next){	
@@ -77,6 +49,8 @@ exports.get = function(req, res, next){
 			case('filter'):
 				functions.getGenres(req, res);
 			break;
+			case('loadItems'):
+				functions.loadItems(req,res);
 			default:
 				return;
 			break;		

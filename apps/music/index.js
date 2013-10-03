@@ -12,34 +12,8 @@ var express = require('express')
 exports.engine = 'jade';
 
 exports.index = function(req, res, next){	
-	var dir = config.musicpath
-	, suffix = new RegExp("\.(mp3)","g");
-	
-	helper.getLocalFiles(req, res, dir, suffix, function(err,files){
-		var unique = {}, 
-		albums = [];
-		for(var i = 0, l = files.length; i < l; ++i){
-			var albumDir = files[i].dir;
-			var albumTitles = albumDir.substring(albumDir.lastIndexOf("/")).replace(/^\/|\/$/g, '');
-			
-			// filter albums on unique title
-			if(unique.hasOwnProperty(albumTitles)) {
-				continue;
-			}
-			
-			//single
-			if(albumTitles === '' && files[i].file !== undefined){
-				albumTitles = files[i].file;
-			}
-			
-			albums.push(albumTitles);
-			unique[albumTitles] = 1;
-		};
-		
-		res.render('music',{
-			music: albums,
-			selectedTheme: config.theme
-		});
+	res.render('music',{
+		selectedTheme: config.theme
 	});
 };
 
@@ -48,11 +22,24 @@ exports.get = function(req, res, next){
 	, optionalParam = req.params.optionalParam
 	, action = req.params.action;
 	
+	if (optionalParam === undefined){
+		switch(infoRequest) {
+			case('loadItems'):
+				functions.loadItems(req,res);
+			default:
+				return;
+			break;		
+		}	
+	}
+	
 	if(!action){
 		switch(optionalParam) {
 			case('info'):
 				functions.getInfo(req, res, infoRequest);
 			break;	
+			case('loadItems'):
+				functions.loadItems(req,res);
+			break;
 			default:
 				functions.getInfo(req, res, infoRequest);
 				return;

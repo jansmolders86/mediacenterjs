@@ -1,4 +1,35 @@
 module.exports = {
+	loadItems: function(req,res){
+		var fs = require('fs')
+		, helper = require('../../lib/helpers.js')	
+		, ini = require('ini')
+		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))	
+		, dir = config.musicpath
+		, suffix = new RegExp("\.(mp3)","g");
+
+		helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+			var unique = {}, 
+			albums = [];
+			for(var i = 0, l = files.length; i < l; ++i){
+				var albumDir = files[i].dir;
+				var albumTitles = albumDir.substring(albumDir.lastIndexOf("/")).replace(/^\/|\/$/g, '');
+				
+				// filter albums on unique title
+				if(unique.hasOwnProperty(albumTitles)) {
+					continue;
+				}
+				
+				//single
+				if(albumTitles === '' && files[i].file !== undefined){
+					albumTitles = files[i].file;
+				}
+				
+				albums.push(albumTitles);
+				unique[albumTitles] = 1;
+			};
+			res.json(albums);
+		});
+	},
 	getInfo: function(req, res, infoRequest){
 		var fs = require('fs.extra')
 		, colors = require('colors')
