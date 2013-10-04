@@ -24,7 +24,6 @@ var express = require('express')
 , fs = require('fs.extra')
 , ini = require('ini')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
-, helper = require('../../lib/helpers.js')
 , functions = require('./movie-functions');
 
 exports.index = function(req, res, next){	

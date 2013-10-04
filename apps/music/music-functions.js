@@ -1,13 +1,17 @@
+// TODO: This file needs heavy optimization!!
+
+var file_utils = require('../../lib/utils/file-utils'),
+	ajax_utils = require('../../lib/utils/ajax-utils');
+
 module.exports = {
 	loadItems: function(req,res){
 		var fs = require('fs')
-		, helper = require('../../lib/helpers.js')	
 		, ini = require('ini')
 		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))	
 		, dir = config.musicpath
 		, suffix = new RegExp("\.(mp3)","g");
 
-		helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+		file_utils.getLocalFiles(dir, suffix, function(err,files){
 			var unique = {}, 
 			albums = [];
 			for(var i = 0, l = files.length; i < l; ++i){
@@ -35,7 +39,6 @@ module.exports = {
 		, colors = require('colors')
 		, Encoder = require('node-html-encoder').Encoder
 		, encoder = new Encoder('entity')
-		, helper = require('../../lib/helpers.js')
 		, ini = require('ini')
 		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
 		, dblite = require('dblite');
@@ -101,8 +104,8 @@ module.exports = {
 				, writePath = './public/music/data/musicindex.js'
 				, getDir = true
 				, suffix = new RegExp("\.(mp3)","g");
-				
-				helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+
+				file_utils.getLocalFiles(req, res, dir, suffix, function(err,files){
 						var tracks = [];
 						for(var i = 0, l = files.length; i < l; ++i){
 							var track = files[i].file;
@@ -150,7 +153,7 @@ module.exports = {
 					}
 					
 					var suffix = new RegExp("\.(mp3|jpg|jpeg|png|gif)","g");
-					helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+					file_utils.getLocalFiles(req, res, dir, suffix, function(err,files){
 						files.forEach(function(file){
 							if (file.file.match(/\.(jpg|jpeg|png|gif)/gi)){
 								if (single == true){
@@ -197,7 +200,7 @@ module.exports = {
 			var mm = require('musicmetadata');
 			var dir = config.musicpath+albumRequest+'/';
 			var suffix = new RegExp("\.(mp3)","g");
-			helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+			file_utils.getLocalFiles(req, res, dir, suffix, function(err,files){
 
 				var parser = new mm(fs.createReadStream(files[0].href));
 
@@ -216,7 +219,7 @@ module.exports = {
 						console.log('No ID3 tag info, falling back:', albumString);
 					}
 
-					helper.xhrCall("http://api.discogs.com/database/search?q="+albumString+"&type=release&callback=", function(response) {
+					ajax_utils.xhrCall("http://api.discogs.com/database/search?q="+albumString+"&type=release&callback=", function(response) {
 
 						var requestResponse = JSON.parse(response)
 						,requestInitialDetails = requestResponse.results[0];
@@ -287,7 +290,6 @@ module.exports = {
 		, colors = require('colors')
 		, Encoder = require('node-html-encoder').Encoder
 		, encoder = new Encoder('entity')
-		, helper = require('../../lib/helpers.js')
 		, ini = require('ini')
 		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 		
@@ -300,7 +302,7 @@ module.exports = {
 		}else if(decodeAlbum !== undefined){
 			var dir = config.musicpath+decodeAlbum+'/';
 			var suffix = new RegExp("\.(mp3)","g");
-			helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+			file_utils.getLocalFiles(dir, suffix, function(err,files){
 				files.forEach(function(file){
 					if(file.file === decodeTrack){
 						var track = file.href;

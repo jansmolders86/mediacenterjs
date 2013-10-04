@@ -28,7 +28,8 @@ var express = require('express')
 , probe = require('node-ffprobe')
 , rimraf = require('rimraf')
 , util = require('util')
-, helper = require('../../lib/helpers.js')
+, file_utils = require('../../lib/utils/file-utils')
+, ajax_utils = require('../../lib/utils/ajax-utils')
 , Encoder = require('node-html-encoder').Encoder
 , encoder = new Encoder('entity')
 , Trakt = require('trakt')
@@ -43,7 +44,7 @@ exports.index = function(req, res, next){
 	, dir = config.tvpath
 	, fileTypes = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");;
 
-	helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes,  function(status){
+	file_utils.getLocalFiles(dir, writePath, getDir, fileTypes,  function(status){
 		var tvfiles = []
 		,tvfilepath = './public/tv/data/tvindex.js'
 		,tvfiles = fs.readFileSync(tvfilepath)
@@ -126,41 +127,39 @@ exports.post = function(req, res, next){
 			banner = '/tv/images/banner.png';
 		}
 		callback(banner);
-	};
+	}
 
 	function checkDirForCorruptedFiles(tvRequest){
-		var checkDir = './public/tv/data/'+tvRequest
+		var checkDir = './public/tv/data/' + tvRequest;
 		
-		if(fs.existsSync('./public/tv/data/'+tvRequest+'/data.js')){
-			fs.stat('./public/tv/data/'+tvRequest+'/data.js', function (err, stats) {		
+		if(fs.existsSync('./public/tv/data/' + tvRequest + '/data.js')){
+			fs.stat('./public/tv/data/' + tvRequest + '/data.js', function (err, stats) {
 				if(stats.size == 0){
-					helper.removeBadDir(req, res, checkDir)
+					file_utils.removeBadDir(checkDir, res.send);
 				} else {
-					fs.readFile('./public/tv/data/'+tvRequest+'/data.js', 'utf8', function (err, data) {
-						if(!err){
+					fs.readFile('./public/tv/data/' + tvRequest + '/data.js', 'utf8', function (err, data) {
+						if(!err) {
 							res.send(data);
-						}else if(err){
-							helper.removeBadDir(req, res, checkDir);
+						} else {
+							file_utils.removeBadDir(checkDir, res.send);
 						}
 					});
 				}
 			});
 		} else {
-			helper.removeBadDir(req, res, checkDir);
+			file_utils.removeBadDir(checkDir, res.send);
 		}
-	};
+	}
 	
 	function writeData(title,genre,certification,banner){		
-		var scraperdata = new Array()
-		,scraperdataset = null;
-		
-		scraperdataset = { title:title, genre:genre, certification:certification, banner:banner }
-		scraperdata[scraperdata.length] = scraperdataset;
-		var dataToWrite = JSON.stringify(scraperdata, null, 4);
-		var writePath = './public/tv/data/'+tvRequest+'/data.js'
-		
-		helper.writeToFile(req,res,writePath,dataToWrite);
-							
-	};
+		var scraperdata = [];
 
+		scraperdata[0] = { title:title, genre:genre, certification:certification, banner:banner };
+		var dataToWrite = JSON.stringify(scraperdata, null, 4);
+		var writePath = './public/tv/data/' + tvRequest + '/data.js';
+
+		ajax_utils.writeToFile(writePath, dataToWrite, function(data) {
+			res.send(data);
+		});
+	}
 };

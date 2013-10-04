@@ -5,7 +5,6 @@ var express = require('express')
 , fs = require('fs.extra')
 , ini = require('ini')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
-, helper = require('../../lib/helpers.js')
 , functions = require('./music-functions');
  
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/

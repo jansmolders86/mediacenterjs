@@ -1,6 +1,7 @@
 var ini = require('ini')
   , fs = require('fs')
-  , helper = require('../../lib/helpers.js')	
+  , file_utils = require('../../lib/utils/file-utils')
+  , ajax_utils = require('../../lib/utils/ajax-utils')
   , colors = require('colors')
   , dblite = require('dblite')
   , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
@@ -9,8 +10,8 @@ module.exports = {
 	getUniqueMovieFiles: function(req, res, onlyFilenames, callback) {
 		var dir = config.moviepath
 		  , suffix = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
-		  
-		helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+
+		file_utils.getLocalFiles(dir, suffix, function(err, files){
 			var unique = {}
 			movies = [];
 			for(var i = 0, l = files.length; i < l; ++i){
@@ -180,7 +181,7 @@ module.exports = {
 				year = ''; 
 			}
 
-			helper.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&language="+config.language+"&year="+year+"&=", function(response) {
+			ajax_utils.xhrCall("http://api.themoviedb.org/3/search/movie?api_key="+api_key+"&query="+movieTitle+"&language="+config.language+"&year="+year+"&=", function(response) {
 				var requestResponse = JSON.parse(response)
 				, requestInitialDetails = requestResponse.results[0];
 				
@@ -192,8 +193,8 @@ module.exports = {
 						backdrop_path = localImageDir+requestInitialDetails.backdrop_path;
 						id = requestInitialDetails.id;
 						original_name = requestInitialDetails.original_title;
-							
-						helper.xhrCall("http://api.themoviedb.org/3/movie/"+id+"?api_key="+api_key+"&=", function(response) {
+
+						ajax_utils.xhrCall("http://api.themoviedb.org/3/movie/"+id+"?api_key="+api_key+"&=", function(response) {
 							if (response !== 'Nothing found.' && response !== undefined && response !== '' && response !== null) {
 								var secondRequestResponse = JSON.parse(response);
 								var genresFound = secondRequestResponse.genres;
