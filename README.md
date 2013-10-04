@@ -186,12 +186,15 @@ or
 	specifiedPath/f/MyfavouriteMovies/fight club.avi
 	
 ###Filename conventions###
-On the basis of the name of the file, MCJS will try to get the movie details. This way the server does not have to look inside the files to get the metadata, which speeds up the process.
-To specify the movie, you can add the year after the title in brackets. Like so:
+MCJS will use the filenname to try to get the correct movie details. This way the server does not have to look inside the files to get the metadata, which speeds up the process.
+As you can gather the more precise the title of the movie, the better the scraper will know whhich movie it is.
+
+Asside from the title you can make it even easier for the scraper to recognize the movie by adding the date of release like so:
 	
 	Fight Club (1999).avi
 	
-Messy filenames will be cleaned up. Additional text like release group names,dividers,file type or quality will be filtered out of the filename on the server.
+If you your filenames are 'messy', the system will try to clean them up before sending the title to the scraper.
+Text like release group names,dividers,file type or quality will be filtered out of the filename on the server.
 so:
 
 	Fight.Club.iMMORTALS.(1999).xvid-R5.torrent.avi 
@@ -200,7 +203,8 @@ will become
 
 	Fight Club (1999).avi
 	
-But it is best to avoid messy names in the first place.
+But to get the best result you should clean up your filenames as best as possible.
+
 If a movie is split into multiple pieces, you can specify it in the filename as well. It is best to format it like this:
 
 	Fight Club (1999) CD1.avi
@@ -210,7 +214,10 @@ What can the music player do?
 
 Once you specify the location of your music, the music will look in the specified directory for mp3 files. 
 The I3d Tag will be used to determine the correct album information. If no correct ID3tag is found, the folder name will be used to determine the artist/album.
-If you add an image in the directory and name it appropriately this image will be used by the music player.
+
+Little side note, the way the ID3tag is used still needs to be improved, so compilation albums could give a mismatch.
+
+If you add an image in the directory and name it appropriately, this image will be used by the music player as the cover art.
 
 So if it is a single like a live recording or a mixtape, just add an image with exactly the same name as the mp3 in the same directory. For example:
 
@@ -218,23 +225,22 @@ So if it is a single like a live recording or a mixtape, just add an image with 
 	
 If you have an album, the music player will look for a image file with the following names: 
 
-	"cover" and "front"
+	"cover" or "front"
 	
 This image will be copied to the cache of MCJS so it can be used without restrictions. So you can even delete the image in the local dir and as long as you don't clear the cache, the image will be used.
-If no image is provided, the player will contact the website Discogs and try to get the art there. 
+If no image is provided, the player will contact the Discogs scraper and try to get the art ther. (Although there are plans to port discogs to lastFM.)
 
-Once you start playback, the eq icon and header will change colour according to the dominant colour of the album art. 
+A nice GUI detail: Once you start playback, the eq icon and header will change colour according to the dominant colour of the album art. 
 
 What is a MCJS App and how will it work?
 -------------
 
 An 'app' in this case is basically a wrapper for a feature you can use within MCJS.
 
-An App consists of two parts. A public part and a Model View Controller. When you look in the root of MCJS you'll see a folder called 'Apps'. 
-In this folder you can create a new folder or copy the hello world example and rename it.
+An App consists of two parts. A public part and the core. (a mini Model View Controller). 
+When you look in the root of MCJS you'll see a folder called 'Apps'. In this folder you can create a new folder or copy the hello world example and rename it.
 
-This is the MVC of your app. With and index.js file to control all the incoming route requests, a folder called Views which contains the actual client side HTML. 
-And finally you can extend the basic routing with the route.js file.
+This is the core of your app. With and index.js file to control all the incoming route requests, a folder called Views which contains the view (client side HTML) and best practise seperate file(s) for the additional functions you use in your app.
 
 __index.js__
 
@@ -250,14 +256,18 @@ If we look at the hello world example, you will see the following contents
 	
 * The render engine is the way the view is written down. Currently only JADE is supported.
 * The exports.index is the initial route to the app. And in this case will render the hello.jade file in the views folder.
-* The 'index' is the key used by the routing to assign te proper handeling. Another example is 'post'.
+* The 'index' is the key used by the routing to assign te proper handeling. Another example is 'get'.
 
 __The public part of an App / Making it public__
 
-When we go back to the root folder you will also see a folder called public. Everything in this folder is accessible from the client. Add a folder with the same name. 
-If you want your app to show up in the dashboard, all you need to do is add a tile.png to your public folder. This will alert MCJS that you want your app to be accessible from the dashboard, and it will automatically add it.
+When we go back to the root folder you will also see a folder called public. Everything in this folder is accessible from the client. 
 
-So in theory, you can make a background app that hooks on an existing app, or just runs in the background, without having it showing up in the dashboard simply by not adding the tile.
+Add a folder with the same name. 
+
+If you want your app to show up in the dashboard, all you need to do is add a tile.png to your public folder root. 
+This will alert MCJS that you want your app to be accessible from the dashboard, and it will automatically add it.
+
+(In theory, you can make a background app that hooks on an existing app, or just runs in the background, without having it showing up in the dashboard simply by not adding the tile. It's up to you how you use this functionality.)
 
 Routing
 -------------
@@ -294,8 +304,8 @@ You can extend this in your own route.js file in your app folder.
 
 __route.js__ 
 
-Although the basic routing is pretty generic, you can extend the basic routing table with your own custom routes by adding this JSON file and defining your routes. 
-The 'NAME' will be replaced with the app name (folder name). You do not have to hard code it. But you can also add route outside your app namespace. For Example:
+Although the basic routing is pretty generic and should be sufficient most of the time, you can extend the basic routing table with your own custom routes by adding this JSON file to the root of your core app folder and defining your routes. 
+The 'NAME' will be replaced with the app name (folder name / namespace). You do not have to hard code it. But you can also add route outside your app namespace. For Example:
 
 	{
 		"track": [{
@@ -364,19 +374,19 @@ This app also makes use of the following modules:
 * Lucien Immink https://github.com/lucienimmink for his javascript knowledge/support
 * P.J. Onori for his icons
 
-###Thanks to the following sponsors:###
+###Thanks to the following people for their donation:###
 
 * Koen Peters http://geekyplugins.com/
 * Friso Geerlings 
 
 
-What is the beta version going to have?
+What will the beta version be able to do?
 =======================================
 
-On the todo list for MCJS are:
+The project will reach beta status when it is able to provide:
 
 * Fast transcoding 
-* Cross Browser compatibility
+* Cross Browser/device compatibility
 * Easy to add/change themes
 * And a set of ready made apps like youtube and google music.
 * Multilanguage support
