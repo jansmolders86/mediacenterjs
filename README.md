@@ -362,6 +362,11 @@ This app also makes use of the following modules:
 * Lucien Immink https://github.com/lucienimmink for his javascript knowledge/support
 * P.J. Onori for his icons
 
+###Thanks to the following sponsers:###
+
+* Koen Peters http://geekyplugins.com/
+* Friso Geerlings 
+
 
 What is the beta version going to have?
 =======================================
