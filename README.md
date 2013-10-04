@@ -60,7 +60,7 @@ I'm trying to figure out how to get around these limitations.
 Other known issues 
 ==================
 
-* Frontend needs to be ported to knockout (or angular)
+* Frontend needs to be ported to knockout (still wip)
 
 What still needs to be done
 ==================
