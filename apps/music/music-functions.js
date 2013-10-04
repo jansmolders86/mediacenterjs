@@ -1,13 +1,12 @@
 // TODO: This file needs heavy optimization!!
 
 var file_utils = require('../../lib/utils/file-utils'),
-	ajax_utils = require('../../lib/utils/ajax-utils');
+	ajax_utils = require('../../lib/utils/ajax-utils'),
+	config = require('../../lib/configuration-handler').getConfiguration();
 
 module.exports = {
 	loadItems: function(req,res){
 		var fs = require('fs')
-		, ini = require('ini')
-		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))	
 		, dir = config.musicpath
 		, suffix = new RegExp("\.(mp3)","g");
 
@@ -39,8 +38,6 @@ module.exports = {
 		, colors = require('colors')
 		, Encoder = require('node-html-encoder').Encoder
 		, encoder = new Encoder('entity')
-		, ini = require('ini')
-		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
 		, dblite = require('dblite');
 	
 		var albumRequest = infoRequest
@@ -53,7 +50,6 @@ module.exports = {
 		, tracks = null;
 		
 		// Init Database
-		dblite.bin = config.sqlite_bin;
 		var db = dblite('./lib/database/mcjs.sqlite');
 		db.query("CREATE TABLE IF NOT EXISTS music (filename TEXT PRIMARY KEY,title VARCHAR, cover VARCHAR, year VARCHAR, genre VARCHAR , tracks VARCHAR)");
 
@@ -289,9 +285,7 @@ module.exports = {
 		var fs = require('fs.extra')
 		, colors = require('colors')
 		, Encoder = require('node-html-encoder').Encoder
-		, encoder = new Encoder('entity')
-		, ini = require('ini')
-		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
+		, encoder = new Encoder('entity');
 		
 		var decodeTrack = encoder.htmlDecode(optionalParam)
 		, decodeAlbum = encoder.htmlDecode(infoRequest);

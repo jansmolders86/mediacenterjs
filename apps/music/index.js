@@ -3,8 +3,7 @@
 var express = require('express')
 , app = express()
 , fs = require('fs.extra')
-, ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
+, config = require('../../lib/configuration-handler').getConfiguration()
 , functions = require('./music-functions');
  
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/

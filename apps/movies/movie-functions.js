@@ -1,10 +1,9 @@
-var ini = require('ini')
-  , fs = require('fs')
+var fs = require('fs')
   , file_utils = require('../../lib/utils/file-utils')
   , ajax_utils = require('../../lib/utils/ajax-utils')
   , colors = require('colors')
   , dblite = require('dblite')
-  , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
+  , config = require('../../lib/configuration-handler').getConfiguration();
 
 module.exports = {
 	getUniqueMovieFiles: function(req, res, onlyFilenames, callback) {
@@ -37,7 +36,6 @@ module.exports = {
 	}, 
 	initMovieDb: function() {
 		// Init Database
-		dblite.bin = config.sqlite_bin;
 		var db = dblite('./lib/database/mcjs.sqlite');
 		db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number VARCHAR)");
 		

@@ -23,20 +23,12 @@ var express = require('express')
 , app = express()
 , fs = require('fs')
 , downloader = require('downloader')
-, request = require("request")
-, ffmpeg = require('fluent-ffmpeg')
-, probe = require('node-ffprobe')
-, rimraf = require('rimraf')
-, util = require('util')
 , file_utils = require('../../lib/utils/file-utils')
 , ajax_utils = require('../../lib/utils/ajax-utils')
-, Encoder = require('node-html-encoder').Encoder
-, encoder = new Encoder('entity')
 , Trakt = require('trakt')
 , trakt = new Trakt({username: 'mediacenterjs', password: 'mediacenterjs'})
 , colors = require('colors')
-, ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));	
+, config = require('../../lib/configuration-handler').getConfiguration();
 
 exports.index = function(req, res, next){	
 	var writePath = './public/tv/data/tvindex.js'
@@ -44,11 +36,10 @@ exports.index = function(req, res, next){
 	, dir = config.tvpath
 	, fileTypes = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");;
 
-	file_utils.getLocalFiles(dir, writePath, getDir, fileTypes,  function(status){
-		var tvfiles = []
-		,tvfilepath = './public/tv/data/tvindex.js'
-		,tvfiles = fs.readFileSync(tvfilepath)
-		,tvfileResults = JSON.parse(tvfiles)	
+	file_utils.getLocalFiles(dir, fileTypes, function(status){
+		var tvfilepath = './public/tv/data/tvindex.js',
+			tvfiles = fs.readFileSync(tvfilepath),
+			tvfileResults = JSON.parse(tvfiles);
 		
 		res.render('tv',{
 			tvshows:tvfileResults,
@@ -61,18 +52,13 @@ exports.index = function(req, res, next){
 
 
 exports.post = function(req, res, next){	
-	var tvTitle = null
-	, id = 'No data found...'
-	, title = 'No data found...'
+	var title = 'No data found...'
 	, genre = 'No data found...'
 	, certification = 'No data found...'
-	, banner = '/tv/images/banner.png'
-	
-	var scraperdata = new Array()
-	, scraperdataset = null;
+	, banner = '/tv/images/banner.png';
 
 	var incommingFile = req.body
-	, tvRequest = incommingFile.tvTitle
+	, tvRequest = incommingFile.tvTitle;
 
 	//Check if folder already exists
 	if (fs.existsSync('./public/tv/data/'+tvRequest)) {
@@ -98,9 +84,9 @@ exports.post = function(req, res, next){
 									localCover = banner.match(/[^/]+$/);
 									
 									banner = localImageDir+localCover;
-									title = tvSearchResult.title
-									genre = tvSearchResult.genre
-									certification = tvSearchResult.certification
+									title = tvSearchResult.title;
+									genre = tvSearchResult.genre;
+									certification = tvSearchResult.certification;
 
 									writeData(title,genre,certification,banner);	
 

@@ -17,26 +17,19 @@
 */
 
 var express = require('express')
-, app = express()
-, fs = require ('fs')
-, dateFormat = require('dateformat')
-, lingua = require('lingua')
-, colors = require('colors')
-, rimraf = require('rimraf')
-, ini = require('ini')
-, dblite = require('dblite')
-, http = require('http');
+	, app = express()
+	, fs = require ('fs')
+	, dateFormat = require('dateformat')
+	, lingua = require('lingua')
+	, colors = require('colors')
+	, rimraf = require('rimraf')
+	, dblite = require('dblite')
+	, http = require('http')
+	, configuration_handler = require('./lib/configuration-handler');
 
-// Copy config-template.ini to config.ini if it does not exist
-if (!fs.existsSync('./configuration/config.ini')) {
-	var template = fs.readFileSync('./configuration/config-template.ini', 'utf-8');
-	fs.writeFileSync('./configuration/config.ini', template);
-}
-
-var config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
+var config = configuration_handler.initializeConfiguration();
 
 // Init Database
-dblite.bin = config.sqlite_bin;
 var db = dblite('./lib/database/mcjs.sqlite');
 
 var language = null;
@@ -57,7 +50,7 @@ app.configure(function(){
 	app.use(express.static(__dirname + '/public'));
 	app.use(express.favicon(__dirname + '/public/core/favicon.ico'));
 	app.use(lingua(app, {
-		defaultLocale: 'translation_'+language,
+		defaultLocale: 'translation_' + language,
 		storageKey: 'lang',
 		path: __dirname+'/public/translations/',
 		cookieOptions: {
@@ -87,21 +80,23 @@ app.use(function(req, res) {
     res.status(500).render('404',{ selectedTheme: config.theme});
 });
 
-app.get("/", function(req, res, next) {  
+app.get("/", function(req, res) {
 	if(	config.moviepath == '' && config.language == '' && config.location == '' || config.moviepath == null || config.moviepath == undefined){
 		res.render('setup');	
 	} else {
-		var apps = []
+		var apps = [];
+
 		//Search app folder for apps and check if tile icon is present
-		fs.readdirSync(__dirname + '/apps').forEach(function(name){
-			if(fs.existsSync(__dirname + '/public/'+name+'/tile.png')){
+		fs.readdirSync(__dirname + '/apps').forEach(function(name) {
+			if(fs.existsSync(__dirname + '/public/'+name+'/tile.png')) {
 				apps.push(name);
 			}
 		});
+
 		var now = new Date();
 		var time = dateFormat(now, "HH:MM");
 		var date = dateFormat(now, "dd-mm-yyyy");
-		req.setMaxListeners(0)
+		req.setMaxListeners(0);
 		res.render('index', {
 			title: 'Homepage',
 			selectedTheme: config.theme,
@@ -177,7 +172,7 @@ app.post('/submit', function(req, res){
 });
 
 function writeSettings(req, res, callback){
-	var incommingTheme = req.body.theme
+	var incommingTheme = req.body.theme;
 	if (incommingTheme.match(/\.(css)/)){
 		themeName = incommingTheme;
 	} else {
@@ -194,7 +189,7 @@ function writeSettings(req, res, callback){
 	config.screensaver = req.body.screensaver,
 	config.spotifyUser= req.body.spotifyUser,
 	config.spotifyPass = req.body.spotifyPass,
-	config.port = req.body.port
+	config.port = req.body.port;
 	
     fs.writeFile('./configuration/config.ini', ini.stringify(config), function(err){
         if(err){

@@ -19,9 +19,7 @@
 
 var express = require('express')
 , app = express()
-, fs = require ('fs')
-, ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));	
+, config = require('../../lib/configuration-handler').getConfiguration();
 
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';

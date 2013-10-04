@@ -21,11 +21,10 @@ exports.engine = 'jade';
 var express = require('express')
 , app = express()
 , fs = require('fs')
-, ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
+, config = require('../../lib/configuration-handler').getConfiguration();
 
 exports.index = function(req, res, next){	
-	var allThemes = new Array();
+	var allThemes = [];
 	
 	fs.readdir('./public/themes/',function(err,files){
 		if (err){
