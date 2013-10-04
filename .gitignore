@@ -13,5 +13,6 @@ results
 
 node_modules
 lib/database/mcjs.sqlite
+configuration/config.ini
 
 npm-debug.log

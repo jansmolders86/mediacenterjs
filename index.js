@@ -24,9 +24,16 @@ var express = require('express')
 , colors = require('colors')
 , rimraf = require('rimraf')
 , ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
 , dblite = require('dblite')
 , http = require('http');
+
+// Copy config-template.ini to config.ini if it does not exist
+if (!fs.existsSync('./configuration/config.ini')) {
+	var template = fs.readFileSync('./configuration/config-template.ini', 'utf-8');
+	fs.writeFileSync('./configuration/config.ini', template);
+}
+
+var config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
 // Init Database
 dblite.bin = config.sqlite_bin;
