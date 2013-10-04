@@ -352,10 +352,12 @@ This app also makes use of the following modules:
 * trakt
 * colors
 * dblite
+* async
+* musicmetadata
 
 ###Special thanks to:###
 
-* Sylvain https://github.com/flyinva  for his Fench translation
+* Sylvain https://github.com/flyinva  for his French translation
 * Jussi Vatjus https://github.com/jupe for his code support
 * Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
 * Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
