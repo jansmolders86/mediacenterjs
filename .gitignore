@@ -11,4 +11,7 @@ pids
 logs
 results
 
+node_modules
+lib/database/mcjs.sqlite
+
 npm-debug.log
