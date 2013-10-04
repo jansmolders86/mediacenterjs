@@ -1,12 +1,15 @@
-module.exports = {
-	loadItems: function (req,res){
-		var fs = require('fs')
-		, helper = require('../../lib/helpers.js')	
-		, ini = require('ini')
-		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))	
-		, dir = config.moviepath
-		, suffix = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
+var ini = require('ini')
+  , fs = require('fs')
+  , helper = require('../../lib/helpers.js')	
+  , colors = require('colors')
+  , dblite = require('dblite')
+  , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
+module.exports = {
+	getUniqueMovieFiles: function(req, res, onlyFilenames, callback) {
+		var dir = config.moviepath
+		  , suffix = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
+		  
 		helper.getLocalFiles(req, res, dir, suffix, function(err,files){
 			var unique = {}
 			movies = [];
@@ -23,27 +26,34 @@ module.exports = {
 				if(movieTitles === '' && files[i].file !== undefined){
 					movieTitles = files[i].file;
 				}
-				movies.push(movieTitles);
+				
+				movies.push(onlyFilenames ? movieTitles: files[i]);
 				unique[movieTitles] = 1;
 			};
+			
+			callback(movies);
+		});
+	}, 
+	initMovieDb: function() {
+		// Init Database
+		dblite.bin = config.sqlite_bin;
+		var db = dblite('./lib/database/mcjs.sqlite');
+		db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number VARCHAR)");
+		
+		return db;
+	},
+	loadItems: function (req,res){
+		this.getUniqueMovieFiles(req, res, true, function(movies) {
 			res.json(movies);
 		});
 	},
 	playMovie: function (req, res, platform, movieRequest){
 		var ffmpeg = require('fluent-ffmpeg')
-		, fs = require('fs')
 		, probe = require('node-ffprobe')
-		, helper = require('../../lib/helpers.js')
 		, Encoder = require('node-html-encoder').Encoder
-		, encoder = new Encoder('entity')
-		, colors = require('colors')
-		, ini = require('ini')
-		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));	
+		, encoder = new Encoder('entity');	
 	
-		var dir = config.moviepath
-		, suffix = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
-
-		helper.getLocalFiles(req, res, dir, suffix, function(err,files){
+		this.getUniqueMovieFiles(req, res, false, function(files) {
 			files.forEach(function(file){
 				if(file.file === movieRequest){
 					var movie = file.href;
@@ -114,13 +124,7 @@ module.exports = {
 	},
 	handler: function (req, res, infoRequest){
 		//Modules
-		var fs = require('fs')
-		, downloader = require('downloader')
-		, helper = require('../../lib/helpers.js')
-		, colors = require('colors')
-		, ini = require('ini')
-		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
-		, dblite = require('dblite');
+		var downloader = require('downloader');
 
 		// Variable defaults
 		var movieRequest = infoRequest
@@ -135,12 +139,8 @@ module.exports = {
 		, certification = 'No data found...'
 		, genre = null
 		, runtime = 'No data found...'
-		, overview = 'No data found...';
-		
-		// Init Database
-		dblite.bin = "./bin/sqlite3/sqlite3";
-		var db = dblite('./lib/database/mcjs.sqlite');
-		db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number VARCHAR)");
+		, overview = 'No data found...'
+		, db = this.initMovieDb();
 
 		db.on('info', function (text) { console.log(text) });
 		db.on('error', function (err) { console.error('Database error: ' + err) });
@@ -159,7 +159,8 @@ module.exports = {
 					if (err) console.log('Error creating folder',err .red);
 				});
 			}
-					
+			
+			// TODO: Try to move some of those texts to outside
 			var filename = movieRequest
 			, year = filename.match(/19\d{2}|20\d{2/)
 			, stripped = filename.replace(/\.|_|\/|\+|\-/g," ")
@@ -298,9 +299,7 @@ module.exports = {
 		}
 	},
 	getGenres: function (req, res){
-		var dblite = require('dblite');
-		dblite.bin = "./bin/sqlite3/sqlite3";
-		var db = dblite('./lib/database/mcjs.sqlite');
+		var db = this.initMovieDb();
 
 		db.on('info', function (text) { console.log(text) });
 		db.on('error', function (err) { console.error('Database error: ' + err) });
@@ -317,9 +316,7 @@ module.exports = {
 		);
 	},
 	filter: function (req, res, infoRequest){
-		var dblite = require('dblite');
-		dblite.bin = "./bin/sqlite3/sqlite3";
-		var db = dblite('./lib/database/mcjs.sqlite');
+		var db = this.initMovieDb();
 
 		db.on('info', function (text) { console.log(text) });
 		db.on('error', function (err) { console.error('Database error: ' + err) });

@@ -29,7 +29,7 @@ var express = require('express')
 , http = require('http');
 
 // Init Database
-dblite.bin = "./bin/sqlite3/sqlite3";
+dblite.bin = config.sqlite_bin;
 var db = dblite('./lib/database/mcjs.sqlite');
 
 var language = null;
