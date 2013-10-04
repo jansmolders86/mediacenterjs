@@ -46,7 +46,7 @@ What's coming up
 ==================
 * Tv show app functionality
 
-Known issues: video playback
+Known issues: video/audio playback
 ==================
 
 These issues are known issues and current browser/platform limitations.
@@ -55,6 +55,7 @@ I'm trying to figure out how to get around these limitations.
 * IOS:  Video is not seekable
 * Browser: Video buffering does not work properly. (Current quickfix is simply pause the video and let it buffer a bit)
 * Android: Fullscreen mode not stable & Not seekable
+* Ubuntu: Audio playback of mp3 not supported by default
 
 Other known issues 
 ==================
