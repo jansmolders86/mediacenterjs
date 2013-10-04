@@ -1,9 +1,9 @@
 # Refactoring Todo's
 
-- [x] Add node_modules to .gitignore
-- [x] Create Configuration-Template
-- [ ] Introduce Database-Manager
-- [ ] Introduce Configuration-Manager
-- [ ] Restructure Movie-, Music-, ... Functions
-- [ ] ...
+- ~~Add node_modules to .gitignore~~
+- ~~Create Configuration-Template~~
+- Introduce Database-Manager
+- Introduce Configuration-Manager
+- Restructure Movie-, Music-, ... Functions
+- ...
 
