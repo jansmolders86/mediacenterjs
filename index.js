@@ -126,33 +126,23 @@ app.post('/removeModule', function(req, res){
 });
 
 app.post('/clearCache', function(req, res){
-	var incommingCache = req.body
-	, cache = incommingCache.cache
-	, rmdir = './public/data/' + cache + '/';
+	var app_cache_handler = require('./lib/handlers/app-cache-handler');
+	var incommingCache = req.body,
+		cache = incommingCache.cache;
 	
 	console.log('clearing ' + cache + ' cache');
+	app_cache_handler.clearCache(cache, function(err) {
+		if (err) {
+			console.log('Error removing module', e .red);
+			return res.send('Error clearing cache', e);
+		}
 
-	// TODO: Move this logic to app-cache-handler
-	fs.readdir(rmdir,function(err,dirs){
-		dirs.forEach(function(dir){
-			var dataFolder = rmdir + dir;
-			stats = fs.lstatSync(dataFolder);
-			if (stats.isDirectory()) {
-				rimraf(dataFolder, function (e) { 		
-					if(e){
-						console.log('Error removing module', e .red);
-						res.send('Error clearing cache', e);
-					} else{
-						db.query('DROP TABLE IF EXISTS '+cache);
-						
-						db.on('info', function (text) { console.log(text) });
-						db.on('error', function (err) { console.error('Database error: ' + err) });
-						
-						res.send('done');
-					};
-				});
-			};
-		});		
+		db.query('DROP TABLE IF EXISTS ' + cache);
+
+		db.on('info', function (text) { console.log(text) });
+		db.on('error', function (err) { console.error('Database error: ' + err) });
+
+		return res.send('done');
 	});
 });
 
