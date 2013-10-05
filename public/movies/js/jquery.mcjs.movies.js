@@ -77,6 +77,7 @@
 			o.viewModel = ko.observableArray(data);
 			ko.applyBindings(o.viewModel,o.$that[0]);
 			
+			_focusedItem(o);
 				
 			//TODO: make ko click
 			$(o.overlayselector).on('click tap',function(e) {
