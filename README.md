@@ -45,6 +45,8 @@ What currently works?
 What's coming up
 ==================
 * Tv show app functionality
+* Code rework (frontend (knockout) / backend)
+* Better inbrowser streaming
 
 Known issues: video/audio playback
 ==================
