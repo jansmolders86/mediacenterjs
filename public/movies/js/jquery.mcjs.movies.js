@@ -123,7 +123,7 @@
 	}
 	
 	function _focusedItem(o){
-		$(o.movieListSelector+' > li').on({
+		$(o.movieListSelector+' > li').live({
 			mouseenter: function() {	
 				var newBackground = $(this).find("img."+o.posterClass).attr(o.backdrophandler);
 				$(this).addClass(o.focusedClass);
