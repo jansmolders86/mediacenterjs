@@ -25,7 +25,7 @@ var express = require('express')
 	, rimraf = require('rimraf')
 	, dblite = require('dblite')
 	, http = require('http')
-	, configuration_handler = require('./lib/configuration-handler');
+	, configuration_handler = require('./lib/handlers/configuration-handler');
 
 var config = configuration_handler.initializeConfiguration();
 
@@ -132,7 +132,7 @@ app.post('/clearCache', function(req, res){
 	
 	console.log('clearing ' + cache + ' cache');
 
-	// TODO: Move this logic to file-utils
+	// TODO: Move this logic to app-cache-handler
 	fs.readdir(rmdir,function(err,dirs){
 		dirs.forEach(function(dir){
 			var dataFolder = rmdir + dir;

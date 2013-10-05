@@ -19,7 +19,7 @@
 
 var express = require('express')
 , app = express()
-, config = require('../../lib/configuration-handler').getConfiguration();
+, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';

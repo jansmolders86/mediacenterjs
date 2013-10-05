@@ -1,9 +1,10 @@
 var fs = require('fs.extra')
   , file_utils = require('../../lib/utils/file-utils')
   , ajax_utils = require('../../lib/utils/ajax-utils')
+  , app_cache_handler = require('../../lib/handlers/app-cache-handler')
   , colors = require('colors')
   , dblite = require('dblite')
-  , config = require('../../lib/configuration-handler').getConfiguration();
+  , config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
 module.exports = {
 	getUniqueMovieFiles: function(req, res, onlyFilenames, callback) {
@@ -12,7 +13,7 @@ module.exports = {
 
 		file_utils.getLocalFiles(dir, suffix, function(err, files){
 			var unique = {}
-			movies = [];
+			var movies = [];
 			for(var i = 0, l = files.length; i < l; ++i){
 				var movieFiles = files[i].file;
 				var movieTitles = movieFiles.substring(movieFiles.lastIndexOf("/")).replace(/^\/|\/$/g, '');
@@ -29,7 +30,7 @@ module.exports = {
 				
 				movies.push(onlyFilenames ? movieTitles: files[i]);
 				unique[movieTitles] = 1;
-			};
+			}
 			
 			callback(movies);
 		});
@@ -150,16 +151,8 @@ module.exports = {
 		
 		//Get data if new movie
 		function getData(movieRequest){
-			var DATA_PATH = './public/data/movies/' + movieRequest;
-
 			//Check if folder exists
-			if (fs.existsSync(DATA_PATH)) {
-				console.log('dir already created',movieRequest .green);
-			}else{
-				fs.mkdirs(DATA_PATH, function (err) {
-					if (err) console.log('Error creating folder',err .red);
-				});
-			}
+			app_cache_handler.ensureCacheDirExists('movies', movieRequest);
 			
 			// TODO: Try to move some of those texts to outside
 			var filename = movieRequest
@@ -187,8 +180,8 @@ module.exports = {
 				
 				downloadCache(requestInitialDetails,movieRequest,function(poster, backdrop) {
 					if (requestInitialDetails !== undefined && requestInitialDetails !== '' && requestInitialDetails !== null) {
-						poster_path = '/data/movies/' + movieTitle + requestInitialDetails.poster_path;
-						backdrop_path = '/data/movies/' + movieTitle + requestInitialDetails.backdrop_path;
+						poster_path = app_cache_handler.getFrontendCachePath('movies', movieTitle, requestInitialDetails.poster_path);
+						backdrop_path = app_cache_handler.getFrontendCachePath('movies', movieTitle, requestInitialDetails.backdrop_path);
 						var id = requestInitialDetails.id;
 						original_name = requestInitialDetails.original_title;
 
@@ -200,13 +193,15 @@ module.exports = {
 								if(genresFound.length){
 									genre = secondRequestResponse.genres[0].name;
 								}
+
 								runtime = secondRequestResponse.runtime;
 								imdb_id = secondRequestResponse.imdb_id;
 								overview = secondRequestResponse.overview;
 								// Needs seperate call
 								// rating = secondRequestResponse.rating;
 								// certification = requestInitialDetails.certification;
-							};
+							}
+
 							writeData(original_name,poster_path,backdrop_path,imdb_id,rating,certification,genre,runtime,overview, function(){
 								getStoredData(movieRequest);
 							});
@@ -252,14 +247,14 @@ module.exports = {
 	
 		function downloadCache(response,movieRequest,callback){
 			if (response !== undefined && response !== '' && response !== null) {
-
 				var backdrop_url = "http://cf2.imgobject.com/t/p/w1920/"
 				, poster_url = "http://cf2.imgobject.com/t/p/w342/"
-				, poster = poster_url+response.poster_path
-				, backdrop = backdrop_url+response.backdrop_path
-				, downloadDir = './public/data/movies/' + movieRequest + '/';
+				, poster = poster_url + response.poster_path
+				, backdrop = backdrop_url + response.backdrop_path
+				, downloadDir = app_cache_handler.getCacheDir('movies', movieRequest);
 				
-				if (fs.existsSync(downloadDir+response.poster_path) === true && fs.existsSync(downloadDir+response.backdrop_path) === true) {
+				if (fs.existsSync(downloadDir + response.poster_path) === true &&
+					fs.existsSync(downloadDir + response.backdrop_path) === true) {
 					return callback(poster,backdrop);
 				} else {
 					downloader.on('done', function(msg) { console.log('done', msg); });
@@ -269,13 +264,11 @@ module.exports = {
 					
 					return callback(poster,backdrop);
 				}
-			}else{
-				var poster = poster_path
-				, backdrop = backdrop_path;
-				
-				return callback(poster,backdrop);
-			};
-		};
+			} else {
+				// TODO...
+				return callback(null, null);
+			}
+		}
 		
 		function writeData(original_name,poster_path,backdrop_path,imdb_id,rating,certification,genre,runtime,overview,callback){
 			console.log('Writing data to table for',movieRequest .green);			

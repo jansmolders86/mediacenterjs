@@ -21,7 +21,7 @@ exports.engine = 'jade';
 var express = require('express')
 , app = express()
 , fs = require('fs')
-, config = require('../../lib/configuration-handler').getConfiguration();
+, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
 exports.index = function(req, res, next){	
 	var allThemes = [];

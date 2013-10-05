@@ -25,10 +25,11 @@ var express = require('express')
 , downloader = require('downloader')
 , file_utils = require('../../lib/utils/file-utils')
 , ajax_utils = require('../../lib/utils/ajax-utils')
+, app_cache_handler = require('../../lib/handlers/app-cache-handler')
 , Trakt = require('trakt')
 , trakt = new Trakt({username: 'mediacenterjs', password: 'mediacenterjs'})
 , colors = require('colors')
-, config = require('../../lib/configuration-handler').getConfiguration();
+, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
 exports.index = function(req, res, next){	
 	var dir = config.tvpath
@@ -55,50 +56,38 @@ exports.post = function(req, res, next){
 	, tvRequest = incommingFile.tvTitle;
 
 	//Check if folder already exists
-	if (fs.existsSync('./public/data/tv/'+tvRequest)) {
-		checkDirForCorruptedFiles(tvRequest)
-	} else {
-		fs.mkdirs('./public/data/tv/'+tvRequest, function (err) {
-			if (err) {
-				console.log('Error creating folder',err .red);
-				writeData(title,genre,certification,banner);			
-			} else {
-				console.log('Directory '+tvRequest+' created');
+	app_cache_handler.ensureCacheDirExists('tv', tvRequest);
+	checkDirForCorruptedFiles(tvRequest);
 
-				var options = { query: tvRequest }
-				trakt.request('search', 'shows', options, function(err, result) {
-					if (err) {
-						console.log('error retrieving tvshow info', err .red);
-					} else {
-						var tvSearchResult = result[0];
-						
-						if (tvSearchResult !== undefined && tvSearchResult !== '' && tvSearchResult !== null) {
-							downloadCache(tvSearchResult,function(banner) {
-									var localImageDir = '/data/tv/'+tvRequest+'/',
-									localCover = banner.match(/[^/]+$/);
-									
-									banner = localImageDir+localCover;
-									title = tvSearchResult.title;
-									genre = tvSearchResult.genre;
-									certification = tvSearchResult.certification;
+	var options = { query: tvRequest };
+	trakt.request('search', 'shows', options, function(err, result) {
+		if (err) {
+			console.log('error retrieving tvshow info', err .red);
+		} else {
+			var tvSearchResult = result[0];
+			if (tvSearchResult !== undefined && tvSearchResult !== '' && tvSearchResult !== null) {
+				downloadCache(tvSearchResult,function(banner) {
+						var localImageDir = '/data/tv/'+tvRequest+'/',
+						localCover = banner.match(/[^/]+$/);
 
-									writeData(title,genre,certification,banner);	
+						banner = localImageDir+localCover;
+						title = tvSearchResult.title;
+						genre = tvSearchResult.genre;
+						certification = tvSearchResult.certification;
 
-							}); 
-						} else {
-							writeData(title,genre,certification,banner);
-						};
-					};
+						writeData(title,genre,certification,banner);
 				});
+			} else {
+				writeData(title,genre,certification,banner);
 			}
-		});
-	};
+		}
+	});
 	
 	
 	function downloadCache(tvSearchResult,callback){
 		if (typeof tvSearchResult){
 			var banner = tvSearchResult.images.banner
-			, downloadDir = './public/data/tv/'+tvRequest+'/';
+			, downloadDir = app_cache_handler.getCacheDir('tv', tvRequest) + '/';
 			
 			downloader.on('done', function(msg) { console.log('done', msg .green); });
 			downloader.on('error', function(msg) { console.log('error', msg .red); });
@@ -110,7 +99,7 @@ exports.post = function(req, res, next){
 	}
 
 	function checkDirForCorruptedFiles(tvRequest){
-		var checkDir = './public/data/tv/data/' + tvRequest;
+		var checkDir = app_cache_handler.getCacheDir('tv', tvRequest);
 		
 		if(fs.existsSync(checkDir + '/data.js')){
 			fs.stat(checkDir + '/data.js', function (err, stats) {
@@ -136,7 +125,7 @@ exports.post = function(req, res, next){
 
 		scraperdata[0] = { title:title, genre:genre, certification:certification, banner:banner };
 		var dataToWrite = JSON.stringify(scraperdata, null, 4);
-		var writePath = './public/data/tv/' + tvRequest + '/data.js';
+		var writePath = app_cache_handler.getCacheDir('tv', tvRequest) + '/data.js';
 
 		ajax_utils.writeToFile(writePath, dataToWrite, function(data) {
 			res.send(data);
