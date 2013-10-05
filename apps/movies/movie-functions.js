@@ -1,4 +1,4 @@
-var fs = require('fs')
+var fs = require('fs.extra')
   , file_utils = require('../../lib/utils/file-utils')
   , ajax_utils = require('../../lib/utils/ajax-utils')
   , colors = require('colors')
@@ -150,11 +150,13 @@ module.exports = {
 		
 		//Get data if new movie
 		function getData(movieRequest){
+			var DATA_PATH = './public/data/movies/' + movieRequest;
+
 			//Check if folder exists
-			if (fs.existsSync('./public/movies/data/'+movieRequest)) {
+			if (fs.existsSync(DATA_PATH)) {
 				console.log('dir already created',movieRequest .green);
 			}else{
-				fs.mkdir('./public/movies/data/'+movieRequest, 0777, function (err) {
+				fs.mkdirs(DATA_PATH, function (err) {
 					if (err) console.log('Error creating folder',err .red);
 				});
 			}
@@ -185,11 +187,9 @@ module.exports = {
 				
 				downloadCache(requestInitialDetails,movieRequest,function(poster, backdrop) {
 					if (requestInitialDetails !== undefined && requestInitialDetails !== '' && requestInitialDetails !== null) {
-						var localImageDir = '/movies/data/'+movieRequest;
-						
-						poster_path = localImageDir+requestInitialDetails.poster_path;
-						backdrop_path = localImageDir+requestInitialDetails.backdrop_path;
-						id = requestInitialDetails.id;
+						poster_path = '/data/movies/' + movieTitle + requestInitialDetails.poster_path;
+						backdrop_path = '/data/movies/' + movieTitle + requestInitialDetails.backdrop_path;
+						var id = requestInitialDetails.id;
 						original_name = requestInitialDetails.original_title;
 
 						ajax_utils.xhrCall("http://api.themoviedb.org/3/movie/"+id+"?api_key="+api_key+"&=", function(response) {
@@ -257,7 +257,7 @@ module.exports = {
 				, poster_url = "http://cf2.imgobject.com/t/p/w342/"
 				, poster = poster_url+response.poster_path
 				, backdrop = backdrop_url+response.backdrop_path
-				, downloadDir = './public/movies/data/'+movieRequest+'/';
+				, downloadDir = './public/data/movies/' + movieRequest + '/';
 				
 				if (fs.existsSync(downloadDir+response.poster_path) === true && fs.existsSync(downloadDir+response.backdrop_path) === true) {
 					return callback(poster,backdrop);

@@ -21,7 +21,7 @@ exports.engine = 'jade';
 /* Modules */
 var express = require('express')
 , app = express()
-, fs = require('fs')
+, fs = require('fs.extra')
 , downloader = require('downloader')
 , file_utils = require('../../lib/utils/file-utils')
 , ajax_utils = require('../../lib/utils/ajax-utils')
@@ -31,20 +31,14 @@ var express = require('express')
 , config = require('../../lib/configuration-handler').getConfiguration();
 
 exports.index = function(req, res, next){	
-	var writePath = './public/tv/data/tvindex.js'
-	, getDir = true
-	, dir = config.tvpath
+	var dir = config.tvpath
 	, fileTypes = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");;
 
-	file_utils.getLocalFiles(dir, fileTypes, function(status){
-		var tvfilepath = './public/tv/data/tvindex.js',
-			tvfiles = fs.readFileSync(tvfilepath),
-			tvfileResults = JSON.parse(tvfiles);
-		
+	file_utils.getLocalFiles(dir, fileTypes, function(status, files){
 		res.render('tv',{
-			tvshows:tvfileResults,
+			tvshows: files,
 			selectedTheme: config.theme,
-			status:status
+			status: status
 		});
 	});
 
@@ -61,10 +55,10 @@ exports.post = function(req, res, next){
 	, tvRequest = incommingFile.tvTitle;
 
 	//Check if folder already exists
-	if (fs.existsSync('./public/tv/data/'+tvRequest)) {
+	if (fs.existsSync('./public/data/tv/'+tvRequest)) {
 		checkDirForCorruptedFiles(tvRequest)
 	} else {
-		fs.mkdir('./public/tv/data/'+tvRequest, 0777, function (err) {
+		fs.mkdirs('./public/data/tv/'+tvRequest, function (err) {
 			if (err) {
 				console.log('Error creating folder',err .red);
 				writeData(title,genre,certification,banner);			
@@ -80,7 +74,7 @@ exports.post = function(req, res, next){
 						
 						if (tvSearchResult !== undefined && tvSearchResult !== '' && tvSearchResult !== null) {
 							downloadCache(tvSearchResult,function(banner) {
-									var localImageDir = '/tv/data/'+tvRequest+'/',
+									var localImageDir = '/data/tv/'+tvRequest+'/',
 									localCover = banner.match(/[^/]+$/);
 									
 									banner = localImageDir+localCover;
@@ -104,7 +98,7 @@ exports.post = function(req, res, next){
 	function downloadCache(tvSearchResult,callback){
 		if (typeof tvSearchResult){
 			var banner = tvSearchResult.images.banner
-			, downloadDir = './public/tv/data/'+tvRequest+'/';
+			, downloadDir = './public/data/tv/'+tvRequest+'/';
 			
 			downloader.on('done', function(msg) { console.log('done', msg .green); });
 			downloader.on('error', function(msg) { console.log('error', msg .red); });
@@ -116,14 +110,14 @@ exports.post = function(req, res, next){
 	}
 
 	function checkDirForCorruptedFiles(tvRequest){
-		var checkDir = './public/tv/data/' + tvRequest;
+		var checkDir = './public/data/tv/data/' + tvRequest;
 		
-		if(fs.existsSync('./public/tv/data/' + tvRequest + '/data.js')){
-			fs.stat('./public/tv/data/' + tvRequest + '/data.js', function (err, stats) {
+		if(fs.existsSync(checkDir + '/data.js')){
+			fs.stat(checkDir + '/data.js', function (err, stats) {
 				if(stats.size == 0){
 					file_utils.removeBadDir(checkDir, res.send);
 				} else {
-					fs.readFile('./public/tv/data/' + tvRequest + '/data.js', 'utf8', function (err, data) {
+					fs.readFile(checkDir + '/data.js', 'utf8', function (err, data) {
 						if(!err) {
 							res.send(data);
 						} else {
@@ -142,7 +136,7 @@ exports.post = function(req, res, next){
 
 		scraperdata[0] = { title:title, genre:genre, certification:certification, banner:banner };
 		var dataToWrite = JSON.stringify(scraperdata, null, 4);
-		var writePath = './public/tv/data/' + tvRequest + '/data.js';
+		var writePath = './public/data/tv/' + tvRequest + '/data.js';
 
 		ajax_utils.writeToFile(writePath, dataToWrite, function(data) {
 			res.send(data);

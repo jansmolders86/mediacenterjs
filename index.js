@@ -113,9 +113,9 @@ app.post('/removeModule', function(req, res){
 	, module = incommingModule.module
 	, appDir = './apps/'+module+'/'
 	, publicdir = './public/'+module+'/';
-	
+
+	// TODO: Move this logic to file-utils
 	rimraf(appDir, function (e){if(e)console.log('Error removing module', e .red)});
-	
 	rimraf(publicdir, function (e) { 
 		if(e) {
 			console.log('Error removing module', e .red);
@@ -128,13 +128,14 @@ app.post('/removeModule', function(req, res){
 app.post('/clearCache', function(req, res){
 	var incommingCache = req.body
 	, cache = incommingCache.cache
-	, rmdir = './public/'+cache+'/data/';
+	, rmdir = './public/data/' + cache + '/';
 	
-	console.log('clearing '+cache+' cache');
-	
+	console.log('clearing ' + cache + ' cache');
+
+	// TODO: Move this logic to file-utils
 	fs.readdir(rmdir,function(err,dirs){
 		dirs.forEach(function(dir){
-			var dataFolder = rmdir+dir
+			var dataFolder = rmdir + dir;
 			stats = fs.lstatSync(dataFolder);
 			if (stats.isDirectory()) {
 				rimraf(dataFolder, function (e) { 		
@@ -190,7 +191,8 @@ function writeSettings(req, res, callback){
 	config.spotifyUser= req.body.spotifyUser,
 	config.spotifyPass = req.body.spotifyPass,
 	config.port = req.body.port;
-	
+
+	// TODO: Move this logic to configuration-handler
     fs.writeFile('./configuration/config.ini', ini.stringify(config), function(err){
         if(err){
             console.log('Error writing INI file.',err);  

@@ -97,16 +97,14 @@ module.exports = {
 			}else{
 
 				var dir = config.musicpath+encoder.htmlDecode(albumRequest)+'/'
-				, writePath = './public/music/data/musicindex.js'
-				, getDir = true
 				, suffix = new RegExp("\.(mp3)","g");
 
-				file_utils.getLocalFiles(req, res, dir, suffix, function(err,files){
+				file_utils.getLocalFiles(dir, suffix, function(err,files){
 						var tracks = [];
 						for(var i = 0, l = files.length; i < l; ++i){
 							var track = files[i].file;
 							tracks.push(track);
-						};
+						}
 
 						var allFilesJSON = JSON.stringify(tracks, null, 4);
 						db.query(
@@ -147,9 +145,9 @@ module.exports = {
 						var dir = config.musicpath+encoder.htmlDecode(albumRequest)+'/';
 						single = false 
 					}
-					
+
 					var suffix = new RegExp("\.(mp3|jpg|jpeg|png|gif)","g");
-					file_utils.getLocalFiles(req, res, dir, suffix, function(err,files){
+					file_utils.getLocalFiles(dir, suffix, function(err,files){
 						files.forEach(function(file){
 							if (file.file.match(/\.(jpg|jpeg|png|gif)/gi)){
 								if (single == true){
@@ -196,8 +194,7 @@ module.exports = {
 			var mm = require('musicmetadata');
 			var dir = config.musicpath+albumRequest+'/';
 			var suffix = new RegExp("\.(mp3)","g");
-			file_utils.getLocalFiles(req, res, dir, suffix, function(err,files){
-
+			file_utils.getLocalFiles(dir, suffix, function(err,files){
 				var parser = new mm(fs.createReadStream(files[0].href));
 
 				console.log('Looking for ID3 tag info');	
@@ -228,15 +225,15 @@ module.exports = {
 							genre = requestInitialDetails.genre[0];
 						
 							if (foundLocal = true && localDir !== null && localFile !== null){
-								fs.copy(localDir, './public/music/data/'+albumRequest+'/'+localFile, function (err) {
+								fs.copy(localDir, './public/data/music/'+albumRequest+'/'+localFile, function (err) {
 									if (err) console.log('Error copying image to cache',err .red);
 									console.log('Copied cover to cache succesfull' .green);
 								});		
-								cover = '/music/data/'+albumRequest+'/'+localFile;	
+								cover = '/data/music/'+albumRequest+'/'+localFile;
 								callback(title,cover,year,genre);		
 							} else {
 								downloadCache(requestInitialDetails, function(cover) {
-									var localImageDir = '/music/data/'+albumRequest+'/'
+									var localImageDir = '/data/music/'+albumRequest+'/'
 									, localCover = cover.match(/[^/]+$/);
 
 									cover = localImageDir+localCover;
@@ -262,10 +259,10 @@ module.exports = {
 		
 		function downloadCache(response,callback){	
 			// Create dir to store images if needed.
-			if (fs.existsSync('./public/music/data/'+albumRequest)) {
+			if (fs.existsSync('./public/data/music/'+albumRequest)) {
 				console.log('dir already created',albumRequest .green);
 			}else{
-				fs.mkdir('./public/music/data/'+albumRequest, 0777, function (err) {
+				fs.mkdirs('./public/data/music/'+albumRequest, 0777, function (err) {
 					if (err) console.log('Error creating folder',err .red);
 				});
 			}
@@ -273,7 +270,7 @@ module.exports = {
 			var downloader = require('downloader');
 			
 			var responseImage = response.thumb
-			, downloadDir = './public/music/data/'+albumRequest+'/'
+			, downloadDir = './public/data/music/'+albumRequest+'/'
 			, cover = responseImage.replace(/-90-/,"-150-");
 			
 			downloader.download(cover, downloadDir);
