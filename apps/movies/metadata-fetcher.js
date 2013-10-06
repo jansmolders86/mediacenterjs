@@ -67,26 +67,6 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 
 /* Private Methods */
 
-stripMovieTitle = function(movieTitle) {
-	var stripped = movieTitle.replace(/\.|_|\/|\+|\-/g, " "),                            // Strip illegal characters
-		noyear = stripped.replace(/([0-9]{4})|\(|\)|\[|\]/g, ""),                        // Remove year
-		releasegroups = noyear.replace(RELEASE_GROUPS, ""),                              // Remove release group names
-		movietype = releasegroups.replace(MOVIE_TYPES, ""),                              // Remove Movie Type Tags
-		noCountries = movietype.replace(COUNTRIES, ""),                                  // Remove Country Names
-		cleanedUpMovieTitle = noCountries.replace(/cd [1-9]|cd[1-9]/gi, "").trimRight(); // Remove CD-Number
-
-	var hasCdinTitle = movieTitle.match(/cd [1-9]|cd[1-9]/gi);
-	var cd_number = '';
-	if(hasCdinTitle) cd_number = hasCdinTitle.toString();
-
-	var year = movieTitle.match(/19\d{2}|20\d{2/);
-	if(!year) {
-		year = '';
-	}
-
-	return { movieTitle: cleanedUpMovieTitle, year: year, cd: cd_number };
-};
-
 loadMetadataFromDatabase = function(movieTitle, callback) {
 	db.query('SELECT * FROM movies WHERE local_name =? ', [ movieTitle ], {
 			local_name 		: String,
