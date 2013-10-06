@@ -36,6 +36,7 @@
     "musicmetadata": "0.2.5",
     "dblite": "0.2.6",
     "walk": ">=1.2.2",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "moviedb": "~0.1.0"
   }
 }
