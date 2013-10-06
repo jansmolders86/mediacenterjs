@@ -19,6 +19,9 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
  * @param callback           The Callback
  */
 exports.fetchMetadataForMovie = function(movieTitle, callback) {
+	var movieInfos = movie_title_cleaner.cleanupMovieTitle(movieTitle);
+	movieTitle = movieInfos.movieTitle;
+
 	loadMetadataFromDatabase(movieTitle, function (result) {
 		if (result) {
 			// Movie is already in the database.
@@ -27,9 +30,6 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 		}
 
 		// New Movie. Fetch Metadata...
-		var movieInfos = movie_title_cleaner.cleanupMovieTitle(movieTitle);
-		movieTitle = movieInfos.movieTitle;
-
 		fetchMetadataFromTheMovieDB(movieTitle, movieInfos.year, function(err, result) {
 			if (err) {
 				console.error(err);
