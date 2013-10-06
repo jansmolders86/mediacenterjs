@@ -22,6 +22,7 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 	var movieInfos = movie_title_cleaner.cleanupMovieTitle(movieTitle);
 	movieTitle = movieInfos.movieTitle;
 
+	app_cache_handler.ensureCacheDirExists('movies', movieTitle);
 	loadMetadataFromDatabase(movieTitle, function (result) {
 		if (result) {
 			// Movie is already in the database.
@@ -36,12 +37,19 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 				callback([]);
 			}
 
-			downloadMovieFanart(result.poster_path, result.backdrop_path, movieTitle, function(err) {
-				if (err) console.error(err);
+			var poster_path = result.poster_path ? result.poster_path : null;
+			var backdrop_path = result.backdrop_path ? result.backdrop_path : null;
+			downloadMovieFanart(poster_path, backdrop_path, movieTitle, function(err) {
+				var poster_path = '';
+				var backdrop_path = '';
+				if (err) {
+					console.error(err);
+				} else {
+					poster_path = app_cache_handler.getFrontendCachePath('movies', movieTitle, result.poster_path);
+					backdrop_path = app_cache_handler.getFrontendCachePath('movies', movieTitle, result.backdrop_path);
+				}
 
-				var poster_path = app_cache_handler.getFrontendCachePath('movies', movieTitle, result.poster_path);
-				var backdrop_path = app_cache_handler.getFrontendCachePath('movies', movieTitle, result.backdrop_path);
-				var genre = '';
+				var genre = 'Unknown';
 				if(result.genres.length){
 					genre = result.genres[0].name;
 				}
@@ -131,16 +139,20 @@ downloadMovieFanart = function(poster_path, backdrop_path, movieTitle, callback)
 		var poster_url = "http://cf2.imgobject.com/t/p/w342",
 			backdrop_url = "http://cf2.imgobject.com/t/p/w1920";
 
-		app_cache_handler.downloadDataToCache('movies', movieTitle, poster_url + poster_path, function(err) {
-			if (err) callback(err);
-			app_cache_handler.downloadDataToCache('movies', movieTitle, backdrop_url + backdrop_path, function(err) {
-				if (err) {
-					callback(err);
-				} else {
-					callback(null);
-				}
+		try {
+			app_cache_handler.downloadDataToCache('movies', movieTitle, poster_url + poster_path, function(err) {
+				if (err) callback(err);
+				app_cache_handler.downloadDataToCache('movies', movieTitle, backdrop_url + backdrop_path, function(err) {
+					if (err) {
+						callback(err);
+					} else {
+						callback(null);
+					}
+				});
 			});
-		});
+		} catch (exception) {
+			callback(exception);
+		}
 	} else {
 		callback('No Poster or Backdrop specified!');
 	}

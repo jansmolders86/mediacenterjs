@@ -62,7 +62,6 @@ exports.handler = function (req, res, movieRequest){
 	var metadata_fetcher = require('./metadata-fetcher');
 
 	this.initMovieDb();
-	app_cache_handler.ensureCacheDirExists('movies', movieRequest);
 
 	console.log('Searching for ' + movieRequest + ' in database');
 	metadata_fetcher.fetchMetadataForMovie(movieRequest, function(metadata) {
