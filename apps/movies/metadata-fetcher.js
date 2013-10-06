@@ -13,20 +13,6 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 
 /* Public Methods */
 
-/*
- metadata.movieRequest,
- original_name,
- poster_path,
- backdrop_path,
- imdb_id,
- rating,
- certification,
- genre,
- runtime,
- overview,
- cd_number
- */
-
 /**
  * Fetches the Metadata for the specified Movie from themoviedb.org.
  * @param movieTitle         The Title of the Movie
