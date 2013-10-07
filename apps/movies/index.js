@@ -22,8 +22,8 @@ exports.engine = 'jade';
 var express = require('express')
 , app = express()
 , fs = require('fs.extra')
-, ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
+, nconf = require('nconf')
+, config = require('../../configuration/config.json')
 , helper = require('../../lib/helpers.js')
 , functions = require('./movie-functions');
 

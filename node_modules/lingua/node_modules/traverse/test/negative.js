@@ -1,5 +1,5 @@
 var traverse = require('../');
-var test = require('tap').test;
+var test = require('tape');
 
 test('negative update test', function (t) {
     var obj = [ 5, 6, -3, [ 7, 8, -2, 1 ], { f : 10, g : -13 } ];

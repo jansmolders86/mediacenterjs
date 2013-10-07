@@ -21,8 +21,7 @@ exports.engine = 'jade';
 var express = require('express')
 , app = express()
 , fs = require('fs')
-, ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
+, config = require('../../configuration/config.json')
 
 exports.index = function(req, res, next){	
 	var allThemes = new Array();

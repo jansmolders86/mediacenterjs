@@ -1,9 +1,8 @@
 module.exports = {
 	loadItems: function(req,res){
 		var fs = require('fs')
-		, helper = require('../../lib/helpers.js')	
-		, ini = require('ini')
-		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))	
+		, helper = require('../../lib/helpers.js')
+		, config = require('../../configuration/config.json')
 		, dir = config.musicpath
 		, suffix = new RegExp("\.(mp3)","g");
 
@@ -36,8 +35,7 @@ module.exports = {
 		, Encoder = require('node-html-encoder').Encoder
 		, encoder = new Encoder('entity')
 		, helper = require('../../lib/helpers.js')
-		, ini = require('ini')
-		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
+		, config = require('../../configuration/config.json')
 		, dblite = require('dblite');
 	
 		var albumRequest = infoRequest
@@ -288,8 +286,7 @@ module.exports = {
 		, Encoder = require('node-html-encoder').Encoder
 		, encoder = new Encoder('entity')
 		, helper = require('../../lib/helpers.js')
-		, ini = require('ini')
-		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
+		, config = require('./configuration/config.json');
 		
 		var decodeTrack = encoder.htmlDecode(optionalParam)
 		, decodeAlbum = encoder.htmlDecode(infoRequest);

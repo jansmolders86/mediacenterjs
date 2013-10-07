@@ -2,8 +2,7 @@ module.exports = {
 	loadItems: function (req,res){
 		var fs = require('fs')
 		, helper = require('../../lib/helpers.js')	
-		, ini = require('ini')
-		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))	
+		, config = require('../../configuration/config.json')
 		, dir = config.moviepath
 		, suffix = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
 
@@ -37,8 +36,7 @@ module.exports = {
 		, Encoder = require('node-html-encoder').Encoder
 		, encoder = new Encoder('entity')
 		, colors = require('colors')
-		, ini = require('ini')
-		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));	
+		, config = require('./configuration/config.json')
 	
 		var dir = config.moviepath
 		, suffix = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
@@ -118,8 +116,7 @@ module.exports = {
 		, downloader = require('downloader')
 		, helper = require('../../lib/helpers.js')
 		, colors = require('colors')
-		, ini = require('ini')
-		, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
+		, config = require('./configuration/config.json')
 		, dblite = require('dblite');
 
 		// Variable defaults

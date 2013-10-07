@@ -1,4 +1,4 @@
-var test = require('tap').test;
+var test = require('tape');
 var traverse = require('../');
 var deepEqual = require('./lib/deep_equal');
 var util = require('util');

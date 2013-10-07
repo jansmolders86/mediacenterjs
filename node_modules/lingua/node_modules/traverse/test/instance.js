@@ -1,4 +1,4 @@
-var test = require('tap').test;
+var test = require('tape');
 var traverse = require('../');
 var EventEmitter = require('events').EventEmitter;
 

@@ -23,8 +23,8 @@ var express = require('express')
 , lingua = require('lingua')
 , colors = require('colors')
 , rimraf = require('rimraf')
-, ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
+, nconf = require('nconf')
+, config = require('./configuration/config.json')
 , dblite = require('dblite')
 , http = require('http');
 
@@ -170,32 +170,33 @@ app.post('/submit', function(req, res){
 });
 
 function writeSettings(req, res, callback){
+	nconf.argv().env().file({file: './configuration/config.json'});
 	var incommingTheme = req.body.theme
 	if (incommingTheme.match(/\.(css)/)){
 		themeName = incommingTheme;
 	} else {
 		themeName = incommingTheme+'.css';
 	}
+	// TODO add input sanitization
+    nconf.set('moviepath', req.body.movielocation);
+	nconf.set('musicpath', req.body.musiclocation);
+	nconf.set('tvpath', req.body.tvlocation);
+	nconf.set('language', req.body.language);
+	nconf.set('onscreenkeyboard', req.body.usekeyboard);
+	nconf.set('location', req.body.location);
+	nconf.set('theme', themeName);
+	nconf.set('screensaver', req.body.screensaver);
+	nconf.set('spotifyUser', req.body.spotifyUser);
+	nconf.set('spotifyPass', req.body.spotifyPass);
+	nconf.set('port', req.body.port);
 	
-    config.moviepath = req.body.movielocation,
-	config.musicpath = req.body.musiclocation,
-	config.tvpath = req.body.tvlocation,
-	config.language = req.body.language,
-	config.onscreenkeyboard = req.body.usekeyboard,
-	config.location = req.body.location,
-	config.theme = themeName,	
-	config.screensaver = req.body.screensaver,
-	config.spotifyUser= req.body.spotifyUser,
-	config.spotifyPass = req.body.spotifyPass,
-	config.port = req.body.port
-	
-    fs.writeFile('./configuration/config.ini', ini.stringify(config), function(err){
-        if(err){
-            console.log('Error writing INI file.',err);  
-        } else{
+	nconf.save(function (error) {
+		if(error){
+			console.log('Error writing config file.',err);  
+		} else{
 			res.redirect('/');
-        }
-    });
+		}
+	});
 }
 
 app.set('port', process.env.PORT || 3000);
@@ -203,9 +204,10 @@ app.set('port', process.env.PORT || 3000);
 // Open App socket
 if (config.port == "" || config.port == undefined ){
 	var defaultPort = app.get('port');
-	console.log('First run, Setup running on localhost:'+defaultPort);
+	console.log('First run, Setup running on localhost:' + defaultPort);
 	app.listen(parseInt(defaultPort));
 } else{
-	console.log("MediacenterJS listening on port:", config.port .green.bold); 
+	var message = "MediacenterJS listening on port:" + config.port;
+	console.log(message.green.bold);
 	app.listen(parseInt(config.port));
 }

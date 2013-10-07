@@ -34,8 +34,7 @@ var express = require('express')
 , Trakt = require('trakt')
 , trakt = new Trakt({username: 'mediacenterjs', password: 'mediacenterjs'})
 , colors = require('colors')
-, ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));	
+, config = require('../../configuration/config.json')
 
 exports.index = function(req, res, next){	
 	var writePath = './public/tv/data/tvindex.js'

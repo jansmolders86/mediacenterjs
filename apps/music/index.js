@@ -3,8 +3,7 @@
 var express = require('express')
 , app = express()
 , fs = require('fs.extra')
-, ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
+, config = require('../../configuration/config.json')
 , helper = require('../../lib/helpers.js')
 , functions = require('./music-functions');
  

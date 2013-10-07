@@ -1,5 +1,5 @@
 var traverse = require('../');
-var test = require('tap').test;
+var test = require('tape');
 
 test('subexpr', function (t) {
     var obj = [ 'a', 4, 'b', 5, 'c', 6 ];
