@@ -1,0 +1,11 @@
+succesMessage = Gennemført succesfuldt.
+weather_cloudy = overskyet
+weather_sunny = solrigt
+weather_rain = regn
+weather_mist = tåge
+weather_clear = klart
+weather_snow = sne
+weather_storm = torden
+feelsLike = Føles som
+error_weather =  Vær venlig at indtaste en større by.
+confirmMessage = Er du sikker på, at du vil gøre dette? Denne handling kan ikke fortrydes.
