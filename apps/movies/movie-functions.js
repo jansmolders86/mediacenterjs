@@ -36,7 +36,7 @@ module.exports = {
 		, Encoder = require('node-html-encoder').Encoder
 		, encoder = new Encoder('entity')
 		, colors = require('colors')
-		, config = require('./configuration/config.json')
+		, config = require('../../configuration/config.json');
 	
 		var dir = config.moviepath
 		, suffix = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
@@ -81,7 +81,7 @@ module.exports = {
 						});
 					
 						var proc = new ffmpeg({ source: movie, nolog: true, timeout:15000}) 
-						.addOptions(['-vcodec libx264','-pix_fmt yuv420p','-s qvga','-segment_list_type m3u8','-threads 4','-map 0:v','-map 0:a:0','-c:a mp3', '-b:a 160000','-ac 2','-f hls','-hls_time 10','-hls_list_size 6','-hls_wrap 18','-start_number 1','-deinterlace'])							
+						.addOptions(['-vcodec libx264','-pix_fmt yuv420p','-s qvga','-segment_list_type m3u8','-threads 4','-map 0:v','-map 0:a:0','-c:a mp3', '-b:a 160000','-ac 2','-f hls','-hls_time 10','-hls_list_size 6','-hls_wrap 18','-start_number 1','-deinterlace'])
 						.writeToStream(res, function(retcode, error){
 							if (!error){
 								console.log('file has been converted succesfully',retcode);
@@ -116,7 +116,7 @@ module.exports = {
 		, downloader = require('downloader')
 		, helper = require('../../lib/helpers.js')
 		, colors = require('colors')
-		, config = require('./configuration/config.json')
+		, config = require('../../configuration/config.json')
 		, dblite = require('dblite');
 
 		// Variable defaults

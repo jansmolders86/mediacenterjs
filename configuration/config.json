@@ -1,13 +1,13 @@
 {
-	"moviepath":"",
-	"musicpath":"",
-	"tvpath":"",
-	"language":"",
-	"onscreenkeyboard":false,
-	"location":"",
-	"screensaver":"",
-	"theme":"",
-	"spotifyUser":"",
-	"spotifyPass":"",
-	"port":0
+  "moviepath": "/Users/volvox/Movies/",
+  "musicpath": "/Users/volvox/Music/Deadmau5/",
+  "tvpath": "/Users/volvox/Movies/",
+  "language": "en",
+  "onscreenkeyboard": "false",
+  "location": "Tempe",
+  "screensaver": "dim",
+  "theme": "wigo.css",
+  "spotifyUser": "",
+  "spotifyPass": "",
+  "port": "3000"
 }

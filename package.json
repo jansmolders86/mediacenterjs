@@ -31,7 +31,7 @@
 		"colors":"0.6.2",
 		"async":"0.2.9",
 		"musicmetadata":"0.2.5",
-		"dblite":">=0.2.6",
+		"dblite":">=0.3.6",
 		"nconf": "0.6.7"
 	}
 }

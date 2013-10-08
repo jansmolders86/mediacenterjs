@@ -13,3 +13,19 @@ results
 
 npm-debug.log
 node_modules/
+
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Files from updating data locally
+public/music/data/

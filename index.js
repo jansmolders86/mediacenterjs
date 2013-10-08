@@ -49,6 +49,8 @@ app.configure(function(){
 	app.use(express.methodOverride());
 	app.use(express.static(__dirname + '/public'));
 	app.use(express.favicon(__dirname + '/public/core/favicon.ico'));
+	// TODO take out if we are not in development
+	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 	app.use(lingua(app, {
 		defaultLocale: 'translation_'+language,
 		storageKey: 'lang',
