@@ -34,12 +34,19 @@ exports.index = function(req, res, next){
 			res.render('youtube', {"error":'Problem getting content from YouTube.'});
 			return;
 		}
+		var createdDate = new Date(activityData.items[0].snippet.publishedAt);
+		var dateString = createdDate.getUTCFullYear() +"/"+
+		("0" + (createdDate.getUTCMonth()+1)).slice(-2) +"/"+
+		("0" + createdDate.getUTCDate()).slice(-2) + " " +
+		("0" + createdDate.getUTCHours()).slice(-2) + ":" +
+		("0" + createdDate.getUTCMinutes()).slice(-2) + ":" +
+		("0" + createdDate.getUTCSeconds()).slice(-2);
 		res.render('youtube', {
 			"title": activityData.items[0].snippet.title, 
 			"synopsis": activityData.items[0].snippet.description, 
 			"image": activityData.items[0].snippet.thumbnails.high.url, 
 			"channelTitle": activityData.items[0].snippet.channelTitle,
-			"viewCount": activityData.items[0].snippet.views || 0,
+			"createdDate": dateString || Date.now(),
 		});
 		/*for(var videoCounter in activityData.items) {
 			var videoObj = {
