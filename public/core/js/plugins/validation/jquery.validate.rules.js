@@ -3,7 +3,7 @@ $(function () {
 	
 var rules = [];
     rules["language"] = function(value, element) {
-        var isValid = value.match(/([nl]|[en]|[fr])/)
+        var isValid = value.match(/([nl]|[en]|[fr]|[da])/)
         return isValid;
 	};
     rules["path"] = function(value, element) {
