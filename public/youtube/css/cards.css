@@ -1,0 +1,89 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,900,700italic,900italic);
+* {
+	font-family: 'Roboto', sans-serif; line-height:1.2; vertical-align:middle;
+}
+body {
+	background:#222;
+}
+main {
+  display:block;
+  position:relative;
+  width:30rem;
+  margin:3vh auto;
+  padding:1.5rem 0 0;
+  background:#d5d5d5;
+  outline
+  border-radius:.25rem;
+  overflow:hidden;
+  transform:scale(.75);
+  transform-origin:center 3rem;
+  transition:transform .3s;
+}
+.card {
+  padding:1.5rem;
+  box-shadow:0 1px 2px #aaa;
+  background:white;
+  margin:0 1rem 1rem;
+  border-radius:3px;
+  user-select:none;
+  animation:fly-in-from-left .5s 1s ease both;
+  transform-origin:top left;
+}
+.card:nth-child(even){
+  animation-name:fly-in-from-right;
+  animation-delay:1.1s;
+ transform-origin:top right;
+}
+
+@keyframes fly-in-from-left {
+  from {
+    transform:translateY(15rem) rotate(15deg);
+    opacity:0;
+  }
+}
+
+@keyframes fly-in-from-right {
+  from {
+    transform:translateY(15rem) rotate(-15deg);
+    opacity:0;
+  }
+}
+
+.card:after {
+  position:absolute;
+  font-size:.9rem;
+  top:1.5rem;
+  right:1rem;
+  content:"i";
+  border:thin solid gray;
+  color:gray;
+  width:1rem;
+  line-height:1rem;
+  text-align:center;
+  border-radius:50%;
+  pointer-events:none;
+}
+
+h1 {
+  font-size:2rem;
+  font-weight:200;
+}
+  strong {
+    font-weight:300;
+    color:#539D00;
+  }
+
+h2 {
+  font-size:.9rem;
+  line-height:2.5;
+  color:gray;
+  font-weight:400;
+}
+
+.map {
+  height:12rem;
+  background:whitesmoke;
+  margin:.5rem 0 0 -1.5rem;
+  width:28rem;
+  
+}

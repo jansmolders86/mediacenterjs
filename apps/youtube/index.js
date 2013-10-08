@@ -19,21 +19,20 @@
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
 
-//var youtube = require('youtube-feeds')
 
 // Render the indexpage
-//var youtube = require('youtube-feeds')
+var youtube = require('youtube-feeds');
 exports.index = function(req, res, next){
-
-	/*youtube.httpProtocol = 'https'
-	youtube.feeds.videos( {q:'keywords'}, function( err, data ) {
-		if( err instanceof Error ) {
-			console.log( 'Error searching Youtube', err )
-		} else {
-			console.log( 'Getting Youtube data', data )
-		}
-	});*/
 	
-	res.render('youtube');
+	youtube.httpProtocol = 'https';
+	youtube.feeds.standard('most_popular', function( err, data ) {
+		if( err instanceof Error ) {
+			console.log( 'Error searching Youtube', err );
+			res.render('youtube', {"error":'Problem getting content from YouTube.'});
+		} else {
+			res.render('youtube', {"title": data.items[0].title, "synopsis": data.items[0].description, "image": data.items[0].thumbnail.hqDefault, "viewCount": data.items[0].viewCount});
+		}
+	});
+	//res.redirect('https://www.youtube.com/tv#/browse');
 };
 

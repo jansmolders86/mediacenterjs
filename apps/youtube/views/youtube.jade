@@ -3,8 +3,14 @@ html(lang="en")
 	head
 		// Core inclusion
 		link(rel='stylesheet', href='/core/css/style.css')
+		link(rel='stylesheet', href='/youtube/css/cards.css')
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/jquery.mcjs.core.js")
+		style.
+			.map {
+				background-image: url(#{locals.image});
+				background-position:center;
+			}
 
 		title Youtube
 		script.
@@ -17,4 +23,13 @@ html(lang="en")
 		#wrapper
 			a.backlink(href="/") 
 				img(src="/core/icons/back.png")
-			h1 This is a placeholder for the Youtube app.
+			if locals.error
+				h1 #{locals.error}
+			else 
+				h1 Top Trending
+			main
+				section.card
+					h1
+						strong #{locals.title}
+					div.map
+					h2 View Count: #{locals.viewCount}
