@@ -140,10 +140,10 @@ __Install node on Ubuntu/Debian__
 	// Git clone
 	sudo apt-get install git
 	git clone https://github.com/jansmolders86/mediacenterjs.git
+	npm install
 
 	// NPM install
 	npm install mediacenterjs
-
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 
