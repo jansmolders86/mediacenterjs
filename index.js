@@ -49,8 +49,6 @@ app.configure(function(){
 	app.use(express.methodOverride());
 	app.use(express.static(__dirname + '/public'));
 	app.use(express.favicon(__dirname + '/public/core/favicon.ico'));
-	// TODO take out if we are not in development
-	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 	app.use(lingua(app, {
 		defaultLocale: 'translation_'+language,
 		storageKey: 'lang',
@@ -191,6 +189,7 @@ function writeSettings(req, res, callback){
 	nconf.set('spotifyUser', req.body.spotifyUser);
 	nconf.set('spotifyPass', req.body.spotifyPass);
 	nconf.set('port', req.body.port);
+	nconf.set('oauth', req.body.oauth);
 	
 	nconf.save(function (error) {
 		if(error){

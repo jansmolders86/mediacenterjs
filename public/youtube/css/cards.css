@@ -54,7 +54,6 @@ main {
   font-size:.9rem;
   top:1.5rem;
   right:1rem;
-  content:"i";
   border:thin solid gray;
   color:gray;
   width:1rem;
@@ -74,16 +73,20 @@ h1 {
   }
 
 h2 {
-  font-size:.9rem;
+  font-size:1rem;
+  color:gray;
+  font-weight:400;
+}
+h3 {
+  font-size:.5rem;
   line-height:2.5;
   color:gray;
   font-weight:400;
 }
-
 .map {
   height:12rem;
   background:whitesmoke;
-  margin:.5rem 0 0 -1.5rem;
+  margin:-1.5rem 0 0 -1.5rem;
   width:28rem;
   
 }

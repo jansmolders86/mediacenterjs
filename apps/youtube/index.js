@@ -21,18 +21,31 @@ exports.engine = 'jade';
 
 
 // Render the indexpage
-var youtube = require('youtube-feeds');
+var Youtube = require('youtube-api');
+var config = require('../../configuration/config.json');
 exports.index = function(req, res, next){
-	
-	youtube.httpProtocol = 'https';
-	youtube.feeds.standard('most_popular', function( err, data ) {
-		if( err instanceof Error ) {
-			console.log( 'Error searching Youtube', err );
-			res.render('youtube', {"error":'Problem getting content from YouTube.'});
-		} else {
-			res.render('youtube', {"title": data.items[0].title, "synopsis": data.items[0].description, "image": data.items[0].thumbnail.hqDefault, "viewCount": data.items[0].viewCount});
-		}
+	Youtube.authenticate({
+		type: "oauth",
+		token: config.oauth
 	});
-	//res.redirect('https://www.youtube.com/tv#/browse');
+	Youtube.activities.list({"part": "snippet", "home": true}, function (error, activityData) {
+		if( error instanceof Error ) {
+			console.log('Error searching Youtube', error);
+			res.render('youtube', {"error":'Problem getting content from YouTube.'});
+			return;
+		}
+		res.render('youtube', {
+			"title": activityData.items[0].snippet.title, 
+			"synopsis": activityData.items[0].snippet.description, 
+			"image": activityData.items[0].snippet.thumbnails.high.url, 
+			"channelTitle": activityData.items[0].snippet.channelTitle,
+			"viewCount": activityData.items[0].snippet.views || 0,
+		});
+		/*for(var videoCounter in activityData.items) {
+			var videoObj = {
+
+			}
+		}*/
+	});
 };
 

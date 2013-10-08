@@ -63,7 +63,7 @@ server = {
         });
     },
     "watchFile": function() {
-		fs.watchFile('./configuration/config.ini', {interval : 500}, function(curr, prev) {
+		fs.watchFile('./configuration/config.json', {interval : 500}, function(curr, prev) {
 			if (curr.mtime.valueOf() != prev.mtime.valueOf() || curr.ctime.valueOf() != prev.ctime.valueOf()) {
 				console.log('Restarting because of changed file' .yellow.bold);
 				// give browser time to load finsh page
