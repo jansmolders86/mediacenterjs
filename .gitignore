@@ -14,3 +14,5 @@ results
 npm-debug.log
 node_modules/
 screenshots/
+.DS_Store
+thumbs.db
