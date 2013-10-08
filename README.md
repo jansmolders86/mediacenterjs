@@ -63,6 +63,7 @@ Other known issues
 ==================
 
 * Frontend needs to be ported to knockout (still wip)
+* Movie scraper API has a limitation on the amount of calls we can make. So with a lot if movies, you can get misfires if you scroll through too many movies at once.
 
 What still needs to be done
 ==================
@@ -370,6 +371,7 @@ This app also makes use of the following modules:
 ###Special thanks to:###
 
 * Sylvain https://github.com/flyinva  for his French translation
+* Kasper Isager https://github.com/kasperisager for his Danish translation
 * Jussi Vatjus https://github.com/jupe for his code support
 * Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
 * Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
