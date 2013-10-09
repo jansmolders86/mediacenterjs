@@ -40,9 +40,7 @@ exports.index = function(req, res, next){
 			availableLanguages.push(languageCode);
 		}
 	});
-	
-	console.log(availableLanguages)
-					
+
 	res.render('settings',{
 		movielocation: config.moviepath,
 		selectedTheme: config.theme,
