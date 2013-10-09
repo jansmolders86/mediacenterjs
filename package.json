@@ -11,6 +11,10 @@
 		"url": "http://www.gnu.org/licenses"
 	}],
 	"version": "0.0.41",
+	"repository" :{ 
+		"type" : "git", 
+		"url" : "http://github.com/jansmolders86/mediacenterjs.git"
+	},
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",
