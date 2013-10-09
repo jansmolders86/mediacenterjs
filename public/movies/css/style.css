@@ -77,7 +77,7 @@ a.backlink { margin-top: 0px; z-index:4; }
 	cursor:pointer;
 }
 
-.movieposter .cdNumber{
+.movieposter.showDetails .cdNumber{
 	width:90px;
 	height:80px;
 	background:url(img/cdnumber-bg.png) no-repeat;
@@ -87,7 +87,7 @@ a.backlink { margin-top: 0px; z-index:4; }
 	z-index:3;
 }
 
-.movieposter .cdNumber > span{
+.movieposter.showDetails .cdNumber > span{
 	color:#fff;
 	font-size:14px;
 	-webkit-transform: rotate(44.5deg);  /* Chrome, Safari 3.1+ */
@@ -97,22 +97,16 @@ a.backlink { margin-top: 0px; z-index:4; }
 	transform: rotate(44.5deg);
 	font-weight:bold;
 	margin-left: 47px;
-	margin-top: 17px;
+	margin-top: 15px;
 }
 
 .movieposter img{
-	margin:50px 0 0 90px ;
-    display:block;
-	width:32px;
-	height:32px;
-	padding:0;
-	border:0;
-}
-
-.movieposter img.coverfound{
 	margin:0 0 20px 0;
+    display:block;
 	width:100%;
 	height:auto;
+	padding:0;
+	border:0;
 }
 
 .movieposter span{
@@ -143,12 +137,18 @@ span.title{visibility:hidden; width:0; height:0;}
 
 
 .movieposter a{ float:left; }
-
 .movieposter .imageWrapper {width:250px;  height:278px; overflow:hidden;}
-.movieposter .overview{padding:10px;}
-.movieposter .overview p{font-size:11px; line-height:17px; margin:0;}
+.movieposter .overview{
+	padding:10px; 
+	font-size:11px; 
+	line-height:17px; 
+	margin:0;
+	max-height:207px;
+	position:relative;
+	overflow:hidden;
+}
 
-.movieposter .specs{
+.movieposter.showDetails .specs{
 	float: left;
 	color: #666;
 	line-height: 19px;
@@ -161,8 +161,6 @@ span.title{visibility:hidden; width:0; height:0;}
 	color:#9F9384;
 	border-top: 1px solid #e7e7e7;
 }
-
-
 
 .overview h1{ margin:0px 0 10px 0; font-size:13px; max-width:165px;}
 .specs p{font-size:12px; float:left; margin:10px 0 0 15px;}

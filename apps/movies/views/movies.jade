@@ -43,11 +43,29 @@ html(lang="en")
 
 		#wrapper
 			#moviebrowser
-				ul.movies(data-bind="foreach:  $data")
+				// ko if: movies().length > 0
+				ul.movies(data-bind="foreach: movies")
 					li.movieposter.boxed
 						.imageWrapper
-							img.movieposter(src="/core/css/img/ajax-loader.gif")
-						.overlay(data-bind="attr:{title: $data}")			
-						span.title(data-bind="text:$data")	
+							// ko if: backdropImage() !== null && posterImage() !== null
+							img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }", src="/core/css/img/ajax-loader.gif")
+							// /ko	
+						.overlay(data-bind="{click: playMovie}")	
+						span.title(data-bind="text:localName")	
 						.overview
+							// ko if: overview() !== null 
+							h1(data-bind="text:title")
+							.summary(data-bind="text:overview")
+							// /ko	
 						.specs
+							// ko if: genre() !== undefined 
+							p
+								strong(data-bind="text:'Genre: '+genre()")
+							p
+								strong(data-bind="text:'Runtime: '+runtime()")
+							// /ko	
+						// ko if: cdNumber() !== 'No data found...' && cdNumber() !== null
+						.cdNumber
+							span(data-bind="text:cdNumber")
+						// /ko	
+				// /ko							
