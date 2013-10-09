@@ -70,8 +70,8 @@
 		
 			//Set up i18n translation
 			$.i18n.properties({
-				name: 'frontend-translation', 
-				path:'/translations/', 
+				name: 'translation', 
+				path:'/translations/frontend/', 
 				mode:'map',
 				language: data.language,
 				extension: 'js',

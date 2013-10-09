@@ -13,6 +13,13 @@ html(lang="en")
 			$(document).ready(function() {
 				$('.validate-form').validate();
 				$("[type=checkbox], [type=radio]").prettyForm();
+				
+				var userLang = navigator.language || navigator.userLanguage; 
+				if(userLang.match(/nl|en|fr|da/g)){
+					$('input#language').val(userLang);
+				} else{
+					$('input#language').val('en');
+				}
 			});
 	body
 		#header
@@ -25,7 +32,7 @@ html(lang="en")
 				.row	
 					span.info 
 						span.quote &ldquo;
-						span MediaCenterJS will index all the moviefiles in this initial folder. <br/> You can add or change a location later in the settings.
+						span MediaCenterJS will index all the moviefiles in this initial folder. <br/> You can add or change a location later in the settings. <br/> You can also change the language their.
 						span.quote &rdquo; 		
 				.row
 					label Specify music location
@@ -48,9 +55,6 @@ html(lang="en")
 						input#nokeyboard(name="usekeyboard",type="radio",value="no",checked) 
 						label(for="nokeyboard") No
 				.row
-					label Language
-					input.keyboard(name="language",type="text",placeholder="ie nl or en",data-rule-required="true", data-rule-language="true",  data-msg-language="EN, FR, DA and NL are currently supported")
-				.row
 					label You current location (city)
 					input.keyboard(name="location",type="text",placeholder="ie london or amsterdam",data-rule-required="true")
 				.row
@@ -59,6 +63,7 @@ html(lang="en")
 				.row
 					input(type="submit",value="Submit")
 					input(name="screensaver",type="hidden",value="dim")
+					input#language(name="language",type="hidden",value="en")
 					input(name="theme",type="hidden",value="wigo.css")
 					input(name="spotifyUser",type="hidden",value="")
 					input(name="spotifyPass",type="hidden",value="")

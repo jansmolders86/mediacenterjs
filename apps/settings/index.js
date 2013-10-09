@@ -25,31 +25,37 @@ var express = require('express')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
 exports.index = function(req, res, next){	
-	var allThemes = new Array();
+	var allThemes = new Array()
+	, availableLanguages = []
+	, availablethemes = fs.readdirSync('./public/themes/')
+	, availableTranslations = fs.readdirSync('./public/translations/');
 	
-	fs.readdir('./public/themes/',function(err,files){
-		if (err){
-			console.log('Could not get themes',err .red);
-		}else{
-			files.forEach(function(file){
-				allThemes.push(file);
-			});
-
-			res.render('settings',{
-				movielocation: config.moviepath,
-				selectedTheme: config.theme,
-				musiclocation : config.musicpath,
-				tvlocation : config.tvpath,
-				language: config.language,
-				onscreenkeyboard: config.onscreenkeyboard,
-				location: config.location,
-				screensaver: config.screensaver,
-				spotifyUser: config.spotifyUser,
-				spotifyPass: config.spotifyPass,
-				themes:allThemes,
-				port: config.port
-			});	
-			
-		}	
+	availablethemes.forEach(function(file){
+		allThemes.push(file);
 	});
+		
+	availableTranslations.forEach(function(file){
+		if (file.match('translation')){
+			var languageCode = file.replace(/translation_|.json/g,"")
+			availableLanguages.push(languageCode);
+		}
+	});
+	
+	console.log(availableLanguages)
+					
+	res.render('settings',{
+		movielocation: config.moviepath,
+		selectedTheme: config.theme,
+		musiclocation : config.musicpath,
+		tvlocation : config.tvpath,
+		language: config.language,
+		availableLanguages: availableLanguages,
+		onscreenkeyboard: config.onscreenkeyboard,
+		location: config.location,
+		screensaver: config.screensaver,
+		spotifyUser: config.spotifyUser,
+		spotifyPass: config.spotifyPass,
+		themes:allThemes,
+		port: config.port
+	});		
 };
