@@ -373,6 +373,7 @@ This app also makes use of the following modules:
 * Sylvain https://github.com/flyinva  for his French translation
 * Kasper Isager https://github.com/kasperisager for his Danish translation
 * Jussi Vatjus https://github.com/jupe for his code support
+* Terry MooreII https://github.com/TerryMooreII For the Javascript Jabber app
 * Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
 * Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
 * Lucien Immink https://github.com/lucienimmink for his javascript knowledge/support
