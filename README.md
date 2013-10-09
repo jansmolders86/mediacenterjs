@@ -140,7 +140,10 @@ __Install node on Ubuntu/Debian__
 	// Git clone
 	sudo apt-get install git
 	git clone https://github.com/jansmolders86/mediacenterjs.git
+	cd mediacenterjs
 	npm install
+	sudo chmod -R 755 bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
+	sudo node server
 
 	// NPM install
 	npm install mediacenterjs
@@ -149,8 +152,7 @@ The program will boot in setup mode, being accessible on localhost:3000 or 'IP o
 
 If you get an 'EACCESS' error, please set the permissions of the entire app to read, write and execute and run the server using 'sudo'
  
-     sudo chmod -R 755 mediacenterjs/
-     
+     sudo chmod -R 755 bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
      sudo node server
 
 Running MediacenterJS
@@ -370,9 +372,11 @@ This app also makes use of the following modules:
 
 ###Special thanks to:###
 
-* Sylvain https://github.com/flyinva  for his French translation
+* Sylvain https://github.com/flyinva for his French translation
 * Kasper Isager https://github.com/kasperisager for his Danish translation
 * Jussi Vatjus https://github.com/jupe for his code support
+* Terry MooreII https://github.com/TerryMooreII For the Javascript Jabber app
+* Stefan Hoffman https://github.com/hoffi for his hudge contribution to the backend
 * Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
 * Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
 * Lucien Immink https://github.com/lucienimmink for his javascript knowledge/support
