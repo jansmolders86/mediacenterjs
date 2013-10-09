@@ -186,7 +186,7 @@ or
 
 	specifiedPath/f/fight club.avi
 	
-or  
+or even
 
 	specifiedPath/f/MyfavouriteMovies/fight club.avi
 	
@@ -395,13 +395,14 @@ The project will reach beta status when it is able to provide:
 
 * Fast transcoding 
 * Cross Browser/device compatibility
-* Easy to add/change themes
-* And a set of ready made apps like youtube and google music.
+* Easy to add/change themes (with several available to choose from)
+* A set of ready made apps like youtube and google music.
 * Multilanguage support
 * App import/export functionality
 
 This application will run on Windows and Linux based systems. 
-There will be a specific Linux distro using a kiosk, debian distro.
+
+***There will be a specific Linux distro using a kiosk, debian distro.***
 
 I'm building MCJS in my free time so if you want to encourage me to continue this enormous project, feel free to do so.
 
