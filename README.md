@@ -142,7 +142,7 @@ __Install node on Ubuntu/Debian__
 	git clone https://github.com/jansmolders86/mediacenterjs.git
 	cd mediacenterjs
 	npm install
-	sudo chmod -R 755 bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
+	sudo chmod 755 bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
 	sudo node server
 
 	// NPM install
