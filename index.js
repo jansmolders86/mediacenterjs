@@ -169,6 +169,18 @@ app.get('/getToken', function (req, res) {
 	}
 	res.json({token: token});
 });
+app.post('/updateToken', function (req, res) {
+	nconf.argv().env().file({file: './configuration/config.json'});
+	nconf.set('oauth', req.body.oauth);
+	nconf.save(function (error) {
+		if(error){
+			console.log('Error writing config file.',err);
+			res.end('Error with config file.');
+		} else{
+			res.end();
+		}
+	});
+});
 app.post('/submit', function (req, res){
 	writeSettings(req, res, function(){
 		res.redirect('/');

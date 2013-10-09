@@ -33,21 +33,14 @@ exports.index = function(req, res, next){
 			console.log('Error searching Youtube', error);
 			res.render('youtube', {"error":'Problem getting content from YouTube.'});
 			return;
-		}
-		if(activityData.error && activityData.error.code === 401) {
-			// TODO Re auth here
-			res.render('youtube', {"error":'Need to re authenticate to Google.'});
+		} else if(error) {
+			res.render('youtube', {"error":'Need to re authenticate to Google, popup in '});
+			return;
 		}
 		var videos = [];
 		for(var videoCounter in activityData.items) {
 			var createdDate = new Date(activityData.items[videoCounter].snippet.publishedAt);
-			/*http://stackoverflow.com/a/8363049/1612721*/
-			var dateString = createdDate.getUTCFullYear() +"/"+
-			("0" + (createdDate.getUTCMonth()+1)).slice(-2) +"/"+
-			("0" + createdDate.getUTCDate()).slice(-2) + " " +
-			("0" + createdDate.getUTCHours()).slice(-2) + ":" +
-			("0" + createdDate.getUTCMinutes()).slice(-2) + ":" +
-			("0" + createdDate.getUTCSeconds()).slice(-2);
+			var dateString = createDateString(createdDate);
 			var videoObj = {
 				"title": activityData.items[videoCounter].snippet.title, 
 				"synopsis": activityData.items[videoCounter].snippet.description, 
@@ -60,4 +53,13 @@ exports.index = function(req, res, next){
 		res.render('youtube', {"videos": videos});
 	});
 };
+/*http://stackoverflow.com/a/8363049/1612721*/
+function createDateString(createdDate) {
+	return createdDate.getUTCFullYear() +"/"+
+	("0" + (createdDate.getUTCMonth()+1)).slice(-2) +"/"+
+	("0" + createdDate.getUTCDate()).slice(-2) + " " +
+	("0" + createdDate.getUTCHours()).slice(-2) + ":" +
+	("0" + createdDate.getUTCMinutes()).slice(-2) + ":" +
+	("0" + createdDate.getUTCSeconds()).slice(-2);
+}
 
