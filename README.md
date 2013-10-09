@@ -149,8 +149,8 @@ The program will boot in setup mode, being accessible on localhost:3000 or 'IP o
 
 If you get an 'EACCESS' error, please set the permissions of the entire app to read, write and execute and run the server using 'sudo'
  
-     sudo chmod -R 755 mediacenterjs/
-     
+     sudo chmod -R 755 mediacenterjs/bin/sqlite3/sqlite3 mediacenterjs/lib/database/mcjs.sqlite
+   
      sudo node server
 
 Running MediacenterJS
