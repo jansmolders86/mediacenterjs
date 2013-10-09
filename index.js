@@ -153,17 +153,23 @@ app.post('/clearCache', function(req, res){
 	});
 });
 
-app.post('/setuppost', function(req, res){
+app.post('/setuppost', function (req, res){
 	writeSettings(req, res, function(){
 		res.render('finish');
 	});
 });
 
-app.get('/configuration', function(req, res){
+app.get('/configuration', function (req, res){
 	res.send(config);
 });
-	
-app.post('/submit', function(req, res){
+app.get('/getToken', function (req, res) {
+	var token = config.oauth;
+	if(!token) {
+		res.json({message: 'No token'}, 500);
+	}
+	res.json({token: token});
+});
+app.post('/submit', function (req, res){
 	writeSettings(req, res, function(){
 		res.redirect('/');
 	});
@@ -190,6 +196,7 @@ function writeSettings(req, res, callback){
 	nconf.set('spotifyPass', req.body.spotifyPass);
 	nconf.set('port', req.body.port);
 	nconf.set('oauth', req.body.oauth);
+	nconf.set('oauthKey', req.body.oauthKey);
 	
 	nconf.save(function (error) {
 		if(error){

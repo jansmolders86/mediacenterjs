@@ -28,31 +28,36 @@ exports.index = function(req, res, next){
 		type: "oauth",
 		token: config.oauth
 	});
-	Youtube.activities.list({"part": "snippet", "home": true}, function (error, activityData) {
+	Youtube.activities.list({"part": "snippet", "home": true, "maxResults": 50}, function (error, activityData) {
 		if( error instanceof Error ) {
 			console.log('Error searching Youtube', error);
 			res.render('youtube', {"error":'Problem getting content from YouTube.'});
 			return;
 		}
-		var createdDate = new Date(activityData.items[0].snippet.publishedAt);
-		var dateString = createdDate.getUTCFullYear() +"/"+
-		("0" + (createdDate.getUTCMonth()+1)).slice(-2) +"/"+
-		("0" + createdDate.getUTCDate()).slice(-2) + " " +
-		("0" + createdDate.getUTCHours()).slice(-2) + ":" +
-		("0" + createdDate.getUTCMinutes()).slice(-2) + ":" +
-		("0" + createdDate.getUTCSeconds()).slice(-2);
-		res.render('youtube', {
-			"title": activityData.items[0].snippet.title, 
-			"synopsis": activityData.items[0].snippet.description, 
-			"image": activityData.items[0].snippet.thumbnails.high.url, 
-			"channelTitle": activityData.items[0].snippet.channelTitle,
-			"createdDate": dateString || Date.now(),
-		});
-		/*for(var videoCounter in activityData.items) {
+		if(activityData.error && activityData.error.code === 401) {
+			// TODO Re auth here
+			res.render('youtube', {"error":'Need to re authenticate to Google.'});
+		}
+		var videos = [];
+		for(var videoCounter in activityData.items) {
+			var createdDate = new Date(activityData.items[videoCounter].snippet.publishedAt);
+			/*http://stackoverflow.com/a/8363049/1612721*/
+			var dateString = createdDate.getUTCFullYear() +"/"+
+			("0" + (createdDate.getUTCMonth()+1)).slice(-2) +"/"+
+			("0" + createdDate.getUTCDate()).slice(-2) + " " +
+			("0" + createdDate.getUTCHours()).slice(-2) + ":" +
+			("0" + createdDate.getUTCMinutes()).slice(-2) + ":" +
+			("0" + createdDate.getUTCSeconds()).slice(-2);
 			var videoObj = {
-
+				"title": activityData.items[videoCounter].snippet.title, 
+				"synopsis": activityData.items[videoCounter].snippet.description, 
+				"image": activityData.items[videoCounter].snippet.thumbnails.high.url, 
+				"channelTitle": activityData.items[videoCounter].snippet.channelTitle,
+				"createdDate": dateString || Date.now()
 			}
-		}*/
+			videos.push(videoObj);
+		}
+		res.render('youtube', {"videos": videos});
 	});
 };
 

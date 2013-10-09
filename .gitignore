@@ -29,3 +29,8 @@ Icon
 
 # Files from updating data locally
 public/music/data/
+public/movies/data/
+public/tv/data/
+
+#Configuration
+configuration/config.json

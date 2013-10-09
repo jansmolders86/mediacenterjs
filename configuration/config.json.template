@@ -1,0 +1,15 @@
+{
+  "moviepath": "",
+  "musicpath": "",
+  "tvpath": "",
+  "language": "en",
+  "onscreenkeyboard": "false",
+  "location": "",
+  "screensaver": "dim",
+  "theme": "wigo.css",
+  "spotifyUser": "",
+  "spotifyPass": "",
+  "port": "",
+  "oauth": "",
+  "oauthKey": ""
+}

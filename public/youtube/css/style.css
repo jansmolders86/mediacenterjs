@@ -1,6 +1,10 @@
-#oauth {
-	background-color: #0074a2;
+h2 strong {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2; /* number of lines to show */
+	-webkit-box-orient: vertical;
 }
-img#check {
-	display: none;
+.map {
+	background-position:center;
 }

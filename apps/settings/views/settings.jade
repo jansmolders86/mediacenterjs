@@ -6,7 +6,7 @@ html(lang="en")
 		link(rel='stylesheet', href='/core/css/style.css')
 		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css') 
 		link(rel='stylesheet', href='/themes/'+selectedTheme)
-		link(rel='stylesheet', href='/youtube/css/style.css')
+		link(rel='stylesheet', href='/settings/css/style.css')
 		
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/jquery-ui-1.10.3.min.js")
@@ -38,24 +38,56 @@ html(lang="en")
 					var cleanedThemeName = $(this).html().replace(/\.(css)/i,"");
 					$(this).text(cleanedThemeName)
 				});
-				$('#oauth').click(function (e) {
+				$('a#oauth').click(function (e) {
 					e.preventDefault();
-					OAuth.initialize('4JyE38P_ZmsNXGR3vdmTKb7sdSM');
+					// TODO need to make this configurable
+					OAuth.initialize($('input#oauthKey').val());
 					OAuth.popup('youtube', function (error, oauthData){
-						if(error) {
-							console.log(error);
+						if(error instanceof Error) {
+							$('label[for="oauthKey"]').text(error.message);
+							$('img#ex').fadeIn('fast').css('display', 'inline-block');
+						} else {
+							// TODO if they don't have local storage, then do something else (but who doesn't have localStorage now anyways?!)
+							localStorage.setItem('oauth_token', oauthData.access_token);
+							localStorage.setItem('oauth_key', $('input#oauthKey').val());
+							$('input.oauth').val(localStorage.getItem('oauth_token'));
+							$('input.oauthKeyHidden').val(localStorage.getItem('oauth_key'));
+							$('img#check').fadeIn('fast').css('display', 'inline-block');
 						}
-						// TODO if they don't have local storage, then do something else
-						localStorage.setItem('oauth_token', oauthData.access_token);
-						$('input.oauth').val(localStorage.getItem('oauth_token'));
-						$('img#check').fadeIn('fast');
 					});
 				});
 				if(localStorage.getItem('oauth_token')) {
-					$('img#check').show();
+					$('img#check').show().css('display', 'inline-block');
 					$('input.oauth').val(localStorage.getItem('oauth_token'));
+					$('input.oauthKeyHidden').val(localStorage.getItem('oauth_key'));
+				} else {
+					getStoredToken(function (error, data) {
+						if(!error) {
+							localStorage.setItem('oauth_token', data.token);
+							$('img#check').show().css('display', 'inline-block');
+							$('input.oauth').val(data.token);
+							$('input.oauthKeyHidden').val(localStorage.getItem('oauth_key'));
+						}
+					});
 				}
+				$('img#helpCircle').click(function (e) {
+					e.preventDefault();
+					window.open('https://oauth.io/docs/getting-started', '_blank');
+				})
 			});
+			// Get token that's stored on the server-side config which we submitted earlier
+			function getStoredToken(callback) {
+				$.ajax({
+					type: "GET",
+					url: "/getToken",
+					success: function (data) {
+						return callback(null, data);
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						return callback(jqXHR.responseText);
+					}
+				});
+			}
 	body
 		#hiddenSetting
 			p= onscreenkeyboard
@@ -64,21 +96,32 @@ html(lang="en")
 				img(src="/core/icons/back.png")
 			h1  #{lingua.settings}		
 		#wrapper
-		
 			.ui-widget
 				.ui-state-highlight.ui-corner-all
 					span.ui-icon.ui-icon-alert
 					.message 
+			h2 Cache
+			hr
 			.row
 				a.btn.cachelink(href="",data-cachelink="movies") #{lingua.settings_clear_cache_movies}
 				a.btn.cachelink(href="",data-cachelink="music") #{lingua.settings_clear_cache_music}
 				a.btn.cachelink(href="",data-cachelink="tv") #{lingua.settings_clear_cache_tv}
-			.row
-				a.btn#oauth(href="#") Register OAuth
-				img#check(src="/core/icons/check.png")
 			#settings
+				h2#oauthTitle OAuth
+				span
+					img#helpCircle(src="/core/icons/helpCircle.png")
+				hr
+				div#oauthContainer
+					input#oauthKey(name="oauthKey" type="text", placeholder="OAuth.io Key")
+					a.btn#oauth(href="#") Register OAuth
+					img#check(src="/core/icons/check.png")
+					img#ex(src="/core/icons/ex.png")
+					label(for="oauthKey")
+				h2 Settings
+				hr
 				form#setup.validate-form(action='/submit',method='post')
 					input.oauth(name="oauth" type="hidden")
+					input.oauthKeyHidden(name="oauthKey" type="hidden")
 					.row
 						label #{lingua.setting_movielocation}
 						input.keyboard(name="movielocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")

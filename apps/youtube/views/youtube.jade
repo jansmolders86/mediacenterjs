@@ -3,14 +3,10 @@ html(lang="en")
 	head
 		// Core inclusion
 		link(rel='stylesheet', href='/core/css/style.css')
+		link(rel='stylesheet', href='/youtube/css/style.css')
 		link(rel='stylesheet', href='/youtube/css/cards.css')
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/jquery.mcjs.core.js")
-		style.
-			.map {
-				background-image: url(#{locals.image});
-				background-position:center;
-			}
 
 		title Youtube
 		script.
@@ -26,12 +22,13 @@ html(lang="en")
 			if locals.error
 				h1 #{locals.error}
 			else 
-				h1 Top Trending
+				h1 What to Watch
 			main
-				section.card
-					div.map
-					h2
-						strong #{locals.title}
-					h3 #{locals.channelTitle}
-					br
-					h3 Created on #{locals.createdDate}
+				each video in locals.videos
+					section.card
+						div.map(style="background-image: url(#{video.image});")
+						h2
+							strong #{video.title}
+						h3 #{video.channelTitle}
+						br
+						h3 Created on #{video.createdDate}
