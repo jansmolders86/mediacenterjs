@@ -1,0 +1,50 @@
+doctype 5
+html(lang="en")
+	head
+		// Core inclusion
+		link(rel='stylesheet', href='/core/css/style.css')
+		script(src="/core/js/jquery-1.8.2.min.js")
+		script(src="/core/js/jquery.mcjs.core.js")
+		
+		// App specific
+		link(rel='stylesheet', href='/nerdist/css/style.css')
+		
+		title JavaScript Jabber
+		
+		link(href="http://vjs.zencdn.net/4.0/video-js.css", rel="stylesheet")
+		script(src="http://vjs.zencdn.net/4.0/video.js")
+		style.
+			.vjs-play-progress, .vjs-volume-level { background-color: #d96800!important; }
+			.vjs-control-bar, .vjs-big-play-button { background: rgba(171,171,171,0.7)!important; }
+			.vjs-slider { background: rgba(171,171,171,0.2333333333333333)!important; }
+			.vjs-fade-out { opacity: 1 !important; visibility: visible !important; }
+			.vjs-fullscreen-control{visibility:hidden!important;}
+		
+		script.
+			$(function(){
+				$('body').mcjs();
+				
+				$('.link').click(function(e) {
+					e.preventDefault();	
+					
+					var link = $(this).attr('href')
+					
+					videojs("player").ready(function(){
+						var myPlayer = this;
+						$('#player').css('bottom','0');
+						myPlayer.src(link);
+						myPlayer.play();
+					});
+				});
+			});
+	body
+		#header
+			a.backlink(href="/") 
+				img(src="/core/icons/back.png")
+			h1 JavaScript Jabber	
+		#wrapper
+			ul.articles
+				each article in articles
+					li.article!=article
+			video#player.video-js.vjs-default-skin(controls, preload="metadata", width="100%", height="33", data-setup="{}") %
+				source(src="",type="audio/mp3")		
