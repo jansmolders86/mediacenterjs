@@ -59,10 +59,10 @@ html(lang="en")
 			ul#tiles
 				each item in apps
 					li.tile.boxed
-						a(href="/"+item)
-							img(src="/"+item+"/tile.png")
+						a(href="/" + item.appLink + "/")
+							img(src="/" + item.tileLink + "/tile.png")
 						.info
-							- if(item !== 'movies' && item !== 'music' && item !== 'weather' && item !== 'tv' && item !== 'settings')
+							- if(item.appLink !== 'movies' && item.appLink !== 'music' && item.appLink !== 'weather' && item.appLink !== 'tv' && item.appLink !== 'settings')
 								.remove
 									img(src="/core/css/img/remove.png") 
-									a(href=item) Remove
+									a(href=item.appLink) Remove

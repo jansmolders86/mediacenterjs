@@ -84,13 +84,41 @@ app.get("/", function(req, res, next) {
 	if(	config.moviepath == '' && config.language == '' && config.location == '' || config.moviepath == null || config.moviepath == undefined){
 		res.render('setup');	
 	} else {
-		var apps = []
-		//Search app folder for apps and check if tile icon is present
+		
+		var apps = [];
+
+		//Search core app folder for apps and check if tile icon is present
 		fs.readdirSync(__dirname + '/apps').forEach(function(name){
 			if(fs.existsSync(__dirname + '/public/'+name+'/tile.png')){
-				apps.push(name);
+				var obj = {
+					appLink: name, 
+					tileLink: name
+				}
+				apps.push(obj);
 			}
 		});
+
+		//search node_modules for plugins
+		var nodeModules = __dirname + '/node_modules';
+		var pluginPrefix = 'mediacenterjs-'; //TODO: externalize in config file
+
+		fs.readdirSync(nodeModules).forEach(function(name){
+
+			//Check if the folder in the node_modules starts with the prefix
+			if(name.substr(0, pluginPrefix.length) !== pluginPrefix)
+				return;
+
+			var pluginPath = nodeModules + '/' + name;
+			if(fs.existsSync( pluginPath + '/public/tile.png')){
+				var obj = {
+					appLink: name, 
+					tileLink: name + '/public'
+				}
+				apps.push(obj);
+			}
+
+		});
+
 		var now = new Date();
 		var time = dateFormat(now, "HH:MM");
 		var date = dateFormat(now, "dd-mm-yyyy");
