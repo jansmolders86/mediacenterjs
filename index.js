@@ -114,7 +114,6 @@ app.post('/removeModule', function(req, res){
 	, appDir = './apps/'+module+'/'
 	, publicdir = './public/'+module+'/';
 
-	// TODO: Move this logic to file-utils
 	rimraf(appDir, function (e){if(e)console.log('Error removing module', e .red)});
 	rimraf(publicdir, function (e) { 
 		if(e) {
@@ -162,34 +161,10 @@ app.post('/submit', function(req, res){
 	});
 });
 
-function writeSettings(req, res, callback){
-	var incommingTheme = req.body.theme;
-	if (incommingTheme.match(/\.(css)/)){
-		themeName = incommingTheme;
-	} else {
-		themeName = incommingTheme+'.css';
-	}
-	
-    config.moviepath = req.body.movielocation,
-	config.musicpath = req.body.musiclocation,
-	config.tvpath = req.body.tvlocation,
-	config.language = req.body.language,
-	config.onscreenkeyboard = req.body.usekeyboard,
-	config.location = req.body.location,
-	config.theme = themeName,	
-	config.screensaver = req.body.screensaver,
-	config.spotifyUser= req.body.spotifyUser,
-	config.spotifyPass = req.body.spotifyPass,
-	config.port = req.body.port;
-
-	// TODO: Move this logic to configuration-handler
-    fs.writeFile('./configuration/config.ini', ini.stringify(config), function(err){
-        if(err){
-            console.log('Error writing INI file.',err);  
-        } else{
-			res.redirect('/');
-        }
-    });
+function writeSettings(req, res){
+	configuration_handler.saveSettings(req.body, function() {
+		res.redirect('/');
+	});
 }
 
 app.set('port', process.env.PORT || 3000);
