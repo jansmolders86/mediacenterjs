@@ -1,5 +1,3 @@
-// TODO: This file needs heavy optimization!!
-
 var file_utils = require('../../lib/utils/file-utils'),
 	config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
@@ -31,7 +29,6 @@ exports.getInfo = function(req, res, infoRequest) {
 	db.query("CREATE TABLE IF NOT EXISTS music (filename TEXT PRIMARY KEY,title VARCHAR, cover VARCHAR, year VARCHAR, genre VARCHAR , tracks VARCHAR)");
 
 	metadata_fetcher.fetchMetadataForAlbum(infoRequest, function(result) {
-		console.log(result);
 		res.json(result);
 	});
 };
