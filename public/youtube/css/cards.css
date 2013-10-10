@@ -30,6 +30,7 @@ main {
   background:white;
   margin:0 1rem 1rem;
   border-radius:3px;
+  cursor: pointer;
   user-select:none;
   -webkit-user-select:none;
 
@@ -115,7 +116,7 @@ h3 {
 }
 .map {
   height:12rem;
-  background:whitesmoke;
+  background:whitesmoke url('/core/css/img/ajax-loader.gif') no-repeat center;
   margin:-1.5rem 0 0 -1.5rem;
   width:28rem;
   

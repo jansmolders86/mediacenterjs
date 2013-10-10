@@ -37,3 +37,6 @@ label[for="search"] {
 	margin-right: 13%;
 	display: none;
 }
+#wrapper {
+	height: 100%;
+}

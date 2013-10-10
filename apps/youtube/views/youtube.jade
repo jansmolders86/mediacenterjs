@@ -26,7 +26,9 @@ html(lang="en")
 					span
 			else 
 				h1 What to Watch
-				label(for="search") Searching
+				label(for="search")
+				// TODO if you search, you cannot go back to original data nor old searches till you refresh/search again.
+				// To fix, we need to implement states using pushState or some MVC
 				input#search(type="text", placeholder="Search..", autocomplete="off", autofocus)
 				main
 					block videos

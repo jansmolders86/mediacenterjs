@@ -27,6 +27,7 @@ var express = require('express')
 , config = require('./configuration/config.json')
 , dblite = require('dblite')
 , Youtube = require('youtube-api')
+, jade = require('jade')
 , http = require('http');
 
 // Init Database
@@ -190,6 +191,14 @@ app.post('/searchYoutube', function (req, res) {
 		res.json(data);
 	});
 });
+app.post('/getCards', function (req, res) {
+	getCards(req, function (error, data) {
+		if(error) {
+			res.json({message: error}, 500);
+		}
+		res.json({data: data});
+	});
+});
 app.post('/submit', function (req, res){
 	writeSettings(req, res, function(){
 		res.redirect('/');
@@ -244,6 +253,23 @@ function searchYoutube(req, callback) {
 			return callback(error);
 		}
 		return callback(null, result.items);
+	});
+}
+
+function getCards(req, callback) {
+	var cardAmount = parseInt(req.body.cardAmount);
+	fs.readFile('apps/youtube/views/card.jade', 'utf8', function (error, data) {
+		if(error) {
+			return callback('Error reading template file');
+		}
+		var fn = jade.compile(data);
+		var html = fn();
+		var totalHtml = "";
+		while(cardAmount !== 0) {
+			totalHtml += html;
+			cardAmount--;
+		}
+		return callback(null, totalHtml);
 	});
 }
 
