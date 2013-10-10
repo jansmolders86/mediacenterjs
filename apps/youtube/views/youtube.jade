@@ -7,66 +7,14 @@ html(lang="en")
 		link(rel='stylesheet', href='/youtube/css/style.css')
 		// Card UI inclusion
 		link(rel='stylesheet', href='/youtube/css/cards.css')
+		link(rel='stylesheet', href='/youtube/css/animate-custom.css')
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/jquery.mcjs.core.js")
 		// OAuth.io
 		script(src='/core/js/oauth.min.js')
-
+		script(src="/youtube/js/main.js")
 		title Youtube
-		script.
-			$(function(){
-				$('body').mcjs();
-				if($('h1#error').val().length > 0) {
-					countdownError();
-				}
-			});
-			/**
-			 * Countdown till OAuth popover displays
-			 */
-			function countdownError() {
-				var countdown = 3;
-				var interval = setInterval(function () {
-					if(countdown === 0) {
-						clearInterval(interval);
-						OAuth.initialize(localStorage.getItem('oauth_key'));
-						OAuth.popup('youtube', function (error, oauthData){
-							if(error) {
-								updateError(error);
-								return;
-							}
-							localStorage.setItem('oauth_token', oauthData.access_token);
-							updateRemoteToken();
-						});
-					}
-					$('h1#error span').text(countdown--);
-				}, 1000);
-			}
-			/**
-			 * Send ajax request with oauth token
-			 */
-			function updateRemoteToken() {
-				$.ajax({
-					type: 'POST',
-					url: '/updateToken',
-					data: 'oauth='+localStorage.getItem('oauth_token'),
-					success: function() {
-						location.reload();
-					},
-					error: function (jqXHR, textStatus, errorThrown) {
-						updateError(jqXHR.responseText);
-					}
-				});
-			}
-			/**
-			 * Updates markup with new error messages
-			 * @param  {string} message The error message
-			 */
-			function updateError(message) {
-				$('h1#error').fadeOut('fast', function () {
-					$(this).text(message);
-					$(this).fadeIn('fast');
-				});
-			}
+		
 	body
 		#backdrop
 			img.backdropimg(src="")
@@ -78,12 +26,7 @@ html(lang="en")
 					span
 			else 
 				h1 What to Watch
+				label(for="search") Searching
+				input#search(type="text", placeholder="Search..", autocomplete="off", autofocus)
 				main
-					each video in locals.videos
-						section.card
-							div.map(style="background-image: url(#{video.image});")
-							h2
-								strong #{video.title}
-							h3 #{video.channelTitle}
-							br
-							h3 Created on #{video.createdDate}
+					block videos

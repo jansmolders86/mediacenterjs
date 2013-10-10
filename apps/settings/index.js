@@ -46,7 +46,8 @@ exports.index = function(req, res, next){
 				spotifyUser: config.spotifyUser,
 				spotifyPass: config.spotifyPass,
 				themes:allThemes,
-				port: config.port
+				port: config.port,
+				oauthKey: config.oauthKey
 			});	
 			
 		}	

@@ -1,0 +1,11 @@
+extends youtube
+
+block videos
+	each video in locals.videos
+		section.card(data-id="#{video.videoID}")
+			div.map(style="background-image: url(#{video.image});")
+			h2
+				strong #{video.title}
+			h3 #{video.channelTitle} - #{video.viewCount} views
+			br
+			h3 Created on #{video.createdDate}

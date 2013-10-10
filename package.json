@@ -6,6 +6,11 @@
 		"name": "Jan Smolders",
 		"email": "jansmolders86@gmail.com"
 	},
+	"contributors": [{
+			"name": "Adam Schodde",
+			"email": "sparky1010+github@gmail.com"
+		}
+	],
 	"licenses": [{
 		"type": "GPLv3",
 		"url": "http://www.gnu.org/licenses"

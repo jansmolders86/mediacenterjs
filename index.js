@@ -26,6 +26,7 @@ var express = require('express')
 , nconf = require('nconf')
 , config = require('./configuration/config.json')
 , dblite = require('dblite')
+, Youtube = require('youtube-api')
 , http = require('http');
 
 // Init Database
@@ -174,11 +175,19 @@ app.post('/updateToken', function (req, res) {
 	nconf.set('oauth', req.body.oauth);
 	nconf.save(function (error) {
 		if(error){
-			console.log('Error writing config file.',err);
+			console.log('Error writing config file.', err);
 			res.end('Error with config file.');
-		} else{
-			res.end();
+			return;
 		}
+		res.end();
+	});
+});
+app.post('/searchYoutube', function (req, res) {
+	searchYoutube(req, function (error, data) {
+		if(error) {
+			res.json({message: error}, 500);
+		}
+		res.json(data);
 	});
 });
 app.post('/submit', function (req, res){
@@ -216,6 +225,25 @@ function writeSettings(req, res, callback){
 		} else{
 			res.redirect('/');
 		}
+	});
+}
+
+/**
+ * Searches youtube given the query as the input parameter from the POST request
+ * @param  {Object}   req      The request from the user
+ * @param  {Function} callback Callback function to send back
+ * @return {Function} callback ^
+ */
+function searchYoutube(req, callback) {
+	Youtube.authenticate({
+		type: "oauth",
+		token: config.oauth
+	});
+	Youtube.search.list({q: req.body.q, part: 'snippet', maxResults: 50}, function (error, result) {
+		if(error) {
+			return callback(error);
+		}
+		return callback(null, result.items);
 	});
 }
 

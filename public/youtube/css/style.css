@@ -12,3 +12,28 @@ h1#error span {
 	vertical-align: initial;
 	font-family: 'Open Sans Condensed', sans-serif;
 }
+input#search {
+	background-color: transparent !important;
+	float: right;
+	margin-top: -4%;
+}
+input::-webkit-input-placeholder { /* WebKit browsers */
+    color: white;
+}
+input::-moz-placeholder { /* Firefox 19+ browsers */
+    color: white;
+}
+input:-moz-placeholder { /* Firefox 4-18 browsers */
+    color: white;
+}
+input:-ms-input-placeholder { /* IE 10 */
+	color: white;
+}
+label[for="search"] {
+	width: initial;
+	display: inline;
+	float: right;
+	margin-top: -6%;
+	margin-right: 13%;
+	display: none;
+}
