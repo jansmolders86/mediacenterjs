@@ -6,7 +6,7 @@ var dblite = require('dblite'),
 	ajax_utils = require('../../lib/utils/ajax-utils'),
 	app_cache_handler = require('../../lib/handlers/app-cache-handler'),
 	config = require('../../lib/handlers/configuration-handler').getConfiguration(),
-	album_title_cleaner = require('./album-title-cleaner');
+	album_title_cleaner = require('../../lib/utils/title-cleaner');
 
 /* Variables */
 var db = dblite('./lib/database/mcjs.sqlite');
@@ -21,8 +21,8 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
  * @param callback           The Callback
  */
 exports.fetchMetadataForAlbum = function(albumTitle, callback) {
-	var albumInfo = album_title_cleaner.cleanupAlbumTitle(albumTitle);
-	albumTitle = albumInfo.albumTitle;
+	var albumInfo = album_title_cleaner.cleanupTitle(albumTitle);
+	albumTitle = albumInfo.title;
 	app_cache_handler.ensureCacheDirExists('music', albumTitle);
 	loadMetadataFromDatabase(albumTitle, function (result) {
 		if (result) {
@@ -61,7 +61,6 @@ exports.fetchMetadataForAlbum = function(albumTitle, callback) {
 
 					var metadata = [ albumTitle, result.title, thumb_path, result.year,
 						genre, JSON.stringify(tracks, null, false) ];
-					console.log(metadata);
 					storeMetadataInDatabase(metadata, function() {
 						loadMetadataFromDatabase(albumTitle, callback);
 					});

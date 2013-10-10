@@ -4,7 +4,7 @@ var dblite = require('dblite'),
 	fs = require('fs'),
 	app_cache_handler = require('../../lib/handlers/app-cache-handler'),
 	config = require('../../lib/handlers/configuration-handler').getConfiguration(),
-	movie_title_cleaner = require('./movie-title-cleaner');
+	movie_title_cleaner = require('../../lib/utils/title-cleaner');
 
 /* Variables */
 var db = dblite('./lib/database/mcjs.sqlite');
@@ -19,8 +19,8 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
  * @param callback           The Callback
  */
 exports.fetchMetadataForMovie = function(movieTitle, callback) {
-	var movieInfos = movie_title_cleaner.cleanupMovieTitle(movieTitle);
-	movieTitle = movieInfos.movieTitle;
+	var movieInfos = movie_title_cleaner.cleanupTitle(movieTitle);
+	movieTitle = movieInfos.title;
 
 	app_cache_handler.ensureCacheDirExists('movies', movieTitle);
 	loadMetadataFromDatabase(movieTitle, function (result) {
