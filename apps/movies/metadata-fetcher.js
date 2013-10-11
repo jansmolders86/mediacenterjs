@@ -40,7 +40,7 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 			var poster_path = result.poster_path ? result.poster_path : null;
 			var backdrop_path = result.backdrop_path ? result.backdrop_path : null;
 			downloadMovieFanart(poster_path, backdrop_path, movieTitle, function(err) {
-				var poster_path = '';
+				var poster_path = '/movies/css/img/nodata.jpg';
 				var backdrop_path = '';
 				if (err) {
 					console.error(err);

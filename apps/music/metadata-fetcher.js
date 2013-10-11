@@ -40,7 +40,7 @@ exports.fetchMetadataForAlbum = function(albumTitle, callback) {
 
 			var thumb_url = result.thumb ? result.thumb : null;
 			downloadAlbumFanart(thumb_url, albumTitle, function(err) {
-				var thumb_path = '';
+				var thumb_path = '/music/css/img/nodata.jpg';
 				if (err) {
 					console.error(err);
 				} else {
