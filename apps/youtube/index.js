@@ -22,6 +22,7 @@ exports.engine = 'jade';
 
 // Render the indexpage
 var Youtube = require('youtube-api');
+var iso8601 = require('./iso8601.js');
 var config = require('../../configuration/config.json');
 exports.index = function(req, res, next){
 	Youtube.authenticate({
@@ -29,7 +30,7 @@ exports.index = function(req, res, next){
 		token: config.oauth
 	});
 	// TODO Currently uses most popular videos to display because getting personal activity feed has no view counts
-	Youtube.videos.list({"part": "snippet,statistics", "chart": "mostPopular", "maxResults": 50}, function (error, activityData) {
+	Youtube.videos.list({"part": "snippet,statistics,contentDetails", "chart": "mostPopular", "maxResults": 50}, function (error, activityData) {
 		if( error instanceof Error ) {
 			console.log('Error searching Youtube', error);
 			res.render('youtube', {"error":'Problem getting content from YouTube.'});
@@ -49,6 +50,7 @@ exports.index = function(req, res, next){
 				"channelTitle": activityData.items[videoCounter].snippet.channelTitle,
 				"videoID": activityData.items[videoCounter].id,
 				"viewCount": activityData.items[videoCounter].statistics.viewCount,
+				"duration": getDuration(activityData.items[videoCounter].contentDetails.duration),
 				"createdDate": dateString
 			};
 			videos.push(videoObj);
@@ -64,5 +66,10 @@ function createDateString(createdDate) {
 	("0" + createdDate.getUTCHours()).slice(-2) + ":" +
 	("0" + createdDate.getUTCMinutes()).slice(-2) + ":" +
 	("0" + createdDate.getUTCSeconds()).slice(-2) + " UTC";
+}
+
+function getDuration(iso8601Duration) {
+	var durationInSeconds = iso8601.parseToTotalSeconds(iso8601Duration);
+	return Math.floor(durationInSeconds/60) + ':' + ('0' + durationInSeconds%60).slice(-2);
 }
 

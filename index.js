@@ -252,7 +252,15 @@ function searchYoutube(req, callback) {
 		if(error) {
 			return callback(error);
 		}
-		return callback(null, result.items);
+		//return callback(null, );
+		var videoArray = [];
+		for(var videoCounter in result.items) {
+			var videoId = result.items[videoCounter].id.videoId;
+			videoArray.push(videoId);
+		}
+		Youtube.videos.list({part: 'snippet,statistics,contentDetails', id: videoArray.join(',')}, function (error, result) {
+			return callback(null, result.items);
+		});
 	});
 }
 

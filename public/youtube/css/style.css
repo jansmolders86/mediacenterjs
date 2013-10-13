@@ -5,9 +5,6 @@ h2 strong {
 	-webkit-line-clamp: 2; /* number of lines to show */
 	-webkit-box-orient: vertical;
 }
-.map {
-	background-position:center;
-}
 h1#error span {
 	vertical-align: initial;
 	font-family: 'Open Sans Condensed', sans-serif;

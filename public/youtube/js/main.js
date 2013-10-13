@@ -6,32 +6,7 @@ $(function(){
 	if($('h1#error').text().length > 0) {
 		countdownError();
 	}
-	// When enter is pressed in the searchbar
-	$('input#search').keyup(function(event){
-    	if(event.keyCode === 13){
-    		// Show the Searching... label
-    		$('label[for="search"]').fadeIn('fast', function () {
-    			$(this).text('Searching');
-    			var timeout = setInterval(function (){
-    				var searchText = $('label[for="search"]').text();
-    				$('label[for="search"]').text(searchText + '.');
-    				if(searchText.indexOf('..') !== -1) {
-    					clearTimeout(timeout);
-    				}
-    			}, 1000);
-    		});
-    		// Search youtube for query
-    		searchYoutube($('input#search').val(), function (error, data) {
-    			if(error) {
-    				$('label[for="search"]').text(JSON.parse(error.message));
-    				return;
-    			}
-    			$('label[for="search"]').fadeOut('fast');
-    			// Use search results to repopulate the cards
-    			updateCards(data);
-    		});
-    	}
-    });
+	searchBar();
 });
 
 /**
@@ -172,15 +147,50 @@ function populateCards(data) {
 	$('.card').each(function (index, element) {
 		var createdDate = new Date(data[index].snippet.publishedAt);
 		var dateString = createDateString(createdDate);
-		$(this).data('id', data[index].id.videoId);
+		$(this).children('.map').children('#duration').text(getDuration(data[index].contentDetails.duration))
+		$(this).data('id', data[index].id);
 		$(this).children('.map').css('background-image', 'url('+data[index].snippet.thumbnails.high.url+')');
 		$(this).children('h2').children('strong').text(data[index].snippet.title);
-		// TODO if we can find stats on the video views (which can be a seperate query but high on bandwidth, we could get them and edit this)
-		$(this).children('h3').eq(0).text('Created by: ' + data[index].snippet.channelTitle);
+		$(this).children('h3').eq(0).text(data[index].snippet.channelTitle + ' - ' + data[index].statistics.viewCount + ' views');
 		$(this).children('h3').eq(1).text('Created on: ' + dateString);
 	});
 	$('.card:nth-child(even)').removeClass('animated rotateOutUpRight');
 	$('.card:nth-child(odd)').removeClass('animated rotateOutUpLeft');
 	$('.card:nth-child(odd)').addClass('animated rotateInUpLeft');
 	$('.card:nth-child(even)').addClass('animated rotateInUpRight');
+}
+
+// Logic for searchbar
+function searchBar() {
+	// When enter is pressed in the searchbar
+	$('input#search').keyup(function(event){
+    	if(event.keyCode === 13){
+    		// Show the Searching... label
+    		$('label[for="search"]').fadeIn('fast', function () {
+    			$(this).text('Searching');
+    			var timeout = setInterval(function (){
+    				var searchText = $('label[for="search"]').text();
+    				$('label[for="search"]').text(searchText + '.');
+    				if(searchText.indexOf('..') !== -1) {
+    					clearTimeout(timeout);
+    				}
+    			}, 1000);
+    		});
+    		// Search youtube for query
+    		searchYoutube($('input#search').val(), function (error, data) {
+    			if(error) {
+    				$('label[for="search"]').text(JSON.parse(error.message));
+    				return;
+    			}
+    			$('label[for="search"]').fadeOut('fast');
+    			// Use search results to repopulate the cards
+    			updateCards(data);
+    		});
+    	}
+    });
+}
+
+function getDuration(iso8601Duration) {
+	var durationInSeconds = nezasa.iso8601.Period.parseToTotalSeconds(iso8601Duration);
+	return Math.floor(durationInSeconds/60) + ':' + ('0' + durationInSeconds%60).slice(-2);
 }
