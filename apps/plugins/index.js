@@ -32,72 +32,115 @@ exports.index = function(req, res, next){
 	var search = npm + ' search ';
 	var install = npm + ' install ';
 	var remove = npm + ' remove ';
-	var stdout;
-	var availablePlugins = function(){
+	var pluginPrefix = 'mediacenterjs-'; //TODO: externalize in config file
+	var plugins = [];
+	var errorMsg;
+	var installedPlugins = [];
 
-		// async.series([
-		// 	function(callback){
-
-		// 		callback()
-		// 	}
-		// 	});	
-		// 	]), function(){
-
-		// } 
-
-
-
+	var contains = function(array, value){
+		var isFound = false;
+		array.forEach(function(val){
+			if (val === value) {
+				isFound = true;
+				return false; //break loop;
+			}
+		});
+		return isFound;
 	}
 
-	var installedPlugins = function(){
-
-
-	}
-
-	var uninstallPlugin = function(name){
-
-	}
-
-	exec(search + 'mediacenterjs-', function callback(error, stdout, stderr){
-		
-		//THIS IS NOT EVEN CLOSE TO WORKING
-		//NEED TO CACHE THE SEARCH RESULTS!!! SLOWWWWWW
-
+	var buildPluginList = function(stdout){
 
 		var list = stdout.split('\n');
 		var plugins = [];
-		list.forEach(function(p){
-			if (p.substr(0, 4) === 'NAME') return;
-
+		list.forEach(function(p, i){
+			//First removes header, 
+			//second removes blank lastline.
+			//third removes npm upddates
+			if (p.substr(0, 4) === 'NAME' || i === list.length - 1 || p.substr(0,3) === 'npm') return;  
 			var s = p.split(' ');
 			var name = s[0];
 
 			p = p.replace(name, '');
-
 			s = p.split('=');
 			var desc = s[0];
-
 			p = p.replace(desc, '');
-
 			s = p.split(' ');
 
-			var plugin = {
-				name: name,
-				desc: desc,
-				author: s[0],
-				date: s[2] + ' ' + s[3],
-				version: s[5]
 
+
+			var plugin = {
+				name: name.replace(pluginPrefix, ''), //Remove the Mediacenterjs-
+				desc: desc,
+				author: s[0].substr(1),
+				date: s[2] + ' ' + s[3],
+				version: s[5],
+				isInstalled: contains(installedPlugins, name)
 			}
 
 			plugins.push(plugin);
 		});
 
+		return plugins;
+	}
 
-		res.render('plugins', {
-			plugins: plugins
+	var getAvailablePlugins = function(){
+
+		exec(search + pluginPrefix, function callback(error, stdout, stderr){
+
+			//THIS IS NOT EVEN CLOSE TO WORKING
+			//NEED TO CACHE THE SEARCH RESULTS!!! SLOWWWWWW
+
+			if (error){
+				var errorMsg = 'Error: Unable to retieve plugins list';
+				console.log(errorMsg);
+			}
+
+			var plugins = buildPluginList(stdout);
+
+			res.render('plugins', {
+				errorMsg:errorMsg,
+				plugins: plugins,
+				i18n: {
+					search: "Search",
+					install: "Install",
+					remove: "Uninstall",
+					refresh: "Refresh"
+				}
+			});
+
 		});
 
-	});
+	}
+
+	var getInstalledPlugins = function(){
+		//search node_modules for plugins
+
+		var nodeModules = __dirname + '/../../node_modules';
+		
+		fs.readdirSync(nodeModules).forEach(function(name){
+
+			//Check if the folder in the node_modules starts with the prefix
+			if(name.substr(0, pluginPrefix.length) !== pluginPrefix)
+				return;
+
+			installedPlugins.push(name);
+			
+		});
+
+	}
+
+	var uninstallPlugin = function(plugin){
+		var name = pluginPrefix + plugin.name;
+
+		exec(remove + name, function callback(error, stdout, stderr){
+			if (error){
+				console.log("Error: Unable to uninstall plugin: " + name);
+			}			
+		})
+
+	}
+
+	getInstalledPlugins();
+	getAvailablePlugins();
 			
 };
