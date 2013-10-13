@@ -100,7 +100,7 @@ app.get("/", function(req, res, next) {
 
 		//search node_modules for plugins
 		var nodeModules = __dirname + '/node_modules';
-		var pluginPrefix = 'mediacenterjs-'; //TODO: externalize in config file
+		var pluginPrefix = config.pluginPrefix;
 
 		fs.readdirSync(nodeModules).forEach(function(name){
 
