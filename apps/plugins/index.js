@@ -84,7 +84,7 @@ exports.index = function(req, res, next){
 	var getAvailablePlugins = function(){
 
 		exec(search + pluginPrefix, function callback(error, stdout, stderr){
-			//NEED TO CACHE THE SEARCH RESULTS!!! SLOWWWWWW
+			//TODO: NEED TO CACHE THE SEARCH RESULTS!!! SLOWWWWWW Page loads.
 
 			if (error){
 				var errorMsg = 'Error: Unable to retieve plugins list';
@@ -105,12 +105,11 @@ exports.index = function(req, res, next){
 			});
 
 		});
-
 	}
 
+	//search node_modules for installed plugins
 	var getInstalledPlugins = function(){
-		//search node_modules for plugins
-
+		
 		var nodeModules = __dirname + '/../../node_modules';
 		
 		fs.readdirSync(nodeModules).forEach(function(name){
@@ -124,6 +123,8 @@ exports.index = function(req, res, next){
 		});
 	}
 
+	//TODO: Not sure if this work, not tested yet...
+	//Also I dont know how to hook this up with jade.
 	var uninstallPlugin = function(plugin){
 		var name = pluginPrefix + plugin.name;
 
@@ -131,8 +132,7 @@ exports.index = function(req, res, next){
 			if (error){
 				console.log("Error: Unable to uninstall plugin: " + name);
 			}			
-		})
-
+		});
 	}
 
 	getInstalledPlugins();
