@@ -32,7 +32,7 @@ exports.index = function(req, res, next){
 	var search = npm + ' search ';
 	var install = npm + ' install ';
 	var remove = npm + ' remove ';
-	var pluginPrefix = 'mediacenterjs-'; //TODO: externalize in config file
+	var pluginPrefix = config.pluginPrefix;
 	var plugins = [];
 	var errorMsg;
 	var installedPlugins = [];
@@ -66,8 +66,6 @@ exports.index = function(req, res, next){
 			p = p.replace(desc, '');
 			s = p.split(' ');
 
-
-
 			var plugin = {
 				name: name.replace(pluginPrefix, ''), //Remove the Mediacenterjs-
 				desc: desc,
@@ -86,8 +84,6 @@ exports.index = function(req, res, next){
 	var getAvailablePlugins = function(){
 
 		exec(search + pluginPrefix, function callback(error, stdout, stderr){
-
-			//THIS IS NOT EVEN CLOSE TO WORKING
 			//NEED TO CACHE THE SEARCH RESULTS!!! SLOWWWWWW
 
 			if (error){
@@ -126,7 +122,6 @@ exports.index = function(req, res, next){
 			installedPlugins.push(name);
 			
 		});
-
 	}
 
 	var uninstallPlugin = function(plugin){
