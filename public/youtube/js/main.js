@@ -46,7 +46,13 @@ function updateRemoteToken() {
 			},2000);
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
-			updateError(jqXHR.responseText);
+			if(error instanceof Error) {
+				updateError(jqXHR.responseText);
+			}
+			else {
+				$('h1').text('Need to re-authenticate to Google, popup in ');
+				countdownError();
+			}
 		}
 	});
 }
