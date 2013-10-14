@@ -1,9 +1,13 @@
+/*Author: Claire Sarsam*/
 h2 strong {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
 	-webkit-line-clamp: 2; /* number of lines to show */
 	-webkit-box-orient: vertical;
+}
+.map {
+	background-position:center;
 }
 h1#error span {
 	vertical-align: initial;
@@ -13,6 +17,7 @@ input#search {
 	background-color: transparent !important;
 	float: right;
 	margin-top: -4%;
+	margin-bottom: 10px;
 }
 input::-webkit-input-placeholder { /* WebKit browsers */
     color: white;
@@ -36,4 +41,14 @@ label[for="search"] {
 }
 #wrapper {
 	height: 100%;
+}
+
+@media ( max-width: 854px ) {
+  input#search {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 }

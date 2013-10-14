@@ -1,34 +1,40 @@
-@import url(http://fonts.googleapis.com/css?family=Roboto:100);
+/*Author: Claire Sarsam*/
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,900,700italic,900italic);
 * {
-	font-family: 'Roboto', sans-serif; line-height:1.2; vertical-align:middle;
+  font-family: 'Roboto', sans-serif; line-height:1.2; vertical-align:middle;
 }
 body {
-	background:#222;
+  background:#222;
 }
+
 main {
+  width: 1632px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 5px;
   display:block;
   position:relative;
-  width:30rem;
   margin:3vh auto;
-  padding:1.5rem 0 0;
   background:#d5d5d5;
   outline
   border-radius:.25rem;
   overflow:hidden;
-  transform:scale(.75);
-  -webkit-transform:scale(.75);
   transform-origin:center 3rem;
   -webkit-transform-origin:center 3rem;
   transition:transform .3s;
   -webkit-transition:-webkit-transform .3s;
 }
+
 .card {
+  width: 350px;
+  float: left;
+  margin: 5px;
+  height: 285px;
   padding:1.5rem;
   position: relative;
   z-index: 2;
   box-shadow:0 1px 2px #aaa;
   background:white;
-  margin:0 1rem 1rem;
   border-radius:3px;
   cursor: pointer;
   user-select:none;
@@ -98,9 +104,10 @@ h1 {
   font-size:2rem;
   font-weight:200;
 }
-strong {
-  color:#539D00;
-}
+  strong {
+    font-weight:300;
+    color:#539D00;
+  }
 
 h2 {
   font-size:1rem;
@@ -108,19 +115,66 @@ h2 {
   font-weight:400;
 }
 h3 {
-  font-size:.8rem;
-  line-height:2.0;
+  font-size:.7rem;
+  line-height:2.5;
   color:gray;
-  font-weight:200;
+  font-weight:400;
 }
-
 .map {
   height:12rem;
   background:whitesmoke url('/core/css/img/ajax-loader.gif') no-repeat center;
   margin:-1.5rem 0 0 -1.5rem;
-  width:28rem;
-  background-position:center;
-  position: relative;
+  width: 398px;
+  
+}
+
+/* Media Queries for adjusting grid */
+
+@media ( max-width: 1755px ) and ( min-width: 1350px ) {
+  main {
+    width: 1224px;
+  }
+}
+
+@media ( max-width: 1349px ) and (min-width: 1186px) {
+  .card {
+      width: 300px;
+  }
+
+  .card .map {
+      width: 348px;
+  }
+
+  main {
+      width: 1074px;
+  }
+}
+
+@media ( max-width: 1185px ) and ( min-width: 936px ) {
+  main {
+    width: 816px;
+  }
+}
+
+@media ( max-width: 935px ) and ( min-width: 855px ) {
+    .card {
+      width: 300px;
+    }
+
+    .card .map {
+        width: 348px;
+    }
+    
+    main {
+      width: 716px;
+    }
+}
+
+@media ( max-width: 854px ) {
+  main {
+    width: 408px;
+    clear: both;
+  }
 }
 div#duration {
   background-color: black;

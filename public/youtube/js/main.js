@@ -105,8 +105,9 @@ function updateCards(data) {
 				$('main').html(cardHTML);
 				populateCards(data);
 			});
+		} else {
+			populateCards(data);
 		}
-		populateCards(data);
 	}, 500);
 }
 
@@ -147,7 +148,7 @@ function populateCards(data) {
 	$('.card').each(function (index, element) {
 		var createdDate = new Date(data[index].snippet.publishedAt);
 		var dateString = createDateString(createdDate);
-		$(this).children('.map').children('#duration').text(getDuration(data[index].contentDetails.duration))
+		$(this).children('.map').children('#duration').text(getDuration(data[index].contentDetails.duration));
 		$(this).data('id', data[index].id);
 		$(this).children('.map').css('background-image', 'url('+data[index].snippet.thumbnails.high.url+')');
 		$(this).children('h2').children('strong').text(data[index].snippet.title);
