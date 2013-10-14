@@ -101,7 +101,7 @@ storeMetadataInDatabase = function(metadata, callback) {
 
 fetchMetadataFromTheMovieDB = function(movieTitle, year, callback) {
 	moviedb.searchMovie({ query: movieTitle, language: config.language, year: year }, function(err, result) {
-		if (err) {
+		if (err || (result && result.results.length > 0)) {
 			console.error(err);
 			callback(err, null);
 		}
