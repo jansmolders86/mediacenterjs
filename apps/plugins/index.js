@@ -28,16 +28,19 @@ var async = require('async');
 
 exports.index = function(req, res, next){	
 
-	var npm = 'npm';
-	var search = npm + ' search ';
-	var install = npm + ' install ';
-	var remove = npm + ' remove ';
-	var pluginPrefix = config.pluginPrefix;
-	var plugins = [];
-	var errorMsg;
-	var installedPlugins = [];
+	var npm = 'npm'
+	  , search = npm + ' search '
+	  , install = npm + ' install '
+	  , remove = npm + ' remove '
+	  , pluginPrefix = config.pluginPrefix
+	  , plugins = []
+	  , errorMsg
+	  , installedPlugins = [];
 
 	var contains = function(array, value){
+		if (array instanceof Array === false)
+			return false;
+
 		var isFound = false;
 		array.forEach(function(val){
 			if (val === value) {
@@ -46,7 +49,7 @@ exports.index = function(req, res, next){
 			}
 		});
 		return isFound;
-	}
+	};
 
 	var buildPluginList = function(stdout){
 
@@ -79,7 +82,7 @@ exports.index = function(req, res, next){
 		});
 
 		return plugins;
-	}
+	};
 
 	var getAvailablePlugins = function(){
 
@@ -105,7 +108,7 @@ exports.index = function(req, res, next){
 			});
 
 		});
-	}
+	};
 
 	//search node_modules for installed plugins
 	var getInstalledPlugins = function(){
@@ -121,21 +124,55 @@ exports.index = function(req, res, next){
 			installedPlugins.push(name);
 			
 		});
-	}
+	};
 
 	//TODO: Not sure if this work, not tested yet...
 	//Also I dont know how to hook this up with jade.
-	var uninstallPlugin = function(plugin){
-		var name = pluginPrefix + plugin.name;
+	var uninstallPlugin = function(pluginName){
+		console.log('Plugins.uninstallPlugin');
+
+		if (!plugin || plugin === undefined)
+			return;
+
+		var name = pluginPrefix + pluginName;
+
+		console.log('Plugins.uninstallPlugin: Uninstalling ' + name);
 
 		exec(remove + name, function callback(error, stdout, stderr){
 			if (error){
 				console.log("Error: Unable to uninstall plugin: " + name);
+				return;
 			}			
+			console.log('Plugins.uninstallPlugin: Uninstalled');			
 		});
-	}
+	};
 
-	getInstalledPlugins();
-	getAvailablePlugins();
-			
+
+	//TODO: Not sure if this work, not tested yet...
+	//Also I dont know how to hook this up with jade.
+	var installPlugin = function(pluginName){
+		console.log('Plugins.installPlugin');
+
+		if (!plugin || plugin === undefined)
+			return;
+
+		var name = pluginPrefix + pluginName;
+
+		console.log('Plugins.installPlugin: Installing ' + name);
+
+		exec(install + name, function callback(error, stdout, stderr){
+			if (error){
+				console.log("Error: Unable to install plugin: " + name);
+				return;
+			}			
+			console.log('Plugins.installPlugin: installed');			
+		});
+	};
+
+	var init = function(){
+		getInstalledPlugins();
+		getAvailablePlugins();
+	};
+	
+	init()
 };

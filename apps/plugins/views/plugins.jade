@@ -36,6 +36,8 @@ html(lang="en")
 					var cleanedThemeName = $(this).html().replace(/\.(css)/i,"");
 					$(this).text(cleanedThemeName)
 				});
+
+
 				
 			});
 	body
@@ -47,7 +49,7 @@ html(lang="en")
 		#wrapper
 			span= errorMsg	
 
-			button
+			a.btn(href="/")
 				=i18n.refresh	
 
 			ul
@@ -59,8 +61,10 @@ html(lang="en")
 							span.plugin-date= plugin.date
 							span.plugin-author= plugin.author
 							span.plugin-version= plugin.version
-							button
-								if plugin.isInstalled
+							
+							if plugin.isInstalled
+								a.btn(href="/remove/" + plugin.name)
 									=i18n.remove
-								else
+							else
+								a.btn(href="/install/" + plugin.name)
 									=i18n.install
