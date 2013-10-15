@@ -8,34 +8,20 @@ html(lang="en")
 		link(rel='stylesheet', href='/themes/'+selectedTheme)
 		
 		script(src="/core/js/jquery-1.8.2.min.js")
+		script(src="/core/js/plugins/knockout-2.3.0.js")
 		script(src="/core/js/jquery-ui-1.10.3.min.js")
 		
 		script(src="/core/js/plugins/jquery.idle-timer.js")
 		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
 		script(src="/core/js/jquery.mcjs.core.js")
-		
-		script(src="/core/js/plugins/jquery.prettyForm.js")
-		script(src="/core/js/plugins/jquery.keyboard.min.js")
-		
-		script(src="/core/js/plugins/validation/jquery.validate.min.js")
-		script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
-		script(src="/core/js/plugins/validation/jquery.validate.rules.js")
+
+		link(rel='stylesheet', href='/plugins/css/style.css')
+		script(src="/plugins/js/jquery.plugins.js")
 		
 		script.
 			$(function() {
 				$('body').mcjs();
-				
-				$('a#loadItems').on('click', function(e){
-					e.preventDefault();
-					$.ajax({
-						url: '/plugins/loadItems', 
-						type: 'get',
-						dataType: 'json'
-					}).done(function(data){	
-						console.log(data)
-					});
-				});
-				
+				$('body').mcjsp();
 			});
 	body
 		#header
@@ -43,4 +29,22 @@ html(lang="en")
 				img(src="/core/icons/back.png")
 			h1  Plugins		
 		#wrapper
-			a#loadItems.btn load	
+			.loading.boxed
+				div
+					img(src="/core/css/img/ajax-loader.gif") 
+					p Loading modules...
+
+			ul.plugins(data-bind="foreach: plugin")
+				li.boxed
+					.info
+						h2.name(data-bind="text:name")
+						div.desc(data-bind="text:desc")
+						div.author(data-bind="text:'By: '+ author()")
+						div.date(data-bind="text:'Added: '+date()")
+						div.version(data-bind="text:version")
+					// ko if: isInstalled() === false 
+					a.btn.install(data-bind="{click: install}")	Install plugin
+					// /ko	
+					// ko if: isInstalled() === true 
+					a.btn.remove(data-bind="{click: remove}") Remove plugin
+					// /ko	

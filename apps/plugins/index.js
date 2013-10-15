@@ -45,7 +45,6 @@ exports.get = function(req, res, next){
 	if (optionalParam === undefined){
 		switch(infoRequest) {
 			case('loadItems'):
-				console.log('find all npm ');
 				functions.getAvailablePlugins(req,res);
 			default:
 				return;
@@ -55,7 +54,7 @@ exports.get = function(req, res, next){
 	
 	if(!action){
 		switch(optionalParam) {
-			case('uinstall'):
+			case('uninstall'):
 				functions.uninstallPlugin(req, res, infoRequest);
 			break;	
 			case('install'):

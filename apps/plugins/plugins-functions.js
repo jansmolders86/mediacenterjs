@@ -2,11 +2,13 @@ var express = require('express')
 	, app = express()
 	, fs = require('fs')
 	, ini = require('ini')
+	, colors = require('colors')
 	, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
 	, exec = require('child_process').exec
 	, async = require('async')
 	, pluginPrefix = config.pluginPrefix
 	, npm = 'npm'
+	, search = npm + ' search '
 	, install = npm + ' install '
 	, remove = npm + ' remove '
 	, plugins = []
@@ -29,19 +31,15 @@ exports.getAvailablePlugins = function(req, res){
 		});
 	};
 
-	console.log('getAvailablePlugins')
-	var npm = 'npm'
-		, search = npm + ' search '
-		, pluginPrefix = config.pluginPrefix
-		, plugins = []
+	console.log('Looking for available plugins...' .green)
 
 	exec(search + pluginPrefix, function callback(error, stdout, stderr){
 		//TODO: NEED TO CACHE THE SEARCH RESULTS!!! SLOWWWWWW Page loads.
 		if (error){
 			console.log('Error: Unable to retieve plugins list');
+		} else {
+			buildPluginList(stdout);
 		}
-		var plugins = buildPluginList(stdout);
-		console.log(plugins);
 	});
 
 	var buildPluginList = function(stdout){
@@ -73,7 +71,7 @@ exports.getAvailablePlugins = function(req, res){
 			plugins.push(plugin);
 		});
 
-		return plugins;
+		res.json(plugins);
 	};
 	
 	var contains = function(array, value){
@@ -113,7 +111,6 @@ exports.uninstallPlugin = function(req, res, pluginName){
 
 exports.installPlugin = function(req, res, pluginName){
 	console.log('Plugins.installPlugin');
-
 	if (!plugin || plugin === undefined)
 		return;
 
