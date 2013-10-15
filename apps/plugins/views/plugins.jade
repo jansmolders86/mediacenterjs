@@ -1,0 +1,70 @@
+doctype 5
+html(lang="en")
+	head
+		title MediacenterJS - Plugins
+		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
+		link(rel='stylesheet', href='/core/css/style.css')
+		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css') 
+		link(rel='stylesheet', href='/themes/'+selectedTheme)
+		
+		script(src="/core/js/jquery-1.8.2.min.js")
+		script(src="/core/js/jquery-ui-1.10.3.min.js")
+		
+		script(src="/core/js/plugins/jquery.idle-timer.js")
+		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
+		script(src="/core/js/jquery.mcjs.core.js")
+		
+		script(src="/core/js/plugins/jquery.prettyForm.js")
+		script(src="/core/js/plugins/jquery.keyboard.min.js")
+		
+		script(src="/core/js/plugins/validation/jquery.validate.min.js")
+		script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
+		script(src="/core/js/plugins/validation/jquery.validate.rules.js")
+		
+		script.
+			$(function() {
+				$('body').mcjs();
+				$('.validate-form').validate();
+				$("[type=checkbox], [type=radio]").prettyForm();
+				
+				var usekeyboard= $('#hiddenSetting').find('p').html();
+				if ( usekeyboard == 'yes' ){
+					$('.keyboard').keyboard();
+				}
+				
+				$('#theme').find('option').each(function(){
+					var cleanedThemeName = $(this).html().replace(/\.(css)/i,"");
+					$(this).text(cleanedThemeName)
+				});
+
+
+				
+			});
+	body
+		
+		#header.settings
+			a.backlink(href="/") 
+				img(src="/core/icons/back.png")
+			h1  Plugins		
+		#wrapper
+			span= errorMsg	
+
+			a.btn(href="/")
+				=i18n.refresh	
+
+			ul
+				each plugin in plugins
+					li 
+						div
+							h3.plugin-name= plugin.name
+							span.plugin.desc= plugin.desc
+							span.plugin-date= plugin.date
+							span.plugin-author= plugin.author
+							span.plugin-version= plugin.version
+							
+							if plugin.isInstalled
+								a.btn(href="/remove/" + plugin.name)
+									=i18n.remove
+							else
+								a.btn(href="/install/" + plugin.name)
+									=i18n.install
