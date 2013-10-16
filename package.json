@@ -30,6 +30,7 @@
 		"request": "2.16.6",
 		"require": "0.5.0",
 		"rimraf": "2.1.4",
+		"semver": ">=2.0.0",
 		"feedparser": "0.15.4",
 		"trakt": "0.0.5-2",
 		"colors":"0.6.0-1",

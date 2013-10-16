@@ -3,6 +3,7 @@ var express = require('express')
 	, fs = require('fs')
 	, ini = require('ini')
 	, colors = require('colors')
+	, semver = require('semver')
 	, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
 	, exec = require('child_process').exec
 	, async = require('async')
@@ -10,6 +11,7 @@ var express = require('express')
 	, npm = 'npm'
 	, search = npm + ' search '
 	, install = npm + ' install '
+	, upgrade = npm + ' upgrade '
 	, remove = npm + ' remove '
 	, plugins = []
 	, installedPlugins = [];
@@ -43,14 +45,18 @@ exports.getAvailablePlugins = function(req, res){
 			var desc = s[0];
 			p = p.replace(desc, '');
 			s = p.split(' ');
-
+            var version = s[5];
+            
+            var compareInfo = isPluginCurrentlyInstalled(installedPlugins, name, version)
+            
 			var plugin = {
 				name: name.replace(pluginPrefix, ''), //Remove the Mediacenterjs-
 				desc: desc,
 				author: s[0].substr(1),
 				date: s[2] + ' ' + s[3],
-				version: s[5],
-				isInstalled: contains(installedPlugins, name)
+				version: version,
+				isInstalled: compareInfo.isInstalled,
+				isUpgradable: compareInfo.isUpgradable
 			}
 
 			plugins.push(plugin);
@@ -59,18 +65,23 @@ exports.getAvailablePlugins = function(req, res){
 		res.json(plugins);
 	};
 	
-	var contains = function(array, value){
+	var isPluginCurrentlyInstalled = function(array, name, version){
+		
+		var info = {
+			isInstalled: false,
+			isUpgradable: false
+		};
 		if (array instanceof Array === false){
-			return false;
+			return info;
 		}
-		var isFound = false;
 		array.forEach(function(val){
-			if (val === value) {
-				isFound = true;
+			if (val.name === name) {
+				info.isInstalled = true;
+				info.isUpgradable = semver.gt(val.info.version, version);
 				return false; //break loop;
 			}
 		});
-		return isFound;
+		return info;
 	};
 	
 	var getInstalledPlugins = function(){
@@ -80,7 +91,23 @@ exports.getAvailablePlugins = function(req, res){
 			if(name.substr(0, pluginPrefix.length) !== pluginPrefix){
 				return;
 			}
-			installedPlugins.push(name);
+			
+			var info = {};
+                
+			fs.readFile(nodeModules + '/' + name + '/package.json' , function (err, data) {
+              if (err){ 
+                console.error("Error: Unable to read Installed Plugins package.json");
+                return false;
+              }
+              info = JSON.toJSON(data);
+            });
+            
+			var plugin = {
+				name: name,
+				info: info
+			};
+			
+			installedPlugins.push(plugin);
 		});
 	};
 
@@ -106,6 +133,26 @@ exports.uninstallPlugin = function(req, res, pluginName){
 	});
 };
 
+
+exports.upgradePlugin = function(req, res, pluginName){
+	console.log('Plugins.uninstallPlugin', pluginName);
+	
+	if (!pluginName || pluginName === undefined)
+		return;
+
+	var name = pluginPrefix + pluginName;
+	console.log('Plugins.upgradePlugin: Uninstalling ' + name);
+
+	exec(upgrade + name, function callback(error, stdout, stderr){
+		if (error){
+			console.log("Error: Unable to upgrade plugin: " + name);
+			return;
+		} else {		
+			console.log('Plugins.upgradePlugin: Uninstalled');
+			res.redirect('/plugins/');
+		}
+	});
+};
 
 exports.installPlugin = function(req, res, pluginName){
 	console.log('Plugins.installPlugin', pluginName);
