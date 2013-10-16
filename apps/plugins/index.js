@@ -58,7 +58,7 @@ exports.get = function(req, res, next){
 				functions.uninstallPlugin(req, res, infoRequest);
 			break;	
 			case('install'):
-				functions.installPlugin(req,res);
+				functions.installPlugin(req,res, infoRequest);
 			break;		
 		}
 	}

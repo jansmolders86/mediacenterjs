@@ -16,21 +16,6 @@ var express = require('express')
 
 exports.getAvailablePlugins = function(req, res){
 
-	var getInstalledPlugins = function(){
-
-		var nodeModules = __dirname + '/../../node_modules';
-
-		fs.readdirSync(nodeModules).forEach(function(name){
-
-			//Check if the folder in the node_modules starts with the prefix
-			if(name.substr(0, pluginPrefix.length) !== pluginPrefix)
-				return;
-
-			installedPlugins.push(name);
-
-		});
-	};
-
 	console.log('Looking for available plugins...' .green)
 
 	exec(search + pluginPrefix, function callback(error, stdout, stderr){
@@ -75,9 +60,9 @@ exports.getAvailablePlugins = function(req, res){
 	};
 	
 	var contains = function(array, value){
-		if (array instanceof Array === false)
+		if (array instanceof Array === false){
 			return false;
-
+		}
 		var isFound = false;
 		array.forEach(function(val){
 			if (val === value) {
@@ -87,13 +72,24 @@ exports.getAvailablePlugins = function(req, res){
 		});
 		return isFound;
 	};
+	
+	var getInstalledPlugins = function(){
+		var nodeModules = __dirname + '/../../node_modules';
+		fs.readdirSync(nodeModules).forEach(function(name){
+			//Check if the folder in the node_modules starts with the prefix
+			if(name.substr(0, pluginPrefix.length) !== pluginPrefix){
+				return;
+			}
+			installedPlugins.push(name);
+		});
+	};
 
 };	
 
 exports.uninstallPlugin = function(req, res, pluginName){
-	console.log('Plugins.uninstallPlugin');
+	console.log('Plugins.uninstallPlugin', pluginName);
 	
-	if (!plugin || plugin === undefined)
+	if (!pluginName || pluginName === undefined)
 		return;
 
 	var name = pluginPrefix + pluginName;
@@ -103,15 +99,17 @@ exports.uninstallPlugin = function(req, res, pluginName){
 		if (error){
 			console.log("Error: Unable to uninstall plugin: " + name);
 			return;
-		}			
-		console.log('Plugins.uninstallPlugin: Uninstalled');			
+		} else {		
+			console.log('Plugins.uninstallPlugin: Uninstalled');
+			res.redirect('/plugins/');
+		}
 	});
 };
 
 
 exports.installPlugin = function(req, res, pluginName){
-	console.log('Plugins.installPlugin');
-	if (!plugin || plugin === undefined)
+	console.log('Plugins.installPlugin', pluginName);
+	if (!pluginName || pluginName === undefined)
 		return;
 
 	var name = pluginPrefix + pluginName;
@@ -120,7 +118,9 @@ exports.installPlugin = function(req, res, pluginName){
 		if (error){
 			console.log("Error: Unable to install plugin: " + name);
 			return;
-		}			
-		console.log('Plugins.installPlugin: installed');			
+		} else {
+			console.log('Plugins.installPlugin: installed');			
+			res.redirect('/plugins/');
+		}
 	});
 };
