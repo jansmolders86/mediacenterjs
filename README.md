@@ -47,6 +47,7 @@ What's coming up
 * Tv show app functionality
 * Code rework (frontend (knockout) / backend)
 * Better inbrowser streaming
+* Plugin manager
 
 Known issues: video/audio playback
 ==================
