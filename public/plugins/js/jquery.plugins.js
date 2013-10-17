@@ -79,7 +79,8 @@
 		this.date 			= ko.observable(json.date);
 		this.version 		= ko.observable(json.version);
 		this.isInstalled 	= ko.observable(json.isInstalled);
-		this.isUpgradable	= ko.observable(json.isUpgradable)
+		this.isUpgradable	= ko.observable(json.isUpgradable);
+
 		this.install = function () {
 			$.ajax({
 				url: '/plugins/'+json.name+'/install', 
@@ -87,9 +88,16 @@
 				dataType: 'json'
 			});
 		};
+		this.upgrade = function () {
+			$.ajax({
+				url: '/plugins/'+json.name+'/upgrade', 
+				type: 'get',
+				dataType: 'json'
+			});
+		};
 		this.remove = function () {
 			$.ajax({
-				url: '/plugins/'+json.name+'/install', 
+				url: '/plugins/'+json.name+'/remove', 
 				type: 'get',
 				dataType: 'json'
 			});
