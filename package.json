@@ -14,6 +14,10 @@
 			"email": "csarsam+github@gmail.com"
 		}
 	],
+	"repostitory": {
+		"type": "git",
+		"url": "https://github.com/jansmolders86/mediacenterjs",
+	},
 	"licenses": [{
 		"type": "GPLv3",
 		"url": "http://www.gnu.org/licenses"
