@@ -31,7 +31,7 @@ What currently works?
 * Basic keyboard controls
 * Onscreen keyboard
 * Movie indexing
-* Multi-language support (English, French and Dutch)
+* Multi-language support
 * Display movies with Poster, Backdrop and information 
 * Local caching of information and images
 * Basic transcoding and playback of movies and music
