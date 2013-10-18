@@ -11,6 +11,8 @@ pids
 logs
 results
 
+public/data/*
+configuration/config.ini
 npm-debug.log
 node_modules/
 screenshots/

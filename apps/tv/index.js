@@ -21,38 +21,25 @@ exports.engine = 'jade';
 /* Modules */
 var express = require('express')
 , app = express()
-, fs = require('fs')
+, fs = require('fs.extra')
 , downloader = require('downloader')
-, request = require("request")
-, ffmpeg = require('fluent-ffmpeg')
-, probe = require('node-ffprobe')
-, rimraf = require('rimraf')
-, util = require('util')
-, helper = require('../../lib/helpers.js')
-, Encoder = require('node-html-encoder').Encoder
-, encoder = new Encoder('entity')
+, file_utils = require('../../lib/utils/file-utils')
+, ajax_utils = require('../../lib/utils/ajax-utils')
+, app_cache_handler = require('../../lib/handlers/app-cache-handler')
 , Trakt = require('trakt')
 , trakt = new Trakt({username: 'mediacenterjs', password: 'mediacenterjs'})
 , colors = require('colors')
-, ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));	
+, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
 exports.index = function(req, res, next){	
-	var writePath = './public/tv/data/tvindex.js'
-	, getDir = true
-	, dir = config.tvpath
+	var dir = config.tvpath
 	, fileTypes = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");;
 
-	helper.getLocalFiles(req, res, dir, writePath, getDir, fileTypes,  function(status){
-		var tvfiles = []
-		,tvfilepath = './public/tv/data/tvindex.js'
-		,tvfiles = fs.readFileSync(tvfilepath)
-		,tvfileResults = JSON.parse(tvfiles)	
-		
+	file_utils.getLocalFiles(dir, fileTypes, function(status, files){
 		res.render('tv',{
-			tvshows:tvfileResults,
+			tvshows: files,
 			selectedTheme: config.theme,
-			status:status
+			status: status
 		});
 	});
 
@@ -60,64 +47,47 @@ exports.index = function(req, res, next){
 
 
 exports.post = function(req, res, next){	
-	var tvTitle = null
-	, id = 'No data found...'
-	, title = 'No data found...'
+	var title = 'No data found...'
 	, genre = 'No data found...'
 	, certification = 'No data found...'
-	, banner = '/tv/images/banner.png'
-	
-	var scraperdata = new Array()
-	, scraperdataset = null;
+	, banner = '/tv/images/banner.png';
 
 	var incommingFile = req.body
-	, tvRequest = incommingFile.tvTitle
+	, tvRequest = incommingFile.tvTitle;
 
 	//Check if folder already exists
-	if (fs.existsSync('./public/tv/data/'+tvRequest)) {
-		checkDirForCorruptedFiles(tvRequest)
-	} else {
-		fs.mkdir('./public/tv/data/'+tvRequest, 0777, function (err) {
-			if (err) {
-				console.log('Error creating folder',err .red);
-				writeData(title,genre,certification,banner);			
-			} else {
-				console.log('Directory '+tvRequest+' created');
+	app_cache_handler.ensureCacheDirExists('tv', tvRequest);
+	checkDirForCorruptedFiles(tvRequest);
 
-				var options = { query: tvRequest }
-				trakt.request('search', 'shows', options, function(err, result) {
-					if (err) {
-						console.log('error retrieving tvshow info', err .red);
-					} else {
-						var tvSearchResult = result[0];
-						
-						if (tvSearchResult !== undefined && tvSearchResult !== '' && tvSearchResult !== null) {
-							downloadCache(tvSearchResult,function(banner) {
-									var localImageDir = '/tv/data/'+tvRequest+'/',
-									localCover = banner.match(/[^/]+$/);
-									
-									banner = localImageDir+localCover;
-									title = tvSearchResult.title
-									genre = tvSearchResult.genre
-									certification = tvSearchResult.certification
+	var options = { query: tvRequest };
+	trakt.request('search', 'shows', options, function(err, result) {
+		if (err) {
+			console.log('error retrieving tvshow info', err .red);
+		} else {
+			var tvSearchResult = result[0];
+			if (tvSearchResult !== undefined && tvSearchResult !== '' && tvSearchResult !== null) {
+				downloadCache(tvSearchResult,function(banner) {
+						var localImageDir = '/data/tv/'+tvRequest+'/',
+						localCover = banner.match(/[^/]+$/);
 
-									writeData(title,genre,certification,banner);	
+						banner = localImageDir+localCover;
+						title = tvSearchResult.title;
+						genre = tvSearchResult.genre;
+						certification = tvSearchResult.certification;
 
-							}); 
-						} else {
-							writeData(title,genre,certification,banner);
-						};
-					};
+						writeData(title,genre,certification,banner);
 				});
+			} else {
+				writeData(title,genre,certification,banner);
 			}
-		});
-	};
+		}
+	});
 	
 	
 	function downloadCache(tvSearchResult,callback){
 		if (typeof tvSearchResult){
 			var banner = tvSearchResult.images.banner
-			, downloadDir = './public/tv/data/'+tvRequest+'/';
+			, downloadDir = app_cache_handler.getCacheDir('tv', tvRequest) + '/';
 			
 			downloader.on('done', function(msg) { console.log('done', msg .green); });
 			downloader.on('error', function(msg) { console.log('error', msg .red); });
@@ -126,41 +96,39 @@ exports.post = function(req, res, next){
 			banner = '/tv/images/banner.png';
 		}
 		callback(banner);
-	};
+	}
 
 	function checkDirForCorruptedFiles(tvRequest){
-		var checkDir = './public/tv/data/'+tvRequest
+		var checkDir = app_cache_handler.getCacheDir('tv', tvRequest);
 		
-		if(fs.existsSync('./public/tv/data/'+tvRequest+'/data.js')){
-			fs.stat('./public/tv/data/'+tvRequest+'/data.js', function (err, stats) {		
+		if(fs.existsSync(checkDir + '/data.js')){
+			fs.stat(checkDir + '/data.js', function (err, stats) {
 				if(stats.size == 0){
-					helper.removeBadDir(req, res, checkDir)
+					file_utils.removeBadDir(checkDir, res.send);
 				} else {
-					fs.readFile('./public/tv/data/'+tvRequest+'/data.js', 'utf8', function (err, data) {
-						if(!err){
+					fs.readFile(checkDir + '/data.js', 'utf8', function (err, data) {
+						if(!err) {
 							res.send(data);
-						}else if(err){
-							helper.removeBadDir(req, res, checkDir);
+						} else {
+							file_utils.removeBadDir(checkDir, res.send);
 						}
 					});
 				}
 			});
 		} else {
-			helper.removeBadDir(req, res, checkDir);
+			file_utils.removeBadDir(checkDir, res.send);
 		}
-	};
+	}
 	
 	function writeData(title,genre,certification,banner){		
-		var scraperdata = new Array()
-		,scraperdataset = null;
-		
-		scraperdataset = { title:title, genre:genre, certification:certification, banner:banner }
-		scraperdata[scraperdata.length] = scraperdataset;
-		var dataToWrite = JSON.stringify(scraperdata, null, 4);
-		var writePath = './public/tv/data/'+tvRequest+'/data.js'
-		
-		helper.writeToFile(req,res,writePath,dataToWrite);
-							
-	};
+		var scraperdata = [];
 
+		scraperdata[0] = { title:title, genre:genre, certification:certification, banner:banner };
+		var dataToWrite = JSON.stringify(scraperdata, null, 4);
+		var writePath = app_cache_handler.getCacheDir('tv', tvRequest) + '/data.js';
+
+		ajax_utils.writeToFile(writePath, dataToWrite, function(data) {
+			res.send(data);
+		});
+	}
 };

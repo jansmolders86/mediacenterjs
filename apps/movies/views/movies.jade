@@ -64,7 +64,7 @@ html(lang="en")
 							p
 								strong(data-bind="text:'Runtime: '+runtime()")
 							// /ko	
-						// ko if: cdNumber() !== 'No data found...' && cdNumber() !== null
+						// ko if: cdNumber() !== '' && cdNumber() !== null
 						.cdNumber
 							span(data-bind="text:cdNumber")
 						// /ko	

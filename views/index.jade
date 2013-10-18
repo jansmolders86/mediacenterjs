@@ -61,8 +61,3 @@ html(lang="en")
 					li.tile.boxed
 						a(href="/" + item.appLink + "/")
 							img(src="/" + item.tileLink + "/tile.png")
-						.info
-							- if(item.appLink !== 'movies' && item.appLink !== 'music' && item.appLink !== 'weather' && item.appLink !== 'tv' && item.appLink !== 'settings' && item.appLink !== 'plugins')
-								.remove
-									img(src="/core/css/img/remove.png") 
-									a(href=item.appLink) Remove

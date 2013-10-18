@@ -17,20 +17,17 @@
 */
 
 var express = require('express')
-, app = express()
-, fs = require ('fs')
-, dateFormat = require('dateformat')
-, lingua = require('lingua')
-, colors = require('colors')
-, rimraf = require('rimraf')
-, ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
-, dblite = require('dblite')
-, http = require('http');
+	, app = express()
+	, fs = require ('fs')
+	, dateFormat = require('dateformat')
+	, lingua = require('lingua')
+	, colors = require('colors')
+	, rimraf = require('rimraf')
+	, dblite = require('dblite')
+	, http = require('http')
+	, configuration_handler = require('./lib/handlers/configuration-handler');
 
-// Init Database
-dblite.bin = "./bin/sqlite3/sqlite3";
-var db = dblite('./lib/database/mcjs.sqlite');
+var config = configuration_handler.initializeConfiguration();
 
 var language = null;
 if(config.language === ""){
@@ -50,7 +47,7 @@ app.configure(function(){
 	app.use(express.static(__dirname + '/public'));
 	app.use(express.favicon(__dirname + '/public/core/favicon.ico'));
 	app.use(lingua(app, {
-		defaultLocale: 'translation_'+language,
+		defaultLocale: 'translation_' + language,
 		storageKey: 'lang',
 		path: __dirname+'/public/translations/',
 		cookieOptions: {
@@ -122,7 +119,7 @@ app.get("/", function(req, res, next) {
 		var now = new Date();
 		var time = dateFormat(now, "HH:MM");
 		var date = dateFormat(now, "dd-mm-yyyy");
-		req.setMaxListeners(0)
+		req.setMaxListeners(0);
 		res.render('index', {
 			title: 'Homepage',
 			selectedTheme: config.theme,
@@ -139,9 +136,8 @@ app.post('/removeModule', function(req, res){
 	, module = incommingModule.module
 	, appDir = './apps/'+module+'/'
 	, publicdir = './public/'+module+'/';
-	
+
 	rimraf(appDir, function (e){if(e)console.log('Error removing module', e .red)});
-	
 	rimraf(publicdir, function (e) { 
 		if(e) {
 			console.log('Error removing module', e .red);
@@ -152,32 +148,26 @@ app.post('/removeModule', function(req, res){
 });
 
 app.post('/clearCache', function(req, res){
-	var incommingCache = req.body
-	, cache = incommingCache.cache
-	, rmdir = './public/'+cache+'/data/';
+	var app_cache_handler = require('./lib/handlers/app-cache-handler');
+	var incommingCache = req.body,
+		cache = incommingCache.cache;
 	
-	console.log('clearing '+cache+' cache');
-	
-	fs.readdir(rmdir,function(err,dirs){
-		dirs.forEach(function(dir){
-			var dataFolder = rmdir+dir
-			stats = fs.lstatSync(dataFolder);
-			if (stats.isDirectory()) {
-				rimraf(dataFolder, function (e) { 		
-					if(e){
-						console.log('Error removing module', e .red);
-						res.send('Error clearing cache', e);
-					} else{
-						db.query('DROP TABLE IF EXISTS '+cache);
-						
-						db.on('info', function (text) { console.log(text) });
-						db.on('error', function (err) { console.error('Database error: ' + err) });
-						
-						res.send('done');
-					};
-				});
-			};
-		});		
+	console.log('clearing ' + cache + ' cache');
+	app_cache_handler.clearCache(cache, function(err) {
+		if (err) {
+			console.log('Error removing module', e .red);
+			return res.send('Error clearing cache', e);
+		}
+		// Init Database
+		dblite.bin = "./bin/sqlite3/sqlite3";
+		var db = dblite('./lib/database/mcjs.sqlite');
+
+		db.query('DROP TABLE IF EXISTS ' + cache);
+
+		db.on('info', function (text) { console.log(text) });
+		db.on('error', function (err) { console.error('Database error: ' + err) });
+
+		return res.send('done');
 	});
 });
 
@@ -197,33 +187,10 @@ app.post('/submit', function(req, res){
 	});
 });
 
-function writeSettings(req, res, callback){
-	var incommingTheme = req.body.theme
-	if (incommingTheme.match(/\.(css)/)){
-		themeName = incommingTheme;
-	} else {
-		themeName = incommingTheme+'.css';
-	}
-	
-    config.moviepath = req.body.movielocation,
-	config.musicpath = req.body.musiclocation,
-	config.tvpath = req.body.tvlocation,
-	config.language = req.body.language,
-	config.onscreenkeyboard = req.body.usekeyboard,
-	config.location = req.body.location,
-	config.theme = themeName,	
-	config.screensaver = req.body.screensaver,
-	config.spotifyUser= req.body.spotifyUser,
-	config.spotifyPass = req.body.spotifyPass,
-	config.port = req.body.port
-	
-    fs.writeFile('./configuration/config.ini', ini.stringify(config), function(err){
-        if(err){
-            console.log('Error writing INI file.',err);  
-        } else{
-			res.redirect('/');
-        }
-    });
+function writeSettings(req, res){
+	configuration_handler.saveSettings(req.body, function() {
+		res.redirect('/');
+	});
 }
 
 app.set('port', process.env.PORT || 3000);

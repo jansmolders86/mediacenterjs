@@ -1,41 +1,44 @@
 {
-	"name": "mediacenterjs",
-	"description": "A NodeJS based mediacenter for your browser",
-	"homepage": "http://www.mediacenterjs.com",
-	"author": {
-		"name": "Jan Smolders",
-		"email": "jansmolders86@gmail.com"
-	},
+  "name": "mediacenterjs",
+  "description": "A NodeJS based mediacenter for your browser",
+  "homepage": "http://www.mediacenterjs.com",
+  "author": {
+    "name": "Jan Smolders",
+    "email": "jansmolders86@gmail.com"
+  },
 	"licenses": [{
 		"type": "GPLv3",
 		"url": "http://www.gnu.org/licenses"
 	}],
-	"version": "0.0.41",
+  "version": "0.0.41",
 	"repository" :{ 
 		"type" : "git", 
 		"url" : "http://github.com/jansmolders86/mediacenterjs.git"
 	},
-	"readmeFilename": "README.md",
-	"dependencies": {
-		"express": "3.x",
-		"fs.extra": "1.2.1",
-		"dateformat": "1.0.4-1.2.3",
-		"downloader": "0.1.2",
-		"fluent-ffmpeg": "1.5.2",
-		"jade": ">=0.27.7",
-		"lingua": "0.3.6",
-		"node-ffprobe": "1.2.2",
-		"node-html-encoder": "0.0.2",
-		"redis": "0.8.3",
-		"request": "2.16.6",
-		"require": "0.5.0",
-		"rimraf": "2.1.4",
-		"feedparser": "0.15.4",
-		"trakt": "0.0.5-2",
-		"colors":"0.6.0-1",
-		"ini":"1.1.0",
-		"async":"0.2.9",
-		"musicmetadata":"0.2.5",
-		"dblite":">=0.2.6"
-	}
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "express": "3.x",
+    "fs.extra": "1.2.1",
+    "dateformat": "1.0.4-1.2.3",
+    "downloader": "0.1.2",
+    "fluent-ffmpeg": "1.5.2",
+    "jade": ">=0.27.7",
+    "lingua": "0.3.6",
+    "node-ffprobe": "1.2.2",
+    "node-html-encoder": "0.0.2",
+    "redis": "0.8.3",
+    "request": "2.16.6",
+    "require": "0.5.0",
+    "rimraf": "2.1.4",
+    "feedparser": "0.15.4",
+    "trakt": "0.0.5-2",
+    "colors": "0.6.0-1",
+    "ini": "1.1.0",
+    "async": "0.2.9",
+    "musicmetadata": "0.2.5",
+    "dblite": "0.2.6",
+    "walk": ">=1.2.2",
+    "underscore": "~1.5.2",
+    "moviedb": "~0.1.0"
+  }
 }

@@ -22,61 +22,47 @@ exports.engine = 'jade';
 var express = require('express')
 , app = express()
 , fs = require('fs.extra')
-, ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
-, helper = require('../../lib/helpers.js')
+, config = require('../../lib/handlers/configuration-handler').getConfiguration()
 , functions = require('./movie-functions');
 
-exports.index = function(req, res, next){	
-	res.render('movies',{
-		selectedTheme: config.theme,
-	});
+exports.index = function(req, res){
+	res.render('movies', { selectedTheme: config.theme });
 };
 
-exports.get = function(req, res, next){	
-	var infoRequest = req.params.id
-	, optionalParam = req.params.optionalParam
-	, action = req.params.action
-	, platform = 'browser';
+exports.get = function(req, res){
+	var infoRequest = req.params.id,
+		optionalParam = req.params.optionalParam,
+		platform = req.params.action;
 	
-	if(infoRequest === 'filter'){
+	if(infoRequest === 'filter') {
 		functions.filter(req, res, optionalParam);
-	} else if (optionalParam === undefined){
+	}
+	else if (!optionalParam) {
 		switch(infoRequest) {
 			case('getGenres'):
 				functions.getGenres(req, res);
-			break;
-			case('filter'):
-				functions.getGenres(req, res);
-			break;
+				break;
 			case('loadItems'):
 				functions.loadItems(req,res);
-			default:
-				return;
-			break;		
+				break;
 		}	
 	}
 	
-	if(!action){
+	if(!platform){
+		platform = 'browser';
 		switch(optionalParam) {
 			case('play'):
 				functions.playMovie(req, res, platform, infoRequest);
-			break;
+				break;
 			case('info'):
 				functions.handler(req, res, infoRequest);
-			break;	
-			default:
-				//Default
-				return;
-			break;		
+				break;
 		}
-	} else if(action === 'ios') {
-		platform = 'ios';
+	}
+	else if(platform === 'ios') {
 		functions.playMovie(req, res, platform, infoRequest);
-	} else if(action === 'android') {
-		platform = 'android';
+	}
+	else if(platform === 'android') {
 		functions.playMovie(req, res, platform, infoRequest);
-	} 
-
-}
-
+	}
+};

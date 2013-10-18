@@ -31,18 +31,18 @@ html(lang="en")
 			form#setup.validate-form(action='/setuppost',method='post')
 				.row
 					label Specify movie location
-					input.keyboard(name="movielocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
+					input.keyboard(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
 				.row	
 					span.info 
 						span.quote &ldquo;
-						span MediaCenterJS will index all the moviefiles in this initial folder. <br/> You can add or change a location later in the settings. <br/> You can also change the language their.
+						span MediaCenterJS will index all the moviefiles in this initial folder. <br/> You can add or change a location later in the settings.
 						span.quote &rdquo; 		
 				.row
 					label Specify music location
-					input.keyboard(name="musiclocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")							
+					input.keyboard(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
 				.row
 					label Specify tvshow location
-					input.keyboard(name="tvlocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")							
+					input.keyboard(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
 				.row
 					span.label Use high res images (needs more diskspace) 
 					.checkgroup

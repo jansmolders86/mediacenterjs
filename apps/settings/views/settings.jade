@@ -59,13 +59,13 @@ html(lang="en")
 				form#setup.validate-form(action='/submit',method='post')
 					.row
 						label #{lingua.setting_movielocation}
-						input.keyboard(name="movielocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+						input.keyboard(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row
 						label #{lingua.setting_musiclocation}
-						input.keyboard(name="musiclocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")	
+						input.keyboard(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row
 						label #{lingua.setting_tvlocation}
-						input.keyboard(name="tvlocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+						input.keyboard(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row
 						span.label #{lingua.setting_screensaver}
 						.checkgroup
