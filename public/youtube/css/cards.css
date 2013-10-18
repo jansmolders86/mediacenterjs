@@ -15,7 +15,7 @@ main {
   display:block;
   position:relative;
   margin:3vh auto;
-  background:#d5d5d5;
+  background: transparent;
   outline
   border-radius:.25rem;
   overflow:hidden;
@@ -56,6 +56,10 @@ main {
   /*transform-origin:top right;
   -webkit-transform-origin:top right;*/
 }
+.card.active{
+  position: absolute;
+  z-index: 9000;
+}
 /*
 @keyframes fly-in-from-left {
   from {
@@ -85,20 +89,6 @@ main {
     opacity:0;
   }
 }*/
-
-.card:after {
-  position:absolute;
-  font-size:.9rem;
-  top:1.5rem;
-  right:1rem;
-  border:thin solid gray;
-  color:gray;
-  width:1rem;
-  line-height:1rem;
-  text-align:center;
-  border-radius:50%;
-  pointer-events:none;
-}
 
 h1 {
   font-size:2rem;

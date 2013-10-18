@@ -7,6 +7,7 @@ $(function(){
 		countdownError();
 	}
 	searchBar();
+	cardClickListener();
 });
 
 /**
@@ -171,7 +172,7 @@ function populateCards(data) {
 function searchBar() {
 	// When enter is pressed in the searchbar
 	$('input#search').keyup(function(event){
-    	if(event.keyCode === 13){
+    	if($(this).val().length > 0 && event.keyCode === 13){
     		// Show the Searching... label
     		$('label[for="search"]').fadeIn('fast', function () {
     			$(this).text('Searching');
@@ -197,6 +198,48 @@ function searchBar() {
     });
 }
 
+function cardClickListener() {
+	$('.card').each(function () {
+		$(this).click(function () {
+			$(this).removeClass('animated rotateInUpLeft rotateInUpRight rotateOutUpLeft rotateOutUpRight');
+		});
+	});
+	$('body').delegate('.card','click', function(){
+		if($('.card.active').length <= 0) {
+			$(this).addClass('cloned');
+			var parent = $(this).parent().parent();
+			var position = $(this).position();
+			var clone = $(this).clone().addClass('active');
+			parent.append(clone);
+			clone.css({
+				left: position.left + 'px',
+				top: position.top + 'px'
+			}).animate({
+				width: '100%',
+				height: '100%',
+				top: 0,
+				left: 0
+			}, 500);
+		}
+	});
+	$('body').delegate('.card.active', 'click', function() {
+		var cloned = $('.card.cloned');
+		var position = cloned.position();
+		var w = cloned.width();
+		var h = cloned.height();
+		$(this).animate({
+			width: w + 'px',
+			height: h + 'px',
+			top: position.top + 'px',
+			left: position.left + 'px'
+		}, 500, function() {
+			$('.card.active').remove();
+			cloned.removeClass('cloned');
+		});
+	});
+}
+
+// Converts ISO8601 standard time from Youtube to minutes and seconds
 function getDuration(iso8601Duration) {
 	var durationInSeconds = nezasa.iso8601.Period.parseToTotalSeconds(iso8601Duration);
 	return Math.floor(durationInSeconds/60) + ':' + ('0' + durationInSeconds%60).slice(-2);
