@@ -31,7 +31,7 @@ What currently works?
 * Basic keyboard controls
 * Onscreen keyboard
 * Movie indexing
-* Multi-language support (English, French and Dutch)
+* Multi-language support
 * Display movies with Poster, Backdrop and information 
 * Local caching of information and images
 * Basic transcoding and playback of movies and music
@@ -45,7 +45,6 @@ What currently works?
 What's coming up
 ==================
 * Tv show app functionality
-* Code rework (frontend (knockout) / backend)
 * Better inbrowser streaming
 * Plugin manager
 
