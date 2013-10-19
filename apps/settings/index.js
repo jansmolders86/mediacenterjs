@@ -21,35 +21,54 @@ exports.engine = 'jade';
 var express = require('express')
 , app = express()
 , fs = require('fs')
-, config = require('../../configuration/config.json')
+, ini = require('ini')
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
 exports.index = function(req, res, next){	
-	var allThemes = new Array();
+	var allThemes = new Array()
+	, availableLanguages = []
+	, availablethemes = fs.readdirSync('./public/themes/')
+	, availableTranslations = fs.readdirSync('./public/translations/');
 	
-	fs.readdir('./public/themes/',function(err,files){
-		if (err){
-			console.log('Could not get themes',err .red);
-		}else{
-			files.forEach(function(file){
-				allThemes.push(file);
-			});
 
-			res.render('settings',{
-				movielocation: config.moviepath,
-				selectedTheme: config.theme,
-				musiclocation : config.musicpath,
-				tvlocation : config.tvpath,
-				language: config.language,
-				onscreenkeyboard: config.onscreenkeyboard,
-				location: config.location,
-				screensaver: config.screensaver,
-				spotifyUser: config.spotifyUser,
-				spotifyPass: config.spotifyPass,
-				themes:allThemes,
-				port: config.port,
-				oauthKey: config.oauthKey
-			});	
-			
-		}	
+	availablethemes.forEach(function(file){
+		allThemes.push(file);
 	});
+		
+	availableTranslations.forEach(function(file){
+		if (file.match('translation')){
+			var languageCode = file.replace(/translation_|.json/g,"")
+			availableLanguages.push(languageCode);
+		}
+	});
+
+	res.render('settings',{
+		movielocation: config.moviepath,
+		selectedTheme: config.theme,
+		musiclocation : config.musicpath,
+		tvlocation : config.tvpath,
+		language: config.language,
+		availableLanguages: availableLanguages,
+		onscreenkeyboard: config.onscreenkeyboard,
+		location: config.location,
+		screensaver: config.screensaver,
+		spotifyUser: config.spotifyUser,
+		spotifyPass: config.spotifyPass,
+		themes:allThemes,
+		port: config.port,
+		oauth: config.oauth,
+		oauthKey: config.oauthKey
+	});		
+};
+exports.get = function(req, res, next) {
+	var infoRequest = req.params.id;
+	switch(infoRequest) {
+		case 'getToken':
+			var token = config.oauth;
+			if(!token) {
+				res.json({message: 'No token'}, 500);
+			}
+			res.json({token: token});
+		break;
+	}
 };

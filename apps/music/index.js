@@ -3,8 +3,8 @@
 var express = require('express')
 , app = express()
 , fs = require('fs.extra')
-, config = require('../../configuration/config.json')
 , helper = require('../../lib/helpers.js')
+, config = require('../../lib/handlers/configuration-handler').getConfiguration()
 , functions = require('./music-functions');
  
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
@@ -34,6 +34,7 @@ exports.get = function(req, res, next){
 	if(!action){
 		switch(optionalParam) {
 			case('info'):
+                console.log('getting info')
 				functions.getInfo(req, res, infoRequest);
 			break;	
 			case('loadItems'):

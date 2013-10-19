@@ -11,14 +11,18 @@ pids
 logs
 results
 
+public/data/*
+configuration/config.ini
 npm-debug.log
 node_modules/
+
 
 .DS_Store
 .AppleDouble
 .LSOverride
 Icon
-
+screenshots/
+thumbs.db
 
 # Thumbnails
 ._*
@@ -34,3 +38,4 @@ public/tv/data/
 
 #Configuration
 configuration/config.json
+

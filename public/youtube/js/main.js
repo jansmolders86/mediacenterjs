@@ -38,7 +38,7 @@ function countdownError() {
 function updateRemoteToken() {
 	$.ajax({
 		type: 'POST',
-		url: '/updateToken',
+		url: '/youtube/updateToken',
 		data: 'oauth='+localStorage.getItem('oauth_token'),
 		success: function() {
 			updateError('Refreshing...');
@@ -78,7 +78,7 @@ function updateError(message) {
 function searchYoutube(query, callback) {
 	$.ajax({
     	type: 'POST',
-    	url: '/searchYoutube',
+    	url: '/youtube/searchYoutube',
     	data: 'q=' + query,
     	success: function(data) {
     		return callback(null, data);
@@ -136,7 +136,7 @@ function createDateString(createdDate) {
 function getCards(cardAmount, callback) {
 	$.ajax({
 		type: "POST",
-		url: "/getCards",
+		url: "/youtube/getCards",
 		data: "cardAmount="+cardAmount,
 		success: function (data) {
 			return callback(null, data.data);

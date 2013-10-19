@@ -16,20 +16,51 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+exports.engine = 'jade';
 
+/* Modules */
 var express = require('express')
 , app = express()
-, config = require('../../lib/handlers/configuration-handler').getConfiguration();
-
+, fs = require('fs')
+, ini = require('ini')
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
+, exec = require('child_process').exec
+, async = require('async')
+, functions = require('./plugins-functions');
+ 
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
 
-// Render the indexpage
-exports.index = function(req, res, next){
-	res.render('weather',{
-		userLanguage: config.language,
-		userLocation: config.location,
+exports.index = function(req, res, next){	
+	res.render('plugins',{
 		selectedTheme: config.theme
 	});
 };
 
+exports.get = function(req, res, next){	
+	var infoRequest = req.params.id
+	, optionalParam = req.params.optionalParam
+	, action = req.params.action;
+	
+	if (optionalParam === undefined){
+		switch(infoRequest) {
+			case('loadItems'):
+				functions.getAvailablePlugins(req,res);
+			default:
+				return;
+			break;		
+		}	
+	}
+	
+	if(!action){
+		switch(optionalParam) {
+			case('uninstall'):
+				functions.uninstallPlugin(req, res, infoRequest);
+			break;	
+			case('install'):
+				functions.installPlugin(req,res, infoRequest);
+			break;		
+		}
+	}
+	
+}

@@ -1,5 +1,6 @@
 {
 	"name": "mediacenterjs",
+	"version": "0.0.41",
 	"description": "A NodeJS based mediacenter for your browser",
 	"homepage": "http://www.mediacenterjs.com",
 	"author": {
@@ -14,15 +15,14 @@
 			"email": "csarsam+github@gmail.com"
 		}
 	],
-	"repostitory": {
-		"type": "git",
-		"url": "https://github.com/jansmolders86/mediacenterjs",
-	},
 	"licenses": [{
 		"type": "GPLv3",
 		"url": "http://www.gnu.org/licenses"
 	}],
-	"version": "0.0.41",
+	"repository" :{ 
+		"type" : "git", 
+		"url" : "http://github.com/jansmolders86/mediacenterjs.git"
+	},
 	"readmeFilename": "README.md",
 	"dependencies": {
 		"express": "3.x",
@@ -40,11 +40,14 @@
 		"rimraf": "2.1.4",
 		"feedparser": "0.15.4",
 		"trakt": "0.0.5-2",
-		"colors":"0.6.2",
-		"async":"0.2.9",
-		"musicmetadata":"0.2.5",
+		"colors": "0.6.0-1",
+		"ini": "1.1.0",
+		"async": "0.2.9",
+		"musicmetadata": "0.2.5",
 		"dblite":">=0.3.6",
-		"nconf": "0.6.7",
+		"walk": ">=1.2.2",
+		"underscore": "~1.5.2",
+		"moviedb": "~0.1.0",
 		"youtube-api": "~0.1.1"
 	}
 }

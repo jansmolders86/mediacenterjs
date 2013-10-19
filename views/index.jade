@@ -2,7 +2,7 @@ doctype 5
 html(lang="en")
 	head
 		title MediacenterJS
-		
+		meta(name="mobile-web-app-capable" content="yes")
 		// Core inclusion
 		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
 		
@@ -59,10 +59,5 @@ html(lang="en")
 			ul#tiles
 				each item in apps
 					li.tile.boxed
-						a(href="/"+item)
-							img(src="/"+item+"/tile.png")
-						.info
-							- if(item !== 'movies' && item !== 'music' && item !== 'weather' && item !== 'tv' && item !== 'settings')
-								.remove
-									img(src="/core/css/img/remove.png") 
-									a(href=item) Remove
+						a(href="/" + item.appLink + "/")
+							img(src="/" + item.tileLink + "/tile.png")

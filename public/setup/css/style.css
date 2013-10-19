@@ -1,0 +1,32 @@
+#oauth {
+	background-color: #0074a2;
+}
+label[for="oauthKey"] {
+	color: red;
+	font-size: 12px;
+	width: 100%;
+	margin-top: 17px;
+}
+img#check, img#ex {
+	display: none;
+	margin-left: 4px;
+	margin-bottom: -4px;
+}
+div#settings span {
+	display: inline-block;
+	width: 5%;
+}
+img#helpCircle {
+	width: 15px;
+	height: 15px;
+	margin-bottom: 11px;
+	cursor: pointer;
+	display: inline;
+}
+h2#oauthTitle {
+	display: inline;
+	width: 83px;
+}
+div#oauthRow {
+	margin: 50px 0 0 60px;
+}

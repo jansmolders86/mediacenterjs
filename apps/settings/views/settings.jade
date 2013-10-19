@@ -73,13 +73,13 @@ html(lang="en")
 				$('img#helpCircle').click(function (e) {
 					e.preventDefault();
 					window.open('https://oauth.io/docs/getting-started', '_blank');
-				})
+				});
 			});
 			// Get token that's stored on the server-side config which we submitted earlier
 			function getStoredToken(callback) {
 				$.ajax({
 					type: "GET",
-					url: "/getToken",
+					url: "/settings/getToken",
 					success: function (data) {
 						return callback(null, data);
 					},
@@ -124,13 +124,13 @@ html(lang="en")
 					input.oauthKeyHidden(name="oauthKey" type="hidden")
 					.row
 						label #{lingua.setting_movielocation}
-						input.keyboard(name="movielocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+						input.keyboard(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row
 						label #{lingua.setting_musiclocation}
-						input.keyboard(name="musiclocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")	
+						input.keyboard(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row
 						label #{lingua.setting_tvlocation}
-						input.keyboard(name="tvlocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+						input.keyboard(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row
 						span.label #{lingua.setting_screensaver}
 						.checkgroup
@@ -159,7 +159,10 @@ html(lang="en")
 								label(for="nokeyboard") #{lingua.setting_no}
 					.row
 						label #{lingua.setting_language}
-						input.keyboard(name="language",type="text",placeholder="ie nl or gb", value= language ,data-rule-required="true", data-rule-language="true", data-msg-language="EN, FR and NL are currently supported")
+						select#language(name="language")
+							- for lang in availableLanguages
+								option(value=lang, selected=lang == language) #{lang}
+					
 					.row
 						label #{lingua.setting_location}
 						input.keyboard(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")					

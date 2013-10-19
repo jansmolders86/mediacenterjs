@@ -24,7 +24,7 @@ var express = require('express')
 , colors = require('colors')
 , rimraf = require('rimraf')
 , nconf = require('nconf')
-, config = require('./configuration/config.json')
+, configuration_handler = require('./lib/handlers/configuration-handler')
 , dblite = require('dblite')
 , Youtube = require('youtube-api')
 , jade = require('jade')
@@ -33,6 +33,8 @@ var express = require('express')
 // Init Database
 dblite.bin = "./bin/sqlite3/sqlite3";
 var db = dblite('./lib/database/mcjs.sqlite');
+
+var config = configuration_handler.initializeConfiguration();
 
 var language = null;
 if(config.language === ""){
@@ -52,7 +54,7 @@ app.configure(function(){
 	app.use(express.static(__dirname + '/public'));
 	app.use(express.favicon(__dirname + '/public/core/favicon.ico'));
 	app.use(lingua(app, {
-		defaultLocale: 'translation_'+language,
+		defaultLocale: 'translation_' + language,
 		storageKey: 'lang',
 		path: __dirname+'/public/translations/',
 		cookieOptions: {
@@ -86,17 +88,45 @@ app.get("/", function(req, res, next) {
 	if(	config.moviepath == '' && config.language == '' && config.location == '' || config.moviepath == null || config.moviepath == undefined){
 		res.render('setup');	
 	} else {
-		var apps = []
-		//Search app folder for apps and check if tile icon is present
+		
+		var apps = [];
+
+		//Search core app folder for apps and check if tile icon is present
 		fs.readdirSync(__dirname + '/apps').forEach(function(name){
 			if(fs.existsSync(__dirname + '/public/'+name+'/tile.png')){
-				apps.push(name);
+				var obj = {
+					appLink: name, 
+					tileLink: name
+				}
+				apps.push(obj);
 			}
 		});
+
+		//search node_modules for plugins
+		var nodeModules = __dirname + '/node_modules';
+		var pluginPrefix = 'mediacenterjs-'; //TODO: externalize in config file
+
+		fs.readdirSync(nodeModules).forEach(function(name){
+
+			//Check if the folder in the node_modules starts with the prefix
+			if(name.substr(0, pluginPrefix.length) !== pluginPrefix)
+				return;
+
+			var pluginPath = nodeModules + '/' + name;
+			if(fs.existsSync( pluginPath + '/public/tile.png')){
+				var obj = {
+					appLink: name, 
+					tileLink: name + '/public'
+				}
+				apps.push(obj);
+			}
+
+		});
+
 		var now = new Date();
 		var time = dateFormat(now, "HH:MM");
 		var date = dateFormat(now, "dd-mm-yyyy");
-		req.setMaxListeners(0)
+		req.setMaxListeners(0);
 		res.render('index', {
 			title: 'Homepage',
 			selectedTheme: config.theme,
@@ -113,9 +143,8 @@ app.post('/removeModule', function(req, res){
 	, module = incommingModule.module
 	, appDir = './apps/'+module+'/'
 	, publicdir = './public/'+module+'/';
-	
+
 	rimraf(appDir, function (e){if(e)console.log('Error removing module', e .red)});
-	
 	rimraf(publicdir, function (e) { 
 		if(e) {
 			console.log('Error removing module', e .red);
@@ -126,32 +155,26 @@ app.post('/removeModule', function(req, res){
 });
 
 app.post('/clearCache', function(req, res){
-	var incommingCache = req.body
-	, cache = incommingCache.cache
-	, rmdir = './public/'+cache+'/data/';
+	var app_cache_handler = require('./lib/handlers/app-cache-handler');
+	var incommingCache = req.body,
+		cache = incommingCache.cache;
 	
-	console.log('clearing '+cache+' cache');
-	
-	fs.readdir(rmdir,function(err,dirs){
-		dirs.forEach(function(dir){
-			var dataFolder = rmdir+dir
-			stats = fs.lstatSync(dataFolder);
-			if (stats.isDirectory()) {
-				rimraf(dataFolder, function (e) { 		
-					if(e){
-						console.log('Error removing module', e .red);
-						res.send('Error clearing cache', e);
-					} else{
-						db.query('DROP TABLE IF EXISTS '+cache);
-						
-						db.on('info', function (text) { console.log(text) });
-						db.on('error', function (err) { console.error('Database error: ' + err) });
-						
-						res.send('done');
-					};
-				});
-			};
-		});		
+	console.log('clearing ' + cache + ' cache');
+	app_cache_handler.clearCache(cache, function(err) {
+		if (err) {
+			console.log('Error removing module', e .red);
+			return res.send('Error clearing cache', e);
+		}
+		// Init Database
+		dblite.bin = "./bin/sqlite3/sqlite3";
+		var db = dblite('./lib/database/mcjs.sqlite');
+
+		db.query('DROP TABLE IF EXISTS ' + cache);
+
+		db.on('info', function (text) { console.log(text) });
+		db.on('error', function (err) { console.error('Database error: ' + err) });
+
+		return res.send('done');
 	});
 });
 
@@ -164,120 +187,16 @@ app.post('/setuppost', function (req, res){
 app.get('/configuration', function (req, res){
 	res.send(config);
 });
-app.get('/getToken', function (req, res) {
-	var token = config.oauth;
-	if(!token) {
-		res.json({message: 'No token'}, 500);
-	}
-	res.json({token: token});
-});
-app.post('/updateToken', function (req, res) {
-	nconf.argv().env().file({file: './configuration/config.json'});
-	nconf.set('oauth', req.body.oauth);
-	nconf.save(function (error) {
-		if(error){
-			console.log('Error writing config file.', err);
-			res.end('Error with config file.');
-			return;
-		}
-		res.end();
-	});
-});
-app.post('/searchYoutube', function (req, res) {
-	searchYoutube(req, function (error, data) {
-		if(error) {
-			res.json({message: error}, 500);
-		}
-		res.json(data);
-	});
-});
-app.post('/getCards', function (req, res) {
-	getCards(req, function (error, data) {
-		if(error) {
-			res.json({message: error}, 500);
-		}
-		res.json({data: data});
-	});
-});
+
 app.post('/submit', function (req, res){
 	writeSettings(req, res, function(){
 		res.redirect('/');
 	});
 });
 
-function writeSettings(req, res, callback){
-	nconf.argv().env().file({file: './configuration/config.json'});
-	var incommingTheme = req.body.theme
-	if (incommingTheme.match(/\.(css)/)){
-		themeName = incommingTheme;
-	} else {
-		themeName = incommingTheme+'.css';
-	}
-	// TODO add input sanitization
-    nconf.set('moviepath', req.body.movielocation);
-	nconf.set('musicpath', req.body.musiclocation);
-	nconf.set('tvpath', req.body.tvlocation);
-	nconf.set('language', req.body.language);
-	nconf.set('onscreenkeyboard', req.body.usekeyboard);
-	nconf.set('location', req.body.location);
-	nconf.set('theme', themeName);
-	nconf.set('screensaver', req.body.screensaver);
-	nconf.set('spotifyUser', req.body.spotifyUser);
-	nconf.set('spotifyPass', req.body.spotifyPass);
-	nconf.set('port', req.body.port);
-	nconf.set('oauth', req.body.oauth);
-	nconf.set('oauthKey', req.body.oauthKey);
-	
-	nconf.save(function (error) {
-		if(error){
-			console.log('Error writing config file.',err);  
-		} else{
-			res.redirect('/');
-		}
-	});
-}
-
-/**
- * Searches youtube given the query as the input parameter from the POST request
- * @param  {Object}   req      The request from the user
- * @param  {Function} callback Callback function to send back
- * @return {Function} callback ^
- */
-function searchYoutube(req, callback) {
-	Youtube.authenticate({
-		type: "oauth",
-		token: config.oauth
-	});
-	Youtube.search.list({q: req.body.q, part: 'snippet', maxResults: 50}, function (error, result) {
-		if(error) {
-			return callback(error);
-		}
-		//return callback(null, );
-		var videoArray = [];
-		for(var videoCounter in result.items) {
-			var videoId = result.items[videoCounter].id.videoId;
-			videoArray.push(videoId);
-		}
-		Youtube.videos.list({part: 'snippet,statistics,contentDetails', id: videoArray.join(',')}, function (error, result) {
-			return callback(null, result.items);
-		});
-	});
-}
-
-function getCards(req, callback) {
-	var cardAmount = parseInt(req.body.cardAmount);
-	fs.readFile('apps/youtube/views/card.jade', 'utf8', function (error, data) {
-		if(error) {
-			return callback('Error reading template file');
-		}
-		var fn = jade.compile(data);
-		var html = fn();
-		var totalHtml = "";
-		while(cardAmount !== 0) {
-			totalHtml += html;
-			cardAmount--;
-		}
-		return callback(null, totalHtml);
+function writeSettings(req, res){
+	configuration_handler.saveSettings(req.body, function() {
+		res.redirect('/');
 	});
 }
 

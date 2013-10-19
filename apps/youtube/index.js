@@ -21,9 +21,13 @@ exports.engine = 'jade';
 
 
 // Render the indexpage
-var Youtube = require('youtube-api');
-var iso8601 = require('./iso8601.js');
-var config = require('../../configuration/config.json');
+var Youtube = require('youtube-api')
+, iso8601 = require('./iso8601.js')
+, fs = require('fs')
+, ini = require('ini')
+, jade = require('jade')
+, configuration_handler = require('../../lib/handlers/configuration-handler')
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 exports.index = function(req, res, next){
 	Youtube.authenticate({
 		type: "oauth",
@@ -58,6 +62,77 @@ exports.index = function(req, res, next){
 		res.render('videos', {"videos": videos});
 	});
 };
+exports.post = function(req, res, next) {
+	var infoRequest = req.params.id;
+	switch(infoRequest) {
+		case 'updateToken':
+			config.oauth = req.body.oauth;
+			configuration_handler.saveSettings(config, function () {
+				res.end();
+			});
+		break;
+		case 'searchYoutube':
+			searchYoutube(req, function (error, data) {
+				if(error) {
+					res.json({message: error}, 500);
+				}
+				res.json(data);
+			});
+		break;
+		case 'getCards':
+			getCards(req, function (error, data) {
+				if(error) {
+					res.json({message: error}, 500);
+				}
+				res.json({data: data});
+			});
+		break;
+	}
+};
+/**
+ * Searches youtube given the query as the input parameter from the POST request
+ * @param  {Object}   req      The request from the user
+ * @param  {Function} callback Callback function to send back
+ * @return {Function} callback ^
+ */
+function searchYoutube(req, callback) {
+	Youtube.authenticate({
+		type: "oauth",
+		token: config.oauth
+	});
+	Youtube.search.list({q: req.body.q, part: 'snippet', maxResults: 50}, function (error, result) {
+		if(error) {
+			return callback(error);
+		}
+		//return callback(null, );
+		var videoArray = [];
+		for(var videoCounter in result.items) {
+			var videoId = result.items[videoCounter].id.videoId;
+			videoArray.push(videoId);
+		}
+		Youtube.videos.list({part: 'snippet,statistics,contentDetails', id: videoArray.join(',')}, function (error, result) {
+			return callback(null, result.items);
+		});
+	});
+}
+
+function getCards(req, callback) {
+	var cardAmount = parseInt(req.body.cardAmount);
+	fs.readFile('apps/youtube/views/card.jade', 'utf8', function (error, data) {
+		if(error) {
+			return callback('Error reading template file');
+		}
+		var fn = jade.compile(data);
+		var html = fn();
+		var totalHtml = "";
+		while(cardAmount !== 0) {
+			totalHtml += html;
+			cardAmount--;
+		}
+		return callback(null, totalHtml);
+	});
+}
+
 /*http://stackoverflow.com/a/8363049/1612721*/
 function createDateString(createdDate) {
 	return createdDate.getUTCFullYear() +"/"+

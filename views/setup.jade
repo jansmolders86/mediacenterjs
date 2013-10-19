@@ -4,24 +4,95 @@ html(lang="en")
 		// Core inclusion
 		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
 		link(rel='stylesheet', href='/core/css/style.css')
+		link(rel='stylesheet', href='/setup/css/style.css')
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/plugins/jquery.prettyForm.js")
 		script(src="/core/js/plugins/validation/jquery.validate.min.js")
 		script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
 		script(src="/core/js/plugins/validation/jquery.validate.rules.js")
+		script(src='/core/js/oauth.min.js')
 		script.
 			$(document).ready(function() {
 				$('.validate-form').validate();
 				$("[type=checkbox], [type=radio]").prettyForm();
+				
+				var userLang = navigator.language || navigator.userLanguage; 
+				userLang = userLang.replace(/-.*/,'');
+				
+				console.log(userLang)
+				if(userLang.match(/nl|en|fr|da/g)){
+					$('input#language').val(userLang);
+				} else{
+					$('input#language').val('en');
+				}
+				$('a#oauth').click(function (e) {
+					e.preventDefault();
+					// TODO need to make this configurable
+					OAuth.initialize($('input#oauthKey').val());
+					OAuth.popup('youtube', function (error, oauthData){
+						if(error instanceof Error) {
+							$('label[for="oauthKey"]').text(error.message);
+							$('img#ex').fadeIn('fast').css('display', 'inline-block');
+						} else {
+							// TODO if they don't have local storage, then do something else (but who doesn't have localStorage now anyways?!)
+							localStorage.setItem('oauth_token', oauthData.access_token);
+							localStorage.setItem('oauth_key', $('input#oauthKey').val());
+							$('input.oauth').val(localStorage.getItem('oauth_token'));
+							$('input.oauthKeyHidden').val(localStorage.getItem('oauth_key'));
+							$('img#check').fadeIn('fast').css('display', 'inline-block');
+						}
+					});
+				});
+				if(localStorage.getItem('oauth_token')) {
+					$('img#check').show().css('display', 'inline-block');
+					$('input.oauth').val(localStorage.getItem('oauth_token'));
+					$('input.oauthKeyHidden').val(localStorage.getItem('oauth_key'));
+				} else {
+					getStoredToken(function (error, data) {
+						if(!error) {
+							localStorage.setItem('oauth_token', data.token);
+							$('img#check').show().css('display', 'inline-block');
+							$('input.oauth').val(data.token);
+							$('input.oauthKeyHidden').val(localStorage.getItem('oauth_key'));
+						}
+					});
+				}
+				$('img#helpCircle').click(function (e) {
+					e.preventDefault();
+					window.open('https://oauth.io/docs/getting-started', '_blank');
+				});
 			});
+			// Get token that's stored on the server-side config which we submitted earlier
+			function getStoredToken(callback) {
+				$.ajax({
+					type: "GET",
+					url: "/getToken",
+					success: function (data) {
+						return callback(null, data);
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						return callback(jqXHR.responseText);
+					}
+				});
+			}
 	body
 		#header
 			h1 Hi, Please setup MediacenterJS
 		#wrapper
+			.row#oauthRow
+				h2#oauthTitle OAuth
+				span
+					img#helpCircle(src="/core/icons/helpCircle.png")
+				div#oauthContainer
+					input#oauthKey(name="oauthKey" type="text", placeholder="OAuth.io Key", value=oauthKey)
+					a.btn#oauth(href="#") Register OAuth
+					img#check(src="/core/icons/check.png")
+					img#ex(src="/core/icons/ex.png")
+					label(for="oauthKey")
 			form#setup.validate-form(action='/setuppost',method='post')
 				.row
 					label Specify movie location
-					input.keyboard(name="movielocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
+					input.keyboard(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
 				.row	
 					span.info 
 						span.quote &ldquo;
@@ -29,10 +100,10 @@ html(lang="en")
 						span.quote &rdquo; 		
 				.row
 					label Specify music location
-					input.keyboard(name="musiclocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")							
+					input.keyboard(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
 				.row
 					label Specify tvshow location
-					input.keyboard(name="tvlocation",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")							
+					input.keyboard(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
 				.row
 					span.label Use high res images (needs more diskspace) 
 					.checkgroup
@@ -48,9 +119,6 @@ html(lang="en")
 						input#nokeyboard(name="usekeyboard",type="radio",value="false",checked) 
 						label(for="nokeyboard") No
 				.row
-					label Language
-					input.keyboard(name="language",type="text",placeholder="ie nl or en",data-rule-required="true", data-rule-language="true",  data-msg-language="EN, FR and NL are currently supported")
-				.row
 					label You current location (city)
 					input.keyboard(name="location",type="text",placeholder="ie london or amsterdam",data-rule-required="true")
 				.row
@@ -58,7 +126,10 @@ html(lang="en")
 					input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337",data-rule-required="true")
 				.row
 					input(type="submit",value="Submit")
+					input.oauth(name="oauth" type="hidden")
+					input.oauthKeyHidden(name="oauthKey" type="hidden")
 					input(name="screensaver",type="hidden",value="dim")
+					input#language(name="language",type="hidden",value="en")
 					input(name="theme",type="hidden",value="wigo.css")
 					input(name="spotifyUser",type="hidden",value="")
 					input(name="spotifyPass",type="hidden",value="")

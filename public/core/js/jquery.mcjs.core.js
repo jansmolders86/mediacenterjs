@@ -92,8 +92,8 @@
 			type: 'get'
 		}).done(function(data){
 			$.i18n.properties({
-				name: 'frontend-translation', 
-				path:'/translations/', 
+				name: 'translation', 
+				path:'/translations/frontend/', 
 				mode:'map',
 				language: data.language,
 				extension: 'js',

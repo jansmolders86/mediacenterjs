@@ -31,7 +31,7 @@ What currently works?
 * Basic keyboard controls
 * Onscreen keyboard
 * Movie indexing
-* Multi-language support (English, French and Dutch)
+* Multi-language support
 * Display movies with Poster, Backdrop and information 
 * Local caching of information and images
 * Basic transcoding and playback of movies and music
@@ -45,8 +45,8 @@ What currently works?
 What's coming up
 ==================
 * Tv show app functionality
-* Code rework (frontend (knockout) / backend)
 * Better inbrowser streaming
+* Plugin manager
 
 Known issues: video/audio playback
 ==================
@@ -63,6 +63,7 @@ Other known issues
 ==================
 
 * Frontend needs to be ported to knockout (still wip)
+* Movie scraper API has a limitation on the amount of calls we can make. So with a lot if movies, you can get misfires if you scroll through too many movies at once.
 
 What still needs to be done
 ==================
@@ -139,17 +140,19 @@ __Install node on Ubuntu/Debian__
 	// Git clone
 	sudo apt-get install git
 	git clone https://github.com/jansmolders86/mediacenterjs.git
+	cd mediacenterjs
+	npm install
+	sudo chmod 755 bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
+	sudo node server
 
 	// NPM install
 	npm install mediacenterjs
-
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 
 If you get an 'EACCESS' error, please set the permissions of the entire app to read, write and execute and run the server using 'sudo'
  
-     sudo chmod -R 755 mediacenterjs/
-     
+     sudo chmod 755 bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
      sudo node server
 
 Running MediacenterJS
@@ -183,7 +186,7 @@ or
 
 	specifiedPath/f/fight club.avi
 	
-or  
+or even
 
 	specifiedPath/f/MyfavouriteMovies/fight club.avi
 	
@@ -369,8 +372,11 @@ This app also makes use of the following modules:
 
 ###Special thanks to:###
 
-* Sylvain https://github.com/flyinva  for his French translation
+* Sylvain https://github.com/flyinva for his French translation
+* Kasper Isager https://github.com/kasperisager for his Danish translation
 * Jussi Vatjus https://github.com/jupe for his code support
+* Terry MooreII https://github.com/TerryMooreII For the Javascript Jabber app
+* Stefan Hoffman https://github.com/hoffi for his hudge contribution to the backend
 * Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
 * Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
 * Lucien Immink https://github.com/lucienimmink for his javascript knowledge/support
@@ -389,13 +395,14 @@ The project will reach beta status when it is able to provide:
 
 * Fast transcoding 
 * Cross Browser/device compatibility
-* Easy to add/change themes
-* And a set of ready made apps like youtube and google music.
+* Easy to add/change themes (with several available to choose from)
+* A set of ready made apps like youtube and google music.
 * Multilanguage support
 * App import/export functionality
 
 This application will run on Windows and Linux based systems. 
-There will be a specific Linux distro using a kiosk, debian distro.
+
+***There will be a specific Linux distro using a kiosk, debian distro.***
 
 I'm building MCJS in my free time so if you want to encourage me to continue this enormous project, feel free to do so.
 
