@@ -15,9 +15,8 @@ html(lang="en")
 				$("[type=checkbox], [type=radio]").prettyForm();
 				
 				var userLang = navigator.language || navigator.userLanguage; 
-				userLang.replace(/-.*/,'');
+				userLang = userLang.replace(/-.*/,'');
 				
-				console.log(userLang)
 				if(userLang.match(/nl|en|fr|da/g)){
 					$('input#language').val(userLang);
 				} else{
