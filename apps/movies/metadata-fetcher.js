@@ -121,18 +121,14 @@ storeMetadataInDatabase = function(metadata, callback) {
 
 fetchMetadataFromTheMovieDB = function(movieTitle, year, callback) {
 	moviedb.searchMovie({ query: movieTitle, language: config.language, year: year }, function(err, result) {
-		if (err || (result && result.results.length > 0)) {
+		if (err || (result && result.results.length < 1)) {
 			console.error(err);
 			callback(err, null);
-		}
-
-		if(result.results[0] !== undefined){
+		}else {
 			console.log('Scraper found data for movie', movieTitle, result.results[0])
 			moviedb.movieInfo({ id: result.results[0].id }, function(err, response) {
 				callback(err, response);
 			});
-		} else{
-			callback(err, null);
 		}
 	});
 };
