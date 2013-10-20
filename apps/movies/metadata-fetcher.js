@@ -66,7 +66,7 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 					runtime = 'Unknown',
 					overview = '',
 					certification =''
-				
+				 
 				if(result !== null){
 					rating = result.vote_average.toString();
 					original_title = result.original_title;

@@ -20,4 +20,4 @@ screenshots/
 .DS_Store
 thumbs.db
 public/music/data/*
-public/movies/data/*
+public/movies/data/* 
