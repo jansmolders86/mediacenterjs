@@ -7,7 +7,12 @@ var dblite = require('dblite'),
 	movie_title_cleaner = require('../../lib/utils/title-cleaner');
 
 /* Variables */
-var db = dblite('./lib/database/mcjs.sqlite');
+// Init Database
+if(config.platform === 'OSX'){
+	dblite.bin = "./bin/sqlite3/osx/sqlite3";
+}else {
+	dblite.bin = "./bin/sqlite3/sqlite3";
+}
 db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
@@ -76,7 +81,6 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 				}
 				
 				var metadata = [ movieTitle, original_title, poster_path, backdrop_path, imdb_id, rating, certification, genre, runtime, overview, movieInfos.cd ];
-				console.log('metadata', metadata);
 				storeMetadataInDatabase(metadata, function() {
 					loadMetadataFromDatabase(movieTitle, callback);
 				});
