@@ -126,7 +126,7 @@ User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-ins
 
 Install NodeJS: http://nodejs.org/download/
 
-__Install node on Ubuntu/Debian__
+__Install node on Ubuntu/Debian/OSX__
 
 
 	Ubuntu: gksu software-properties-gtk (enable all software sources)
@@ -142,7 +142,11 @@ __Install node on Ubuntu/Debian__
 	git clone https://github.com/jansmolders86/mediacenterjs.git
 	cd mediacenterjs
 	npm install
-	sudo chmod 755 bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
+	sudo chmod +x bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
+	
+	For OSX users:
+	sudo chmod +x ./bin/sqlite3/osx/sqlite3 
+	
 	sudo node server
 
 	// NPM install
