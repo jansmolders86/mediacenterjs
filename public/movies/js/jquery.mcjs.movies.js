@@ -121,19 +121,21 @@
 			}).done(function(data){
 				// If current item is in cache, fill item with values
 				if (o.movieCache[title]) {
-					var movieData = data[0]
-					, movie = o.movieCache[title];
-					
-					movie.posterImage(movieData.poster_path);
-					movie.backdropImage(movieData.backdrop_path);
-					movie.genre(movieData.genre);
-					movie.runtime(movieData.runtime);
-					movie.overview(movieData.overview);
-					movie.title(movieData.original_name);
-					movie.cdNumber(movieData.cd_number);
+					setTimeout(function(){
+						var movieData = data[0]
+						, movie = o.movieCache[title];
+						
+						movie.posterImage(movieData.poster_path);
+						movie.backdropImage(movieData.backdrop_path);
+						movie.genre(movieData.genre);
+						movie.runtime(movieData.runtime);
+						movie.overview(movieData.overview);
+						movie.title(movieData.original_name);
+						movie.cdNumber(movieData.cd_number);
+						
+						visibleMovie.addClass('showDetails '+o.fadeClass);
+					},500);
 				}
-				
-				visibleMovie.addClass('showDetails '+o.fadeClass);
 				
 				_focusedItem(o);
 				_scrollBackdrop(o);

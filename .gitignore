@@ -13,8 +13,11 @@ results
 
 public/data/*
 configuration/config.ini
+config.ini
 npm-debug.log
 node_modules/
 screenshots/
 .DS_Store
 thumbs.db
+public/music/data/*
+public/movies/data/*

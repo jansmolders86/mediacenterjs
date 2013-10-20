@@ -7,7 +7,6 @@ var dblite = require('dblite'),
 	movie_title_cleaner = require('../../lib/utils/title-cleaner');
 
 /* Variables */
-dblite.bin = "./bin/sqlite3/sqlite3";
 var db = dblite('./lib/database/mcjs.sqlite');
 db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
@@ -37,44 +36,47 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 				console.error(err);
 				callback([]);
 			}
-            
-            var poster_path = '/movies/css/img/nodata.jpg'
-                , backdrop_path = '/movies/css/img/backdrop.jpg';
-            
-            if(result !== null){
-                poster_path = result.poster_path
-                backdrop_path = result.backdrop_path
-            }
-            
-			downloadMovieFanart(poster_path, backdrop_path, movieTitle, function(err) {
-                
-                var genre = 'Unknown'
-                    , rating = 'Unknown'
-                    , title = movieTitle
-                    , imdb_id = 'Unknown'
-                    , runtime = 'Unknown'
-                    , overview = 'Unknown'
-                    , certification = 'Unknown'
-                
-                
-                if(result !== null){
-                    rating = result.vote_average.toString();
-                    title = result.original_title
-                    imdb_id  = result.imdb_id
-                    runtime = result.runtime
-                    overview = result.overview
-                    
-                    if(result.genres.length){
-                        genre = result.genres[0].name;
-                    }
-                }
-                
-                if(result !== null){
-                   poster_path = app_cache_handler.getFrontendCachePath('movies', movieTitle, result.poster_path);
-                   backdrop_path = app_cache_handler.getFrontendCachePath('movies', movieTitle, result.backdrop_path);
-                }    
 
-				var metadata = [ movieTitle, title, poster_path, backdrop_path, imdb_id, rating, certification, genre, runtime, overview, movieInfos.cd ];
+			var poster_path = null;
+			var backdrop_path = null;
+			
+			if(result !== null){
+				poster_path = result.poster_path;
+				backdrop_path = result.backdrop_path;
+			}
+			
+			downloadMovieFanart(poster_path, backdrop_path, movieTitle, function(err) {
+				var poster_path = '/movies/css/img/nodata.jpg';
+				var backdrop_path = '/movies/css/img/backdrop.png';
+				
+				if (err) {
+					console.error(err);
+				} else {
+					poster_path = app_cache_handler.getFrontendCachePath('movies', movieTitle, result.poster_path);
+					backdrop_path = app_cache_handler.getFrontendCachePath('movies', movieTitle, result.backdrop_path);
+				}
+
+				var genre = 'Unknown';
+				if(result !== null && result.genres.length){
+					genre = result.genres[0].name;
+				}
+				var rating = 'Unknown',
+					original_title = movieTitle,
+					imdb_id = '',
+					runtime = 'Unknown',
+					overview = '',
+					certification =''
+				
+				if(result !== null){
+					rating = result.vote_average.toString();
+					original_title = result.original_title;
+					imdb_id = result.imdb_id;
+					runtime = result.runtime;
+					overview = result.overview;
+				}
+				
+				var metadata = [ movieTitle, original_title, poster_path, backdrop_path, imdb_id, rating, certification, genre, runtime, overview, movieInfos.cd ];
+				console.log('metadata', metadata);
 				storeMetadataInDatabase(metadata, function() {
 					loadMetadataFromDatabase(movieTitle, callback);
 				});
@@ -102,6 +104,7 @@ loadMetadataFromDatabase = function(movieTitle, callback) {
 		function(rows) {
 			if (typeof rows !== 'undefined' && rows.length > 0){
 				console.log('found info for movie' .green);
+				console.log(rows)
 				callback(rows);
 			} else {
 				console.log('new movie' .green);
@@ -112,29 +115,30 @@ loadMetadataFromDatabase = function(movieTitle, callback) {
 };
 
 storeMetadataInDatabase = function(metadata, callback) {
-    if(metadata !== null && metadata !== undefined){ 
-	   console.log('Writing data to table for', metadata[0] .green);
-	   db.query('INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?,?)', metadata);
-	   callback();
-    }
+	db.query('INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?,?)', metadata);
+	callback();
 };
 
 fetchMetadataFromTheMovieDB = function(movieTitle, year, callback) {
 	moviedb.searchMovie({ query: movieTitle, language: config.language, year: year }, function(err, result) {
-		if (err) {
-			console.error('Error downloading scraperdata',err);
-			callback(err);
+		if (err || (result && result.results.length > 0)) {
+			console.error(err);
+			callback(err, null);
 		}
 
-        moviedb.movieInfo({ id: result.results[0].id }, function(err, response) {
-            callback(err, response);
-        });
-	
+		if(result.results[0] !== undefined){
+			console.log('Scraper found data for movie', movieTitle, result.results[0])
+			moviedb.movieInfo({ id: result.results[0].id }, function(err, response) {
+				callback(err, response);
+			});
+		} else{
+			callback(err, null);
+		}
 	});
 };
 
 downloadMovieFanart = function(poster_path, backdrop_path, movieTitle, callback) {
-	if (poster_path !== '/movies/css/img/nodata.jpg' && backdrop_path !== '/movies/css/img/backdrop.jpg') {
+	if (poster_path && backdrop_path) {
 		var path = require('path');
 
 		var poster_url = "http://cf2.imgobject.com/t/p/w342",
@@ -155,6 +159,6 @@ downloadMovieFanart = function(poster_path, backdrop_path, movieTitle, callback)
 			callback(exception);
 		}
 	} else {
-		callback('Falling back to defaults');
+		callback('No Poster or Backdrop specified!');
 	}
 };
