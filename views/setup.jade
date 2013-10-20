@@ -22,6 +22,11 @@ html(lang="en")
 				} else{
 					$('input#language').val('en');
 				}
+				
+				var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+				if(isMac){
+					$('input#platform').val(OSX);
+				} 
 			});
 	body
 		#header
@@ -66,6 +71,7 @@ html(lang="en")
 					input(type="submit",value="Submit")
 					input(name="screensaver",type="hidden",value="dim")
 					input#language(name="language",type="hidden",value="en")
+					input#platform(name="platform",type="hidden",value="")
 					input(name="theme",type="hidden",value="wigo.css")
 					input(name="spotifyUser",type="hidden",value="")
 					input(name="spotifyPass",type="hidden",value="")

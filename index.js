@@ -159,7 +159,11 @@ app.post('/clearCache', function(req, res){
 			return res.send('Error clearing cache', e);
 		}
 		// Init Database
-		dblite.bin = "./bin/sqlite3/sqlite3";
+		if(config.platform === 'OSX'){
+			dblite.bin = "./bin/sqlite3/osx/sqlite3";
+		}else {
+			dblite.bin = "./bin/sqlite3/sqlite3";
+		}
 		var db = dblite('./lib/database/mcjs.sqlite');
 
 		db.query('DROP TABLE IF EXISTS ' + cache);
