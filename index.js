@@ -26,7 +26,7 @@ var express = require('express')
 	, dblite = require('dblite')
 	, http = require('http')
 	, server = require('http').createServer(app)
-	, io = require('socket.io').listen(server)
+	, io = require('socket.io').listen(3001)
 	, configuration_handler = require('./lib/handlers/configuration-handler');
 
 	io.set('log level', 1);

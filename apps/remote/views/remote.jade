@@ -18,7 +18,7 @@ html(lang="en")
 		.remote
 		
 		script.
-			var socket = io.connect('http://localhost:3000'); 
+			var socket = io.connect('http://localhost:3001'); 
 			socket.on('connect', function(data){
 				socket.emit('remote');	
 				
