@@ -105,7 +105,7 @@
 	}
 
 	/**** End of custom functions ***/
-	
+		
 	$.fn.mcjsp = function( method ) {
 		if ( methods[method] ) {
 			return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
