@@ -53,19 +53,19 @@ html(lang="en")
 					console.log(data);
 					socket.emit('screen');
 				});
-          
+
 				socket.on('controlling', function(data){
 					console.log(data);
 					var current = $(".selected");
-                  
+
 					if(data.action === "goLeft"){ 
 						console.log('left!')
 					}
 					else if(data.action === "goRight"){
-                     	console.log('Right!')     
+						console.log('Right!')     
 					}
 					else if(data.action === "enter"){
-                    	console.log('Enter!')      
+						console.log('Enter!')      
 					}
 				});
 			});
