@@ -1,4 +1,4 @@
-doctype 5
+﻿doctype 5
 html(lang="en")
 	head
 		title MediacenterJS
@@ -12,6 +12,8 @@ html(lang="en")
 		
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/jquery-ui-1.10.3.min.js")
+		
+		script(src="/core/js/socket.io.min.js")
 		
 		script(src="/core/js/plugins/jquery.idle-timer.js")
 		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
@@ -42,8 +44,30 @@ html(lang="en")
 				}
 				
 				delayNext();
-
+				
 				$('body').mcjs();
+				
+				//TODO: Get port from config file
+				var socket = io.connect('http://localhost:3000');
+				socket.on('connect', function(data){
+					console.log(data);
+					socket.emit('screen');
+				});
+          
+				socket.on('controlling', function(data){
+					console.log(data);
+					var current = $(".selected");
+                  
+					if(data.action === "goLeft"){ 
+						console.log('left!')
+					}
+					else if(data.action === "goRight"){
+                     	console.log('Right!')     
+					}
+					else if(data.action === "enter"){
+                    	console.log('Enter!')      
+					}
+				});
 			});
 		
 	body.homepage

@@ -25,8 +25,12 @@ var express = require('express')
 	, rimraf = require('rimraf')
 	, dblite = require('dblite')
 	, http = require('http')
+	, server = require('http').createServer(app)
+	, io = require('socket.io').listen(server)
 	, configuration_handler = require('./lib/handlers/configuration-handler');
 
+	io.set('log level', 1);
+	
 var config = configuration_handler.initializeConfiguration();
 
 var language = null;
@@ -196,6 +200,44 @@ function writeSettings(req, res){
 		res.redirect('/');
 	});
 }
+
+//Socket.io Server
+//TODO Put in seperate file
+io.sockets.on('connection', function (socket) {
+	console.log(socket);
+	
+	socket.on("screen", function(data){
+		socket.type = "screen";
+		ss = socket;
+		console.log("Screen ready...");
+	});
+	
+	socket.on("remote", function(data){
+		socket.type = "remote";
+		console.log("Remote ready...");
+	});
+
+	socket.on("control", function(data){
+		console.log(data);
+		if(socket.type === "remote"){
+			if(data.action === "tap"){
+				if(ss != undefined){
+					ss.emit("controlling", {action:"enter"});
+				}
+			}
+			else if(data.action === "swipeLeft"){
+				if(ss != undefined){
+					ss.emit("controlling", {action:"goLeft"});
+				}
+			}
+			else if(data.action === "swipeRight"){
+				if(ss != undefined){
+					ss.emit("controlling", {action:"goRight"});
+				}
+			}
+		}
+	});
+});
 
 app.set('port', process.env.PORT || 3000);
 
