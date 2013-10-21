@@ -377,6 +377,7 @@ This app also makes use of the following modules:
 ###Special thanks to:###
 
 * Sylvain https://github.com/flyinva for his French translation
+* Luis Eduardo Brito https://github.com/luiseduardobrito for his Portuguese translation
 * Kasper Isager https://github.com/kasperisager for his Danish translation
 * Jussi Vatjus https://github.com/jupe for his code support
 * Terry MooreII https://github.com/TerryMooreII For the Javascript Jabber app
