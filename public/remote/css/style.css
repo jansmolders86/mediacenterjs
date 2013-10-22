@@ -6,14 +6,15 @@
 	}
 
 	#remote-wrapper,
-	#clock-wrapper{
+	#button-wrapper{
 		width: 100%;
 		height: 100%;
 		text-align:center;
 		margin:auto;
 	}
-	#remote-wrapper{margin-top:10px;}
-	#clock-wrapper{ margin:75px 0; }
+	#remote-wrapper,
+	#button-wrapper{margin-top:60px;}
+	#remote-wrapper{ margin-top:75px; }
 	
 	.button{
 		cursor: pointer;
@@ -76,7 +77,43 @@
 	}
 	#header .settings{
 		position: absolute;
-		top: 18px;
+		top: 10px;
 		left: 10px;
+		font-size:28px;
+	}
+	
+	#button-wrapper div{margin-bottom:10px;}
+	
+	#remote-wrapper{
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		width: 200px;
+		border-radius: 80px;
+		height:100px;
+		background:#fff;
+	}
+	
+	#remote-wrapper div{
+		display:inline-block; 
+		margin-top:30px;
+		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+		-webkit-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+		-moz-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+		-o-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+		-ms-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+		transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+	}
+	
+	#remote-wrapper .left,
+	#remote-wrapper .right,
+	#remote-wrapper .enter{padding: 7px; border-radius: 30px;}
+	
+	#remote-wrapper .left{margin-right:15px;}
+	#remote-wrapper .right{margin-left:15px;}
+	
+	#remote-wrapper .left:hover,
+	#remote-wrapper .right:hover,
+	#remote-wrapper .enter:hover{		
+		background-color: #A4A4A4;
+		color: #FFFFFF;
 	}
 	

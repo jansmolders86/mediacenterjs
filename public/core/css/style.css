@@ -53,7 +53,12 @@ body{
 body.homepage{ overflow:hidden; }
 
 img{border:0; display:block;}
-*:focus { color:#fb8521; outline:none !important;} 
+*:focus { color:#fb8521;}
+
+*{ -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease;} 
 
 h1,
 h2,
@@ -183,7 +188,7 @@ a.backlink{
 	position:relative;
 }
 
-.focused{ border:2px solid #ddd; cursor:pointer; }
+.focused{ border:4px solid #FB8521; cursor:pointer; }
 
 
 /* Screensaver */ 
@@ -320,7 +325,13 @@ a.btn{
 	font-size:18px;
 	border:0;
 	border-radius:5px;
+	border-radius: 0.2em;
+	-webkit-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
+	-moz-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
+	box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
 }
+.btn.focused,
+.btn:hover{	background-color:#fff; color:#fb8521;}
 
 .floatright{ float:right; }
 .floatleft{ float:left; }

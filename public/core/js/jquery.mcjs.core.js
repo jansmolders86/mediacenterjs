@@ -180,13 +180,30 @@
 			});
 
 			socket.on('controlling', function(data){
-				var focused = $('li.focused')
-				,item = $('li')
+				var focused = $('.focused')
+				,listItem = $('li')
+				,anchorItem = $('#wrapper > a')
+				,rowAchorITem = $('.row > a')
+				,inputItem = $('input')
 				,elid = $(document.activeElement).is("input:focus");
 
 				if(data.action === "goLeft"){ 
-					if (item.prev().length == 0) item.eq(-1).addClass('focused');
-					focused.removeClass('focused').prev().addClass('focused');
+					if(listItem.length > 0){
+						var item = listItem;
+						_goLeft(focused, item);
+					}
+					else if(anchorItem > 0){
+						var item = anchorItem;
+						_goLeft(focused, item);
+					}
+					else if(rowAchorITem > 0){
+						var item = rowAchorITem;
+						_goLeft(focused, item);
+					}
+					else if(inputItem > 0){
+						var item = inputItem;
+						_goLeft(focused, item);
+					}
 				}
 				if(data.action === "back"){ 
 					if ($('.backlink').length > 0) document.location = $('.backlink').attr('href');
@@ -204,20 +221,48 @@
 					videojs("player").requestFullScreen()
 				}
 				else if(data.action === "goRight"){
-					if (focused.next().length == 0) item.eq(0).addClass('focused')
-					focused.removeClass('focused').next().addClass('focused');
+					//TODO: on last item move to next element
+					if(listItem.length > 0){
+						var item = listItem;
+						_goRight(focused, item);
+					}
+					else if(anchorItem > 0){
+						var item = anchorItem;
+						_goRight(focused, item);
+					}
+					else if(rowAchorITem > 0){
+						var item = rowAchorITem;
+						_goRight(focused, item);
+					}
+					else if(inputItem > 0){
+						var item = inputItem;
+						_goRight(focused, item);
+					}
 				}
 				else if(data.action === "enter"){
-					if (!elid) document.location = focused.find('a').attr('href');
+					if (!elid && focused.length > 0) document.location = focused.find('a').attr('href');
 				}
 			});
 		} else {
 			console.log('Make sure you include the socket.io clientside javascript on the page!')
 		}
+		
+
+		
 	}
 	
 	
 	/************ KEYBOARD HANDELING ***************/
+	
+	function _goRight(focused, item){
+		if (focused.next(item).length == 0)item.eq(0).addClass('focused');
+		focused.removeClass('focused').next(item).addClass('focused');
+	}	
+	
+	function _goLeft(focused, item){
+		if (item.prev(item).length == 0) item.eq(-1).addClass('focused');
+		focused.removeClass('focused').prev().addClass('focused');
+	}	
 	
 	// Catch and set keyevents
 	function _keyevents(o, $that){

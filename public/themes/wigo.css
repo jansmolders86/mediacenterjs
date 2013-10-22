@@ -137,11 +137,17 @@ a.btn{
 	padding:10px;
 	font-family: 'Open Sans', sans-serif;
 	color:#fff;
-	text-align:center;
 	font-size:18px;
 	border:0;
 	border-radius:5px;
+	border-radius: 0.2em;
+	-webkit-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
+	-moz-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
+	box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
 }
+.btn.focused,
+.btn:hover{	background-color:#fff; color:#fb8521;}
+
 
 em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red; font-style: normal; font-size: 13px;}
 
