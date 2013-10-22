@@ -6,34 +6,62 @@ html(lang="en")
 		meta(name="viewport" content="width=device-width initial-scale=1, maximum-scale=1, user-scalable=no")
 		// Core inclusion
 		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
-		
 		script(src="/core/js/jquery-1.8.2.min.js")
-		
 		script(src="/core/js/socket.io.min.js")
 		script(src="/core/js/plugins/quo.js")
 
 		style.
-			.remote{background:red;width:200px;height:200px;margin:50px auto;}
+		
+			body{
+				background:#FCFCFC;
+			}
+			.remote{
+				background:#FCFCFC;
+				width:300px;
+				height:300px;
+				margin:50px auto;
+				border-radius:150px;
+				border:1px solid #ccc;
+			}
+			
 	body
 		.remote
-		
+			.tap
 		script.
 			var socket = io.connect('http://localhost:3001'); 
+			
+			var activeState = '2px solid #da7f09';
+			var normalState = '1px solid #ccc';
+
 			socket.on('connect', function(data){
 				socket.emit('remote');	
 				
 				$$(".remote").swipeLeft(function(){
-					alert('swiping left');
+					
+					$(".remote").css('borderLeft',activeState);
+					setTimeout(function(){
+						$(".remote").css('borderLeft',normalState);
+					},300);
+					
 					socket.emit('control',{action:"swipeLeft"}); 
 				});
 
 				$$(".remote").swipeRight(function(){
-					alert('swiping right');
+					
+					$(".remote").css('borderRight',activeState);
+					setTimeout(function(){
+						$(".remote").css('borderRight',normalState);
+					},300);
+					
 					socket.emit('control',{action:"swipeRight"}); 
 				});
 				$$(".remote").tap(function(){
-					alert('Tapping');
-					socket.emit('control',{action:"tap"}); 
+					$(".remote").css('border',activeState);
+					setTimeout(function(){
+						$(".remote").css('border',normalState);
+					},300);
+					
+					//socket.emit('control',{action:"tap"}); 
 				});
 
 				socket.on("loading", function(data){

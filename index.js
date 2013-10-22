@@ -203,6 +203,7 @@ function writeSettings(req, res){
 
 //Socket.io Server
 //TODO Put in seperate file
+var ss;
 io.sockets.on('connection', function (socket) {
 	console.log(socket);
 	
