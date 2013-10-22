@@ -54,18 +54,24 @@ html(lang="en")
 					socket.emit('screen');
 				});
 
+				
 				socket.on('controlling', function(data){
-					console.log(data);
-					var current = $(".selected");
+					var focused = $('li.focused')
+					,item = $('li')
+					,elid = $(document.activeElement).is("input:focus");
 
 					if(data.action === "goLeft"){ 
-						console.log('left!')
+						focused.removeClass('focused').prev('li').addClass('focused');
+						if (item.prev().length == 0) item.eq(-1).addClass('focused');
 					}
 					else if(data.action === "goRight"){
-						console.log('Right!')     
+						if (focused.next().length == 0){
+							item.eq(0).addClass('focused');
+						} 
+						focused.removeClass('focused').next('li').addClass('focused');
 					}
 					else if(data.action === "enter"){
-						console.log('Enter!')      
+						if (!elid) document.location = focused.find('a').attr('href');
 					}
 				});
 			});

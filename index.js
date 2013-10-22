@@ -205,8 +205,6 @@ function writeSettings(req, res){
 //TODO Put in seperate file
 var ss;
 io.sockets.on('connection', function (socket) {
-	console.log(socket);
-	
 	socket.on("screen", function(data){
 		socket.type = "screen";
 		ss = socket;

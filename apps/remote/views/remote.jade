@@ -8,63 +8,94 @@ html(lang="en")
 		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/socket.io.min.js")
-		script(src="/core/js/plugins/quo.js")
-
-		style.
-		
-			body{
-				background:#FCFCFC;
-			}
-			.remote{
-				background:#FCFCFC;
-				width:300px;
-				height:300px;
-				margin:50px auto;
-				border-radius:150px;
-				border:1px solid #ccc;
-			}
-			
-	body
-		.remote
-			.tap
 		script.
-			var socket = io.connect('http://localhost:3001'); 
-			
-			var activeState = '2px solid #da7f09';
-			var normalState = '1px solid #ccc';
+			// TODO: Make ip and port dynamic
+			var socket = io.connect('http://pc0030.isaac.local:3001')
+			, activeState = '3px solid #da7f09'
+			, normalState = '2px solid #ccc';
 
 			socket.on('connect', function(data){
 				socket.emit('remote');	
 				
-				$$(".remote").swipeLeft(function(){
-					
-					$(".remote").css('borderLeft',activeState);
-					setTimeout(function(){
-						$(".remote").css('borderLeft',normalState);
-					},300);
-					
+				$(".left").on('click',function(){
 					socket.emit('control',{action:"swipeLeft"}); 
 				});
 
-				$$(".remote").swipeRight(function(){
-					
-					$(".remote").css('borderRight',activeState);
-					setTimeout(function(){
-						$(".remote").css('borderRight',normalState);
-					},300);
-					
+				$(".right").on('click',function(){
 					socket.emit('control',{action:"swipeRight"}); 
 				});
-				$$(".remote").tap(function(){
-					$(".remote").css('border',activeState);
-					setTimeout(function(){
-						$(".remote").css('border',normalState);
-					},300);
-					
-					//socket.emit('control',{action:"tap"}); 
+				
+				$(".enter").on('click',function(){
+					socket.emit('control',{action:"tap"}); 
 				});
 
 				socket.on("loading", function(data){
 					console.log(data);
 				});  
 			});
+			
+		style.
+			body{
+				background:#FCFCFC;
+			}
+
+			#remote-wrapper{
+				width:300px;
+				height:300px;
+				margin:200px auto;
+			}
+			
+			.button{
+				cursor: pointer;
+				display: inline-block;
+				vertical-align: middle;
+				min-height: 1em;
+				outline: none;
+				border: none;
+				background-color: #EBEBEB;
+				color: #999999;
+				padding: 0.8em 1.5em;
+				font-size: 1rem;
+				text-transform: uppercase;
+				line-height: 1;
+				font-weight: bold;
+				font-style: normal;
+				text-align: center;
+				text-decoration: none;
+				-webkit-border-radius: 0.2em;
+				-moz-border-radius: 0.2em;
+				border-radius: 0.2em;
+				-webkit-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
+				-moz-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
+				box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				-ms-box-sizing: border-box;
+				box-sizing: border-box;
+				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+				-webkit-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+				-moz-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+				-o-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+				-ms-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+				transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+			}
+			
+			.button:hover{
+				opacity: 1 !important;
+				background-color: #A4A4A4;
+				color: #FFFFFF;
+			}
+			
+			
+			
+	body
+		#remote-wrapper
+			.left.button <
+			.enter.button ()
+			.right.button >
+
+			
