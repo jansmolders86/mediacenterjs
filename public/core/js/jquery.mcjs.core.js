@@ -182,8 +182,7 @@
 			socket.on('controlling', function(data){
 				var focused = $('.focused')
 				,listItem = $('li')
-				,anchorItem = $('#wrapper > a')
-				,rowAchorITem = $('.row > a')
+				,buttonItem = $('a.btn')
 				,inputItem = $('input')
 				,elid = $(document.activeElement).is("input:focus");
 
@@ -191,16 +190,10 @@
 					if(listItem.length > 0){
 						var item = listItem;
 						_goLeft(focused, item);
-					}
-					else if(anchorItem > 0){
-						var item = anchorItem;
+					}else if(buttonItem > 0){
+						var item = buttonItem;
 						_goLeft(focused, item);
-					}
-					else if(rowAchorITem > 0){
-						var item = rowAchorITem;
-						_goLeft(focused, item);
-					}
-					else if(inputItem > 0){
+					}else if(inputItem > 0){
 						var item = inputItem;
 						_goLeft(focused, item);
 					}
@@ -225,16 +218,10 @@
 					if(listItem.length > 0){
 						var item = listItem;
 						_goRight(focused, item);
-					}
-					else if(anchorItem > 0){
-						var item = anchorItem;
-						_goRight(focused, item);
-					}
-					else if(rowAchorITem > 0){
-						var item = rowAchorITem;
-						_goRight(focused, item);
-					}
-					else if(inputItem > 0){
+					}else if(buttonItem > 0){
+						var item = buttonItem;
+						_goLeft(focused, item);
+					}else if(inputItem > 0){
 						var item = inputItem;
 						_goRight(focused, item);
 					}
@@ -246,9 +233,6 @@
 		} else {
 			console.log('Make sure you include the socket.io clientside javascript on the page!')
 		}
-		
-
-		
 	}
 	
 	
