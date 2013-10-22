@@ -46,34 +46,6 @@ html(lang="en")
 				delayNext();
 				
 				$('body').mcjs();
-				
-				//TODO: Get port from config file
-				var socket = io.connect('http://localhost:3001');
-				socket.on('connect', function(data){
-					console.log(data);
-					socket.emit('screen');
-				});
-
-				
-				socket.on('controlling', function(data){
-					var focused = $('li.focused')
-					,item = $('li')
-					,elid = $(document.activeElement).is("input:focus");
-
-					if(data.action === "goLeft"){ 
-						focused.removeClass('focused').prev('li').addClass('focused');
-						if (item.prev().length == 0) item.eq(-1).addClass('focused');
-					}
-					else if(data.action === "goRight"){
-						if (focused.next().length == 0){
-							item.eq(0).addClass('focused');
-						} 
-						focused.removeClass('focused').next('li').addClass('focused');
-					}
-					else if(data.action === "enter"){
-						if (!elid) document.location = focused.find('a').attr('href');
-					}
-				});
 			});
 		
 	body.homepage

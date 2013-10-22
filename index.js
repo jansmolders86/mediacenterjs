@@ -26,10 +26,8 @@ var express = require('express')
 	, dblite = require('dblite')
 	, http = require('http')
 	, server = require('http').createServer(app)
-	, io = require('socket.io').listen(3001)
+	, remoteControl = require('./lib/utils/remote-control')
 	, configuration_handler = require('./lib/handlers/configuration-handler');
-
-	io.set('log level', 1);
 	
 var config = configuration_handler.initializeConfiguration();
 
@@ -202,41 +200,7 @@ function writeSettings(req, res){
 }
 
 //Socket.io Server
-//TODO Put in seperate file
-var ss;
-io.sockets.on('connection', function (socket) {
-	socket.on("screen", function(data){
-		socket.type = "screen";
-		ss = socket;
-		console.log("Screen ready...");
-	});
-	
-	socket.on("remote", function(data){
-		socket.type = "remote";
-		console.log("Remote ready...");
-	});
-
-	socket.on("control", function(data){
-		console.log(data);
-		if(socket.type === "remote"){
-			if(data.action === "tap"){
-				if(ss != undefined){
-					ss.emit("controlling", {action:"enter"});
-				}
-			}
-			else if(data.action === "swipeLeft"){
-				if(ss != undefined){
-					ss.emit("controlling", {action:"goLeft"});
-				}
-			}
-			else if(data.action === "swipeRight"){
-				if(ss != undefined){
-					ss.emit("controlling", {action:"goRight"});
-				}
-			}
-		}
-	});
-});
+remoteControl.remoteControl();
 
 app.set('port', process.env.PORT || 3000);
 

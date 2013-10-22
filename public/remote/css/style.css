@@ -1,0 +1,82 @@
+	body{
+		background: #f7f7f7;
+		font-family: 'Open Sans', sans-serif; 
+		font-weight:400;
+		color:#afb7ba;
+	}
+
+	#remote-wrapper,
+	#clock-wrapper{
+		width: 100%;
+		height: 100%;
+		text-align:center;
+		margin:auto;
+	}
+	#remote-wrapper{margin-top:10px;}
+	#clock-wrapper{ margin:75px 0; }
+	
+	.button{
+		cursor: pointer;
+		display: inline-block;
+		vertical-align: middle;
+		min-height: 1em;
+		outline: none;
+		border: none;
+		background-color: #EBEBEB;
+		color: #999999;
+		padding: 0.8em 1.5em;
+		font-size: 1rem;
+		text-transform: uppercase;
+		line-height: 1;
+		font-weight: bold;
+		font-style: normal;
+		text-align: center;
+		text-decoration: none;
+		-webkit-border-radius: 0.2em;
+		-moz-border-radius: 0.2em;
+		border-radius: 0.2em;
+		-webkit-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
+		-moz-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
+		box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		-ms-box-sizing: border-box;
+		box-sizing: border-box;
+		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+		-webkit-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+		-moz-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+		-o-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+		-ms-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+		transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+	}
+	
+	.button:hover{
+		opacity: 1 !important;
+		background-color: #A4A4A4;
+		color: #FFFFFF;
+	}
+	
+	.divider{color:#afb7ba !important;}
+	
+	#clock ul{lit-style:none; margin:0; padding:0;}
+	#clock li{display:inline-block;  margin:0; padding:0;}
+	
+	#header{
+		position:fixed;
+		top:0;
+		left:0;
+		width:100%;
+		background:#afb7ba;
+		height:50px;
+		color:#fff;
+	}
+	#header .settings{
+		position: absolute;
+		top: 18px;
+		left: 10px;
+	}
+	

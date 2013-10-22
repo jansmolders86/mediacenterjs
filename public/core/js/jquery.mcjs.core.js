@@ -58,7 +58,8 @@
 			
 			window.scrollTo(0,0);
 			
-			_initpages(o, $(this))
+			_initpages(o, $(this));
+			_websocketHandler(o, $(this));
 			_resizeviewport(o, $(this)); 	// Strech bg to fullscreen
 			_keyevents(o,$(this)); 			// init keys
 			_screensaver(o, $(this));
@@ -166,9 +167,57 @@
 		});
 	}
 	
+	/************ Remote Control ****************/
+	
+	//Socket.io handler for remote control
+	function _websocketHandler(o, $that){
+		//TODO: Get port from config file
+		if(io !== undefined){
+			var socket = io.connect('http://localhost:3001');
+			socket.on('connect', function(data){
+				console.log(data);
+				socket.emit('screen');
+			});
+
+			socket.on('controlling', function(data){
+				var focused = $('li.focused')
+				,item = $('li')
+				,elid = $(document.activeElement).is("input:focus");
+
+				if(data.action === "goLeft"){ 
+					if (item.prev().length == 0) item.eq(-1).addClass('focused');
+					focused.removeClass('focused').prev().addClass('focused');
+				}
+				if(data.action === "back"){ 
+					if ($('.backlink').length > 0) document.location = $('.backlink').attr('href');
+				}
+				if(data.action === "play"){ 
+					videojs("player").play();
+				}
+				if(data.action === "pause"){ 
+					videojs("player").pause();
+				}
+				if(data.action === "stop"){ 
+					//TODO:
+				}
+				if(data.action === "fullscreen"){ 
+					videojs("player").requestFullScreen()
+				}
+				else if(data.action === "goRight"){
+					if (focused.next().length == 0) item.eq(0).addClass('focused')
+					focused.removeClass('focused').next().addClass('focused');
+				}
+				else if(data.action === "enter"){
+					if (!elid) document.location = focused.find('a').attr('href');
+				}
+			});
+		} else {
+			console.log('Make sure you include the socket.io clientside javascript on the page!')
+		}
+	}
+	
 	
 	/************ KEYBOARD HANDELING ***************/
-	
 	
 	// Catch and set keyevents
 	function _keyevents(o, $that){
