@@ -315,7 +315,8 @@ input,
 select{ display:block; width:200px; padding:5px 10px; float:left; -webkit-appearance: none;}
 
 input[type=submit],
-a.btn{
+.btn,
+.button{
 	background-color:#fb8521;
 	padding:10px;
 	font-family: 'Open Sans', sans-serif;
@@ -331,6 +332,8 @@ a.btn{
 	box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
 }
 .btn.focused,
+.button.focused,
+.button:hover,
 .btn:hover{	background-color:#fff; color:#fb8521;}
 
 .floatright{ float:right; }

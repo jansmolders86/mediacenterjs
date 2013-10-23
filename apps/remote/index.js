@@ -19,8 +19,44 @@
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
 
-// Render the indexpage
-exports.index = function(req, res, next){
-	res.render('remote');
-};
+var express = require('express')
+, app = express()
+, fs = require('fs')
+, ini = require('ini')
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
+exports.index = function(req, res, next){	
+	var allThemes = new Array()
+	, availableLanguages = []
+	, availablethemes = fs.readdirSync('./public/themes/')
+	, availableTranslations = fs.readdirSync('./public/translations/');
+	
+	availablethemes.forEach(function(file){
+		allThemes.push(file);
+	});
+		
+	availableTranslations.forEach(function(file){
+		if (file.match('translation')){
+			var languageCode = file.replace(/translation_|.json/g,"")
+			availableLanguages.push(languageCode);
+		}
+	});
+
+	res.render('remote',{
+		movielocation: config.moviepath,
+		selectedTheme: config.theme,
+		musiclocation : config.musicpath,
+		tvlocation : config.tvpath,
+		localIP : config.localIP,
+		remotePort : config.remotePort,
+		language: config.language,
+		availableLanguages: availableLanguages,
+		onscreenkeyboard: config.onscreenkeyboard,
+		location: config.location,
+		screensaver: config.screensaver,
+		spotifyUser: config.spotifyUser,
+		spotifyPass: config.spotifyPass,
+		themes:allThemes,
+		port: config.port
+	});		
+};

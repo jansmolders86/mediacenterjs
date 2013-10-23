@@ -98,7 +98,12 @@ html(lang="en")
 						select#language(name="language")
 							- for lang in availableLanguages
 								option(value=lang, selected=lang == language) #{lang}
-					
+					.row
+						label Local IP (for Remote)
+						input.keyboard(name="localIP",type="text",placeholder="localhost", value= localIP)	
+					.row
+						label Remote port (specific port for Remote)
+						input.keyboard(name="remotePort",type="text",placeholder="3001", value= remotePort)	
 					.row
 						label #{lingua.setting_location}
 						input.keyboard(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")					

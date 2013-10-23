@@ -193,9 +193,21 @@ app.post('/submit', function(req, res){
 	});
 });
 
+app.post('/submitRemote', function(req, res){
+	writeSettingsRemote(req, res, function(){
+		res.redirect('/remote/');
+	});
+});
+
 function writeSettings(req, res){
 	configuration_handler.saveSettings(req.body, function() {
 		res.redirect('/');
+	});
+}
+
+function writeSettingsRemote(req, res){
+	configuration_handler.saveSettings(req.body, function() {
+		res.redirect('/remote/');
 	});
 }
 

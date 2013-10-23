@@ -46,6 +46,8 @@ exports.index = function(req, res, next){
 		selectedTheme: config.theme,
 		musiclocation : config.musicpath,
 		tvlocation : config.tvpath,
+		localIP : config.localIP,
+		remotePort : config.remotePort,
 		language: config.language,
 		availableLanguages: availableLanguages,
 		onscreenkeyboard: config.onscreenkeyboard,
