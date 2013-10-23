@@ -178,38 +178,28 @@ app.post('/clearCache', function(req, res){
 });
 
 app.post('/setuppost', function(req, res){
-	writeSettings(req, res, function(){
+	configuration_handler.saveSettings(req.body, function() {
 		res.render('finish');
 	});
 });
+
+// Form  handlers
 
 app.get('/configuration', function(req, res){
 	res.send(config);
 });
 	
 app.post('/submit', function(req, res){
-	writeSettings(req, res, function(){
+	configuration_handler.saveSettings(req.body, function() {
 		res.redirect('/');
 	});
 });
 
 app.post('/submitRemote', function(req, res){
-	writeSettingsRemote(req, res, function(){
+	configuration_handler.saveSettings(req.body, function() {
 		res.redirect('/remote/');
 	});
 });
-
-function writeSettings(req, res){
-	configuration_handler.saveSettings(req.body, function() {
-		res.redirect('/');
-	});
-}
-
-function writeSettingsRemote(req, res){
-	configuration_handler.saveSettings(req.body, function() {
-		res.redirect('/remote/');
-	});
-}
 
 //Socket.io Server
 remoteControl.remoteControl();

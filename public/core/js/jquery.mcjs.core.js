@@ -182,52 +182,43 @@
 			socket.on('controlling', function(data){
 				var focused = $('.focused')
 				,listItem = $('li')
-				,buttonItem = $('a.btn')
-				,inputItem = $('input')
 				,elid = $(document.activeElement).is("input:focus");
 
 				if(data.action === "goLeft"){ 
 					if(listItem.length > 0){
 						var item = listItem;
 						_goLeft(focused, item);
-					}else if(buttonItem > 0){
-						var item = buttonItem;
-						_goLeft(focused, item);
-					}else if(inputItem > 0){
-						var item = inputItem;
-						_goLeft(focused, item);
 					}
 				}
 				if(data.action === "back"){ 
 					if ($('.backlink').length > 0) document.location = $('.backlink').attr('href');
 				}
-				if(data.action === "play"){ 
-					videojs("player").play();
-				}
 				if(data.action === "pause"){ 
-					videojs("player").pause();
-				}
-				if(data.action === "stop"){ 
-					//TODO:
+					if (!elid){
+						if(videojs("player").paused()){
+							videojs("player").play();
+						} else {
+							videojs("player").pause();
+						}
+					}
 				}
 				if(data.action === "fullscreen"){ 
-					videojs("player").requestFullScreen()
+					videojs("player").requestFullScreen();
 				}
 				else if(data.action === "goRight"){
 					//TODO: on last item move to next element
 					if(listItem.length > 0){
 						var item = listItem;
 						_goRight(focused, item);
-					}else if(buttonItem > 0){
-						var item = buttonItem;
-						_goLeft(focused, item);
-					}else if(inputItem > 0){
-						var item = inputItem;
-						_goRight(focused, item);
 					}
 				}
 				else if(data.action === "enter"){
-					if (!elid && focused.length > 0) document.location = focused.find('a').attr('href');
+					if (!elid && focused.length > 0){
+						var attrHref = focused.find('a').attr('href');
+						if (typeof attrHref !== 'undefined' && attrHref !== false){
+							document.location = attrHref
+						}
+					}
 				}
 			});
 		} else {
