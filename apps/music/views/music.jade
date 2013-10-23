@@ -49,12 +49,11 @@ html(lang="en")
 				img(src="/core/icons/back.png")
 			h1 #{lingua.music}
 		#wrapper
-			#musicWrapper
-				ul.music(data-bind="foreach:  $data")
-					li.boxed
-						img.cover(src="/core/css/img/ajax-loader.gif")
-						.overlay
-						a.title(data-bind="text:$data")
+			ul.music(data-bind="foreach:  $data")
+				li.boxed
+					img.cover(src="/core/css/img/ajax-loader.gif")
+					.overlay
+					a.title(data-bind="text:$data")
 			#tracklist
 				#albumInfo
 					img.cover(src="/core/css/img/ajax-loader.gif")			

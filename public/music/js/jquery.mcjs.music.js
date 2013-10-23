@@ -373,7 +373,7 @@
 	/* default values for this plugin */
 	$.fn.mcjsm.defaults = {
 		datasetKey: 'mcjsmusic' //always lowercase
-		, musicListSelector: '#musicWrapper' 
+		, musicListSelector: '.music' 
 		, trackListSelector: '#tracklist' 
 		, playerSelector: '#player' 
 		, headerSelector: '#header' 
