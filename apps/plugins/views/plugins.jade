@@ -29,6 +29,10 @@ html(lang="en")
 				img(src="/core/icons/back.png")
 			h1  Plugins		
 		#wrapper
+
+			div.message.boxed(data-bind="visible:message() != ''")
+				span(data-bind="html:message")
+			
 			.loading.boxed
 				div
 					img(src="/core/css/img/ajax-loader.gif") 
@@ -45,11 +49,14 @@ html(lang="en")
 					// ko if: isInstalled() === false 
 					a.btn.install(data-bind="{click: install}")	Install plugin
 					// /ko	
-					// ko if: isUpgradable() === true 
-					a.btn.upgrade(data-bind="{click: upgrade}") Upgrade plugin
-					// /ko
 					// ko if: isInstalled() === true 
 					a.btn.remove(data-bind="{click: remove}") Remove plugin
 					// /ko	
-			
+					// ko if: isUpgradable() === true 
+					a.btn.upgrade(data-bind="{click: upgrade}") Upgrade plugin
+					// /ko
+
+
+			div.boxed(data-bind="visible:upgradeAll().length > 0 ")
+				a.btn.upgrade(data-bind="{click: upgradeAllPlugins.bind($data, upgradeAll() )}") Upgrade All
 			

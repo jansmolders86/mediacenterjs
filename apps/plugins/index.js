@@ -51,17 +51,18 @@ exports.get = function(req, res, next){
 			break;		
 		}	
 	}
+
 	
 	if(!action){
 		switch(optionalParam) {
 			case('uninstall'):
-				functions.uninstallPlugin(req, res, infoRequest);
+				functions.pluginManager(req, res, infoRequest, 'remove');
 			break;	
 			case('install'):
-				functions.installPlugin(req,res, infoRequest);
+				functions.pluginManager(req,res, infoRequest, 'install');
 			break;
 			case('upgrade'):
-				functions.upgradePlugin(req,res, infoRequest);
+				functions.pluginManager(req,res, infoRequest, 'install');  //for some reason update isnt working
 			break;		
 		}
 	}

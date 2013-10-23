@@ -19,6 +19,8 @@ var express = require('express')
 
 var getInstalledPlugins = function(){
 	var nodeModules = __dirname + '/../../node_modules';
+	installedPlugins = [];
+	upgradablePluginList = [];
 
 	fs.readdirSync(nodeModules).forEach(function(name){
 		//Check if the folder in the node_modules starts with the prefix
@@ -28,14 +30,16 @@ var getInstalledPlugins = function(){
 		
 		var info = {};
 		var data = fs.readFileSync(nodeModules + '/' + name + '/package.json' , 'utf8');
+        
         try{
         	info = JSON.parse(data);
         }catch(e){
         	console.log('JSON Parse Error')
         	info = {
-        		version:"0.0.0"
+        		version: "0.0.0"
         	}
         }
+		
 		var plugin = {
 			name: name,
 			info: info
@@ -47,15 +51,24 @@ var getInstalledPlugins = function(){
 
 exports.getAvailablePlugins = function(req, res){
 
-	console.log('Looking for available plugins...' .green)
+	console.log('Looking for available plugins...' .green);
+	
 	getInstalledPlugins();
 
 	exec(search + pluginPrefix, function callback(error, stdout, stderr){
 		//TODO: NEED TO CACHE THE SEARCH RESULTS!!! SLOWWWWWW Page loads.
 		if (error){
-			console.log('Error: Unable to retieve plugins list');
+			var message = 'Error: Unable to retieve plugins list <br /> ' + stderr; 
+			console.log(message);
+			res.json({message:message, plugins:[]});
+			return;
+
 		} else {
-			buildPluginList(stdout);
+			var plugins = buildPluginList(stdout);
+			res.json({
+				plugins:plugins,
+				upgradablePlugins: upgradablePluginList
+			});
 		}
 	});
 
@@ -105,8 +118,8 @@ exports.getAvailablePlugins = function(req, res){
 
 			plugins.push(plugin);
 		});
-
-		res.json(plugins);
+		
+		return plugins;
 	};
 	
 	var isPluginCurrentlyInstalled = function(array, name, version){
@@ -120,74 +133,59 @@ exports.getAvailablePlugins = function(req, res){
 		array.forEach(function(val){
 
 			if (val.name === name) {
+				var isUpgradable = false;
+				if (semver.gt(version, val.info.version))
+					isUpgradable = true;
+
 				info.isInstalled = true;
-				info.isUpgradable = semver.gt(version, val.info.version);
+				info.isUpgradable = isUpgradable;
+
+				if (isUpgradable)
+					upgradablePluginList.push(val.name.substr(pluginPrefix.length));
+
+
 				return false; //break loop;
 			}
 		});
 		
-		if (info.isUpgradable)
-			upgradablePluginList.push(info.name);
-
+		
 		return info;
 	};
 };	
 
-exports.uninstallPlugin = function(req, res, pluginName){
-	console.log('Plugins.uninstallPlugin', pluginName);
+exports.pluginManager = function(req, res, pluginName, action){
+	console.log('Plugins.pluginManager', pluginName);
+	if (!pluginName || pluginName === undefined || !action || action === undefined){
+		res.json({
+			error: 1,
+			message: "Invalid parameters"
+		})
+		return;
+	}
+	var name = pluginPrefix + pluginName;
+	console.log('Plugins.pluginManager: ' + action + 'ing ' + name);
 	
-	if (!pluginName || pluginName === undefined)
-		return;
-
-	var name = pluginPrefix + pluginName;
-	console.log('Plugins.uninstallPlugin: Uninstalling ' + name);
-
-	exec(remove + name, function callback(error, stdout, stderr){
+	exec(npm + ' ' + action + ' ' + name, function callback(error, stdout, stderr){
+		console.log(npm + ' ' + action + ' ' + name)
+		console.log(stdout)
 		if (error){
-			console.log("Error: Unable to uninstall plugin: " + name);
+			console.log('Error: Unable to ' + action + ' plugin: ' + name + '\n' + error);
+			
+			res.json({
+				error: 1,
+				message: 'Unable to ' + action + ' ' + pluginName+ '.'
+
+			});
+
 			return;
-		} else {		
-			console.log('Plugins.uninstallPlugin: Uninstalled');
-			res.redirect('/plugins/');
-		}
-	});
-};
 
-
-exports.upgradePlugin = function(req, res, pluginName){
-	console.log('Plugins.upgradePlugin', pluginName);
-	
-	if (!pluginName || pluginName === undefined)
-		return;
-
-	var name = pluginPrefix + pluginName;
-	console.log('Plugins.upgradePlugin: Upgrading ' + name);
-
-	exec(upgrade + name, function callback(error, stdout, stderr){
-		if (error){
-			console.log("Error: Unable to upgrade plugin: " + name);
-			return;
-		} else {		
-			console.log('Plugins.upgradePlugin: Upgraded');
-			res.redirect('/plugins/');
-		}
-	});
-};
-
-exports.installPlugin = function(req, res, pluginName){
-	console.log('Plugins.installPlugin', pluginName);
-	if (!pluginName || pluginName === undefined)
-		return;
-
-	var name = pluginPrefix + pluginName;
-	console.log('Plugins.installPlugin: Installing ' + name);
-	exec(install + name, function callback(error, stdout, stderr){
-		if (error){
-			console.log("Error: Unable to install plugin: " + name);
-			return;
 		} else {
-			console.log('Plugins.installPlugin: installed');			
-			res.redirect('/plugins/');
+			console.log('Plugins.pluginManager: ' + action + 'ed.');			
+				
+			res.json({
+				error: 0,
+				message: pluginName +  ' ' + action + ' successfully.'  
+			});
 		}
 	});
 };

@@ -40,15 +40,46 @@
 		});
 	}
 	
+
+
 	/**** Start of custom functions ***/
 	
 	function _loadItems(o){
-	
+		$('.loading').show();
+
 		if (!o.viewModel) {
 			// create initial viewmodel
-			console.log('asd')
+			
 			o.viewModel = {};
 			o.viewModel.plugin = ko.observableArray();
+			o.viewModel.message = ko.observable('');
+			o.viewModel.upgradeAll = ko.observableArray([]);
+
+			o.viewModel.upgradeAllPlugins = function(data){
+				var requests = [];
+				console.log(data)
+				for(var i=0; i<data.length; i++){
+					
+					requests.push($.ajax({
+						url: '/plugins/'+data[i]+'/upgrade', 
+						type: 'get',
+						dataType: 'json',
+						beforeSend: function(){
+								o.viewModel.message('Upgrading ' + data[i] + '...')
+							}
+						}).done(function(data){
+							setTimeout(function(){
+								o.viewModel.message(data.message);
+								
+							}, 1000);	 
+					}));
+				}
+				$.when.apply($, requests).then(function(){
+					o.viewModel.message('All plugins upgraded successfully');
+					_loadItems(o);
+				});
+			}
+
 			ko.applyBindings(o.viewModel,o.$that[0]);
 		}	
 	
@@ -57,22 +88,35 @@
 			type: 'get',
 			dataType: 'json'
 		}).done(function(data){	
-		
+			$('.message').fadeOut('slow');
 			$('.loading').hide();
 			
-			var pluginList = [];
-			$.each(data, function() {
-				var plugin = new pluginModel(this);
-				pluginList.push(plugin);
-			});
-			
-			o.viewModel.plugin(pluginList);
-			o.viewModel.plugin.sort();
+			if (data.message){
+				o.viewModel.message(data.message);
+			}else{
+					
+				var pluginList = [];
+				$.each(data.plugins, function() {
+					var plugin = new pluginModel(this, o);
+					pluginList.push(plugin);
+				});
+				
+				o.viewModel.plugin(pluginList);
+				o.viewModel.plugin.sort();
+				//o.viewModel.message('')
+				o.viewModel.upgradeAll(data.upgradablePlugins);	
+							
+			}
+
 		});
 	}
 	
-	var pluginModel = function (json) {
-		var that 			= this;
+	var pluginModel = function (json, o) {
+		
+		var timeout 		= 5000;
+
+		var that 			= this;	
+		var jqxhr;
 		this.name 			= ko.observable(json.name);
 		this.desc 			= ko.observable(json.desc);
 		this.author			= ko.observable(json.author);
@@ -82,24 +126,50 @@
 		this.isUpgradable	= ko.observable(json.isUpgradable);
 
 		this.install = function () {
-			$.ajax({
+			jqxhr = $.ajax({
 				url: '/plugins/'+json.name+'/install', 
 				type: 'get',
-				dataType: 'json'
+				dataType: 'json',
+				beforeSend: function(){
+					o.viewModel.message('Installing ' + json.name + '...')
+				}
+			}).done(function(data){
+				setTimeout(function(){
+					o.viewModel.message(data.message);
+					_loadItems(o);
+				}, timeout);	//This is just to give it the feel that something is happening 
 			});
 		};
+
 		this.upgrade = function () {
-			$.ajax({
+			jqxhr = $.ajax({
 				url: '/plugins/'+json.name+'/upgrade', 
 				type: 'get',
-				dataType: 'json'
+				dataType: 'json',
+				beforeSend: function(){
+					o.viewModel.message('Upgrading ' + json.name + '...')
+				}
+			}).done(function(data){
+				setTimeout(function(){
+					o.viewModel.message(data.message);
+					_loadItems(o);
+				}, timeout);	 
 			});
 		};
+		
 		this.remove = function () {
-			$.ajax({
-				url: '/plugins/'+json.name+'/remove', 
+			jqxhr = $.ajax({
+				url: '/plugins/'+json.name+'/uninstall', 
 				type: 'get',
-				dataType: 'json'
+				dataType: 'json',
+				beforeSend: function(){
+					o.viewModel.message('Uninstalling ' + json.name + '...')
+				}
+			}).done(function(data){
+				setTimeout(function(){
+					o.viewModel.message(data.message);
+					_loadItems(o);
+				}, timeout);	 
 			});
 		};
 	}
