@@ -73,13 +73,13 @@
 			ko.applyBindings(o.viewModel,o.$that[0]);
 			
 			// TODO: click handler ko
-			$(o.musicListSelector+' ul > li').on('click tap', function(e) {
+			$(o.musicListSelector+' > li').on('click tap', function(e) {
 				e.preventDefault();	
 				
-				$(o.musicListSelector+' ul > li').each(function(){
-					if($(o.musicListSelector+' ul > li').hasClass(o.playingClass) || $(o.musicListSelector).find('li').hasClass(o.selectedClass)){
-						$(o.musicListSelector+' ul > li').removeClass(o.playingClass);
-						$(o.musicListSelector+' ul > li').removeClass(o.selectedClass);
+				$(o.musicListSelector+' > li').each(function(){
+					if($(o.musicListSelector+' > li').hasClass(o.playingClass) || $(o.musicListSelector).find('li').hasClass(o.selectedClass)){
+						$(o.musicListSelector+' > li').removeClass(o.playingClass);
+						$(o.musicListSelector+'> li').removeClass(o.selectedClass);
 					}
 				});
 
@@ -151,21 +151,21 @@
 	}
 	
 	function _focusedItem(o){
-		$(o.musicListSelector+'ul > li').on({
+		$(o.musicListSelector+' > li').on({
 			mouseenter: function() {	
 				$(this).addClass(o.focusedClass);
 			},
 			mouseleave: function() {
-				if ($(o.musicListSelector+'ul > li.'+o.focusedClass).length > 1){
-					$(o.musicListSelector+'ul > li.'+o.focusedClass).removeClass(o.focusedClass);
+				if ($(o.musicListSelector+' > li.'+o.focusedClass).length > 1){
+					$(o.musicListSelector+' > li.'+o.focusedClass).removeClass(o.focusedClass);
 				}
 			},			
 			focus: function() {				
 				$(this).addClass(o.focusedClass);
 			},
 			focusout: function() {
-				if ($(o.musicListSelector+'ul > li.'+o.focusedClass).length > 1){
-					$(o.musicListSelector+'ul > li.'+o.focusedClass).removeClass(o.focusedClass);
+				if ($(o.musicListSelector+' > li.'+o.focusedClass).length > 1){
+					$(o.musicListSelector+' > li.'+o.focusedClass).removeClass(o.focusedClass);
 				}
 			}
 		});	
