@@ -575,11 +575,14 @@ em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red;
 	height:100%; 
 	min-height: 100%;
 	height:auto; 
-	overflow:hidden;
 }
 
 #remote .status{bottom:10px; left:0; position:absolute; width:100%; text-align:center;}
 
+@media (orientation:landscape) {
+	#remote .status{bottom:-200px; left:0; position:absolute; width:100%; text-align:center;}
+	#remote #plain-wrapper .mute.link{ left: 45%; top:90px;}
+}
 
 /** jQuery UI additions**/
 

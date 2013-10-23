@@ -61,7 +61,8 @@ ul.music li.coverfound:hover .overlay{
 	height:120px;
 	background:url(img/cover-overlay.png) no-repeat;
 }
-li{border:4px solid #e5e5e5 !important;}
+
+ul.music > li{border:4px solid #e5e5e5;}
 li.focused{border:4px solid #FB8521 !important;}
 
 ul.music li a{	
