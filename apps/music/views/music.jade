@@ -50,7 +50,7 @@ html(lang="en")
 			h1 #{lingua.music}
 		#wrapper
 			ul.music(data-bind="foreach:  $data")
-				li.boxed
+				li.boxed.clickable.controllable
 					img.cover(src="/core/css/img/ajax-loader.gif")
 					.overlay
 					a.title(data-bind="text:$data")

@@ -58,16 +58,16 @@ html(lang="en")
 				a.btn.cachelink(href="",data-cachelink="tv") #{lingua.settings_clear_cache_tv}
 			#settings
 				form#setup.validate-form(action='/submit',method='post')
-					.row
+					.row.controllable
 						label #{lingua.setting_movielocation}
 						input.keyboard(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-					.row
+					.row.controllable
 						label #{lingua.setting_musiclocation}
 						input.keyboard(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-					.row
+					.row.controllable
 						label #{lingua.setting_tvlocation}
 						input.keyboard(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-					.row
+					.row.controllable
 						span.label #{lingua.setting_screensaver}
 						.checkgroup
 							- if(screensaver === 'dim')
@@ -80,7 +80,7 @@ html(lang="en")
 								label(for="dimYes") #{lingua.setting_yes}
 								input#dimNo(name="screensaver",type="radio",value="off",checked) 
 								label(for="dimNo") #{lingua.setting_no}
-					.row
+					.row.controllable
 						span.label #{lingua.setting_keyboard}
 						.checkgroup
 							- if(onscreenkeyboard === 'yes')
@@ -93,33 +93,33 @@ html(lang="en")
 								label(for="yeskeyboard") #{lingua.setting_yes}
 								input#nokeyboard(name="usekeyboard",type="radio",value="no",checked) 
 								label(for="nokeyboard") #{lingua.setting_no}
-					.row
+					.row.controllable
 						label #{lingua.setting_language}
 						select#language(name="language")
 							- for lang in availableLanguages
 								option(value=lang, selected=lang == language) #{lang}
-					.row
+					.row.controllable
 						label Local IP (for Remote)
 						input.keyboard(name="localIP",type="text",placeholder="localhost", value= localIP)	
-					.row
+					.row.controllable
 						label Remote port (specific port for Remote)
 						input.keyboard(name="remotePort",type="text",placeholder="3001", value= remotePort)	
-					.row
+					.row.controllable
 						label #{lingua.setting_location}
 						input.keyboard(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")					
-					.row
+					.row.controllable
 						label Spotify Username
 						input.keyboard(name="spotifyUser",type="text", value=spotifyUser)					
-					.row
+					.row.controllable
 						label Spotify Password
 						input.keyboard(name="spotifyPass",type="password", value=spotifyPass)	
-					.row
+					.row.controllable
 						label #{lingua.setting_theme}
 						select#theme(name="theme")
 							- for theme in themes
 								option(selected=theme) #{theme}
-					.row
+					.row.controllable
 						label #{lingua.setting_port}
 						input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
-					.row
+					.row.controllable
 						input(type="submit",value="#{lingua.setting_submit}")	

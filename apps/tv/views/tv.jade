@@ -45,7 +45,7 @@ html(lang="en")
 				- else
 					ul.tvbanners
 						each tvshow in tvshows
-							li.tvshow.boxed
+							li.tvshow.boxed.controllable
 								img(src="/core/css/img/ajax-loader.gif")
 								.overlay(data-tvshow= tvshow)	
 								.info

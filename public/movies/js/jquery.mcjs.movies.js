@@ -134,6 +134,7 @@
 						movie.cdNumber(movieData.cd_number);
 						
 						visibleMovie.addClass('showDetails '+o.fadeClass);
+						
 					},500);
 				}
 				

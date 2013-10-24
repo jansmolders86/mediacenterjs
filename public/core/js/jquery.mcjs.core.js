@@ -183,12 +183,12 @@
 
 					socket.on('controlling', function(data){
 						var focused = $('.focused')
-						,listItem = $('li')
+						,accesibleItem = $('.controllable')
 						,elid = $(document.activeElement).is("input:focus");
 
 						if(data.action === "goLeft"){ 
-							if(listItem.length > 0){
-								var item = listItem;
+							if(accesibleItem.length > 0){
+								var item = accesibleItem;
 								_goLeft(focused, item);
 							}
 						}
@@ -209,30 +209,24 @@
 						}
 						else if(data.action === "goRight"){
 							//TODO: on last item move to next element
-							if(listItem.length > 0){
-								var item = listItem;
+							if(accesibleItem.length > 0){
+								var item = accesibleItem;
 								_goRight(focused, item);
 							}
 						}
 						else if(data.action === "enter"){
 							if (focused.length > 0){
-								if(!elid && focused.find('a').length > 0){
+								if(!elid ){
 									var attrHref = focused.find('a').attr('href');
 									if (typeof attrHref !== 'undefined' && attrHref !== false){
 										document.location = attrHref
-									} else if (focused.find('a').data('events') != undefined && focused.find('a').data('events').click !== undefined) {
+									} else if (focused.find('a').hasClass('clickable')) {
 										focused.find('a').click();
-									} else if(focused.find('.overlay').data('events') != undefined && focused.find('.overlay').data('events').click !== undefined){
-										focused.find('.overlay').click();
-									} else {
-										return;
-									}
-								} else if(focused.find('input').length > 0){
-									focused.find('input').focus();
-								} else if(!elid){
-									if (focused.data('events') != undefined && focused.data('events').click !== undefined) {
+									} else if(focused.hasClass('clickable')){
 										focused.click();
-									} else {
+									} else if(focused.find('input').length > 0){
+										focused.find('input').focus();
+									}else {
 										return;
 									}
 								}
@@ -256,6 +250,10 @@
 	function _goLeft(focused, item){
 		if (item.prev(item).length == 0) item.eq(-1).addClass('focused');
 		focused.removeClass('focused').prev().addClass('focused');
+		
+		if($('#tracklist').length > 0){
+			$('#tracklist').find('li').addClass('focused')
+		}
 	}	
 	
 	// Catch and set keyevents

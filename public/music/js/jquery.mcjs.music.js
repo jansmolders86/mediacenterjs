@@ -195,7 +195,7 @@
 			
 			// Populate tracks
 			tracks.forEach(function(value, index) {
-				$(o.trackListSelector +' > ul').append('<li data-url="'+value+'"><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+value+'</div></li>')
+				$(o.trackListSelector +' > ul').append('<li class="controllable"data-url="'+value+'"><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+value+'</div></li>')
 			});
 			
 			_presentTracks(o);

@@ -36,7 +36,7 @@ html(lang="en")
 					p Loading modules...
 
 			ul.plugins(data-bind="foreach: plugin")
-				li.boxed
+				li.boxed.controllable
 					.info
 						h2.name(data-bind="text:name")
 						div.desc(data-bind="text:desc")
@@ -44,8 +44,8 @@ html(lang="en")
 						div.date(data-bind="text:'Added: '+date()")
 						div.version(data-bind="text:version")
 					// ko if: isInstalled() === false 
-					a.btn.install(data-bind="{click: install}")	Install plugin
+					a.btn.install.clickable(data-bind="{click: install}")	Install plugin
 					// /ko	
 					// ko if: isInstalled() === true 
-					a.btn.remove(data-bind="{click: remove}") Remove plugin
+					a.btn.remove.clickable(data-bind="{click: remove}") Remove plugin
 					// /ko	
