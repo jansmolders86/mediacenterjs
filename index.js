@@ -26,6 +26,7 @@ var express = require('express')
 , ini = require('ini')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
 , dblite = require('dblite')
+, mcjsRouting = require('./lib/routing/routing')
 , http = require('http');
 
 // Init Database
@@ -73,7 +74,7 @@ app.configure('production', function(){
 	app.use(express.errorHandler()); 
 });   
 
-require('./lib/routing/routing')(app,{ verbose: !module.parent });
+mcjsRouting.loadRoutes(app,{ verbose: !module.parent });
 
 app.use(function(req, res) {
     res.status(404).render('404',{ selectedTheme: config.theme});
@@ -100,7 +101,7 @@ app.get("/", function(req, res, next) {
 
 		//search node_modules for plugins
 		var nodeModules = __dirname + '/node_modules';
-		var pluginPrefix = 'mediacenterjs-'; //TODO: externalize in config file
+		var pluginPrefix = config.pluginPrefix;
 
 		fs.readdirSync(nodeModules).forEach(function(name){
 
@@ -131,6 +132,33 @@ app.get("/", function(req, res, next) {
 			apps: apps
 		});	
 	}
+});
+
+//Added this so that I had access to the express app 
+//to add and remove routes dynamically.
+app.get("/plugins/routeManager", function(req, res){
+	var name = req.query.plugin;
+	var action = req.query.action;
+	console.log("Action: %s  - -  Name: %s", action, name)
+	if (!name || name === undefined || !action || action === undefined){
+		console.log('/plugins/routeManager: unable to add or remove route.  Missing parameter' .red);
+		res.send('done');
+		return;
+	}
+	switch(action.toLowerCase()){
+		case "install":
+		mcjsRouting.loadRoutes(app,{ verbose: !module.parent });
+			//mcjsRouting.addRoute(name, true);
+		break;
+		case "remove":
+		mcjsRouting.loadRoutes(app,{ verbose: !module.parent });
+			//mcjsRouting.deleteRoute(name, true);
+		break;
+		default:
+			console.log('/plugins/routeManager: Invalid actions type: ' + action + '.'  .red);	
+		break;
+	}
+	res.send('done');
 });
 
 
