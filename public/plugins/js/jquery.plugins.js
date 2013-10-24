@@ -40,8 +40,6 @@
 		});
 	}
 	
-
-
 	/**** Start of custom functions ***/
 	
 	function _loadItems(o){
