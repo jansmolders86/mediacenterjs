@@ -60,13 +60,13 @@ html(lang="en")
 				form#setup.validate-form(action='/submit',method='post')
 					.row.controllable
 						label #{lingua.setting_movielocation}
-						input.keyboard(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+						input.keyboard.clickable(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row.controllable
 						label #{lingua.setting_musiclocation}
-						input.keyboard(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+						input.keyboard.clickable(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row.controllable
 						label #{lingua.setting_tvlocation}
-						input.keyboard(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+						input.keyboard.clickable(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 					.row.controllable
 						span.label #{lingua.setting_screensaver}
 						.checkgroup
@@ -100,19 +100,19 @@ html(lang="en")
 								option(value=lang, selected=lang == language) #{lang}
 					.row.controllable
 						label Local IP (for Remote)
-						input.keyboard(name="localIP",type="text",placeholder="localhost", value= localIP)	
+						input.keyboard.clickable(name="localIP",type="text",placeholder="localhost", value= localIP)	
 					.row.controllable
 						label Remote port (specific port for Remote)
-						input.keyboard(name="remotePort",type="text",placeholder="3001", value= remotePort)	
+						input.keyboard.clickable(name="remotePort",type="text",placeholder="3001", value= remotePort)	
 					.row.controllable
 						label #{lingua.setting_location}
-						input.keyboard(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")					
+						input.keyboard.clickable(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")					
 					.row.controllable
 						label Spotify Username
-						input.keyboard(name="spotifyUser",type="text", value=spotifyUser)					
+						input.keyboard.clickable(name="spotifyUser",type="text", value=spotifyUser)					
 					.row.controllable
 						label Spotify Password
-						input.keyboard(name="spotifyPass",type="password", value=spotifyPass)	
+						input.keyboard.clickable(name="spotifyPass",type="password", value=spotifyPass)	
 					.row.controllable
 						label #{lingua.setting_theme}
 						select#theme(name="theme")
@@ -120,6 +120,6 @@ html(lang="en")
 								option(selected=theme) #{theme}
 					.row.controllable
 						label #{lingua.setting_port}
-						input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
+						input.keyboard.clickable(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
 					.row.controllable
-						input(type="submit",value="#{lingua.setting_submit}")	
+						input.clickable(type="submit",value="#{lingua.setting_submit}")	
