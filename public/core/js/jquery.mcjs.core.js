@@ -171,56 +171,75 @@
 	
 	//Socket.io handler for remote control
 	function _websocketHandler(o, $that){
-		//TODO: Get port from config file
 		if(io !== undefined){
-			var socket = io.connect('http://localhost:3001');
-			socket.on('connect', function(data){
-				console.log(data);
-				socket.emit('screen');
-			});
+			$.ajax({
+					url: '/configuration/', 
+					type: 'get'
+				}).done(function(data){
+					var socket = io.connect(data.localIP+':'+data.remotePort);
+					socket.on('connect', function(data){
+						socket.emit('screen');
+					});
 
-			socket.on('controlling', function(data){
-				var focused = $('.focused')
-				,listItem = $('li')
-				,elid = $(document.activeElement).is("input:focus");
+					socket.on('controlling', function(data){
+						var focused = $('.focused')
+						,listItem = $('li')
+						,elid = $(document.activeElement).is("input:focus");
 
-				if(data.action === "goLeft"){ 
-					if(listItem.length > 0){
-						var item = listItem;
-						_goLeft(focused, item);
-					}
-				}
-				if(data.action === "back"){ 
-					if ($('.backlink').length > 0) document.location = $('.backlink').attr('href');
-				}
-				if(data.action === "pause"){ 
-					if (!elid){
-						if(videojs("player").paused()){
-							videojs("player").play();
-						} else {
-							videojs("player").pause();
+						if(data.action === "goLeft"){ 
+							if(listItem.length > 0){
+								var item = listItem;
+								_goLeft(focused, item);
+							}
 						}
-					}
-				}
-				if(data.action === "fullscreen"){ 
-					videojs("player").requestFullScreen();
-				}
-				else if(data.action === "goRight"){
-					//TODO: on last item move to next element
-					if(listItem.length > 0){
-						var item = listItem;
-						_goRight(focused, item);
-					}
-				}
-				else if(data.action === "enter"){
-					if (!elid && focused.length > 0){
-						var attrHref = focused.find('a').attr('href');
-						if (typeof attrHref !== 'undefined' && attrHref !== false){
-							document.location = attrHref
+						if(data.action === "back"){ 
+							if ($('.backlink').length > 0) document.location = $('.backlink').attr('href');
 						}
-					}
-				}
-			});
+						if(data.action === "pause"){ 
+							if (!elid){
+								if(videojs("player").paused()){
+									videojs("player").play();
+								} else {
+									videojs("player").pause();
+								}
+							}
+						}
+						if(data.action === "fullscreen"){ 
+							videojs("player").requestFullScreen();
+						}
+						else if(data.action === "goRight"){
+							//TODO: on last item move to next element
+							if(listItem.length > 0){
+								var item = listItem;
+								_goRight(focused, item);
+							}
+						}
+						else if(data.action === "enter"){
+							if (focused.length > 0){
+								if(!elid && focused.find('a').length > 0){
+									var attrHref = focused.find('a').attr('href');
+									if (typeof attrHref !== 'undefined' && attrHref !== false){
+										document.location = attrHref
+									} else if (focused.find('a').data('events') != undefined && focused.find('a').data('events').click !== undefined) {
+										focused.find('a').click();
+									} else if(focused.find('.overlay').data('events') != undefined && focused.find('.overlay').data('events').click !== undefined){
+										focused.find('.overlay').click();
+									} else {
+										return;
+									}
+								} else if(focused.find('input').length > 0){
+									focused.find('input').focus();
+								} else if(!elid){
+									if (focused.data('events') != undefined && focused.data('events').click !== undefined) {
+										focused.click();
+									} else {
+										return;
+									}
+								}
+							}
+						}
+					});
+				});
 		} else {
 			console.log('Make sure you include the socket.io clientside javascript on the page!')
 		}

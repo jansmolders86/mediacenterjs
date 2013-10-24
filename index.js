@@ -81,7 +81,22 @@ app.use(function(req, res) {
 
 app.get("/", function(req, res, next) {  
 	if(	config.moviepath == '' && config.language == '' && config.location == '' || config.moviepath == null || config.moviepath == undefined){
-		res.render('setup');	
+
+		var localIP = getIPAddresses()
+		, sendLocalIP = '';
+		
+		if(getIPAddresses() !== undefined && getIPAddresses() !== null) {
+			localIP = getIPAddresses();	
+		}
+		
+		if(localIP[0] !== undefined && localIP[0] !==  null){
+			sendLocalIP = localIP[0];
+			}
+
+		res.render('setup',{
+			localIP:sendLocalIP
+		});	
+		
 	} else {
 		
 		var apps = [];
@@ -131,6 +146,24 @@ app.get("/", function(req, res, next) {
 		});	
 	}
 });
+
+function getIPAddresses() {
+
+	var ipAddresses = [];
+
+	var interfaces = require('os').networkInterfaces();
+	for (var devName in interfaces) {
+		var iface = interfaces[devName];
+		for (var i = 0; i < iface.length; i++) {
+			var alias = iface[i];
+			if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+				ipAddresses.push(alias.address);
+			}
+		}
+	}
+
+	return ipAddresses;
+}
 
 
 app.post('/removeModule', function(req, res){

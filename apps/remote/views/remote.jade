@@ -62,37 +62,33 @@ html(lang="en")
 
 							$('.status').text('Remote connected');
 							
-							$(".left.link").on('click touchstart',function(){
+							$(".left.link").on('click',function(){
 								socket.emit('control',{action:"goLeft"}); 
 							});
 
-							$(".right.link").on('click touchstart',function(){
+							$(".right.link").on('click',function(){
 								socket.emit('control',{action:"goRight"}); 
 							});
 							
-							$(".enter").on('click touchstart',function(){
+							$(".enter.link").on('click',function(){
 								socket.emit('control',{action:"enter"}); 
 							});
 							
-							$(".back").on('click touchstart',function(){
+							$(".back.link").on('click',function(){
 								socket.emit('control',{action:"back"}); 
 							});		
 
-							$(".play").on('click touchstart',function(){
-								socket.emit('control',{action:"play"}); 
-							});	
-
-							$(".pause").on('click touchstart',function(){
+							$(".pause.link").on('click',function(){
 								socket.emit('control',{action:"pause"}); 
 							});	
 
-							$(".stop").on('click touchstart',function(){
-								socket.emit('control',{action:"stop"}); 
+							$(".fullscreen.link").on('click',function(){
+								socket.emit('control',{action:"fullscreen"}); 
 							});		
 
-							$(".fullscreen").on('click touchstart',function(){
+							$(".mute.link").on('click',function(){
 								socket.emit('control',{action:"fullscreen"}); 
-							});			
+							});									
 
 							socket.on("loading", function(data){
 								console.log(data);
