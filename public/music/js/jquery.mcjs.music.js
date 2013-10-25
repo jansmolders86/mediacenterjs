@@ -47,13 +47,11 @@
 			});
 			_lazyload(o);
 			
-			$(o.backLinkSelector).on('click tap',function(e) {
+			$(o.backLinkSelector).on('click',function(e) {
 				e.preventDefault();	
 				if ($(o.trackListSelector).is(':hidden')){	
-					$('this').attr('href', '/')
 					window.location = '/';
 				} else if ($(o.trackListSelector).is(':visible')) {	
-					$('this').attr('href', '#')
 					$(o.trackListSelector).hide();
 					$(o.musicListSelector).fadeIn();
 				}
