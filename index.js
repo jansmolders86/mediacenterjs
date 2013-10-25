@@ -134,34 +134,6 @@ app.get("/", function(req, res, next) {
 	}
 });
 
-//Added this so that I had access to the express app 
-//to add and remove routes dynamically.
-app.get("/plugins/routeManager", function(req, res){
-	var name = req.query.plugin;
-	var action = req.query.action;
-	console.log("Action: %s  - -  Name: %s", action, name)
-	if (!name || name === undefined || !action || action === undefined){
-		console.log('/plugins/routeManager: unable to add or remove route.  Missing parameter' .red);
-		res.send('done');
-		return;
-	}
-	switch(action.toLowerCase()){
-		case "install":
-		mcjsRouting.loadRoutes(app,{ verbose: !module.parent });
-			//mcjsRouting.addRoute(name, true);
-		break;
-		case "remove":
-		mcjsRouting.loadRoutes(app,{ verbose: !module.parent });
-			//mcjsRouting.deleteRoute(name, true);
-		break;
-		default:
-			console.log('/plugins/routeManager: Invalid actions type: ' + action + '.'  .red);	
-		break;
-	}
-	res.send('done');
-});
-
-
 app.post('/removeModule', function(req, res){
 	var incommingModule = req.body
 	, module = incommingModule.module

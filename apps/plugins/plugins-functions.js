@@ -185,33 +185,6 @@ exports.pluginManager = function(req, res, pluginName, action){
 				error: 0,
 				message: pluginName +  ' ' + action + ' successfully.'  
 			});
-
-			if(action === 'install' || action === 'remove'){
-				console.log('CALLING...')
-				var http = require('http');
-
-				var options = {
-				  host: 'localhost',
-				  port: 3000,
-				  path: '/plugins/routeManager?action='+ action +'&plugin=' + pluginPrefix + pluginName
-				};
-
-				callback = function(response) {
-				  var str = '';
-
-				  //another chunk of data has been recieved, so append it to `str`
-				  response.on('data', function (chunk) {
-				    str += chunk;
-				  });
-
-				  //the whole response has been recieved, so we just print it out here
-				  response.on('end', function () {
-				    console.log(str);
-				  });
-				}
-
-				http.request(options, callback).end();
-			}
 		}
 	});
 };
