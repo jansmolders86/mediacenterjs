@@ -289,7 +289,7 @@
 	function _goBack(o){
 		if ($('.backlink').length > 0){
 			$('.backlink').click();
-		} else if($(document.activeElement).is("input:focus")){
+		} else if(!$(document.activeElement).is("input:focus")){
 			e.preventDefault()
 			window.history.go(-1)
 		}
