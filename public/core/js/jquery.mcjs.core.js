@@ -288,7 +288,8 @@
 
 	function _goBack(o){
 		if ($('.backlink').length > 0){
-			$('.backlink').click();
+			var attrHref = $('.backlink').attr('href');
+			document.location = attrHref;
 		} else if(!$(document.activeElement).is("input:focus")){
 			e.preventDefault()
 			window.history.go(-1)
