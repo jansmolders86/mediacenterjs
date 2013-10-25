@@ -52,22 +52,22 @@ html(lang="en")
 				.ui-state-highlight.ui-corner-all
 					span.ui-icon.ui-icon-alert
 					.message 
-			.row
-				a.btn.cachelink(href="",data-cachelink="movies") #{lingua.settings_clear_cache_movies}
-				a.btn.cachelink(href="",data-cachelink="music") #{lingua.settings_clear_cache_music}
-				a.btn.cachelink(href="",data-cachelink="tv") #{lingua.settings_clear_cache_tv}
+			.row.mcjs-rm-controllable
+				a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="movies") #{lingua.settings_clear_cache_movies}
+				a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="music") #{lingua.settings_clear_cache_music}
+				a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="tv") #{lingua.settings_clear_cache_tv}
 			#settings
 				form#setup.validate-form(action='/submit',method='post')
-					.row.controllable
+					.row.mcjs-rm-controllable
 						label #{lingua.setting_movielocation}
-						input.keyboard.clickable(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-					.row.controllable
+						input.keyboard.mcjs-rc-clickable(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+					.row.mcjs-rm-controllable
 						label #{lingua.setting_musiclocation}
-						input.keyboard.clickable(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-					.row.controllable
+						input.keyboard.mcjs-rc-clickable(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+					.row.mcjs-rm-controllable
 						label #{lingua.setting_tvlocation}
-						input.keyboard.clickable(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-					.row.controllable
+						input.keyboard.mcjs-rc-clickable(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+					.row.mcjs-rm-controllable
 						span.label #{lingua.setting_screensaver}
 						.checkgroup
 							- if(screensaver === 'dim')
@@ -80,7 +80,7 @@ html(lang="en")
 								label(for="dimYes") #{lingua.setting_yes}
 								input#dimNo(name="screensaver",type="radio",value="off",checked) 
 								label(for="dimNo") #{lingua.setting_no}
-					.row.controllable
+					.row.mcjs-rm-controllable
 						span.label #{lingua.setting_keyboard}
 						.checkgroup
 							- if(onscreenkeyboard === 'yes')
@@ -93,33 +93,33 @@ html(lang="en")
 								label(for="yeskeyboard") #{lingua.setting_yes}
 								input#nokeyboard(name="usekeyboard",type="radio",value="no",checked) 
 								label(for="nokeyboard") #{lingua.setting_no}
-					.row.controllable
+					.row.mcjs-rm-controllable
 						label #{lingua.setting_language}
 						select#language(name="language")
 							- for lang in availableLanguages
 								option(value=lang, selected=lang == language) #{lang}
-					.row.controllable
+					.row.mcjs-rm-controllable
 						label Local IP (for Remote)
-						input.keyboard.clickable(name="localIP",type="text",placeholder="localhost", value= localIP)	
-					.row.controllable
+						input.keyboard.mcjs-rc-clickable(name="localIP",type="text",placeholder="localhost", value= localIP)	
+					.row.mcjs-rm-controllable
 						label Remote port (specific port for Remote)
-						input.keyboard.clickable(name="remotePort",type="text",placeholder="3001", value= remotePort)	
-					.row.controllable
+						input.keyboardmcjs-rc-clickable(name="remotePort",type="text",placeholder="3001", value= remotePort)	
+					.row.mcjs-rm-controllable
 						label #{lingua.setting_location}
-						input.keyboard.clickable(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")					
-					.row.controllable
+						input.keyboard.mcjs-rc-clickable(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")					
+					.row.mcjs-rm-controllable
 						label Spotify Username
-						input.keyboard.clickable(name="spotifyUser",type="text", value=spotifyUser)					
-					.row.controllable
+						input.keyboard.mcjs-rc-clickable(name="spotifyUser",type="text", value=spotifyUser)					
+					.row.mcjs-rm-controllable
 						label Spotify Password
-						input.keyboard.clickable(name="spotifyPass",type="password", value=spotifyPass)	
-					.row.controllable
+						input.keyboard.mcjs-rc-clickable(name="spotifyPass",type="password", value=spotifyPass)	
+					.row.mcjs-rm-controllable
 						label #{lingua.setting_theme}
 						select#theme(name="theme")
 							- for theme in themes
 								option(selected=theme) #{theme}
-					.row.controllable
+					.row.mcjs-rm-controllable
 						label #{lingua.setting_port}
-						input.keyboard.clickable(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
-					.row.controllable
-						input.clickable(type="submit",value="#{lingua.setting_submit}")	
+						input.keyboard.mcjs-rc-clickable(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
+					.row.mcjs-rm-controllable
+						input.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")	

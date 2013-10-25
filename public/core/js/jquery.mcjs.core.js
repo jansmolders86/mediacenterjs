@@ -167,7 +167,10 @@
 		});
 	}
 	
-	/************ Remote Control ****************/
+	
+	
+	/************ KEYBOARD/REMOTE HANDELING ***************/
+	
 	
 	//Socket.io handler for remote control
 	function _websocketHandler(o, $that){
@@ -182,18 +185,14 @@
 					});
 
 					socket.on('controlling', function(data){
-						var focused = $('.focused')
-						,accesibleItem = $('.controllable')
-						,elid = $(document.activeElement).is("input:focus");
-
 						if(data.action === "goLeft"){ 
-							if(accesibleItem.length > 0){
-								var item = accesibleItem;
-								_goLeft(focused, item);
+							if($(o.accesibleItem).length > 0){
+								var item = $(o.accesibleItem);
+								_goLeft(o, item);
 							}
 						}
 						if(data.action === "back"){ 
-							if ($('.backlink').length > 0) document.location = $('.backlink').attr('href');
+							_goBack(o);
 						}
 						if(data.action === "pause"){ 
 							if (!elid){
@@ -208,29 +207,13 @@
 							videojs("player").requestFullScreen();
 						}
 						else if(data.action === "goRight"){
-							//TODO: on last item move to next element
-							if(accesibleItem.length > 0){
-								var item = accesibleItem;
-								_goRight(focused, item);
+							if($(o.accesibleItem).length > 0){
+								var item = $(o.accesibleItem);
+								_goRight(o, item);
 							}
 						}
 						else if(data.action === "enter"){
-							if (focused.length > 0){
-								if(!elid ){
-									var attrHref = focused.find('a').attr('href');
-									if (typeof attrHref !== 'undefined' && attrHref !== false){
-										document.location = attrHref
-									} else if (focused.find('a').hasClass('clickable')) {
-										focused.find('a').click();
-									} else if(focused.hasClass('clickable')){
-										focused.click();
-									} else if(focused.find('input').length > 0){
-										focused.find('input').focus();
-									}else {
-										return;
-									}
-								}
-							}
+							_pressEnter(o);
 						}
 					});
 				});
@@ -238,23 +221,6 @@
 			console.log('Make sure you include the socket.io clientside javascript on the page!')
 		}
 	}
-	
-	
-	/************ KEYBOARD HANDELING ***************/
-	
-	function _goRight(focused, item){
-		if (focused.next(item).length == 0)item.eq(0).addClass('focused');
-		focused.removeClass('focused').next(item).addClass('focused');
-	}	
-	
-	function _goLeft(focused, item){
-		if (item.prev(item).length == 0) item.eq(-1).addClass('focused');
-		focused.removeClass('focused').prev().addClass('focused');
-		
-		if($('#tracklist').length > 0){
-			$('#tracklist').find('li').addClass('focused')
-		}
-	}	
 	
 	// Catch and set keyevents
 	function _keyevents(o, $that){
@@ -269,21 +235,16 @@
 			
 			switch(e.keyCode) {
 				case 39 : //next
-					focused.removeClass('focused').next().addClass('focused');
-					if (focused.next().length == 0) item.eq(0).addClass('focused');
+					_goRight(o, item);
 				break;
 				case 37 : //prev
-					focused.removeClass('focused').prev().addClass('focused');
-					if (item.prev().length == 0) item.eq(-1).addClass('focused');
+					_goLeft(o, item);
 				break;
 				case 13 : //enter
-					if (!elid) document.location = focused.find('a').attr('href');
+					_pressEnter(o);
 				break;
 				case 8  : //backspace
-					if (!elid){
-						e.preventDefault()
-						window.history.go(-1)
-					}
+					_goBack(o);
 				break;
 				case 32 : 
 					if (!elid){
@@ -297,6 +258,68 @@
 			}
 		});
 	}
+	
+	function _goRight(o, item){
+		if ($(o.focused).next(item).length == 0)item.eq(0).addClass('focused');
+		$(o.focused).removeClass('focused').next(item).addClass('focused');
+	}	
+	
+	function _goLeft(o, item){
+		if (item.prev(item).length == 0) item.eq(-1).addClass('focused');
+		$(o.focused).removeClass('focused').prev().addClass('focused');
+	}	
+	
+	function _pressEnter(o, item){
+		if ($(o.focused).length > 0){
+			var attrHref = $(o.focused).find('a').attr('href');
+			if (typeof attrHref !== 'undefined' && attrHref !== false){
+				document.location = attrHref;
+			} else if ($(o.focused).find('.'+o.clickableItemClass).length > 0) {
+				$(o.focused).find('.'+o.clickableItemClass).click();
+			} else if($(o.focused).hasClass(o.clickableItemClass)){
+				$(o.focused).click();
+			} else if($(o.focused).find('input').length > 0){
+				$(o.focused).find('input').focus();
+			}else {
+				return;
+			}
+		}
+	}	
+
+	function _goBack(o){
+		if ($('.backlink').length > 0){
+			$('.backlink').click();
+		} else if($(document.activeElement).is("input:focus")){
+			e.preventDefault()
+			window.history.go(-1)
+		}
+	}		
+	
+	// Returns true or false
+	function _isElementVisibleInViewPort(el) {
+		var eap,
+			rect     = el.getBoundingClientRect(),
+			vWidth   = window.innerWidth || doc.documentElement.clientWidth,
+			vHeight  = window.innerHeight || doc.documentElement.clientHeight,
+			efp      = function (x, y) { return document.elementFromPoint(x, y) },
+			contains = "contains" in el ? "contains" : "compareDocumentPosition",
+			has      = contains == "contains" ? 1 : 0x10;
+
+		// Return false if it's not in the viewport
+		if (rect.right < 0 || rect.bottom < 0 || rect.left > vWidth || rect.top > vHeight){
+			return false;
+		}
+		
+		// Return true if any of its four corners are visible
+		return (
+			  (eap = efp(rect.left,  rect.top)) == el || el[contains](eap) == has
+		  ||  (eap = efp(rect.right, rect.top)) == el || el[contains](eap) == has
+		  ||  (eap = efp(rect.right, rect.bottom)) == el || el[contains](eap) == has
+		  ||  (eap = efp(rect.left,  rect.bottom)) == el || el[contains](eap) == has
+		);
+	}
+	
+	
 	
 	/************ Screensaver ***************/
 	
@@ -341,7 +364,11 @@
 	
 	/* default values for this plugin */
 	$.fn.mcjs.defaults = {
-		debug : true
+		datasetKey: 'mcjs', //always lowercase
+		debug : true,
+		focused : '.focused',
+		accesibleItem :'.mcjs-rm-controllable',
+		clickableItemClass : 'mcjs-rc-clickable'
 	}
 
 })(jQuery);
