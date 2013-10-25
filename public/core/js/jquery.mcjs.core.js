@@ -288,8 +288,13 @@
 
 	function _goBack(o){
 		if ($('.backlink').length > 0){
-			var attrHref = $('.backlink').attr('href');
-			document.location = attrHref;
+                     var attrHref = $('.backlink).attr('href');
+                     if(typeof attrHref !== undefined && attrHref !== false){
+			   var attrHref = $('.backlink').attr('href');
+			   document.location = attrHref;
+                      } else {
+                           $('.backlink).click();
+                      }
 		} else if(!$(document.activeElement).is("input:focus")){
 			e.preventDefault()
 			window.history.go(-1)
