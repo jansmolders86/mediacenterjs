@@ -55,7 +55,7 @@ body.homepage{ overflow:hidden; }
 img{border:0; display:block;}
 *:focus { color:#fb8521;}
 
-*{ 
+body *{ 
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
