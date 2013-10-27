@@ -16,18 +16,20 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 var express = require('express')
-, app = express()
-, fs = require ('fs')
-, dateFormat = require('dateformat')
-, lingua = require('lingua')
-, colors = require('colors')
-, rimraf = require('rimraf')
-, ini = require('ini')
-, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
-, dblite = require('dblite')
-, mcjsRouting = require('./lib/routing/routing')
-, http = require('http');
+	, app = express()
+	, fs = require ('fs')
+	, dateFormat = require('dateformat')
+	, lingua = require('lingua')
+	, colors = require('colors')
+	, rimraf = require('rimraf')
+	, dblite = require('dblite')
+	, mcjsRouting = require('./lib/routing/routing')
+	, http = require('http')
+	, configuration_handler = require('./lib/handlers/configuration-handler');
+
+var config = configuration_handler.initializeConfiguration();
 
 var language = null;
 if(config.language === ""){
