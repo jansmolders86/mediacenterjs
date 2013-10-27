@@ -17,17 +17,17 @@
 */
 
 var express = require('express')
-	, app = express()
-	, fs = require ('fs')
-	, dateFormat = require('dateformat')
-	, lingua = require('lingua')
-	, colors = require('colors')
-	, rimraf = require('rimraf')
-	, dblite = require('dblite')
-	, http = require('http')
-	, configuration_handler = require('./lib/handlers/configuration-handler');
-
-var config = configuration_handler.initializeConfiguration();
+, app = express()
+, fs = require ('fs')
+, dateFormat = require('dateformat')
+, lingua = require('lingua')
+, colors = require('colors')
+, rimraf = require('rimraf')
+, ini = require('ini')
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
+, dblite = require('dblite')
+, mcjsRouting = require('./lib/routing/routing')
+, http = require('http');
 
 var language = null;
 if(config.language === ""){
@@ -70,7 +70,7 @@ app.configure('production', function(){
 	app.use(express.errorHandler()); 
 });   
 
-require('./lib/routing/routing')(app,{ verbose: !module.parent });
+mcjsRouting.loadRoutes(app,{ verbose: !module.parent });
 
 app.use(function(req, res) {
     res.status(404).render('404',{ selectedTheme: config.theme});
@@ -97,7 +97,7 @@ app.get("/", function(req, res, next) {
 
 		//search node_modules for plugins
 		var nodeModules = __dirname + '/node_modules';
-		var pluginPrefix = 'mediacenterjs-'; //TODO: externalize in config file
+		var pluginPrefix = config.pluginPrefix;
 
 		fs.readdirSync(nodeModules).forEach(function(name){
 
@@ -129,7 +129,6 @@ app.get("/", function(req, res, next) {
 		});	
 	}
 });
-
 
 app.post('/removeModule', function(req, res){
 	var incommingModule = req.body
