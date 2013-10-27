@@ -45,6 +45,7 @@ What currently works?
 What's coming up
 ==================
 * Tv show app functionality
+* Remote control
 * Better inbrowser streaming
 * Plugin manager
 
@@ -373,6 +374,8 @@ This app also makes use of the following modules:
 * dblite
 * async
 * musicmetadata
+* walk
+* socket.io
 
 ###Special thanks to:###
 
