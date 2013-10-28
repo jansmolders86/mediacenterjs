@@ -75,7 +75,10 @@ p a:hover{text-decoration:none;}
 
 #header{
 	height:75px;
-	width:90%;
+	width:100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box; 
+    box-sizing: border-box;
 	padding:10px 200px 15px 100px;
 	position:relative;
 	float:left;
@@ -94,20 +97,20 @@ p a:hover{text-decoration:none;}
 a.backlink{ 
 	display:block; 
 	float:left; 
-	margin-top:13px; 
+	margin-top:5px; 
 	margin-right:30px;
 	width: 32px;
 	height:32px;
 }
 
 
-#header .logo{ float:left; height:45px; margin: 17px 10px 0 0px; }
+#header .logo{ float:left; height:45px; margin: 0px 10px 0 0px; }
 
 #header h1{
-	width:800px;
+	width: 50%;
+	padding: 0;
 	margin:0;
-	padding:0;
-	margin:14px 0 0 60px;
+	display: inline-block;
 }
 
 #content{
@@ -152,8 +155,7 @@ a.btn{
 em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red; font-style: normal; font-size: 13px;}
 
 input,
-select{ display:block; width:200px; padding:5px 10px; -webkit-appearance: none;}
-select{ width: 223px; }
+select{ display:block; -webkit-appearance: none;}
 
 /* Player */
 

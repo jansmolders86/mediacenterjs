@@ -24,24 +24,23 @@ html(lang="en")
 				$('.validate-form').validate();
 			
 				var viewPortHeight = $(window).height();
-				$('#settings').height(viewPortHeight - 20);
+				$('#settings, #setupRemote').height(viewPortHeight - 20);
 			
-				setTimeout(function(){
-					window.scrollTo(0, 1);
-				}, 10);
+				window.scrollTo(0,0);
 				
 				$('i.ellipsis.vertical.icon.settings').on('click touchstart', function(){
 					$('#settings').toggleClass('show');
 				});
 				
-				$('#main').on('click touchstart', function(){
+				$('.keyboard.link').on('click', function(e){
+					$('#keyboard-wrapper').toggle();
+				});
+				
+				$('#main').on('click', function(){
 					if($('#settings').hasClass('show')) $('#settings').removeClass('show');
 				});
 				
 				$('.status').text('Remote not connected');
-				
-				//var currentIP = window.location.host
-				//$('#localIP').val(currentIP)
 				
 				$(document).on('touchstart','.link' ,function(){
 					$(this).find('i').css("color","#fb8521");
@@ -50,6 +49,7 @@ html(lang="en")
 				}).on("touchcancel", function() {
 					$(this).find('i').css("color","#333");
 				}); 
+
 				
 				$.ajax({
 						url: '/configuration/', 
@@ -88,6 +88,12 @@ html(lang="en")
 
 							$(".mute.link").on('click',function(){
 								socket.emit('control',{action:"fullscreen"}); 
+							});					
+
+							$("#sendValue").on('click',function(){
+								if($(#sendValueInput).val() !== ''){
+									socket.emit('control',{action:"sendValue"}); 
+								}
 							});									
 
 							socket.on("loading", function(data){
@@ -99,7 +105,7 @@ html(lang="en")
 
 	body#remote	
 		#settings.hide
-			form#setup.validate-form(action='/submitRemote',method='post')
+			form#setupRemote.validate-form(action='/submitRemote',method='post')
 				.row
 					label #{lingua.setting_movielocation}
 					input(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
@@ -163,7 +169,14 @@ html(lang="en")
 					i.fullscreen.icon
 				.mute.link
 					i.mute.icon
+				.dashboard.link
+					i.dashboard.icon
+				.keyboard.link
+					i.keyboard.icon
 				.shuffle.link
 					i.shuffle.icon
 			
 			.status
+		#keyboard-wrapper
+			input#sendValueInput(name="sendValue",type="text",value="")
+			input#sendValue(type="submit",value="#{lingua.setting_submit}")	

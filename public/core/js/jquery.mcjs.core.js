@@ -112,15 +112,6 @@
 		
 		// Add fade effect
 		$(".backdropimg").addClass("fadein");
-		
-		// Init validation
-		if (typeof $.fn.validate !== 'undefined'){
-			$('.validate-form').validate();
-		} else {
-			if(o.debug === true){
-				console.log('If you want to include validation on your page, please include the validation plugin');
-			}
-		}
 	}
 	
 	function _modalDialog(o, url, type, data){
@@ -196,14 +187,6 @@
 					});
 
 					socket.on('controlling', function(data){
-						
-						if (typeof $.fn.keyboard !== 'undefined'){
-							$('.keyboard').keyboard();
-						} else {
-							if(o.debug === true){
-								console.log('If you want to use the onscreen keyboard, please include the plugin and add the ".keyboard" class to the element');
-							}
-						}
 					
 						if(data.action === "goLeft"){ 
 							if($(o.accesibleItem).length > 0){
@@ -286,10 +269,13 @@
 			if($(o.focused).length > 0){
 				$(o.focused).removeClass('focused');
 			}
-			item  = $('.ui-keyboard-keyset').find('button.ui-keyboard-button');
+			item  = $('.ui-keyboard-button');
+			if ($('#focusedBtn').next(item).length == 0)item.eq(0).attr('id','focusedBtn');
+			$('#focusedBtn').attr('id','').next(item).attr('id','focusedBtn').scrollintoview({direction: "vertical"});
+			
 		}
 		if ($(o.focused).next(item).length == 0)item.eq(0).addClass('focused');
-		$(o.focused).removeClass('focused').next(item).addClass('focused').scrollintoview();
+		$(o.focused).removeClass('focused').next(item).addClass('focused').scrollintoview({direction: "vertical"});
 	}	
 	
 	function _goLeft(o, item){
@@ -297,10 +283,10 @@
 			if($(o.focused).length > 0){
 				$(o.focused).removeClass('focused');
 			}
-			item  = $('.ui-keyboard-keyset').find('button.ui-keyboard-button');
+			item  = $('.ui-keyboard-button');
 		}
 		if (item.prev(item).length == 0) item.eq(-1).addClass('focused');
-		$(o.focused).removeClass('focused').prev().addClass('focused').scrollintoview();
+		$(o.focused).removeClass('focused').prev().addClass('focused').scrollintoview({direction: "vertical"});
 	}	
 	
 	function _pressEnter(o, item){
@@ -336,16 +322,18 @@
 	}	
 
 	function _goBack(o){
-		if ($('.backlink').length > 0){
-			var attrHref = $('.backlink').attr('href');
-			if (typeof attrHref !== undefined && attrHref !== false){
+		if( !$(document.activeElement).is("input:focus")){
+			if ($('.backlink').length > 0){
 				var attrHref = $('.backlink').attr('href');
-				document.location = attrHref;
-			} else {
-				$('.backlink').click();
+				if (typeof attrHref !== undefined && attrHref !== false){
+					var attrHref = $('.backlink').attr('href');
+					document.location = attrHref;
+				} else {
+					$('.backlink').click();
+				}
+			} else if( !$(document.activeElement).is("input:focus") ){
+				window.history.go(-1);
 			}
-		} else if( !$(document.activeElement).is("input:focus") ){
-			window.history.go(-1);
 		}
 	}
 	
@@ -393,7 +381,7 @@
 	/* default values for this plugin */
 	$.fn.mcjs.defaults = {
 		datasetKey: 'mcjs', //always lowercase
-		debug : true,
+		debug : false,
 		focused : '.focused',
 		accesibleItem :'.mcjs-rm-controllable',
 		clickableItemClass : 'mcjs-rc-clickable'

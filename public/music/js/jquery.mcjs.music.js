@@ -48,6 +48,7 @@
 			_lazyload(o);
 			
 			$(o.backLinkSelector).on('click',function(e) {
+				console.log('click')
 				e.preventDefault();	
 				if ($(o.trackListSelector).is(':hidden')){	
 					window.location = '/';
@@ -68,7 +69,6 @@
 			type: 'get',
 			dataType: 'json'
 		}).done(function(data){	
-			console.log(data);
 			o.viewModel = ko.observableArray(data);
 			ko.applyBindings(o.viewModel,o.$that[0]);
 			
@@ -232,6 +232,16 @@
 							var currentItem = focused;
 							if(focused.length > 0){
 								_trackClickHandler(o, album, currentItem);
+							}
+						}
+						
+						if(data.action === "back"){ 
+							console.log('go back')
+							if ($(o.trackListSelector).is(':hidden')){	
+								window.location = '/';
+							} else if ($(o.trackListSelector).is(':visible')) {	
+								$(o.trackListSelector).hide();
+								$(o.musicListSelector).fadeIn();
 							}
 						}
 
