@@ -50,7 +50,6 @@ exports.index = function(req, res, next){
 		remotePort : config.remotePort,
 		language: config.language,
 		availableLanguages: availableLanguages,
-		onscreenkeyboard: config.onscreenkeyboard,
 		location: config.location,
 		screensaver: config.screensaver,
 		spotifyUser: config.spotifyUser,

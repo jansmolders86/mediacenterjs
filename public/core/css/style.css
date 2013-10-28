@@ -35,7 +35,7 @@ html{
 	border:0;
 	background-color:#f6f6f6;
 	position:relative;
-	overflow-x:hidden;
+	oveflow:hidden;
 }
 
 body{ 
@@ -44,13 +44,11 @@ body{
 	height: 100%;
 	width: 100%;
 	border:0;
-	overflow-x:hidden;
 	position:relative;
 	font-family: 'Open Sans', sans-serif; 
 	color: #747474;
+	overflow:auto;
 }
-
-body.homepage{ overflow:hidden; }
 
 img{border:0; display:block;}
 *:focus { color:#fb8521;}
@@ -62,12 +60,12 @@ body *{
 	transition: all 0.2s ease;
 } 
   
- .overlay{
+.overlay{
 	-webkit-transition: none;
 	-moz-transition: none;
 	-o-transition: none;
 	transition: none;
- }
+}
 
 h1,
 h2,
@@ -200,7 +198,7 @@ a.backlink{
 .focused{ border:4px solid #FB8521; cursor:pointer; }
 
 
-/* Screensaver */ 
+/* Screen saver */ 
 
 body.dim,
 html.dim{background:#222;}
@@ -276,13 +274,13 @@ html.dim{background:#222;}
 
 /***** -----------------   FORM ELEMENTS / SETTINGS ---------------------- *****/
 /* 						Please edit this in your own theme. 					*/
-#settings{margin-top:200px;}
+#settings{margin-top:20px;}
 #settingsbox{ margin:50px 0 0 0px; width:450px; }
 #setup{ margin:50px 0 0 60px; width:700px; height:500px; }
 #hiddenSetting{visibility:hidden; width:0; height:0; float:left;}
 
 .row{ min-height:50px; width:960px; float:left; }
-.row a.cachelink{ margin:0 0 10px 60px; float:left; clear:both;}
+.row a.cachelink{ margin:0 0 10px 0px; clear:both;}
 
 span.info{
 	display:block;
@@ -586,6 +584,9 @@ em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red;
 
 #remote .status{bottom:10px; left:0; position:absolute; width:100%; text-align:center;}
 
+.mcjs-rm-controllable{border:3px solid rgba(255,255,255,0) }
+.mcjs-rm-controllable.focused{ border-color:rgba(251,133,33,0.8);}
+
 @media (orientation:landscape) {
 	#remote .status{bottom:-200px; left:0; position:absolute; width:100%; text-align:center;}
 	#remote #plain-wrapper .mute.link{ left: 45%; top:90px;}
@@ -616,6 +617,13 @@ em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red;
 	border:0;
 	color:#e5e5e5;
 }
+
+.ui-keyboard-button.focused{
+	border: 1px solid #fff!important;
+	background: #fb8521!important;
+	font-weight: bold!important;
+	color: #fff!important;
+} 
 .ui-keyboard-button span { padding: 0; margin: 0; white-space:nowrap; }
 .ui-keyboard-button-endrow { clear: left; }
 .ui-keyboard-widekey { min-width: 4em; width: auto; }

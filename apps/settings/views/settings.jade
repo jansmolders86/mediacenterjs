@@ -13,6 +13,7 @@ html(lang="en")
 		script(src="/core/js/socket.io.min.js")
 		script(src="/core/js/plugins/jquery.idle-timer.js")
 		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
+		script(src="/core/js/plugins/jquery.scrollintoview.min.js")
 		script(src="/core/js/jquery.mcjs.core.js")
 		
 		script(src="/core/js/plugins/jquery.prettyForm.js")
@@ -28,11 +29,6 @@ html(lang="en")
 				$('.validate-form').validate();
 				$("[type=checkbox], [type=radio]").prettyForm();
 				
-				var usekeyboard= $('#hiddenSetting').find('p').html();
-				if ( usekeyboard == 'yes' ){
-					$('.keyboard').keyboard();
-				}
-				
 				$('#theme').find('option').each(function(){
 					var cleanedThemeName = $(this).html().replace(/\.(css)/i,"");
 					$(this).text(cleanedThemeName)
@@ -40,8 +36,6 @@ html(lang="en")
 				
 			});
 	body
-		#hiddenSetting
-			p= onscreenkeyboard
 		#header.settings
 			a.backlink(href="/") 
 				img(src="/core/icons/back.png")
@@ -52,12 +46,14 @@ html(lang="en")
 				.ui-state-highlight.ui-corner-all
 					span.ui-icon.ui-icon-alert
 					.message 
-			.row.mcjs-rm-controllable
-				a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="movies") #{lingua.settings_clear_cache_movies}
-				a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="music") #{lingua.settings_clear_cache_music}
-				a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="tv") #{lingua.settings_clear_cache_tv}
 			#settings
 				form#setup.validate-form(action='/submit',method='post')
+					.row.mcjs-rm-controllable
+						a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="movies") #{lingua.settings_clear_cache_movies}
+					.row.mcjs-rm-controllable
+						a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="music") #{lingua.settings_clear_cache_music}
+					.row.mcjs-rm-controllable
+						a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="tv") #{lingua.settings_clear_cache_tv}
 					.row.mcjs-rm-controllable
 						label #{lingua.setting_movielocation}
 						input.keyboard.mcjs-rc-clickable(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
@@ -80,19 +76,6 @@ html(lang="en")
 								label(for="dimYes") #{lingua.setting_yes}
 								input#dimNo(name="screensaver",type="radio",value="off",checked) 
 								label(for="dimNo") #{lingua.setting_no}
-					.row.mcjs-rm-controllable
-						span.label #{lingua.setting_keyboard}
-						.checkgroup
-							- if(onscreenkeyboard === 'yes')
-								input#yeskeyboard(name="usekeyboard",type="radio",value="yes",checked) 
-								label(for="yeskeyboard") #{lingua.setting_yes}
-								input#nokeyboard(name="usekeyboard",type="radio",value="no") 
-								label(for="nokeyboard") #{lingua.setting_no}
-							- else
-								input#yeskeyboard(name="usekeyboard",type="radio",value="yes") 
-								label(for="yeskeyboard") #{lingua.setting_yes}
-								input#nokeyboard(name="usekeyboard",type="radio",value="no",checked) 
-								label(for="nokeyboard") #{lingua.setting_no}
 					.row.mcjs-rm-controllable
 						label #{lingua.setting_language}
 						select#language(name="language")

@@ -49,7 +49,6 @@ exports.index = function(req, res, next){
 		tvlocation : config.tvpath,
 		language: config.language,
 		availableLanguages: availableLanguages,
-		onscreenkeyboard: config.onscreenkeyboard,
 		location: config.location,
 		localIP : config.localIP,
 		remotePort : config.remotePort,

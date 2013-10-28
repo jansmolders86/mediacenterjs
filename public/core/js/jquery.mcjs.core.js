@@ -31,7 +31,7 @@
 		modalDialog : function modalDialog(url, type,data) {
 			return this.each(function() {
 				var o = $.data(this, ns);
-				_modalDialog(o, url, type,data)
+				_modalDialog(o, url, type,data);
 			});
 		}
 		
@@ -47,10 +47,10 @@
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
 				$that: $that
-				,viewportWidth	: $(window).width()
-				,viewportHeight	: $(window).height()
-				,confirmMessage : undefined
-				,succesMessage : undefined
+				, viewportWidth		: $(window).width()
+				, viewportHeight	: $(window).height()
+				, confirmMessage 	: undefined
+				, succesMessage 	: undefined
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -58,11 +58,11 @@
 			
 			window.scrollTo(0,0);
 			
-			_initpages(o, $(this));
-			_websocketHandler(o, $(this));
+			_initpages(o, $(this));			// Init core functionality
+			_websocketHandler(o, $(this));	// Init remote control
 			_resizeviewport(o, $(this)); 	// Strech bg to fullscreen
-			_keyevents(o,$(this)); 			// init keys
-			_screensaver(o, $(this));
+			_keyevents(o,$(this)); 			// Init keys
+			_screensaver(o, $(this));		// Init screensaver
 
 			$('a.cachelink').click(function(e){
 				e.preventDefault();
@@ -70,7 +70,7 @@
 				, data = {cache : cacheLink}
 				, url = '/clearCache'
 				, type = 'post';
-				_modalDialog(o, url, type,data)
+				_modalDialog(o, url, type,data);
 			});
 		
 			$('.remove').click(function(e){
@@ -79,7 +79,7 @@
 				, data = {module : moduleLink}
 				, url = '/removeModule'
 				, type = 'post';				
-				_modalDialog(o, url, type,data)
+				_modalDialog(o, url, type,data);
 			});
 		});
 	}
@@ -87,6 +87,7 @@
 	/**** Start of custom functions ***/
 	
 	function _initpages(o, $that){
+		
 		// Setup frontend validation
 		$.ajax({
 			url: '/configuration/', 
@@ -100,53 +101,63 @@
 				extension: 'js',
 				loadBaseFile: false ,
 				callback: function() {
-					o.confirmMessage = $.i18n.prop('confirmMessage')
-					o.succesMessage = $.i18n.prop('succesMessage')
+					o.confirmMessage = $.i18n.prop('confirmMessage');
+					o.succesMessage = $.i18n.prop('succesMessage');
 				}
 			})
 		});
 	
-		// Hide all ui boxes
+		// Hide all UI boxes
 		$(".ui-widget").hide();
 		
 		// Add fade effect
 		$(".backdropimg").addClass("fadein");
 		
-		// Init Keyboard
-		if(jQuery().keyboard) {
-			if ( o.usekeyboard == 'yes' ) $('.keyboard').keyboard();
-		}	
+		// Init validation
+		if (typeof $.fn.validate !== 'undefined'){
+			$('.validate-form').validate();
+		} else {
+			if(o.debug === true){
+				console.log('If you want to include validation on your page, please include the validation plugin');
+			}
+		}
 	}
 	
 	function _modalDialog(o, url, type, data){
-		var dialog = null;
-		dialog = $('<div>' + o.confirmMessage + '</div>').dialog({
-			resizable: false,
-			modal: true,
-			buttons: [{
-				text: "Ok",
-				click: function () {
-					dialog.dialog('destroy').remove();
-					$.ajax({
-						url: url, 
-						type: type,
-						data: data
-					}).done(function(data){
-						if(data == 'done'){
-							$(".ui-widget").find('.message').html(o.succesMessage);
-							$(".ui-widget").show();
-						} 
-					});
-				},
+		if (typeof jQuery.ui !== 'undefined'){
+			var dialog = null;
+			dialog = $('<div>' + o.confirmMessage + '</div>').dialog({
+				resizable: false,
+				modal: true,
+				buttons: [{
+					text: "Ok",
+					click: function () {
+						dialog.dialog('destroy').remove();
+						$.ajax({
+							url: url, 
+							type: type,
+							data: data
+						}).done(function(data){
+							if(data == 'done'){
+								$(".ui-widget").find('.message').html(o.succesMessage);
+								$(".ui-widget").show();
+							} 
+						});
+					},
 
-			}, {
-				text: "Cancel",
-				click: function () {
-					dialog.dialog('destroy').remove();
-				},
-			}]
-		});
-		dialog.dialog('open');
+				}, {
+					text: "Cancel",
+					click: function () {
+						dialog.dialog('destroy').remove();
+					},
+				}]
+			});
+			dialog.dialog('open');
+		} else {
+			if(o.debug === true){
+				console.log('If you want to include modal dialogs or error handling, please include the jQuery UI plugin');
+			}
+		}
 	}
 	
 	
@@ -185,6 +196,15 @@
 					});
 
 					socket.on('controlling', function(data){
+						
+						if (typeof $.fn.keyboard !== 'undefined'){
+							$('.keyboard').keyboard();
+						} else {
+							if(o.debug === true){
+								console.log('If you want to use the onscreen keyboard, please include the plugin and add the ".keyboard" class to the element');
+							}
+						}
+					
 						if(data.action === "goLeft"){ 
 							if($(o.accesibleItem).length > 0){
 								var item = $(o.accesibleItem);
@@ -218,7 +238,9 @@
 					});
 				});
 		} else {
-			console.log('Make sure you include the socket.io clientside javascript on the page!')
+			if(o.debug === true){
+				console.log('Make sure you include the socket.io clientside javascript plugin is on the page to allow the remote to access the page');
+			}
 		}
 	}
 	
@@ -260,24 +282,51 @@
 	}
 	
 	function _goRight(o, item){
+		if($('.ui-keyboard-keyset').length > 0){  
+			if($(o.focused).length > 0){
+				$(o.focused).removeClass('focused');
+			}
+			item  = $('.ui-keyboard-keyset').find('button.ui-keyboard-button');
+		}
 		if ($(o.focused).next(item).length == 0)item.eq(0).addClass('focused');
-		$(o.focused).removeClass('focused').next(item).addClass('focused');
+		$(o.focused).removeClass('focused').next(item).addClass('focused').scrollintoview();
 	}	
 	
 	function _goLeft(o, item){
+		if($('.ui-keyboard-keyset').length > 0){  
+			if($(o.focused).length > 0){
+				$(o.focused).removeClass('focused');
+			}
+			item  = $('.ui-keyboard-keyset').find('button.ui-keyboard-button');
+		}
 		if (item.prev(item).length == 0) item.eq(-1).addClass('focused');
-		$(o.focused).removeClass('focused').prev().addClass('focused');
+		$(o.focused).removeClass('focused').prev().addClass('focused').scrollintoview();
 	}	
 	
 	function _pressEnter(o, item){
-		if ($(o.focused).length > 0){
-			var attrHref = $(o.focused).find('a').attr('href');
-			if (typeof attrHref !== 'undefined' && attrHref !== false){
-				document.location = attrHref;
+		if($('.ui-keyboard').length > 0){
+			var e = $.Event('keypress');
+			$(o.focused).focus();
+			$(o.focused).trigger(e);
+		} else if ($(o.focused).length > 0){
+			if (typeof $(o.focused).find('a').attr('href') !== 'undefined' && $(o.focused).find('a').attr('href') !== false){
+				document.location = $(o.focused).find('a').attr('href');
 			} else if ($(o.focused).find('.'+o.clickableItemClass).length > 0) {
-				$(o.focused).find('.'+o.clickableItemClass).click();
+				if($('.'+o.clickableItemClass).is('input')){
+					$('.'+o.clickableItemClass).focus();
+				} else {
+					$('.'+o.clickableItemClass).click();
+				}
 			} else if($(o.focused).hasClass(o.clickableItemClass)){
-				$(o.focused).click();
+				if($(o.focused).is('input')){
+					$(o.focused).focus();
+				} else if($(o.focused).is('a')){
+					if (typeof $('a'+o.focused).attr('href') !== 'undefined' && $('a'+o.focused).find('a').attr('href') !== false){
+						document.location = $('a'+o.focused).attr('href');
+					}
+				} else {
+					$(o.focused).click();
+				}
 			} else if($(o.focused).find('input').length > 0){
 				$(o.focused).find('input').focus();
 			}else {
@@ -288,43 +337,17 @@
 
 	function _goBack(o){
 		if ($('.backlink').length > 0){
-                     var attrHref = $('.backlink).attr('href');
-                     if(typeof attrHref !== undefined && attrHref !== false){
-			   var attrHref = $('.backlink').attr('href');
-			   document.location = attrHref;
-                      } else {
-                           $('.backlink).click();
-                      }
-		} else if(!$(document.activeElement).is("input:focus")){
-			e.preventDefault()
-			window.history.go(-1)
+			var attrHref = $('.backlink').attr('href');
+			if (typeof attrHref !== undefined && attrHref !== false){
+				var attrHref = $('.backlink').attr('href');
+				document.location = attrHref;
+			} else {
+				$('.backlink').click();
+			}
+		} else if( !$(document.activeElement).is("input:focus") ){
+			window.history.go(-1);
 		}
-	}		
-	
-	// Returns true or false
-	function _isElementVisibleInViewPort(el) {
-		var eap,
-			rect     = el.getBoundingClientRect(),
-			vWidth   = window.innerWidth || doc.documentElement.clientWidth,
-			vHeight  = window.innerHeight || doc.documentElement.clientHeight,
-			efp      = function (x, y) { return document.elementFromPoint(x, y) },
-			contains = "contains" in el ? "contains" : "compareDocumentPosition",
-			has      = contains == "contains" ? 1 : 0x10;
-
-		// Return false if it's not in the viewport
-		if (rect.right < 0 || rect.bottom < 0 || rect.left > vWidth || rect.top > vHeight){
-			return false;
-		}
-		
-		// Return true if any of its four corners are visible
-		return (
-			  (eap = efp(rect.left,  rect.top)) == el || el[contains](eap) == has
-		  ||  (eap = efp(rect.right, rect.top)) == el || el[contains](eap) == has
-		  ||  (eap = efp(rect.right, rect.bottom)) == el || el[contains](eap) == has
-		  ||  (eap = efp(rect.left,  rect.bottom)) == el || el[contains](eap) == has
-		);
 	}
-	
 	
 	
 	/************ Screensaver ***************/
@@ -345,9 +368,8 @@
 				});
 
 				$(document).bind("active.idleTimer", function(){
-				   $("html, body, #wrapper, #header").removeClass("dim")
+					$("html, body, #wrapper, #header").removeClass("dim")
 				});
-
 				
 				$.idleTimer(timeout);
 			} else if(data.screensaver === 'off'){
@@ -376,5 +398,4 @@
 		accesibleItem :'.mcjs-rm-controllable',
 		clickableItemClass : 'mcjs-rc-clickable'
 	}
-
 })(jQuery);
