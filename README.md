@@ -155,6 +155,17 @@ After the initial setup has been completed MediacenterJS will be available on th
 the server.js will make sure you do not have to restart the actual application (index.js) every time the configuration file changes.
 
 Of course, if you change the port, you need to use that port after the initial setup.
+
+![Remote] (http://www.mediacenterjs.com/global/images/remote.png)
+
+Using the remote control
+-------------
+
+Integrated with Mediacenterjs is a handly remote control you can use on your mobile phone or tablet. Simply open your favourite browser and navigate to the local ip address of the MCJS server followed by the port and remote url. Which would give you an url that looks something like:
+
+     http://192.168.0.101:3000/remote/
+
+If your phone is connected to the same wifi this should work automatically and the message on the bottom of the screen should say "Remote connected". If for some reason the IP is different and the remote is not connected you can fill in a different IP by pressing the three dotts at the top left corner. This will bring up the settings menu where you can customize all the MCJS settings.
 	
 What can the movie browser/player do? 
 -------------
