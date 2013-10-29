@@ -12,7 +12,7 @@ More screenshots in the screenshot folder.
 Status: 
 =======
 
-__Heavy work in progress, Alpha version (0.0.41)__
+__Heavy work in progress, Alpha version (0.0.45)__
 
 Why use it?
 ===========
