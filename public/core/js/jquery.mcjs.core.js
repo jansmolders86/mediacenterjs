@@ -195,7 +195,6 @@
 								}
 							break;
 							case "goRight" :
-								console.log('Right!')
 								if($(o.accesibleItem).length > 0){
 									var item = $(o.accesibleItem);
 									_goRight(o, item);
@@ -279,7 +278,6 @@
 	}
 	
 	function _goRight(o, item){
-		console.log('asd')
 		if ($(o.focused).next(item).length == 0)item.eq(0).addClass('focused');
 		$(o.focused).removeClass('focused').next(item).addClass('focused').scrollintoview({direction: "vertical"});
 	}	
@@ -291,16 +289,24 @@
 	
 	function _pressEnter(o, item){
 		if ($(o.focused).length > 0){
-			if (typeof $(o.focused).find('a').attr('href') !== 'undefined' && $(o.focused).find('a').attr('href') !== false){
-				document.location = $(o.focused).find('a').attr('href');
-			} else if ($(o.focused).find('.'+o.clickableItemClass).length > 0) {
-				if($('.'+o.clickableItemClass).is('input')){
+			if ($(o.focused).find('.'+o.clickableItemClass).length > 0) {
+				if($(o.focused).find('.'+o.clickableItemClass).is('input')){
+					if($(o.focused).find('.'+o.clickableItemClass).is('input[type=submit]')){
+						$(o.focused).find('.'+o.clickableItemClass).click();
+					}
 					$(o.focused).find('.'+o.clickableItemClass).focus();
+				} else if($(o.focused).find('.'+o.clickableItemClass).is('a')) {
+					if (typeof $(o.focused).find('.'+o.clickableItemClass).attr('href') !== 'undefined' && $(o.focused).find('.'+o.clickableItemClass).attr('href') !== false){
+						document.location = $(o.focused).find('.'+o.clickableItemClass).attr('href');
+					}
 				} else {
 					$(o.focused).find('.'+o.clickableItemClass).click();
 				}
 			} else if($(o.focused).hasClass(o.clickableItemClass)){
 				if($(o.focused).is('input')){
+					if($(o.focused).is('input[type=submit]')){
+						$(o.focused).click();
+					}
 					$(o.focused).focus();
 				} else if($(o.focused).is('a')){
 					if (typeof $('a'+o.focused).attr('href') !== 'undefined' && $('a'+o.focused).find('a').attr('href') !== false){
@@ -309,9 +315,7 @@
 				} else {
 					$(o.focused).click();
 				}
-			} else if($(o.focused).find('input').length > 0){
-				$(o.focused).find('input').focus();
-			}else {
+			} else {
 				return;
 			}
 		}
