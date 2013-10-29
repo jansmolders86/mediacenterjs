@@ -46,49 +46,49 @@ html(lang="en")
 					span.ui-icon.ui-icon-alert
 					.message 
 			form#setup.validate-form(action='/submit',method='post')
-				.row.wrap.mcjs-rm-controllable
+				.row.wrap.mcjs-rc-controllable
 					a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="movies") #{lingua.settings_clear_cache_movies}
-				.row.wrap.mcjs-rm-controllable
+				.row.wrap.mcjs-rc-controllable
 					a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="music") #{lingua.settings_clear_cache_music}
-				.row.wrap.mcjs-rm-controllable
+				.row.wrap.mcjs-rc-controllable
 					a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="tv") #{lingua.settings_clear_cache_tv}
-				.row.mcjs-rm-controllable
+				.row.mcjs-rc-controllable
 					label #{lingua.setting_movielocation}
 					input.mcjs-rc-clickable(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-				.row.mcjs-rm-controllable
+				.row.mcjs-rc-controllable
 					label #{lingua.setting_musiclocation}
 					input.mcjs-rc-clickable(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-				.row.mcjs-rm-controllable
+				.row.mcjs-rc-controllable
 					label #{lingua.setting_tvlocation}
 					input.mcjs-rc-clickable(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-				.row.mcjs-rm-controllable
+				.row.mcjs-rc-controllable
 					label #{lingua.setting_language}
 					select#language(name="language")
 						- for lang in availableLanguages
 							option(value=lang, selected=lang == language) #{lang}
-				.row.mcjs-rm-controllable
+				.row.mcjs-rc-controllable
 					label Local IP (for Remote)
 					input.mcjs-rc-clickable(name="localIP",type="text",placeholder="localhost", value= localIP)	
-				.row.mcjs-rm-controllable
+				.row.mcjs-rc-controllable
 					label Remote port (specific port for Remote)
 					input.mcjs-rc-clickable(name="remotePort",type="text",placeholder="3001", value= remotePort)	
-				.row.mcjs-rm-controllable
+				.row.mcjs-rc-controllable
 					label #{lingua.setting_location}
 					input.mcjs-rc-clickable(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")					
-				.row.mcjs-rm-controllable
+				.row.mcjs-rc-controllable
 					label Spotify Username
 					input.mcjs-rc-clickable(name="spotifyUser",type="text", value=spotifyUser)					
-				.row.mcjs-rm-controllable
+				.row.mcjs-rc-controllable
 					label Spotify Password
 					input.mcjs-rc-clickable(name="spotifyPass",type="password", value=spotifyPass)	
-				.row.mcjs-rm-controllable
+				.row.mcjs-rc-controllable
 					label #{lingua.setting_theme}
 					select#theme(name="theme")
 						- for theme in themes
 							option(selected=theme) #{theme}
-				.row.mcjs-rm-controllable
+				.row.mcjs-rc-controllable
 					label #{lingua.setting_port}
 					input.mcjs-rc-clickable(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
-				.row.mcjs-rm-controllable
+				.row.mcjs-rc-controllable
 					input.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")	
 					inpute(type="hidden",name="screensaver",value="dim")	

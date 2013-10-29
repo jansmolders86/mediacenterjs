@@ -224,6 +224,7 @@ app.get('/configuration', function(req, res){
 });
 	
 app.post('/submit', function(req, res){
+	console.log('asdsa',req.body);
 	configuration_handler.saveSettings(req.body, function() {
 		res.redirect('/');
 	});

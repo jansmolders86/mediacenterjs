@@ -15,7 +15,8 @@ var express = require('express')
 	, remove = npm + ' remove '
 	, plugins = []
 	, installedPlugins = []
-	, upgradablePluginList = [];
+	, upgradablePluginList = []
+	, configuration_handler = require('../../lib/handlers/configuration-handler');
 
 var getInstalledPlugins = function(){
 	var nodeModules = __dirname + '/../../node_modules';
@@ -132,18 +133,18 @@ exports.getAvailablePlugins = function(req, res){
 
 
 		array.forEach(function(val){
-
 			if (val.name === name) {
 				var isUpgradable = false;
-				if (semver.gt(version, val.info.version))
+				if (semver.gt(version, val.info.version)){
 					isUpgradable = true;
+				}
 
 				info.isInstalled = true;
 				info.isUpgradable = isUpgradable;
 
-				if (isUpgradable)
+				if (isUpgradable){
 					upgradablePluginList.push(val.name.substr(pluginPrefix.length));
-
+				}
 
 				return false; //break loop;
 			}
@@ -185,6 +186,27 @@ exports.pluginManager = function(req, res, pluginName, action){
 				error: 0,
 				message: pluginName +  ' ' + action + ' successfully.'  
 			});
+
+			setTimeout(function(){
+				console.log('Please wait, restarting server');
+				var currentSettings = {
+						moviepath: config.moviepath,
+						musicpath: config.musicpath,
+						tvpath: config.tvpath,
+						language: config.language,
+						localIP: config.localIP,
+						remotePort: config.remotePort,
+						location: config.location,
+						spotifyUser: config.spotifyUser,
+						spotifyPass: config.spotifyPass,
+						theme: config.theme,
+						port:  config.port }
+
+				configuration_handler.saveSettings(currentSettings, function() {
+				});
+				
+			},3000);
+			
 		}
 	});
 };

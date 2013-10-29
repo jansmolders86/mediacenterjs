@@ -41,13 +41,13 @@ What currently works?
 * Basic screensaver
 * Lazy loading of movie and music items
 * I3d tag support
+* Remote control
+* Plugin manager
 
 What's coming up
 ==================
 * Tv show app functionality
-* Remote control
 * Better inbrowser streaming
-* Plugin manager
 
 Known issues: video/audio playback
 ==================
@@ -59,12 +59,6 @@ I'm trying to figure out how to get around these limitations.
 * Browser: Video buffering does not work properly. (Current quickfix is simply pause the video and let it buffer a bit)
 * Android: Fullscreen mode not stable & Not seekable
 * Ubuntu: Audio playback of mp3 not supported by default
-
-Other known issues 
-==================
-
-* Frontend needs to be ported to knockout (still wip)
-* Movie scraper API has a limitation on the amount of calls we can make. So with a lot if movies, you can get misfires if you scroll through too many movies at once.
 
 What still needs to be done
 ==================
@@ -89,13 +83,8 @@ What do I need to have installed?
 
 * FFmpeg installed (Linux and windows binaries are included)
 * NodeJS installed
-* A modern browser like Chrome
+* A modern browser like Chrome or Firefox
 * An internet connection
-
-Additional Apps
-===========
-* Simple Spotify player: https://github.com/jansmolders86/mediacenterjs-spotify-app
-
 
 Partial documentation 
 ==========================
@@ -331,7 +320,19 @@ The 'NAME' will be replaced with the app name (folder name / namespace). You do 
 			"path": "/configuration"
 		}]
 	}
+	
+__Remote control__ 
 
+If you want the remote to properly navigate your app you need to add classes to the elements within your app so the remote can find it's way within your app.
+To specify a element that you can navigate to and from add the following class:
+
+	.mcjs-rc-controllable
+	
+To specify a element that you can click on add the following class:
+
+	.mcjs-rc-clickable
+	
+Please make sure you have include the socket.io clientside javascript and the MCJS core plugin to make sure the remote will work in your app.
 	
 Building an App
 -------------
@@ -351,31 +352,6 @@ This app makes heavy use of:
 * Express (https://github.com/visionmedia/express)
 * Node-Fluent-FFmpeg (https://github.com/schaermu/node-fluent-ffmpeg)
 * VideoJS (http://www.videojs.com/)
-
-This app also makes use of the following modules:
-
-* express
-* fs.extra
-* dateformat
-* downloader
-* fluent-ffmpeg
-* jade
-* lingua
-* node-ffprobe
-* node-html-encoder
-* redis
-* request
-* require
-* rimraf
-* feedparser
-* ini
-* trakt
-* colors
-* dblite
-* async
-* musicmetadata
-* walk
-* socket.io
 
 ###Special thanks to:###
 
@@ -401,12 +377,12 @@ What will the beta version be able to do?
 
 The project will reach beta status when it is able to provide:
 
-* Fast transcoding 
-* Cross Browser/device compatibility
-* Easy to add/change themes (with several available to choose from)
-* A set of ready made apps like youtube and google music.
-* Multilanguage support
-* App import/export functionality
+- [ ] Fast transcoding 
+- [ ] Cross Browser/device compatibility
+- [ ] Easy to add/change themes (with several available to choose from)
+- [ ] A set of ready made apps like youtube and google music.
+- [ ] Multi language support
+- [ ] App import/export functionality
 
 This application will run on Windows and Linux based systems. 
 

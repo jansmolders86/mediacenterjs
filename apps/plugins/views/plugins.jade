@@ -13,6 +13,7 @@ html(lang="en")
 		
 		script(src="/core/js/plugins/jquery.idle-timer.js")
 		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
+		script(src="/core/js/socket.io.min.js")
 		script(src="/core/js/jquery.mcjs.core.js")
 
 		link(rel='stylesheet', href='/plugins/css/style.css')
@@ -39,7 +40,7 @@ html(lang="en")
 					p Loading modules...
 
 			ul.plugins(data-bind="foreach: plugin")
-				li.boxed.mcjs-rm-controllable
+				li.boxed.mcjs-rc-controllable
 					.info
 						h2.name(data-bind="text:name")
 						div.desc(data-bind="text:desc")
@@ -47,7 +48,7 @@ html(lang="en")
 						div.date(data-bind="text:'Added: '+date()")
 						div.version(data-bind="text:version")
 					// ko if: isInstalled() === false 
-					a.btn.install.mcjs-rc-clickabledata-bind="{click: install}")	Install plugin
+					a.btn.install.mcjs-rc-clickable(data-bind="{click: install}")	Install plugin
 					// /ko	
 					// ko if: isInstalled() === true 
 					a.btn.remove.mcjs-rc-clickable(data-bind="{click: remove}") Remove plugin

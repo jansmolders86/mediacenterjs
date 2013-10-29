@@ -379,7 +379,7 @@
 		datasetKey: 'mcjs', //always lowercase
 		debug : false,
 		focused : '.focused',
-		accesibleItem :'.mcjs-rm-controllable',
+		accesibleItem :'.mcjs-rc-controllable',
 		clickableItemClass : 'mcjs-rc-clickable'
 	}
 })(jQuery);

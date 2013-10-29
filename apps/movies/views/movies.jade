@@ -47,7 +47,7 @@ html(lang="en")
 			#moviebrowser
 				// ko if: movies().length > 0
 				ul.movies(data-bind="foreach: movies")
-					li.movieposter.boxed.mcjs-rm-controllable
+					li.movieposter.boxed.mcjs-rc-controllable
 						.imageWrapper
 							// ko if: backdropImage() !== null && posterImage() !== null
 							img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }", src="/core/css/img/ajax-loader.gif")

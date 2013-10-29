@@ -71,7 +71,7 @@ server = {
 					server.restart();
 				},2000);
 			}
-		});
+		});	
 	}
 }
 

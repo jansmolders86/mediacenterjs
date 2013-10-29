@@ -7,7 +7,7 @@ h2{padding: 5px 0px; margin:0;}
 
 .message{text-align: center; font-size:24px; margin-bottom:10px;}
 
-.btn{float:right; margin-top: 30px; margin-right:20px; width:140px;}
+.btn{float:right; margin-top: 30px; margin-right:20px; }
 .btn.remove{background:red; color:#fff;}
 .btn.install{background:green; color:#fff;}
 .btn.upgrade{background:orange; color:#fff;}
