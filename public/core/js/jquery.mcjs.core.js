@@ -187,37 +187,51 @@
 					});
 
 					socket.on('controlling', function(data){
-					
-						if(data.action === "goLeft"){ 
-							if($(o.accesibleItem).length > 0){
-								var item = $(o.accesibleItem);
-								_goLeft(o, item);
-							}
-						}
-						if(data.action === "back"){ 
-							_goBack(o);
-						}
-						if(data.action === "pause"){ 
-							if (!elid){
+						switch(data.action) {
+							case "goLeft" :
+								if($(o.accesibleItem).length > 0){
+									var item = $(o.accesibleItem);
+									_goLeft(o, item);
+								}
+							break;
+							case "goRight" :
+								console.log('Right!')
+								if($(o.accesibleItem).length > 0){
+									var item = $(o.accesibleItem);
+									_goRight(o, item);
+								}
+							break;
+							case "back" :
+								_goBack(o);
+							break;
+							case "pause" :
 								if(videojs("player").paused()){
 									videojs("player").play();
 								} else {
 									videojs("player").pause();
 								}
-							}
-						}
-						if(data.action === "fullscreen"){ 
-							videojs("player").requestFullScreen();
-						}
-						else if(data.action === "goRight"){
-							if($(o.accesibleItem).length > 0){
-								var item = $(o.accesibleItem);
-								_goRight(o, item);
-							}
-						}
-						else if(data.action === "enter"){
-							_pressEnter(o);
-						}
+							break;
+							case "fullscreen" :
+								videojs("player").requestFullScreen();
+							break;
+							case "mute" :
+								if(videojs("player").volume() === 0){
+									videojs("player").volume(1)
+								} else {
+									videojs("player").volume(0);
+								}
+							break;							
+							case "enter" :
+								_pressEnter(o);
+							break;
+							case "dashboard" :
+								document.location = '/';
+							break;
+						}	
+					});
+
+					socket.on('sending', function(data){
+						$(o.focused).find("input").val(data);
 					});
 				});
 		} else {
@@ -265,43 +279,25 @@
 	}
 	
 	function _goRight(o, item){
-		if($('.ui-keyboard-keyset').length > 0){  
-			if($(o.focused).length > 0){
-				$(o.focused).removeClass('focused');
-			}
-			item  = $('.ui-keyboard-button');
-			if ($('#focusedBtn').next(item).length == 0)item.eq(0).attr('id','focusedBtn');
-			$('#focusedBtn').attr('id','').next(item).attr('id','focusedBtn').scrollintoview({direction: "vertical"});
-			
-		}
+		console.log('asd')
 		if ($(o.focused).next(item).length == 0)item.eq(0).addClass('focused');
 		$(o.focused).removeClass('focused').next(item).addClass('focused').scrollintoview({direction: "vertical"});
 	}	
 	
 	function _goLeft(o, item){
-		if($('.ui-keyboard-keyset').length > 0){  
-			if($(o.focused).length > 0){
-				$(o.focused).removeClass('focused');
-			}
-			item  = $('.ui-keyboard-button');
-		}
 		if (item.prev(item).length == 0) item.eq(-1).addClass('focused');
 		$(o.focused).removeClass('focused').prev().addClass('focused').scrollintoview({direction: "vertical"});
 	}	
 	
 	function _pressEnter(o, item){
-		if($('.ui-keyboard').length > 0){
-			var e = $.Event('keypress');
-			$(o.focused).focus();
-			$(o.focused).trigger(e);
-		} else if ($(o.focused).length > 0){
+		if ($(o.focused).length > 0){
 			if (typeof $(o.focused).find('a').attr('href') !== 'undefined' && $(o.focused).find('a').attr('href') !== false){
 				document.location = $(o.focused).find('a').attr('href');
 			} else if ($(o.focused).find('.'+o.clickableItemClass).length > 0) {
 				if($('.'+o.clickableItemClass).is('input')){
-					$('.'+o.clickableItemClass).focus();
+					$(o.focused).find('.'+o.clickableItemClass).focus();
 				} else {
-					$('.'+o.clickableItemClass).click();
+					$(o.focused).find('.'+o.clickableItemClass).click();
 				}
 			} else if($(o.focused).hasClass(o.clickableItemClass)){
 				if($(o.focused).is('input')){

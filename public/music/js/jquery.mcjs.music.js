@@ -235,6 +235,10 @@
 							}
 						}
 						
+						if(data.action === "shuffle"){ 
+							_randomTrack(o);
+						}
+						
 						if(data.action === "back"){ 
 							console.log('go back')
 							if ($(o.trackListSelector).is(':hidden')){	

@@ -74,6 +74,10 @@ html(lang="en")
 								socket.emit('control',{action:"enter"}); 
 							});
 							
+							$(".dashboard.link").on('click',function(){
+								socket.emit('control',{action:"dashboard"}); 
+							});
+							
 							$(".back.link").on('click',function(){
 								socket.emit('control',{action:"back"}); 
 							});		
@@ -87,12 +91,18 @@ html(lang="en")
 							});		
 
 							$(".mute.link").on('click',function(){
-								socket.emit('control',{action:"fullscreen"}); 
+								socket.emit('control',{action:"mute"}); 
+							});		
+							
+							$(".shuffle.link").on('click',function(){
+								socket.emit('control',{action:"shuffle"}); 
 							});					
+							
 
 							$("#sendValue").on('click',function(){
-								if($(#sendValueInput).val() !== ''){
-									socket.emit('control',{action:"sendValue"}); 
+								if($('#sendValueInput').val() !== ''){
+									var keyValue = $('#sendValueInput').val();
+									socket.emit('message',keyValue); 
 								}
 							});									
 

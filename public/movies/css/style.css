@@ -34,7 +34,7 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 }
 
 #header.scrolling{ opacity:0.9;}
-#header{height:35px; z-index:3; position:fixed; top:0; }
+#header{height:60px; z-index:3; position:fixed; top:0; }
 #header h1{z-index:4; margin-top:0px;}
 #wrapper{ padding-top:230px;z-index:1; }
 
