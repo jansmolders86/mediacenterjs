@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 var express = require('express')
 	, app = express()
 	, fs = require ('fs')
@@ -24,6 +25,7 @@ var express = require('express')
 	, colors = require('colors')
 	, rimraf = require('rimraf')
 	, dblite = require('dblite')
+	, mcjsRouting = require('./lib/routing/routing')
 	, http = require('http')
 	, server = require('http').createServer(app)
 	, remoteControl = require('./lib/utils/remote-control')
@@ -72,7 +74,7 @@ app.configure('production', function(){
 	app.use(express.errorHandler()); 
 });   
 
-require('./lib/routing/routing')(app,{ verbose: !module.parent });
+mcjsRouting.loadRoutes(app,{ verbose: !module.parent });
 
 app.use(function(req, res) {
     res.status(404).render('404',{ selectedTheme: config.theme});
@@ -114,7 +116,7 @@ app.get("/", function(req, res, next) {
 
 		//search node_modules for plugins
 		var nodeModules = __dirname + '/node_modules';
-		var pluginPrefix = 'mediacenterjs-'; //TODO: externalize in config file
+		var pluginPrefix = config.pluginPrefix;
 
 		fs.readdirSync(nodeModules).forEach(function(name){
 
@@ -164,7 +166,6 @@ function getIPAddresses() {
 
 	return ipAddresses;
 }
-
 
 app.post('/removeModule', function(req, res){
 	var incommingModule = req.body

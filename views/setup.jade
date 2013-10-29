@@ -17,7 +17,7 @@ html(lang="en")
 				var userLang = navigator.language || navigator.userLanguage; 
 				userLang = userLang.replace(/-.*/,'');
 				
-				if(userLang.match(/nl|en|fr|da|po/g)){
+				if(userLang.match(/nl|en|fr|da|pt/g)){
 					$('input#language').val(userLang);
 				} else{
 					$('input#language').val('en');
