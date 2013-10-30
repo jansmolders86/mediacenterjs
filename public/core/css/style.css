@@ -196,7 +196,13 @@ a.backlink{
 	position:relative;
 }
 
-.focused{ border:4px solid #FB8521; cursor:pointer; }
+.focused{ 
+	border-left: 4px solid #FB8521;
+	cursor: pointer;
+	border-radius: 5px;
+	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1); 
+	cursor:pointer; 
+}
 
 
 /* Screen saver */ 
