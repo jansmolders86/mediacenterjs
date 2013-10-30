@@ -133,9 +133,10 @@ p a:hover{text-decoration:none;}
     -o-animation: glide-in 0.5s; 
     animation: glide-in 0.5s; 
 	background:#fff;
-	-moz-box-shadow: 0 0px 5px #888;
-	-webkit-box-shadow: 0 0px 5px #888;
-	box-shadow: 0 0px 5px #888;
+	-moz-box-shadow: 0px 0px 0px 1px;
+	box-shadow: 0px 0px 0px 1px;
+	-webkit-box-shadow: 0px 0px 0px 1px;
+	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
 }
 
 #header .logo{ float:left; height:45px; margin:0px 10px 0 0px; }
@@ -255,23 +256,6 @@ html.dim{background:#222;}
 .tile img{ width:160px; height:169px;}
 .tile a{ float:left; padding:0 10px 3px 0; display:block; }
 .tile:hover{ cursor:pointer; }
-
-.settingslink{
-	position: absolute;
-	top: 20px;
-	right:450px;
-	height:50px;
-	list-style:none;
-}
-
-.settingslink a{
-	background:url(/core/icons/settings.png) no-repeat;
-	padding-left:50px;
-	height:50px;
-	display:block;
-	line-height:32px;
-	font-family:sans-serif;
-}
 
 /***** -----------------   DATE AND TIME  ---------------------- *****/
 

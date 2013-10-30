@@ -311,6 +311,10 @@
 					if (typeof $(o.focused).find('.'+o.clickableItemClass).attr('href') !== 'undefined' && $(o.focused).find('.'+o.clickableItemClass).attr('href') !== false){
 						document.location = $(o.focused).find('.'+o.clickableItemClass).attr('href');
 					}
+				} else if($(o.focused).find('a')) {
+					if (typeof $(o.focused).find('a').attr('href') !== 'undefined' && $(o.focused).find('a').attr('href') !== false){
+						document.location = $(o.focused).find('a').attr('href');
+					}
 				} else {
 					$(o.focused).find('.'+o.clickableItemClass).click();
 				}

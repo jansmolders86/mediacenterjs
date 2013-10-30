@@ -73,6 +73,14 @@ p a:hover{text-decoration:none;}
 	position:relative;
 }
 
+.focused{ 
+	border-left: 4px solid #FB8521;
+	cursor: pointer;
+	border-radius: 5px;
+	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1); 
+	cursor:pointer; 
+}
+
 #header{
 	height:75px;
 	width:100%;
@@ -89,9 +97,10 @@ p a:hover{text-decoration:none;}
     -o-animation: glide-in 0.5s; 
     animation: glide-in 0.5s; 
 	background:#fff;
-	-moz-box-shadow: 0 0px 5px #888;
-	-webkit-box-shadow: 0 0px 5px #888;
-	box-shadow: 0 0px 5px #888;
+	-moz-box-shadow: 0px 0px 0px 1px;
+	box-shadow: 0px 0px 0px 1px;
+	-webkit-box-shadow: 0px 0px 0px 1px;
+	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
 }
 
 a.backlink{ 
@@ -102,7 +111,6 @@ a.backlink{
 	width: 32px;
 	height:32px;
 }
-
 
 #header .logo{ float:left; height:45px; margin: 0px 10px 0 0px; }
 
@@ -118,15 +126,6 @@ a.backlink{
 	margin:0;
 	padding:0;
 	margin-left:60px;
-}
-
-.settingslink a{
-	background:url(/core/icons/settings.png) no-repeat;
-	padding-left:50px;
-	height:50px;
-	display:block;
-	line-height:32px;
-	font-family:sans-serif;
 }
 
 /* Form elements */
