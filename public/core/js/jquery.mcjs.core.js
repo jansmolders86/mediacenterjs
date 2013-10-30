@@ -224,7 +224,19 @@
 								_pressEnter(o);
 							break;
 							case "dashboard" :
-								document.location = '/';
+								if(window.location.pathname === '/plugins/'){
+									$.ajax({
+										url: '/plugins/reloadServer', 
+										type: 'get',
+										dataType: 'json'
+									}).done(function(data){
+										setTimeout(function(){
+											document.location = '/';
+										},1000);
+									});
+								} else {
+									document.location = '/';
+								}
 							break;
 						}	
 					});

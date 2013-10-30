@@ -42,6 +42,11 @@ exports.get = function(req, res, next){
 		switch(infoRequest) {
 			case('loadItems'):
 				functions.getAvailablePlugins(req,res);
+			break;
+			case('reloadServer'):
+				console.log('asd')
+				functions.reloadServer(req,res);
+			break;
 			default:
 				return;
 			break;		

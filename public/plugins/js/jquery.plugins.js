@@ -34,8 +34,20 @@
 			
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
-
 			_loadItems(o);
+			
+			$('.backlink').on('click',function(e) {
+				e.preventDefault();	
+				$.ajax({
+					url: '/plugins/reloadServer', 
+					type: 'get',
+					dataType: 'json'
+				}).done(function(data){
+					setTimeout(function(){
+						document.location = '/';
+					},1000);
+				});
+			});
 			
 		});
 	}
