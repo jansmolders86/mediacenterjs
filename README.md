@@ -1,4 +1,4 @@
-![logo] (screenshots/logo.png) MediacenterJS
+![logo] (http://www.mediacenterjs.com/global/images/github/logo.png) MediacenterJS
 =============
 
 __A NodeJS based Mediacenter__ 
