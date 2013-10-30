@@ -1,8 +1,7 @@
-#header h1{margin: 8px 0 0 60px;}
 
 .boxed{padding: 5px 20px; position:relative; overflow:hidden;}
 
-h2{padding: 5px 0px; margin:0;}
+h2{padding: 5px 0px; margin:0; font-weight:300; font-size:25px; text-transform: capitalize;}
 .info{float:left;}
 
 .message{text-align: center; font-size:24px; margin-bottom:10px;}
@@ -22,5 +21,4 @@ h2{padding: 5px 0px; margin:0;}
 .loading div{width:300px; margin:0 auto;}
 .loading img,
 .loading p{float:left; margin:0; font-weight:normal;}
-
 .loading p{margin:4px 0 0 10px;}
