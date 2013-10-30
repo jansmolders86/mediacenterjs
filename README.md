@@ -5,7 +5,7 @@ __A NodeJS based Mediacenter__
 
 Website: http://www.mediacenterjs.com
 
-![Dashboard] (screenshots/screen1.png)
+![Dashboard] (http://www.mediacenterjs.com/global/images/github/screen1.png)
 
 More screenshots in the screenshot folder.
 
@@ -156,7 +156,7 @@ the server.js will make sure you do not have to restart the actual application (
 
 Of course, if you change the port, you need to use that port after the initial setup.
 
-![Remote] (http://www.mediacenterjs.com/global/images/remote.png)
+![Remote] (http://www.mediacenterjs.com/global/images/github/remote.png)
 
 Using the remote control
 -------------
@@ -168,7 +168,7 @@ Integrated with Mediacenterjs is a handly remote control you can use on your mob
 If your phone is connected to the same wifi this should work automatically and the message on the bottom of the screen should say "Remote connected". If for some reason the IP is different and the remote is not connected you can fill in a different IP by pressing the three dotts at the top left corner. This will bring up the settings menu where you can customize all the MCJS settings.
 	
 
-![Movies] (http://www.mediacenterjs.com/global/images/second.png)
+![Movies] (http://www.mediacenterjs.com/global/images/github/second.png)
 
 What can the movie browser/player do? 
 -------------
@@ -404,7 +404,7 @@ This application will run on Windows and Linux based systems.
 
 I'm building MCJS in my free time so if you want to encourage me to continue this enormous project, feel free to do so.
 
-[![Donate] (screenshots/paypal-donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
+[![Donate] (http://www.mediacenterjs.com/global/images/github/paypal-donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
 
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
 This application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
