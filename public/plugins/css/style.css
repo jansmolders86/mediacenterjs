@@ -13,7 +13,7 @@ li.boxed{
 	float: left;
 	position: relative;
 	top: 0px;
-	width: 316px;
+	width: 290px;
 	min-height: 375px;
 	margin: 0em 0.5em 2.5em;
 	padding: 0em;
@@ -62,7 +62,7 @@ h2{
 .message{
 	text-align: center; 
 	font-size:24px; 
-	width:500px;
+	width:100%;
 	margin:10px auto;
 	background-color: #EFEFEF;
 	-webkit-box-sizing: border-box;
@@ -72,9 +72,10 @@ h2{
 	color: rgba(0, 0, 0, 0.7);
 	border-radius: 0.325em 0.325em 0.325em 0.325em;
 	padding:20px;
+	text-transform: capitalize;
 }
 
-.btn{ margin: 30px 50px; padding:10px 50px!important;}
+.btn{ margin: 30px 50px; padding:10px 30px!important;}
 .btn.remove{background:#7E8C8C; color:#fff;}
 .btn.install{background:#27AE61; color:#fff;}
 .btn.upgrade{background:#E77E23; color:#fff;}
