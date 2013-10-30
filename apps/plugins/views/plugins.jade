@@ -29,23 +29,20 @@ html(lang="en")
 			a.backlink
 				img(src="/core/icons/back.png")
 			h1  Plugins		
-		#wrapper
-
-			div.message.boxed(data-bind="visible:message() != ''")
-				span(data-bind="html:message")
-			
 			.loading.boxed
 				div
 					img(src="/core/css/img/ajax-loader.gif") 
 					p Loading modules...
+		#wrapper
+
+			div.message.boxed(data-bind="visible:message() != ''")
+				span(data-bind="html:message")
 
 			ul.plugins(data-bind="foreach: plugin")
 				li.boxed.mcjs-rc-controllable
 					.info
 						h2.name(data-bind="text:name")
 						div.desc(data-bind="text:desc")
-						div.author(data-bind="text:'By: '+ author()")
-						div.date(data-bind="text:'Added: '+date()")
 						div.version(data-bind="text:version")
 					// ko if: isInstalled() === false 
 					a.btn.install.mcjs-rc-clickable(data-bind="{click: install}")	Install plugin
@@ -56,6 +53,9 @@ html(lang="en")
 					// ko if: isUpgradable() === true 
 					a.btn.upgrade.mcjs-rc-clickable(data-bind="{click: upgrade}") Upgrade plugin
 					// /ko
+					.additional-info
+						div.author(data-bind="text:'By: '+ author()")
+						div.date(data-bind="text:'Added: '+date()")
 
 
 			div.boxed(data-bind="visible:upgradeAll().length > 0 ")
