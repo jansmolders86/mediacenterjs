@@ -43,9 +43,10 @@
 					type: 'get',
 					dataType: 'json'
 				}).done(function(data){
+					$('.backlink').find('img').attr('src', '/core/css/img/ajax-loader.gif')
 					setTimeout(function(){
 						document.location = '/';
-					},1000);
+					},2000);
 				});
 			});
 			
