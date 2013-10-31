@@ -114,7 +114,7 @@ Ffmpeg binaries for Linux and Windows are included.
 User guide for installing FFmpeg on Windows: (http://www.wikihow.com/Install-FFmpeg-on-Windows)
 User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-install-ffmpeg-linux)
 
-Install NodeJS: http://nodejs.org/download/
+Install NodeJS: http://nodejs.org/download/  (minimal version 0.10.x)
 
 __Install node on Ubuntu/Debian/OSX__
 
