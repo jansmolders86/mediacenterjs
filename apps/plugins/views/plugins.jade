@@ -26,13 +26,18 @@ html(lang="en")
 			});
 	body
 		#header
-			a.backlink
-				img(src="/core/icons/back.png")
-			h1  Plugins		
-			.loading.boxed
-				div
-					img(src="/core/css/img/ajax-loader.gif") 
-					p Loading modules...
+			div.pull-left
+				a.backlink
+					img(src="/core/icons/back.png")
+				h1  Plugins		
+				
+			div.loading.boxed.pull-left
+				img(src="/core/css/img/ajax-loader.gif") 
+				p Loading modules...
+
+			div.pull-right.boxed(data-bind="visible:upgradeAll().length > 0")
+				a.btn.upgrade.upgrade-all(data-bind="{click: upgradeAllPlugins.bind($data, upgradeAll() )}") Upgrade All
+		
 		#wrapper
 
 			div.message.boxed(data-bind="visible:message() != ''")
@@ -58,6 +63,5 @@ html(lang="en")
 						div.date(data-bind="text:'Added: '+date()")
 
 
-			div.boxed(data-bind="visible:upgradeAll().length > 0 ")
-				a.btn.upgrade(data-bind="{click: upgradeAllPlugins.bind($data, upgradeAll() )}") Upgrade All
+			
 			

@@ -87,12 +87,14 @@ li.boxed.focused .btn,
 
 .version{display:none;}
 
-.loading div{
-	margin-top: -41px;
-	float: left;
-	margin-left: 250px;
+.loading{
+	margin: 10px 50px 0px 10px;
 	width:300px;
 }
 .loading img,
 .loading p{float:left; margin:0; font-weight:normal;}
 .loading p{margin:4px 0 0 10px;}
+
+.pull-left { float: left;}
+.pull-right {float:right;}
+.upgrade-all {margin:5px 0;}
