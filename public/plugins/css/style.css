@@ -73,12 +73,26 @@ h2{
 	text-transform: capitalize;
 }
 
-.btn{ margin: 30px 50px; padding:10px 30px!important;}
-.btn.remove{background:#7E8C8C; color:#fff;}
-.btn.install{background:#27AE61; color:#fff;}
-.btn.upgrade{background:#E77E23; color:#fff;}
+.btn{ 
+	margin: 30px 20px; 
+	padding:10px 0px; 
+	color:#fff;
+	width: 200px;
+	text-align:center;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.btn.remove{background:#7E8C8C;}
+.btn.install{background:#27AE61;}
+.btn.upgrade{background:#3598DC; margin-top: -20px;}
+.btn.upgrade.upgrade-all{ margin-top:5px;}
+
 li.boxed.focused .btn,
-.btn:hover{ background:#fb8521; } 
+.btn:hover{ 
+	background:#fb8521; 
+	color:#fff; 
+} 
 
 .desc{font-family:arial; width:100%; height:150px; min-height:150px; display:block;}
 
