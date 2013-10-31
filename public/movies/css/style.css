@@ -75,6 +75,7 @@ a.backlink { margin-top: 0px; z-index:4; }
 	left:0;
 	z-index:6;
 	cursor:pointer;
+	border-radius:2px;
 }
 
 .movieposter.showDetails .cdNumber{
@@ -133,6 +134,12 @@ span.title{visibility:hidden; width:0; height:0;}
     border-radius:2px;
 	display:block;
 	background:#fff;
+	-webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+	border-bottom: 0.2em solid rgba(0, 0, 0, 0.2);
+	border-radius: 0.33em;
+	-webkit-transition: -webkit-box-shadow 0.2s ease;
+	transition: box-shadow 0.2s ease;
 }
 
 
