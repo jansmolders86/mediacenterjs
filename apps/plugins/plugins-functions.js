@@ -97,14 +97,27 @@ exports.getAvailablePlugins = function(req, res){
 			p = p.replace(/  /g, ' ');
 			
 			s = p.split(' ');
+			
+			console.log('s', s)
 			var author = s[0].substr(1);
 			var date = s[1] + ' ' + s[2];
-            var version = s[3];
+			
+			if(isNaN(s[3]) === false){
+				var version = s[3];
+			}else if(isNaN(s[4]) === false){
+				var version = s[4];
+			} else {
+				var version = '0.0.1';
+			}
            	var keywords = [];
             for (var i=4; i<s.length; i++){
             	keywords.push(s[i]);
             }
 
+					
+			console.log('name',name);
+			console.log('version',version);
+			
             var compareInfo = isPluginCurrentlyInstalled(installedPlugins, name, version);
             
 			var plugin = {
@@ -130,7 +143,6 @@ exports.getAvailablePlugins = function(req, res){
 			isInstalled: false,
 			isUpgradable: false
 		};
-
 
 		array.forEach(function(val){
 			if (val.name === name) {
