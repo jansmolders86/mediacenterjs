@@ -159,27 +159,12 @@ ul.music li.playing a{
 #albumInfo .year,
 #albumInfo .genre{ color:#333; padding-left: 140px; font-size:14px; }
 
-.eq{
-	visibility:hidden;
-	width: 25px;
-	height: 31px;
-	float: left;
-	margin: -5px 5px 0 0;
-}
-.eq .bar {
-    width:7px;
-    height:15px;
-    display: inline-block;
-    vertical-align: bottom;
-	margin-right:1px;
-}
-.eq.pause,
+i.play { visibility:hidden; font-size:14px; display:inline-block;}
+.selected i.play { visibility:visible; font-size: 14px; display:inline-block;}
 li.playing.pause a{
 	background:url(img/pause-icon.png) no-repeat -2px 12px !important;
 }
-.eq.pause .bar {
-	visibility:hidden;
-}
+li .title{display:inline-block;}
 
 .random{
 	width: 25px;

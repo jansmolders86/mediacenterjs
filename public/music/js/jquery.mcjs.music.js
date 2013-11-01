@@ -174,7 +174,7 @@
 			
 			// Populate tracks
 			tracks.forEach(function(value, index) {
-				$(o.trackListSelector +' > ul').append('<li class="mcjs-rc-tracklist-control" data-url="'+value+'"><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+value+'</div></li>')
+				$(o.trackListSelector +' > ul').append('<li class="mcjs-rc-tracklist-control" data-url="'+value+'"><i class="play icon"></i><div class="title">'+value+'</div></li>')
 			});
 			
 			_presentTracks(o);
@@ -291,9 +291,6 @@
 		$('.random').removeClass('hidden');
 		
 		$(o.playerSelector).addClass('show');
-		$('li.'+o.selectedClass).find(".bar").each(function() {
-			_fluctuate(o,$(this));
-		});
 		
 		videojs(o.playerID).ready(function(){
 			var myPlayer = this;
@@ -376,22 +373,9 @@
 	
 	function _dominantColor(o,image){
 		var dominantColor = getDominantColor(image);
-		$('.bar').css('background','rgb('+dominantColor+')');
 		$(o.headerSelector).css('borderBottom','5px solid rgb('+dominantColor+')');
+		$('.play').css('color','rgb('+dominantColor+')');
 	}
-	
-	function _fluctuate(o,bar) {
-		var barHeight = Math.random() * 10;
-		barHeight += 1;
-		var randomHeight = barHeight * 30;
-		
-		bar.animate({
-			height: barHeight
-		}, randomHeight, function() {
-			_fluctuate(o,$(this));
-		});
-	}
-	
 
 	/**** End of custom functions ***/
 	

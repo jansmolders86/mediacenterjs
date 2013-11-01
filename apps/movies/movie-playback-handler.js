@@ -5,17 +5,52 @@ var colors = require('colors'),
 
 /* Constants */
 var FFMPEG_TIMEOUT = 15000;
-var BROWSER_FFMPEG_OPTS = ['-y','-ss 0','-threads 4','-vcodec libx264','-pix_fmt yuv420p','-profile:v main',
-			'-b:v 512k','-acodec mp3','-ab 160000','-ar 44100','-rtbufsize 1000k', '-maxrate 620k','-f flv'];
+var BROWSER_FFMPEG_OPTS = [
+	'-y',
+	'-ss 0',
+	'-threads 0',
+	'-vcodec libx264',
+	'-pix_fmt yuv420p',
+	'-profile:v main',
+	'-b:v 512k',
+	'-acodec mp3',
+	'-ab 160000',
+	'-ar 44100',
+	'-qmax 2',
+	'-rtbufsize 1000k', 
+	'-maxrate 620k',
+	'-deinterlace',
+	'-crf 20',
+	'-f flv'];
 
-var MOBILE_FFMPEG_OPTS = ['-threads 4', '-ac 2', '-b:a 160000'];
+var MOBILE_FFMPEG_OPTS = [
+	'-threads 0', 
+	'-ac 2', 
+	'-b:a 160000'];
 
-var IOS_FFMPEG_OPTS = ['-vcodec libx264','-pix_fmt yuv420p','-s qvga','-segment_list_type m3u8','-map 0:v',
-			'-map 0:a:0','-c:a mp3','-f hls','-hls_time 10','-hls_list_size 6','-hls_wrap 18','-start_number 1',
-			'-deinterlace'].concat(MOBILE_FFMPEG_OPTS);
+var IOS_FFMPEG_OPTS = [
+	'-vcodec libx264',
+	'-pix_fmt yuv420p',
+	'-s qvga',
+	'-segment_list_type m3u8',
+	'-map 0:v',
+	'-map 0:a:0',
+	'-c:a mp3',
+	'-f hls',
+	'-hls_time 10',
+	'-hls_list_size 6',
+	'-hls_wrap 18',
+	'-start_number 1',
+	'-deinterlace'].concat(MOBILE_FFMPEG_OPTS);
 
-var ANDROID_FFMPEG_OPTS = ['-vcodec libvpx', '-vb 250k', '-keyint_min 150', '-g 150', '-c:a libvorbis', '-f webm']
-							.concat(MOBILE_FFMPEG_OPTS);
+var ANDROID_FFMPEG_OPTS = [
+	'-vcodec libvpx', 
+	'-vb 250k', 
+	'-keyint_min 150', 
+	'-g 150', 
+	'-c:a libvorbis', 
+	'-f webm']
+	.concat(MOBILE_FFMPEG_OPTS);
 
 /* Public Methods */
 
@@ -45,7 +80,6 @@ exports.startPlayback = function(response, movieUrl, movieFile, platform) {
 };
 
 /* Private Methods */
-
 startBrowserPlayback = function(response, movieUrl, movieFile) {
 	response.writeHead(200, { 'Content-Type':'video/flv', 'Content-Length': movieFile.size });
 
