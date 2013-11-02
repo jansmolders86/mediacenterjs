@@ -52,12 +52,11 @@ var getInstalledPlugins = function(){
 };
 
 exports.getAvailablePlugins = function(req, res){
-
 	console.log('Looking for available plugins..(pluginsList.' .green);
+	var plugins = [];
 	
 	getInstalledPlugins();
-	var plugins = [];
-
+	
 	async.waterfall([
 		function(callback){
 			npmSearch(["mediacenterjs-"], function(pluginList){
@@ -93,24 +92,26 @@ exports.getAvailablePlugins = function(req, res){
 		}],
 
 	function(err){
-
 		if (err){
-			console.log('Something went wrong: ' + err)
+			console.log('Error: Searching for plugins: ' + err);
+			res.json({
+				error: 1,
+				message: 'Error: Unable to get a list of the available plugins.'
+			});
 		}
 	});
 
 	var npmSearch = function(search, callback){
 		npm.load([], function (err, npm) {
 		  	npm.commands.search(search, function(err, res){
-				if (err)
+				if (err){
 					console.log('NPM Search Error ' + err);
-				
+					return;
+				}
 				callback(res);
 			});
 		});
 	}
-
-
 
 	var isPluginCurrentlyInstalled = function(array, name, version){
 		
@@ -118,7 +119,6 @@ exports.getAvailablePlugins = function(req, res){
 			isInstalled: false,
 			isUpgradable: false
 		};
-
 
 		array.forEach(function(val){
 			if (val.name === name) {
@@ -154,29 +154,61 @@ exports.pluginManager = function(req, res, pluginName, action){
 	var name = pluginPrefix + pluginName;
 	console.log('Plugins.pluginManager: ' + action + 'ing ' + name);
 	
-	exec(npm + ' ' + action + ' ' + name, function callback(error, stdout, stderr){
-		console.log(npm + ' ' + action + ' ' + name)
-		console.log(stdout)
-		if (error){
-			console.log('Error: Unable to ' + action + ' plugin: ' + name + '\n' + error);
-			
-			res.json({
-				error: 1,
-				message: 'Unable to ' + action + ' ' + pluginName+ '.'
-			});
+		
+	npm.load([], function (err, npm) {
+	  	var plugin = [];
+	  	plugin.push(name)
+	  	console.log(plugin)
+		switch(action){
+			case "install":
+			  	npm.commands.install(plugin, cb);
+			break;
+			case "upgrade":
+				npm.commands.upgrade(plugin, cb);
 
-			return;
-
-		} else {
-			console.log('Plugins.pluginManager: ' + action + 'ed.');			
-				
-			res.json({
-				error: 0,
-				message: pluginName +  ' ' + action + ' successfully.'  
-			});
-			
+			break;
+			case "remove":
+			  	npm.commands.remove(plugin, cb);
+			break;
 		}
 	});
+
+	var cb = function(err, result){
+		if (err){
+			console.log('Error: Unable to ' + action + ' plugin: ' + name + '\n' + error);
+			showError();
+		}else{
+			console.log('Plugins.pluginManager: ' + action + 'ed.');
+			showSuccess();
+		}
+	}
+
+	var showError = function(){
+		res.json({
+			error: 1,
+			message: 'Unable to ' + action + ' ' + pluginName+ '.'
+		});
+
+	};
+
+	var showSuccess = function(){
+		var msg = '';
+		switch(action){
+			case "install":
+			  	msg = "installed";
+			break;
+			case "upgrade":
+				msg = "upgraded";
+			break;
+			case "remove":
+			  	msg = "upgraded";
+			break;
+		}
+		res.json({
+			error: 0,
+			message: pluginName +  ' ' + msg + ' successfully.'  
+		});	
+	};
 };
 
 exports.reloadServer = function(req, res){
