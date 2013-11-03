@@ -200,13 +200,13 @@ or even
 	
 ###Filename conventions###
 MCJS will use the filenname to try to get the correct movie details. This way the server does not have to look inside the files to get the metadata, which speeds up the process.
-As you can gather the more precise the title of the movie, the better the scraper will know whhich movie it is.
+As you can gather the more precise the title of the movie, the better the scraper will know which movie it is.
 
 Asside from the title you can make it even easier for the scraper to recognize the movie by adding the date of release like so:
 	
 	Fight Club (1999).avi
 	
-If you your filenames are 'messy', the system will try to clean them up before sending the title to the scraper.
+If your filenames are 'messy', the system will try to clean them up before sending the title to the scraper.
 Text like release group names,dividers,file type or quality will be filtered out of the filename on the server.
 so:
 
