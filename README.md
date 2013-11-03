@@ -318,7 +318,8 @@ You can extend this in your own route.js file in your app folder.
 __route.js__ 
 
 Although the basic routing is pretty generic and should be sufficient most of the time, you can extend the basic routing table with your own custom routes by adding this JSON file to the root of your core app folder and defining your routes. 
-The 'NAME' will be replaced with the app name (folder name / namespace). You do not have to hard code it. But you can also add route outside your app namespace. For Example:
+
+The 'NAME' will be replaced with the app name (folder name / namespace). You do not have to hard code it. But you can also add routes outside your app namespace. For Example:
 
 	{
 		"track": [{
@@ -345,7 +346,8 @@ To specify a element that you can navigate to and from add the following class:
 To specify a element that you can click on add the following class:
 
 	.mcjs-rc-clickable
-	
+
+These classes will also enable keyboard navigation for your app.	
 Please make sure you have include the socket.io clientside javascript and the MCJS core plugin to make sure the remote will work in your app.
 	
 Building an App
@@ -373,7 +375,7 @@ This app makes heavy use of:
 * Luis Eduardo Brito https://github.com/luiseduardobrito for his Portuguese translation
 * Kasper Isager https://github.com/kasperisager for his Danish translation
 * Jussi Vatjus https://github.com/jupe for his code support
-* Terry MooreII https://github.com/TerryMooreII For the Javascript Jabber app
+* Terry MooreII https://github.com/TerryMooreII For the Javascript Jabber app and building the Plugin manager
 * Stefan Hoffman https://github.com/hoffi for his hudge contribution to the backend
 * Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
 * Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
