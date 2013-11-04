@@ -33,7 +33,7 @@ exports.get = function(req, res, next){
 	if(!action){
 		switch(optionalParam) {
 			case('info'):
-                var musicName = infoRequest.replace('\+',' ');
+                var musicName = infoRequest.replace(/\+/g, " ");
 				functions.getInfo(req, res, musicName);
 			break;	
 			case('loadItems'):
@@ -44,7 +44,7 @@ exports.get = function(req, res, next){
 		//Do nothing
 		return;
 	} else  if(action === 'play') {
-		var musicName = infoRequest.replace('\+',' ');
+		var musicName = infoRequest.replace(/\+/g, " ");
 		functions.playTrack(req, res, musicName, optionalParam);
 	};
 }

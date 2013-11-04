@@ -52,11 +52,11 @@ exports.get = function(req, res){
 		platform = 'browser';
 		switch(optionalParam) {
 			case('play'):
-				var movieName = infoRequest.replace('\+',' ');
+				var movieName = infoRequest.replace(/\+/g, " ");
 				functions.playMovie(req, res, platform, movieName);
 			break;
 			case('info'):
-				var movieName = infoRequest.replace('\+',' ');
+				var movieName = infoRequest.replace(/\+/g, " ");
 				functions.handler(req, res, infoRequest);
 			break;
 		}
