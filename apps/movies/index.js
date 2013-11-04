@@ -52,11 +52,13 @@ exports.get = function(req, res){
 		platform = 'browser';
 		switch(optionalParam) {
 			case('play'):
-				functions.playMovie(req, res, platform, infoRequest);
-				break;
+				var movieName = infoRequest.replace('\+',' ');
+				functions.playMovie(req, res, platform, movieName);
+			break;
 			case('info'):
+				var movieName = infoRequest.replace('\+',' ');
 				functions.handler(req, res, infoRequest);
-				break;
+			break;
 		}
 	}
 	else if(platform === 'ios') {
