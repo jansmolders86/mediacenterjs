@@ -43,7 +43,12 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 	overflow:hidden;
 	width:100%;
 	background:url(img/backdrop.png) repeat-x;
+	-webkit-transition: height 1s;
+	-moz-transition: height 1s;
+	transition: height 1s;
 }
+
+#backdrop.shrink{height:50px;}
 
 #backdrop img{	height:auto; }
 a.backlink { margin-top: 0px; z-index:4; }
@@ -169,7 +174,7 @@ span.title{visibility:hidden; width:0; height:0;}
 	border-top: 1px solid #e7e7e7;
 }
 
-.overview h1{ margin:0px 0 10px 0; font-size:13px; max-width:165px;}
+.overview h1{ margin:0px 0 10px 0; font-size:13px; max-width:230px;}
 .specs p{font-size:12px; float:left; margin:10px 0 0 15px;}
 
 #genres { position:absolute; top: 240px; left: 96px;}

@@ -40,10 +40,12 @@
 			_setViewmodel(o);
 			_getItems(o);
 			
-			$that.scroll( function(){ 
+			$that.on('scroll resize', function() {
 				_lazyload(o);
-			});	
+				_positionElement(o);
 
+			});	
+			
 			_showAndFilterAvailableGenres(o);			
 			
 		});
@@ -78,6 +80,16 @@
 			_playMovie(platform,url);
 		};
 	}
+	
+	function _positionElement(o){
+		var startFromTopInit = $('#moviebrowser').offset().top > 100;
+		if (startFromTopInit){
+            $('#backdrop').removeClass('shrink');
+        } else {
+            $('#backdrop').addClass('shrink');
+		}
+	};
+
 	
 	function _setViewmodel(o){
 		if (!o.viewModel) {
