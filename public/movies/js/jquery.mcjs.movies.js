@@ -82,7 +82,7 @@
 	}
 	
 	function _positionElement(o){
-		var startFromTopInit = $('#moviebrowser').offset().top > 100;
+		var startFromTopInit = $('#moviebrowser').offset().top > 50;
 		if (startFromTopInit){
             $('#backdrop').removeClass('shrink');
         } else {
