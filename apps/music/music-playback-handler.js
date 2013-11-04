@@ -50,10 +50,7 @@ startTrackStreaming = function(response, playbackPath) {
 		'Content-Type': 'audio/mp3',
 		'Content-Length': end - start,
 		'Content-Range': 'bytes ' + start + '-' + end + '/' + fileStat.size,
-		'Transfer-Encoding': 'chunked',
-		'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With'
+		'Transfer-Encoding': 'chunked'
 	});
 
 	var stream = fs.createReadStream(playbackPath);

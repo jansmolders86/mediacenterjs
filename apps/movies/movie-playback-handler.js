@@ -83,10 +83,7 @@ exports.startPlayback = function(response, movieUrl, movieFile, platform) {
 startBrowserPlayback = function(response, movieUrl, movieFile) {
 	response.writeHead(200, { 
 		'Content-Type':'video/flv', 
-		'Content-Length': movieFile.size,
-		'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With'
+		'Content-Length': movieFile.size
 	});
 
 	probe(movieUrl, function(err, probeData) {
@@ -104,10 +101,7 @@ startBrowserPlayback = function(response, movieUrl, movieFile) {
 startIOSPlayback = function(response, movieUrl, movieFile) {
 	response.writeHead(200, { 
 		'Content-Type':'application/x-mpegURL', 
-		'Content-Length':movieFile.size,
-		'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With'		
+		'Content-Length':movieFile.size	
 	});
 
 	startMovieStreaming(response, movieUrl, IOS_FFMPEG_OPTS);
@@ -116,10 +110,7 @@ startIOSPlayback = function(response, movieUrl, movieFile) {
 startAndroidPlayback = function(response, movieUrl, movieFile) {
 	response.writeHead(200, { 
 		'Content-Type':'video/webm', 
-		'Content-Length':movieFile.size,
-		'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With'
+		'Content-Length':movieFile.size'
 	});
 
 	startMovieStreaming(response, movieUrl, ANDROID_FFMPEG_OPTS);
