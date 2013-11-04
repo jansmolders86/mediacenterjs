@@ -255,20 +255,21 @@
 	// Catch and set keyevents
 	function _keyevents(o, $that){
 		$(document).keydown(function(e){
-			var focused = $('li.focused')
-			,subitemFocused = $('.options:visible li.focused')
-			,subitem = $('.options:visible li')
-			,item = $('li')
-			,elid = $(document.activeElement).is("input:focus");
-			
+			var elid = $(document.activeElement).is("input:focus");
 			if (typeof e == 'undefined' && window.event) { e = window.event; }
 			
 			switch(e.keyCode) {
 				case 39 : //next
-					_goRight(o, item);
+					if($(o.accesibleItem).length > 0){
+						var item = $(o.accesibleItem);
+						_goRight(o, item);
+					}
 				break;
 				case 37 : //prev
-					_goLeft(o, item);
+					if($(o.accesibleItem).length > 0){
+						var item = $(o.accesibleItem);
+						_goLeft(o, item);
+					}
 				break;
 				case 13 : //enter
 					_pressEnter(o);
