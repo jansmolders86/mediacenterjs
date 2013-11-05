@@ -334,11 +334,22 @@
 				} else if(platform === 'browser'){
 					$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
 
-					videojs('player').ready(function(){
+					videojs("player", {}, function(){
 						myPlayer = this;
-						myPlayer.play();
+						$('.vjs-big-play-button').trigger('click');
 						myPlayer.on('error', function(e){ console.log('Error', e) });
 						myPlayer.on('ended', function(e){ window.location="/movies/"; });
+					});
+					
+					$('.vjs-big-play-button').on('click',function(){
+						setTimeout(function(){
+							videojs("player").pause();
+							$('.vjs-loading-spinner').show();
+							setTimeout(function(){
+								$('.vjs-loading-spinner').hide();
+								videojs("player").play();
+							},10000);
+						},3000)
 					});
 				}
 			}

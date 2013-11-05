@@ -7,12 +7,15 @@ Website: http://www.mediacenterjs.com
 
 ![Dashboard] (http://www.mediacenterjs.com/global/images/github/screen1.png)
 
-More screenshots in the screenshot folder.
-
 Status: 
 =======
 
-__Heavy work in progress, Alpha version (0.0.45)__
+__Heavy work in progress, Alpha version (0.0.50)__
+
+__version 0.0.50__
+* Greatly improved video playback
+* Operational plugin manager
+* Improved GUI
 
 Why use it?
 ===========
@@ -55,9 +58,9 @@ Known issues: video/audio playback
 These issues are known issues and current browser/platform limitations.
 I'm trying to figure out how to get around these limitations.
 
-* IOS:  Video is not seekable
+* IOS: Video is not seekable
 * Browser: Video buffering does not work properly. (Current quickfix is simply pause the video and let it buffer a bit)
-* Android: Fullscreen mode not stable & Not seekable
+* Android: not seekable & mp3 playback not working
 * Ubuntu: Audio playback of mp3 not supported by default
 
 What still needs to be done
