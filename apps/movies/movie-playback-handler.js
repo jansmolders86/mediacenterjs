@@ -110,7 +110,7 @@ startIOSPlayback = function(response, movieUrl, movieFile) {
 startAndroidPlayback = function(response, movieUrl, movieFile) {
 	response.writeHead(200, { 
 		'Content-Type':'video/webm', 
-		'Content-Length':movieFile.size'
+		'Content-Length':movieFile.size
 	});
 
 	startMovieStreaming(response, movieUrl, ANDROID_FFMPEG_OPTS);

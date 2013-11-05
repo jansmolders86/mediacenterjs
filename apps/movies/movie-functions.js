@@ -46,8 +46,6 @@ exports.loadItems = function (req, res){
 };
 
 exports.playMovie = function (req, res, platform, movieRequest){
-	var movie_playback_handler = require('./movie-playback-handler');
-
 	file_utils.getLocalFile(config.moviepath, movieRequest, function(err, file) {
 		if (err) console.log(err .red);
 		if (file) {
@@ -55,6 +53,7 @@ exports.playMovie = function (req, res, platform, movieRequest){
 			var stat = fs.statSync(movieUrl);
 
 			console.log('Client platform is', platform);
+			var movie_playback_handler = require('./movie-playback-handler');
 			movie_playback_handler.startPlayback(res, movieUrl, stat, platform);
 		} else {
 			console.log("File " + movieRequest + " could not be found!" .red);
