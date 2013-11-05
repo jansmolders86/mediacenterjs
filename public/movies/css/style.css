@@ -43,12 +43,23 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 	overflow:hidden;
 	width:100%;
 	background:url(img/backdrop.png) repeat-x;
-	-webkit-transition: height 1s;
-	-moz-transition: height 1s;
-	transition: height 1s;
+	-webkit-transition: opacity 1s ease-in-out;
+	-moz-transition: opacity 1s ease-in-out;
+	-ms-transition: opacity 1s ease-in-out;
+	-o-transition: opacity 1s ease-in-out;
+	transition: opacity 1s ease-in-out;
+	-webkit-transition: height 1s ease-in-out;
+	-moz-transition: height 1s ease-in-out;
+	-ms-transition: height 1s ease-in-out;
+	-o-transition: height 1s ease-in-out;
+	transition: height 1s ease-in-out;
 }
 
-#backdrop.shrink{height:50px;}
+#backdrop.shrink{  
+	filter: alpha(opacity=0.3);
+	opacity: 0.3;
+	height:50px;
+}
 
 #backdrop img{	height:auto; }
 a.backlink { margin-top: 0px; z-index:4; }
