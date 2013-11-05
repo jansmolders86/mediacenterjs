@@ -59,7 +59,7 @@ These issues are known issues and current browser/platform limitations.
 I'm trying to figure out how to get around these limitations.
 
 * IOS: Video is not seekable
-* Browser: Video buffering does not work properly. (Current quickfix is simply pause the video and let it buffer a bit)
+* Browser: HD videos still take a lot of processing power.
 * Android: not seekable & mp3 playback not working
 * Ubuntu: Audio playback of mp3 not supported by default
 
