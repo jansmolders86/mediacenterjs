@@ -348,8 +348,8 @@
 							setTimeout(function(){
 								$('.vjs-loading-spinner').hide();
 								videojs("player").play();
-							},10000);
-						},3000)
+							},15000);
+						},2500)
 					});
 				}
 			}
