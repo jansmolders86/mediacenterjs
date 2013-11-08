@@ -95,7 +95,7 @@ startBrowserPlayback = function(response, movieUrl, movieFile) {
 	probe(movieUrl, function(err, probeData) {
 
 		var metaDuration = "", tDuration = "";
-		if(probeData.streams[0].duration !== 0 && probeData.streams[0].duration !== 'N/A'){
+		if(probeData !== undefined && probeData.streams[0].duration !== 0 && probeData.streams[0].duration !== 'N/A'){
 			var metaDuration =  '-metadata duration="' + probeData.streams[0].duration + '"',
 			tDuration =  '-t ' + probeData.streams[0].duration;
 		}
@@ -104,13 +104,8 @@ startBrowserPlayback = function(response, movieUrl, movieFile) {
 		var maxRate  = '-maxrate 1024'
 		var minRate  = '-maxrate 1024'
 		var bufSize = '-bufsize 1024'
-		if(probeData.streams[1].bit_rate !== 0 && probeData.streams[1].bit_rate !== 'N/A'){
-			// Currently, we scale back high bitrate playback due to performance issues
-			if(probeData.streams[1].bit_rate > 20000){
-				var bitrate = 1024;
-			} else {
-				var bitrate = probeData.streams[1].bit_rate
-			}
+		if(probeData !== undefined && probeData.streams[1].bit_rate !== 0 && probeData.streams[1].bit_rate !== 'N/A'){
+			var bitrate = probeData.streams[1].bit_rate
 			videoBitrate = '-b:v '+ bitrate;
 			maxRate  = '-maxrate '+ bitrate;
 			bufSize = '-bufsize '+ bitrate / 2;
@@ -128,7 +123,7 @@ startBrowserPlayback = function(response, movieUrl, movieFile) {
 		}*/
 		
 		var resolution = '';
-		if(probeData.streams[1].width !== 0 && probeData.streams[1].height !== 0 && probeData.streams[1].width !== undefined && probeData.streams[1].height !== undefined && probeData.streams[1].width !== 'N/A' && probeData.streams[1].height !== 'N/A'){
+		if(probeData !== undefined && probeData.streams[1].width !== 0 && probeData.streams[1].height !== 0 && probeData.streams[1].width !== undefined && probeData.streams[1].height !== undefined && probeData.streams[1].width !== 'N/A' && probeData.streams[1].height !== 'N/A'){
 			
 			// Currently, we scale back 1080p playback due to performance issues
 			if(probeData.streams[1].height > 720){
@@ -139,23 +134,21 @@ startBrowserPlayback = function(response, movieUrl, movieFile) {
 		}
 		
 		var audioBitrate = '-ab 160000'
-		if(probeData.streams[0].bit_rate !== 0 && probeData.streams[0].bit_rate !== 'N/A'){
+		if(probeData !== undefined && probeData.streams[0].bit_rate !== 0 && probeData.streams[0].bit_rate !== 'N/A'){
 			audioBitrate = '-ab '+ probeData.streams[0].bit_rate;
 		}
 		
 		var audioChannels = '-ac 2'
-		if(probeData.streams[0].channels !== 0 && probeData.streams[0].channels !== undefined && probeData.streams[0].channels !== 'N/A'){
+		if(probeData !== undefined && probeData.streams[0].channels !== 0 && probeData.streams[0].channels !== undefined && probeData.streams[0].channels !== 'N/A'){
 			audioBitrate = '-ac '+ probeData.streams[0].channels ;
 		}
 		
 		var audioSampleRate = '-ar 44100';
-		if(probeData.streams[0].sample_rate !== 0 && probeData.streams[0].sample_rate < 44101 && probeData.streams[0].sample_rate !== 'N/A'){
+		if(probeData !== undefined && probeData.streams[0].sample_rate !== 0 && probeData.streams[0].sample_rate < 44101 && probeData.streams[0].sample_rate !== 'N/A'){
 			audioSampleRate = '-ar '+ probeData.streams[0].sample_rate;
 		}
 		
-		console.log(maxRate)
-		console.log(bufSize)
-		console.log(videoBitrate)
+		console.log('Movie settings based on Metadata: \n MaxRate:'+maxRate +' \n BufferSize:'+bufSize+' \n BitRate: '+videoBitrate+'\n Duration: '+tDuration )
 		
 		var BROWSER_FFMPEG_OPTS = [
 		'-y',
