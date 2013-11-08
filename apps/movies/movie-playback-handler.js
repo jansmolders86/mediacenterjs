@@ -94,10 +94,14 @@ startBrowserPlayback = function(response, movieUrl, movieFile) {
 
 	probe(movieUrl, function(err, probeData) {
 
-		var metaDuration = "", tDuration = "";
+		var metaDuration = "", 
+		tDuration = "";
 		if(probeData !== undefined && probeData.streams[0].duration !== 0 && probeData.streams[0].duration !== 'N/A'){
 			var metaDuration =  '-metadata duration="' + probeData.streams[0].duration + '"',
 			tDuration =  '-t ' + probeData.streams[0].duration;
+		} else 	if(probeData !== undefined && probeData.streams[1].duration !== 0 && probeData.streams[1].duration !== 'N/A'){
+			var metaDuration =  '-metadata duration="' + probeData.streams[1].duration + '"',
+			tDuration =  '-t ' + probeData.streams[1].duration;
 		}
 	
 		var videoBitrate = '-b:v 1024';
@@ -124,7 +128,6 @@ startBrowserPlayback = function(response, movieUrl, movieFile) {
 		
 		var resolution = '';
 		if(probeData !== undefined && probeData.streams[1].width !== 0 && probeData.streams[1].height !== 0 && probeData.streams[1].width !== undefined && probeData.streams[1].height !== undefined && probeData.streams[1].width !== 'N/A' && probeData.streams[1].height !== 'N/A'){
-			
 			// Currently, we scale back 1080p playback due to performance issues
 			if(probeData.streams[1].height > 720){
 				resolution = '-s 1280x720';
