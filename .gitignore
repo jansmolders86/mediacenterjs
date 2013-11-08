@@ -12,7 +12,6 @@ logs
 results
 
 public/data/*
-configuration/config.ini
 npm-debug.log
 node_modules/
 
@@ -36,6 +35,6 @@ public/music/data/
 public/movies/data/
 public/tv/data/
 
-#Configuration
-configuration/config.json
 
+#Configuration
+configuration/config.ini
