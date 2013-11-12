@@ -55,7 +55,7 @@
 	
 	// Create movie model
 	//TODO: put in separate file 
-	var Movie = function (json) {
+	var Movie = function (o, json) {
 		var that = this;
 		this.localName 		= ko.observable(json);
 		this.posterImage 	= ko.observable();
@@ -68,6 +68,7 @@
 		this.playMovie = function () {
 			var movieTitle = that.localName();
 			var platform = 'browser'
+			var movieBackdrop = this.backdropImage
 			if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
 				platform = 'ios';
 				var url = '/movies/'+movieTitle+'/play/ios';
@@ -77,7 +78,7 @@
 			}else {
 				var url = '/movies/'+movieTitle+'/play';
 			}	
-			_playMovie(platform,url);
+			_playMovie(o, platform,url);
 		};
 	}
 	
@@ -109,7 +110,7 @@
 			var listing = [];
 			$.each(data, function () {
 				// create movie model for each movie
-				var movie = new Movie(this);
+				var movie = new Movie(o, this);
 				listing.push(movie);
 				
 				// add model to cache
@@ -310,7 +311,7 @@
 	}
 	
 	//TODO: make public function
-	function _playMovie(platform,url){
+	function _playMovie(o, platform,url){
 		$.ajax({
 			url: '/configuration/', 
 			type: 'get'
@@ -319,11 +320,11 @@
 			$('#wrapper, #header, .movies, #backdrop').hide();
 			$('body').animate({backgroundColor: '#000'},500);
 			
-			if($('#player').length > 1) {
-				$('#player').remove();
+			if($('#'+o.playerID).length > 1) {
+				$('#'+o.playerID).remove();
 			} else {
 				if(platform === 'android' || platform === 'ios'){
-					$('body').append('<video id="player" controls width="100%" height="100%"></video>');
+					$('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
 					
 					var myVideo = document.getElementsByTagName('video')[0];
 					myVideo.src = url;
@@ -334,7 +335,7 @@
 				} else if(platform === 'browser'){
 					$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
 
-					videojs("player", {}, function(){
+					videojs('player', {}, function(){
 						myPlayer = this;
 						$('.vjs-big-play-button').trigger('click');
 						myPlayer.on('error', function(e){ console.log('Error', e) });
@@ -348,12 +349,45 @@
 							setTimeout(function(){
 								$('.vjs-loading-spinner').hide();
 								videojs("player").play();
+								_pageVisibility(o);
 							},15000);
 						},2500)
 					});
 				}
 			}
+			
 		});
+	}
+	
+	function _pageVisibility(o){
+		var hidden, visibilityChange; 
+		if (typeof document.hidden !== "undefined") {
+			hidden = "hidden";
+			visibilityChange = "visibilitychange";
+		} else if (typeof document.mozHidden !== "undefined") {
+			hidden = "mozHidden";
+			visibilityChange = "mozvisibilitychange";
+		} else if (typeof document.msHidden !== "undefined") {
+			hidden = "msHidden";
+			visibilityChange = "msvisibilitychange";
+		} else if (typeof document.webkitHidden !== "undefined") {
+			hidden = "webkitHidden";
+			visibilityChange = "webkitvisibilitychange";
+		}
+		
+		function handleVisibilityChange() {
+			if (document[hidden]) {
+				videojs("player").pause();
+			} else if (sessionStorage.isPaused !== "true") {
+				videojs("player").play();
+			}
+		}
+
+		if (typeof document.addEventListener === "undefined" || typeof hidden === "undefined") {
+			console.log("The Page Visibility feature requires a browser such as Google Chrome that supports the Page Visibility API.");
+		} else {
+			document.addEventListener(visibilityChange, handleVisibilityChange, false);
+		}
 	}
 
 	/**** End of custom functions ***/
