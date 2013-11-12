@@ -333,9 +333,9 @@
 					myVideo.onended = function(e){window.location="/movies/";}
 					
 				} else if(platform === 'browser'){
-					$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
+					$('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
 
-					videojs('player', {}, function(){
+					videojs(o.playerID, {}, function(){
 						myPlayer = this;
 						$('.vjs-big-play-button').trigger('click');
 						myPlayer.on('error', function(e){ console.log('Error', e) });
@@ -344,11 +344,11 @@
 					
 					$('.vjs-big-play-button').on('click',function(){
 						setTimeout(function(){
-							videojs("player").pause();
+							videojs(o.playerID).pause();
 							$('.vjs-loading-spinner').show();
 							setTimeout(function(){
 								$('.vjs-loading-spinner').hide();
-								videojs("player").play();
+								videojs(o.playerID).play();
 								_pageVisibility(o);
 							},15000);
 						},2500)
@@ -377,9 +377,9 @@
 		
 		function handleVisibilityChange() {
 			if (document[hidden]) {
-				videojs("player").pause();
+				videojs(o.playerID).pause();
 			} else if (sessionStorage.isPaused !== "true") {
-				videojs("player").play();
+				videojs(o.playerID).play();
 			}
 		}
 
