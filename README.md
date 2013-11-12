@@ -46,6 +46,7 @@ What currently works?
 * I3d tag support
 * Remote control
 * Plugin manager
+* Page visibility API 
 
 What's coming up
 ==================
