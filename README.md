@@ -67,7 +67,7 @@ I'm trying to figure out how to get around these limitations.
 What still needs to be done
 ==================
 
-* Full progress and todo list: https://trello.com/b/czjyYsFi/mediacenterjs
+* Issues have been added that need to be fixed before Beta status can be reached.
 
 What is MediacenterJS?
 =========================
