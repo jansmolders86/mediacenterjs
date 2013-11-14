@@ -340,7 +340,7 @@
 
 	function _goBack(o){
 		if( !$(document.activeElement).is("input:focus")){
-			if ($('.backlink').length > 0){
+            if ($('.backlink').length > 0){
 				var attrHref = $('.backlink').attr('href');
 				if (typeof attrHref !== undefined && attrHref !== false){
 					var attrHref = $('.backlink').attr('href');
@@ -349,7 +349,11 @@
 					$('.backlink').click();
 				}
 			} else if( !$(document.activeElement).is("input:focus") ){
-				window.history.go(-1);
+                if( $('body').hasClass('playingMovie')){
+                    window.location = '/movies/';
+                } else {
+                    window.history.go(-1);
+                }
 			}
 		}
 	}

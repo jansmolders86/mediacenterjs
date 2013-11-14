@@ -788,38 +788,38 @@ em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red;
 
 
 .glinein{
-	-webkit-animation: glide-in 0.8s; 
-	-moz-animation: glide-in 0.8s; 
-    -o-animation: glide-in 0.8s; 
-    animation: glide-in 0.8s; 
+	-webkit-animation: glide-in 0.5s;
+	-moz-animation: glide-in 0.5s;
+    -o-animation: glide-in 0.5s;
+    animation: glide-in 0.5s;
 }
 
 .fadein{
-	-webkit-animation: fade-in 2s; 
-	-moz-animation:  fade-in 2s; 
-    -o-animation: fade-in 2s; 
-    animation: fade-in 2s; 
+	-webkit-animation: fade-in 1s;
+	-moz-animation:  fade-in 1s;
+    -o-animation: fade-in 1s;
+    animation: fade-in 1s;
 }
 
 .fadeinslow{
-	-webkit-animation: fade-in 3s; 
-	-moz-animation:  fade-in 3s; 
-    -o-animation: fade-in 3s; 
-    animation: fade-in 3s; 
+	-webkit-animation: fade-in 2s;
+	-moz-animation:  fade-in 2s;
+    -o-animation: fade-in 2s;
+    animation: fade-in 2s;
 }
 
 .fadeout{
-	-webkit-animation: fade-out 3s; 
-	-moz-animation:  fade-out 3s; 
-    -o-animation: fade-out 3s; 
-    animation: fade-out 3s; 
+	-webkit-animation: fade-out 2s;
+	-moz-animation:  fade-out 2s;
+    -o-animation: fade-out 2s;
+    animation: fade-out 2s;
 }
 
 .flipin{ 
-	-webkit-animation: flip-in 2s; 
-	-moz-animation: flip-in 2s; 
-    -o-animation: flip-in 2s; 
-    animation: flip-in 2s; 
+	-webkit-animation: flip-in 1s;
+	-moz-animation: flip-in 1s;
+    -o-animation: flip-in 1s;
+    animation: flip-in 1s;
 }
 
 

@@ -19,6 +19,8 @@ node_modules/
 screenshots/
 .DS_Store
 thumbs.db
+.idea
+.idea/*
 public/music/data/*
 public/movies/data/* 
 lib/database/mcjs.sqlite

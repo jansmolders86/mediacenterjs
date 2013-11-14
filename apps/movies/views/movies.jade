@@ -48,12 +48,12 @@ html(lang="en")
 			#moviebrowser
 				// ko if: movies().length > 0
 				ul.movies(data-bind="foreach: movies")
-					li.movieposter.boxed.mcjs-rc-controllable
+					li.movieposter.boxed.mcjs-rc-controllable(data-bind="attr: {'id':isActive}" )
 						.imageWrapper
 							// ko if: backdropImage() !== null && posterImage() !== null
 							img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }", src="/core/css/img/ajax-loader.gif")
 							// /ko	
-						.overlay.mcjs-rc-clickable(data-bind="{click: playMovie}")	
+						.overlay.mcjs-rc-clickable(data-bind="{click: playMovie}")
 						span.title(data-bind="text:localName")	
 						.overview
 							// ko if: overview() !== null 

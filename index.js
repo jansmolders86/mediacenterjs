@@ -26,8 +26,6 @@ var express = require('express')
 	, rimraf = require('rimraf')
 	, dblite = require('dblite')
 	, mcjsRouting = require('./lib/routing/routing')
-	, http = require('http')
-	, server = require('http').createServer(app)
 	, remoteControl = require('./lib/utils/remote-control')
 	, configuration_handler = require('./lib/handlers/configuration-handler');
 	
@@ -71,6 +69,12 @@ app.all('*', function(req, res, next) {
   next();
 });
 
+/*Chmod files*/
+fs.chmodSync('./bin/ffmpeg/ffmpeg', 0755);
+fs.chmodSync('./bin/sqlite3/sqlite3', 0755);
+fs.chmodSync('./bin/sqlite3/osx/sqlite3', 0755);
+fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
+
 app.configure('development', function(){   
 	app.enable('verbose errors');
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));  
@@ -89,7 +93,9 @@ app.use(function(req, res) {
 });
 
 app.get("/", function(req, res, next) {  
-	if(	config.moviepath == '' && config.language == '' && config.location == '' || config.moviepath == null || config.moviepath == undefined){
+	if(	config.moviepath == '' && config.language == '' && config.location == '' ||
+        config.moviepath == null ||
+        config.moviepath == undefined){
 
 		var localIP = getIPAddresses()
 		, sendLocalIP = '';
@@ -128,8 +134,9 @@ app.get("/", function(req, res, next) {
 		fs.readdirSync(nodeModules).forEach(function(name){
 
 			//Check if the folder in the node_modules starts with the prefix
-			if(name.substr(0, pluginPrefix.length) !== pluginPrefix)
-				return;
+			if(name.substr(0, pluginPrefix.length) !== pluginPrefix){
+                return;
+            }
 
 			var pluginPath = nodeModules + '/' + name;
 			if(fs.existsSync( pluginPath + '/public/tile.png')){
@@ -157,10 +164,9 @@ app.get("/", function(req, res, next) {
 });
 
 function getIPAddresses() {
+	var ipAddresses = []
+	    , interfaces = require('os').networkInterfaces();
 
-	var ipAddresses = [];
-
-	var interfaces = require('os').networkInterfaces();
 	for (var devName in interfaces) {
 		var iface = interfaces[devName];
 		for (var i = 0; i < iface.length; i++) {
@@ -176,9 +182,9 @@ function getIPAddresses() {
 
 app.post('/removeModule', function(req, res){
 	var incommingModule = req.body
-	, module = incommingModule.module
-	, appDir = './apps/'+module+'/'
-	, publicdir = './public/'+module+'/';
+        , module = incommingModule.module
+        , appDir = './apps/'+module+'/'
+        , publicdir = './public/'+module+'/';
 
 	rimraf(appDir, function (e){if(e)console.log('Error removing module', e .red)});
 	rimraf(publicdir, function (e) { 
@@ -192,8 +198,8 @@ app.post('/removeModule', function(req, res){
 
 app.post('/clearCache', function(req, res){
 	var app_cache_handler = require('./lib/handlers/app-cache-handler');
-	var incommingCache = req.body,
-		cache = incommingCache.cache;
+	var incommingCache = req.body
+        , cache = incommingCache.cache;
 	
 	console.log('clearing ' + cache + ' cache');
 	app_cache_handler.clearCache(cache, function(err) {

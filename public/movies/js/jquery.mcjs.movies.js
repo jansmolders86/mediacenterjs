@@ -65,10 +65,11 @@
 		this.overview 		= ko.observable();
 		this.title 			= ko.observable();
 		this.cdNumber 		= ko.observable();
+		this.isActive 		= ko.observable();
 		this.playMovie = function () {
 			var movieTitle = that.localName();
 			var platform = 'browser'
-			var movieBackdrop = this.backdropImage
+            that.isActive(o.activeMovieId);
 			if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
 				platform = 'ios';
 				var url = '/movies/'+movieTitle+'/play/ios';
@@ -218,26 +219,28 @@
 	}
 	
 	function _scrollBackdrop(o){
-		var duration = 40000
-		$(o.backdropSelector).animate({ 
-			top: '-380px'
-		},
-		{
-			easing: 'swing',
-			duration: duration,
-			complete: function(){
-				$(o.backdropSelector).animate({ 
-					top: '-0px'
-				},
-				{
-					easing: 'swing',
-					duration: duration,
-					complete: function(){
-						_scrollBackdrop(o)
-					}
-				});	
-			}
-		});		
+		var duration = o.scrollDuration
+        if(o.stopScroll !== false){
+            $(o.backdropSelector).animate({
+                top: '-380px'
+            },
+            {
+                easing: 'swing',
+                duration: duration,
+                complete: function(){
+                    $(o.backdropSelector).animate({
+                        top: '-0px'
+                    },
+                    {
+                        easing: 'swing',
+                        duration: duration,
+                        complete: function(){
+                            _scrollBackdrop(o)
+                        }
+                    });
+                }
+            });
+        }
 	}
 	
 	//TODO: Clean this up
@@ -317,44 +320,58 @@
 			type: 'get'
 		}).done(function(data){
 			var myPlayer;
-			$('#wrapper, #header, .movies, #backdrop').hide();
-			$('body').animate({backgroundColor: '#000'},500);
-			
-			if($('#'+o.playerID).length > 1) {
-				$('#'+o.playerID).remove();
-			} else {
-				if(platform === 'android' || platform === 'ios'){
-					$('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
-					
-					var myVideo = document.getElementsByTagName('video')[0];
-					myVideo.src = url;
-					myVideo.load();
-					myVideo.play();
-					myVideo.onended = function(e){window.location="/movies/";}
-					
-				} else if(platform === 'browser'){
-					$('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
 
-					videojs(o.playerID, {}, function(){
-						myPlayer = this;
-						$('.vjs-big-play-button').trigger('click');
-						myPlayer.on('error', function(e){ console.log('Error', e) });
-						myPlayer.on('ended', function(e){ window.location="/movies/"; });
-					});
-					
-					$('.vjs-big-play-button').on('click',function(){
-						setTimeout(function(){
-							videojs(o.playerID).pause();
-							$('.vjs-loading-spinner').show();
+            $('#wrapper, .movies, #header').hide();
+            $('body').animate({backgroundColor: '#000'},500).addClass('playingMovie');
+
+            var newBackground = $('#'+o.activeMovieId).find("img."+o.posterClass).attr(o.backdrophandler);
+            $(o.backdropSelector).attr("src", newBackground).addClass(o.fadeClass);
+
+            $('#backdrop').css({
+                height:'100%',
+                backgroundColor: '#000'
+            });
+
+            o.stopScroll = true;
+
+			setTimeout(function(){
+				
+				if($('#'+o.playerID).length > 1) {
+					$('#'+o.playerID).remove();
+				} else {
+					if(platform === 'android' || platform === 'ios'){
+						$('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
+						
+						var myVideo = document.getElementsByTagName('video')[0];
+						myVideo.src = url;
+						myVideo.load();
+						myVideo.play();
+						myVideo.onended = function(e){window.location="/movies/";}
+						
+					} else if(platform === 'browser'){
+						$('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
+
+						videojs(o.playerID, {}, function(){
+							myPlayer = this;
+							$('.vjs-big-play-button').trigger('click');
+							myPlayer.on('error', function(e){ console.log('Error', e) });
+							myPlayer.on('ended', function(e){ window.location="/movies/"; });
+						});
+						
+						$('.vjs-big-play-button').on('click',function(){
 							setTimeout(function(){
-								$('.vjs-loading-spinner').hide();
-								videojs(o.playerID).play();
-								_pageVisibility(o);
-							},15000);
-						},2500)
-					});
+								videojs(o.playerID).pause();
+								$('.vjs-loading-spinner').show();
+								setTimeout(function(){
+									$('.vjs-loading-spinner, #backdrop').hide();
+									videojs(o.playerID).play();
+									_pageVisibility(o);
+								},15000);
+							},2500)
+						});
+					}
 				}
-			}
+			},3000);
 			
 		});
 	}
@@ -406,7 +423,6 @@
 	$.fn.mcjsm.defaults = {		
 		datasetKey: 'mcjsmovies' //always lowercase
 		, movieListSelector: '.movies' 
-		, trackListSelector: '#tracklist' 
 		, backdropSelector: '.backdropimg' 
 		, backdrophandler: 'title' 
 		, posterClass: 'movieposter' 
@@ -418,9 +434,12 @@
 		, backLinkSelector: '.backlink' 
 		, playerID: 'player' 
 		, overlayselector : '.overlay'
+        , activeMovieId : 'active'
 		, fadeClass: 'fadein' 
 		, fadeSlowClass: 'fadeinslow' 
 		, focusedClass: 'focused'
+        , scrollDuration: 40000
+        , stopScroll: false
 		, scrollingClass: 'scrolling'
 	};
 

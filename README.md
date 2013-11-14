@@ -46,7 +46,7 @@ What currently works?
 * I3d tag support
 * Remote control
 * Plugin manager
-* Page visibility API 
+* Page visibility API
 
 What's coming up
 ==================
@@ -136,10 +136,6 @@ __Install node on Ubuntu/Debian/OSX__
 	git clone https://github.com/jansmolders86/mediacenterjs.git
 	cd mediacenterjs
 	npm install
-	sudo chmod +x bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
-	
-	For OSX users:
-	sudo chmod +x ./bin/sqlite3/osx/sqlite3 
 	
 	sudo node server
 
@@ -148,9 +144,12 @@ __Install node on Ubuntu/Debian/OSX__
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 
-If you get an 'EACCESS' error, please set thefollowing permissions and run the server using 'sudo'
+If you get an 'EACCESS' error, please set the following permissions and run the server using 'sudo'
  
      sudo chmod 755 bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
+            or on OSX
+     sudo chmod 755 bin/sqlite3/osx/sqlite3 lib/database/mcjs.sqlite
+
      sudo node server
 
 Running MediacenterJS
