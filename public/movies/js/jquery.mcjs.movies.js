@@ -31,7 +31,8 @@
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
 				$that: $that,
-				movieCache : []
+				movieCache : [],
+                platform:'browser'
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -46,8 +47,7 @@
 
 			});	
 			
-			_showAndFilterAvailableGenres(o);			
-			
+			_showAndFilterAvailableGenres(o);
 		});
 	}
 	
@@ -68,21 +68,30 @@
 		this.isActive 		= ko.observable();
 		this.playMovie = function () {
             window.location.hash = that.localName();
-			var movieTitle = that.localName();
-			var platform = 'browser'
             that.isActive(o.activeMovieId);
-			if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
-				platform = 'ios';
-				var url = '/movies/'+movieTitle+'/play/ios';
-			} else if(navigator.userAgent.toLowerCase().indexOf("android") > -1){
-				platform = 'android';
-				var url = '/movies/'+movieTitle+'/play/android';
-			}else {
-				var url = '/movies/'+movieTitle+'/play';
-			}	
-			_playMovie(o, platform,url);
+
+            var movieTitle = that.localName();
+            var url = _checkPlatform(o, movieTitle);
+			_playMovie(o, url);
 		};
 	}
+
+    function _checkPlatform(o, movieTitle){
+        if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
+            o.platform = 'IOS'
+            var url = '/movies/'+movieTitle+'/play/ios';
+        } else if(navigator.userAgent.toLowerCase().indexOf("android") > -1){
+            o.platform = 'Android'
+            var url = '/movies/'+movieTitle+'/play/android';
+        }else {
+            o.platform = 'browser'
+            var url = '/movies/'+movieTitle+'/play';
+        }
+
+        console.log(url)
+        return url;
+    }
+
 	
 	function _positionElement(o){
 		var startFromTopInit = $('#moviebrowser').offset().top > 50;
@@ -122,8 +131,15 @@
 			// Fill viewmodel with movie model per item
 			o.viewModel.movies(listing);
 			o.viewModel.movies.sort();
-			
-			_lazyload(o);
+
+            if(window.location.hash) {
+                var movieTitle =window.location.hash.substring(1);
+                var url = _checkPlatform(o, movieTitle);
+                _playMovie(o,url);
+            } else{
+                _lazyload(o);
+            }
+
 		});
 	}
 	
@@ -154,7 +170,7 @@
 				}
 				
 				_focusedItem(o);
-				_scrollBackdrop(o);
+                _scrollBackdrop(o);
 			});
 		}		
 	}
@@ -184,7 +200,7 @@
 	}
 	
 	
-	/******** Jquery only  functions *********/ 
+	/******** Jquery only functions *********/
 	
 	//TODO: Put in separate file
 	function _focusedItem(o){
@@ -192,10 +208,10 @@
 			mouseenter: function() {	
 				var newBackground = $(this).find("img."+o.posterClass).attr(o.backdrophandler);
 				$(this).addClass(o.focusedClass);
-				$(o.backdropSelector).attr("src", newBackground).addClass(o.fadeClass);
+				$(o.backdropClass).attr("src", newBackground).addClass(o.fadeClass);
 			},
 			mouseleave: function() {
-				$(o.backdropSelector).removeClass(o.fadeClass);
+				$(o.backdropClass).removeClass(o.fadeClass);
 				if ($('li.'+o.posterClass+'.'+o.focusedClass).length) {
 					$('li.'+o.posterClass+'.'+o.focusedClass).removeClass(o.focusedClass);
 				}
@@ -203,10 +219,10 @@
 			focus: function() {		
 				$(this).addClass(o.focusedClass);			
 				var newBackground = $(this).find("img."+o.posterClass).attr(o.backdrophandler);
-				$(o.backdropSelector).attr("src", newBackground).addClass(o.fadeClass);
+				$(o.backdropClass).attr("src", newBackground).addClass(o.fadeClass);
 			},
 			focusout: function() {
-				$(o.backdropSelector).removeClass(o.fadeClass);
+				$(o.backdropClass).removeClass(o.fadeClass);
 				if ($('li.'+o.posterClass+'.'+o.focusedClass).length) {
 					$('li.'+o.posterClass+'.'+o.focusedClass).removeClass(o.focusedClass);
 				}
@@ -215,33 +231,33 @@
 		
 		if ($(o.movieListSelector+' > li'+o.focusedClass)){
 			var newBackground = $(this).find("img."+o.posterClass).attr(o.backdrophandler);
-			$(o.backdropSelector).attr("src", newBackground).addClass(o.fadeSlowClass);
+			$(o.backdropClass).attr("src", newBackground).addClass(o.fadeSlowClass);
 		}
 	}
 	
 	function _scrollBackdrop(o){
-		var duration = o.scrollDuration
-        if(o.stopScroll !== false){
-            $(o.backdropSelector).animate({
-                top: '-380px'
-            },
-            {
-                easing: 'swing',
-                duration: duration,
-                complete: function(){
-                    $(o.backdropSelector).animate({
-                        top: '-0px'
-                    },
-                    {
-                        easing: 'swing',
-                        duration: duration,
-                        complete: function(){
-                            _scrollBackdrop(o)
+		var duration = 40000;
+        $(o.backdropClass).animate({
+            top: '-380px'
+        },
+        {
+            easing: 'swing',
+            duration: duration,
+            complete: function(){
+                $(o.backdropClass).animate({
+                    top: '-0px'
+                },
+                {
+                    easing: 'swing',
+                    duration: duration,
+                    complete: function(){
+                        if(o.stopScroll === false){
+                            _scrollBackdrop(o);
                         }
-                    });
-                }
-            });
-        }
+                    }
+                });
+            }
+        });
 	}
 
 	function _showAndFilterAvailableGenres(o){
@@ -313,7 +329,10 @@
 		});
 	}
 
-	function _playMovie(o, platform,url){
+	function _playMovie(o,url){
+
+        console.log('platform',o.platform)
+        console.log('url',url)
 		$.ajax({
 			url: '/configuration/', 
 			type: 'get'
@@ -322,24 +341,17 @@
 
             $('#wrapper, .movies, #header').hide();
 
-            var newBackground = $('#'+o.activeMovieId).find("img."+o.posterClass).attr(o.backdrophandler);
-            $(o.backdropSelector).attr("src", newBackground).addClass(o.fadeClass);
-
-            $('#backdrop').removeClass('shrink').css({
-                height:'100%',
-                backgroundColor: '#000'
-            }).append('<div clas="movie-loading"><i class="loading icon"></i></div>');
+            _resetBackdrop(o);
 
             $('body').animate({backgroundColor: '#000'},500).addClass('playingMovie');
-
-            o.stopScroll = true;
 
 			setTimeout(function(){
 				
 				if($('#'+o.playerID).length > 1) {
 					$('#'+o.playerID).remove();
 				} else {
-					if(platform === 'android' || platform === 'ios'){
+					if(o.platform === 'Android' || o.platform === 'IOS'){
+                        $('#wrapper, .movies, #header, #backdrop').hide();
 						$('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
 						
 						var myVideo = document.getElementsByTagName('video')[0];
@@ -348,7 +360,7 @@
 						myVideo.play();
 						myVideo.onended = function(e){window.location="/movies/";}
 						
-					} else if(platform === 'browser'){
+					} else if(o.platform === 'browser'){
 						$('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
 
 						videojs(o.playerID, {}, function(){
@@ -375,6 +387,19 @@
 			
 		});
 	}
+
+    function _resetBackdrop(o){
+        //Remove img and reintroduce it to stop the animation and load the correct backdrop img
+        //TODO add lookup on class title if no active item exists.
+        var newBackground = $('#'+o.activeMovieId).find("img."+o.posterClass).attr(o.backdrophandler);
+        $(o.backdropClass).remove();
+        $('#backdrop').append('<img src="'+newBackground+'" class="'+ o.backdropSelector+'">').addClass(o.fadeClass);
+
+        $('#backdrop').removeClass('shrink').css({
+            height:'100%',
+            backgroundColor: '#000'
+        }).append('<div clas="movie-loading"><i class="loading icon"></i></div>');
+    }
 	
 	function _pageVisibility(o){
 		var hidden, visibilityChange; 
@@ -423,8 +448,9 @@
 	$.fn.mcjsm.defaults = {		
 		datasetKey: 'mcjsmovies' //always lowercase
 		, movieListSelector: '.movies' 
-		, backdropSelector: '.backdropimg' 
-		, backdrophandler: 'title' 
+		, backdropClass: '.backdropimg'
+		, backdropSelector: 'backdropimg'
+		, backdrophandler: 'title'
 		, posterClass: 'movieposter' 
 		, playerSelector: '#player' 
 		, headerSelector: '#header' 
@@ -438,8 +464,6 @@
 		, fadeClass: 'fadein' 
 		, fadeSlowClass: 'fadeinslow' 
 		, focusedClass: 'focused'
-        , scrollDuration: 40000
-        , stopScroll: false
 		, scrollingClass: 'scrolling'
 	};
 
