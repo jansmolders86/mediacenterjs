@@ -24,3 +24,4 @@ thumbs.db
 public/music/data/*
 public/movies/data/* 
 lib/database/mcjs.sqlite
+*.sqlite

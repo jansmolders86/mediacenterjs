@@ -322,15 +322,16 @@
 			var myPlayer;
 
             $('#wrapper, .movies, #header').hide();
-            $('body').animate({backgroundColor: '#000'},500).addClass('playingMovie');
 
             var newBackground = $('#'+o.activeMovieId).find("img."+o.posterClass).attr(o.backdrophandler);
             $(o.backdropSelector).attr("src", newBackground).addClass(o.fadeClass);
 
-            $('#backdrop').css({
+            $('#backdrop').removeClass('shrink').css({
                 height:'100%',
                 backgroundColor: '#000'
-            });
+            }).append('<div clas="movie-loading"><i class="loading icon"></i></div>');
+
+            $('body').animate({backgroundColor: '#000'},500).addClass('playingMovie');
 
             o.stopScroll = true;
 

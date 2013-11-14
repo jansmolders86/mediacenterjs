@@ -71,7 +71,18 @@ a.backlink { margin-top: 0px; z-index:4; }
     position:absolute;
     left:50%;
     top:50%;
+    width:200px;
+    height:200px;
 }
+
+.loading.icon{
+    -webkit-animation: icon-loading 0.5s linear infinite;
+    -ms-animation: icon-loading 0.5s linear infinite;
+    animation: icon-loading 0.5s linear infinite;
+    font-size:48px;
+    color:#fb8521;
+}
+
 .movies{
 	margin: 0 auto;
 	padding: 0;
