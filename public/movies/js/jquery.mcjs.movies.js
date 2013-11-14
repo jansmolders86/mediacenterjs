@@ -67,6 +67,7 @@
 		this.cdNumber 		= ko.observable();
 		this.isActive 		= ko.observable();
 		this.playMovie = function () {
+            window.location.hash = that.localName();
 			var movieTitle = that.localName();
 			var platform = 'browser'
             that.isActive(o.activeMovieId);
@@ -242,8 +243,7 @@
             });
         }
 	}
-	
-	//TODO: Clean this up
+
 	function _showAndFilterAvailableGenres(o){
 		$.ajax({
 			url: '/movies/getGenres/', 
@@ -312,8 +312,7 @@
 			});
 		});
 	}
-	
-	//TODO: make public function
+
 	function _playMovie(o, platform,url){
 		$.ajax({
 			url: '/configuration/', 

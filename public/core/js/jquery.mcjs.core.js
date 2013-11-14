@@ -257,7 +257,7 @@
 		$(document).keydown(function(e){
 			var elid = $(document.activeElement).is("input:focus");
 			if (typeof e == 'undefined' && window.event) { e = window.event; }
-			
+
 			switch(e.keyCode) {
 				case 39 : //next
 					if($(o.accesibleItem).length > 0){
@@ -275,9 +275,10 @@
 					_pressEnter(o);
 				break;
 				case 8  : //backspace
+                    e.preventDefault();
 					_goBack(o);
 				break;
-				case 32 : 
+				case 32 :
 					if (!elid){
 						if(videojs("player").paused()){
 							videojs("player").play();
@@ -303,7 +304,7 @@
 	function _pressEnter(o, item){
 		if ($(o.focused).length > 0){
 			if ($(o.focused).find('.'+o.clickableItemClass).length > 0) {
-				if($(o.focused).find('.'+o.clickableItemClass).is('input')){
+				if($(o.focused).find('.'+o.clickableItemClass).is('input').length > 0){
 					if($(o.focused).find('.'+o.clickableItemClass).is('input[type=submit]')){
 						$(o.focused).find('.'+o.clickableItemClass).click();
 					}
@@ -312,7 +313,7 @@
 					if (typeof $(o.focused).find('.'+o.clickableItemClass).attr('href') !== 'undefined' && $(o.focused).find('.'+o.clickableItemClass).attr('href') !== false){
 						document.location = $(o.focused).find('.'+o.clickableItemClass).attr('href');
 					}
-				} else if($(o.focused).find('a')) {
+				} else if($(o.focused).find('a').length > 0) {
 					if (typeof $(o.focused).find('a').attr('href') !== 'undefined' && $(o.focused).find('a').attr('href') !== false){
 						document.location = $(o.focused).find('a').attr('href');
 					}
@@ -339,21 +340,21 @@
 	}	
 
 	function _goBack(o){
-		if( !$(document.activeElement).is("input:focus")){
+        if( !$(document.activeElement).is("input:focus")){
             if ($('.backlink').length > 0){
-				var attrHref = $('.backlink').attr('href');
-				if (typeof attrHref !== undefined && attrHref !== false){
-					var attrHref = $('.backlink').attr('href');
-					document.location = attrHref;
-				} else {
-					$('.backlink').click();
-				}
-			} else if( !$(document.activeElement).is("input:focus") ){
-                if( $('body').hasClass('playingMovie')){
-                    window.location = '/movies/';
+                if($('body').hasClass('playingMovie')){
+                    document.location='/movies/';
                 } else {
-                    window.history.go(-1);
+                    var attrHref = $('.backlink').attr('href');
+                    if (typeof attrHref !== undefined && attrHref !== false){
+                        var attrHref = $('.backlink').attr('href');
+                        document.location = attrHref;
+                    } else {
+                        $('.backlink').click();
+                    }
                 }
+			} else if( !$(document.activeElement).is("input:focus") ){
+                window.history.go(-1);
 			}
 		}
 	}
