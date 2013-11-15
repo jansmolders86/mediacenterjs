@@ -117,6 +117,8 @@ p a:hover{text-decoration:none;}
 	float:left;
 }
 
+.homepage h1{text-transform: none; font-weight:300;}
+
 #header{
 	height:75px;
 	width:100%;

@@ -112,6 +112,8 @@ a.backlink{
 	height:32px;
 }
 
+.homepage h1{text-transform: none; font-weight:300;}
+
 #header .logo{ float:left; height:45px; margin: 0px 10px 0 0px; }
 
 #header h1{

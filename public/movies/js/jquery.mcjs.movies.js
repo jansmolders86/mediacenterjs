@@ -87,8 +87,6 @@
             o.platform = 'browser'
             var url = '/movies/'+movieTitle+'/play';
         }
-
-        console.log(url)
         return url;
     }
 
