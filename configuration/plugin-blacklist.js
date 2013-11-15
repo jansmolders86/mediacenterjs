@@ -1,4 +1,4 @@
 exports.blackList = [
-	'mediacenterjs-template-generator',
+	'mediacenterjs-plugin-generator',
 	'mediacenterjs-plugin-template'
 ];
