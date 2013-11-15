@@ -17,6 +17,7 @@ var express = require('express')
 	, plugins = []
 	, installedPlugins = []
 	, upgradablePluginList = []
+	, blackList = require('../../configuration/plugin-blacklist.js').blackList
 	, configuration_handler = require('../../lib/handlers/configuration-handler');
 
 var getInstalledPlugins = function(){
@@ -66,7 +67,7 @@ exports.getAvailablePlugins = function(req, res){
 					callback("NPM Search Error");
 				}
 			});
-		}, 
+		},
 		function(pluginList, callback){
 			for (var key in pluginList) {
 				var obj = pluginList[key];
@@ -83,6 +84,18 @@ exports.getAvailablePlugins = function(req, res){
 				});
 		   }
 		   callback(null, plugins);
+		},
+		function(pluginList, callback){
+			
+			for (var i = 0; i < blackList.length; i++){
+				for (var j = 0; j < pluginList.length; j++){
+					if (pluginPrefix + pluginList[j].name === blackList[i]){
+						pluginList.splice(j, 1);
+					}
+				}			
+			}
+			callback(null, pluginList);
+
 		}, 
 		function(plugins, callback){
 			res.json({
