@@ -47,11 +47,12 @@ var IOS_FFMPEG_OPTS = [
 
 var ANDROID_FFMPEG_OPTS = [
 	'-vcodec libx264', 
-	'-vb 250k', 
-	'-profile:v main',
+	'-vb 250k',
+    '-s 1280x720',
+    '-profile:v baseline',
 	'-keyint_min 150', 
 	'-pix_fmt yuv420p',
-	'-deinterlace', 
+	'-deinterlace',
 	'-c:a mp3', 
 	'-f mp4',
 	'-movflags',

@@ -6,6 +6,7 @@ lib-cov
 *.out
 *.pid
 *.gz
+*.sqlite
 
 pids
 logs
@@ -35,7 +36,8 @@ public/music/data/*
 public/movies/data/*
 public/tv/data/*
 lib/database/mcjs.sqlite
-
+.idea
+.idea/*
 
 #Configuration
 configuration/config.ini

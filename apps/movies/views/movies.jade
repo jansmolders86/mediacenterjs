@@ -5,6 +5,7 @@ html(lang="en")
 		
 		// Core inclusion
 		link(rel='stylesheet', href='/core/css/style.css')
+		link(rel='stylesheet', href='/core/css/icon.css')
 		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css')
 		link(rel='stylesheet', href='/themes/'+selectedTheme)
 		
@@ -23,9 +24,10 @@ html(lang="en")
 		script(src="http://vjs.zencdn.net/4.3/video.js")
 		style.
 			.vjs-play-progress, .vjs-volume-level { background-color: #d96800!important; }
-			.vjs-control-bar, .vjs-big-play-button { background: rgba(171,171,171,0.7)!important; }
-			.vjs-slider { background: rgba(171,171,171,0.2333333333333333)!important; }
+			.vjs-control-bar, .vjs-big-play-button { background: rgba(171,171,171,0.3)!important; }
+			.vjs-slider { background: rgba(171,171,171,0.3)!important; }
 			.vjs-fullscreen.vjs-user-inactive { cursor: none; }
+			.vjs-default-skin .vjs-control-bar { font-size: 90% }
 		
 		link(rel='stylesheet', href='/movies/css/style.css')
 		script(src="/movies/js/jquery.mcjs.movies.js")
@@ -48,12 +50,12 @@ html(lang="en")
 			#moviebrowser
 				// ko if: movies().length > 0
 				ul.movies(data-bind="foreach: movies")
-					li.movieposter.boxed.mcjs-rc-controllable
+					li.movieposter.boxed.mcjs-rc-controllable(data-bind="attr: {'id':isActive}" )
 						.imageWrapper
 							// ko if: backdropImage() !== null && posterImage() !== null
 							img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }", src="/core/css/img/ajax-loader.gif")
 							// /ko	
-						.overlay.mcjs-rc-clickable(data-bind="{click: playMovie}")	
+						.overlay.mcjs-rc-clickable(data-bind="{click: playMovie}")
 						span.title(data-bind="text:localName")	
 						.overview
 							// ko if: overview() !== null 

@@ -31,7 +31,8 @@
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
 				$that: $that,
-				movieCache : []
+				movieCache : [],
+                platform:'browser'
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -46,8 +47,7 @@
 
 			});	
 			
-			_showAndFilterAvailableGenres(o);			
-			
+			_showAndFilterAvailableGenres(o);
 		});
 	}
 	
@@ -55,7 +55,7 @@
 	
 	// Create movie model
 	//TODO: put in separate file 
-	var Movie = function (json) {
+	var Movie = function (o, json) {
 		var that = this;
 		this.localName 		= ko.observable(json);
 		this.posterImage 	= ko.observable();
@@ -65,21 +65,31 @@
 		this.overview 		= ko.observable();
 		this.title 			= ko.observable();
 		this.cdNumber 		= ko.observable();
+		this.isActive 		= ko.observable();
 		this.playMovie = function () {
-			var movieTitle = that.localName();
-			var platform = 'browser'
-			if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
-				platform = 'ios';
-				var url = '/movies/'+movieTitle+'/play/ios';
-			} else if(navigator.userAgent.toLowerCase().indexOf("android") > -1){
-				platform = 'android';
-				var url = '/movies/'+movieTitle+'/play/android';
-			}else {
-				var url = '/movies/'+movieTitle+'/play';
-			}	
-			_playMovie(platform,url);
+            window.location.hash = that.localName();
+            that.isActive(o.activeMovieId);
+
+            var movieTitle = that.localName();
+            var url = _checkPlatform(o, movieTitle);
+			_playMovie(o, url);
 		};
 	}
+
+    function _checkPlatform(o, movieTitle){
+        if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
+            o.platform = 'IOS'
+            var url = '/movies/'+movieTitle+'/play/ios';
+        } else if(navigator.userAgent.toLowerCase().indexOf("android") > -1){
+            o.platform = 'Android'
+            var url = '/movies/'+movieTitle+'/play/android';
+        }else {
+            o.platform = 'browser'
+            var url = '/movies/'+movieTitle+'/play';
+        }
+        return url;
+    }
+
 	
 	function _positionElement(o){
 		var startFromTopInit = $('#moviebrowser').offset().top > 50;
@@ -109,7 +119,7 @@
 			var listing = [];
 			$.each(data, function () {
 				// create movie model for each movie
-				var movie = new Movie(this);
+				var movie = new Movie(o, this);
 				listing.push(movie);
 				
 				// add model to cache
@@ -119,8 +129,15 @@
 			// Fill viewmodel with movie model per item
 			o.viewModel.movies(listing);
 			o.viewModel.movies.sort();
-			
-			_lazyload(o);
+
+            if(window.location.hash) {
+                var movieTitle =window.location.hash.substring(1);
+                var url = _checkPlatform(o, movieTitle);
+                _playMovie(o,url);
+            } else{
+                _lazyload(o);
+            }
+
 		});
 	}
 	
@@ -151,7 +168,7 @@
 				}
 				
 				_focusedItem(o);
-				_scrollBackdrop(o);
+                _scrollBackdrop(o);
 			});
 		}		
 	}
@@ -181,7 +198,7 @@
 	}
 	
 	
-	/******** Jquery only  functions *********/ 
+	/******** Jquery only functions *********/
 	
 	//TODO: Put in separate file
 	function _focusedItem(o){
@@ -189,10 +206,10 @@
 			mouseenter: function() {	
 				var newBackground = $(this).find("img."+o.posterClass).attr(o.backdrophandler);
 				$(this).addClass(o.focusedClass);
-				$(o.backdropSelector).attr("src", newBackground).addClass(o.fadeClass);
+				$(o.backdropClass).attr("src", newBackground).addClass(o.fadeClass);
 			},
 			mouseleave: function() {
-				$(o.backdropSelector).removeClass(o.fadeClass);
+				$(o.backdropClass).removeClass(o.fadeClass);
 				if ($('li.'+o.posterClass+'.'+o.focusedClass).length) {
 					$('li.'+o.posterClass+'.'+o.focusedClass).removeClass(o.focusedClass);
 				}
@@ -200,10 +217,10 @@
 			focus: function() {		
 				$(this).addClass(o.focusedClass);			
 				var newBackground = $(this).find("img."+o.posterClass).attr(o.backdrophandler);
-				$(o.backdropSelector).attr("src", newBackground).addClass(o.fadeClass);
+				$(o.backdropClass).attr("src", newBackground).addClass(o.fadeClass);
 			},
 			focusout: function() {
-				$(o.backdropSelector).removeClass(o.fadeClass);
+				$(o.backdropClass).removeClass(o.fadeClass);
 				if ($('li.'+o.posterClass+'.'+o.focusedClass).length) {
 					$('li.'+o.posterClass+'.'+o.focusedClass).removeClass(o.focusedClass);
 				}
@@ -212,34 +229,35 @@
 		
 		if ($(o.movieListSelector+' > li'+o.focusedClass)){
 			var newBackground = $(this).find("img."+o.posterClass).attr(o.backdrophandler);
-			$(o.backdropSelector).attr("src", newBackground).addClass(o.fadeSlowClass);
+			$(o.backdropClass).attr("src", newBackground).addClass(o.fadeSlowClass);
 		}
 	}
 	
 	function _scrollBackdrop(o){
-		var duration = 40000
-		$(o.backdropSelector).animate({ 
-			top: '-380px'
-		},
-		{
-			easing: 'swing',
-			duration: duration,
-			complete: function(){
-				$(o.backdropSelector).animate({ 
-					top: '-0px'
-				},
-				{
-					easing: 'swing',
-					duration: duration,
-					complete: function(){
-						_scrollBackdrop(o)
-					}
-				});	
-			}
-		});		
+		var duration = 40000;
+        $(o.backdropClass).animate({
+            top: '-380px'
+        },
+        {
+            easing: 'swing',
+            duration: duration,
+            complete: function(){
+                $(o.backdropClass).animate({
+                    top: '-0px'
+                },
+                {
+                    easing: 'swing',
+                    duration: duration,
+                    complete: function(){
+                        if(o.stopScroll === false){
+                            _scrollBackdrop(o);
+                        }
+                    }
+                });
+            }
+        });
 	}
-	
-	//TODO: Clean this up
+
 	function _showAndFilterAvailableGenres(o){
 		$.ajax({
 			url: '/movies/getGenres/', 
@@ -308,52 +326,108 @@
 			});
 		});
 	}
-	
-	//TODO: make public function
-	function _playMovie(platform,url){
+
+	function _playMovie(o,url){
+
+        console.log('platform',o.platform)
+        console.log('url',url)
 		$.ajax({
 			url: '/configuration/', 
 			type: 'get'
 		}).done(function(data){
 			var myPlayer;
-			$('#wrapper, #header, .movies, #backdrop').hide();
-			$('body').animate({backgroundColor: '#000'},500);
-			
-			if($('#player').length > 1) {
-				$('#player').remove();
-			} else {
-				if(platform === 'android' || platform === 'ios'){
-					$('body').append('<video id="player" controls width="100%" height="100%"></video>');
-					
-					var myVideo = document.getElementsByTagName('video')[0];
-					myVideo.src = url;
-					myVideo.load();
-					myVideo.play();
-					myVideo.onended = function(e){window.location="/movies/";}
-					
-				} else if(platform === 'browser'){
-					$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
 
-					videojs("player", {}, function(){
-						myPlayer = this;
-						$('.vjs-big-play-button').trigger('click');
-						myPlayer.on('error', function(e){ console.log('Error', e) });
-						myPlayer.on('ended', function(e){ window.location="/movies/"; });
-					});
-					
-					$('.vjs-big-play-button').on('click',function(){
-						setTimeout(function(){
-							videojs("player").pause();
-							$('.vjs-loading-spinner').show();
+            $('#wrapper, .movies, #header').hide();
+
+            _resetBackdrop(o);
+
+            $('body').animate({backgroundColor: '#000'},500).addClass('playingMovie');
+
+			setTimeout(function(){
+				
+				if($('#'+o.playerID).length > 1) {
+					$('#'+o.playerID).remove();
+				} else {
+					if(o.platform === 'Android' || o.platform === 'IOS'){
+                        $('#wrapper, .movies, #header, #backdrop').hide();
+						$('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
+						
+						var myVideo = document.getElementsByTagName('video')[0];
+						myVideo.src = url;
+						myVideo.load();
+						myVideo.play();
+						myVideo.onended = function(e){window.location="/movies/";}
+						
+					} else if(o.platform === 'browser'){
+						$('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
+
+						videojs(o.playerID, {}, function(){
+							myPlayer = this;
+							$('.vjs-big-play-button').trigger('click');
+							myPlayer.on('error', function(e){ console.log('Error', e) });
+							myPlayer.on('ended', function(e){ window.location="/movies/"; });
+						});
+						
+						$('.vjs-big-play-button').on('click',function(){
 							setTimeout(function(){
-								$('.vjs-loading-spinner').hide();
-								videojs("player").play();
-							},15000);
-						},2500)
-					});
+								videojs(o.playerID).pause();
+								$('.vjs-loading-spinner').show();
+								setTimeout(function(){
+									$('.vjs-loading-spinner, #backdrop').hide();
+									videojs(o.playerID).play();
+									_pageVisibility(o);
+								},15000);
+							},2500)
+						});
+					}
 				}
-			}
+			},3000);
+			
 		});
+	}
+
+    function _resetBackdrop(o){
+        //Remove img and reintroduce it to stop the animation and load the correct backdrop img
+        //TODO add lookup on class title if no active item exists.
+        var newBackground = $('#'+o.activeMovieId).find("img."+o.posterClass).attr(o.backdrophandler);
+        $(o.backdropClass).remove();
+        $('#backdrop').append('<img src="'+newBackground+'" class="'+ o.backdropSelector+'">').addClass(o.fadeClass);
+
+        $('#backdrop').removeClass('shrink').css({
+            height:'100%',
+            backgroundColor: '#000'
+        }).append('<div clas="movie-loading"><i class="loading icon"></i></div>');
+    }
+	
+	function _pageVisibility(o){
+		var hidden, visibilityChange; 
+		if (typeof document.hidden !== "undefined") {
+			hidden = "hidden";
+			visibilityChange = "visibilitychange";
+		} else if (typeof document.mozHidden !== "undefined") {
+			hidden = "mozHidden";
+			visibilityChange = "mozvisibilitychange";
+		} else if (typeof document.msHidden !== "undefined") {
+			hidden = "msHidden";
+			visibilityChange = "msvisibilitychange";
+		} else if (typeof document.webkitHidden !== "undefined") {
+			hidden = "webkitHidden";
+			visibilityChange = "webkitvisibilitychange";
+		}
+		
+		function handleVisibilityChange() {
+			if (document[hidden]) {
+				videojs(o.playerID).pause();
+			} else if (sessionStorage.isPaused !== "true") {
+				videojs(o.playerID).play();
+			}
+		}
+
+		if (typeof document.addEventListener === "undefined" || typeof hidden === "undefined") {
+			console.log("The Page Visibility feature requires a browser such as Google Chrome that supports the Page Visibility API.");
+		} else {
+			document.addEventListener(visibilityChange, handleVisibilityChange, false);
+		}
 	}
 
 	/**** End of custom functions ***/
@@ -372,9 +446,9 @@
 	$.fn.mcjsm.defaults = {		
 		datasetKey: 'mcjsmovies' //always lowercase
 		, movieListSelector: '.movies' 
-		, trackListSelector: '#tracklist' 
-		, backdropSelector: '.backdropimg' 
-		, backdrophandler: 'title' 
+		, backdropClass: '.backdropimg'
+		, backdropSelector: 'backdropimg'
+		, backdrophandler: 'title'
 		, posterClass: 'movieposter' 
 		, playerSelector: '#player' 
 		, headerSelector: '#header' 
@@ -384,6 +458,7 @@
 		, backLinkSelector: '.backlink' 
 		, playerID: 'player' 
 		, overlayselector : '.overlay'
+        , activeMovieId : 'active'
 		, fadeClass: 'fadein' 
 		, fadeSlowClass: 'fadeinslow' 
 		, focusedClass: 'focused'
