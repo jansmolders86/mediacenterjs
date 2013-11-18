@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 var express = require('express')
 , app = express()
 , fs = require ('fs')
@@ -23,12 +24,14 @@ var express = require('express')
 , lingua = require('lingua')
 , colors = require('colors')
 , rimraf = require('rimraf')
-, nconf = require('nconf')
-, configuration_handler = require('./lib/handlers/configuration-handler')
 , dblite = require('dblite')
+, mcjsRouting = require('./lib/routing/routing')
+, http = require('http')
+, server = require('http').createServer(app)
+, remoteControl = require('./lib/utils/remote-control')
 , Youtube = require('youtube-api')
 , jade = require('jade')
-, http = require('http');
+, configuration_handler = require('./lib/handlers/configuration-handler');
 
 // Init Database
 dblite.bin = "./bin/sqlite3/sqlite3";
@@ -67,6 +70,13 @@ app.configure(function(){
 	app.locals.pretty = true;
 });
 
+/* CORS */
+app.all('*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
 app.configure('development', function(){   
 	app.enable('verbose errors');
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));  
@@ -77,7 +87,7 @@ app.configure('production', function(){
 	app.use(express.errorHandler()); 
 });   
 
-require('./lib/routing/routing')(app,{ verbose: !module.parent });
+mcjsRouting.loadRoutes(app,{ verbose: !module.parent });
 
 app.use(function(req, res) {
     res.status(404).render('404',{ selectedTheme: config.theme});
@@ -86,7 +96,22 @@ app.use(function(req, res) {
 
 app.get("/", function(req, res, next) {  
 	if(	config.moviepath == '' && config.language == '' && config.location == '' || config.moviepath == null || config.moviepath == undefined){
-		res.render('setup');	
+
+		var localIP = getIPAddresses()
+		, sendLocalIP = '';
+		
+		if(getIPAddresses() !== undefined && getIPAddresses() !== null) {
+			localIP = getIPAddresses();	
+		}
+		
+		if(localIP[0] !== undefined && localIP[0] !==  null){
+			sendLocalIP = localIP[0];
+			}
+
+		res.render('setup',{
+			localIP:sendLocalIP
+		});	
+		
 	} else {
 		
 		var apps = [];
@@ -104,7 +129,7 @@ app.get("/", function(req, res, next) {
 
 		//search node_modules for plugins
 		var nodeModules = __dirname + '/node_modules';
-		var pluginPrefix = 'mediacenterjs-'; //TODO: externalize in config file
+		var pluginPrefix = config.pluginPrefix;
 
 		fs.readdirSync(nodeModules).forEach(function(name){
 
@@ -137,6 +162,23 @@ app.get("/", function(req, res, next) {
 	}
 });
 
+function getIPAddresses() {
+
+	var ipAddresses = [];
+
+	var interfaces = require('os').networkInterfaces();
+	for (var devName in interfaces) {
+		var iface = interfaces[devName];
+		for (var i = 0; i < iface.length; i++) {
+			var alias = iface[i];
+			if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+				ipAddresses.push(alias.address);
+			}
+		}
+	}
+
+	return ipAddresses;
+}
 
 app.post('/removeModule', function(req, res){
 	var incommingModule = req.body
@@ -166,7 +208,11 @@ app.post('/clearCache', function(req, res){
 			return res.send('Error clearing cache', e);
 		}
 		// Init Database
-		dblite.bin = "./bin/sqlite3/sqlite3";
+		if(config.platform === 'OSX'){
+			dblite.bin = "./bin/sqlite3/osx/sqlite3";
+		}else {
+			dblite.bin = "./bin/sqlite3/sqlite3";
+		}
 		var db = dblite('./lib/database/mcjs.sqlite');
 
 		db.query('DROP TABLE IF EXISTS ' + cache);
@@ -178,27 +224,31 @@ app.post('/clearCache', function(req, res){
 	});
 });
 
-app.post('/setuppost', function (req, res){
-	writeSettings(req, res, function(){
+app.post('/setuppost', function(req, res){
+	configuration_handler.saveSettings(req.body, function() {
 		res.render('finish');
 	});
 });
+// Form  handlers
 
-app.get('/configuration', function (req, res){
+app.get('/configuration', function(req, res){
 	res.send(config);
 });
-
-app.post('/submit', function (req, res){
-	writeSettings(req, res, function(){
-		res.redirect('/');
-	});
-});
-
-function writeSettings(req, res){
+	
+app.post('/submit', function(req, res){
 	configuration_handler.saveSettings(req.body, function() {
 		res.redirect('/');
 	});
-}
+});
+
+app.post('/submitRemote', function(req, res){
+	configuration_handler.saveSettings(req.body, function() {
+		res.redirect('/remote/');
+	});
+});
+
+//Socket.io Server
+remoteControl.remoteControl();
 
 app.set('port', process.env.PORT || 3000);
 

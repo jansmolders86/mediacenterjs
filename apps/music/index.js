@@ -34,21 +34,18 @@ exports.get = function(req, res, next){
 	if(!action){
 		switch(optionalParam) {
 			case('info'):
-                console.log('getting info')
-				functions.getInfo(req, res, infoRequest);
+                var musicName = infoRequest.replace(/\+/g, " ");
+				functions.getInfo(req, res, musicName);
 			break;	
 			case('loadItems'):
 				functions.loadItems(req,res);
-			break;
-			default:
-				functions.getInfo(req, res, infoRequest);
-				return;
-			break;		
+			break;	
 		}
 	} else if (!optionalParam){
 		//Do nothing
 		return;
 	} else  if(action === 'play') {
-		functions.playTrack(req, res, infoRequest, optionalParam);
+		var musicName = infoRequest.replace(/\+/g, " ");
+		functions.playTrack(req, res, musicName, optionalParam);
 	};
 }

@@ -19,13 +19,9 @@
 exports.engine = 'jade';
 
 /* Modules */
-var express = require('express')
-, app = express()
-, fs = require('fs')
+var fs = require('fs')
 , ini = require('ini')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
-, exec = require('child_process').exec
-, async = require('async')
 , functions = require('./plugins-functions');
  
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
@@ -46,21 +42,29 @@ exports.get = function(req, res, next){
 		switch(infoRequest) {
 			case('loadItems'):
 				functions.getAvailablePlugins(req,res);
+			break;
+			case('reloadServer'):
+				console.log('asd')
+				functions.reloadServer(req,res);
+			break;
 			default:
 				return;
 			break;		
 		}	
 	}
+
 	
 	if(!action){
 		switch(optionalParam) {
 			case('uninstall'):
-				functions.uninstallPlugin(req, res, infoRequest);
+				functions.pluginManager(req, res, infoRequest, 'remove');
 			break;	
 			case('install'):
-				functions.installPlugin(req,res, infoRequest);
+				functions.pluginManager(req,res, infoRequest, 'install');
+			break;
+			case('upgrade'):
+				functions.pluginManager(req,res, infoRequest, 'install');  //for some reason update isnt working
 			break;		
 		}
-	}
-	
-}
+	}	
+};

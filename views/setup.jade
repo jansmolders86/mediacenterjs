@@ -18,8 +18,7 @@ html(lang="en")
 				
 				var userLang = navigator.language || navigator.userLanguage; 
 				userLang = userLang.replace(/-.*/,'');
-				
-				if(userLang.match(/nl|en|fr|da/g)){
+				if(userLang.match(/nl|en|fr|da|pt/g)){
 					$('input#language').val(userLang);
 				} else{
 					$('input#language').val('en');
@@ -60,6 +59,10 @@ html(lang="en")
 					e.preventDefault();
 					window.open('https://oauth.io/docs/getting-started', '_blank');
 				});
+				var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+				if(isMac){
+					$('input#platform').val('OSX');
+				}
 			});
 			// Get token that's stored on the server-side config which we submitted earlier
 			function getStoredToken(callback) {
@@ -129,6 +132,9 @@ html(lang="en")
 					input.oauthKeyHidden(name="oauthKey" type="hidden")
 					input(name="screensaver",type="hidden",value="dim")
 					input#language(name="language",type="hidden",value="en")
+					input#platform(name="platform",type="hidden",value="")
 					input(name="theme",type="hidden",value="wigo.css")
 					input(name="spotifyUser",type="hidden",value="")
 					input(name="spotifyPass",type="hidden",value="")
+					input(name="localIP",type="hidden",value= localIP)
+					input(name="remotePort",type="hidden",value="3001")

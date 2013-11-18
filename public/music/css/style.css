@@ -62,6 +62,15 @@ ul.music li.coverfound:hover .overlay{
 	background:url(img/cover-overlay.png) no-repeat;
 }
 
+ul.music > li{border:1px solid #e5e5e5;}
+li.focused{	
+	border-left: 4px solid #FB8521 !important;
+	cursor: pointer;
+	border-radius: 5px;
+	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1); 
+	cursor:pointer; 
+}
+
 ul.music li a{	
 	width:110px;
 	height:32px;
@@ -150,27 +159,12 @@ ul.music li.playing a{
 #albumInfo .year,
 #albumInfo .genre{ color:#333; padding-left: 140px; font-size:14px; }
 
-.eq{
-	visibility:hidden;
-	width: 25px;
-	height: 31px;
-	float: left;
-	margin: -5px 5px 0 0;
-}
-.eq .bar {
-    width:7px;
-    height:15px;
-    display: inline-block;
-    vertical-align: bottom;
-	margin-right:1px;
-}
-.eq.pause,
+i.play { visibility:hidden; font-size:14px; display:inline-block;}
+.selected i.play { visibility:visible; font-size: 14px; display:inline-block;}
 li.playing.pause a{
 	background:url(img/pause-icon.png) no-repeat -2px 12px !important;
 }
-.eq.pause .bar {
-	visibility:hidden;
-}
+li .title{display:inline-block;}
 
 .random{
 	width: 25px;

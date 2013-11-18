@@ -12,17 +12,20 @@ html(lang="en")
 		script(src="/core/js/plugins/knockout-2.3.0.js")
 		script(src="/core/js/jquery-ui-1.10.3.min.js")
 		
+		script(src="/core/js/socket.io.min.js")
 		script(src="/core/js/plugins/jquery.idle-timer.js")
 		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
+		script(src="/core/js/plugins/jquery.scrollintoview.min.js")
 		script(src="/core/js/jquery.mcjs.core.js")
 		
 		// App specific
-		link(href="http://vjs.zencdn.net/4.0/video-js.css", rel="stylesheet")
-		script(src="http://vjs.zencdn.net/4.0/video.js")
+		link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
+		script(src="http://vjs.zencdn.net/4.3/video.js")
 		style.
 			.vjs-play-progress, .vjs-volume-level { background-color: #d96800!important; }
 			.vjs-control-bar, .vjs-big-play-button { background: rgba(171,171,171,0.7)!important; }
 			.vjs-slider { background: rgba(171,171,171,0.2333333333333333)!important; }
+			.vjs-fullscreen.vjs-user-inactive { cursor: none; }
 		
 		link(rel='stylesheet', href='/movies/css/style.css')
 		script(src="/movies/js/jquery.mcjs.movies.js")
@@ -45,12 +48,12 @@ html(lang="en")
 			#moviebrowser
 				// ko if: movies().length > 0
 				ul.movies(data-bind="foreach: movies")
-					li.movieposter.boxed
+					li.movieposter.boxed.mcjs-rc-controllable
 						.imageWrapper
 							// ko if: backdropImage() !== null && posterImage() !== null
 							img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }", src="/core/css/img/ajax-loader.gif")
 							// /ko	
-						.overlay(data-bind="{click: playMovie}")	
+						.overlay.mcjs-rc-clickable(data-bind="{click: playMovie}")	
 						span.title(data-bind="text:localName")	
 						.overview
 							// ko if: overview() !== null 
@@ -64,7 +67,7 @@ html(lang="en")
 							p
 								strong(data-bind="text:'Runtime: '+runtime()")
 							// /ko	
-						// ko if: cdNumber() !== '' && cdNumber() !== null
+						// ko if: cdNumber() !== '' && cdNumber() !== null && cdNumber() !== undefined 
 						.cdNumber
 							span(data-bind="text:cdNumber")
 						// /ko	

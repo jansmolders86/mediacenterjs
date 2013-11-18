@@ -11,7 +11,11 @@ var SUPPORTED_FILETYPES = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
 
 exports.initMovieDb = function() {
 	// Init Database
-	dblite.bin = "./bin/sqlite3/sqlite3";
+	if(config.platform === 'OSX'){
+		dblite.bin = "./bin/sqlite3/osx/sqlite3";
+	}else {
+		dblite.bin = "./bin/sqlite3/sqlite3";
+	}
 	var db = dblite('./lib/database/mcjs.sqlite');
     
 	db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number VARCHAR)");
@@ -41,8 +45,6 @@ exports.loadItems = function (req, res){
 };
 
 exports.playMovie = function (req, res, platform, movieRequest){
-	var movie_playback_handler = require('./movie-playback-handler');
-
 	file_utils.getLocalFile(config.moviepath, movieRequest, function(err, file) {
 		if (err) console.log(err .red);
 		if (file) {
@@ -50,6 +52,7 @@ exports.playMovie = function (req, res, platform, movieRequest){
 			var stat = fs.statSync(movieUrl);
 
 			console.log('Client platform is', platform);
+			var movie_playback_handler = require('./movie-playback-handler');
 			movie_playback_handler.startPlayback(res, movieUrl, stat, platform);
 		} else {
 			console.log("File " + movieRequest + " could not be found!" .red);

@@ -13,6 +13,7 @@ html(lang="en")
 		
 		script(src="/core/js/plugins/jquery.idle-timer.js")
 		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
+		script(src="/core/js/socket.io.min.js")
 		script(src="/core/js/jquery.mcjs.core.js")
 
 		link(rel='stylesheet', href='/plugins/css/style.css')
@@ -25,26 +26,42 @@ html(lang="en")
 			});
 	body
 		#header
-			a.backlink(href="/") 
-				img(src="/core/icons/back.png")
-			h1  Plugins		
+			div.pull-left
+				a.backlink
+					img(src="/core/icons/back.png")
+				h1  Plugins		
+				
+			div.loading.boxed.pull-left
+				img(src="/core/css/img/ajax-loader.gif") 
+				p Loading modules...
+
+			div.pull-right.boxed(data-bind="visible:upgradeAll().length > 0")
+				a.btn.upgrade.upgrade-all(data-bind="{click: upgradeAllPlugins.bind($data, upgradeAll() )}") Upgrade All
+		
 		#wrapper
-			.loading.boxed
-				div
-					img(src="/core/css/img/ajax-loader.gif") 
-					p Loading modules...
+
+			div.message.boxed(data-bind="visible:message() != ''")
+				span(data-bind="html:message")
 
 			ul.plugins(data-bind="foreach: plugin")
-				li.boxed
+				li.boxed.mcjs-rc-controllable
 					.info
 						h2.name(data-bind="text:name")
 						div.desc(data-bind="text:desc")
-						div.author(data-bind="text:'By: '+ author()")
-						div.date(data-bind="text:'Added: '+date()")
 						div.version(data-bind="text:version")
 					// ko if: isInstalled() === false 
-					a.btn.install(data-bind="{click: install}")	Install plugin
+					a.btn.install.mcjs-rc-clickable(data-bind="{click: install}")	Install plugin
 					// /ko	
 					// ko if: isInstalled() === true 
-					a.btn.remove(data-bind="{click: remove}") Remove plugin
+					a.btn.remove.mcjs-rc-clickable(data-bind="{click: remove}") Remove plugin
 					// /ko	
+					// ko if: isUpgradable() === true 
+					a.btn.upgrade.mcjs-rc-clickable(data-bind="{click: upgrade}") Upgrade plugin
+					// /ko
+					.additional-info
+						div.author(data-bind="text:'By: '+ author()")
+						div.date(data-bind="text:'Added: '+date()")
+
+
+			
+			

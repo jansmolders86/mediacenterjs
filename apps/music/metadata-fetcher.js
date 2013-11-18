@@ -10,7 +10,11 @@ var dblite = require('dblite'),
 
 /* Variables */
 // Init Database
-dblite.bin = "./bin/sqlite3/sqlite3";
+if(config.platform === 'OSX'){
+	dblite.bin = "./bin/sqlite3/osx/sqlite3";
+}else {
+	dblite.bin = "./bin/sqlite3/sqlite3";
+}
 var db = dblite('./lib/database/mcjs.sqlite');
 
 db.on('info', function (text) { console.log(text) });

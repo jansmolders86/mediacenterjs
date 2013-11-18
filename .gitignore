@@ -11,7 +11,6 @@ pids
 logs
 results
 
-public/data/*
 npm-debug.log
 node_modules/
 
@@ -31,9 +30,11 @@ thumbs.db
 .Trashes
 
 # Files from updating data locally
-public/music/data/
-public/movies/data/
-public/tv/data/
+public/data/*
+public/music/data/*
+public/movies/data/*
+public/tv/data/*
+lib/database/mcjs.sqlite
 
 
 #Configuration

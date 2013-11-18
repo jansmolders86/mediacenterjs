@@ -47,7 +47,8 @@
 			});
 			_lazyload(o);
 			
-			$(o.backLinkSelector).on('click tap',function(e) {
+			$(o.backLinkSelector).on('click',function(e) {
+				console.log('click')
 				e.preventDefault();	
 				if ($(o.trackListSelector).is(':hidden')){	
 					window.location = '/';
@@ -68,18 +69,17 @@
 			type: 'get',
 			dataType: 'json'
 		}).done(function(data){	
-			console.log(data);
 			o.viewModel = ko.observableArray(data);
 			ko.applyBindings(o.viewModel,o.$that[0]);
 			
 			// TODO: click handler ko
-			$(o.musicListSelector+' ul > li').on('click tap', function(e) {
+			$(o.musicListSelector+' > li').on('click tap', function(e) {
 				e.preventDefault();	
 				
-				$(o.musicListSelector+' ul > li').each(function(){
-					if($(o.musicListSelector+' ul > li').hasClass(o.playingClass) || $(o.musicListSelector).find('li').hasClass(o.selectedClass)){
-						$(o.musicListSelector+' ul > li').removeClass(o.playingClass);
-						$(o.musicListSelector+' ul > li').removeClass(o.selectedClass);
+				$(o.musicListSelector+' > li').each(function(){
+					if($(o.musicListSelector+' > li').hasClass(o.playingClass) || $(o.musicListSelector).find('li').hasClass(o.selectedClass)){
+						$(o.musicListSelector+' > li').removeClass(o.playingClass);
+						$(o.musicListSelector+'> li').removeClass(o.selectedClass);
 					}
 				});
 
@@ -150,27 +150,6 @@
 		});
 	}
 	
-	function _focusedItem(o){
-		$(o.musicListSelector+'ul > li').on({
-			mouseenter: function() {	
-				$(this).addClass(o.focusedClass);
-			},
-			mouseleave: function() {
-				if ($(o.musicListSelector+'ul > li.'+o.focusedClass).length > 1){
-					$(o.musicListSelector+'ul > li.'+o.focusedClass).removeClass(o.focusedClass);
-				}
-			},			
-			focus: function() {				
-				$(this).addClass(o.focusedClass);
-			},
-			focusout: function() {
-				if ($(o.musicListSelector+'ul > li.'+o.focusedClass).length > 1){
-					$(o.musicListSelector+'ul > li.'+o.focusedClass).removeClass(o.focusedClass);
-				}
-			}
-		});	
-	}
-	
 	function _getAlbum(o, album){	
 		$.ajax({
 			url: '/music/'+album+'/info/', 
@@ -195,7 +174,7 @@
 			
 			// Populate tracks
 			tracks.forEach(function(value, index) {
-				$(o.trackListSelector +' > ul').append('<li data-url="'+value+'"><div class="eq"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div><div class="title">'+value+'</div></li>')
+				$(o.trackListSelector +' > ul').append('<li class="mcjs-rc-tracklist-control" data-url="'+value+'"><i class="play icon"></i><div class="title">'+value+'</div></li>')
 			});
 			
 			_presentTracks(o);
@@ -222,23 +201,79 @@
 			});	
 			
 			// Play song init
-			$(o.trackListSelector+' ul > li').on('click tap', function(e) {
+			$(o.trackListSelector+' ul > li').on('click', function(e) {
 				e.preventDefault();	
-				$('.random').removeClass('active');
-				var songTitle = $(this).find('.title').html();
-				
-				$(o.trackListSelector+' ul > li').each(function(){
-					$(this).removeClass(o.selectedClass);
-				});
-				
-				$(this).addClass(o.selectedClass);
-				var track = '/music/'+album+'/'+songTitle+'/play/'
-				, random = false;
-
-				_playTrack(o,track,album,songTitle,random);
+				var currentItem  = $(this);
+				_trackClickHandler(o, album, currentItem);
 			});
+			
+			
+			//Remote Control extender
+			if(io !== undefined){
+				$.ajax({
+					url: '/configuration/', 
+					type: 'get'
+				}).done(function(data){
+					var socket = io.connect(data.localIP+':'+data.remotePort);
+					socket.on('connect', function(data){
+						socket.emit('remote');
+					});
+
+					socket.on('controlling', function(data){
+						var focused = $('.'+o.focusedClass)
+						,accesibleItem = $('li.mcjs-rc-tracklist-control');
+						
+						if(data.action === "goLeft"){ 
+							var item = accesibleItem;
+							if (item.prev(item).length === 0) item.eq(-1).addClass(o.focusedClass);
+						}
+
+						if(data.action === "enter"){ 
+							var currentItem = focused;
+							if(focused.length > 0){
+								_trackClickHandler(o, album, currentItem);
+							}
+						}
+						
+						if(data.action === "shuffle"){ 
+							_randomTrack(o);
+						}
+						
+						if(data.action === "back"){ 
+							console.log('go back')
+							if ($(o.trackListSelector).is(':hidden')){	
+								window.location = '/';
+							} else if ($(o.trackListSelector).is(':visible')) {	
+								$(o.trackListSelector).hide();
+								$(o.musicListSelector).fadeIn();
+							}
+						}
+
+						else if(data.action === "goRight"){
+							if (focused.next(accesibleItem).length === 0)accesibleItem.eq(0).addClass(o.focusedClass);
+						}
+					});
+				});
+			}
 		});			
 	}
+	
+	function _trackClickHandler(o, album, currentItem){
+		$('.random').removeClass('active');
+		var songTitle = currentItem.find('.title').html();
+		
+		$(o.trackListSelector+' ul > li').each(function(){
+			$(this).removeClass(o.selectedClass);
+		});
+		
+		if(!currentItem.hasClass(o.selectedClass)){
+			currentItem.addClass(o.selectedClass);
+		}
+		var track = '/music/'+album+'/'+songTitle+'/play/'
+		, random = false;
+
+		_playTrack(o,track,album,songTitle,random);
+	}	
 	
 	function _presentTracks(o){
 		var parentHeight = $(o.trackListSelector).height();
@@ -256,9 +291,6 @@
 		$('.random').removeClass('hidden');
 		
 		$(o.playerSelector).addClass('show');
-		$('li.'+o.selectedClass).find(".bar").each(function() {
-			_fluctuate(o,$(this));
-		});
 		
 		videojs(o.playerID).ready(function(){
 			var myPlayer = this;
@@ -341,22 +373,9 @@
 	
 	function _dominantColor(o,image){
 		var dominantColor = getDominantColor(image);
-		$('.bar').css('background','rgb('+dominantColor+')');
 		$(o.headerSelector).css('borderBottom','5px solid rgb('+dominantColor+')');
+		$('.play').css('color','rgb('+dominantColor+')');
 	}
-	
-	function _fluctuate(o,bar) {
-		var barHeight = Math.random() * 10;
-		barHeight += 1;
-		var randomHeight = barHeight * 30;
-		
-		bar.animate({
-			height: barHeight
-		}, randomHeight, function() {
-			_fluctuate(o,$(this));
-		});
-	}
-	
 
 	/**** End of custom functions ***/
 	
@@ -373,7 +392,7 @@
 	/* default values for this plugin */
 	$.fn.mcjsm.defaults = {
 		datasetKey: 'mcjsmusic' //always lowercase
-		, musicListSelector: '#musicWrapper' 
+		, musicListSelector: '.music' 
 		, trackListSelector: '#tracklist' 
 		, playerSelector: '#player' 
 		, headerSelector: '#header' 

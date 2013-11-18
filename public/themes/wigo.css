@@ -73,9 +73,20 @@ p a:hover{text-decoration:none;}
 	position:relative;
 }
 
+.focused{ 
+	border-left: 4px solid #FB8521;
+	cursor: pointer;
+	border-radius: 5px;
+	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1); 
+	cursor:pointer; 
+}
+
 #header{
 	height:75px;
-	width:90%;
+	width:100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box; 
+    box-sizing: border-box;
 	padding:10px 200px 15px 100px;
 	position:relative;
 	float:left;
@@ -86,28 +97,28 @@ p a:hover{text-decoration:none;}
     -o-animation: glide-in 0.5s; 
     animation: glide-in 0.5s; 
 	background:#fff;
-	-moz-box-shadow: 0 0px 5px #888;
-	-webkit-box-shadow: 0 0px 5px #888;
-	box-shadow: 0 0px 5px #888;
+	-moz-box-shadow: 0px 0px 0px 1px;
+	box-shadow: 0px 0px 0px 1px;
+	-webkit-box-shadow: 0px 0px 0px 1px;
+	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
 }
 
 a.backlink{ 
 	display:block; 
 	float:left; 
-	margin-top:13px; 
+	margin-top:5px; 
 	margin-right:30px;
 	width: 32px;
 	height:32px;
 }
 
-
-#header .logo{ float:left; height:45px; margin: 17px 10px 0 0px; }
+#header .logo{ float:left; height:45px; margin: 0px 10px 0 0px; }
 
 #header h1{
-	width:800px;
+	width: 50%;
+	padding: 0;
 	margin:0;
-	padding:0;
-	margin:14px 0 0 60px;
+	display: inline-block;
 }
 
 #content{
@@ -115,15 +126,6 @@ a.backlink{
 	margin:0;
 	padding:0;
 	margin-left:60px;
-}
-
-.settingslink a{
-	background:url(/core/icons/settings.png) no-repeat;
-	padding-left:50px;
-	height:50px;
-	display:block;
-	line-height:32px;
-	font-family:sans-serif;
 }
 
 /* Form elements */
@@ -137,17 +139,22 @@ a.btn{
 	padding:10px;
 	font-family: 'Open Sans', sans-serif;
 	color:#fff;
-	text-align:center;
 	font-size:18px;
 	border:0;
 	border-radius:5px;
+	border-radius: 0.2em;
+	-webkit-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
+	-moz-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
+	box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
 }
+.btn.focused,
+.btn:hover{	background-color:#fff; color:#fb8521;}
+
 
 em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red; font-style: normal; font-size: 13px;}
 
 input,
-select{ display:block; width:200px; padding:5px 10px; -webkit-appearance: none;}
-select{ width: 223px; }
+select{ display:block; -webkit-appearance: none;}
 
 /* Player */
 

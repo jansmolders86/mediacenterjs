@@ -3,124 +3,231 @@ var express = require('express')
 	, fs = require('fs')
 	, ini = require('ini')
 	, colors = require('colors')
+	, semver = require('semver')
 	, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
 	, exec = require('child_process').exec
 	, async = require('async')
+	, npm = require('npm')
 	, pluginPrefix = config.pluginPrefix
-	, npm = 'npm'
+	, npm = require('npm')
 	, search = npm + ' search '
 	, install = npm + ' install '
+	, upgrade = npm + ' upgrade '
 	, remove = npm + ' remove '
 	, plugins = []
-	, installedPlugins = [];
+	, installedPlugins = []
+	, upgradablePluginList = []
+	, configuration_handler = require('../../lib/handlers/configuration-handler');
+
+var getInstalledPlugins = function(){
+	var nodeModules = __dirname + '/../../node_modules';
+	installedPlugins = [];
+	upgradablePluginList = [];
+
+	fs.readdirSync(nodeModules).forEach(function(name){
+		//Check if the folder in the node_modules starts with the prefix
+		if(name.substr(0, pluginPrefix.length) !== pluginPrefix){
+			return;
+		}
+		
+		var info = {};
+		var data = fs.readFileSync(nodeModules + '/' + name + '/package.json' , 'utf8');
+        
+        try{
+        	info = JSON.parse(data);
+        }catch(e){
+        	console.log('JSON Parse Error')
+        	info = {
+        		version: "0.0.0"
+        	}
+        }
+		
+		var plugin = {
+			name: name,
+			info: info
+		};
+				
+		installedPlugins.push(plugin);
+	});
+};
 
 exports.getAvailablePlugins = function(req, res){
+	console.log('Looking for available plugins..(pluginsList.' .green);
+	var plugins = [];
+	
+	getInstalledPlugins();
+	
+	async.waterfall([
+		function(callback){
+			npmSearch(["mediacenterjs-"], function(pluginList){
+				if (pluginList){
+					callback(null, pluginList);
+				}else{
+					callback("NPM Search Error");
+				}
+			});
+		}, 
+		function(pluginList, callback){
+			for (var key in pluginList) {
+				var obj = pluginList[key];
+		   	  	var compareInfo = isPluginCurrentlyInstalled(installedPlugins, obj.name, obj.version);          
+		   		plugins.push({
+					name: obj.name.replace(pluginPrefix, ''), //Remove the Mediacenterjs-
+					desc: obj.description,
+					author: obj.maintainers[0].replace('=',''),
+					date: obj.time,
+					version: obj.version,
+					keywords: obj.keywords,
+					isInstalled: compareInfo.isInstalled,
+					isUpgradable: compareInfo.isUpgradable
+				});
+		   }
+		   callback(null, plugins);
+		}, 
+		function(plugins, callback){
+			res.json({
+                plugins:plugins,
+                upgradablePlugins: upgradablePluginList
+        	});	
+		}],
 
-	console.log('Looking for available plugins...' .green)
-
-	exec(search + pluginPrefix, function callback(error, stdout, stderr){
-		//TODO: NEED TO CACHE THE SEARCH RESULTS!!! SLOWWWWWW Page loads.
-		if (error){
-			console.log('Error: Unable to retieve plugins list');
-		} else {
-			buildPluginList(stdout);
+	function(err){
+		if (err){
+			console.log('Error: Searching for plugins: ' + err);
+			res.json({
+				error: 1,
+				message: 'Error: Unable to get a list of the available plugins.'
+			});
 		}
 	});
 
-	var buildPluginList = function(stdout){
-		var list = stdout.split('\n');
-		var plugins = [];
-		list.forEach(function(p, i){
-			//First removes header, 
-			//second removes blank lastline.
-			//third removes npm updates
-			if (p.substr(0, 4) === 'NAME' || i === list.length - 1 || p.substr(0,3) === 'npm') return;  
-			var s = p.split(' ');
-			var name = s[0];
-
-			p = p.replace(name, '');
-			s = p.split('=');
-			var desc = s[0];
-			p = p.replace(desc, '');
-			s = p.split(' ');
-
-			var plugin = {
-				name: name.replace(pluginPrefix, ''), //Remove the Mediacenterjs-
-				desc: desc,
-				author: s[0].substr(1),
-				date: s[2] + ' ' + s[3],
-				version: s[5],
-				isInstalled: contains(installedPlugins, name)
-			}
-
-			plugins.push(plugin);
+	var npmSearch = function(search, callback){
+		npm.load([], function (err, npm) {
+		  	npm.commands.search(search, function(err, res){
+				if (err){
+					console.log('NPM Search Error ' + err);
+					return;
+				}
+				callback(res);
+			});
 		});
+	}
 
-		res.json(plugins);
-	};
-	
-	var contains = function(array, value){
-		if (array instanceof Array === false){
-			return false;
-		}
-		var isFound = false;
+	var isPluginCurrentlyInstalled = function(array, name, version){
+		
+		var info = {
+			isInstalled: false,
+			isUpgradable: false
+		};
+
 		array.forEach(function(val){
-			if (val === value) {
-				isFound = true;
+			if (val.name === name) {
+				var isUpgradable = false;
+				if (semver.gt(version, val.info.version)){
+					isUpgradable = true;
+				}
+
+				info.isInstalled = true;
+				info.isUpgradable = isUpgradable;
+
+				if (isUpgradable){
+					upgradablePluginList.push(val.name.substr(pluginPrefix.length));
+				}
+
 				return false; //break loop;
 			}
 		});
-		return isFound;
+		
+		return info;
 	};
-	
-	var getInstalledPlugins = function(){
-		var nodeModules = __dirname + '/../../node_modules';
-		fs.readdirSync(nodeModules).forEach(function(name){
-			//Check if the folder in the node_modules starts with the prefix
-			if(name.substr(0, pluginPrefix.length) !== pluginPrefix){
-				return;
-			}
-			installedPlugins.push(name);
-		});
-	};
-
 };	
 
-exports.uninstallPlugin = function(req, res, pluginName){
-	console.log('Plugins.uninstallPlugin', pluginName);
+exports.pluginManager = function(req, res, pluginName, action){
+	console.log('Plugins.pluginManager', pluginName);
+	if (!pluginName || pluginName === undefined || !action || action === undefined){
+		res.json({
+			error: 1,
+			message: "Invalid parameters"
+		})
+		return;
+	}
+	var name = pluginPrefix + pluginName;
+	console.log('Plugins.pluginManager: ' + action + 'ing ' + name);
 	
-	if (!pluginName || pluginName === undefined)
-		return;
+		
+	npm.load([], function (err, npm) {
+	  	var plugin = [];
+	  	plugin.push(name)
+	  	console.log(plugin)
+		switch(action){
+			case "install":
+			  	npm.commands.install(plugin, cb);
+			break;
+			case "upgrade":
+				npm.commands.upgrade(plugin, cb);
 
-	var name = pluginPrefix + pluginName;
-	console.log('Plugins.uninstallPlugin: Uninstalling ' + name);
-
-	exec(remove + name, function callback(error, stdout, stderr){
-		if (error){
-			console.log("Error: Unable to uninstall plugin: " + name);
-			return;
-		} else {		
-			console.log('Plugins.uninstallPlugin: Uninstalled');
-			res.redirect('/plugins/');
+			break;
+			case "remove":
+			  	npm.commands.remove(plugin, cb);
+			break;
 		}
 	});
-};
 
-
-exports.installPlugin = function(req, res, pluginName){
-	console.log('Plugins.installPlugin', pluginName);
-	if (!pluginName || pluginName === undefined)
-		return;
-
-	var name = pluginPrefix + pluginName;
-	console.log('Plugins.installPlugin: Installing ' + name);
-	exec(install + name, function callback(error, stdout, stderr){
-		if (error){
-			console.log("Error: Unable to install plugin: " + name);
-			return;
-		} else {
-			console.log('Plugins.installPlugin: installed');			
-			res.redirect('/plugins/');
+	var cb = function(err, result){
+		if (err){
+			console.log('Error: Unable to ' + action + ' plugin: ' + name + '\n' + error);
+			showError();
+		}else{
+			console.log('Plugins.pluginManager: ' + action + 'ed.');
+			showSuccess();
 		}
-	});
+	}
+
+	var showError = function(){
+		res.json({
+			error: 1,
+			message: 'Unable to ' + action + ' ' + pluginName+ '.'
+		});
+
+	};
+
+	var showSuccess = function(){
+		var msg = '';
+		switch(action){
+			case "install":
+			  	msg = "installed";
+			break;
+			case "upgrade":
+				msg = "upgraded";
+			break;
+			case "remove":
+			  	msg = "upgraded";
+			break;
+		}
+		res.json({
+			error: 0,
+			message: pluginName +  ' ' + msg + ' successfully.'  
+		});	
+	};
 };
+
+exports.reloadServer = function(req, res){
+	console.log('Please wait, restarting server');
+	var currentSettings = {
+			moviepath: config.moviepath,
+			musicpath: config.musicpath,
+			tvpath: config.tvpath,
+			language: config.language,
+			localIP: config.localIP,
+			remotePort: config.remotePort,
+			location: config.location,
+			spotifyUser: config.spotifyUser,
+			spotifyPass: config.spotifyPass,
+			theme: config.theme,
+			port:  config.port }
+	configuration_handler.saveSettings(currentSettings, function(){
+		console.log('done');
+		res.json('');
+	});
+}
+

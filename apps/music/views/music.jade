@@ -4,6 +4,7 @@ html(lang="en")
 		title #{lingua.music}
 		
 		// Core inclusion
+		link(rel='stylesheet', href='/core/css/icon.css')
 		link(rel='stylesheet', href='/core/css/style.css')
 		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css')
 		link(rel='stylesheet', href='/themes/'+selectedTheme)
@@ -12,8 +13,10 @@ html(lang="en")
 		script(src="/core/js/plugins/knockout-2.3.0.js")
 		script(src="/core/js/jquery-ui-1.10.3.min.js")
 		
+		script(src="/core/js/socket.io.min.js")
 		script(src="/core/js/plugins/jquery.idle-timer.js")
 		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
+		script(src="/core/js/plugins/jquery.scrollintoview.min.js")
 		script(src="/core/js/jquery.mcjs.core.js")
 		
 		link(href="http://vjs.zencdn.net/4.0/video-js.css", rel="stylesheet")
@@ -44,16 +47,15 @@ html(lang="en")
 			});
 	body
 		#header
-			a.backlink(href="/") 
+			a.backlink
 				img(src="/core/icons/back.png")
 			h1 #{lingua.music}
 		#wrapper
-			#musicWrapper
-				ul.music(data-bind="foreach:  $data")
-					li.boxed
-						img.cover(src="/core/css/img/ajax-loader.gif")
-						.overlay
-						a.title(data-bind="text:$data")
+			ul.music(data-bind="foreach:  $data")
+				li.boxed.mcjs-rc-clickable.mcjs-rc-controllable
+					img.cover(src="/core/css/img/ajax-loader.gif")
+					.overlay
+					a.title(data-bind="text:$data")
 			#tracklist
 				#albumInfo
 					img.cover(src="/core/css/img/ajax-loader.gif")			

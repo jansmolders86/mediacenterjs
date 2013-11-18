@@ -1,18 +1,21 @@
-![logo] (screenshots/logo.png) MediacenterJS
+![logo] (http://www.mediacenterjs.com/global/images/github/logo.png) MediacenterJS
 =============
 
 __A NodeJS based Mediacenter__ 
 
 Website: http://www.mediacenterjs.com
 
-![Dashboard] (screenshots/screen1.png)
-
-More screenshots in the screenshot folder.
+![Dashboard] (http://www.mediacenterjs.com/global/images/github/screen1.png)
 
 Status: 
 =======
 
-__Heavy work in progress, Alpha version (0.0.41)__
+__Heavy work in progress, Alpha version (0.0.50)__
+
+__version 0.0.50__
+* Greatly improved video playback
+* Operational plugin manager
+* Improved GUI
 
 Why use it?
 ===========
@@ -41,12 +44,13 @@ What currently works?
 * Basic screensaver
 * Lazy loading of movie and music items
 * I3d tag support
+* Remote control
+* Plugin manager
 
 What's coming up
 ==================
 * Tv show app functionality
 * Better inbrowser streaming
-* Plugin manager
 
 Known issues: video/audio playback
 ==================
@@ -54,16 +58,10 @@ Known issues: video/audio playback
 These issues are known issues and current browser/platform limitations.
 I'm trying to figure out how to get around these limitations.
 
-* IOS:  Video is not seekable
-* Browser: Video buffering does not work properly. (Current quickfix is simply pause the video and let it buffer a bit)
-* Android: Fullscreen mode not stable & Not seekable
+* IOS: Video is not seekable
+* Browser: HD videos still take a lot of processing power.
+* Android: not seekable & mp3 playback not working
 * Ubuntu: Audio playback of mp3 not supported by default
-
-Other known issues 
-==================
-
-* Frontend needs to be ported to knockout (still wip)
-* Movie scraper API has a limitation on the amount of calls we can make. So with a lot if movies, you can get misfires if you scroll through too many movies at once.
 
 What still needs to be done
 ==================
@@ -88,13 +86,8 @@ What do I need to have installed?
 
 * FFmpeg installed (Linux and windows binaries are included)
 * NodeJS installed
-* A modern browser like Chrome
+* A modern browser like Chrome or Firefox
 * An internet connection
-
-Additional Apps
-===========
-* Simple Spotify player: https://github.com/jansmolders86/mediacenterjs-spotify-app
-
 
 Partial documentation 
 ==========================
@@ -124,9 +117,9 @@ Ffmpeg binaries for Linux and Windows are included.
 User guide for installing FFmpeg on Windows: (http://www.wikihow.com/Install-FFmpeg-on-Windows)
 User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-install-ffmpeg-linux)
 
-Install NodeJS: http://nodejs.org/download/
+Install NodeJS: http://nodejs.org/download/  (minimal version 0.10.x)
 
-__Install node on Ubuntu/Debian__
+__Install node on Ubuntu/Debian/OSX__
 
 
 	Ubuntu: gksu software-properties-gtk (enable all software sources)
@@ -142,7 +135,11 @@ __Install node on Ubuntu/Debian__
 	git clone https://github.com/jansmolders86/mediacenterjs.git
 	cd mediacenterjs
 	npm install
-	sudo chmod 755 bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
+	sudo chmod +x bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
+	
+	For OSX users:
+	sudo chmod +x ./bin/sqlite3/osx/sqlite3 
+	
 	sudo node server
 
 	// NPM install
@@ -150,7 +147,7 @@ __Install node on Ubuntu/Debian__
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 
-If you get an 'EACCESS' error, please set the permissions of the entire app to read, write and execute and run the server using 'sudo'
+If you get an 'EACCESS' error, please set thefollowing permissions and run the server using 'sudo'
  
      sudo chmod 755 bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
      sudo node server
@@ -161,7 +158,21 @@ After the initial setup has been completed MediacenterJS will be available on th
 the server.js will make sure you do not have to restart the actual application (index.js) every time the configuration file changes.
 
 Of course, if you change the port, you need to use that port after the initial setup.
+
+![Remote] (http://www.mediacenterjs.com/global/images/github/remote.png)
+
+Using the remote control
+-------------
+
+Integrated with Mediacenterjs is a handly remote control you can use on your mobile phone or tablet. Simply open your favourite browser and navigate to the local ip address of the MCJS server followed by the port and remote url. Which would give you an url that looks something like:
+
+    Example: http://192.168.0.101:3000/remote/
+
+If your phone is connected to the same wifi this should work automatically and the message on the bottom of the screen should say "Remote connected". If for some reason the IP is different and the remote is not connected you can fill in a different IP by pressing the three dotts at the top left corner. This will bring up the settings menu where you can customize all the MCJS settings.
 	
+
+![Movies] (http://www.mediacenterjs.com/global/images/github/second.png)
+
 What can the movie browser/player do? 
 -------------
 
@@ -192,13 +203,13 @@ or even
 	
 ###Filename conventions###
 MCJS will use the filenname to try to get the correct movie details. This way the server does not have to look inside the files to get the metadata, which speeds up the process.
-As you can gather the more precise the title of the movie, the better the scraper will know whhich movie it is.
+As you can gather the more precise the title of the movie, the better the scraper will know which movie it is.
 
 Asside from the title you can make it even easier for the scraper to recognize the movie by adding the date of release like so:
 	
 	Fight Club (1999).avi
 	
-If you your filenames are 'messy', the system will try to clean them up before sending the title to the scraper.
+If your filenames are 'messy', the system will try to clean them up before sending the title to the scraper.
 Text like release group names,dividers,file type or quality will be filtered out of the filename on the server.
 so:
 
@@ -310,7 +321,8 @@ You can extend this in your own route.js file in your app folder.
 __route.js__ 
 
 Although the basic routing is pretty generic and should be sufficient most of the time, you can extend the basic routing table with your own custom routes by adding this JSON file to the root of your core app folder and defining your routes. 
-The 'NAME' will be replaced with the app name (folder name / namespace). You do not have to hard code it. But you can also add route outside your app namespace. For Example:
+
+The 'NAME' will be replaced with the app name (folder name / namespace). You do not have to hard code it. But you can also add routes outside your app namespace. For Example:
 
 	{
 		"track": [{
@@ -326,7 +338,20 @@ The 'NAME' will be replaced with the app name (folder name / namespace). You do 
 			"path": "/configuration"
 		}]
 	}
+	
+__Remote control__ 
 
+If you want the remote to properly navigate your app you need to add classes to the elements within your app so the remote can find it's way within your app.
+To specify a element that you can navigate to and from add the following class:
+
+	.mcjs-rc-controllable
+	
+To specify a element that you can click on add the following class:
+
+	.mcjs-rc-clickable
+
+These classes will also enable keyboard navigation for your app.	
+Please make sure you have include the socket.io clientside javascript and the MCJS core plugin to make sure the remote will work in your app.
 	
 Building an App
 -------------
@@ -347,35 +372,13 @@ This app makes heavy use of:
 * Node-Fluent-FFmpeg (https://github.com/schaermu/node-fluent-ffmpeg)
 * VideoJS (http://www.videojs.com/)
 
-This app also makes use of the following modules:
-
-* express
-* fs.extra
-* dateformat
-* downloader
-* fluent-ffmpeg
-* jade
-* lingua
-* node-ffprobe
-* node-html-encoder
-* redis
-* request
-* require
-* rimraf
-* feedparser
-* ini
-* trakt
-* colors
-* dblite
-* async
-* musicmetadata
-
 ###Special thanks to:###
 
 * Sylvain https://github.com/flyinva for his French translation
+* Luis Eduardo Brito https://github.com/luiseduardobrito for his Portuguese translation
 * Kasper Isager https://github.com/kasperisager for his Danish translation
 * Jussi Vatjus https://github.com/jupe for his code support
-* Terry MooreII https://github.com/TerryMooreII For the Javascript Jabber app
+* Terry MooreII https://github.com/TerryMooreII For the Javascript Jabber app and building the Plugin manager
 * Stefan Hoffman https://github.com/hoffi for his hudge contribution to the backend
 * Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
 * Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
@@ -393,12 +396,12 @@ What will the beta version be able to do?
 
 The project will reach beta status when it is able to provide:
 
-* Fast transcoding 
-* Cross Browser/device compatibility
-* Easy to add/change themes (with several available to choose from)
-* A set of ready made apps like youtube and google music.
-* Multilanguage support
-* App import/export functionality
+- [ ] Fast transcoding 
+- [ ] Cross Browser/device compatibility
+- [ ] Easy to add/change themes (with several available to choose from)
+- [ ] A set of ready made apps like youtube and google music.
+- [ ] Multi language support
+- [ ] App import/export functionality
 
 This application will run on Windows and Linux based systems. 
 
@@ -406,7 +409,7 @@ This application will run on Windows and Linux based systems.
 
 I'm building MCJS in my free time so if you want to encourage me to continue this enormous project, feel free to do so.
 
-[![Donate] (screenshots/paypal-donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
+[![Donate] (http://www.mediacenterjs.com/global/images/github/paypal-donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
 
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
 This application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.

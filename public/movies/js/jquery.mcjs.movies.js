@@ -40,10 +40,12 @@
 			_setViewmodel(o);
 			_getItems(o);
 			
-			$that.scroll( function(){ 
+			$that.on('scroll resize', function() {
 				_lazyload(o);
-			});	
+				_positionElement(o);
 
+			});	
+			
 			_showAndFilterAvailableGenres(o);			
 			
 		});
@@ -78,6 +80,16 @@
 			_playMovie(platform,url);
 		};
 	}
+	
+	function _positionElement(o){
+		var startFromTopInit = $('#moviebrowser').offset().top > 50;
+		if (startFromTopInit){
+            $('#backdrop').removeClass('shrink');
+        } else {
+            $('#backdrop').addClass('shrink');
+		}
+	};
+
 	
 	function _setViewmodel(o){
 		if (!o.viewModel) {
@@ -121,19 +133,22 @@
 			}).done(function(data){
 				// If current item is in cache, fill item with values
 				if (o.movieCache[title]) {
-					var movieData = data[0]
-					, movie = o.movieCache[title];
-					
-					movie.posterImage(movieData.poster_path);
-					movie.backdropImage(movieData.backdrop_path);
-					movie.genre(movieData.genre);
-					movie.runtime(movieData.runtime);
-					movie.overview(movieData.overview);
-					movie.title(movieData.original_name);
-					movie.cdNumber(movieData.cd_number);
+					setTimeout(function(){
+						var movieData = data[0]
+						, movie = o.movieCache[title];
+						 
+						movie.posterImage(movieData.poster_path);
+						movie.backdropImage(movieData.backdrop_path);
+						movie.genre(movieData.genre);
+						movie.runtime(movieData.runtime);
+						movie.overview(movieData.overview);
+						movie.title(movieData.original_name);
+						movie.cdNumber(movieData.cd_number);
+						
+						visibleMovie.addClass('showDetails '+o.fadeClass);
+						
+					},500);
 				}
-				
-				visibleMovie.addClass('showDetails '+o.fadeClass);
 				
 				_focusedItem(o);
 				_scrollBackdrop(o);
@@ -319,11 +334,22 @@
 				} else if(platform === 'browser'){
 					$('body').append('<video id="player" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
 
-					videojs('player').ready(function(){
+					videojs("player", {}, function(){
 						myPlayer = this;
-						myPlayer.play();
+						$('.vjs-big-play-button').trigger('click');
 						myPlayer.on('error', function(e){ console.log('Error', e) });
 						myPlayer.on('ended', function(e){ window.location="/movies/"; });
+					});
+					
+					$('.vjs-big-play-button').on('click',function(){
+						setTimeout(function(){
+							videojs("player").pause();
+							$('.vjs-loading-spinner').show();
+							setTimeout(function(){
+								$('.vjs-loading-spinner').hide();
+								videojs("player").play();
+							},15000);
+						},2500)
 					});
 				}
 			}

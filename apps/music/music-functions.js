@@ -33,8 +33,12 @@ exports.getInfo = function(req, res, infoRequest) {
 	var metadata_fetcher = require('./metadata-fetcher');
 	var dblite = require('dblite');
     
-    // Init Database
-    dblite.bin = "./bin/sqlite3/sqlite3";
+	// Init Database
+	if(config.platform === 'OSX'){
+		dblite.bin = "./bin/sqlite3/osx/sqlite3";
+	}else {
+		dblite.bin = "./bin/sqlite3/sqlite3";
+	}
     var db = dblite('./lib/database/mcjs.sqlite')
     
 	db.query("CREATE TABLE IF NOT EXISTS music (filename TEXT PRIMARY KEY,title VARCHAR, cover VARCHAR, year VARCHAR, genre VARCHAR , tracks VARCHAR)");

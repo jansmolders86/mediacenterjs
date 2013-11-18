@@ -31,7 +31,7 @@
 		modalDialog : function modalDialog(url, type,data) {
 			return this.each(function() {
 				var o = $.data(this, ns);
-				_modalDialog(o, url, type,data)
+				_modalDialog(o, url, type,data);
 			});
 		}
 		
@@ -47,10 +47,10 @@
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
 				$that: $that
-				,viewportWidth	: $(window).width()
-				,viewportHeight	: $(window).height()
-				,confirmMessage : undefined
-				,succesMessage : undefined
+				, viewportWidth		: $(window).width()
+				, viewportHeight	: $(window).height()
+				, confirmMessage 	: undefined
+				, succesMessage 	: undefined
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -58,10 +58,11 @@
 			
 			window.scrollTo(0,0);
 			
-			_initpages(o, $(this))
+			_initpages(o, $(this));			// Init core functionality
+			_websocketHandler(o, $(this));	// Init remote control
 			_resizeviewport(o, $(this)); 	// Strech bg to fullscreen
-			_keyevents(o,$(this)); 			// init keys
-			_screensaver(o, $(this));
+			_keyevents(o,$(this)); 			// Init keys
+			_screensaver(o, $(this));		// Init screensaver
 
 			$('a.cachelink').click(function(e){
 				e.preventDefault();
@@ -69,7 +70,7 @@
 				, data = {cache : cacheLink}
 				, url = '/clearCache'
 				, type = 'post';
-				_modalDialog(o, url, type,data)
+				_modalDialog(o, url, type,data);
 			});
 		
 			$('.remove').click(function(e){
@@ -78,7 +79,7 @@
 				, data = {module : moduleLink}
 				, url = '/removeModule'
 				, type = 'post';				
-				_modalDialog(o, url, type,data)
+				_modalDialog(o, url, type,data);
 			});
 		});
 	}
@@ -86,6 +87,7 @@
 	/**** Start of custom functions ***/
 	
 	function _initpages(o, $that){
+		
 		// Setup frontend validation
 		$.ajax({
 			url: '/configuration/', 
@@ -99,53 +101,54 @@
 				extension: 'js',
 				loadBaseFile: false ,
 				callback: function() {
-					o.confirmMessage = $.i18n.prop('confirmMessage')
-					o.succesMessage = $.i18n.prop('succesMessage')
+					o.confirmMessage = $.i18n.prop('confirmMessage');
+					o.succesMessage = $.i18n.prop('succesMessage');
 				}
 			})
 		});
 	
-		// Hide all ui boxes
+		// Hide all UI boxes
 		$(".ui-widget").hide();
 		
 		// Add fade effect
 		$(".backdropimg").addClass("fadein");
-		
-		// Init Keyboard
-		if(jQuery().keyboard) {
-			if ( o.usekeyboard == 'yes' ) $('.keyboard').keyboard();
-		}	
 	}
 	
 	function _modalDialog(o, url, type, data){
-		var dialog = null;
-		dialog = $('<div>' + o.confirmMessage + '</div>').dialog({
-			resizable: false,
-			modal: true,
-			buttons: [{
-				text: "Ok",
-				click: function () {
-					dialog.dialog('destroy').remove();
-					$.ajax({
-						url: url, 
-						type: type,
-						data: data
-					}).done(function(data){
-						if(data == 'done'){
-							$(".ui-widget").find('.message').html(o.succesMessage);
-							$(".ui-widget").show();
-						} 
-					});
-				},
+		if (typeof jQuery.ui !== 'undefined'){
+			var dialog = null;
+			dialog = $('<div>' + o.confirmMessage + '</div>').dialog({
+				resizable: false,
+				modal: true,
+				buttons: [{
+					text: "Ok",
+					click: function () {
+						dialog.dialog('destroy').remove();
+						$.ajax({
+							url: url, 
+							type: type,
+							data: data
+						}).done(function(data){
+							if(data == 'done'){
+								$(".ui-widget").find('.message').html(o.succesMessage);
+								$(".ui-widget").show();
+							} 
+						});
+					},
 
-			}, {
-				text: "Cancel",
-				click: function () {
-					dialog.dialog('destroy').remove();
-				},
-			}]
-		});
-		dialog.dialog('open');
+				}, {
+					text: "Cancel",
+					click: function () {
+						dialog.dialog('destroy').remove();
+					},
+				}]
+			});
+			dialog.dialog('open');
+		} else {
+			if(o.debug === true){
+				console.log('If you want to include modal dialogs or error handling, please include the jQuery UI plugin');
+			}
+		}
 	}
 	
 	
@@ -167,37 +170,112 @@
 	}
 	
 	
-	/************ KEYBOARD HANDELING ***************/
 	
+	/************ KEYBOARD/REMOTE HANDELING ***************/
+	
+	
+	//Socket.io handler for remote control
+	function _websocketHandler(o, $that){
+		if(io !== undefined){
+			$.ajax({
+					url: '/configuration/', 
+					type: 'get'
+				}).done(function(data){
+					var socket = io.connect(data.localIP+':'+data.remotePort);
+					socket.on('connect', function(data){
+						socket.emit('screen');
+					});
+
+					socket.on('controlling', function(data){
+						switch(data.action) {
+							case "goLeft" :
+								if($(o.accesibleItem).length > 0){
+									var item = $(o.accesibleItem);
+									_goLeft(o, item);
+								}
+							break;
+							case "goRight" :
+								if($(o.accesibleItem).length > 0){
+									var item = $(o.accesibleItem);
+									_goRight(o, item);
+								}
+							break;
+							case "back" :
+								_goBack(o);
+							break;
+							case "pause" :
+								if(videojs("player").paused()){
+									videojs("player").play();
+								} else {
+									videojs("player").pause();
+								}
+							break;
+							case "fullscreen" :
+								videojs("player").requestFullScreen();
+							break;
+							case "mute" :
+								if(videojs("player").volume() === 0){
+									videojs("player").volume(1)
+								} else {
+									videojs("player").volume(0);
+								}
+							break;							
+							case "enter" :
+								_pressEnter(o);
+							break;
+							case "dashboard" :
+								if(window.location.pathname === '/plugins/'){
+									$.ajax({
+										url: '/plugins/reloadServer', 
+										type: 'get',
+										dataType: 'json'
+									}).done(function(data){
+										setTimeout(function(){
+											document.location = '/';
+										},1000);
+									});
+								} else {
+									document.location = '/';
+								}
+							break;
+						}	
+					});
+
+					socket.on('sending', function(data){
+						$(o.focused).find("input").val(data);
+					});
+				});
+		} else {
+			if(o.debug === true){
+				console.log('Make sure you include the socket.io clientside javascript plugin is on the page to allow the remote to access the page');
+			}
+		}
+	}
 	
 	// Catch and set keyevents
 	function _keyevents(o, $that){
 		$(document).keydown(function(e){
-			var focused = $('li.focused')
-			,subitemFocused = $('.options:visible li.focused')
-			,subitem = $('.options:visible li')
-			,item = $('li')
-			,elid = $(document.activeElement).is("input:focus");
-			
+			var elid = $(document.activeElement).is("input:focus");
 			if (typeof e == 'undefined' && window.event) { e = window.event; }
 			
 			switch(e.keyCode) {
 				case 39 : //next
-					focused.removeClass('focused').next().addClass('focused');
-					if (focused.next().length == 0) item.eq(0).addClass('focused');
+					if($(o.accesibleItem).length > 0){
+						var item = $(o.accesibleItem);
+						_goRight(o, item);
+					}
 				break;
 				case 37 : //prev
-					focused.removeClass('focused').prev().addClass('focused');
-					if (item.prev().length == 0) item.eq(-1).addClass('focused');
+					if($(o.accesibleItem).length > 0){
+						var item = $(o.accesibleItem);
+						_goLeft(o, item);
+					}
 				break;
 				case 13 : //enter
-					if (!elid) document.location = focused.find('a').attr('href');
+					_pressEnter(o);
 				break;
 				case 8  : //backspace
-					if (!elid){
-						e.preventDefault()
-						window.history.go(-1)
-					}
+					_goBack(o);
 				break;
 				case 32 : 
 					if (!elid){
@@ -211,6 +289,71 @@
 			}
 		});
 	}
+	
+	function _goRight(o, item){
+		if ($(o.focused).next(item).length == 0)item.eq(0).addClass('focused');
+		$(o.focused).removeClass('focused').next(item).addClass('focused').scrollintoview({direction: "vertical"});
+	}	
+	
+	function _goLeft(o, item){
+		if (item.prev(item).length == 0) item.eq(-1).addClass('focused');
+		$(o.focused).removeClass('focused').prev().addClass('focused').scrollintoview({direction: "vertical"});
+	}	
+	
+	function _pressEnter(o, item){
+		if ($(o.focused).length > 0){
+			if ($(o.focused).find('.'+o.clickableItemClass).length > 0) {
+				if($(o.focused).find('.'+o.clickableItemClass).is('input')){
+					if($(o.focused).find('.'+o.clickableItemClass).is('input[type=submit]')){
+						$(o.focused).find('.'+o.clickableItemClass).click();
+					}
+					$(o.focused).find('.'+o.clickableItemClass).focus();
+				} else if($(o.focused).find('.'+o.clickableItemClass).is('a')) {
+					if (typeof $(o.focused).find('.'+o.clickableItemClass).attr('href') !== 'undefined' && $(o.focused).find('.'+o.clickableItemClass).attr('href') !== false){
+						document.location = $(o.focused).find('.'+o.clickableItemClass).attr('href');
+					}
+				} else if($(o.focused).find('a')) {
+					if (typeof $(o.focused).find('a').attr('href') !== 'undefined' && $(o.focused).find('a').attr('href') !== false){
+						document.location = $(o.focused).find('a').attr('href');
+					}
+				} else {
+					$(o.focused).find('.'+o.clickableItemClass).click();
+				}
+			} else if($(o.focused).hasClass(o.clickableItemClass)){
+				if($(o.focused).is('input')){
+					if($(o.focused).is('input[type=submit]')){
+						$(o.focused).click();
+					}
+					$(o.focused).focus();
+				} else if($(o.focused).is('a')){
+					if (typeof $('a'+o.focused).attr('href') !== 'undefined' && $('a'+o.focused).find('a').attr('href') !== false){
+						document.location = $('a'+o.focused).attr('href');
+					}
+				} else {
+					$(o.focused).click();
+				}
+			} else {
+				return;
+			}
+		}
+	}	
+
+	function _goBack(o){
+		if( !$(document.activeElement).is("input:focus")){
+			if ($('.backlink').length > 0){
+				var attrHref = $('.backlink').attr('href');
+				if (typeof attrHref !== undefined && attrHref !== false){
+					var attrHref = $('.backlink').attr('href');
+					document.location = attrHref;
+				} else {
+					$('.backlink').click();
+				}
+			} else if( !$(document.activeElement).is("input:focus") ){
+				window.history.go(-1);
+			}
+		}
+	}
+	
 	
 	/************ Screensaver ***************/
 	
@@ -230,9 +373,8 @@
 				});
 
 				$(document).bind("active.idleTimer", function(){
-				   $("html, body, #wrapper, #header").removeClass("dim")
+					$("html, body, #wrapper, #header").removeClass("dim")
 				});
-
 				
 				$.idleTimer(timeout);
 			} else if(data.screensaver === 'off'){
@@ -255,7 +397,10 @@
 	
 	/* default values for this plugin */
 	$.fn.mcjs.defaults = {
-		debug : true
+		datasetKey: 'mcjs', //always lowercase
+		debug : false,
+		focused : '.focused',
+		accesibleItem :'.mcjs-rc-controllable',
+		clickableItemClass : 'mcjs-rc-clickable'
 	}
-
 })(jQuery);

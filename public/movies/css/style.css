@@ -34,7 +34,7 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 }
 
 #header.scrolling{ opacity:0.9;}
-#header{height:35px; z-index:3; position:fixed; top:0; }
+#header{height:60px; z-index:3; position:fixed; top:0; }
 #header h1{z-index:4; margin-top:0px;}
 #wrapper{ padding-top:230px;z-index:1; }
 
@@ -43,6 +43,22 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 	overflow:hidden;
 	width:100%;
 	background:url(img/backdrop.png) repeat-x;
+	-webkit-transition: opacity 1s ease-in-out;
+	-moz-transition: opacity 1s ease-in-out;
+	-ms-transition: opacity 1s ease-in-out;
+	-o-transition: opacity 1s ease-in-out;
+	transition: opacity 1s ease-in-out;
+	-webkit-transition: height 1s ease-in-out;
+	-moz-transition: height 1s ease-in-out;
+	-ms-transition: height 1s ease-in-out;
+	-o-transition: height 1s ease-in-out;
+	transition: height 1s ease-in-out;
+}
+
+#backdrop.shrink{  
+	filter: alpha(opacity=0.3);
+	opacity: 0.3;
+	height:50px;
 }
 
 #backdrop img{	height:auto; }
@@ -75,6 +91,7 @@ a.backlink { margin-top: 0px; z-index:4; }
 	left:0;
 	z-index:6;
 	cursor:pointer;
+	border-radius:2px;
 }
 
 .movieposter.showDetails .cdNumber{
@@ -133,6 +150,12 @@ span.title{visibility:hidden; width:0; height:0;}
     border-radius:2px;
 	display:block;
 	background:#fff;
+	-webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+	border-bottom: 0.2em solid rgba(0, 0, 0, 0.2);
+	border-radius: 0.33em;
+	-webkit-transition: -webkit-box-shadow 0.2s ease;
+	transition: box-shadow 0.2s ease;
 }
 
 
@@ -162,7 +185,7 @@ span.title{visibility:hidden; width:0; height:0;}
 	border-top: 1px solid #e7e7e7;
 }
 
-.overview h1{ margin:0px 0 10px 0; font-size:13px; max-width:165px;}
+.overview h1{ margin:0px 0 10px 0; font-size:13px; max-width:230px;}
 .specs p{font-size:12px; float:left; margin:10px 0 0 15px;}
 
 #genres { position:absolute; top: 240px; left: 96px;}

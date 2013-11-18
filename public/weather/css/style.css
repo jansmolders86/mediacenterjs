@@ -9,9 +9,10 @@ body,html{overflow:hidden; position:relative; color:#333;}
 	-webkit-box-shadow:none;
 	box-shadow:none;
 }
+#header h1{margin-top:5px;}
 #header *{color:#F1F5FE;}
 
-.degrees{ font-size:48px; }
+.degrees{ font-size:48px; margin-top: 7px;}
 .degrees.getsucces{	
 	-webkit-animation: glide-in 0.8s; 
 	-moz-animation: glide-in 0.8s; 

@@ -69,9 +69,9 @@ server = {
 				// give browser time to load finsh page
 				setTimeout(function(){
 					server.restart();
-				},1000);
+				},2000);
 			}
-		});
+		});	
 	}
 }
 
