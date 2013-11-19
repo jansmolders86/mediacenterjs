@@ -38,7 +38,7 @@ exports.loadItems = function (req, res){
 				movieTitles = files[i].file;
 			}
 
-			movies.push(movieTitles);
+			movies.push(movieTitles.split("/").pop());
 		}
 
 		res.json(movies);

@@ -21,7 +21,7 @@ exports.loadItems = function(req, res){
                 albumTitles = files[i].file;
             }
             
-            albums.push(albumTitles);
+            albums.push(albumTitles.split("/").pop());
             unique[albumTitles] = 1;
         };
         

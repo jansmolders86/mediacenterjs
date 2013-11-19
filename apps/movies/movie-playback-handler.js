@@ -5,24 +5,6 @@ var colors = require('colors'),
 
 /* Constants */
 var FFMPEG_TIMEOUT = 15000;
-var BROWSER_FFMPEG_OPTS = [
-	'-y',
-	'-loglevel quiet',
-	'-ss 0',
-	'-threads 0',
-	'-vcodec libx264',
-	'-pix_fmt yuv420p',
-	'-profile:v main',
-	'-b:v 512k',
-	'-acodec mp3',
-	'-ab 160000',
-	'-ar 44100',
-	'-qmax 2',
-	'-rtbufsize 1000k', 
-	'-maxrate 620k',
-	'-deinterlace',
-	'-crf 23',
-	'-f flv'];
 
 var MOBILE_FFMPEG_OPTS = [
 	'-threads 0', 
