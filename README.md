@@ -137,10 +137,9 @@ __Install node on Ubuntu/Debian/OSX__
 	cd mediacenterjs
 	npm install
 	
-	sudo node server
+	node server
+	Use 'sudo node server' if you use a port below 1000
 
-	// NPM install
-	npm install mediacenterjs
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 
