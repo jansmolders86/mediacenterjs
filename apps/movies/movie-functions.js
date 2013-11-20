@@ -3,27 +3,33 @@ var fs = require('fs.extra')
 	, file_utils = require('../../lib/utils/file-utils')
 	, app_cache_handler = require('../../lib/handlers/app-cache-handler')
 	, colors = require('colors')
-	, dblite = require('dblite')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
 /* Constants */
 var SUPPORTED_FILETYPES = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
 
 exports.initMovieDb = function() {
-	// Init Database
-	if(config.platform === 'OSX'){
-		dblite.bin = "./bin/sqlite3/osx/sqlite3";
-	}else {
-		dblite.bin = "./bin/sqlite3/sqlite3";
-	}
-	var db = dblite('./lib/database/mcjs.sqlite');
-    
-	db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number VARCHAR)");
+    // Init Database
+    var dblite = require('dblite')
+    if(config.binaries === 'packaged'){
+        if(config.platform === 'OSX'){
+            dblite.bin = "./bin/sqlite3/osx/sqlite3";
+        }else {
+            dblite.bin = "./bin/sqlite3/sqlite3";
+        }
+    }
+    var db = dblite('./lib/database/mcjs.sqlite');
+    db.on('info', function (text) { console.log(text) });
+    db.on('error', function (err) {
+        if(config.binaries !== 'packaged'){
+            console.log('You choose to use locally installed binaries instead of the binaries included. /n Please install them. Eg type "apt-get install sqlite3"');
+        }
+        console.error('Database error: ' + err)
+    });
 
-	db.on('info', function (text) { console.log(text) });
-	db.on('error', function (err) { console.error('Database error: ' + err) });
+    db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number VARCHAR)");
+    return db;
 
-	return db;
 };
 
 exports.loadItems = function (req, res){

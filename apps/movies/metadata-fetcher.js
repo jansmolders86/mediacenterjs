@@ -1,6 +1,5 @@
 /* Global Imports */
-var dblite = require('dblite'),
-	moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3'),
+var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3'),
 	fs = require('fs'),
 	app_cache_handler = require('../../lib/handlers/app-cache-handler'),
 	config = require('../../lib/handlers/configuration-handler').getConfiguration(),
@@ -8,14 +7,22 @@ var dblite = require('dblite'),
 
 /* Variables */
 // Init Database
-if(config.platform === 'OSX'){
-	dblite.bin = "./bin/sqlite3/osx/sqlite3";
-}else {
-	dblite.bin = "./bin/sqlite3/sqlite3";
+var dblite = require('dblite')
+if(config.binaries === 'packaged'){
+    if(config.platform === 'OSX'){
+        dblite.bin = "./bin/sqlite3/osx/sqlite3";
+    }else {
+        dblite.bin = "./bin/sqlite3/sqlite3";
+    }
 }
 var db = dblite('./lib/database/mcjs.sqlite');
 db.on('info', function (text) { console.log(text) });
-db.on('error', function (err) { console.error('Database error: ' + err) });
+db.on('error', function (err) {
+    if(config.binaries !== 'packaged'){
+        console.log('You choose to use locally installed binaries instead of the binaries included. /n Please install them. Eg type "apt-get install sqlite3"');
+    }
+    console.error('Database error: ' + err)
+});
 
 /* Public Methods */
 
@@ -81,7 +88,7 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 					overview = result.overview;
 				}
 				
-				var metadata = [ movieTitle, original_title, poster_path, backdrop_path, imdb_id, rating, certification, genre, runtime, overview, movieInfos.cd ];
+				var metadata = [ movieTitle, original_title, poster_path.replace(/\\/g,"/"), backdrop_path.replace(/\\/g,"/"), imdb_id, rating, certification, genre, runtime, overview, movieInfos.cd ];
 				storeMetadataInDatabase(metadata, function() {
 					loadMetadataFromDatabase(movieTitle, callback);
 				});

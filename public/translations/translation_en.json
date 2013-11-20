@@ -14,6 +14,7 @@
 "setting_screensaver" : "Dim screen on inactivity",
 "setting_keyboard" : "Use onscreen keyboard",
 "setting_language" : "Language",
+"setting_binaries" : "Binary files",
 "setting_location" : "You current location (city)",
 "setting_theme" : "Pick a theme",
 "setting_port" : "Port",

@@ -15,6 +15,7 @@
 "setting_keyboard" : "Utiliser le clavier de l'écran",
 "setting_language" : "Langue",
 "setting_location" : "Votre localité",
+"setting_binaries" : "Les fichiers binaires",
 "setting_theme" : "Choisir un thème",
 "setting_port" : "Port",
 "setting_submit" : "Valider",

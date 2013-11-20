@@ -278,7 +278,7 @@
                     e.preventDefault();
 					_goBack(o);
 				break;
-				case 32 :
+				case 32 :  //space
 					if (!elid){
 						if(videojs("player").paused()){
 							videojs("player").play();

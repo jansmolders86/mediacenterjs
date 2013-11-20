@@ -344,7 +344,6 @@
             $('body').animate({backgroundColor: '#000'},500).addClass('playingMovie');
 
 			setTimeout(function(){
-				
 				if($('#'+o.playerID).length > 1) {
 					$('#'+o.playerID).remove();
 				} else {
@@ -356,7 +355,9 @@
 						myVideo.src = url;
 						myVideo.load();
 						myVideo.play();
-						myVideo.onended = function(e){window.location="/movies/";}
+						myVideo.onended = function(e){
+                            window.location.replace("/movies/");
+                        }
 						
 					} else if(o.platform === 'browser'){
 						$('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
@@ -365,7 +366,10 @@
 							myPlayer = this;
 							$('.vjs-big-play-button').trigger('click');
 							myPlayer.on('error', function(e){ console.log('Error', e) });
-							myPlayer.on('ended', function(e){ window.location="/movies/"; });
+							myPlayer.on('ended', function(e){
+                                myPlayer.dispose();
+                                window.location.replace("/movies/");
+                            });
 						});
 						
 						$('.vjs-big-play-button').on('click',function(){

@@ -87,6 +87,11 @@ html(lang="en")
 						- for theme in themes
 							option(selected=theme) #{theme}
 				.row.mcjs-rc-controllable
+					label #{lingua.setting_binaries}
+					select#theme(name="binaries")
+						- for binaryType in binaryTypes
+							option(value=binaryType, selected=binaryType == selectedBinaryType) #{binaryType}
+				.row.mcjs-rc-controllable
 					label #{lingua.setting_port}
 					input.mcjs-rc-clickable(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
 				.row.mcjs-rc-controllable

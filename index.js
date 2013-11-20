@@ -24,7 +24,6 @@ var express = require('express')
 	, lingua = require('lingua')
 	, colors = require('colors')
 	, rimraf = require('rimraf')
-	, dblite = require('dblite')
 	, mcjsRouting = require('./lib/routing/routing')
 	, remoteControl = require('./lib/utils/remote-control')
 	, configuration_handler = require('./lib/handlers/configuration-handler');
@@ -207,18 +206,26 @@ app.post('/clearCache', function(req, res){
 			console.log('Error removing module', e .red);
 			return res.send('Error clearing cache', e);
 		}
-		// Init Database
-		if(config.platform === 'OSX'){
-			dblite.bin = "./bin/sqlite3/osx/sqlite3";
-		}else {
-			dblite.bin = "./bin/sqlite3/sqlite3";
-		}
-		var db = dblite('./lib/database/mcjs.sqlite');
 
-		db.query('DROP TABLE IF EXISTS ' + cache);
+        // Init Database
+        var dblite = require('dblite')
+        if(config.binaries === 'packaged'){
+            if(config.platform === 'OSX'){
+                dblite.bin = "./bin/sqlite3/osx/sqlite3";
+            }else {
+                dblite.bin = "./bin/sqlite3/sqlite3";
+            }
+        }
+        var db = dblite('./lib/database/mcjs.sqlite');
+        db.on('info', function (text) { console.log(text) });
+        db.on('error', function (err) {
+            if(config.binaries !== 'packaged'){
+                console.log('You choose to use locally installed binaries instead of the binaries included. /n Please install them. Eg type "apt-get install sqlite3"');
+            }
+            console.error('Database error: ' + err)
+        });
 
-		db.on('info', function (text) { console.log(text) });
-		db.on('error', function (err) { console.error('Database error: ' + err) });
+        db.query('DROP TABLE IF EXISTS ' + cache);
 
 		return res.send('done');
 	});

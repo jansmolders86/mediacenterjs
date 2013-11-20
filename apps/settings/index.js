@@ -41,12 +41,16 @@ exports.index = function(req, res, next){
 		}
 	});
 
+    binaryTypes = ['packaged','local'];
+
 	res.render('settings',{
 		movielocation: config.moviepath,
 		selectedTheme: config.theme,
 		musiclocation : config.musicpath,
 		tvlocation : config.tvpath,
 		localIP : config.localIP,
+        selectedBinaryType : config.binaries,
+        binaryTypes : binaryTypes,
 		remotePort : config.remotePort,
 		language: config.language,
 		availableLanguages: availableLanguages,
