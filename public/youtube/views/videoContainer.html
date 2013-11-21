@@ -1,0 +1,21 @@
+<a href="" class="backlink">
+	<img src="css/icons/back.png">
+</a>
+<div ng-if="tokenerror">
+	<h1 id="error" tokenerror>
+		{{tokenerror}}
+		<span></span>
+	</h1>
+</div>
+<div ng-if="error">
+	<h1 id="error">
+		{{error}}
+	</h1>
+</div>
+<div id="videoContainer" ng-if="!error && !tokenerror">
+	<h2 ng-if="video.title">{{video.title}}</h2>
+	<h1 ng-if="!video.title">What to Watch</h1>
+	<label for="search"></label>
+	<input type="text" id="search" placeholder="Search.." autocomplete="off" autofocus search>
+	<video-angular></video-angular>
+</div>

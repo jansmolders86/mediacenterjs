@@ -1,4 +1,4 @@
-/*Author: Claire Sarsam*/
+/*Author: Claire Sarsam, edited by: Adam Schodde*/
 h2 strong {
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -19,6 +19,8 @@ input#search {
 	color: white;
 	float: right;
 	margin-top: -4%;
+	width: 30%;
+	margin-right: 9%;
 	margin-bottom: 10px;
 }
 input::-webkit-input-placeholder { /* WebKit browsers */
@@ -40,9 +42,6 @@ label[for="search"] {
 	margin-top: -6%;
 	margin-right: 13%;
 	display: none;
-}
-#wrapper {
-	height: 100%;
 }
 
 @media ( max-width: 854px ) {

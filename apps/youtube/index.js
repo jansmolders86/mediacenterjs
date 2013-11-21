@@ -29,38 +29,7 @@ var Youtube = require('youtube-api')
 , configuration_handler = require('../../lib/handlers/configuration-handler')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 exports.index = function(req, res, next){
-	Youtube.authenticate({
-		type: "oauth",
-		token: config.oauth
-	});
-	// TODO Currently uses most popular videos to display because getting personal activity feed has no view counts
-	Youtube.videos.list({"part": "snippet,statistics,contentDetails", "chart": "mostPopular", "maxResults": 50}, function (error, activityData) {
-		if( error instanceof Error ) {
-			console.log('Error searching Youtube', error);
-			res.render('youtube', {"error":'Problem getting content from YouTube.'});
-			return;
-		} else if(error) {
-			res.render('youtube', {"error":'Need to re-authenticate to Google, popup in '});
-			return;
-		}
-		var videos = [];
-		for(var videoCounter in activityData.items) {
-			var createdDate = new Date(activityData.items[videoCounter].snippet.publishedAt);
-			var dateString = createDateString(createdDate);
-			var videoObj = {
-				"title": activityData.items[videoCounter].snippet.title,
-				"synopsis": activityData.items[videoCounter].snippet.description,
-				"image": activityData.items[videoCounter].snippet.thumbnails.high.url,
-				"channelTitle": activityData.items[videoCounter].snippet.channelTitle,
-				"videoID": activityData.items[videoCounter].id,
-				"viewCount": activityData.items[videoCounter].statistics.viewCount,
-				"duration": getDuration(activityData.items[videoCounter].contentDetails.duration),
-				"createdDate": dateString
-			};
-			videos.push(videoObj);
-		}
-		res.render('videos', {"videos": videos});
-	});
+	res.render('youtube');
 };
 exports.post = function(req, res, next) {
 	var infoRequest = req.params.id;
@@ -68,39 +37,78 @@ exports.post = function(req, res, next) {
 		case 'updateToken':
 			config.oauth = req.body.oauth;
 			configuration_handler.saveSettings(config, function () {
-				res.end();
+				res.json({message: 'Success'});
 			});
 		break;
 		case 'searchYoutube':
-			searchYoutube(req, function (error, data) {
+			searchYoutube(req, function (error, searchResults) {
 				if(error) {
-					res.json({message: error}, 500);
+					res.json(500, {message: error});
+				} else {
+					parseVideoData(searchResults, function (videos) {
+						res.json({'videos': videos});
+					});
 				}
-				res.json(data);
-			});
-		break;
-		case 'getCards':
-			getCards(req, function (error, data) {
-				if(error) {
-					res.json({message: error}, 500);
-				}
-				res.json({data: data});
 			});
 		break;
 	}
 };
+exports.get = function(req, res, next) {
+	var infoRequest = req.params.id;
+	switch(infoRequest) {
+		case 'index':
+			Youtube.authenticate({
+				type: "oauth",
+				token: config.oauth
+			});
+			// TODO Currently uses most popular videos to display because getting personal activity feed has no view counts
+			Youtube.videos.list({"part": "snippet,statistics,contentDetails", "chart": "mostPopular", "maxResults": 50}, function (error, activityData) {
+				if( error instanceof Error ) {
+					console.log('Error searching Youtube', error);
+					res.json(500, {"error":'Problem getting content from YouTube.'});
+					return;
+				} else if(error) {
+					res.json(500, {"error":'Need to re-authenticate to Google, popup in '});
+					return;
+				}
+				parseVideoData(activityData, function (videos) {
+					res.json({"videos": videos});
+				});
+			});
+		break;
+		case 'getVideo':
+			getVideo(req, function (error, videoResult) {
+				if(error) {
+					res.json({message: error}, 500);
+				} else {
+					parseVideoData(videoResult, function (video) {
+						res.json({'videos': video});
+					});
+				}
+			});
+		break;
+		case 'getKey':
+			if(config.oauthKey) {
+				res.json({key: config.oauthKey});
+			} else {
+				res.json(500, {error: 'Oauth key missing in config file, please update!'});
+			}
+		break;
+	}
+};
+
 /**
  * Searches youtube given the query as the input parameter from the POST request
- * @param  {Object}   req      The request from the user
+ * @param  {Object}   request  The request from the user
  * @param  {Function} callback Callback function to send back
  * @return {Function} callback ^
  */
-function searchYoutube(req, callback) {
+function searchYoutube(request, callback) {
 	Youtube.authenticate({
 		type: "oauth",
 		token: config.oauth
 	});
-	Youtube.search.list({q: req.body.q, part: 'snippet', maxResults: 50}, function (error, result) {
+	Youtube.search.list({q: request.body.q, part: 'snippet', maxResults: 50}, function (error, result) {
 		if(error) {
 			return callback(error);
 		}
@@ -111,25 +119,27 @@ function searchYoutube(req, callback) {
 			videoArray.push(videoId);
 		}
 		Youtube.videos.list({part: 'snippet,statistics,contentDetails', id: videoArray.join(',')}, function (error, result) {
-			return callback(null, result.items);
+			return callback(null, result);
 		});
 	});
 }
 
-function getCards(req, callback) {
-	var cardAmount = parseInt(req.body.cardAmount);
-	fs.readFile('apps/youtube/views/card.jade', 'utf8', function (error, data) {
-		if(error) {
-			return callback('Error reading template file');
-		}
-		var fn = jade.compile(data);
-		var html = fn();
-		var totalHtml = "";
-		while(cardAmount !== 0) {
-			totalHtml += html;
-			cardAmount--;
-		}
-		return callback(null, totalHtml);
+/**
+ * Gets a particular video metadata given its youtube ID
+ * @param  {Object}   request  The request from the user
+ * @param  {Function} callback Callback function to send back
+ * @return {Function} callback ^
+ */
+function getVideo(request, callback) {
+	if(!request.query.id) {
+		return callback('Missing ID');
+	}
+	Youtube.authenticate({
+		type: "oauth",
+		token: config.oauth
+	});
+	Youtube.videos.list({part: 'snippet,statistics,contentDetails', id: request.query.id}, function (error, result) {
+		return callback(null, result);
 	});
 }
 
@@ -143,8 +153,34 @@ function createDateString(createdDate) {
 	("0" + createdDate.getUTCSeconds()).slice(-2) + " UTC";
 }
 
+/*Converts iso8601 standard to human readable duration*/
 function getDuration(iso8601Duration) {
 	var durationInSeconds = iso8601.parseToTotalSeconds(iso8601Duration);
 	return Math.floor(durationInSeconds/60) + ':' + ('0' + durationInSeconds%60).slice(-2);
 }
 
+/**
+ * Parses the video content from Youtube and returns only the data we want
+ * @param  {Array}   data     The data from Youtube
+ * @param  {Function} callback Callback function to send back
+ * @return {Function} callback ^
+ */
+function parseVideoData(data, callback) {
+	var videos = [];
+	for(var videoCounter in data.items) {
+		var createdDate = new Date(data.items[videoCounter].snippet.publishedAt);
+		var dateString = createDateString(createdDate);
+		var videoObj = {
+			"title": data.items[videoCounter].snippet.title,
+			"synopsis": data.items[videoCounter].snippet.description,
+			"image": data.items[videoCounter].snippet.thumbnails.high.url,
+			"channelTitle": data.items[videoCounter].snippet.channelTitle,
+			"videoID": data.items[videoCounter].id,
+			"viewCount": data.items[videoCounter].statistics.viewCount,
+			"duration": getDuration(data.items[videoCounter].contentDetails.duration),
+			"createdDate": dateString
+		};
+		videos.push(videoObj);
+	}
+	return callback(videos);
+}
