@@ -18,7 +18,7 @@ youtubeApp.service('Index', ['$http', function ($http) {
 youtubeApp.service('OauthAng', ['$http', function ($http) {
 	return {
 		getKey: function() {
-			return $http.get('/getKey');
+			return $http.get('/youtube/getKey');
 		}
 	}
 }]);
