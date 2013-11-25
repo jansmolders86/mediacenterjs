@@ -99,7 +99,6 @@
 								var country = parsed_json['location']['country'];
 								var weathertype = parsed_json['current_observation']['weather'];
 								var weathericon = parsed_json['current_observation']['icon_url'];
-                console.log(parsed_json['current_observation']);
 								
 								if (o.language === 'en'){
 									var feelslike_c = parsed_json['current_observation']['feelslike_f'];
