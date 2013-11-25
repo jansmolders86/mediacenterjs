@@ -4,29 +4,30 @@ html(lang="en")
 		// Core inclusion
 		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
 		link(rel='stylesheet', href='/core/css/style.css')
+		link(rel='stylesheet', href='/setup/css/style.css')
+		link(rel='stylesheet', href='/settings/css/style.css')
+
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/plugins/jquery.prettyForm.js")
 		script(src="/core/js/plugins/validation/jquery.validate.min.js")
 		script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
 		script(src="/core/js/plugins/validation/jquery.validate.rules.js")
+		script(src='/core/js/oauth.min.js')
+		script(src="/settings/js/jquery.mcjs.settings.js")
 		script.
-			$(document).ready(function() {
-				$('.validate-form').validate();
-				$("[type=checkbox], [type=radio]").prettyForm();
-				
-				var userLang = navigator.language || navigator.userLanguage; 
+			$(function() {
+				var userLang = navigator.language || navigator.userLanguage;
 				userLang = userLang.replace(/-.*/,'');
-				
 				if(userLang.match(/nl|en|fr|da|pt/g)){
 					$('input#language').val(userLang);
 				} else{
 					$('input#language').val('en');
 				}
-				
+
 				var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
 				if(isMac){
 					$('input#platform').val('OSX');
-				} 
+				}
 			});
 	body
 		#header
@@ -36,11 +37,11 @@ html(lang="en")
 				.row
 					label Specify movie location
 					input.keyboard(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
-				.row	
-					span.info 
+				.row
+					span.info
 						span.quote &ldquo;
 						span MediaCenterJS will index all the moviefiles in this initial folder. <br/> You can add or change a location later in the settings.
-						span.quote &rdquo; 		
+						span.quote &rdquo;
 				.row
 					label Specify music location
 					input.keyboard(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
@@ -54,7 +55,17 @@ html(lang="en")
 					label Port
 					input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337",data-rule-required="true")
 				.row
-					input(type="submit",value="Submit")
+					span.info
+						span.quote &ldquo;
+						span Securely connect to your Google account using oAuth to use the YouTube app.<br/> Logging in will enable you to view your personal content. <br/> After logging in using oAuth, press 'submit' to save and continue.<br/> You can also log in later.
+						span.quote &rdquo;
+					input#oauthKey(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
+					a.btn#oauth(href="#", style="display:inline-block;") Connect to Google using oAuth
+					input(type="submit",value="Submit", style="display:inline-block; margin-left:150px;")
+					label(for="oauthKey")
+
+					input.oauth(name="oauth" type="hidden")
+					input.oauthKeyHidden(name="oauthKey" type="hidden")
 					input(name="screensaver",type="hidden",value="dim")
 					input#language(name="language",type="hidden",value="en")
 					input#platform(name="platform",type="hidden",value="")

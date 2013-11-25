@@ -29,8 +29,7 @@ exports.initMovieDb = function() {
 
     db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number VARCHAR)");
     return db;
-
-};
+}; 
 
 exports.loadItems = function (req, res){
 	file_utils.getLocalFiles(config.moviepath, SUPPORTED_FILETYPES, function(err, files) {

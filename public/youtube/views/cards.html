@@ -1,0 +1,30 @@
+<a href="/" class="backlink">
+	<img src="css/icons/back.png">
+</a>
+<div ng-if="tokenerror">
+	<h1 id="error" tokenerror>
+		{{tokenerror}}
+		<span></span>
+	</h1>
+</div>
+<div ng-if="error">
+	<h1 id="error">
+		{{error}}
+	</h1>
+</div>
+<div id="videoContainer" ng-if="!error && !tokenerror">
+	<h1>What to Watch</h1>
+	<label for="search"></label>
+	<input type="text" id="search" placeholder="Search.." autocomplete="off" autofocus search>
+	<div id="main">
+		<section class="card" data-id="{{video.videoID}}" ng-repeat="video in videos" videos ng-click="displayVideo($event, video.videoID)">
+			<div class="map" style="background-image: url({{video.image}});">
+				<div id="duration">{{video.duration}}</div>
+			</div>
+			<h2><strong>{{video.title}}</strong></h2>
+			<h3>{{video.channelTitle}} - {{video.viewCount}} views</h3>
+			<br>
+			<h3>Created on {{video.createdDate}}</h3>
+		</section>
+	</div>
+</div>

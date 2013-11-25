@@ -14,7 +14,7 @@ h2,
 h3,
 h4,
 h5,
-h6{ font-family: 'Open Sans Condensed', sans-serif; letter-spacing:2px; text-transform:uppercase; }
+h6{ font-family: 'Open Sans Condensed', sans-serif; font-weight:300; text-transform:uppercase; }
 
 h1{ font-size:36px; }
 h2{ font-size:30px; }

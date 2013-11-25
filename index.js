@@ -26,8 +26,10 @@ var express = require('express')
 	, rimraf = require('rimraf')
 	, mcjsRouting = require('./lib/routing/routing')
 	, remoteControl = require('./lib/utils/remote-control')
+	, Youtube = require('youtube-api')
+	, jade = require('jade')
 	, configuration_handler = require('./lib/handlers/configuration-handler');
-	
+
 var config = configuration_handler.initializeConfiguration();
 
 var language = null;
@@ -236,7 +238,6 @@ app.post('/setuppost', function(req, res){
 		res.render('finish');
 	});
 });
-
 // Form  handlers
 
 app.get('/configuration', function(req, res){
@@ -244,7 +245,6 @@ app.get('/configuration', function(req, res){
 });
 	
 app.post('/submit', function(req, res){
-	console.log('asdsa',req.body);
 	configuration_handler.saveSettings(req.body, function() {
 		res.redirect('/');
 	});
@@ -264,9 +264,10 @@ app.set('port', process.env.PORT || 3000);
 // Open App socket
 if (config.port == "" || config.port == undefined ){
 	var defaultPort = app.get('port');
-	console.log('First run, Setup running on localhost:'+defaultPort);
+	console.log('First run, Setup running on localhost:' + defaultPort);
 	app.listen(parseInt(defaultPort));
 } else{
-	console.log("MediacenterJS listening on port:", config.port .green.bold); 
+	var message = "MediacenterJS listening on port:" + config.port;
+	console.log(message.green.bold);
 	app.listen(parseInt(config.port));
 }
