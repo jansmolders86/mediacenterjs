@@ -1,6 +1,6 @@
 succesMessage = Erfolgreich ausgeführt.
 weather_underground_languagecode = DL
-weather_cloudy = Bedeckt
+weather_cloudy = Wolkig
 weather_sunny = Sonnig
 weather_rain = Regen
 weather_mist = Nebel
