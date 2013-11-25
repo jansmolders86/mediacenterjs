@@ -66,7 +66,7 @@
 		
 			o.location = data.location
 			o.language = data.language
-			o.LANG = o.language.toUpperCase()
+			o.LANG = $.i18n.prop('weather_underground_languagecode')
 		
 			//Set up i18n translation
 			$.i18n.properties({
@@ -99,6 +99,7 @@
 								var country = parsed_json['location']['country'];
 								var weathertype = parsed_json['current_observation']['weather'];
 								var weathericon = parsed_json['current_observation']['icon_url'];
+                console.log(parsed_json['current_observation']);
 								
 								if (o.language === 'en'){
 									var feelslike_c = parsed_json['current_observation']['feelslike_f'];
