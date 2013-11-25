@@ -169,8 +169,6 @@
 								$(o.forecastSelector).find('ul').each(function(){
 									var weatherType = $(this).find('.conditions').attr('data-weatherType');
 									
-									console.log(weatherType)
-									
 									if (weatherType.match(o.cloudy) ){
 										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -273px');
 									} else if( weatherType.match(o.mist) ){
