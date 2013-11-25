@@ -30,6 +30,7 @@ exports.index = function(req, res, next){
 	, availablethemes = fs.readdirSync('./public/themes/')
 	, availableTranslations = fs.readdirSync('./public/translations/');
 	
+
 	availablethemes.forEach(function(file){
 		allThemes.push(file);
 	});
@@ -59,6 +60,20 @@ exports.index = function(req, res, next){
 		spotifyUser: config.spotifyUser,
 		spotifyPass: config.spotifyPass,
 		themes:allThemes,
-		port: config.port
+		port: config.port,
+		oauth: config.oauth,
+		oauthKey: config.oauthKey
 	});		
+};
+exports.get = function(req, res, next) {
+	var infoRequest = req.params.id;
+	switch(infoRequest) {
+		case 'getToken':
+			var token = config.oauth;
+			if(!token) {
+				res.json({message: 'No token'}, 500);
+			}
+			res.json({token: token});
+		break;
+	}
 };

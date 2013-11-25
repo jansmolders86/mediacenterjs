@@ -6,22 +6,38 @@ lib-cov
 *.out
 *.pid
 *.gz
+*.sqlite
 
 pids
 logs
 results
 
-public/data/*
-configuration/config.ini
-config.ini
 npm-debug.log
 node_modules/
-screenshots/
+
+
 .DS_Store
+.AppleDouble
+.LSOverride
+Icon
+screenshots/
 thumbs.db
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Files from updating data locally
+public/data/*
+public/music/data/*
+public/movies/data/*
+public/tv/data/*
+lib/database/mcjs.sqlite
 .idea
 .idea/*
-public/music/data/*
-public/movies/data/* 
-lib/database/mcjs.sqlite
-*.sqlite
+
+#Configuration
+configuration/config.ini

@@ -70,10 +70,11 @@ h2,
 h3,
 h4,
 h5,
-h6{ font-family: 'Open Sans Condensed', sans-serif; letter-spacing:2px; text-transform:uppercase; }
+h6{ font-family: 'Open Sans Condensed', sans-serif; text-transform:uppercase; font-weight: 300;}
 
 h1{ font-size:36px; }
-h2{ font-size:30px; }
+h2{ font-size:30px;}
+
 h3 {
 	margin:0;
 	margin-top:-20px;
@@ -331,9 +332,9 @@ span.info{
 	min-height:30px;
 	clear:both;
 	padding-top:20px;
-	margin:0px 0 50px;
+	margin:0px 0 30px;
 	font-size:14px;
-	line-height: 20px;
+	line-height: 24px;
 }
 
 span.quote{

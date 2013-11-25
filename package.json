@@ -1,16 +1,24 @@
 {
-  "name": "mediacenterjs",
-  "description": "A NodeJS based mediacenter for your browser",
-  "homepage": "http://www.mediacenterjs.com",
-  "author": {
-    "name": "Jan Smolders",
-    "email": "jansmolders86@gmail.com"
-  },
+	"name": "mediacenterjs",
+	"version": "0.0.50",
+	"description": "A NodeJS based mediacenter for your browser",
+	"homepage": "http://www.mediacenterjs.com",
+	"author": {
+		"name": "Jan Smolders",
+		"email": "jansmolders86@gmail.com"
+	},
+	"contributors": [{
+			"name": "Adam Schodde",
+			"email": "sparky1010+github@gmail.com"
+		},{
+			"name": "Claire Sarsam",
+			"email": "csarsam+github@gmail.com"
+		}
+	],
 	"licenses": [{
 		"type": "GPLv3",
 		"url": "http://www.gnu.org/licenses"
 	}],
-  "version": "0.0.50",
 	"repository" :{ 
 		"type" : "git", 
 		"url" : "http://github.com/jansmolders86/mediacenterjs.git"
@@ -42,6 +50,7 @@
     "walk": ">=1.2.2",
     "underscore": "~1.5.2",
     "moviedb": "~0.1.0",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "youtube-api": "~0.1.1"
   }
 }

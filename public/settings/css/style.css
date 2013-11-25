@@ -1,0 +1,24 @@
+#oauth {
+	background-color: #0074a2;
+	margin:0 10px 20px;
+	float:left;
+}
+label[for="oauthKey"] {
+	color: red;
+	font-size: 12px;
+	width: 100%;
+	margin-top: 17px;
+}
+
+#settings h2 {
+	width:100%; 
+	padding-bottom: .2rem;
+	border-bottom: 1px solid rgba(0,0,0,.1);
+	clear:both;
+	height:50px;
+	font-size:30px;
+	text-transform:none;
+	margin:20px 0;
+}
+
+.row{width:100%; clear:both;}

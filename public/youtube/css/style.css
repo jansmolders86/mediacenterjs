@@ -1,0 +1,58 @@
+/*Author: Claire Sarsam, edited by: Adam Schodde*/
+h2 strong {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2; /* number of lines to show */
+	-webkit-box-orient: vertical;
+}
+.map {
+	background-position:center;
+}
+
+#videoContainer > h1{margin-top: 8px;}
+
+h1#error span {
+	vertical-align: initial;
+	font-family: 'Open Sans Condensed', sans-serif;
+}
+input#search {
+	background-color: transparent !important;
+	border: 1px solid white;
+	color: white;
+	float: right;
+	margin-top: -4%;
+	width: 30%;
+	margin-right: 9%;
+	margin-bottom: 10px;
+}
+input::-webkit-input-placeholder { /* WebKit browsers */
+    color: white;
+}
+input::-moz-placeholder { /* Firefox 19+ browsers */
+    color: white;
+}
+input:-moz-placeholder { /* Firefox 4-18 browsers */
+    color: white;
+}
+input:-ms-input-placeholder { /* IE 10 */
+	color: white;
+}
+label[for="search"] {
+	width: initial;
+	display: inline;
+	float: right;
+	margin-top: -6%;
+	margin-right: 13%;
+	display: none;
+}
+
+@media ( max-width: 854px ) {
+  input#search {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}

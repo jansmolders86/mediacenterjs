@@ -1,0 +1,182 @@
+/*Author: Claire Sarsam*/
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,700,500italic,900,700italic,900italic);
+* {
+  font-family: 'Roboto', sans-serif; line-height:1.2; vertical-align:middle;
+}
+
+html, body {
+  background-color: #222;
+}
+
+main {
+  width: 1632px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 5px;
+  display:block;
+  position:relative;
+  margin:3vh auto;
+  background: transparent;
+  outline
+  border-radius:.25rem;
+  overflow:hidden;
+  transform-origin:center 3rem;
+  -webkit-transform-origin:center 3rem;
+  transition:transform .3s;
+  -webkit-transition:-webkit-transform .3s;
+}
+
+.card {
+  width: 350px;
+  float: left;
+  margin: 5px;
+  height: 285px;
+  padding:1.5rem;
+  position: relative;
+  z-index: 2;
+  box-shadow:0 1px 2px #aaa;
+  background:white;
+  border-radius:3px;
+  cursor: pointer;
+  user-select:none;
+  -webkit-user-select:none;
+
+  /*animation:fly-in-from-left .5s 1s ease both;
+  -webkit-animation:fly-in-from-left .5s 1s ease both;
+
+  transform-origin:top left;
+  -webkit-transform-origin:top left;*/
+}
+.card:nth-child(even){
+  /*animation-name:fly-in-from-right;
+  -webkit-animation-name:fly-in-from-right;*/
+
+  animation-delay:0.3s;
+  -webkit-animation-delay:0.3s;
+
+  /*transform-origin:top right;
+  -webkit-transform-origin:top right;*/
+}
+.card.active{
+  position: absolute;
+  z-index: 9000;
+}
+/*
+@keyframes fly-in-from-left {
+  from {
+    transform:translateY(15rem) rotate(15deg);
+    -webkit-transform:translateY(15rem) rotate(15deg);
+    opacity:0;
+  }
+}
+@-webkit-keyframes fly-in-from-left {
+  from {
+    transform:translateY(15rem) rotate(15deg);
+    -webkit-transform:translateY(15rem) rotate(15deg);
+    opacity:0;
+  }
+}
+@keyframes fly-in-from-right {
+  from {
+    transform:translateY(15rem) rotate(-15deg);
+    -webkit-transform:translateY(15rem) rotate(-15deg);
+    opacity:0;
+  }
+}
+@-webkit-keyframes fly-in-from-right {
+  from {
+    transform:translateY(15rem) rotate(-15deg);
+    -webkit-transform:translateY(15rem) rotate(-15deg);
+    opacity:0;
+  }
+}*/
+
+h1 {
+  font-size:2rem;
+  font-weight:200;
+}
+  strong {
+    font-weight:300;
+    color:#539D00;
+  }
+
+h2 {
+  font-size:1rem;
+  color:gray;
+  font-weight:400;
+}
+h3 {
+  font-size:.7rem;
+  line-height:2.5;
+  color:gray;
+  font-weight:400;
+}
+.map {
+  height:12rem;
+  background:whitesmoke url('/core/css/img/ajax-loader.gif') no-repeat center;
+  margin:-1.5rem 0 0 -1.5rem;
+  width: 398px;
+  
+}
+
+/* Media Queries for adjusting grid */
+
+@media ( max-width: 1755px ) and ( min-width: 1350px ) {
+  main {
+    width: 1224px;
+  }
+}
+
+@media ( max-width: 1349px ) and (min-width: 1186px) {
+  .card {
+      width: 300px;
+  }
+
+  .card .map {
+      width: 348px;
+  }
+
+  main {
+      width: 1074px;
+  }
+}
+
+@media ( max-width: 1185px ) and ( min-width: 936px ) {
+  main {
+    width: 816px;
+  }
+}
+
+@media ( max-width: 935px ) and ( min-width: 855px ) {
+    .card {
+      width: 300px;
+    }
+
+    .card .map {
+        width: 348px;
+    }
+    
+    main {
+      width: 716px;
+    }
+}
+
+@media ( max-width: 854px ) {
+  main {
+    width: 408px;
+    clear: both;
+  }
+}
+div#duration {
+  background-color: black;
+  opacity: 0.8;
+  color: white;
+  display: inline;
+  padding: 6px;
+  border: solid white 1px;
+  position: absolute; 
+  bottom: 10px;
+  right: 10px;
+  font-size: 12pt;
+  font-weight: normal;
+}

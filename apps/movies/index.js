@@ -22,6 +22,7 @@ exports.engine = 'jade';
 var express = require('express')
 , app = express()
 , fs = require('fs.extra')
+, helper = require('../../lib/helpers.js')
 , config = require('../../lib/handlers/configuration-handler').getConfiguration()
 , functions = require('./movie-functions');
 
