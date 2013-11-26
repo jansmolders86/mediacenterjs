@@ -47,6 +47,7 @@ What currently works?
 * Remote control
 * Plugin manager
 * Page visibility API
+* YouTube app
 
 What's coming up
 ==================
@@ -374,11 +375,12 @@ This app makes heavy use of:
 ###Special thanks to:###
 
 * Sylvain https://github.com/flyinva for his French translation
+* Adam https://github.com/brutalhonesty for his YouTube App
 * Luis Eduardo Brito https://github.com/luiseduardobrito for his Portuguese translation
 * Kasper Isager https://github.com/kasperisager for his Danish translation
 * Jussi Vatjus https://github.com/jupe for his code support
 * Terry MooreII https://github.com/TerryMooreII For the Javascript Jabber app and building the Plugin manager
-* Stefan Hoffman https://github.com/hoffi for his hudge contribution to the backend
+* Stefan Hoffman https://github.com/hoffi for his hudge contribution to the backend and German translation 
 * Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
 * Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
 * Lucien Immink https://github.com/lucienimmink for his javascript knowledge/support
