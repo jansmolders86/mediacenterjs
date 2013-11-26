@@ -43,22 +43,24 @@ html(lang="en")
 			#settings
 				input.oauthKeyHidden(name="oauthKey" type="hidden")			
 				form#setup.validate-form(action='/submit',method='post')
-					h2 OAuth
+					h2 Sign in using OAuth
 					div#oauthContainer.mcjs-rc-controllable.row
 						span.info
 							span.quote &ldquo;
-							span Securely connect to your Google account using oAuth to use the YouTube app.<br/> Logging in will enable you to view your personal content. <br/> After logging in using oAuth, press 'submit' to save and continue.
+							span Securely connect to your Google account using oAuth to use the YouTube app. Logging in will enable you to view your personal content. <br/> After logging in using oAuth, press 'submit' to save and continue.
 							span.quote &rdquo;
 						input#oauthKey.mcjs-rc-clickable(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
 						a.btn#oauth(href="#") Register OAuth
 						label(for="oauthKey")
-					h2 MediacenterJS general settings
+					h2 Cache management
 					.row.wrap.mcjs-rc-controllable
 						a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="movies") #{lingua.settings_clear_cache_movies}
 					.row.wrap.mcjs-rc-controllable
 						a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="music") #{lingua.settings_clear_cache_music}
 					.row.wrap.mcjs-rc-controllable
 						a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="tv") #{lingua.settings_clear_cache_tv}
+					.row	
+					h2 MediacenterJS general settings
 					.row.mcjs-rc-controllable
 						label #{lingua.setting_movielocation}
 						input.mcjs-rc-clickable(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")

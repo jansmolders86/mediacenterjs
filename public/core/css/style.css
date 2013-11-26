@@ -282,11 +282,11 @@ html.dim{background:#222;}
 	box-sizing: border-box;
 	overflow:hidden;
 }
-#setup input[type=submit]{margin:0 auto; display:block; padding:10px 30px;}
+#setup input[type=submit]{display:block; padding:10px 30px;}
 #hiddenSetting{visibility:hidden; width:0; height:0; float:left;}
 
 .row{ min-height:30px; width:90%; float:left; padding:10px;}
-.row.wrap{width:auto;}
+.row.wrap{width:auto; clear:none;}
 .row a.cachelink{ margin:5px 0; display:inline-block;}
 
 input[type=text],
@@ -384,7 +384,8 @@ input[type=submit],
 .btn.focused,
 .button.focused,
 .button:hover,
-.btn:hover{	
+.btn:hover,
+input[type=submit]:hover{	
 	background-color:#fff; 
 	color:#fb8521;
 	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);

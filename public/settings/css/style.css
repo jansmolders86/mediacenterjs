@@ -1,6 +1,6 @@
 #oauth {
 	background-color: #0074a2;
-	margin:0 10px 20px;
+	margin:0 0 20px;
 	float:left;
 }
 label[for="oauthKey"] {
@@ -18,7 +18,7 @@ label[for="oauthKey"] {
 	height:50px;
 	font-size:30px;
 	text-transform:none;
-	margin:20px 0;
+	margin:20px 10px;
 }
 
 .row{width:100%; clear:both;}
