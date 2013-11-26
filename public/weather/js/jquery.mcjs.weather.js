@@ -57,21 +57,26 @@
 	/**** Start of custom functions ***/
 	
   function _setConditionIcon(o, object, condition) {
-		if (condition.match(o.cloudy) ){
-			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -273px');
-		} else if( condition.match(o.mist) ){
-			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -197px');
-		}else if( condition.match(o.clear) ){
-			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -42px');
-		}else if( condition.match(o.sunny) ){
-			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -42px');
-		}else if( condition.match(o.rain) ){
-			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -349px');
-		}else if( condition.match(o.snow) ){
-			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -123px');
-		}else if( condition.match(o.storm) ){
-			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -507px');
+    var position = 'left -135px top 0px';
+    if (condition.match(o.partly_cloudy)){
+    	position = 'left -135px top 0px';
+		} else if (condition.match(o.cloudy)){
+      position = 'left -5px top -5px';
+		} else if (condition.match(o.mist)) {
+      position = 'left -390px top -330px';
+		} else if (condition.match(o.clear)) {
+      position = 'left -65px top -260px';
+		} else if (condition.match(o.sunny)) {
+      position = 'left -65px top -260px';
+		} else if (condition.match(o.rain)) {
+      position = 'left -260px top -4px';
+		} else if (condition.match(o.snow)) {
+      position = 'left -130px top -131px';
+		} else if (condition.match(o.storm)) {
+      position = 'left -520px top -201px';
 		}
+    
+    $(object).css('background', 'url("/weather/img/climacons.png") no-repeat ' + position);
   }
 	
 	// Get Current weather
@@ -94,6 +99,7 @@
 				loadBaseFile: false ,
 				callback: function() {
 					o.cloudy = new RegExp('cloudy',"gi");
+					o.partly_cloudy = new RegExp('partlycloudy',"gi");
 					o.mist = new RegExp('mist',"gi");
 					o.clear = new RegExp('clear',"gi");
 					o.sunny = new RegExp('sunny',"gi");
@@ -129,13 +135,13 @@
 								}
 			
 								$("body").find("h1").html( locations +", "+ country);
-								$("body").find(".weathertype").html(weathertype);
+								$("body").find(".weathertype .text").html(weathertype);
 								$("body").find(".degrees").html( temp_c + " <sup>"+o.tempIndicator+"</sup>");
 								$("body").find(".feelslike").html( o.feelsLike +" "+ feelslike_c + " <sup>"+o.tempIndicator+"</sup>");
 			
 								var weathertypeset = parsed_json['current_observation']['icon'];
 						    
-                _setConditionIcon(o, $("body").find(".weathertype"), weathertypeset);
+                _setConditionIcon(o, $("body").find(".weathertype .icon"), weathertypeset);
                 
 								if ( weathertypeset.match(o.cloudy) ){
 									$(o.backdropImageSelector).attr('src', "/weather/img/clouds.jpg").addClass("fadein");

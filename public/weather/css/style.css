@@ -41,11 +41,20 @@ body,html{overflow:hidden; position:relative; color:#333;}
 }
 
 .weathertype {
-	font-size:26px;
 	margin-top: 5px;
-	padding-top: 10px;
-	padding-bottom: 12px;
-	padding-left: 58px;
+}
+
+.weathertype .text {
+	font-size: 26px;
+	padding-left: 65px;
+	line-height: 56px;
+	height: 56px;
+}
+
+.weathertype .icon {
+	float: left;
+	width: 60px;
+	height: 60px;
 }
 
 .feelslike {font-size:16px; padding:2px 0;}
