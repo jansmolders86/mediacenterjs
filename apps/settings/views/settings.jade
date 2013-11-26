@@ -41,6 +41,7 @@ html(lang="en")
 					span.ui-icon.ui-icon-alert
 					.message 
 			#settings
+				input.oauthKeyHidden(name="oauthKey" type="hidden")			
 				form#setup.validate-form(action='/submit',method='post')
 					h2 OAuth
 					div#oauthContainer.mcjs-rc-controllable.row
@@ -72,7 +73,6 @@ html(lang="en")
 						select#language.mcjs-rc-clickable(name="language")
 							- for lang in availableLanguages
 								option(value=lang, selected=lang == language) #{lang}
-
 					.row.mcjs-rc-controllable
 						label #{lingua.setting_location}
 						input.mcjs-rc-clickable(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")					
@@ -99,4 +99,3 @@ html(lang="en")
 						input.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
 						input(type="hidden",name="screensaver",value="dim")
 						input.oauth(name="oauth" type="hidden")
-						input.oauthKeyHidden(name="oauthKey" type="hidden")
