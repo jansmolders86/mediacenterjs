@@ -10,12 +10,12 @@ Website: http://www.mediacenterjs.com
 Status: 
 =======
 
-__Heavy work in progress, Alpha version (0.0.50)__
+__Heavy work in progress, Alpha version (0.0.51)__
 
-__version 0.0.50__
-* Greatly improved video playback
-* Operational plugin manager
-* Improved GUI
+__version 0.0.51__
+* Styling fixes
+* Weather app fixes
+* Added YouTube app (Thanks to Brutalhonesty)
 
 Why use it?
 ===========
