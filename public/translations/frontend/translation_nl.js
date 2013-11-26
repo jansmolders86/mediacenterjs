@@ -1,4 +1,5 @@
 succesMessage = Opdracht succesvol uitgevoerd
+weather_underground_languagecode = NL
 weather_cloudy = bewolkt
 weather_sunny = zonnig
 weather_rain = regen

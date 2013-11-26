@@ -66,8 +66,7 @@
 		
 			o.location = data.location
 			o.language = data.language
-			o.LANG = o.language.toUpperCase()
-		
+			
 			//Set up i18n translation
 			$.i18n.properties({
 				name: 'translation', 
@@ -86,6 +85,7 @@
 					o.storm = new RegExp($.i18n.prop('weather_storm'),"gi");
 					o.feelsLike = $.i18n.prop('feelsLike');
 					o.error = $.i18n.prop('error_weather');
+          o.LANG = $.i18n.prop('weather_underground_languagecode')
 
 					$.ajax({
 						url : "http://api.wunderground.com/api/68a6ea8f6013979c/geolookup/conditions/lang:"+o.LANG+"/q/"+ o.language +"/"+ o.location+".json",
@@ -168,8 +168,6 @@
 								
 								$(o.forecastSelector).find('ul').each(function(){
 									var weatherType = $(this).find('.conditions').attr('data-weatherType');
-									
-									console.log(weatherType)
 									
 									if (weatherType.match(o.cloudy) ){
 										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -273px');

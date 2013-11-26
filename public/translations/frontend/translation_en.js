@@ -1,4 +1,5 @@
 succesMessage = Succesfully executed.
+weather_underground_languagecode = EN
 weather_cloudy = cloudy
 weather_sunny = sunny
 weather_rain = rain

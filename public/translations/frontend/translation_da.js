@@ -1,4 +1,5 @@
 succesMessage = Gennemført succesfuldt.
+weather_underground_languagecode = DK
 weather_cloudy = overskyet
 weather_sunny = solrigt
 weather_rain = regn
