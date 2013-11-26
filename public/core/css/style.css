@@ -269,7 +269,7 @@ html.dim{background:#222;}
 /***** -----------------   FORM ELEMENTS / SETTINGS ---------------------- *****/
 /* 						Please edit this in your own theme. 					*/
 #setup{ 
-	width:90%; 
+	width:100%; 
 	height:100%; 
 	position: relative;
 	background-color: #FFFFFF;

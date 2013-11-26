@@ -275,8 +275,10 @@
 					_pressEnter(o);
 				break;
 				case 8  : //backspace
-                    e.preventDefault();
-					_goBack(o);
+					if (!elid){
+						e.preventDefault();
+						_goBack(o);
+					}
 				break;
 				case 32 :  //space
 					if (!elid){
