@@ -63,7 +63,7 @@
 		} else if (condition.match(o.cloudy)){
       position = 'left -5px top -5px';
 		} else if (condition.match(o.mist)) {
-      position = 'left -390px top -330px';
+      position = 'left -520px top -135px';
 		} else if (condition.match(o.clear)) {
       position = 'left -65px top -260px';
 		} else if (condition.match(o.sunny)) {
