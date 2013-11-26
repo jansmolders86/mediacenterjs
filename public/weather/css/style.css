@@ -23,76 +23,83 @@ body,html{overflow:hidden; position:relative; color:#333;}
 .degrees sup{ font-size:24px; }
 
 .current { 
-	position: absolute;
-	bottom: 55px;
-	right: -40px;
-	height: 190px;
-	width: 300px;
-	padding: 20px;
-	z-index:6;
+	float: right;
+	width: 350px;
 }
+
+.current h2 {
+	font-size: 21px;
+	margin-left: -10px;
+	margin-bottom: -5px;
+}
+
 .location {
 	font-size:48px; 
 	float:left; 
 	min-width:600px; 
 	height:50px;
 }
-.weathertype {font-size:26px;}
-.feelslike {font-size:16px; padding:2px 0;}
 
-.forecast{ 
-	position: absolute;
-	width: 100%;
-	height: 180px;
-	left: 0px;
-	bottom: 0px;
-	padding-top: 5px;
-	padding-left: 60px;
-	background:#ecf0f1;
-	opacity:0.8;
+.weathertype {
+	font-size:26px;
+	margin-top: 5px;
+	padding-top: 10px;
+	padding-bottom: 12px;
+	padding-left: 58px;
 }
 
-.forecast *{  
+.feelslike {font-size:16px; padding:2px 0;}
+
+.infoPanel {
+	position: absolute;
+	background:#ecf0f1;
+	opacity: 0.8;
+	width: 100%;
+	bottom: 0;
+	height: 200px;
+	padding-top: 5px;
+}
+
+.forecast { 
+	list-style: none;
+	float: left;
+	padding-top: 15px;
+}
+
+.forecast * {  
 	color:#454545;
 }
 
-.forecast ul{ 
-	list-style: none;
-	float: left;
+.forecast li { 
+	line-height:25px;
+	margin-left: 15px;
 	width: 150px;
 	height: 180px;
-	margin-left: 10px;
-	position: relative;
-	overflow: hidden;
+	text-align: center;
+	display: inline-block;
 }
 
-.forecast ul li{ line-height:25px;}
-.forecast ul li.weekday{ font-size: 20px; font-weight: bold; line-height: 40px; } 
-.forecast .conditions{width: 60px; height: 60px; margin-left: 22px;}
+.forecast li div.weekday { font-size: 20px; font-weight: bold; line-height: 40px; } 
+.forecast li div.conditions {width: 55px; height: 60px; margin: 0px auto;}
 
-.forecast ul li.weekday{margin-left: 10px;}
-
-.forecast .mintemp,
-.forecast .maxtemp{margin-left: 22px;}
-
-@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 1024px) and (orientation:portrait) {
   /* For portrait layouts only */
-	.forecast ul{ 
-		list-style:none;
-		float:left;
-		width: 130px;
-		height: 150px;
+	.forecast { 
 		font-size:12px;
+	}
+	
+	.forecast li { 
+		margin-left: -5px !important;
 	}
 }
 
-@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 1024px) and (orientation:landscape) {
   /* For landscape layouts only */
-	.forecast ul{ 
-		list-style:none;
-		float:left;
-		width: 130px;
-		height: 150px;
+	.forecast { 
 		font-size:12px;
+	}
+	
+	.forecast li { 
+		margin-left: -5px !important;
 	}
 }

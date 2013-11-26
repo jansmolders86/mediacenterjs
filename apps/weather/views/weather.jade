@@ -15,7 +15,6 @@ html(lang="en")
 		script(src="/core/js/jquery.mcjs.core.js")
 		
 		// App specific
-		script(src="/weather/js/jquery.mcjs.weather.js")
 		link(rel='stylesheet', href='/weather/css/style.css')
 		
 		title #{lingua.weather}
@@ -32,8 +31,14 @@ html(lang="en")
 				img(src="/weather/img/back.png")
 			h1	
 		#wrapper
+		.infoPanel
 			.current
+				h2
 				.degrees
 				.feelslike
 				.weathertype
-		.forecast
+			ul.forecast
+			div(style="clear: both;")
+		
+
+		script(src="/weather/js/jquery.mcjs.weather.js")

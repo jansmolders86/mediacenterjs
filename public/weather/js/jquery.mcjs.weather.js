@@ -56,6 +56,23 @@
 	
 	/**** Start of custom functions ***/
 	
+  function _setConditionIcon(o, object, condition) {
+		if (condition.match(o.cloudy) ){
+			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -273px');
+		} else if( condition.match(o.mist) ){
+			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -197px');
+		}else if( condition.match(o.clear) ){
+			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -42px');
+		}else if( condition.match(o.sunny) ){
+			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -42px');
+		}else if( condition.match(o.rain) ){
+			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -349px');
+		}else if( condition.match(o.snow) ){
+			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -123px');
+		}else if( condition.match(o.storm) ){
+			$(object).css('background', 'url("/weather/img/icons.png") no-repeat left -507px');
+		}
+  }
 	
 	// Get Current weather
 	function _currentweather(o, $that){
@@ -76,16 +93,18 @@
 				extension: 'js',
 				loadBaseFile: false ,
 				callback: function() {
-					o.cloudy = new RegExp($.i18n.prop('weather_cloudy'),"gi");
-					o.mist = new RegExp($.i18n.prop('weather_mist'),"gi");
-					o.clear = new RegExp($.i18n.prop('weather_clear'),"gi");
-					o.sunny = new RegExp($.i18n.prop('weather_sunny'),"gi");
-					o.rain = new RegExp($.i18n.prop('weather_rain'),"gi");
-					o.snow = new RegExp($.i18n.prop('weather_snow'),"gi");
-					o.storm = new RegExp($.i18n.prop('weather_storm'),"gi");
+					o.cloudy = new RegExp('cloudy',"gi");
+					o.mist = new RegExp('mist',"gi");
+					o.clear = new RegExp('clear',"gi");
+					o.sunny = new RegExp('sunny',"gi");
+					o.rain = new RegExp('rain',"gi");
+					o.snow = new RegExp('snow',"gi");
+					o.storm = new RegExp('storm',"gi");
 					o.feelsLike = $.i18n.prop('feelsLike');
 					o.error = $.i18n.prop('error_weather');
           o.LANG = $.i18n.prop('weather_underground_languagecode')
+          
+          $(".current h2").html($.i18n.prop('weather_current'));
 
 					$.ajax({
 						url : "http://api.wunderground.com/api/68a6ea8f6013979c/geolookup/conditions/lang:"+o.LANG+"/q/"+ o.language +"/"+ o.location+".json",
@@ -114,8 +133,10 @@
 								$("body").find(".degrees").html( temp_c + " <sup>"+o.tempIndicator+"</sup>");
 								$("body").find(".feelslike").html( o.feelsLike +" "+ feelslike_c + " <sup>"+o.tempIndicator+"</sup>");
 			
-								var weathertypeset = $('.weathertype').text()
-						
+								var weathertypeset = parsed_json['current_observation']['icon'];
+						    
+                _setConditionIcon(o, $("body").find(".weathertype"), weathertypeset);
+                
 								if ( weathertypeset.match(o.cloudy) ){
 									$(o.backdropImageSelector).attr('src', "/weather/img/clouds.jpg").addClass("fadein");
 								}else if( weathertypeset.match(o.mist) ){
@@ -152,38 +173,25 @@
 								var daycount = 1;
 								for(var i = 0; i < daycount; i++) {
 									var weekday = day.date.weekday							
-									var conditions = day.conditions
+									var conditions = day.icon
 									
 									
 									if (o.language === 'en'){
 										var mintemp = day.low.fahrenheit	
 										var maxtemp = day.high.fahrenheit
+                    o.tempIndicator  = '&#8457;';
 									} else {
 										var mintemp = day.low.celsius	
 										var maxtemp = day.high.celsius
 									}
-									$(o.forecastSelector).append('<ul> <li class="weekday">'+ weekday +'</li> <li class="conditions" style="" data-weatherType="'+conditions+'"></li>  <li class="mintemp"> Min: '+ mintemp +'</li>  <li class="maxtemp"> Max:'+ maxtemp +'</li> </ul>');	
+                  
+									$(o.forecastSelector).append('<li> <div class="weekday">'+ weekday +'</div> <div class="conditions" style="" data-weatherType="'+conditions+'"></div>  <div class="mintemp"> Min: ' + mintemp + ' ' + o.tempIndicator + '</div>  <div class="maxtemp"> Max: ' + maxtemp + ' ' + o.tempIndicator + '</div> </li>');	
 								}
 								
 								
-								$(o.forecastSelector).find('ul').each(function(){
+								$(o.forecastSelector).find('li').each(function(){
 									var weatherType = $(this).find('.conditions').attr('data-weatherType');
-									
-									if (weatherType.match(o.cloudy) ){
-										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -273px');
-									} else if( weatherType.match(o.mist) ){
-										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -197px');
-									}else if( weatherType.match(o.clear) ){
-										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -42px');
-									}else if( weatherType.match(o.sunny) ){
-										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -42px');
-									}else if( weatherType.match(o.rain) ){
-										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -349px');
-									}else if( weatherType.match(o.snow) ){
-										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -123px');
-									}else if( weatherType.match(o.storm) ){
-										$(this).find('.conditions').css('background', 'url("/weather/img/icons.png") no-repeat left -507px');
-									}
+									_setConditionIcon(o, $(this).find('.conditions'), weatherType);
 								});
 							})
 						}
