@@ -42,8 +42,10 @@
 				rain : new RegExp('rain',"gi"),
 				snow : new RegExp('snow',"gi"),
 				storm : new RegExp('storm',"gi"),
+				countries_with_fahrenheit : new RegExp('US|UM|BZ|BM|JM|PW|PR|GU|VI',"i"), 
 				feelsLike : '',
-				tempIndicator  : '&#8451;',
+				tempIndicator  : 'c',
+				tempIndicatorSign  : '',
 				error  : '', 
         queryParameters : ''
 			});
@@ -79,7 +81,6 @@
 					o.feelsLike = $.i18n.prop('feelsLike');
 					o.error = $.i18n.prop('error_weather');
           o.LANG = $.i18n.prop('weather_underground_languagecode');
-          o.tempIndicator = o.language === 'en' ? '&#8457;' : '&#8451;';
           o.queryParameters = "lang:"+o.LANG+"/q/"+o.language+"/"+ o.location+".json";
           
           $(".current h2").html($.i18n.prop('weather_current'));
@@ -105,14 +106,16 @@
 					var country = parsed_json['location']['country_iso3166'];
 					var weathertype = parsed_json['current_observation']['weather'];
           
-          var tempIndicatorChar = o.language === 'en' ? 'f' : 'c';
-					var feelslike = parsed_json['current_observation']['feelslike_' + tempIndicatorChar];
-					var temp = parsed_json['current_observation']['temp_' + tempIndicatorChar];
+					o.tempIndicator = country.match(o.countries_with_fahrenheit) ? 'f' : 'c';
+					o.tempIndicatorSign = o.tempIndicator === 'f' ? '&#8457;' : '&#8451;';
+          
+					var feelslike = parsed_json['current_observation']['feelslike_' + o.tempIndicator];
+					var temp = parsed_json['current_observation']['temp_' + o.tempIndicator];
 
 					o.body.find("h1").html(location + ", " + country);
 					o.body.find(".weathertype > .text").html(weathertype);
-					o.body.find(".degrees").html(temp + " <sup>" + o.tempIndicator + "</sup>");
-					o.body.find(".feelslike").html(o.feelsLike + " " + feelslike + " <sup>" + o.tempIndicator + "</sup>");
+					o.body.find(".degrees").html(temp + " <sup>" + o.tempIndicatorSign + "</sup>");
+					o.body.find(".feelslike").html(o.feelsLike + " " + feelslike + " <sup>" + o.tempIndicatorSign + "</sup>");
 
 					var weathertypeset = parsed_json['current_observation']['icon'];
 			    
@@ -126,7 +129,7 @@
 		});
   }
   
-  function _getForecast(o) {
+  function _getForecast(o, country) {
 		$(o.forecastSelector).find("li").remove();
 		$.ajax({
 			url : o.baseApiUrl + "forecast/" + o.queryParameters,
@@ -137,9 +140,9 @@
 					var weekday = day.date.weekday;
 					var conditions = day.icon;
 					
-          var tempIndicatorWord = o.language === 'en' ? 'fahrenheit' : 'celsius';
-					var mintemp = day.low[tempIndicatorWord] + ' ' + o.tempIndicator;
-          var maxtemp = day.high[tempIndicatorWord] + ' ' + o.tempIndicator;
+					var tempIndicatorWord = o.tempIndicator === 'f' ? 'fahrenheit' : 'celsius';
+					var mintemp = day.low[tempIndicatorWord] + ' ' + o.tempIndicatorSign;
+					var maxtemp = day.high[tempIndicatorWord] + ' ' + o.tempIndicatorSign;
           
 					$(o.forecastSelector).append('<li> <div class="weekday">'+ weekday +'</div> <div class="conditions" style="" data-weatherType="'+conditions+'"></div>  <div class="mintemp"> Min: ' + mintemp + '</div>  <div class="maxtemp"> Max: ' + maxtemp + '</div> </li>');
 					
