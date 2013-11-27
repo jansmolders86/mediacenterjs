@@ -1,12 +1,6 @@
 succesMessage = Opdracht succesvol uitgevoerd
+weather_current = huidige omstandigheden
 weather_underground_languagecode = NL
-weather_cloudy = bewolkt
-weather_sunny = zonnig
-weather_rain = regen
-weather_mist = mist
-weather_clear = helder
-weather_snow = sneeuw
-weather_storm = onweer
 feelsLike = Gevoelstemperatuur
 error_weather =  Kies een grotere stad.
 confirmMessage = Weet u zeker dat u dit wilt doen? Dit kan niet ongedaan worden gemaakt.
