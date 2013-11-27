@@ -1,7 +1,9 @@
 /* Global imports */
 var colors = require('colors'),
 	ffmpeg = require('fluent-ffmpeg'),
-	probe = require('node-ffprobe');
+	probe = require('node-ffprobe'),
+	os = require('os'),
+	config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
 /* Constants */
 var FFMPEG_TIMEOUT = 15000;
@@ -185,13 +187,23 @@ startAndroidPlayback = function(response, movieUrl, movieFile) {
 };
 
 startMovieStreaming = function(response, movieUrl, opts) {
-	new ffmpeg({ source: movieUrl, nolog: true, timeout: FFMPEG_TIMEOUT })
-		.addOptions(opts)
-		.writeToStream(response, function(return_code, error){
-			if (!error){
-				console.log('file has been converted successfully', return_code);
-			} else {
-				console.log('file conversion error', error .red);
-			}
-		});
+	
+	if(config.binaries === 'packaged'){
+		if(os.platform() === 'win32'){
+			var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
+		}else{
+			var ffmpegPath = './bin/ffmpeg/ffmpeg'
+		}
+	}
+
+	proc = new ffmpeg({ source: movieUrl, nolog: true, timeout: FFMPEG_TIMEOUT })
+	proc.setFfmpegPath(ffmpegPath)
+	proc.addOptions(opts)
+	proc.writeToStream(response, function(return_code, error){
+		if (!error){
+			console.log('file has been converted successfully', return_code);
+		} else {
+			console.log('file conversion error', error .red);
+		}
+	});
 };
