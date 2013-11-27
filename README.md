@@ -14,7 +14,7 @@ __Heavy work in progress, Alpha version (0.0.51)__
 
 __version 0.0.51__
 * Styling fixes
-* Weather app fixes
+* Weather app fixes (Thanks to Hoffi)
 * Added YouTube app (Thanks to Brutalhonesty)
 
 Why use it?
