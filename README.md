@@ -112,9 +112,10 @@ Or browse to the root directory of MediaCenterJS in the terminal/command prompt 
 
 If you close this window, MCJS will stop working. You can also see useful information about what the server is doing, including error messages and other useful information.
 
-__Please make sure you've installed NodeJS and FFmpeg first!__
+__Please make sure you've installed NodeJS first!__
 
-Ffmpeg binaries for Linux and Windows are included.
+Ffmpeg binaries for Linux/OSX and Windows are included so no need to install them seperately. 
+If for some reason this is still needed, this is how you can accomplish it:
 
 User guide for installing FFmpeg on Windows: (http://www.wikihow.com/Install-FFmpeg-on-Windows)
 User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-install-ffmpeg-linux)
@@ -122,9 +123,6 @@ User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-ins
 Install NodeJS: http://nodejs.org/download/  (minimal version 0.10.x)
 
 __Install node on Ubuntu/Debian/OSX__
-
-
-	Ubuntu: gksu software-properties-gtk (enable all software sources)
 
 	sudo apt-get update
 	sudo apt-get install python-software-properties python g++ make
