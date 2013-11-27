@@ -42,7 +42,7 @@
 				rain : new RegExp('rain',"gi"),
 				snow : new RegExp('snow',"gi"),
 				storm : new RegExp('storm',"gi"),
-				countries_with_fahrenheit : new RegExp('US|UM|BZ|BM|JM|PW|PR|GU|VI',"i"), 
+				countries_with_fahrenheit : new RegExp('US|UM|BZ|BM|JM|PW|PR|GU|VI|KY',"i"), 
 				feelsLike : '',
 				tempIndicator  : 'c',
 				tempIndicatorSign  : '',
