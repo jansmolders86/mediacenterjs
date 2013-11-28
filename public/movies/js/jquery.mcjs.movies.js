@@ -85,7 +85,7 @@
             var url = '/movies/'+movieTitle+'/play/android';
         }else {
             o.platform = 'browser'
-            var url = '/movies/'+movieTitle+'/play';
+            var url = '/movies/'+movieTitle+'/play/browser';
         }
         return url;
     }
@@ -328,66 +328,52 @@
 	}
 
 	function _playMovie(o,url){
-
-        console.log('platform',o.platform)
-        console.log('url',url)
 		$.ajax({
-			url: '/configuration/', 
-			type: 'get'
-		}).done(function(data){
-			var myPlayer;
-
-            $('#wrapper, .movies, #header').hide();
-
-            _resetBackdrop(o);
-
-            $('body').animate({backgroundColor: '#000'},500).addClass('playingMovie');
-
-			setTimeout(function(){
-				if($('#'+o.playerID).length > 1) {
-					$('#'+o.playerID).remove();
-				} else {
-					if(o.platform === 'Android' || o.platform === 'IOS'){
-                        $('#wrapper, .movies, #header, #backdrop').hide();
-						$('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
-						
-						var myVideo = document.getElementsByTagName('video')[0];
-						myVideo.src = url;
-						myVideo.load();
-						myVideo.play();
-						myVideo.onended = function(e){
-                            window.location.replace("/movies/");
-                        }
-						
-					} else if(o.platform === 'browser'){
-						$('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%" data-setup="{"techOrder": ["flash"]}" > <source src="'+url+'" type="video/flv"></video>');
-
-						videojs(o.playerID, {}, function(){
-							myPlayer = this;
-							$('.vjs-big-play-button').trigger('click');
-							myPlayer.on('error', function(e){ console.log('Error', e) });
-							myPlayer.on('ended', function(e){
-                                myPlayer.dispose();
-                                window.location.replace("/movies/");
-                            });
-						});
-						
-						$('.vjs-big-play-button').on('click',function(){
-							setTimeout(function(){
-								videojs(o.playerID).pause();
-								$('.vjs-loading-spinner').show();
-								setTimeout(function(){
-									$('.vjs-loading-spinner, #backdrop').hide();
-									videojs(o.playerID).play();
-									_pageVisibility(o);
-								},15000);
-							},2500)
-						});
-					}
-				}
-			},3000);
-			
+			url: url,
+			type: 'post'
 		});
+
+        var myPlayer;
+
+        $('#wrapper, .movies, #header').hide();
+
+        _resetBackdrop(o);
+
+        $('body').animate({backgroundColor: '#000'},500).addClass('playingMovie');
+
+        setTimeout(function(){
+            if($('#'+o.playerID).length > 1) {
+                $('#'+o.playerID).remove();
+            } else {
+                if(o.platform === 'Android' || o.platform === 'IOS'){
+                    $('#wrapper, .movies, #header, #backdrop').hide();
+                    $('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
+
+                    var myVideo = document.getElementsByTagName('video')[0];
+                    myVideo.src = url;
+                    myVideo.load();
+                    myVideo.play();
+                    myVideo.onended = function(e){
+                        window.location.replace("/movies/");
+                    }
+
+                } else if(o.platform === 'browser'){
+                    $('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%"><source src="" type="video/mp4"></video>');
+
+                    videojs(o.playerID, {}, function(){
+                        myPlayer = this;
+                        myPlayer.src("/data/movies/output.mp4");
+                        setTimeout(function(){
+                            $('.vjs-loading-spinner, #backdrop').hide();
+                            myPlayer.play();
+                            _pageVisibility(o);
+                        },10000)
+                        myPlayer.on('error', function(e){ console.log('Error', e) });
+                    });
+                }
+            }
+        },10000);
+
 	}
 
     function _resetBackdrop(o){

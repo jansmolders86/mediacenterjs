@@ -1,7 +1,7 @@
 /* Global imports */
 var colors = require('colors'),
 	ffmpeg = require('fluent-ffmpeg'),
-	probe = require('node-ffprobe'),
+    fs = require('fs'),
 	os = require('os'),
 	config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
@@ -73,121 +73,56 @@ exports.startPlayback = function(response, movieUrl, movieFile, platform) {
 /* Private Methods */
 startBrowserPlayback = function(response, movieUrl, movieFile) {
 	response.writeHead(200, { 
-		'Content-Type':'video/flv', 
+		'Content-Type':'video/mp4',
+        'Accept-Ranges': 'bytes',
 		'Content-Length': movieFile.size
 	});
 
-	probe(movieUrl, function(err, probeData) {
+    var BROWSER_FFMPEG_OPTS = [
+        '-g 52',
+        '-ss 0',
+        '-threads 0',
+        '-vcodec libx264',
+        '-pix_fmt yuv420p',
+        '-crf 22',
+        '-preset ultraFast',
+        '-acodec mp3',
+        '-movflags +frag_keyframe+empty_moov',
+        '-f mp4'
+    ];
+    startMovieStreaming(response, movieUrl, BROWSER_FFMPEG_OPTS);
 
-		var metaDuration = "", 
-		tDuration = "";
-		if(probeData !== undefined && probeData.streams[0].duration !== 0 && probeData.streams[0].duration !== 'N/A'){
-			var metaDuration =  '-metadata duration="' + probeData.streams[0].duration + '"',
-			tDuration =  '-t ' + probeData.streams[0].duration;
-		} else 	if(probeData !== undefined && probeData.streams[1].duration !== 0 && probeData.streams[1].duration !== 'N/A'){
-			var metaDuration =  '-metadata duration="' + probeData.streams[1].duration + '"',
-			tDuration =  '-t ' + probeData.streams[1].duration;
-		}
-	
-		var videoBitrate = '-b:v 1024';
-		var maxRate  = '-maxrate 1024'
-		var minRate  = '-maxrate 1024'
-		var bufSize = '-bufsize 1024'
-		if(probeData !== undefined && probeData.streams[1].bit_rate !== 0 && probeData.streams[1].bit_rate !== 'N/A'){
-			var bitrate = probeData.streams[1].bit_rate
-			videoBitrate = '-b:v '+ bitrate;
-			maxRate  = '-maxrate '+ bitrate;
-			bufSize = '-bufsize '+ bitrate / 2;
-		}
-		
-		/*
-		var fps = '';
-		if(probeData.streams[1].r_frame_rate !== 0){
-			var fpsRateRaw = probeData.streams[1].r_frame_rate;
-			console.log(fpsRateRaw);
-			var fpsRate = fpsRateRaw.replace(/[^\/]*,'');
-			console.log(fpsRate);
-			fps = '-r '+ fpsRate;
-			console.log(fps);
-		}*/
-		
-		var resolution = '';
-		if(probeData !== undefined && probeData.streams[1].width !== 0 && probeData.streams[1].height !== 0 && probeData.streams[1].width !== undefined && probeData.streams[1].height !== undefined && probeData.streams[1].width !== 'N/A' && probeData.streams[1].height !== 'N/A'){
-			// Currently, we scale back 1080p playback due to performance issues
-			if(probeData.streams[1].height > 720){
-				resolution = '-s 1280x720';
-			} else {
-				resolution = '-s '+ probeData.streams[1].width+'x'+probeData.streams[1].height;
-			}
-		}
-		
-		var audioBitrate = '-ab 160000'
-		if(probeData !== undefined && probeData.streams[0].bit_rate !== 0 && probeData.streams[0].bit_rate !== 'N/A'){
-			audioBitrate = '-ab '+ probeData.streams[0].bit_rate;
-		}
-		
-		var audioChannels = '-ac 2'
-		if(probeData !== undefined && probeData.streams[0].channels !== 0 && probeData.streams[0].channels !== undefined && probeData.streams[0].channels !== 'N/A'){
-			audioBitrate = '-ac '+ probeData.streams[0].channels ;
-		}
-		
-		var audioSampleRate = '-ar 44100';
-		if(probeData !== undefined && probeData.streams[0].sample_rate !== 0 && probeData.streams[0].sample_rate < 44101 && probeData.streams[0].sample_rate !== 'N/A'){
-			audioSampleRate = '-ar '+ probeData.streams[0].sample_rate;
-		}
-		
-		console.log('Movie settings based on Metadata: \n MaxRate:'+maxRate +' \n BufferSize:'+bufSize+' \n BitRate: '+videoBitrate+'\n Duration: '+tDuration )
-		
-		var BROWSER_FFMPEG_OPTS = [
-		'-y',
-		'-loglevel quiet',
-		'-ss 0',
-		'-threads 0',
-		'-vcodec libx264',
-		'-pix_fmt yuv420p',
-		'-profile:v baseline',
-		maxRate,
-		bufSize,
-		videoBitrate,
-		'-r 24',//TODO make dynamic
-		resolution,
-		'-acodec mp3',
-		audioBitrate,
-		audioSampleRate,
-		audioChannels,
-		'-qmax 1',
-		'-rtbufsize 1000', 
-		//'-deinterlace',
-		//'-crf 22',
-		metaDuration, 
-		tDuration,
-		'-g 10',
-		'-f flv'];
-		startMovieStreaming(response, movieUrl, BROWSER_FFMPEG_OPTS);
-
-	});
 };
 
 startIOSPlayback = function(response, movieUrl, movieFile) {
 	response.writeHead(200, { 
-		'Content-Type':'application/x-mpegURL', 
+		'Content-Type':'application/x-mpegURL',
+        'Accept-Ranges': 'bytes',
 		'Content-Length':movieFile.size	
 	});
 
-	startMovieStreaming(response, movieUrl, IOS_FFMPEG_OPTS);
+    startTouchStreaming(response, movieUrl, IOS_FFMPEG_OPTS);
 };
 
 startAndroidPlayback = function(response, movieUrl, movieFile) {
 	response.writeHead(200, { 
-		'Content-Type':'video/webm', 
+		'Content-Type':'video/webm',
+        'Accept-Ranges': 'bytes',
 		'Content-Length':movieFile.size
 	});
 
-	startMovieStreaming(response, movieUrl, ANDROID_FFMPEG_OPTS);
+    startTouchStreaming(response, movieUrl, ANDROID_FFMPEG_OPTS);
 };
 
 startMovieStreaming = function(response, movieUrl, opts) {
-	
+    var outputPath = "./public/data/movies/output.mp4";
+
+    if(fs.existsSync(outputPath) === true){
+        fs.unlinkSync(outputPath);
+    };
+
+    console.log('Start transcoding of ', movieUrl);
+
 	if(config.binaries === 'packaged'){
 		if(os.platform() === 'win32'){
 			var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
@@ -196,14 +131,39 @@ startMovieStreaming = function(response, movieUrl, opts) {
 		}
 	}
 
+    //TODO: Add quotes to fix not found issue
+    var moviepath = '"'+movieUrl+'"';
+    console.log('moviePath',moviepath);
+
 	proc = new ffmpeg({ source: movieUrl, nolog: true, timeout: FFMPEG_TIMEOUT })
 	proc.setFfmpegPath(ffmpegPath)
 	proc.addOptions(opts)
-	proc.writeToStream(response, function(return_code, error){
+	proc.saveToFile(outputPath, function(return_code, error){
 		if (!error){
 			console.log('file has been converted successfully', return_code);
 		} else {
 			console.log('file conversion error', error .red);
 		}
 	});
+};
+
+startTouchStreaming = function(response, movieUrl, opts) {
+    if(config.binaries === 'packaged'){
+        if(os.platform() === 'win32'){
+            var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
+        }else{
+            var ffmpegPath = './bin/ffmpeg/ffmpeg'
+        }
+    }
+
+    proc = new ffmpeg({ source: movieUrl, nolog: true, timeout: FFMPEG_TIMEOUT })
+    proc.setFfmpegPath(ffmpegPath)
+    proc.addOptions(opts)
+    proc.writeToStream(response, function(return_code, error){
+        if (!error){
+            console.log('file has been converted successfully', return_code);
+        } else {
+            console.log('file conversion error', error .red);
+        }
+    });
 };
