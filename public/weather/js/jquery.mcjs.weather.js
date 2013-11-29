@@ -47,7 +47,8 @@
 				tempIndicator  : 'c',
 				tempIndicatorSign  : '',
 				error  : '', 
-        queryParameters : ''
+				queryParameters : '', 
+				body: $('body')
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -80,13 +81,13 @@
 				callback: function() {
 					o.feelsLike = $.i18n.prop('feelsLike');
 					o.error = $.i18n.prop('error_weather');
-          o.LANG = $.i18n.prop('weather_underground_languagecode');
-          o.queryParameters = "lang:"+o.LANG+"/q/"+o.language+"/"+ o.location+".json";
-          
-          $(".current h2").html($.i18n.prop('weather_current'));
-          
-          // Receive Weather Data from WeatherUnderground-API
-          _getCurrentCondition(o);
+					o.LANG = $.i18n.prop('weather_underground_languagecode');
+					o.queryParameters = "lang:"+o.LANG+"/q/"+o.language+"/"+ o.location+".json";
+					
+					$(".current h2").html($.i18n.prop('weather_current'));
+					
+					// Receive Weather Data from WeatherUnderground-API
+					 _getCurrentCondition(o);
 					_getForecast(o);
 				}
 			});	
@@ -111,15 +112,15 @@
           
 					var feelslike = parsed_json['current_observation']['feelslike_' + o.tempIndicator];
 					var temp = parsed_json['current_observation']['temp_' + o.tempIndicator];
-
+					
 					o.body.find("h1").html(location + ", " + country);
 					o.body.find(".weathertype > .text").html(weathertype);
 					o.body.find(".degrees").html(temp + " <sup>" + o.tempIndicatorSign + "</sup>");
 					o.body.find(".feelslike").html(o.feelsLike + " " + feelslike + " <sup>" + o.tempIndicatorSign + "</sup>");
 
 					var weathertypeset = parsed_json['current_observation']['icon'];
-			    
-          _setConditionIcon(o, o.body.find(".weathertype > .icon"), weathertypeset);
+					
+					_setConditionIcon(o, o.body.find(".weathertype > .icon"), weathertypeset);
 					_setWeatherBackdrop(o, $(o.backdropImageSelector), weathertypeset);
 				}
 			},
@@ -147,7 +148,7 @@
 					$(o.forecastSelector).append('<li> <div class="weekday">'+ weekday +'</div> <div class="conditions" style="" data-weatherType="'+conditions+'"></div>  <div class="mintemp"> Min: ' + mintemp + '</div>  <div class="maxtemp"> Max: ' + maxtemp + '</div> </li>');
 					
 					$(o.forecastSelector).find('li').each(function() {
-            var conditionsElement = $(this).find('.conditions');
+						var conditionsElement = $(this).find('.conditions');
 						var weatherType = conditionsElement.attr('data-weatherType');
 						_setConditionIcon(o, conditionsElement, weatherType);
 					});
@@ -159,22 +160,22 @@
   function _setConditionIcon(o, object, condition) {
     var position = 'left -135px top 0px';
     if (condition.match(o.partly_cloudy)){
-    	position = 'left -135px top 0px';
-		} else if (condition.match(o.cloudy)){
-      position = 'left -5px top -5px';
-		} else if (condition.match(o.mist)) {
-      position = 'left -520px top -135px';
-		} else if (condition.match(o.clear)) {
-      position = 'left -65px top -260px';
-		} else if (condition.match(o.sunny)) {
-      position = 'left -65px top -260px';
-		} else if (condition.match(o.rain)) {
-      position = 'left -260px top -4px';
-		} else if (condition.match(o.snow)) {
-      position = 'left -130px top -131px';
-		} else if (condition.match(o.storm)) {
-      position = 'left -520px top -201px';
-		}
+		position = 'left -135px top 0px';
+	} else if (condition.match(o.cloudy)){
+		position = 'left -5px top -5px';
+	} else if (condition.match(o.mist)) {
+		position = 'left -520px top -135px';
+	} else if (condition.match(o.clear)) {
+		position = 'left -65px top -260px';
+	} else if (condition.match(o.sunny)) {
+		position = 'left -65px top -260px';
+	} else if (condition.match(o.rain)) {
+		position = 'left -260px top -4px';
+	} else if (condition.match(o.snow)) {
+		position = 'left -130px top -131px';
+	} else if (condition.match(o.storm)) {
+		position = 'left -520px top -201px';
+	}
     
     $(object).css('background', 'url("/weather/img/climacons.png") no-repeat ' + position);
   }
@@ -182,21 +183,21 @@
   function _setWeatherBackdrop(o, object, condition) {
     var backdropFileName = "default.jpg";
     
-		if (condition.match(o.cloudy)) {
-      backdropFileName = "clouds.jpg";
-		} else if(condition.match(o.mist)) {
-			backdropFileName = "misty.jpg";
-		} else if(condition.match(o.clear)) {
-			backdropFileName = "clear.jpg";
-		} else if(condition.match(o.sunny)) {
-			backdropFileName = "sunny.jpg";
-		} else if(condition.match(o.rain)) {
-			backdropFileName = "rainy.jpg";
-		} else if(condition.match(o.snow)) {
-			backdropFileName = "snowy.jpg";
-		} else if(condition.match(o.storm)) {
-			backdropFileName = "stormy.jpg";
-		}
+	if (condition.match(o.cloudy)) {
+		backdropFileName = "clouds.jpg";
+	} else if(condition.match(o.mist)) {
+		backdropFileName = "misty.jpg";
+	} else if(condition.match(o.clear)) {
+		backdropFileName = "clear.jpg";
+	} else if(condition.match(o.sunny)) {
+		backdropFileName = "sunny.jpg";
+	} else if(condition.match(o.rain)) {
+		backdropFileName = "rainy.jpg";
+	} else if(condition.match(o.snow)) {
+		backdropFileName = "snowy.jpg";
+	} else if(condition.match(o.storm)) {
+		backdropFileName = "stormy.jpg";
+	}
     
     $(object).attr('src', "/weather/img/" + backdropFileName).addClass("fadein");
   }
@@ -219,7 +220,6 @@
 		, backdropImageSelector: '.backdropimg'
 		, forecastSelector: '.forecast'
     , baseApiUrl: 'http://api.wunderground.com/api/68a6ea8f6013979c/'
-    , body: $('body')
 
 	};
 
