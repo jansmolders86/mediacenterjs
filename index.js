@@ -61,6 +61,7 @@ app.configure(function(){
 	}));
 	app.use(app.router);
 	app.locals.pretty = true;
+	app.locals.basedir = __dirname + '/views';
 });
 
 /* CORS */
@@ -107,7 +108,7 @@ app.get("/", function(req, res, next) {
 		
 		if(localIP[0] !== undefined && localIP[0] !==  null){
 			sendLocalIP = localIP[0];
-			}
+		}
 
 		res.render('setup',{
 			localIP:sendLocalIP

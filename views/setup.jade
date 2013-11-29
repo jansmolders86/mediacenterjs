@@ -1,78 +1,75 @@
-doctype 5
-html(lang="en")
-	head
-		// Core inclusion
-		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
-		link(rel='stylesheet', href='/core/css/style.css')
-		link(rel='stylesheet', href='/setup/css/style.css')
-		link(rel='stylesheet', href='/settings/css/style.css')
+extends layout
 
-		script(src="/core/js/jquery-1.8.2.min.js")
-		script(src="/core/js/plugins/jquery.prettyForm.js")
-		script(src="/core/js/plugins/validation/jquery.validate.min.js")
-		script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
-		script(src="/core/js/plugins/validation/jquery.validate.rules.js")
-		script(src='/core/js/oauth.min.js')
-		script(src="/settings/js/jquery.mcjs.settings.js")
-		script.
-			$(function() {
-				var userLang = navigator.language || navigator.userLanguage;
-				userLang = userLang.replace(/-.*/,'');
-				if(userLang.match(/nl|en|fr|da|de|pt/g)){
-					$('input#language').val(userLang);
-				} else{
-					$('input#language').val('en');
-				}
+block declarations
+	- include_validation = true;
 
-				var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
-				if(isMac){
-					$('input#platform').val('OSX');
-				}
-			});
-	body
-		#header
-			h1(style="width:100%") Hi, Please setup MediacenterJS
-		#wrapper
+block additional_css
+	link(rel='stylesheet', href='/setup/css/style.css')
+	link(rel='stylesheet', href='/settings/css/style.css')
 
-			input.oauthKeyHidden(name="oauthKey" type="hidden")
-			form#setup.validate-form(action='/setuppost',method='post')
-				.row
-					label Specify movie location
-					input.keyboard(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
-				.row
-					span.info
-						span.quote &ldquo;
-						span MediaCenterJS will index all the moviefiles in this initial folder. <br/> You can add or change a location later in the settings.
-						span.quote &rdquo;
-				.row
-					label Specify music location
-					input.keyboard(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
-				.row
-					label Specify tvshow location
-					input.keyboard(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
-				.row
-					label You current location (city)
-					input.keyboard(name="location",type="text",placeholder="ie london or amsterdam",data-rule-required="true")
-				.row
-					label Port
-					input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337",data-rule-required="true")
-				.row
-					span.info
-						span.quote &ldquo;
-						span Securely connect to your Google account using oAuth to use the YouTube app.<br/> Logging in will enable you to view your personal content. <br/> After logging in using oAuth, press 'submit' to save and continue.<br/> You can also log in later.
-						span.quote &rdquo;
-					input#oauthKey(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
-					input.oauth(name="oauth" type="hidden")
-					a.btn#oauth(href="#", style="display:inline-block;") Connect to Google using oAuth
-					input(type="submit",value="Submit", style="display:inline-block; margin-left:150px;")
-					label(for="oauthKey")
+block additional_scripts
+	script(src='/core/js/oauth.min.js')
+	script(src="/settings/js/jquery.mcjs.settings.js")
+	script.
+		$(function() {
+			var userLang = navigator.language || navigator.userLanguage;
+			userLang = userLang.replace(/-.*/,'');
+			if(userLang.match(/nl|en|fr|da|de|pt/g)){
+				$('input#language').val(userLang);
+			} else{
+				$('input#language').val('en');
+			}
 
-					input(name="screensaver",type="hidden",value="dim")
-					input#language(name="language",type="hidden",value="en")
-					input#platform(name="platform",type="hidden",value="")
-					input(name="theme",type="hidden",value="wigo.css")
-					input(name="spotifyUser",type="hidden",value="")
-					input(name="spotifyPass",type="hidden",value="")
-					input(name="localIP",type="hidden",value= localIP)
-					input(name="remotePort",type="hidden",value="3001")
-					input(name="binaries",type="hidden",value="packaged")
+			var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+			if(isMac){
+				$('input#platform').val('OSX');
+			}
+		});
+
+block body
+	#header
+		h1(style="width:100%") Hi, Please setup MediacenterJS
+	#wrapper
+
+		input.oauthKeyHidden(name="oauthKey" type="hidden")
+		form#setup.validate-form(action='/setuppost',method='post')
+			.row
+				label Specify movie location
+				input.keyboard(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
+			.row
+				span.info
+					span.quote &ldquo;
+					span MediaCenterJS will index all the moviefiles in this initial folder. <br/> You can add or change a location later in the settings.
+					span.quote &rdquo;
+			.row
+				label Specify music location
+				input.keyboard(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
+			.row
+				label Specify tvshow location
+				input.keyboard(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
+			.row
+				label You current location (city)
+				input.keyboard(name="location",type="text",placeholder="ie london or amsterdam",data-rule-required="true")
+			.row
+				label Port
+				input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337",data-rule-required="true")
+			.row
+				span.info
+					span.quote &ldquo;
+					span Securely connect to your Google account using oAuth to use the YouTube app.<br/> Logging in will enable you to view your personal content. <br/> After logging in using oAuth, press 'submit' to save and continue.<br/> You can also log in later.
+					span.quote &rdquo;
+				input#oauthKey(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
+				input.oauth(name="oauth" type="hidden")
+				a.btn#oauth(href="#", style="display:inline-block;") Connect to Google using oAuth
+				input(type="submit",value="Submit", style="display:inline-block; margin-left:150px;")
+				label(for="oauthKey")
+
+				input(name="screensaver",type="hidden",value="dim")
+				input#language(name="language",type="hidden",value="en")
+				input#platform(name="platform",type="hidden",value="")
+				input(name="theme",type="hidden",value="wigo.css")
+				input(name="spotifyUser",type="hidden",value="")
+				input(name="spotifyPass",type="hidden",value="")
+				input(name="localIP",type="hidden",value=localIP)
+				input(name="remotePort",type="hidden",value="3001")
+				input(name="binaries",type="hidden",value="packaged")

@@ -1,21 +1,18 @@
-doctype 5
-html(lang="en")
-	head
-		// Core inclusion
-		link(rel='stylesheet', href='/core/css/style.css')
-		script(src="/core/js/jquery-1.8.2.min.js")
-		script(src="/core/js/socket.io.min.js")
-		script(src="/core/js/jquery.mcjs.core.js")
+extends /layout
 
-		title Google Music
-		script.
-			$(document).ready(function(){
-				$('body').mcjs();
-			});
-	body
-		#backdrop
-			img.backdropimg(src="")
-		#wrapper
-			a.backlink(href="/") 
-				img(src="/core/icons/back.png")
-			h1 This is a placeholder for the Google music app.
+block declarations
+	- additional_title = 'Google Music'; //- TODO: Translate this
+
+block additional_scripts
+	script.
+		$(document).ready(function(){
+			$('body').mcjs();
+		});
+
+block body
+	#backdrop
+		img.backdropimg(src="")
+	#wrapper
+		a.backlink(href="/") 
+			img(src="/core/icons/back.png")
+		h1 This is a placeholder for the Google music app.

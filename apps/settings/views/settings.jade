@@ -1,103 +1,89 @@
-doctype 5
-html(lang="en")
-	head
-		title MediacenterJS - Settings
-		link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
-		link(rel='stylesheet', href='/core/css/icon.css')
-		link(rel='stylesheet', href='/core/css/style.css')
-		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css') 
-		link(rel='stylesheet', href='/themes/'+selectedTheme)
-		link(rel='stylesheet', href='/settings/css/style.css')
+extends /layout
 
-		script(src="/core/js/jquery-1.8.2.min.js")
-		script(src="/core/js/jquery-ui-1.10.3.min.js")
+block declarations
+	- additional_title = 'Settings'; //- TODO: Translate this
+	- include_validation = true;
 
-		script(src="/core/js/socket.io.min.js")
-		script(src="/core/js/plugins/jquery.idle-timer.js")
-		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
-		script(src="/core/js/plugins/jquery.scrollintoview.min.js")
-		script(src="/core/js/jquery.mcjs.core.js")
-		script(src='/core/js/oauth.min.js')
+block additional_css
+	link(rel='stylesheet', href='/settings/css/style.css')
 
-		script(src="/core/js/plugins/jquery.prettyForm.js")
+block additional_scripts
+	script(src='/core/js/oauth.min.js')
+	script.
+		$(function() {
+			$('body').mcjs();
+		});
 
-		script(src="/core/js/plugins/validation/jquery.validate.min.js")
-		script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
-		script(src="/core/js/plugins/validation/jquery.validate.rules.js")
-		script.
-			$(function() {
-				$('body').mcjs();
-			});
-		script(src="/settings/js/jquery.mcjs.settings.js")
+	script(src="/settings/js/jquery.mcjs.settings.js")
 
-	body
-		#header.settings
-			a.backlink(href="/") 
-				img(src="/core/icons/back.png")
-			h1  #{lingua.settings}		
-		#wrapper
-			.ui-widget
-				.ui-state-highlight.ui-corner-all
-					span.ui-icon.ui-icon-alert
-					.message 
-			#settings
-				input.oauthKeyHidden(name="oauthKey" type="hidden")			
-				form#setup.validate-form(action='/submit',method='post')
-					h2 Sign in using OAuth
-					div#oauthContainer.mcjs-rc-controllable.row
-						span.info
-							span.quote &ldquo;
-							span Securely connect to your Google account using oAuth to use the YouTube app. Logging in will enable you to view your personal content. <br/> After logging in using oAuth, press 'submit' to save and continue.
-							span.quote &rdquo;
-						input#oauthKey.mcjs-rc-clickable(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
-						a.btn#oauth(href="#") Register OAuth
-						label(for="oauthKey")
-					h2 Cache management
-					.row.wrap.mcjs-rc-controllable
-						a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="movies") #{lingua.settings_clear_cache_movies}
-					.row.wrap.mcjs-rc-controllable
-						a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="music") #{lingua.settings_clear_cache_music}
-					.row.wrap.mcjs-rc-controllable
-						a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="tv") #{lingua.settings_clear_cache_tv}
-					.row	
-					h2 MediacenterJS general settings
-					.row.mcjs-rc-controllable
-						label #{lingua.setting_movielocation}
-						input.mcjs-rc-clickable(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-					.row.mcjs-rc-controllable
-						label #{lingua.setting_musiclocation}
-						input.mcjs-rc-clickable(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-					.row.mcjs-rc-controllable
-						label #{lingua.setting_tvlocation}
-						input.mcjs-rc-clickable(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-					.row.mcjs-rc-controllable
-						label #{lingua.setting_language}
-						select#language.mcjs-rc-clickable(name="language")
-							- for lang in availableLanguages
-								option(value=lang, selected=lang == language) #{lang}
-					.row.mcjs-rc-controllable
-						label #{lingua.setting_location}
-						input.mcjs-rc-clickable(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")					
-					.row.mcjs-rc-controllable
-						label Spotify Username
-						input.mcjs-rc-clickable(name="spotifyUser",type="text", value=spotifyUser)					
-					.row.mcjs-rc-controllable
-						label Spotify Password
-						input.mcjs-rc-clickable(name="spotifyPass",type="password", value=spotifyPass)	
-					.row.mcjs-rc-controllable
-						label #{lingua.setting_binaries}
-						select#theme.mcjs-rc-clickable(name="binaries")
-							- for binaryType in binaryTypes
-								option(value=binaryType, selected=binaryType == selectedBinaryType) #{binaryType}
-					.row.mcjs-rc-controllable
-						label #{lingua.setting_theme}
-						select#theme.mcjs-rc-clickable(name="theme")
-							- for theme in themes
-								option(selected=theme) #{theme}
-					.row.mcjs-rc-controllable
-						label #{lingua.setting_port}
-						input.mcjs-rc-clickable(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
-					.row.mcjs-rc-controllable
-						input.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
-						input(type="hidden",name="screensaver",value="dim")
-						input.oauth(name="oauth" type="hidden")
+block body
+	#header.settings
+		a.backlink(href="/") 
+			img(src="/core/icons/back.png")
+		h1  #{lingua.settings}		
+	#wrapper
+		.ui-widget
+			.ui-state-highlight.ui-corner-all
+				span.ui-icon.ui-icon-alert
+				.message 
+		#settings
+			input.oauthKeyHidden(name="oauthKey" type="hidden")			
+			form#setup.validate-form(action='/submit',method='post')
+				h2 Sign in using OAuth
+				div#oauthContainer.mcjs-rc-controllable.row
+					span.info
+						span.quote &ldquo;
+						span Securely connect to your Google account using oAuth to use the YouTube app. Logging in will enable you to view your personal content. <br/> After logging in using oAuth, press 'submit' to save and continue.
+						span.quote &rdquo;
+					input#oauthKey.mcjs-rc-clickable(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
+					a.btn#oauth(href="#") Register OAuth
+					label(for="oauthKey")
+				h2 Cache management
+				.row.wrap.mcjs-rc-controllable
+					a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="movies") #{lingua.settings_clear_cache_movies}
+				.row.wrap.mcjs-rc-controllable
+					a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="music") #{lingua.settings_clear_cache_music}
+				.row.wrap.mcjs-rc-controllable
+					a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="tv") #{lingua.settings_clear_cache_tv}
+				.row	
+				h2 MediacenterJS general settings
+				.row.mcjs-rc-controllable
+					label #{lingua.setting_movielocation}
+					input.mcjs-rc-clickable(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+				.row.mcjs-rc-controllable
+					label #{lingua.setting_musiclocation}
+					input.mcjs-rc-clickable(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+				.row.mcjs-rc-controllable
+					label #{lingua.setting_tvlocation}
+					input.mcjs-rc-clickable(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+				.row.mcjs-rc-controllable
+					label #{lingua.setting_language}
+					select#language.mcjs-rc-clickable(name="language")
+						- for lang in availableLanguages
+							option(value=lang, selected=lang == language) #{lang}
+				.row.mcjs-rc-controllable
+					label #{lingua.setting_location}
+					input.mcjs-rc-clickable(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")					
+				.row.mcjs-rc-controllable
+					label Spotify Username
+					input.mcjs-rc-clickable(name="spotifyUser",type="text", value=spotifyUser)					
+				.row.mcjs-rc-controllable
+					label Spotify Password
+					input.mcjs-rc-clickable(name="spotifyPass",type="password", value=spotifyPass)	
+				.row.mcjs-rc-controllable
+					label #{lingua.setting_binaries}
+					select#theme.mcjs-rc-clickable(name="binaries")
+						- for binaryType in binaryTypes
+							option(value=binaryType, selected=binaryType == selectedBinaryType) #{binaryType}
+				.row.mcjs-rc-controllable
+					label #{lingua.setting_theme}
+					select#theme.mcjs-rc-clickable(name="theme")
+						- for theme in themes
+							option(selected=theme) #{theme}
+				.row.mcjs-rc-controllable
+					label #{lingua.setting_port}
+					input.mcjs-rc-clickable(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
+				.row.mcjs-rc-controllable
+					input.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
+					input(type="hidden",name="screensaver",value="dim")
+					input.oauth(name="oauth" type="hidden")

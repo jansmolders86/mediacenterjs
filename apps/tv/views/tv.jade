@@ -1,55 +1,41 @@
-doctype 5
-html(lang="en")
-	head		
-		title #{lingua.tvshows}	
-		
-		// Core inclusion
-		link(rel='stylesheet', href='/core/css/style.css')
-		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css')
-		link(rel='stylesheet', href='/themes/'+selectedTheme)
-		
-		script(src="/core/js/jquery-1.8.2.min.js")
-		script(src="/core/js/jquery-ui-1.10.3.min.js")
-		
-		script(src="/core/js/socket.io.min.js")
-		script(src="/core/js/plugins/jquery.idle-timer.js")
-		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
-		script(src="/core/js/plugins/jquery.scrollintoview.min.js")
-		script(src="/core/js/jquery.mcjs.core.js")
-		
-		// App specific
-		link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
-		script(src="http://vjs.zencdn.net/4.3/video.js")
-		style.
-			.vjs-play-progress, .vjs-volume-level { background-color: #d96800!important; }
-			.vjs-control-bar, .vjs-big-play-button { background: rgba(171,171,171,0.7)!important; }
-			.vjs-slider { background: rgba(171,171,171,0.2333333333333333)!important; }
-		
-		link(rel='stylesheet', href='/tv/css/style.css')
-		script(src="/tv/js/jquery.mcjs.tv.js")
+extends /layout
 
-		script.
-			$(function(){
-				//$('.movies').jScrollPane();
-				$('body').mcjs();
-				$('body').mcjstv();	
-			});
-	body
-		#header
-			a.backlink(href="/") 
-				img(src="/core/icons/back.png")
-			h1 #{lingua.tvshows}		
-		#wrapper
-			#tvshowBanners
-				- if(status !== null)
-					p.gui= status
-				- else
-					ul.tvbanners
-						each tvshow in tvshows
-							li.tvshow.boxed.mcjs-rc-controllable
-								img(src="/core/css/img/ajax-loader.gif")
-								.overlay(data-tvshow= tvshow)	
-								.info
-									span.title= tvshow		
-									span.certification
-									span.genre
+block declarations	
+	- additional_title = lingua.tvshows;
+
+block additional_css
+	link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
+	style.
+		.vjs-play-progress, .vjs-volume-level { background-color: #d96800!important; }
+		.vjs-control-bar, .vjs-big-play-button { background: rgba(171,171,171,0.7)!important; }
+		.vjs-slider { background: rgba(171,171,171,0.2333333333333333)!important; }
+	
+block additional_scripts
+	script(src="http://vjs.zencdn.net/4.3/video.js")
+	script(src="/tv/js/jquery.mcjs.tv.js")
+
+	script.
+		$(function(){
+			$('body').mcjs();
+			$('body').mcjstv();	
+		});
+
+block body
+	#header
+		a.backlink(href="/") 
+			img(src="/core/icons/back.png")
+		h1 #{lingua.tvshows}		
+	#wrapper
+		#tvshowBanners
+			- if(status !== null)
+				p.gui= status
+			- else
+				ul.tvbanners
+					each tvshow in tvshows
+						li.tvshow.boxed.mcjs-rc-controllable
+							img(src="/core/css/img/ajax-loader.gif")
+							.overlay(data-tvshow= tvshow)	
+							.info
+								span.title= tvshow		
+								span.certification
+								span.genre

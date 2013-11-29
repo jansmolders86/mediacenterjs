@@ -1,0 +1,69 @@
+doctype 5
+html(lang="en")
+	head
+		block declarations
+			- var additional_title = undefined;
+			- var use_knockout = false;
+			- var include_validation = false;
+			- var body_id = '';
+			- var body_class = '';
+
+		if !additional_title
+			title MediacenterJS
+		else
+			title MediacenterJS - #{additional_title}
+		
+		meta(name="mobile-web-app-capable" content="yes")
+		meta(name="apple-mobile-web-app-capable" content="yes")
+		meta(name="apple-mobile-web-app-status-bar-style" content="black")
+
+		block additional_metadata
+
+		// Core inclusion
+		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
+		
+		link(rel='stylesheet', href='/core/css/style.css')
+		link(rel='stylesheet', href='/core/css/icon.css')
+		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css')
+
+		if selectedTheme
+			link(rel='stylesheet', href='/themes/' + selectedTheme)
+		
+		block additional_css
+
+	body(id=body_id, class=body_class)
+		block body
+
+		script(src="/core/js/jquery-1.8.2.min.js")
+		script(src="/core/js/jquery-ui-1.10.3.min.js")
+
+		if use_knockout
+			script(src="/core/js/plugins/knockout-2.3.0.js")
+
+		script(src="/core/js/plugins/perfect-scrollbar.js")
+		script(src="/core/js/socket.io.min.js")
+		script(src="/core/js/plugins/jquery.scrollintoview.min.js")
+		script(src="/core/js/plugins/jquery.idle-timer.js")
+		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
+
+		if include_validation
+			script(src="/core/js/plugins/jquery.prettyForm.js")
+			script(src="/core/js/plugins/validation/jquery.validate.min.js")
+			script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
+			script(src="/core/js/plugins/validation/jquery.validate.rules.js")
+
+		script(src="/core/js/jquery.mcjs.core.js")
+
+		//- This script prevents switching to Safari when clicking on a link in iOS
+		script.
+			$(function() {
+				if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
+					$('a').click(function(e) {
+						e.preventDefault();
+						document.location = $(this).attr('href');
+						return false;
+					});
+				}
+			});
+
+		block additional_scripts
