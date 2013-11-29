@@ -46,7 +46,7 @@
 					$('.backlink').find('img').attr('src', '/core/css/img/ajax-loader.gif')
 					setTimeout(function(){
 						document.location = '/';
-					},3000);
+					},4000);
 				});
 			});
 			
