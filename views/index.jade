@@ -1,4 +1,8 @@
 ﻿extends layout
+
+block declarations
+	- body_class = 'homepage';
+
 block additional_scripts
 	script.
 		$(function() {
@@ -30,7 +34,6 @@ block additional_scripts
 		});
 
 block body
-	body.homepage
 		#backdrop
 			img.backdropimg(src="/core/css/img/backdrop.png")	
 		#header

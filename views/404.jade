@@ -1,35 +1,22 @@
-doctype 5
-html(lang="en")
-	head
-		title MediacenterJS
-		
-		// Core inclusion
-		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
-		
-		link(rel='stylesheet', href='/core/css/style.css')
-		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css')
-		link(rel='stylesheet', href='/themes/'+selectedTheme)
-		
-		script(src="/core/js/jquery-1.8.2.min.js")
-		script(src="/core/js/jquery-ui-1.10.3.min.js")
-		
-		script(src="/core/js/plugins/jquery.idle-timer.js")
-		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
-		script(src="/core/js/jquery.mcjs.core.js")
-		
-		script.
-			$(function() {
-				setTimeout(function(){
-					window.location="/"
-				},5000);
-			});
-			
-	body.homepage
-		#backdrop
-			img.backdropimg(src="/core/css/img/homepage.jpg")	
-		#header
-			img.logo(src="/core/css/img/logo.png")
-			h1 #{lingua.pagenotFound}
-		#wrapper 
-			h1 #{lingua.pagenotFound_header}
-			p #{lingua.pagenotFound_txt}
+extends /layout
+
+block declarations
+	- body_class = 'homepage';
+
+block additional_scripts
+	script.
+		$(function() {
+			setTimeout(function(){
+				window.location="/"
+			},5000);
+		});
+
+block body
+	#backdrop
+		img.backdropimg(src="/core/css/img/backdrop.png")	
+	#header
+		img.logo(src="/core/css/img/logo.png")
+		h1 #{lingua.pagenotFound}
+	#wrapper 
+		h1 #{lingua.pagenotFound_header}
+		p #{lingua.pagenotFound_txt}
