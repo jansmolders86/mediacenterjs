@@ -1,67 +1,54 @@
-doctype 5
-html(lang="en")
-	head
-		title MediacenterJS - Plugins
-		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
-		link(rel='stylesheet', href='/core/css/style.css')
-		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css') 
-		link(rel='stylesheet', href='/themes/'+selectedTheme)
-		
-		script(src="/core/js/jquery-1.8.2.min.js")
-		script(src="/core/js/plugins/knockout-2.3.0.js")
-		script(src="/core/js/jquery-ui-1.10.3.min.js")
-		
-		script(src="/core/js/plugins/jquery.idle-timer.js")
-		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
-		script(src="/core/js/socket.io.min.js")
-		script(src="/core/js/jquery.mcjs.core.js")
+extends /layout
 
-		link(rel='stylesheet', href='/plugins/css/style.css')
-		script(src="/plugins/js/jquery.plugins.js")
-		
-		script.
-			$(function() {
-				$('body').mcjs();
-				$('body').mcjsp();
-			});
-	body
-		#header
-			div.pull-left
-				a.backlink
-					img(src="/core/icons/back.png")
-				h1  Plugins		
-				
-			div.loading.boxed.pull-left
-				img(src="/core/css/img/ajax-loader.gif") 
-				p Loading modules...
+block declarations
+	- additional_title = 'Plugins'; //- TODO: Translate this
+	- use_knockout = true;
 
-			div.pull-right.boxed(data-bind="visible:upgradeAll().length > 0")
-				a.btn.upgrade.upgrade-all(data-bind="{click: upgradeAllPlugins.bind($data, upgradeAll() )}") Upgrade All
-		
-		#wrapper
+block additional_css
+	link(rel='stylesheet', href='/plugins/css/style.css')
 
-			div.message.boxed(data-bind="visible:message() != ''")
-				span(data-bind="html:message")
+block additional_scripts
+	script(src="/plugins/js/jquery.plugins.js")
+	
+	script.
+		$(function() {
+			$('body').mcjs();
+			$('body').mcjsp();
+		});
 
-			ul.plugins(data-bind="foreach: plugin")
-				li.boxed.mcjs-rc-controllable
-					.info
-						h2.name(data-bind="text:name")
-						div.desc(data-bind="text:desc")
-						div.version(data-bind="text:version")
-					// ko if: isInstalled() === false 
-					a.btn.install.mcjs-rc-clickable(data-bind="{click: install}")	Install plugin
-					// /ko	
-					// ko if: isInstalled() === true 
-					a.btn.remove.mcjs-rc-clickable(data-bind="{click: remove}") Remove plugin
-					// /ko	
-					// ko if: isUpgradable() === true 
-					a.btn.upgrade.mcjs-rc-clickable(data-bind="{click: upgrade}") Upgrade plugin
-					// /ko
-					.additional-info
-						div.author(data-bind="text:'By: '+ author()")
-						div.date(data-bind="text:'Added: '+date()")
-
-
+block body
+	#header
+		div.pull-left
+			a.backlink
+				img(src="/core/icons/back.png")
+			h1  Plugins		
 			
-			
+		div.loading.boxed.pull-left
+			img(src="/core/css/img/ajax-loader.gif") 
+			p Loading modules...
+
+		div.pull-right.boxed(data-bind="visible:upgradeAll().length > 0")
+			a.btn.upgrade.upgrade-all(data-bind="{click: upgradeAllPlugins.bind($data, upgradeAll() )}") Upgrade All
+	
+	#wrapper
+		div.message.boxed(data-bind="visible:message() != ''")
+			span(data-bind="html:message")
+
+		ul.plugins(data-bind="foreach: plugin")
+			li.boxed.mcjs-rc-controllable
+				.info
+					h2.name(data-bind="text:name")
+					div.desc(data-bind="text:desc")
+					div.version(data-bind="text:version")
+				// ko if: isInstalled() === false 
+				a.btn.install.mcjs-rc-clickable(data-bind="{click: install}")	Install plugin
+				// /ko	
+				// ko if: isInstalled() === true 
+				a.btn.remove.mcjs-rc-clickable(data-bind="{click: remove}") Remove plugin
+				// /ko	
+				// ko if: isUpgradable() === true 
+				a.btn.upgrade.mcjs-rc-clickable(data-bind="{click: upgrade}") Upgrade plugin
+				// /ko
+				.additional-info
+					div.author(data-bind="text:'By: '+ author()")
+					div.date(data-bind="text:'Added: '+date()")

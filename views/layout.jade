@@ -1,0 +1,45 @@
+doctype 5
+html(lang="en")
+	head
+		block declarations
+			- var additional_title = undefined;
+			- var use_knockout = false;
+			- var body_id = '';
+
+		if !additional_title
+			title MediacenterJS
+		else
+			title MediacenterJS - #{additional_title}
+		
+		meta(name="mobile-web-app-capable" content="yes")
+
+		block additional_metadata
+
+		// Core inclusion
+		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
+		
+		link(rel='stylesheet', href='/core/css/style.css')
+		link(rel='stylesheet', href='/core/css/icon.css')
+		link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css')
+
+		if selectedTheme
+			link(rel='stylesheet', href='/themes/' + selectedTheme)
+		
+		block additional_css
+
+	body(id=body_id)
+		block body
+
+		script(src="/core/js/jquery-1.8.2.min.js")
+		script(src="/core/js/jquery-ui-1.10.3.min.js")
+
+		if use_knockout
+			script(src="/core/js/plugins/knockout-2.3.0.js")
+
+		script(src="/core/js/plugins/perfect-scrollbar.js")
+		script(src="/core/js/socket.io.min.js")
+		script(src="/core/js/plugins/jquery.scrollintoview.min.js")
+		script(src="/core/js/plugins/jquery.idle-timer.js")
+		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
+		script(src="/core/js/jquery.mcjs.core.js")
+		block additional_scripts

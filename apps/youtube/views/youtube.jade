@@ -1,33 +1,29 @@
-doctype 5
-html(lang="en", ng-app="youtubeApp")
-	head
-		meta(charset="UTF-8")
-		// Core inclusion
-		link(rel='stylesheet', href='/core/css/style.css')
-		// Video.js Styles
-		link(rel='stylesheet', href='/youtube/css/lib/video-js.min.css')
-		// Page style inclusion
-		link(rel='stylesheet', href='/youtube/css/style.css')
-		// Card UI inclusion
-		link(rel='stylesheet', href='/youtube/css/cards.css')
-		link(rel='stylesheet', href='/youtube/css/animate-custom.css')
-		script(src="/core/js/jquery-1.8.2.min.js")
-		script(src="/core/js/plugins/angular.min.js")
-		script(src="/core/js/plugins/angular-route.min.js")
-		script(src="/core/js/socket.io.min.js")
-		script(src="/core/js/jquery.mcjs.core.js")
-		// OAuth.io
-		script(src='/core/js/oauth.min.js')
-		// Custom scripts
-		script(src='/core/js/plugins/iso8601.min.js')
-		script(src="/core/js/plugins/video.js")
-		script(src="/core/js/plugins/vjs.youtube.js")
-		script(src="/youtube/js/main.js")
-		script(src="/youtube/js/controllers.js")
-		script(src="/youtube/js/directives.js")
-		script(src="/youtube/js/services.js")
-		title Youtube
-		
-	body
-		#wrapper
-			ng-view
+extends /layout
+
+block declarations
+	- additional_title = 'Youtube'; //- TODO: Translate this
+
+block additional_metadata
+	meta(charset="UTF-8")
+
+block additional_css
+	link(rel='stylesheet', href='/youtube/css/lib/video-js.min.css')
+	link(rel='stylesheet', href='/youtube/css/style.css')
+	link(rel='stylesheet', href='/youtube/css/cards.css')
+	link(rel='stylesheet', href='/youtube/css/animate-custom.css')
+
+block additional_scripts
+	script(src="/core/js/plugins/angular.min.js")
+	script(src="/core/js/plugins/angular-route.min.js")
+	script(src='/core/js/oauth.min.js')
+	script(src='/core/js/plugins/iso8601.min.js')
+	script(src="/core/js/plugins/video.js")
+	script(src="/core/js/plugins/vjs.youtube.js")
+	script(src="/youtube/js/main.js")
+	script(src="/youtube/js/controllers.js")
+	script(src="/youtube/js/directives.js")
+	script(src="/youtube/js/services.js")
+	
+block body
+	#wrapper
+		ng-view
