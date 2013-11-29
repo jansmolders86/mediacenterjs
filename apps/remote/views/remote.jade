@@ -2,18 +2,14 @@ extends /layout
 
 block declarations
 	- additional_title = 'Remote'; //- TODO: Translate this
-	- body_id = 'remote'
+	- body_id = 'remote';
+	- include_validation = true;
 
 block additional_metadata
 	meta(name="HandheldFriendly" content="true")
 	meta(name="viewport" content="width=device-width initial-scale=1, maximum-scale=1, user-scalable=no")
 
 block additional_scripts
-	script(src="/core/js/plugins/jquery.prettyForm.js")
-	script(src="/core/js/plugins/validation/jquery.validate.min.js")
-	script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
-	script(src="/core/js/plugins/validation/jquery.validate.rules.js")
-	
 	script.
 		$(function(){
 			$('.validate-form').validate();

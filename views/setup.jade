@@ -1,14 +1,13 @@
 extends layout
 
+block declarations
+	- include_validation = true;
+
 block additional_css
 	link(rel='stylesheet', href='/setup/css/style.css')
 	link(rel='stylesheet', href='/settings/css/style.css')
 
 block additional_scripts
-	script(src="/core/js/plugins/jquery.prettyForm.js")
-	script(src="/core/js/plugins/validation/jquery.validate.min.js")
-	script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
-	script(src="/core/js/plugins/validation/jquery.validate.rules.js")
 	script(src='/core/js/oauth.min.js')
 	script(src="/settings/js/jquery.mcjs.settings.js")
 	script.

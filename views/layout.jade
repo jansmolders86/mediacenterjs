@@ -4,6 +4,7 @@ html(lang="en")
 		block declarations
 			- var additional_title = undefined;
 			- var use_knockout = false;
+			- var include_validation = false;
 			- var body_id = '';
 			- var body_class = '';
 
@@ -44,6 +45,13 @@ html(lang="en")
 		script(src="/core/js/plugins/jquery.scrollintoview.min.js")
 		script(src="/core/js/plugins/jquery.idle-timer.js")
 		script(src="/core/js/plugins/jquery.i18n.properties.-1.0.9.js")
+
+		if include_validation
+			script(src="/core/js/plugins/jquery.prettyForm.js")
+			script(src="/core/js/plugins/validation/jquery.validate.min.js")
+			script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
+			script(src="/core/js/plugins/validation/jquery.validate.rules.js")
+
 		script(src="/core/js/jquery.mcjs.core.js")
 
 		//- This script prevents switching to Safari when clicking on a link in iOS
