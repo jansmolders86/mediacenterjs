@@ -30,10 +30,8 @@ html(lang="en")
 			link(rel='stylesheet', href='/themes/' + selectedTheme)
 		
 		block additional_css
-
-	body(id=body_id, class=body_class)
-		block body
-
+        
+        
 		script(src="/core/js/jquery-1.8.2.min.js")
 		script(src="/core/js/jquery-ui-1.10.3.min.js")
 
@@ -67,3 +65,7 @@ html(lang="en")
 			});
 
 		block additional_scripts
+
+	body(id=body_id, class=body_class)
+		block body
+
