@@ -11,8 +11,17 @@ block additional_css
 		.vjs-control-bar, .vjs-big-play-button { background: rgba(171,171,171,0.7)!important; }
 		.vjs-slider { background: rgba(171,171,171,0.2333333333333333)!important; }
 		.vjs-fade-out { opacity: 1 !important; visibility: visible !important; }
+		.vjs-default-skin.vjs-controls-disabled .vjs-control-bar { display: block!important;}
 		.vjs-fullscreen-control{visibility:hidden!important;}
-
+		.vjs-default-skin.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar,
+		.vjs-default-skin.vjs-has-started .vjs-control-bar {
+			-webkit-transition: none;
+			-moz-transition: none;
+			-o-transition: none;
+			transition: none;
+			visibility:visible;
+			opacity:1; 
+		}
 	link(rel='stylesheet', href='/music/css/style.css')
 
 block additional_scripts
@@ -35,16 +44,25 @@ block body
 			img(src="/core/icons/back.png")
 		h1 #{lingua.music}
 	#wrapper
-		ul.music(data-bind="foreach:  $data")
-			li.boxed.mcjs-rc-clickable.mcjs-rc-controllable
-				img.cover(src="/core/css/img/ajax-loader.gif")
-				.overlay
-				a.title(data-bind="text:$data")
-		#tracklist
-			#albumInfo
-				img.cover(src="/core/css/img/ajax-loader.gif")			
-				h2
-				.genre
-				.year				
+		// ko if: music().length > 0
+		ul.music(data-bind="foreach: music")
+			li.movieposter.boxed.mcjs-rc-controllable(data-bind="attr: {'id':isActive}" )
+				img.cover(data-bind="attr: { src: thumbnail }")
+				.overlay(data-bind="{click: showAlbum}")
+				a.title(data-bind="text:localName", style="visibility:hidden;")
+				#albumInfo		
+					h2(data-bind="text:title")
+					// ko if: genre() !== 'Unknown' && genre() !== null
+					.genre(data-bind="text:genre")
+					// /ko
+					// ko if: year() !== 'Unknown' && year() !== null
+					.year(data-bind="text:year")
+					// /ko
+				#tracklist
+					ul(data-bind="foreach: tracks")
+						li.mcjs-rc-tracklist-control(data-bind="{click: $parent.playTrack}")
+							i.play.icon
+							.title(data-bind="text:$data")
+		// /ko		
 	video#player.video-js.vjs-default-skin(controls, preload="metadata", width="100%", height="33", data-setup="{}")
 		source(src="",type="audio/mp3")

@@ -29,39 +29,81 @@
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
 				$that : $that,
+				musicCache : [],
 				tracks : new Array
 			});
 			
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
-			
+			_setViewmodel(o);
 			_loadItems(o);
-			
-			_setHeight(o);
-			$(window).resize(function() {
-				_setHeight(o);	
-			});
 			
 			$(o.musicListSelector).scroll( function(){
 				_lazyload(o);
 			});
 			_lazyload(o);
 			
-			$(o.backLinkSelector).on('click',function(e) {
-				console.log('click')
+			$(o.backLinkSelector).on('click', function(e) {
 				e.preventDefault();	
-				if ($(o.trackListSelector).is(':hidden')){	
+				if (!$('body').hasClass('albumview')){	
 					window.location = '/';
-				} else if ($(o.trackListSelector).is(':visible')) {	
-					$(o.trackListSelector).hide();
-					$(o.musicListSelector).fadeIn();
+				} else if ( $('body').hasClass('albumview')) {	
+					$(o.musicListSelector+' > li').attr('id','').show();
+                    $('body').removeClass('albumview');
 				}
 			});
-
 		});
 	}
 	
 	/**** Start of custom functions ***/
+	var Music = function (o, json) {
+		var that = this;
+		this.localName 	= ko.observable(json);
+		this.thumbnail	= ko.observable();
+		this.title		= ko.observable();
+		this.year 		= ko.observable();
+		this.genre 		= ko.observable();
+        this.isActive 	= ko.observable();
+		this.tracks 	= ko.observableArray();
+		this.playTrack 	= function () {
+            var currentItem  = this;
+            var album = that.localName();
+            _trackClickHandler(o, album, currentItem);
+        };
+		this.showAlbum  = function () {
+            $(o.musicListSelector+' > li').hide();
+            that.isActive('active');
+
+			var album = that.localName();
+			var tracksList = that.tracks();
+            
+            $('body').addClass('albumview');
+            
+            $(o.trackListSelector+' > ul').perfectScrollbar();
+
+			if(album.match("\.(mp3)","g")){
+				var track = '/music/none/'+album+'/play'
+				, songTitle = album
+				, random = false
+				, album = 'none';
+				$(this).addClass(o.playingClass).addClass(o.selectedClass);
+				var image = $('.'+o.playingClass).find('img');
+				_dominantColor(o,image);
+				_playTrack(o,track,album,songTitle,random);
+			}
+          
+		};
+	}
+	
+	function _setViewmodel(o){
+		if (!o.viewModel) {
+			// create initial viewmodel
+			o.viewModel = {};
+			o.viewModel.music = ko.observableArray();
+			o.viewModel.tracks = ko.observableArray();
+			ko.applyBindings(o.viewModel,o.$that[0]);
+		}	
+	}
 	
 	function _loadItems(o){
 		$.ajax({
@@ -69,43 +111,27 @@
 			type: 'get',
 			dataType: 'json'
 		}).done(function(data){	
-			o.viewModel = ko.observableArray(data);
-			ko.applyBindings(o.viewModel,o.$that[0]);
-			
-			// TODO: click handler ko
-			$(o.musicListSelector+' > li').on('click tap', function(e) {
-				e.preventDefault();	
+			var listing = [];
+			$.each(data, function () {
+				// create movie model for each movie
+				var music = new Music(o, this);
+				listing.push(music);
 				
-				$(o.musicListSelector+' > li').each(function(){
-					if($(o.musicListSelector+' > li').hasClass(o.playingClass) || $(o.musicListSelector).find('li').hasClass(o.selectedClass)){
-						$(o.musicListSelector+' > li').removeClass(o.playingClass);
-						$(o.musicListSelector+'> li').removeClass(o.selectedClass);
-					}
-				});
-
-				var album = $(this).find('.title').text();
-				if(album.match("\.(mp3)","g")){
-					console.log('asd')
-					var track = '/music/none/'+album+'/play'
-					, songTitle = album
-					, random = false
-					, album = 'none';
-					$(this).addClass(o.playingClass).addClass(o.selectedClass);
-					var image = $('.'+o.playingClass).find('img');
-					_dominantColor(o,image);
-					
-					_playTrack(o,track,album,songTitle,random);
-				}else {
-					_getAlbum(o, album);
-				}
+				// add model to cache
+				o.musicCache[this] = music;
 			});
 			
+			// Fill viewmodel with movie model per item
+			o.viewModel.music(listing);
+			o.viewModel.music.sort();
+
+            _lazyload(o);
+            
 		});	
 	}
 
 	function _setHeight(o){
 		var viewportHeight = $(window).height();
-		$(o.musicListSelector).css('height',viewportHeight - 55);
 		$(o.trackListSelector).css('height',viewportHeight - 200);
 	}
 	
@@ -122,167 +148,96 @@
 				var offsetTop = $(this).offset().top
 				, offsetBottom = offsetTop + $(this).height();
 
-				if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
+				//if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
 					var title = $(this).find('.title').html()
-					, cover = $(this).find('.cover')
-					, album = $(this);
+					, currentAlbum = $(this);
 					
-					_handleMusic(o, title, cover, album);
+					_handleMusic(o, title, currentAlbum);
 					$(this).attr("loaded",true);
-				}
+				//}
 			});		
 		},500);	
 	}
 	
-	function _handleMusic(o, title, cover, album){
+	function _handleMusic(o, title, currentAlbum){
 		$.ajax({
 			url: '/music/'+title+'/info/', 
 			type: 'get'
 		}).done(function(data){
-			var thumbnail	= data[0].cover;
-			
-			album.fadeIn();
-			cover.attr('src','');	
-			setTimeout(function(){
-				cover.attr('src',thumbnail).addClass('coverfound');
-				album.addClass('coverfound');
-			},500);
+			if (o.musicCache[title]) {
+				setTimeout(function(){
+					var musicData = data[0]
+					, music = o.musicCache[title];
+					
+					music.thumbnail(musicData.cover);
+					music.year(musicData.year);
+					music.genre(musicData.genre);
+					music.title(musicData.title);
+					music.tracks(musicData.tracks)
+					currentAlbum.addClass('coverfound');
+					
+				},500);
+			}
 		});
 	}
-	
-	function _getAlbum(o, album){	
-		$.ajax({
-			url: '/music/'+album+'/info/', 
-			type: 'get'
-		}).done(function(data){
-		
-			var thumbnail	= 	data[0].cover
-			, year 			= 	data[0].year
-			, genre 		= 	data[0].genre
-			, tracks 		= 	data[0].tracks;
-			
-			o.tracks = tracks;
-		
-			$(o.trackListSelector).find('h2').html(album);
+    
+    function _remoteControlExtention(o){
+        //Remote Control extender
+        if(io !== undefined){
+            $.ajax({
+                url: '/configuration/', 
+                type: 'get'
+            }).done(function(data){
+                var socket = io.connect(data.localIP+':'+data.remotePort);
+                socket.on('connect', function(data){
+                    socket.emit('remote');
+                });
 
-			if($(o.trackListSelector).find('ul').length == 0){
-				$(o.trackListSelector).append('<ul id="tracks"></ul>')
-			} else{
-				$(o.trackListSelector).find('ul').remove();
-				$(o.trackListSelector).append('<ul></ul>');
-			}
-			
-			// Populate tracks
-			tracks.forEach(function(value, index) {
-				$(o.trackListSelector +' > ul').append('<li class="mcjs-rc-tracklist-control" data-url="'+value+'"><i class="play icon"></i><div class="title">'+value+'</div></li>')
-			});
-			
-			_presentTracks(o);
+                socket.on('controlling', function(data){
+                    var focused = $('.'+o.focusedClass)
+                    ,accesibleItem = $('li.mcjs-rc-tracklist-control');
+                    
+                    if(data.action === "goLeft"){ 
+                        var item = accesibleItem;
+                        if (item.prev(item).length === 0) item.eq(-1).addClass(o.focusedClass);
+                    }
 
-			$(window).resize(function() {
-				_presentTracks(o);
-			});
-			
-			$(o.musicListSelector).hide();
-			$(o.trackListSelector).show();		
-				
-			// Styling
-			$(o.trackListSelector).find('li:odd').addClass('odd');
-			$(o.trackListSelector).find('img.cover').attr('src',thumbnail).addClass('coverfound');
-			if(year !== 'No data found...'){
-				$(o.trackListSelector).find('.year').html(year);
-			}
-			if(genre !== 'No data found...'){
-				$(o.trackListSelector).find('.genre').html(genre);
-			}
-			$('img.cover').bind('load', function (event) {
-				var image = event.target;
-				_dominantColor(o,image);
-			});	
-			
-			// Play song init
-			$(o.trackListSelector+' ul > li').on('click', function(e) {
-				e.preventDefault();	
-				var currentItem  = $(this);
-				_trackClickHandler(o, album, currentItem);
-			});
-			
-			
-			//Remote Control extender
-			if(io !== undefined){
-				$.ajax({
-					url: '/configuration/', 
-					type: 'get'
-				}).done(function(data){
-					var socket = io.connect(data.localIP+':'+data.remotePort);
-					socket.on('connect', function(data){
-						socket.emit('remote');
-					});
+                    if(data.action === "enter"){ 
+                        var currentItem = focused;
+                        if(focused.length > 0){
+                            _trackClickHandler(o, album, currentItem);
+                        }
+                    }
+                    
+                    if(data.action === "shuffle"){ 
+                        _randomTrack(o);
+                    }
+                    
+                    if(data.action === "back"){ 
+                        if ($(o.trackListSelector).is(':hidden')){	
+                            window.location = '/';
+                        } else if ($(o.trackListSelector).is(':visible')) {	
+                            $(o.trackListSelector).hide();
+                            $(o.musicListSelector).fadeIn();
+                        }
+                    }
 
-					socket.on('controlling', function(data){
-						var focused = $('.'+o.focusedClass)
-						,accesibleItem = $('li.mcjs-rc-tracklist-control');
-						
-						if(data.action === "goLeft"){ 
-							var item = accesibleItem;
-							if (item.prev(item).length === 0) item.eq(-1).addClass(o.focusedClass);
-						}
-
-						if(data.action === "enter"){ 
-							var currentItem = focused;
-							if(focused.length > 0){
-								_trackClickHandler(o, album, currentItem);
-							}
-						}
-						
-						if(data.action === "shuffle"){ 
-							_randomTrack(o);
-						}
-						
-						if(data.action === "back"){ 
-							console.log('go back')
-							if ($(o.trackListSelector).is(':hidden')){	
-								window.location = '/';
-							} else if ($(o.trackListSelector).is(':visible')) {	
-								$(o.trackListSelector).hide();
-								$(o.musicListSelector).fadeIn();
-							}
-						}
-
-						else if(data.action === "goRight"){
-							if (focused.next(accesibleItem).length === 0)accesibleItem.eq(0).addClass(o.focusedClass);
-						}
-					});
-				});
-			}
-		});			
-	}
+                    else if(data.action === "goRight"){
+                        if (focused.next(accesibleItem).length === 0)accesibleItem.eq(0).addClass(o.focusedClass);
+                    }
+                });
+            });
+        }	
+    }
 	
 	function _trackClickHandler(o, album, currentItem){
 		$('.random').removeClass('active');
-		var songTitle = currentItem.find('.title').html();
-		
-		$(o.trackListSelector+' ul > li').each(function(){
-			$(this).removeClass(o.selectedClass);
-		});
-		
-		if(!currentItem.hasClass(o.selectedClass)){
-			currentItem.addClass(o.selectedClass);
-		}
-		var track = '/music/'+album+'/'+songTitle+'/play/'
+
+		var track = '/music/'+album+'/'+currentItem+'/play/'
 		, random = false;
 
-		_playTrack(o,track,album,songTitle,random);
+		_playTrack(o,track,album,random);
 	}	
-	
-	function _presentTracks(o){
-		var parentHeight = $(o.trackListSelector).height();
-		$(o.trackListSelector+' > ul').css('height',parentHeight - 200).perfectScrollbar();
-	}
-	
-	function _hideOtherAlbums(o){
-		$(o.musicListSelector).hide();
-	}
 	
 	function _playTrack(o,track,album,songTitle,random){
 		if(!$('.random').length){
@@ -291,7 +246,7 @@
 		$('.random').removeClass('hidden');
 		
 		$(o.playerSelector).addClass('show');
-		
+
 		videojs(o.playerID).ready(function(){
 			var myPlayer = this;
 
@@ -371,12 +326,6 @@
 		_playTrack(o,track,album,songTitle,random);
 	}
 	
-	function _dominantColor(o,image){
-		var dominantColor = getDominantColor(image);
-		$(o.headerSelector).css('borderBottom','5px solid rgb('+dominantColor+')');
-		$('.play').css('color','rgb('+dominantColor+')');
-	}
-
 	/**** End of custom functions ***/
 	
 	$.fn.mcjsm = function( method ) {
