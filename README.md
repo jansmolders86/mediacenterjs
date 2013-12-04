@@ -52,10 +52,13 @@ What currently works?
 What's coming up
 ==================
 * Tv show app functionality
+* Better Music app functionality
 * Better inbrowser streaming
 
 Known issues: video/audio playback
 ==================
+
+* Currently the music app is in heavy development so functionality can be broken.
 
 These issues are known issues and current browser/platform limitations.
 I'm trying to figure out how to get around these limitations.
