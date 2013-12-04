@@ -209,6 +209,23 @@ a.backlink{
 }
 
 
+.message{
+	text-align: center; 
+	font-size:24px; 
+	width:100%;
+	margin:10px auto;
+	background-color: #EFEFEF;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+	color: rgba(0, 0, 0, 0.7);
+	border-radius: 0.325em 0.325em 0.325em 0.325em;
+	padding:20px;
+	text-transform: capitalize;
+}
+
+
 /* Screen saver */ 
 
 body.dim,
