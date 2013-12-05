@@ -60,7 +60,7 @@ block body
 					// /ko
 				#tracklist
 					ul#tracks(data-bind="foreach: tracks")
-						li.mcjs-rc-tracklist-control(data-bind="{click: $parent.playTrack}")
+						li.mcjs-rc-controllable(data-bind="{click: $parent.playTrack}")
 							i.play.icon
 							.title(data-bind="text:$data")
 		// /ko		

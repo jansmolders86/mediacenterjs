@@ -46,12 +46,7 @@
 			
 			$(o.backLinkSelector).on('click', function(e) {
 				e.preventDefault();	
-				if (!$('body').hasClass('albumview')){	
-					window.location = '/';
-				} else if ( $('body').hasClass('albumview')) {
-					$(o.musicListSelector+' > li').removeClass('active').show();
-                    $('body').removeClass('albumview');
-				}
+                _backHandler(o);
 			});
 		});
 	}
@@ -68,6 +63,7 @@
 		this.playTrack 	= function () {
             var currentItem  = this;
             var album = that.localName();
+            $(".title:contains('"+currentItem+"')").parent('li').addClass(o.selectedClass);
             _trackClickHandler(o, album, currentItem);
         };
 		this.showAlbum  = function () {
@@ -77,9 +73,9 @@
             $(".title:contains('"+that.localName()+"')").parent('li').addClass('active');
 
 			var album = that.localName();
-			var tracksList = that.tracks();
+			o.tracks = that.tracks();
             
-            var totalHeight= tracksList.length;
+            var totalHeight= o.tracks.length;
             if(totalHeight > 24){
                 $(o.trackListSelector+' > ul').perfectScrollbar();
             }
@@ -89,9 +85,8 @@
 				, songTitle = album
 				, random = false
 				, album = 'none';
-				$(this).addClass(o.playingClass).addClass(o.selectedClass);
-				var image = $('.'+o.playingClass).find('img');
-				_dominantColor(o,image);
+                
+				$(".title:contains('"+that.localName()+"')").parent('li').addClass(o.playingClass);
 				_playTrack(o,track,album,songTitle,random);
 			}
 		};
@@ -106,6 +101,15 @@
 			ko.applyBindings(o.viewModel,o.$that[0]);
 		}	
 	}
+    
+    function _backHandler(o){
+        if (!$('body').hasClass('albumview')){	
+            window.location = '/';
+        } else if ( $('body').hasClass('albumview')) {
+            $(o.musicListSelector+' > li').removeClass('active').show();
+            $('body').removeClass('albumview');
+        }
+    }
 	
 	function _loadItems(o){
 		$.ajax({
@@ -130,11 +134,6 @@
             _lazyload(o);
             
 		});	
-	}
-
-	function _setHeight(o){
-		var viewportHeight = $(window).height();
-		$(o.trackListSelector).css('height',viewportHeight - 200);
 	}
 	
 	function _lazyload(o){
@@ -198,11 +197,6 @@
                 socket.on('controlling', function(data){
                     var focused = $('.'+o.focusedClass)
                     ,accesibleItem = $('li.mcjs-rc-tracklist-control');
-                    
-                    if(data.action === "goLeft"){ 
-                        var item = accesibleItem;
-                        if (item.prev(item).length === 0) item.eq(-1).addClass(o.focusedClass);
-                    }
 
                     if(data.action === "enter"){ 
                         var currentItem = focused;
@@ -216,17 +210,9 @@
                     }
                     
                     if(data.action === "back"){ 
-                        if ($(o.trackListSelector).is(':hidden')){	
-                            window.location = '/';
-                        } else if ($(o.trackListSelector).is(':visible')) {	
-                            $(o.trackListSelector).hide();
-                            $(o.musicListSelector).fadeIn();
-                        }
+                        _backHandler(o);
                     }
 
-                    else if(data.action === "goRight"){
-                        if (focused.next(accesibleItem).length === 0)accesibleItem.eq(0).addClass(o.focusedClass);
-                    }
                 });
             });
         }	
@@ -236,9 +222,11 @@
 		$('.random').removeClass('active');
 
 		var track = '/music/'+album+'/'+currentItem+'/play/'
-		, random = false;
+		, random = false
+        , songTitle = currentItem;
+        
 
-		_playTrack(o,track,album,random);
+		_playTrack(o,track,album,songTitle,random);
 	}	
 	
 	function _playTrack(o,track,album,songTitle,random){
@@ -303,8 +291,7 @@
 			return;
 		}		
 
-		var album = $(o.trackListSelector).find('h2').html()
-		, track = '/music/'+album+'/'+nextItem+'/play';
+		var track = '/music/'+album+'/'+nextItem+'/play';
 		
 		$('li.'+o.selectedClass).removeClass(o.selectedClass);
 		$(o.trackListSelector).find('li:contains('+nextItem+')').addClass(o.selectedClass);
@@ -322,8 +309,7 @@
 		
 		$(o.trackListSelector).find('li:contains('+nextItem+')').addClass(o.selectedClass);
 		
-		var album = $(o.trackListSelector).find('h2').html()
-		, track = '/music/'+album+'/'+nextItem+'/play';
+		var track = '/music/'+album+'/'+nextItem+'/play';
 		
 		_playTrack(o,track,album,songTitle,random);
 	}
