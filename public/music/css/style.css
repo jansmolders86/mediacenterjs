@@ -37,7 +37,7 @@ ul.music > li img{
 	margin:0;
 }
 
-ul.music > li#active img{ margin: 20px 0 0 40px; }
+ul.music > li.active img{ margin: 20px 0 0 40px; }
 
 ul.music > li.coverfound{
 	background:#fff;
@@ -57,12 +57,12 @@ ul.music > li.coverfound{
 ul.music > li > .title{ width:0; height:0; } 
 
 ul.music > li #albumInfo h2{ font-size:12px; font-family:arial; width: 100px;}
-ul.music > li#active #albumInfo h2{ font-size:30px; font-family: 'Open Sans Condensed', sans-serif; width: 500px; margin-top:5px;}
+ul.music > li.active #albumInfo h2{ font-size:30px; font-family: 'Open Sans Condensed', sans-serif; width: 500px; margin-top:5px;}
 
-ul.music > li#active,
-ul.music > li#active #tracklist{ display:block!important; }
-ul.music > li#active{ width:90%; height:90%; }
-ul.music > li#active .overlay{ visibility:hidden; }
+ul.music > li.active,
+ul.music > li.active #tracklist{ display:block!important; }
+ul.music > li.active{ width:90%; height:90%; }
+ul.music > li.active .overlay{ visibility:hidden; }
 ul.music .overlay{ width:0; height:0; }
 ul.music > li img.coverfound{ width:120px; height:120px; margin:0px; } 
 
@@ -109,7 +109,7 @@ ul.music li.playing a{
     position: relative;
     float: left;
     width: 92%;
-    max-height: 600px;
+    height: 600px;
     z-index: 9;
     padding: 20px;
     overflow: hidden;
@@ -123,9 +123,7 @@ ul.music li.playing a{
 	margin:0 0 50px 0; 
 	padding: 0 3px 20px;
 	width:100%;
-	clear: both;
-	height:100%;
-	float:left;
+    height:600px;
 	position:relative;
 	overflow:hidden;
 }

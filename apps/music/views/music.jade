@@ -46,7 +46,7 @@ block body
 	#wrapper
 		// ko if: music().length > 0
 		ul.music(data-bind="foreach: music")
-			li.movieposter.boxed.mcjs-rc-controllable(data-bind="attr: {'id':isActive}" )
+			li.movieposter.boxed.mcjs-rc-controllable
 				img.cover(data-bind="attr: { src: thumbnail }")
 				.overlay(data-bind="{click: showAlbum}")
 				a.title(data-bind="text:localName", style="visibility:hidden;")
@@ -59,7 +59,7 @@ block body
 					.year(data-bind="text:year")
 					// /ko
 				#tracklist
-					ul(data-bind="foreach: tracks")
+					ul#tracks(data-bind="foreach: tracks")
 						li.mcjs-rc-tracklist-control(data-bind="{click: $parent.playTrack}")
 							i.play.icon
 							.title(data-bind="text:$data")
