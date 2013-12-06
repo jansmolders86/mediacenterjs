@@ -64,7 +64,7 @@ These issues are known issues and current browser/platform limitations.
 I'm trying to figure out how to get around these limitations.
 
 * IOS: Video is not seekable
-* Browser: HD videos still take a lot of processing power.
+* Browser: Duration and playback length are often not valid. This is due to the fact that the transcoding process is still in heavy development.
 * Android: not seekable & mp3 playback not working
 * Ubuntu: Audio playback of mp3 not supported by default
 
