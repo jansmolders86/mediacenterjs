@@ -46,7 +46,8 @@ app.configure(function(){
 	app.set('view engine', 'jade');
 	app.set('views', __dirname + '/views');
 	app.setMaxListeners(100);
-	app.use(express.bodyParser());
+    app.use(express.json());
+    app.use(express.urlencoded());
 	app.use(express.methodOverride());
 	app.use(express.static(__dirname + '/public'));
 	app.use(express.favicon(__dirname + '/public/core/favicon.ico'));
