@@ -36,6 +36,7 @@ public/music/data/*
 public/movies/data/*
 public/tv/data/*
 lib/database/mcjs.sqlite
+lib/database/*
 .idea
 .idea/*
 

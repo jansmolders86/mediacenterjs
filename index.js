@@ -27,6 +27,7 @@ var express = require('express')
 	, mcjsRouting = require('./lib/routing/routing')
 	, remoteControl = require('./lib/utils/remote-control')
 	, Youtube = require('youtube-api')
+    , http = require('http')
 	, jade = require('jade')
 	, configuration_handler = require('./lib/handlers/configuration-handler');
 
@@ -83,6 +84,8 @@ if(fs.existsSync('./bin/sqlite3/osx/sqlite3') === true){
 }
 if(fs.existsSync('./lib/database/mcjs.sqlite') === true){
     fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
+} else {
+    fs.openSync('./lib/database/mcjs.sqlite', 'w')
 }
 
 app.configure('development', function(){   
