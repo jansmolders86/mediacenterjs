@@ -79,13 +79,13 @@
     function _checkPlatform(o, movieTitle){
         if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
             o.platform = 'IOS'
-            var url = '/movies/'+movieTitle+'/play/ios';
+            var url = '/movies/play/'+movieTitle+'/ios';
         } else if(navigator.userAgent.toLowerCase().indexOf("android") > -1){
             o.platform = 'Android'
-            var url = '/movies/'+movieTitle+'/play/android';
+            var url = '/movies/play/'+movieTitle+'/android';
         }else {
             o.platform = 'browser'
-            var url = '/movies/'+movieTitle+'/play/browser';
+            var url = '/movies/play/'+movieTitle+'/browser';
         }
         return url;
     }
@@ -142,7 +142,8 @@
 	}
 	
 	function _handleVisibleMovies(o, movieTitle, visibleMovie, title){
-		var url = '/movies/'+movieTitle+'/info';
+		var url = '/movies/info/'+movieTitle;
+        console.log(url);
 		if(movieTitle !== undefined){
 			$.ajax({
 				url: url, 
