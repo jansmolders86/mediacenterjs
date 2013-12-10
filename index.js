@@ -72,10 +72,18 @@ app.all('*', function(req, res, next) {
 });
 
 /*Chmod files*/
-fs.chmodSync('./bin/ffmpeg/ffmpeg', 0755);
-fs.chmodSync('./bin/sqlite3/sqlite3', 0755);
-fs.chmodSync('./bin/sqlite3/osx/sqlite3', 0755);
-fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
+if(fs.existsSync('./bin/ffmpeg/ffmpeg') === true){
+    fs.chmodSync('./bin/ffmpeg/ffmpeg', 0755);
+}
+if(fs.existsSync('./bin/sqlite3/sqlite3') === true){
+    fs.chmodSync('./bin/sqlite3/sqlite3', 0755);
+}
+if(fs.existsSync('./bin/sqlite3/osx/sqlite3') === true){
+    fs.chmodSync('./bin/sqlite3/osx/sqlite3', 0755);
+}
+if(fs.existsSync('./lib/database/mcjs.sqlite') === true){
+    fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
+}
 
 app.configure('development', function(){   
 	app.enable('verbose errors');
@@ -95,9 +103,7 @@ app.use(function(req, res) {
 });
 
 app.get("/", function(req, res, next) {  
-	if(	config.moviepath == '' && config.language == '' && config.location == '' ||
-        config.moviepath == null ||
-        config.moviepath == undefined){
+	if(	 config.language === '' || config.location === '' || config.moviepath === undefined){
 
 		var localIP = getIPAddresses()
 		, sendLocalIP = '';
@@ -115,18 +121,28 @@ app.get("/", function(req, res, next) {
 		});	
 		
 	} else {
-		
+
 		var apps = [];
 
 		//Search core app folder for apps and check if tile icon is present
 		fs.readdirSync(__dirname + '/apps').forEach(function(name){
+
 			if(fs.existsSync(__dirname + '/public/'+name+'/tile.png')){
 				var obj = {
 					appLink: name, 
 					tileLink: name
 				}
-				apps.push(obj);
+                if(name === 'movies' && config.moviepath === ""){
+                    return;
+                } else if(name === 'music' && config.musicpath === "" ){
+                    return;
+                } else if(name === 'tv' && config.tvpath === "" ){
+                    return;
+                } else {
+                    apps.push(obj);
+                }
 			}
+
 		});
 
 		//search node_modules for plugins

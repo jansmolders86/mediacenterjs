@@ -10,7 +10,7 @@ var rules = [];
 		if ( element.value.match(/(\{|\}|\=|\&|\#|\%|\^|\@|\*)/)  ) { 
 			return false; 
 		} else if ( element.value === "" ) { 
-			return false; 
+			return true;
 		} else if ( element.value.match(/\/$/) ){ 
 			return true; 
 		} else {

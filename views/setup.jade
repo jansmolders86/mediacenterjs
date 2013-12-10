@@ -34,26 +34,26 @@ block body
 		input.oauthKeyHidden(name="oauthKey" type="hidden")
 		form#setup.validate-form(action='/setuppost',method='post')
 			.row
-				label Specify movie location
-				input.keyboard(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
-			.row
 				span.info
 					span.quote &ldquo;
-					span MediaCenterJS will index all the moviefiles in this initial folder. <br/> You can add or change a location later in the settings.
+					span Please provide the location of your media. You can always add or alter these settings from the settings panel. <br/> An app will become accessible once a valid path is given.
 					span.quote &rdquo;
-			.row
-				label Specify music location
-				input.keyboard(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
-			.row
-				label Specify tvshow location
-				input.keyboard(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
-			.row
-				label You current location (city)
-				input.keyboard(name="location",type="text",placeholder="ie london or amsterdam",data-rule-required="true")
-			.row
-				label Port
-				input.keyboard(name="port",type="text",placeholder="ie 3000 or 1337",data-rule-required="true")
-			.row
+			.row.mcjs-rc-controllable
+				label(for="moviepath") Specify movie location
+				input#moviepath.mcjs-rc-clickable(name="moviepath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
+			.row.mcjs-rc-controllable
+				label(for="musicpath") Specify music location
+				input#musicpath.mcjs-rc-clickable(name="musicpath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
+			.row.mcjs-rc-controllable
+				label(for="tvpath") Specify tvshow location
+				input#tvpath.mcjs-rc-clickable(name="tvpath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
+			.row.mcjs-rc-controllable
+				label(for="location") You current location (city) *
+				input#location.mcjs-rc-clickable(name="location",type="text", placeholder="ie london or amsterdam",data-rule-required="true", data-msg-required="This field is required.")
+			.row.mcjs-rc-controllable
+				label(for="port") Port *
+				input#port.mcjs-rc-clickable(name="port",type="text", placeholder="ie 3000 or 1337", data-rule-required="true", data-msg-required="This field is required.")
+			.row.mcjs-rc-controllable
 				span.info
 					span.quote &ldquo;
 					span Securely connect to your Google account using oAuth to use the YouTube app.<br/> Logging in will enable you to view your personal content. <br/> After logging in using oAuth, press 'submit' to save and continue.<br/> You can also log in later.
@@ -61,7 +61,7 @@ block body
 				input#oauthKey(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
 				input.oauth(name="oauth" type="hidden")
 				a.btn#oauth(href="#", style="display:inline-block;") Connect to Google using oAuth
-				input(type="submit",value="Submit", style="display:inline-block; margin-left:150px;")
+				input.mcjs-rc-clickable(type="submit",value="Submit", style="display:inline-block; margin-left:150px;")
 				label(for="oauthKey")
 
 				input(name="screensaver",type="hidden",value="dim")
@@ -73,3 +73,5 @@ block body
 				input(name="localIP",type="hidden",value=localIP)
 				input(name="remotePort",type="hidden",value="3001")
 				input(name="binaries",type="hidden",value="packaged")
+			.row
+				label * = required
