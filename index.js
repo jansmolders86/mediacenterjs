@@ -85,7 +85,9 @@ if(fs.existsSync('./bin/sqlite3/osx/sqlite3') === true){
 if(fs.existsSync('./lib/database/mcjs.sqlite') === true){
     fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
 } else {
-    fs.openSync('./lib/database/mcjs.sqlite', 'w')
+    fs.mkdirSync('./lib/database/');
+    fs.openSync('./lib/database/mcjs.sqlite', 'w');
+    fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
 }
 
 app.configure('development', function(){   
