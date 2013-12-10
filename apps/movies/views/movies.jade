@@ -12,11 +12,11 @@ block additional_css
 		.vjs-slider { background: rgba(171,171,171,0.3)!important; }
 		.vjs-fullscreen.vjs-user-inactive { cursor: none; }
 		.vjs-default-skin .vjs-control-bar { font-size: 90% }
-	link(rel='stylesheet', href='/movies/css/style.css')
+	link(rel='stylesheet', href='/movies/public/css/style.css')
 
 block additional_scripts
 	script(src="http://vjs.zencdn.net/4.3/video.js")
-	script(src="/movies/js/jquery.mcjs.movies.js")
+	script(src="/movies/public/js/jquery.mcjs.movies.js")
 	script.
 		$(function(){
 			$('body').mcjs();

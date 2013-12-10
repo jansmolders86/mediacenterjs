@@ -16,79 +16,51 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-exports.engine = 'jade';
-
 /* Modules */
 var express = require('express')
 , app = express()
-, fs = require('fs.extra')
-, helper = require('../../lib/helpers.js')
+, path = require('path')
 , config = require('../../lib/handlers/configuration-handler').getConfiguration()
 , functions = require('./movie-functions');
 
-exports.index = function(req, res){
-	res.render('movies', { selectedTheme: config.theme });
-};
+/* Configure App (maybe should take environment into consideration too)*/
+app.set('views', __dirname + '/views');
 
-exports.get = function(req, res){
-	var infoRequest = req.params.id,
-		optionalParam = req.params.optionalParam,
-		platform = req.params.action;
-	
-	if(infoRequest === 'filter') {
-		functions.filter(req, res, optionalParam);
-	}
-	else if (!optionalParam) {
-		switch(infoRequest) {
-			case('getGenres'):
-				functions.getGenres(req, res);
-				break;
-			case('loadItems'):
-				functions.loadItems(req,res);
-				break;
-		}	
-	}
-	
-	if(!platform){
-		platform = 'browser';
-		switch(optionalParam) {
-			case('play'):
-				//var movieName = infoRequest.replace(/\+/g, " ");
-				functions.playMovie(req, res, platform, movieName);
-			break;
-			case('info'):
-				var movieName = infoRequest.replace(/\+/g, " ");
-				functions.handler(req, res, infoRequest);
-			break;
-		}
-	}
-	else if(platform === 'ios') {
-		functions.playMovie(req, res, platform, infoRequest);
-	}
-	else if(platform === 'android') {
-		functions.playMovie(req, res, platform, infoRequest);
-	}
-};
 
-exports.post = function(req, res){
-    var infoRequest = req.params.id,
-        optionalParam = req.params.optionalParam,
-        platform = req.params.action;
+/* Set App Routes */
+app.get('/',function(req, res){
+    res.render('movies', { selectedTheme: config.theme });
+});
 
-    if(platform !== undefined && optionalParam === 'play'){
-        switch(platform) {
-            case('browser'):
-                var movieName = infoRequest.replace(/\+/g, " ");
-                console.log('Incomming playback request for', movieName);
-                functions.playMovie(req, res, platform, movieName);
-            break;
-            case('ios'):
-                functions.playMovie(req, res, platform, infoRequest);
-            break;
-            case('android'):
-                var movieName = infoRequest.replace(/\+/g, " ");
-                functions.playMovie(req, res, platform, infoRequest);
-            break;
-        }
-    }
-};
+app.get('/filter/:optionalParam', function(req, res){
+    var optionalParam = req.params.optionalParam;
+    functions.filter(req, res, optionalParam);
+});
+
+app.get('/getGenres', function(req, res){
+    functions.getGenres(req, res);
+});
+
+app.get('/loadItems', function(req, res){
+    functions.loadItems(req,res);
+});
+
+app.get('/info/:moviename', function(req, res){
+    var movieName = req.params.moviename;
+    functions.handler(req, res, movieName);
+});
+
+app.post('/play/:moviename/:platform?', function(req, res){
+    var movieName = req.params.moviename;
+    var platform = req.params.platform || 'browser';
+
+    console.log('Request arrived');
+    functions.playMovie(req, res, platform, movieName);
+});
+
+/* Listening on mount event to add own public path */
+app.on('mount', function(parentApp){
+    parentApp.use('/' + path.basename(__dirname) + '/public', express.static(__dirname + '/public'));
+});
+
+module.exports = app;

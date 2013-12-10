@@ -120,13 +120,20 @@ app.get("/", function(req, res, next) {
 
 		//Search core app folder for apps and check if tile icon is present
 		fs.readdirSync(__dirname + '/apps').forEach(function(name){
-			if(fs.existsSync(__dirname + '/public/'+name+'/tile.png')){
-				var obj = {
-					appLink: name, 
-					tileLink: name
-				}
-				apps.push(obj);
-			}
+            var tileLink = null;
+            if(fs.existsSync(basePublic = __dirname + '/public/'+name+'/tile.png')) {
+                tileLink = '/'+name+'/tile.png';
+            } else if (fs.existsSync(__dirname + '/apps/'+name+'/public/tile.png')) {
+                tileLink = '/'+name+'/public/tile.png';
+            }
+
+            if (tileLink !== null) {
+                var obj = {
+                    appLink: name,
+                    tileLink: tileLink
+                }
+                apps.push(obj);
+            }
 		});
 
 		//search node_modules for plugins
