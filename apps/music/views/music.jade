@@ -46,9 +46,9 @@ block body
 	#wrapper
 		// ko if: music().length > 0
 		ul.music(data-bind="foreach: music")
-			li.movieposter.boxed.mcjs-rc-controllable
+			li.movieposter.boxed.mcjs-rc-controllable(data-bind="click: showAlbum , css : {'active' : viewDetails}")
 				img.cover(data-bind="attr: { src: thumbnail }")
-				.overlay(data-bind="{click: showAlbum}")
+				.overlay
 				a.title(data-bind="text:localName", style="visibility:hidden;")
 				#albumInfo		
 					h2(data-bind="text:title")
@@ -60,9 +60,9 @@ block body
 					// /ko
 				#tracklist
 					ul#tracks(data-bind="foreach: tracks")
-						li.mcjs-rc-controllable(data-bind="{click: $parent.playTrack}")
+						li.mcjs-rc-controllable(data-bind="click: playTrack , css : {'selected' : isActive}")
 							i.play.icon
-							.title(data-bind="text:$data")
+							.title(data-bind="text:name")
 		// /ko		
 	video#player.video-js.vjs-default-skin(controls, preload="metadata", width="100%", height="33", data-setup="{}")
 		source(src="",type="audio/mp3")

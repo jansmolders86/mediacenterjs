@@ -31,7 +31,8 @@
 				musicCache : [],
 				$that : $that,
                 music : undefined,
-				tracks : new Array
+				tracks : new Array,
+                currentAlbum : undefined
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -50,62 +51,60 @@
 			});
 		});
 	}
+    
 	
 	/**** Start of custom functions ***/
+    
+    
+    /**** Set viewmodel ***/
+    
 	var Music = function (o, json) {
-		var that = this;
-		this.localName 	= ko.observable(json);
-		this.thumbnail	= ko.observable();
-		this.title		= ko.observable();
-		this.year 		= ko.observable();
-		this.genre 		= ko.observable();
-		this.tracks 	= ko.observableArray();
-		this.playTrack 	= function () {
-            var currentItem  = this;
-            var album = that.localName();
-            $(".title:contains('"+currentItem+"')").parent('li').addClass(o.selectedClass);
-            _trackClickHandler(o, album, currentItem);
-        };
-		this.showAlbum  = function () {
-            $(o.musicListSelector+' > li').hide();
-            
-            $('body').addClass('albumview');
-            $(".title:contains('"+that.localName()+"')").parent('li').addClass('active');
+		var self            = this;
+		self.localName 	    = ko.observable(json);
+		self.thumbnail	    = ko.observable();
+		self.isSingle	    = ko.observable(false);
+		self.title		    = ko.observable();
+		self.year 		    = ko.observable();
+		self.genre 		    = ko.observable();
+        self.viewDetails    = ko.observable(false);
+		self.tracks 	    = ko.observableArray();
+		self.showAlbum  = function () {
 
-			var album = that.localName();
-			o.tracks = that.tracks();
+			var album = self.localName();
+            o.currentAlbum = album;
             
-            var totalHeight= o.tracks.length;
-            if(totalHeight > 24){
-                $(o.trackListSelector+' > ul').perfectScrollbar();
+            if(self.isSingle() === true){
+                _playSingle(o, album);
+			} else {
+                this.viewDetails(true);
+               $(o.musicListSelector+' > li').hide();
             }
-
-			if(album.match("\.(mp3)","g")){
-				var track = '/music/none/'+album+'/play'
-				, songTitle = album
-				, random = false
-				, album = 'none';
-                
-				$(".title:contains('"+that.localName()+"')").parent('li').addClass(o.playingClass);
-				_playTrack(o,track,album,songTitle,random);
-			}
 		};
 	}
+    
+    var Track = function (o, data) {
+        var self            = this;
+        self.name           = data;
+        self.isActive       = ko.observable(false);
+        self.playTrack  	= function (data, event) {
+            this.isActive(!self.isActive());
+            var trackname = this.name;
+            _trackClickHandler(o, trackname);
+        };
+    }
 	
 	function _setViewmodel(o){
 		if (!o.viewModel) {
-			// create initial viewmodel
 			o.viewModel = {};
 			o.viewModel.music = ko.observableArray();
-			o.viewModel.tracks = ko.observableArray();
 			ko.applyBindings(o.viewModel,o.$that[0]);
 		}	
 	}
     
     function _backHandler(o){
-        if (!$('body').hasClass('albumview')){	
+        if (!$(o.musicListSelector+' > li').hasClass('active')){	
             window.location = '/';
-        } else if ( $('body').hasClass('albumview')) {
+        } else if ( $(o.musicListSelector+' > li').hasClass('active')) {
             $(o.musicListSelector+' > li').removeClass('active').show();
             $('body').removeClass('albumview');
         }
@@ -126,8 +125,6 @@
 				// add model to cache
 				o.musicCache[this] = o.music;
 			});
-			
-			// Fill viewmodel with movie model per item
 			o.viewModel.music(listing);
 			o.viewModel.music.sort();
 
@@ -168,19 +165,33 @@
 			if (o.musicCache[title]) {
 				setTimeout(function(){
 					var musicData = data[0];
-					o.music = o.musicCache[title];
+                    o.music = o.musicCache[title];
 					
 					o.music.thumbnail(musicData.cover);
 					o.music.year(musicData.year);
 					o.music.genre(musicData.genre);
 					o.music.title(musicData.title);
-					o.music.tracks(musicData.tracks)
+                    var array = [];
+                    
+                    if(musicData.tracks.length === 0){
+                        o.music.isSingle(true);
+                    } else{
+                        $.each(musicData.tracks,function (index, value) {
+                            var trackName = value;
+                            var track = new Track(o, trackName);
+                            array.push(track);
+                        });
+                        o.music.tracks(array);
+                    }
+                    
 					currentAlbum.addClass('coverfound');
 					
 				},500);
 			}
 		});
 	}
+    
+    /*** Remote extension ***/
     
     function _remoteControlExtention(o){
         //Remote Control extender
@@ -201,7 +212,7 @@
                     if(data.action === "enter"){ 
                         var currentItem = focused;
                         if(focused.length > 0){
-                            _trackClickHandler(o, album, currentItem);
+                            _trackClickHandler(o, currentItem);
                         }
                     }
                     
@@ -218,14 +229,26 @@
         }	
     }
 	
-	function _trackClickHandler(o, album, currentItem){
+    /*** Playback Handling ***/
+    
+    function _playSingle(o, album){
+        var track = '/music/none/'+album+'/play'
+        , songTitle = album
+        , random = false
+        , album = 'none';
+        
+        //$(".title:contains('"+self.localName()+"')").parent('li').addClass(o.selectedClass);
+        _playTrack(o,track,album,songTitle,random);
+    }
+    
+    
+	function _trackClickHandler(o, currentItem){
 		$('.random').removeClass('active');
-
-		var track = '/music/'+album+'/'+currentItem+'/play/'
+        var album = o.currentAlbum 
+		, track = '/music/'+ album +'/'+currentItem+'/play/'
 		, random = false
         , songTitle = currentItem;
         
-
 		_playTrack(o,track,album,songTitle,random);
 	}	
 	
@@ -337,7 +360,6 @@
 		, playerID: 'player' 
 		, selectedClass: 'selected' 
 		, focusedClass: 'focused' 
-		, playingClass: 'playing' 
 	};
 
 })(jQuery);

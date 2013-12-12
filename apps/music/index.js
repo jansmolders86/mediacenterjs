@@ -45,7 +45,7 @@ exports.get = function(req, res, next){
 		//Do nothing
 		return;
 	} else  if(action === 'play') {
-		var musicName = infoRequest.replace(/\+/g, " ");
-		functions.playTrack(req, res, musicName, optionalParam);
+		var albumTitle = infoRequest.replace(/\+/g, " ");
+		functions.playTrack(req, res, albumTitle, optionalParam);
 	};
 }
