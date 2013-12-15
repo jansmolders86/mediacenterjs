@@ -48,4 +48,28 @@ $(function() {
 		$('input.oauth').val(localStorage.getItem('oauth_token'));
 		$('input.oauthKeyHidden').val(localStorage.getItem('oauth_key'));
 	} 
+	
+	$.ajax({
+		url: '/settings/checkForUpdate', 
+		type: 'get',
+		dataType: 'json'
+	}).done(function(data){
+		if(data === true){
+			$('.pull-right').show();
+		}
+	});
+	
+	$('.pull-right').on('click',function(e){
+		e.preventDefault();
+		$.ajax({
+			url: '/settings/doUpdate', 
+			type: 'get',
+			dataType: 'json'
+		}).done(function(data){
+			if(data === 'Done'){
+				$('.pull-right').hide();
+			}
+		});
+	});
+
 });

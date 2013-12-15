@@ -22,6 +22,7 @@ var express = require('express')
 , app = express()
 , fs = require('fs')
 , ini = require('ini')
+, functions = require('./settings-functions')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
 exports.index = function(req, res, next){	
@@ -66,7 +67,10 @@ exports.index = function(req, res, next){
 	});		
 };
 exports.get = function(req, res, next) {
-	var infoRequest = req.params.id;
+	var infoRequest = req.params.id
+	, optionalParam = req.params.optionalParam
+	, action = req.params.action;
+	
 	switch(infoRequest) {
 		case 'getToken':
 			var token = config.oauth;
@@ -74,6 +78,12 @@ exports.get = function(req, res, next) {
 				res.json({message: 'No token'}, 500);
 			}
 			res.json({token: token});
+		break;
+		case 'checkForUpdate':
+			//functions.checkForUpdates(req,res);
+		break;
+		case 'doUpdate':
+			//functions.doUpdate(req,res);
 		break;
 	}
 };

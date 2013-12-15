@@ -15,8 +15,7 @@ block additional_scripts
 				100
 			];
 			
-			function delayNext()
-			{
+			function delayNext(){
 				setTimeout(function() {
 					$("ul li:eq(" + index + ")").show().addClass("flipin");
 					index++;
@@ -30,6 +29,16 @@ block additional_scripts
 			
 			delayNext();
 			
+			$.ajax({
+				url: '/checkForUpdate', 
+				type: 'get',
+				dataType: 'json'
+			}).done(function(data){
+				if(data === true){
+					$('h2').show();
+				}
+			});
+			
 			$('body').mcjs();
 		});
 
@@ -39,6 +48,7 @@ block body
 		#header
 			img.logo(src="/core/css/img/logo.png")
 			h1 MediacenterJS
+			h2.updateHeader(style="display:none;") New version Available
 			#dateandtime
 				.time=time
 				.date=date	

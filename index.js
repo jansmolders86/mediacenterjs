@@ -26,6 +26,7 @@ var express = require('express')
 	, rimraf = require('rimraf')
 	, mcjsRouting = require('./lib/routing/routing')
 	, remoteControl = require('./lib/utils/remote-control')
+	, versionChecker = require('./lib/utils/version-checker')
 	, Youtube = require('youtube-api')
     , http = require('http')
 	, jade = require('jade')
@@ -255,6 +256,11 @@ app.post('/clearCache', function(req, res){
 		return res.send('done');
 	});
 });
+
+app.get('/checkForUpdate', function(req, res){
+	versionChecker.checkVersion(req, res, true);
+});
+
 
 app.post('/setuppost', function(req, res){
 	configuration_handler.saveSettings(req.body, function() {

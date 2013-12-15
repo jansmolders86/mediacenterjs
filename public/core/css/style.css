@@ -75,6 +75,8 @@ h6{ font-family: 'Open Sans Condensed', sans-serif; text-transform:uppercase; fo
 h1{ font-size:36px; }
 h2{ font-size:30px;}
 
+.updateHeader { position:absolute; right:500px; top:12px; font-size:18px; text-transform: none; font-weight: 400;}
+
 h3 {
 	margin:0;
 	margin-top:-20px;
