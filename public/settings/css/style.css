@@ -31,7 +31,7 @@ label[for="oauthKey"] {
 	margin:20px 10px;
 	line-height: 43px;
 }
-.pull-right {float:right; margin-top:-44px;}
+.pull-right {float:right;}
 .row{width:100%; clear:both;}
 
 .upgrade{ 
