@@ -11,7 +11,7 @@ npm.load([], function (err, npm) {
             for (var key in data) {
                 var obj = data[key];
                 if(obj.name === 'mediacenterjs' && obj.version > currentInfo.version){
-                    npm.commands.update([obj.name], function(err, data){
+                    npm.commands.install([obj.name], function(err, data){
                         if (err){
                             console.log('NPM install error ' + err);
                             npm.commands.restart;
