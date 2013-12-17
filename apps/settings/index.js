@@ -80,10 +80,11 @@ exports.get = function(req, res, next) {
 			res.json({token: token});
 		break;
 		case 'checkForUpdate':
-        	versionChecker.checkVersion(req, res, true);
+        	versionChecker.checkVersion(req, res);
 		break;
 		case 'doUpdate':
-        	versionChecker.checkVersion(req, res, false);
+            fs.openSync('./configuration/update.js', 'w');
 		break;
 	}
 };
+

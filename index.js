@@ -258,7 +258,7 @@ app.post('/clearCache', function(req, res){
 });
 
 app.get('/checkForUpdate', function(req, res){
-	versionChecker.checkVersion(req, res, true);
+	versionChecker.checkVersion(req, res);
 });
 
 

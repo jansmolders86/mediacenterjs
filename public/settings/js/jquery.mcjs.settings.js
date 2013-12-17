@@ -54,21 +54,18 @@ $(function() {
 		type: 'get',
 		dataType: 'json'
 	}).done(function(data){
-		if(data === true){
+		if(data){
+            $('.pull-right > .btn').text(data);
 			$('.pull-right').show();
 		}
 	});
 	
-	$('.pull-right').on('click',function(e){
+	$('.pull-right > .btn').on('click',function(e){
 		e.preventDefault();
 		$.ajax({
 			url: '/settings/doUpdate', 
 			type: 'get',
 			dataType: 'json'
-		}).done(function(data){
-			if(data === 'Done'){
-				$('.pull-right').hide();
-			}
 		});
 	});
 
