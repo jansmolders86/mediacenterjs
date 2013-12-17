@@ -30,49 +30,6 @@ var child_process = require('child_process')
 , npm = require('npm');
 
 
-var checkCurrentVersion = function(){
-	var info = {};
-	var data = fs.readFileSync('./package.json' , 'utf8');
-
-	try{
-		info = JSON.parse(data);
-	}catch(e){
-		console.log('JSON Parse Error', e);
-	}
-	return info;
-};
-
-function versionUpdate(){
-    npm.load([], function (err, npm) {
-        npm.commands.search(["mediacenterjs"], function(err, data){
-            if (err){
-                console.log('NPM search error ' + err);
-                return;
-            } else{
-                var currentInfo = checkCurrentVersion();
-                for (var key in data) {
-                    var obj = data[key];
-                    if(obj.name === 'mediacenterjs' && obj.version > currentInfo.version){
-                        npm.commands.install([obj.name], function(err, data){
-                            if (err){
-                                console.log('NPM install error ' + err);
-                                return;
-                            } else{
-                                console.log('Update successfull');
-                                server.start();
-                            }
-                        });
-                    } else {
-                        console.log('Current version up to date, starting server...')
-                        server.start();
-                    }
-                }
-            }
-        });
-    });
-}
-
-
 server = {
     process: null,
     files: [],
@@ -83,36 +40,38 @@ server = {
         this.restarting = true;
         console.log('Stopping server for restart' .yellow.bold);
         this.process.kill();
-        console.log('KILL')
     },
     "start": function() {
         console.log('start')
         var that = this;
-        console.log('Starting server' .green.bold);
-        that.watchFile();
+        if(that.update === true){
+            npm.load([], function (err, npm) {
+                npm.config.set('force' == true);
+                npm.commands.restart();
+            });
+        } else {
+            console.log('Starting server' .green.bold);
+            that.watchFile();
 
-        this.process = child_process.spawn(process.argv[0], ['index.js']);
+            this.process = child_process.spawn(process.argv[0], ['index.js']);
 
-        this.process.stdout.addListener('data', function (data) {
-            process.stdout.write(data);
-        });
+            this.process.stdout.addListener('data', function (data) {
+                process.stdout.write(data);
+            });
 
-        this.process.stderr.addListener('data', function (data) {
-            sys.print(data);
-        });
+            this.process.stderr.addListener('data', function (data) {
+                sys.print(data);
+            });
 
-        this.process.addListener('exit', function (code) {
-            console.log('Child process exited' .yellow.bold);
-            this.process = null;
-            if (that.restarting) {
-                that.restarting === true;
-                if(that.update === true){
-                    versionUpdate();
-                } else {
+            this.process.addListener('exit', function (code) {
+                console.log('Child process exited' .yellow.bold);
+                this.process = null;
+                if (that.restarting) {
+                    that.restarting === true;
                     that.start();
                 }
-            }
-        });
+            });
+        }
     },
     "watchFile": function() {
         var that = this;
@@ -127,9 +86,8 @@ server = {
 		});	
 		fs.watchFile('./configuration/update.js', {interval : 500}, function(curr, prev) {
 			if (curr.mtime.valueOf() != prev.mtime.valueOf() || curr.ctime.valueOf() != prev.ctime.valueOf()) {
-				console.log('Restarting because of changed file' .yellow.bold);
+				console.log('Restarting because an update is available' .yellow.bold);
                 that.update = true;
-                console.log('file ipdate', that.update)
 				server.restart();
 			}
 		});	

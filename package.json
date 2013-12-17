@@ -24,7 +24,8 @@
 		"url"   : "http://github.com/jansmolders86/mediacenterjs.git"
 	},
     "scripts" :{ 
-        "start" : "node server.js"
+        "start" : "node server.js",
+        "restart" : "node update.js"
     },
     "readmeFilename": "README.md",
     "dependencies": {
