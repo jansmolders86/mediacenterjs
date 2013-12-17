@@ -46,7 +46,6 @@ server = {
         var that = this;
         if(that.update === true){
             npm.load([], function (err, npm) {
-                npm.config.set('force' == true);
                 npm.commands.restart();
             });
         } else {
