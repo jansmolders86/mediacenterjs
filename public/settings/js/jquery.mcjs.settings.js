@@ -55,12 +55,12 @@ $(function() {
 		dataType: 'json'
 	}).done(function(data){
 		if(data){
-            $('.pull-right > .btn').text(data);
-			$('.pull-right').show();
+            $('.update-right > .btn').text(data);
+			$('.update-right').show();
 		}
 	});
 	
-	$('.pull-right > .btn').on('click',function(e){
+	$('.update-right > .btn').on('click',function(e){
 		e.preventDefault();
 		$.ajax({
 			url: '/doUpdate', 
