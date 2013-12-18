@@ -53,6 +53,7 @@ function cleanUp(output, dir) {
     if(fs.existsSync(output) === true){
         fs.unlinkSync(output);
         console.log('Done, restarting server...')
+        server.update = false;
         server.start();
     }
 }
