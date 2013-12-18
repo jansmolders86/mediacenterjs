@@ -50,7 +50,7 @@ $(function() {
 	} 
 	
 	$.ajax({
-		url: '/settings/checkForUpdate', 
+		url: '/checkForUpdate', 
 		type: 'get',
 		dataType: 'json'
 	}).done(function(data){
@@ -63,7 +63,7 @@ $(function() {
 	$('.pull-right > .btn').on('click',function(e){
 		e.preventDefault();
 		$.ajax({
-			url: '/settings/doUpdate', 
+			url: '/doUpdate', 
 			type: 'get',
 			dataType: 'json'
 		});

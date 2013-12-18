@@ -29,6 +29,35 @@ var child_process = require('child_process')
 , colors = require('colors')
 , npm = require('npm');
 
+function installUpdate(that,output, dir){
+    console.log('Installing update...');
+    var fsExtra = require("fs.extra");
+    fsExtra.copy(dir+'/mediacenterjs-master', './', function (err) {
+      if (err) {
+        console.error('Error', err);
+      } else {
+        console.log("success!");
+        cleanUp(output, dir);
+      }
+    });
+}
+
+function cleanUp(that,output, dir) {
+    console.log('Cleanup...');
+    var rimraf = require('rimraf');
+	rimraf(dir, function (e) { 
+		if(e) {
+			console.log('Error removing module', e .red);
+		}
+	});
+    
+    if(fs.existsSync(output) === true){
+        fs.unlinkSync(output);
+        console.log('Done...')
+        that.update === false;
+        server.start();
+    }
+}
 
 server = {
     process: null,
@@ -45,10 +74,7 @@ server = {
         console.log('start')
         var that = this;
         if(that.update === true){
-            npm.load([], function (err, npm) {
-                npm.config.set('force' == true);
-                npm.commands.restart();
-            });
+            installUpdate(that,output, dir);
         } else {
             console.log('Starting server' .green.bold);
             that.watchFile();

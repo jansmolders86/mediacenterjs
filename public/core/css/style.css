@@ -75,8 +75,6 @@ h6{ font-family: 'Open Sans Condensed', sans-serif; text-transform:uppercase; fo
 h1{ font-size:36px; }
 h2{ font-size:30px;}
 
-.updateHeader { position:absolute; right:500px; top:12px; font-size:18px; text-transform: none; font-weight: 400;}
-
 h3 {
 	margin:0;
 	margin-top:-20px;
@@ -278,6 +276,19 @@ html.dim{background:#222;}
 .tile img{ width:160px; height:169px;}
 .tile a{ float:left; padding:0 10px 3px 0; display:block; }
 .tile:hover{ cursor:pointer; }
+
+.upgrade-right {float:right; margin-right: 200px;}
+.upgrade{ 
+	margin:0px; 
+	padding:10px 0px; 
+	color:#fff;
+	width: 250px;
+	text-align:center;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+	background:#3598DC; 
+}
 
 /***** -----------------   DATE AND TIME  ---------------------- *****/
 

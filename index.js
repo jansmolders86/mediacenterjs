@@ -27,6 +27,7 @@ var express = require('express')
 	, mcjsRouting = require('./lib/routing/routing')
 	, remoteControl = require('./lib/utils/remote-control')
 	, versionChecker = require('./lib/utils/version-checker')
+    , fileHandler = require('./lib/utils/file-utils')
 	, Youtube = require('youtube-api')
     , http = require('http')
 	, jade = require('jade')
@@ -260,6 +261,41 @@ app.post('/clearCache', function(req, res){
 app.get('/checkForUpdate', function(req, res){
 	versionChecker.checkVersion(req, res);
 });
+
+app.get('/doUpdate', function(req, res){
+    var src = 'https://codeload.github.com/jansmolders86/mediacenterjs/zip/master';
+    var output = './master.zip';
+    var dir = './install'
+    var options = {};
+
+    fileHandler.downloadFile (src, output, options, function(output){
+        console.log('Done', output);
+        unzip(req, res, output, dir);
+    });
+});
+
+function unzip(req, res, output, dir){
+    if(fs.existsSync(dir) === false){
+        fs.mkdirSync(dir);
+    } else {
+        rimraf(dir, function (err) { 
+            if(err) {
+                console.log('Error removing temp folder', err .red);
+            } else {
+                fileHandler.downloadFile(src, output, options, function(output){
+                    console.log('Done', output);
+                    unzip(req, res, output, dir);
+                });
+            }
+        });
+    }
+    console.log("Unzipping New Version...");
+    var AdmZip = require("adm-zip");
+    var zip = new AdmZip(output);
+    zip.extractAllTo(dir, true);
+    
+    fs.openSync('./configuration/update.js', 'w');
+}
 
 
 app.post('/setuppost', function(req, res){

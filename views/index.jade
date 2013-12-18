@@ -14,32 +14,44 @@ block additional_scripts
 				200,
 				100
 			];
-			
+
 			function delayNext(){
 				setTimeout(function() {
 					$("ul li:eq(" + index + ")").show().addClass("flipin");
 					index++;
-					
+
 					if (index == length)
 						index = 0;
-					
+
 					delayNext();
 				}, delays[index]);
 			}
-			
+
 			delayNext();
-			
+
 			$.ajax({
-				url: '/checkForUpdate', 
+				url: '/checkForUpdate',
 				type: 'get',
 				dataType: 'json'
 			}).done(function(data){
-				if(data === true){
-					$('h2').show();
+				if(data){
+					$('.pull-right > .btn').text(data);
+					$('.pull-right').show();
 				}
 			});
-			
+
+			$('.pull-right > .btn').on('click',function(e){
+				e.preventDefault();
+				$.ajax({
+					url: '/doUpdate',
+					type: 'get',
+					dataType: 'json'
+				});
+			});
+
 			$('body').mcjs();
+
+
 		});
 
 block body
@@ -48,7 +60,8 @@ block body
 		#header
 			img.logo(src="/core/css/img/logo.png")
 			h1 MediacenterJS
-			h2.updateHeader(style="display:none;") New version Available
+			div.upgrade-right.boxed.mcjs-rc-controllable(style="display:none;")
+				a.btn.upgrade.mcjs-rc-clickable
 			#dateandtime
 				.time=time
 				.date=date	

@@ -1,6 +1,6 @@
 {
 	"name": "mediacenterjs",
-	"version": "0.0.51",
+	"version": "0.0.52",
 	"description": "A NodeJS based mediacenter for your browser",
 	"homepage": "http://www.mediacenterjs.com",
 	"author": {
@@ -13,6 +13,12 @@
 		},{
 			"name": "Claire Sarsam",
 			"email": "csarsam+github@gmail.com"
+		},{
+			"name": "Terry Moore II",
+			"email": "terry.moore.ii@gmail.com"
+		},{
+			"name": "Stefan Hoffman",
+			"email": "stefhoff@go4more.de"
 		}
 	],
 	"licenses": [{
@@ -24,8 +30,7 @@
 		"url"   : "http://github.com/jansmolders86/mediacenterjs.git"
 	},
     "scripts" :{ 
-        "start" : "node server.js",
-        "restart" : "node update.js"
+        "start" : "node server.js"
     },
     "readmeFilename": "README.md",
     "dependencies": {
@@ -54,6 +59,8 @@
         "walk": ">=1.2.2",
         "underscore": "~1.5.2",
         "moviedb": "~0.1.0",
+        "adm-zip","0.4.3",
+        "wget",">=0.0.1",
         "socket.io": "~0.9.16",
         "youtube-api": "~0.1.1"
     }

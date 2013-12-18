@@ -22,7 +22,7 @@ var express = require('express')
 , app = express()
 , fs = require('fs')
 , ini = require('ini')
-, versionChecker = require('../../lib/utils/version-checker')
+, http = require('http')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
 exports.index = function(req, res, next){	
@@ -78,12 +78,6 @@ exports.get = function(req, res, next) {
 				res.json({message: 'No token'}, 500);
 			}
 			res.json({token: token});
-		break;
-		case 'checkForUpdate':
-        	versionChecker.checkVersion(req, res);
-		break;
-		case 'doUpdate':
-            fs.openSync('./configuration/update.js', 'w');
 		break;
 	}
 };

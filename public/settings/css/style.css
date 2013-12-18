@@ -31,17 +31,6 @@ label[for="oauthKey"] {
 	margin:20px 10px;
 	line-height: 43px;
 }
-.pull-right {float:right;}
+
 .row{width:100%; clear:both;}
 
-.upgrade{ 
-	margin:0px; 
-	padding:10px 0px; 
-	color:#fff;
-	width: 250px;
-	text-align:center;
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	box-sizing: border-box;
-	background:#3598DC; 
-}
