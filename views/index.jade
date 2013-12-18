@@ -1,73 +1,73 @@
 ﻿extends layout
 
 block declarations
-	- body_class = 'homepage';
+    - body_class = 'homepage';
 
 block additional_scripts
-	script.
-		$(function() {
-			var index = 0;
-			var length = $("ul").children().length;
-			var delays = [
-				200,
-				100,
-				200,
-				100
-			];
+    script.
+        $(function() {
+            var index = 0;
+            var length = $("ul").children().length;
+            var delays = [
+                200,
+                100,
+                200,
+                100
+            ];
 
-			function delayNext(){
-				setTimeout(function() {
-					$("ul li:eq(" + index + ")").show().addClass("flipin");
-					index++;
+            function delayNext(){
+                setTimeout(function() {
+                    $("ul li:eq(" + index + ")").show().addClass("flipin");
+                    index++;
 
-					if (index == length)
-						index = 0;
+                    if (index == length)
+                        index = 0;
 
-					delayNext();
-				}, delays[index]);
-			}
+                    delayNext();
+                }, delays[index]);
+            }
 
-			delayNext();
+            delayNext();
 
-			$.ajax({
-				url: '/checkForUpdate',
-				type: 'get',
-				dataType: 'json'
-			}).done(function(data){
-				if(data){
-					$('.update-right > .btn').text(data);
-					$('.update-right').show();
-				}
-			});
+            $.ajax({
+                url: '/checkForUpdate',
+                type: 'get',
+                dataType: 'json'
+            }).done(function(data){
+                if(data){
+                    $('.upgrade-right> .btn').text(data);
+                    $('.upgrade-right').show();
+                }
+            });
 
-			$('.update-right > .btn').on('click',function(e){
-				e.preventDefault();
-				$.ajax({
-					url: '/doUpdate',
-					type: 'get',
-					dataType: 'json'
-				});
-			});
+            $('.update-right > .btn').on('click',function(e){
+                e.preventDefault();
+                $.ajax({
+                    url: '/doUpdate',
+                    type: 'get',
+                    dataType: 'json'
+                });
+            });
 
-			$('body').mcjs();
+            $('body').mcjs();
 
 
-		});
+        });
 
 block body
-		#backdrop
-			img.backdropimg(src="/core/css/img/backdrop.png")	
-		#header
-			img.logo(src="/core/css/img/logo.png")
-			h1 MediacenterJS
-			div.upgrade-right.boxed.mcjs-rc-controllable(style="display:none;")
-				a.btn.upgrade.mcjs-rc-clickable
-			#dateandtime
-				.time=time
-				.date=date	
-		#wrapper
-			ul#tiles
-				each item in apps
-					li.tile.boxed.mcjs-rc-controllable
-						a(href="/" + item.appLink + "/").mcjs-rc-clickable
-							img(src="/" + item.tileLink + "/tile.png")
+        #backdrop
+            img.backdropimg(src="/core/css/img/backdrop.png")
+        #header
+            img.logo(src="/core/css/img/logo.png")
+            h1 MediacenterJS
+            div.upgrade-right.boxed.mcjs-rc-controllable(style="display:none;")
+                a.btn.upgrade.mcjs-rc-clickable
+            #dateandtime
+                .time=time
+                .date=date
+        #wrapper
+            ul#tiles
+                each item in apps
+                    li.tile.boxed.mcjs-rc-controllable
+                        a(href="/" + item.appLink + "/").mcjs-rc-clickable
+                            img(src="/" + item.tileLink + "/tile.png")
