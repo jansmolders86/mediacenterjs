@@ -7,7 +7,8 @@
 		"name": "Jan Smolders",
 		"email": "jansmolders86@gmail.com"
 	},
-	"contributors": [{
+	"contributors": [
+        {
 			"name": "Adam Schodde",
 			"email": "sparky1010+github@gmail.com"
 		},{
@@ -59,8 +60,8 @@
         "walk": ">=1.2.2",
         "underscore": "~1.5.2",
         "moviedb": "~0.1.0",
-        "adm-zip","0.4.3",
-        "wget",">=0.0.1",
+        "adm-zip":"0.4.3",
+        "wget":">=0.0.1",
         "socket.io": "~0.9.16",
         "youtube-api": "~0.1.1"
     }
