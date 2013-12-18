@@ -14,7 +14,7 @@ __Heavy work in progress, Alpha version (0.0.52)__
 
 __version 0.0.52__
 
-* Self updating. The application is now up-datable from the app itself. No need to use GIT or NPM.
+* Self updating. The application is now updateable from the app itself. No need to use GIT or NPM.
 
 Why use it?
 ===========
