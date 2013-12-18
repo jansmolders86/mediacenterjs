@@ -76,7 +76,7 @@
             if(self.isSingle() === true){
                 _playSingle(o, album);
 			} else {
-                this.viewDetails(true);
+                self.viewDetails(true);
                $(o.musicListSelector+' > li').hide();
             }
 		};
@@ -87,8 +87,8 @@
         self.name           = data;
         self.isActive       = ko.observable(false);
         self.playTrack  	= function (data, event) {
-            this.isActive(!self.isActive());
-            var trackname = this.name;
+            self.isActive(!self.isActive());
+            var trackname = self.name;
             _trackClickHandler(o, trackname);
         };
     }
