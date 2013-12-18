@@ -30,7 +30,7 @@ var child_process = require('child_process')
 
 function installUpdate(output, dir){
     console.log('Installing update...');
-    var fsExtra = require("fs.extra");
+    var fsExtra = require("fs-extra");
     fsExtra.copy('./install/mediacenterjs-master', './', function (err) {
         if (err) {
             console.error('Error', err);

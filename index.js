@@ -276,6 +276,11 @@ app.get('/doUpdate', function(req, res){
 });
 
 function unzip(req, res, output, dir){
+    var src = 'https://codeload.github.com/jansmolders86/mediacenterjs/zip/master';
+    var outputFile = './master.zip';
+    var ExtractDir = './install'
+    var options = {};
+
     if(fs.existsSync(dir) === false){
         fs.mkdirSync(dir);
     } else {
@@ -283,12 +288,8 @@ function unzip(req, res, output, dir){
             if(err) {
                 console.log('Error removing temp folder', err .red);
             } else {
-                var src = 'https://codeload.github.com/jansmolders86/mediacenterjs/zip/master';
-                var output = './master.zip';
-                var dir = './install'
-                var options = {};
 
-                fileHandler.downloadFile(src, output, options, function(output){
+                fileHandler.downloadFile(src, outputFile, options, function(output){
                     console.log('Done', output);
                     setTimeout(function(){
                         unzip(req, res, output, dir);
@@ -300,7 +301,7 @@ function unzip(req, res, output, dir){
     console.log("Unzipping New Version...");
     var AdmZip = require("adm-zip");
     var zip = new AdmZip(output);
-    zip.extractAllTo(dir, true);
+    zip.extractAllTo(ExtractDir, true);
     
     fs.openSync('./configuration/update.js', 'w');
 }

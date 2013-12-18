@@ -42,7 +42,7 @@ block additional_scripts
 
             $('.upgrade-right > .btn').on('click',function(e){
                 e.preventDefault();
-                $('#wrapper').prepend('<div class="message"><div class="message">Downloading and installing update. Please wait...</div></div>');
+                $('#wrapper').prepend('<div class="message">Downloading and installing update. <br/> Grap a coffee and reload the page after 5 minutes or so...</div>');
                 $('#tiles').hide();
                 $('.upgrade-right').hide();
                 $.ajax({
