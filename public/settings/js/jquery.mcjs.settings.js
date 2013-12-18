@@ -47,26 +47,6 @@ $(function() {
 	if(localStorage.getItem('oauth_token')) {
 		$('input.oauth').val(localStorage.getItem('oauth_token'));
 		$('input.oauthKeyHidden').val(localStorage.getItem('oauth_key'));
-	} 
-	
-	$.ajax({
-		url: '/checkForUpdate', 
-		type: 'get',
-		dataType: 'json'
-	}).done(function(data){
-		if(data){
-            $('.upgrade-right > .btn').text(data);
-			$('.upgrade-right').show();
-		}
-	});
-	
-	$('.upgrade-right > .btn').on('click',function(e){
-		e.preventDefault();
-		$.ajax({
-			url: '/doUpdate', 
-			type: 'get',
-			dataType: 'json'
-		});
-	});
+	}
 
 });

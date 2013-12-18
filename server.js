@@ -31,7 +31,7 @@ var child_process = require('child_process')
 function installUpdate(output, dir){
     console.log('Installing update...');
     var fsExtra = require("fs.extra");
-    fsExtra.copy(dir+'/mediacenterjs-master', './', function (err) {
+    fsExtra.copy('./install/mediacenterjs-master', './', function (err) {
         if (err) {
             console.error('Error', err);
         } else {
@@ -75,7 +75,9 @@ server = {
             var output = './master.zip';
             var dir = './install';
             that.update === false;
-            installUpdate(output, dir);
+            setTimeout(function(){
+                installUpdate(output, dir);
+            },2000);
         } else {
             console.log('Starting server' .green.bold);
             that.watchFile();

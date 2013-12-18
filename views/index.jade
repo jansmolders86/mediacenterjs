@@ -40,12 +40,14 @@ block additional_scripts
                 }
             });
 
-            $('.update-right > .btn').on('click',function(e){
+            $('.upgrade-right > .btn').on('click',function(e){
                 e.preventDefault();
+                $('#wrapper').prepend('<div class="message"><div class="message">Downloading and installing update. Please wait...</div></div>');
+                $('#tiles').hide();
+                $('.upgrade-right').hide();
                 $.ajax({
                     url: '/doUpdate',
-                    type: 'get',
-                    dataType: 'json'
+                    type: 'get'
                 });
             });
 

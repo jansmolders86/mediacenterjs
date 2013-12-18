@@ -263,6 +263,7 @@ app.get('/checkForUpdate', function(req, res){
 });
 
 app.get('/doUpdate', function(req, res){
+    console.log('First, download the latest version From Github.');
     var src = 'https://codeload.github.com/jansmolders86/mediacenterjs/zip/master';
     var output = './master.zip';
     var dir = './install'
@@ -282,9 +283,16 @@ function unzip(req, res, output, dir){
             if(err) {
                 console.log('Error removing temp folder', err .red);
             } else {
+                var src = 'https://codeload.github.com/jansmolders86/mediacenterjs/zip/master';
+                var output = './master.zip';
+                var dir = './install'
+                var options = {};
+
                 fileHandler.downloadFile(src, output, options, function(output){
                     console.log('Done', output);
-                    unzip(req, res, output, dir);
+                    setTimeout(function(){
+                        unzip(req, res, output, dir);
+                    },2000);
                 });
             }
         });
