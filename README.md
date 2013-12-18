@@ -10,12 +10,11 @@ Website: http://www.mediacenterjs.com
 Status: 
 =======
 
-__Heavy work in progress, Alpha version (0.0.51)__
+__Heavy work in progress, Alpha version (0.0.52)__
 
-__version 0.0.51__
-* Styling fixes
-* Weather app fixes (Thanks to Hoffi)
-* Added YouTube app (Thanks to Brutalhonesty)
+__version 0.0.52__
+
+* Self updating. The application is now up-datable from the app itself. No need to use GIT or NPM.
 
 Why use it?
 ===========
@@ -48,6 +47,7 @@ What currently works?
 * Plugin manager
 * Page visibility API
 * YouTube app
+* Version manager
 
 What's coming up
 ==================
