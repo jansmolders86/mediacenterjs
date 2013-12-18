@@ -1,60 +1,58 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
-	
-    Copyright (C) 2013 - Jan Smolders
+ MediaCenterJS - A NodeJS based mediacenter solution
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License.
+ Copyright (C) 2013 - Jan Smolders
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	
-	////////////////\\\\\\\\\\\\\\\
-	
-	File based on Spludo Framework. Copyright (c) 2009-2010 DracoBlue, http://dracoblue.net/
-	Licensed under the terms of MIT License.
-	
-*/
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+ ////////////////\\\\\\\\\\\\\\\
+
+ File based on Spludo Framework. Copyright (c) 2009-2010 DracoBlue, http://dracoblue.net/
+ Licensed under the terms of MIT License.
+
+ */
 
 
 var child_process = require('child_process')
-, fs = require("fs")
-, sys = require("sys")
-, colors = require('colors')
-, npm = require('npm');
+    , fs = require("fs")
+    , sys = require("sys")
+    , colors = require('colors');
 
-function installUpdate(that,output, dir){
+function installUpdate(output, dir){
     console.log('Installing update...');
     var fsExtra = require("fs.extra");
     fsExtra.copy(dir+'/mediacenterjs-master', './', function (err) {
-      if (err) {
-        console.error('Error', err);
-      } else {
-        console.log("success!");
-        cleanUp(output, dir);
-      }
+        if (err) {
+            console.error('Error', err);
+        } else {
+            console.log("success!");
+            cleanUp(output, dir);
+        }
     });
 }
 
-function cleanUp(that,output, dir) {
+function cleanUp(output, dir) {
     console.log('Cleanup...');
     var rimraf = require('rimraf');
-	rimraf(dir, function (e) { 
-		if(e) {
-			console.log('Error removing module', e .red);
-		}
-	});
-    
+    rimraf(dir, function (e) {
+        if(e) {
+            console.log('Error removing module', e .red);
+        }
+    });
+
     if(fs.existsSync(output) === true){
         fs.unlinkSync(output);
-        console.log('Done...')
-        that.update === false;
+        console.log('Done, restarting server...')
         server.start();
     }
 }
@@ -74,7 +72,10 @@ server = {
         console.log('start')
         var that = this;
         if(that.update === true){
-            installUpdate(that,output, dir);
+            var output = './master.zip';
+            var dir = './install';
+            that.update === false;
+            installUpdate(output, dir);
         } else {
             console.log('Starting server' .green.bold);
             that.watchFile();
@@ -101,23 +102,23 @@ server = {
     },
     "watchFile": function() {
         var that = this;
-		fs.watchFile('./configuration/config.ini', {interval : 500}, function(curr, prev) {
-			if (curr.mtime.valueOf() != prev.mtime.valueOf() || curr.ctime.valueOf() != prev.ctime.valueOf()) {
-				console.log('Restarting because of changed file' .yellow.bold);
-				// give browser time to load finsh page
-				setTimeout(function(){
-					server.restart();
-				},2000);
-			}
-		});	
-		fs.watchFile('./configuration/update.js', {interval : 500}, function(curr, prev) {
-			if (curr.mtime.valueOf() != prev.mtime.valueOf() || curr.ctime.valueOf() != prev.ctime.valueOf()) {
-				console.log('Restarting because an update is available' .yellow.bold);
+        fs.watchFile('./configuration/config.ini', {interval : 500}, function(curr, prev) {
+            if (curr.mtime.valueOf() != prev.mtime.valueOf() || curr.ctime.valueOf() != prev.ctime.valueOf()) {
+                console.log('Restarting because of changed file' .yellow.bold);
+                // give browser time to load finsh page
+                setTimeout(function(){
+                    server.restart();
+                },2000);
+            }
+        });
+        fs.watchFile('./configuration/update.js', {interval : 500}, function(curr, prev) {
+            if (curr.mtime.valueOf() != prev.mtime.valueOf() || curr.ctime.valueOf() != prev.ctime.valueOf()) {
+                console.log('Restarting because an update is available' .yellow.bold);
                 that.update = true;
-				server.restart();
-			}
-		});	
-	}
+                server.restart();
+            }
+        });
+    }
 }
 
 server.start();
