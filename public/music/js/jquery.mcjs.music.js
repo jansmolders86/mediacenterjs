@@ -69,7 +69,7 @@
         self.viewDetails    = ko.observable(false);
 		self.tracks 	    = ko.observableArray();
 		self.showAlbum  = function () {
-
+            self.viewDetails(false);
 			var album = self.localName();
             o.currentAlbum = album;
             
@@ -77,7 +77,10 @@
                 _playSingle(o, album);
 			} else {
                 self.viewDetails(true);
-               $(o.musicListSelector+' > li').hide();
+                if(self.viewDetails(true) ){
+                    $(o.musicListSelector+' > li').hide();
+                }
+
             }
 		};
 	}
@@ -86,10 +89,16 @@
         var self            = this;
         self.name           = data;
         self.isActive       = ko.observable(false);
-        self.playTrack  	= function (data, event) {
-            self.isActive(!self.isActive());
+        self.playTrack  	= function () {
+
+            if(self.isActive(true)){
+                self.isActive(false);
+            }
+            self.isActive(true);
             var trackname = self.name;
             _trackClickHandler(o, trackname);
+
+
         };
     }
 	
