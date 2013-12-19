@@ -42,13 +42,13 @@ block additional_scripts
 
             $('.upgrade-right > .btn').on('click',function(e){
                 e.preventDefault();
-                $('#wrapper').prepend('<div class="message">Downloading and installing update. <br/> Grap a coffee and reload the page after 5 minutes or so...</div>');
+                $('#wrapper').prepend('<div class="message">Downloading and installing update. <br/> Please wait for the installation to finish...</div>');
                 $('#tiles').hide();
                 $('.upgrade-right').hide();
                 $.ajax({
                     url: '/doUpdate',
                     type: 'get'
-                });
+                }).done(function(data){ if(data === "restarting") setTimeout(function(){ window.location="/"},10000); });
             });
 
             $('body').mcjs();
