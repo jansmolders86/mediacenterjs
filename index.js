@@ -303,7 +303,10 @@ function unzip(req, res, output, dir){
     var zip = new AdmZip(output);
     zip.extractAllTo(ExtractDir, true);
     
-    fs.openSync('./configuration/update.js', 'w');
+    res.json('restarting');
+    setTimeout(function(){
+         fs.openSync('./configuration/update.js', 'w');
+    },1000);
 }
 
 
