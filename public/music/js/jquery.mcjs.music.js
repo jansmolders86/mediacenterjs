@@ -90,7 +90,7 @@
         self.name           = data;
         self.isActive       = ko.observable(false);
         self.playTrack  	= function () {
-
+            //todo: check current active by name (data)
             if(self.isActive(true)){
                 self.isActive(false);
             }
