@@ -34,3 +34,7 @@ label[for="oauthKey"] {
 
 .row{width:100%; clear:both;}
 
+.message{
+	text-transform: capitalize;
+}
+

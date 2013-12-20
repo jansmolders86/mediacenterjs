@@ -48,7 +48,7 @@ block additional_scripts
                 $.ajax({
                     url: '/doUpdate',
                     type: 'get'
-                }).done(function(data){ if(data === "restarting") setTimeout(function(){ window.location="/"},10000); });
+                }).done(function(data){ if(data === "restarting") setTimeout(function(){ window.location="/"},20000); });
             });
 
             $('body').mcjs();
