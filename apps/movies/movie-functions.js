@@ -3,6 +3,7 @@ var fs = require('fs.extra')
 	, file_utils = require('../../lib/utils/file-utils')
 	, app_cache_handler = require('../../lib/handlers/app-cache-handler')
 	, colors = require('colors')
+    , os = require('os')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
 /* Constants */
@@ -54,12 +55,39 @@ exports.playMovie = function (req, res, platform, movieRequest){
 	file_utils.getLocalFile(config.moviepath, movieRequest, function(err, file) {
 		if (err) console.log(err .red);
 		if (file) {
-			var movieUrl = file.href;
-			var stat = fs.statSync(movieUrl);
+			var movieUrl = file.href
+			, stat = fs.statSync(movieUrl)
+            , ExecConfig
+            , outputPath = "./public/data/movies/output.mp4";
+            
+            if(config.binaries === 'packaged'){
+                if(os.platform() === 'win32'){
+                    var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
+                }else{
+                    var ffmpegPath = './bin/ffmpeg/ffmpeg'
+                }
+                
+                var ExecConfig = { env: process.env.ffmpegPath };
+            }
+    
+            if(fs.existsSync(outputPath) === true){
+                fs.unlinkSync(outputPath);
+            };
 
-			console.log('Client platform is', platform);
-			var movie_playback_handler = require('./movie-playback-handler');
-			movie_playback_handler.startPlayback(res, movieUrl, stat, platform);
+            var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52  -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -preset ultraFast -acodec mp3 -sc_threshold -1 -movflags +frag_keyframe+empty_moov '+outputPath
+            , exec = require('child_process').exec
+            , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
+                if (err) {
+                    console.log('FFMPEG error: ',err) ;
+                } else{
+                    console.log('Transcoding complete')
+                    res.json(platform);
+                }
+            });
+
+            child.stdout.on('data', function(data) { console.log(data.toString()); });
+            child.stderr.on('data', function(data) { console.log(data.toString()); });
+    
 		} else {
 			console.log("File " + movieRequest + " could not be found!" .red);
 		}

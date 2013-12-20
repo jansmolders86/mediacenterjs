@@ -328,51 +328,50 @@
 	}
 
 	function _playMovie(o,url){
-		$.ajax({
-			url: url,
-			type: 'post'
-		});
-
+    
+        $('body').animate({backgroundColor: '#000'},500).addClass('playingMovie');
         var myPlayer;
 
         $('#wrapper, .movies, #header').hide();
 
         _resetBackdrop(o);
+        
+        if($('#'+o.playerID).length > 1) {
+            $('#'+o.playerID).remove();
+        } 
+                
+		$.ajax({
+			url: url,
+			type: 'get'
+		}).done(function(data){
+            if(data === 'Android' || data === 'IOS'){
+                $('#wrapper, .movies, #header, #backdrop').hide();
+                $('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
 
-        $('body').animate({backgroundColor: '#000'},500).addClass('playingMovie');
-
-        setTimeout(function(){
-            if($('#'+o.playerID).length > 1) {
-                $('#'+o.playerID).remove();
-            } else {
-                if(o.platform === 'Android' || o.platform === 'IOS'){
-                    $('#wrapper, .movies, #header, #backdrop').hide();
-                    $('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
-
-                    var myVideo = document.getElementsByTagName('video')[0];
-                    myVideo.src = url;
-                    myVideo.load();
-                    myVideo.play();
-                    myVideo.onended = function(e){
-                        window.location.replace("/movies/");
-                    }
-
-                } else if(o.platform === 'browser'){
-                    $('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%"><source src="" type="video/mp4"></video>');
-
-                    videojs(o.playerID, {}, function(){
-                        myPlayer = this;
-                        myPlayer.src("/data/movies/output.mp4");
-                        setTimeout(function(){
-                            $('.vjs-loading-spinner, #backdrop').hide();
-                            myPlayer.play();
-                            _pageVisibility(o);
-                        },10000)
-                        myPlayer.on('error', function(e){ console.log('Error', e) });
-                    });
+                var myVideo = document.getElementsByTagName('video')[0];
+                myVideo.src = "/data/movies/output.mp4";
+                myVideo.load();
+                myVideo.play();
+                myVideo.onended = function(e){
+                    window.location.replace("/movies/");
                 }
+
+            } else if(data === 'browser'){
+                $('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%"><source src="" type="video/mp4"></video>');
+                videojs(o.playerID, {}, function(){
+                    myPlayer = this;
+                    myPlayer.src("/data/movies/output.mp4");
+                    setTimeout(function(){
+                        $('.vjs-loading-spinner, #backdrop').hide();
+                        myPlayer.play();
+                        _pageVisibility(o);
+                    },10000)
+                    myPlayer.on('error', function(e){ 
+                        console.log('Error', e) 
+                    });
+                });
             }
-        },10000);
+        });
 
 	}
 

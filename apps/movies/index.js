@@ -50,31 +50,15 @@ exports.get = function(req, res){
 	}
 	
 	if(!platform){
-		platform = 'browser';
 		switch(optionalParam) {
-			case('play'):
-				//var movieName = infoRequest.replace(/\+/g, " ");
-				functions.playMovie(req, res, platform, movieName);
-			break;
 			case('info'):
 				var movieName = infoRequest.replace(/\+/g, " ");
 				functions.handler(req, res, infoRequest);
 			break;
 		}
 	}
-	else if(platform === 'ios') {
-		functions.playMovie(req, res, platform, infoRequest);
-	}
-	else if(platform === 'android') {
-		functions.playMovie(req, res, platform, infoRequest);
-	}
-};
-
-exports.post = function(req, res){
-    var infoRequest = req.params.id,
-        optionalParam = req.params.optionalParam,
-        platform = req.params.action;
-
+    
+    
     if(platform !== undefined && optionalParam === 'play'){
         switch(platform) {
             case('browser'):
@@ -91,4 +75,5 @@ exports.post = function(req, res){
             break;
         }
     }
+    
 };
