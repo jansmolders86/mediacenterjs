@@ -52,6 +52,7 @@ exports.loadItems = function (req, res){
 };
 
 exports.playMovie = function (req, res, platform, movieRequest){
+ 
 	file_utils.getLocalFile(config.moviepath, movieRequest, function(err, file) {
 		if (err) console.log(err .red);
 		if (file) {
@@ -72,21 +73,35 @@ exports.playMovie = function (req, res, platform, movieRequest){
     
             if(fs.existsSync(outputPath) === true){
                 fs.unlinkSync(outputPath);
-            };
+            };       
 
-            var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52  -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -preset ultraFast -acodec mp3 -sc_threshold -1 -movflags +frag_keyframe+empty_moov '+outputPath
-            , exec = require('child_process').exec
-            , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
-                if (err) {
-                    console.log('FFMPEG error: ',err) ;
-                } else{
-                    console.log('Transcoding complete')
-                    res.json(platform);
+            var probe = require('node-ffprobe');
+
+            probe(movieUrl, function(err, probeData) {
+                
+                var data = { 
+                       'platform': platform,
+                       'duration':probeData.streams[0].duration
                 }
-            });
+                res.json(data);  
+                
+                var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52  -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -preset ultraFast -acodec copy -sc_threshold 0 -movflags +frag_keyframe+empty_moov '+outputPath
+                , exec = require('child_process').exec
+                , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
+                    if (err) {
+                        console.log('FFMPEG error: ',err) ;
+                    } else{
+                        console.log('Transcoding complete');
+                    }
+                });
 
-            child.stdout.on('data', function(data) { console.log(data.toString()); });
-            child.stderr.on('data', function(data) { console.log(data.toString()); });
+                child.stdout.on('data', function(data) { console.log(data.toString()); });
+                child.stderr.on('data', function(data) { console.log(data.toString()); });
+                    
+            });
+            
+            
+          
     
 		} else {
 			console.log("File " + movieRequest + " could not be found!" .red);

@@ -344,7 +344,8 @@
 			url: url,
 			type: 'get'
 		}).done(function(data){
-            if(data === 'Android' || data === 'IOS'){
+            console.log('platform', data)
+            if(data.platform === 'Android' || data.platform === 'IOS'){
                 $('#wrapper, .movies, #header, #backdrop').hide();
                 $('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
 
@@ -356,25 +357,49 @@
                     window.location.replace("/movies/");
                 }
 
-            } else if(data === 'browser'){
-                $('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="100%"><source src="" type="video/mp4"></video>');
+            } else if(data.platform === 'browser'){
+                $('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" data-setup="{bufferedTimeRange.start('+data.duration+'), bufferedTimeRange.end('+data.duration+')}" controls preload="none" width="100%" height="100%"><source src="/data/movies/output.mp4" type="video/mp4"></video>');
+                
                 videojs(o.playerID, {}, function(){
                     myPlayer = this;
-                    myPlayer.src("/data/movies/output.mp4");
                     setTimeout(function(){
                         $('.vjs-loading-spinner, #backdrop').hide();
+
+                        myPlayer.load();                     
                         myPlayer.play();
+                        var videoDuration = myPlayer.duration(data.duration);  
+                        $('.vjs-duration-display .vjs-control-text').text(videoDuration);
+                        myPlayer.bufferedPercent(0);
                         _pageVisibility(o);
-                    },10000)
+                    },5000)
                     myPlayer.on('error', function(e){ 
                         console.log('Error', e) 
                     });
+                    
+                    myPlayer.on('timeupdate', function(e){
+                        var videoDuration = myPlayer.duration(data.duration);  
+                        myPlayer.bufferedPercent(0);
+                        $('.vjs-duration-display .vjs-control-text').text(videoDuration);
+                    });
+                    
+                    myPlayer.on('progress', function(e){
+                        var videoDuration = myPlayer.duration(data.duration);  
+                        myPlayer.bufferedPercent(0);
+                        $('.vjs-duration-display .vjs-control-text').text(videoDuration);
+                    });
+                    
+                    myPlayer.on('loadeddata', function(e){
+                        var videoDuration = myPlayer.duration(data.duration);  
+                        myPlayer.bufferedPercent(0);
+                        $('.vjs-duration-display .vjs-control-text').text(videoDuration);
+                    });
+                    
                 });
             }
         });
 
 	}
-
+    
     function _resetBackdrop(o){
         //Remove img and reintroduce it to stop the animation and load the correct backdrop img
         //TODO add lookup on class title if no active item exists.
