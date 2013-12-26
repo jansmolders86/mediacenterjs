@@ -98,10 +98,10 @@ youtubeApp.directive('videoAngular', ["$timeout",
                                 "src": "http://www.youtube.com/watch?v=" + $scope.video.videoID
                             });
                         } else {
-                            if ($scope.tryLoad >= 5) {
+                            if ($scope.tryWait >= 5) {
                                 console.log("Failed connect to youtube");
                             } else {
-                                $scope.tryLoad++;
+                                $scope.tryWait++;
                                 console.log("Trying wait youtube api...");
                                 $scope.tryWaitYoutubeApi();
                             }
