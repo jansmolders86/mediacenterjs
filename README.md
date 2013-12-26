@@ -342,12 +342,13 @@ The 'NAME' will be replaced with the app name (folder name / namespace). You do 
 	
 __Remote control__ 
 
-If you want the remote to properly navigate your app you need to add classes to the elements within your app so the remote can find it's way within your app.
-To specify a element that you can navigate to and from add the following class:
+If you want the remote to properly navigate your app you need to add classes to the DOM elements of your app so the remote can find it's way within your app.
+
+To specify an element that you can navigate to and from add the following class:
 
 	.mcjs-rc-controllable
 	
-To specify a element that you can click on add the following class:
+To specify an element that you can "click" on or in other words interact with, add the following class:
 
 	.mcjs-rc-clickable
 
