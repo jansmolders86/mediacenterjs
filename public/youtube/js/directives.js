@@ -75,21 +75,44 @@ youtubeApp.directive('tokenerror', ['UpdateToken', function (UpdateToken) {
 		}
 	}
 }]);
-youtubeApp.directive('videoAngular', function () {
-	var myPlayer;
-	return {
-		restrict: 'E',
-		templateUrl: 'views/video.html',
-		link: function($scope, element) {
-			// TODO Need to fix as this causes the stack to exceed its limit
-			if(myPlayer) {
-				myPlayer.dispose();
-			}
-			$scope.width = element.parent().parent().parent().width();
-			$scope.height = element.parent().parent().parent().height();
-			setTimeout(function () {
-				myPlayer = videojs('currentVideo', { "techOrder": ["youtube"], "src": "http://www.youtube.com/watch?v="+$scope.video.videoID });
-			}, 500);
-		}
-	}
-})
+youtubeApp.directive('videoAngular', ["$timeout",
+    function($timeout) {
+        var myPlayer;
+        return {
+            restrict: 'E',
+            templateUrl: 'views/video.html',
+            link: function($scope, element) {
+                // TODO Need to fix as this causes the stack to exceed its limit
+                if (myPlayer) {
+                    myPlayer.dispose();
+                }
+                $scope.width = element.parent().parent().parent().width();
+                $scope.height = element.parent().parent().parent().height();
+                $scope.tryWait = 0;
+                $scope.tryWaitYoutubeApi = function() {
+                    $timeout(function() {
+                        if ($scope.video) {
+
+                            myPlayer = videojs('currentVideo', {
+                                "techOrder": ["youtube"],
+                                "src": "http://www.youtube.com/watch?v=" + $scope.video.videoID
+                            });
+                        } else {
+                            if ($scope.tryLoad >= 5) {
+                                console.log("Failed connect to youtube");
+                            } else {
+                                $scope.tryLoad++;
+                                console.log("Trying wait youtube api...");
+                                $scope.tryWaitYoutubeApi();
+                            }
+
+
+                        }
+
+                    }, 500);
+                };
+                $scope.tryWaitYoutubeApi();
+            }
+        }
+    }
+])
