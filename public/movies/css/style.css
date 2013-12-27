@@ -200,8 +200,14 @@ span.title{visibility:hidden; width:0; height:0;}
 	border-top: 1px solid #e7e7e7;
 }
 
-.overview h1{ margin:0px 0 10px 0; font-size:13px; max-width:230px;}
-.specs p{font-size:12px; float:left; margin:10px 0 0 15px;}
+.overview h1{ 
+	margin: 0px 0 10px 0;
+	font-size: 18px;
+	max-width: 230px;
+	text-transform: none;
+	font-family: 'Open Sans', sans-serif;
+}
+.specs p{font-size:12px; float:left; margin:10px 0 0 9px;}
 
 #genres { position:absolute; top: 240px; left: 96px;}
 #genres li{ float:left; margin-right:20px;}
