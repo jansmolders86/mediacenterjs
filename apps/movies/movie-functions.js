@@ -79,11 +79,53 @@ exports.playMovie = function (req, res, platform, movieRequest){
 
             probe(movieUrl, function(err, probeData) {
                 
-                var data = { 
-                       'platform': platform,
-                       'duration':probeData.streams[0].duration
-                }
-                res.json(data);  
+				if(probeData.streams[0] !== 0 || probeData.streams[0] !== undefined){
+					var data = { 
+						'platform': platform,
+						'duration':probeData.streams[0].duration
+					}
+					res.json(data);  
+				} else{
+
+					var dblite = require('dblite')
+					if(config.binaries === 'packaged'){
+						if(config.platform === 'OSX'){
+							dblite.bin = "./bin/sqlite3/osx/sqlite3";
+						}else {
+							dblite.bin = "./bin/sqlite3/sqlite3";
+						}
+					}
+					var db = dblite('./lib/database/mcjs.sqlite');
+					db.on('info', function (text) { console.log(text) });
+					db.on('error', function (err) {
+						if(config.binaries !== 'packaged'){
+							console.log('You choose to use locally installed binaries instead of the binaries included. /n Please install them. Eg type "apt-get install sqlite3"');
+						}
+						console.error('Database error: ' + err)
+					});
+					db.query('SELECT * FROM movies WHERE local_name =? ', [ movieRequest ], {
+							runtime  		: String,
+						},
+						function(rows) {
+							if (typeof rows !== 'undefined' && rows.length > 0){
+								var data = { 
+									'platform': platform,
+									'duration': rows.runtime
+								}
+								res.json(data);  
+							} else {
+								console.log('Unknow movie duration, falling back to estimated duration.' .red);
+								var data = { 
+									'platform': platform,
+									'duration': 9000
+								}
+								res.json(data);  
+							}
+						}
+					);
+
+				}
+
                 
                 var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52  -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -preset ultraFast -acodec copy -sc_threshold 0 -movflags +frag_keyframe+empty_moov '+outputPath
                 , exec = require('child_process').exec
@@ -107,6 +149,7 @@ exports.playMovie = function (req, res, platform, movieRequest){
 			console.log("File " + movieRequest + " could not be found!" .red);
 		}
 	});
+
 };
 
 exports.handler = function (req, res, movieRequest){
