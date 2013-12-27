@@ -10,10 +10,11 @@ Website: http://www.mediacenterjs.com
 Status: 
 =======
 
-__Heavy work in progress, Alpha version (0.0.52)__
+__Heavy work in progress, Alpha version (0.0.53)__
 
-__version 0.0.52__
+__version 0.0.53__
 
+* Playing 'on the fly' transcoding video now works.
 * Self updating. The application is now updateable from the app itself. No need to use GIT or NPM.
 
 Why use it?

@@ -349,55 +349,102 @@
                 $('#wrapper, .movies, #header, #backdrop').hide();
                 $('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
 
-                var myVideo = document.getElementsByTagName('video')[0];
-                myVideo.src = "/data/movies/output.mp4";
-                myVideo.load();
-                myVideo.play();
-                myVideo.onended = function(e){
-                    window.location.replace("/movies/");
+                var player = document.getElementsByTagName('video')[0];
+                player.src = "/data/movies/output.mp4";
+                player.load();
+                player.play();
+				
+				player.onerror = function(e){ 
+					console.log('Error', e);
+				};
+			
+				player.ontimeupdate = function(e){ 
+				   _setDurationOfMovie(player, data);
+				};
+				
+				player.onprogress = function(e){ 
+					_setDurationOfMovie(player, data);
+				};
+				
+				player.onloadeddata = function(e){ 
+					_setDurationOfMovie(player, data);
+				};
+				
+				player.onloadedmetadata = function(e){ 
+					if(currentTime > 0){
+						player.currentTime(currentTime);
+					}
+				};
+
+                player.onended = function(e){
+					currentTime = player.currentTime();
+					var actualDuration = data.duration;
+					if( currentTime < actualDuration){
+						player.load(); 							
+						player.play();	
+					} else{
+						window.location.replace("/movies/");
+					}
                 }
 
             } else if(data.platform === 'browser'){
                 $('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" data-setup="{bufferedTimeRange.start('+data.duration+'), bufferedTimeRange.end('+data.duration+')}" controls preload="none" width="100%" height="100%"><source src="/data/movies/output.mp4" type="video/mp4"></video>');
                 
-                videojs(o.playerID, {}, function(){
-                    myPlayer = this;
+				var player = videojs(o.playerID);
+				var currentTime = 0;
+				player.ready(function() {
                     setTimeout(function(){
                         $('.vjs-loading-spinner, #backdrop').hide();
 
-                        myPlayer.load();                     
-                        myPlayer.play();
-                        var videoDuration = myPlayer.duration(data.duration);  
-                        $('.vjs-duration-display .vjs-control-text').text(videoDuration);
-                        myPlayer.bufferedPercent(0);
+                        player.load();                     
+                        player.play();
+                        _setDurationOfMovie(player, data);
                         _pageVisibility(o);
-                    },5000)
-                    myPlayer.on('error', function(e){ 
-                        console.log('Error', e) 
+                    },5000);	
+
+                    player.on('error', function(e){ 
+                        console.log('Error', e); 
                     });
                     
-                    myPlayer.on('timeupdate', function(e){
-                        var videoDuration = myPlayer.duration(data.duration);  
-                        myPlayer.bufferedPercent(0);
-                        $('.vjs-duration-display .vjs-control-text').text(videoDuration);
+                    player.on('timeupdate', function(e){
+                       _setDurationOfMovie(player, data);
                     });
                     
-                    myPlayer.on('progress', function(e){
-                        var videoDuration = myPlayer.duration(data.duration);  
-                        myPlayer.bufferedPercent(0);
-                        $('.vjs-duration-display .vjs-control-text').text(videoDuration);
-                    });
+                    player.on('progress', function(e){
+                        _setDurationOfMovie(player, data);
+					});
                     
-                    myPlayer.on('loadeddata', function(e){
-                        var videoDuration = myPlayer.duration(data.duration);  
-                        myPlayer.bufferedPercent(0);
-                        $('.vjs-duration-display .vjs-control-text').text(videoDuration);
+                    player.on('loadeddata', function(e){
+						_setDurationOfMovie(player, data);
+					});
+					
+                    player.on('loadedmetadata', function(e){
+						if(currentTime > 0){
+							player.currentTime(currentTime);
+						}
+                    });
+					
+                    player.on('ended', function(e){
+						currentTime = player.currentTime();
+						var actualDuration = data.duration;
+						if( currentTime < actualDuration){
+							player.load(); 							
+							player.play();	
+						} else{
+							window.location.replace("/movies/");
+						}
                     });
                     
                 });
             }
         });
 
+	}
+	
+	function _setDurationOfMovie(player, data){
+	   var videoDuration = player.duration(data.duration);  
+		player.bufferedPercent(0);
+		$('.vjs-duration-display .vjs-control-text').text(videoDuration);
 	}
     
     function _resetBackdrop(o){
