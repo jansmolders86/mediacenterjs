@@ -31,8 +31,7 @@
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
 				$that: $that,
-				movieCache : [],
-                platform:'browser'
+				movieCache : []
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -78,13 +77,10 @@
 
     function _checkPlatform(o, movieTitle){
         if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
-            o.platform = 'IOS'
             var url = '/movies/'+movieTitle+'/play/ios';
         } else if(navigator.userAgent.toLowerCase().indexOf("android") > -1){
-            o.platform = 'Android'
             var url = '/movies/'+movieTitle+'/play/android';
         }else {
-            o.platform = 'browser'
             var url = '/movies/'+movieTitle+'/play/browser';
         }
         return url;
@@ -344,8 +340,8 @@
 			url: url,
 			type: 'get'
 		}).done(function(data){
-            console.log('platform', data)
-            if(data.platform === 'Android' || data.platform === 'IOS'){
+            if(data.platform === 'android' || data.platform === 'ios'){
+				
                 $('#wrapper, .movies, #header, #backdrop').hide();
                 $('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
 

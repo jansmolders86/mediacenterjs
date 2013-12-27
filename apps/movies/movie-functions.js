@@ -126,9 +126,13 @@ exports.playMovie = function (req, res, platform, movieRequest){
 
 				}
 
-                
-                var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52  -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -preset ultraFast -acodec copy -sc_threshold 0 -movflags +frag_keyframe+empty_moov '+outputPath
-                , exec = require('child_process').exec
+                if(platform === 'browser'){
+					var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -preset ultraFast -acodec copy -sc_threshold 0 -movflags +frag_keyframe+empty_moov '+outputPath
+                }else if (platform === 'ios' || platform === 'android'){
+					var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -preset ultraFast -acodec mp3 -ac 2 -ab 160k -sc_threshold 0 -movflags +frag_keyframe+empty_moov '+outputPath
+				}
+				
+				var exec = require('child_process').exec
                 , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
                     if (err) {
                         console.log('FFMPEG error: ',err) ;
