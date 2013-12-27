@@ -41,7 +41,7 @@
         "dateformat": "1.0.4-1.2.3",
         "downloader": "0.1.2",
         "fluent-ffmpeg": "1.5.2",
-        "jade": ">=0.27.7",
+        "jade": "0.35.0",
         "lingua": "0.3.6",
         "node-ffprobe": "1.2.2",
         "node-html-encoder": "0.0.2",
