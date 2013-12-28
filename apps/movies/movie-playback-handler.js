@@ -17,12 +17,12 @@ var colors = require('colors')
  * @param platform          The target platform
  */
 exports.startPlayback = function(response, movieUrl, movieFile, platform) {
-	var ExecConfig
+	var ExecConfig = {  maxBuffer: 9000*1024 };
 	, outputPath = "./public/data/movies/output.mp4";
 	
 	if(os.platform() === 'win32'){
 		var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
-		ExecConfig = { env: process.env.ffmpegPath };
+		ExecConfig = {  maxBuffer: 9000*1024, env: process.env.ffmpegPath };
 	}
 
 	if(fs.existsSync(outputPath) === true){
