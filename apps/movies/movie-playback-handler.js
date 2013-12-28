@@ -5,7 +5,7 @@ var colors = require('colors')
 	, fs = require('fs.extra')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration()
 	, probe = require('node-ffprobe')
-	, dblite = require('dblite')
+	, dblite = require('dblite');
 
 /* Public Methods */
 
@@ -17,7 +17,7 @@ var colors = require('colors')
  * @param platform          The target platform
  */
 exports.startPlayback = function(response, movieUrl, movieFile, platform) {
-	var ExecConfig = {  maxBuffer: 9000*1024 };
+	var ExecConfig = {  maxBuffer: 9000*1024 }
 	, outputPath = "./public/data/movies/output.mp4";
 	
 	if(os.platform() === 'win32'){
@@ -30,12 +30,11 @@ exports.startPlayback = function(response, movieUrl, movieFile, platform) {
 	};       
 
 	probe(movieUrl, function(err, probeData) {
-		if(probeData.streams[0] !== 0 || probeData.streams[0] !== undefined){
+		if(probeData.streams[0].duration !== 0 || probeData.streams[0].duration !== undefined || probeData.streams[0].duration !== 'N/A' ){
 			var data = { 
 				'platform': platform,
 				'duration':probeData.streams[0].duration
 			}
-			response.json(data);  
 		} else {
 			if(os.platform() === 'win32'){
 				dblite.bin = "./bin/sqlite3/sqlite3";
