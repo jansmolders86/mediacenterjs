@@ -7,7 +7,7 @@ var fs = require('fs.extra')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
 /* Constants */
-var SUPPORTED_FILETYPES = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
+var SUPPORTED_FILETYPES = new RegExp("(avi|mkv|mpeg|mov|mp4|wmv)$","g");
 
 exports.initMovieDb = function() {
     // Init Database
@@ -37,7 +37,6 @@ exports.loadItems = function (req, res){
 
 			movies.push(movieTitles.split("/").pop());
 		}
-
 		res.json(movies);
 	});
 };
