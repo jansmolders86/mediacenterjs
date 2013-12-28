@@ -129,7 +129,8 @@ please paste the following commands in your terminal:
 	
 	sudo add-apt-repository ppa:chris-lea/node.js
 	sudo apt-get update
-	sudo apt-get install python-software-properties python g++ make, nodejs, ffmpeg, sqlite3 -y
+	(if needed: sudo apt-get install python-software-properties python g++ make)
+	sudo apt-get install nodejs ffmpeg sqlite3 -y
 	
 	///If you use a Git clone
 	sudo apt-get install git (If you do not have git installed yet)
