@@ -122,23 +122,63 @@ After you have downloaded MediacenterJS binaries and placed them in the root of 
 
 If you close this window, MCJS will stop working. You can also see useful information about what the server is doing, including error messages and other useful information.
 
-Setup Ubuntu/Debian/OSX
+Setup Ubuntu 13.x/ Mint 15 / Debian Weezy / OSX
 -------------
 
 please paste the following commands in your terminal:
 	
-	// dependencies:
+	// MediacenterJS Dependencies:
 	sudo add-apt-repository ppa:chris-lea/node.js
 	sudo apt-get update
-	sudo apt-get install python-software-properties python g++ make nodejs ffmpeg libavcodec-extra-53 sqlite3 -y
+	sudo apt-get install python-software-properties python g++ make nodejs sqlite3 -y
 	
-	///If you use a Git clone
+If you do not have a recent version of FFMPEG installed on your system you need to compile a new build:
+	
+	//FFMPEG Dependencies
+	sudo apt-get update
+	sudo apt-get -y install autoconf automake build-essential git libass-dev libgpac-dev \
+  	libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libx11-dev \
+  	libxext-dev libxfixes-dev pkg-config texi2html zlib1g-dev libmp3lame-dev yasm libopus-dev
+	mkdir ~/ffmpeg_sources
+	
+	//Install xh264
+	cd ~/ffmpeg_sources
+	git clone --depth 1 git://git.videolan.org/x264.git
+	cd x264
+	./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static --disable-asm
+	make
+	make install
+	make distclean
+	
+	//Install FFMPEG
+	cd ~/ffmpeg_sources
+	git clone --depth 1 git://source.ffmpeg.org/ffmpeg
+	cd ffmpeg
+	PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig"
+	export PKG_CONFIG_PATH
+	./configure --prefix="$HOME/ffmpeg_build" \
+	  --extra-cflags="-I$HOME/ffmpeg_build/include" --extra-ldflags="-L$HOME/ffmpeg_build/lib" \
+	  --bindir="$HOME/bin" --extra-libs="-ldl" --enable-gpl --enable-libass \
+	  --enable-libmp3lame --enable-libtheora --enable-libvorbis \
+	  --enable-libx264 --enable-nonfree --enable-x11grab
+	make
+	make install
+	make distclean
+	hash -r
+	. ~/.profile
+	
+For more information and troubleshooting: https://trac.ffmpeg.org/wiki/UbuntuCompilationGuide
+	
+
+If you use a Git clone of mediacneterJS please use:
+
 	sudo apt-get install git (If you do not have git installed yet)
 	git clone https://github.com/jansmolders86/mediacenterjs.git
 	cd mediacenterjs
 	npm install
 	
-	///Or if you want to use NPM
+If you want to use NPM to install MediacenterJS use:
+
 	npm install mediacenterjs
 	cd mediacenterjs
 	
