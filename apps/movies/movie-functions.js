@@ -3,7 +3,6 @@ var fs = require('fs.extra')
 	, file_utils = require('../../lib/utils/file-utils')
 	, app_cache_handler = require('../../lib/handlers/app-cache-handler')
 	, colors = require('colors')
-    , os = require('os')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
 /* Constants */
