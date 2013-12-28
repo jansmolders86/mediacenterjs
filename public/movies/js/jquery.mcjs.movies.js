@@ -145,6 +145,7 @@
 				type: 'get'
 			}).done(function(data){
 				// If current item is in cache, fill item with values
+
 				if (o.movieCache[title]) {
 					setTimeout(function(){
 						var movieData = data[0]
@@ -183,7 +184,7 @@
 				if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
 					var title = $(this).find('span.title').html();
 					if (title !== undefined){
-						var movieTitle = title.replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv|txt)/gi,"")
+						var movieTitle = title.replace(/(avi|mkv|mpeg|mpg|mov|mp4|wmv)$/,"")
 						, visibleMovie = $(this);
 						_handleVisibleMovies(o, movieTitle, visibleMovie, title);
 					}
