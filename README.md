@@ -170,7 +170,7 @@ If you do not have a recent version of FFMPEG installed on your system you need 
 For more information and troubleshooting: https://trac.ffmpeg.org/wiki/UbuntuCompilationGuide
 	
 
-If you use a Git clone of mediacneterJS please use:
+If you use a Git clone of MediacenterJS please use:
 
 	sudo apt-get install git (If you do not have git installed yet)
 	git clone https://github.com/jansmolders86/mediacenterjs.git
