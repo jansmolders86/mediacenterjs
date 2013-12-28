@@ -91,7 +91,7 @@ Basic feature list:
 What do I need to have installed? 
 ==========================
 
-* FFmpeg installed (Linux and windows binaries are included)
+* FFmpeg installed
 * NodeJS installed
 * A modern browser like Chrome or Firefox
 * An internet connection
