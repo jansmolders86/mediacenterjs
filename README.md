@@ -14,6 +14,7 @@ __Heavy work in progress, Alpha version (0.0.53)__
 
 __version 0.0.53__
 
+* Moved Windows binaries, Linux dependencies need to be installed manually from now on.
 * Playing 'on the fly' transcoding video now works.
 * Self updating. The application is now updateable from the app itself. No need to use GIT or NPM.
 
@@ -109,50 +110,63 @@ Download this application with NPM:
 
 Or download it directly from Github of course. 
 
-After you have downloaded MediacenterJS, click on the .bat file (in Windows) to start the project. 
-Or browse to the root directory of MediaCenterJS in the terminal/command prompt and type:
+Setup Windows
+-------------
 
-	node server
+Install NodeJS (minimal version 0.10.x)
+http://nodejs.org/download/
+
+Before starting the server please download the following zip and place the contents (bin folder) in the root dir of mediacenterjs. 
+https://github.com/jansmolders86/mediacenterjs-windows-binaries/archive/master.zip
+After you have downloaded MediacenterJS binaries and placed them in the root of the folder, click on the .bat file (in Windows) to start the project. 
 
 If you close this window, MCJS will stop working. You can also see useful information about what the server is doing, including error messages and other useful information.
 
-__Please make sure you've installed NodeJS first!__
+Setup Ubuntu/Debian/OSX
+-------------
 
-Ffmpeg binaries for Linux/OSX and Windows are included so no need to install them seperately. 
-If for some reason this is still needed, this is how you can accomplish it:
-
-User guide for installing FFmpeg on Windows: (http://www.wikihow.com/Install-FFmpeg-on-Windows)
-User guide for installing FFmpeg on Linux: (http://linuxers.org/tutorial/how-install-ffmpeg-linux)
-
-Install NodeJS: http://nodejs.org/download/  (minimal version 0.10.x)
-
-__Install node on Ubuntu/Debian/OSX__
-
-	sudo apt-get update
-	sudo apt-get install python-software-properties python g++ make
+please paste the following commands in your terminal:
+	
 	sudo add-apt-repository ppa:chris-lea/node.js
 	sudo apt-get update
-	sudo apt-get install nodejs
-
-	// Git clone
-	sudo apt-get install git
+	sudo apt-get install python-software-properties python g++ make, nodejs, ffmpeg, sqlite3 -y
+	
+	///If you use a Git clone
+	sudo apt-get install git (If you do not have git installed yet)
 	git clone https://github.com/jansmolders86/mediacenterjs.git
 	cd mediacenterjs
 	npm install
 	
+	///Or if you want to use NPM
+	npm install mediacenterjs
+	cd mediacenterjs
+	
 	node server
 	Use 'sudo node server' if you use a port below 1000
 
+Folder setup
+-------------
 
 The program will boot in setup mode, being accessible on localhost:3000 or 'IP of the server':3000.
 
-If you get an 'EACCESS' error, please set the following permissions and run the server using 'sudo'
+SETUP FAQ
+-------------
+
+* If you get an 'EACCESS' error, please set the following permissions and run the server using 'sudo'
  
      sudo chmod 755 bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
             or on OSX
      sudo chmod 755 bin/sqlite3/osx/sqlite3 lib/database/mcjs.sqlite
 
      sudo node server
+	 
+* if you get an 'PACKAGENAME is not installed' error, please install the package with NPM.
+
+	Exampe:
+	
+		'Error module 'colors' not found'
+		
+		npm install colors
 
 Running MediacenterJS
 -------------

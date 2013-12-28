@@ -1,6 +1,7 @@
 /* Global Imports */
 var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3'),
 	fs = require('fs'),
+	os = require('os'),
 	app_cache_handler = require('../../lib/handlers/app-cache-handler'),
 	config = require('../../lib/handlers/configuration-handler').getConfiguration(),
 	movie_title_cleaner = require('../../lib/utils/title-cleaner');
@@ -8,21 +9,12 @@ var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3'),
 /* Variables */
 // Init Database
 var dblite = require('dblite')
-if(config.binaries === 'packaged'){
-    if(config.platform === 'OSX'){
-        dblite.bin = "./bin/sqlite3/osx/sqlite3";
-    }else {
-        dblite.bin = "./bin/sqlite3/sqlite3";
-    }
+if(os.platform() === 'win32'){
+	dblite.bin = "./bin/sqlite3/sqlite3";
 }
 var db = dblite('./lib/database/mcjs.sqlite');
 db.on('info', function (text) { console.log(text) });
-db.on('error', function (err) {
-    if(config.binaries !== 'packaged'){
-        console.log('You choose to use locally installed binaries instead of the binaries included. /n Please install them. Eg type "apt-get install sqlite3"');
-    }
-    console.error('Database error: ' + err)
-});
+db.on('error', function (err) { console.error('Database error: ' + err) });
 
 /* Public Methods */
 

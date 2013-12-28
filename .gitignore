@@ -39,6 +39,8 @@ lib/database/mcjs.sqlite
 lib/database/*
 .idea
 .idea/*
+bin/
+/bin/
 
 #Configuration
 configuration/config.ini

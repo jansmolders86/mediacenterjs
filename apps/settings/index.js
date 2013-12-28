@@ -31,7 +31,6 @@ exports.index = function(req, res, next){
 	, availablethemes = fs.readdirSync('./public/themes/')
 	, availableTranslations = fs.readdirSync('./public/translations/');
 	
-
 	availablethemes.forEach(function(file){
 		allThemes.push(file);
 	});
@@ -43,8 +42,6 @@ exports.index = function(req, res, next){
 		}
 	});
 
-    binaryTypes = ['packaged','local'];
-
 	res.render('settings',{
 		movielocation: config.moviepath,
 		selectedTheme: config.theme,
@@ -52,7 +49,6 @@ exports.index = function(req, res, next){
 		tvlocation : config.tvpath,
 		localIP : config.localIP,
         selectedBinaryType : config.binaries,
-        binaryTypes : binaryTypes,
 		remotePort : config.remotePort,
 		language: config.language,
 		availableLanguages: availableLanguages,

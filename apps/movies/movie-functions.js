@@ -12,21 +12,12 @@ var SUPPORTED_FILETYPES = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");
 exports.initMovieDb = function() {
     // Init Database
     var dblite = require('dblite')
-    if(config.binaries === 'packaged'){
-        if(config.platform === 'OSX'){
-            dblite.bin = "./bin/sqlite3/osx/sqlite3";
-        }else {
-            dblite.bin = "./bin/sqlite3/sqlite3";
-        }
+    if(os.platform() === 'win32'){
+        dblite.bin = "./bin/sqlite3/sqlite3";
     }
     var db = dblite('./lib/database/mcjs.sqlite');
-    db.on('info', function (text) { console.log(text) });
-    db.on('error', function (err) {
-        if(config.binaries !== 'packaged'){
-            console.log('You choose to use locally installed binaries instead of the binaries included. /n Please install them. Eg type "apt-get install sqlite3"');
-        }
-        console.error('Database error: ' + err)
-    });
+	db.on('info', function (text) { console.log(text) });
+	db.on('error', function (err) { console.error('Database error: ' + err) });
 
     db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number VARCHAR)");
     return db;
@@ -58,96 +49,8 @@ exports.playMovie = function (req, res, platform, movieRequest){
 		if (file) {
 			var movieUrl = file.href
 			, stat = fs.statSync(movieUrl)
-            , ExecConfig
-            , outputPath = "./public/data/movies/output.mp4";
-            
-            if(config.binaries === 'packaged'){
-                if(os.platform() === 'win32'){
-                    var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
-                }else{
-                    var ffmpegPath = './bin/ffmpeg/ffmpeg'
-                }
-                
-                var ExecConfig = { env: process.env.ffmpegPath };
-            }
-    
-            if(fs.existsSync(outputPath) === true){
-                fs.unlinkSync(outputPath);
-            };       
-
-            var probe = require('node-ffprobe');
-
-            probe(movieUrl, function(err, probeData) {
-                
-				if(probeData.streams[0] !== 0 || probeData.streams[0] !== undefined){
-					var data = { 
-						'platform': platform,
-						'duration':probeData.streams[0].duration
-					}
-					res.json(data);  
-				} else{
-
-					var dblite = require('dblite')
-					if(config.binaries === 'packaged'){
-						if(config.platform === 'OSX'){
-							dblite.bin = "./bin/sqlite3/osx/sqlite3";
-						}else {
-							dblite.bin = "./bin/sqlite3/sqlite3";
-						}
-					}
-					var db = dblite('./lib/database/mcjs.sqlite');
-					db.on('info', function (text) { console.log(text) });
-					db.on('error', function (err) {
-						if(config.binaries !== 'packaged'){
-							console.log('You choose to use locally installed binaries instead of the binaries included. /n Please install them. Eg type "apt-get install sqlite3"');
-						}
-						console.error('Database error: ' + err)
-					});
-					db.query('SELECT * FROM movies WHERE local_name =? ', [ movieRequest ], {
-							runtime  		: String,
-						},
-						function(rows) {
-							if (typeof rows !== 'undefined' && rows.length > 0){
-								var data = { 
-									'platform': platform,
-									'duration': rows.runtime
-								}
-								res.json(data);  
-							} else {
-								console.log('Unknow movie duration, falling back to estimated duration.' .red);
-								var data = { 
-									'platform': platform,
-									'duration': 9000
-								}
-								res.json(data);  
-							}
-						}
-					);
-
-				}
-
-                if(platform === 'browser'){
-					var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -preset ultraFast -acodec copy -sc_threshold 0 -movflags +frag_keyframe+empty_moov '+outputPath
-                }else if (platform === 'ios' || platform === 'android'){
-					var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -preset ultraFast -acodec mp3 -ac 2 -ab 160k -sc_threshold 0 -movflags +frag_keyframe+empty_moov '+outputPath
-				}
-				
-				var exec = require('child_process').exec
-                , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
-                    if (err) {
-                        console.log('FFMPEG error: ',err) ;
-                    } else{
-                        console.log('Transcoding complete');
-                    }
-                });
-
-                child.stdout.on('data', function(data) { console.log(data.toString()); });
-                child.stderr.on('data', function(data) { console.log(data.toString()); });
-                    
-            });
-            
-            
-          
+			, movie_playback_handler = require('./movie-playback-handler');
+			movie_playback_handler.startPlayback(res, movieUrl, stat, platform);
     
 		} else {
 			console.log("File " + movieRequest + " could not be found!" .red);

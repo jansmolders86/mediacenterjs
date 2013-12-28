@@ -72,11 +72,6 @@ block body
 						label(for="spotifyPass") Spotify Password
 						input#spotifyPass.mcjs-rc-clickable(name="spotifyPass",type="password", value=spotifyPass)
 				.row.mcjs-rc-controllable
-					label(for="binaries") #{lingua.setting_binaries}
-					select#binaries.mcjs-rc-clickable(name="binaries")
-						- for binaryType in binaryTypes
-							option(value=binaryType, selected=binaryType == selectedBinaryType) #{binaryType}
-				.row.mcjs-rc-controllable
 					label(for="theme") #{lingua.setting_theme}
 					select#theme.mcjs-rc-clickable(name="theme")
 						- for theme in themes

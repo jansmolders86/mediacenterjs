@@ -1,47 +1,11 @@
 /* Global imports */
-var colors = require('colors'),
-	ffmpeg = require('fluent-ffmpeg'),
-    fs = require('fs'),
-	os = require('os'),
-	config = require('../../lib/handlers/configuration-handler').getConfiguration();
-
-/* Constants */
-var FFMPEG_TIMEOUT = 15000;
-
-var MOBILE_FFMPEG_OPTS = [
-	'-threads 0', 
-	'-loglevel quiet',
-	'-ac 2', 
-	'-b:a 160000'];
-
-var IOS_FFMPEG_OPTS = [
-	'-vcodec libx264',
-	'-pix_fmt yuv420p',
-	'-s qvga',
-	'-segment_list_type m3u8',
-	'-map 0:v',
-	'-map 0:a:0',
-	'-c:a mp3',
-	'-f hls',
-	'-hls_time 10',
-	'-hls_list_size 6',
-	'-hls_wrap 18',
-	'-start_number 1',
-	'-deinterlace'].concat(MOBILE_FFMPEG_OPTS);
-
-var ANDROID_FFMPEG_OPTS = [
-	'-vcodec libx264', 
-	'-vb 250k',
-    '-s 1280x720',
-    '-profile:v baseline',
-	'-keyint_min 150', 
-	'-pix_fmt yuv420p',
-	'-deinterlace',
-	'-c:a mp3', 
-	'-f mp4',
-	'-movflags',
-	'frag_keyframe+empty_moov']
-	.concat(MOBILE_FFMPEG_OPTS);
+var colors = require('colors')
+	, ffmpeg = require('fluent-ffmpeg')
+	, os = require('os')
+	, fs = require('fs.extra')
+	, config = require('../../lib/handlers/configuration-handler').getConfiguration()
+	, probe = require('node-ffprobe')
+	, dblite = require('dblite')
 
 /* Public Methods */
 
@@ -53,117 +17,81 @@ var ANDROID_FFMPEG_OPTS = [
  * @param platform          The target platform
  */
 exports.startPlayback = function(response, movieUrl, movieFile, platform) {
-	console.log('Getting ready to play on ' + platform);
-	switch (platform) {
-		case "browser":
-			startBrowserPlayback(response, movieUrl, movieFile);
-			break;
-		case "ios":
-			startIOSPlayback(response, movieUrl, movieFile);
-			break;
-		case "android":
-			startAndroidPlayback(response, movieUrl, movieFile);
-			break;
-		default:
-			console.log("Unknown platform: " + platform .red);
-			break;
-	}
-};
-
-/* Private Methods */
-startBrowserPlayback = function(response, movieUrl, movieFile) {
-	response.writeHead(200, { 
-		'Content-Type':'video/mp4',
-        'Accept-Ranges': 'bytes',
-		'Content-Length': movieFile.size
-	});
-
-    var BROWSER_FFMPEG_OPTS = [
-        '-g 52',
-        '-ss 0',
-        '-threads 0',
-        '-vcodec libx264',
-        '-pix_fmt yuv420p',
-        '-crf 22',
-        '-preset ultraFast',
-        '-acodec mp3',
-        '-movflags +frag_keyframe+empty_moov',
-        '-f mp4'
-    ];
-    startMovieStreaming(response, movieUrl, BROWSER_FFMPEG_OPTS);
-
-};
-
-startIOSPlayback = function(response, movieUrl, movieFile) {
-	response.writeHead(200, { 
-		'Content-Type':'application/x-mpegURL',
-        'Accept-Ranges': 'bytes',
-		'Content-Length':movieFile.size	
-	});
-
-    startTouchStreaming(response, movieUrl, IOS_FFMPEG_OPTS);
-};
-
-startAndroidPlayback = function(response, movieUrl, movieFile) {
-	response.writeHead(200, { 
-		'Content-Type':'video/webm',
-        'Accept-Ranges': 'bytes',
-		'Content-Length':movieFile.size
-	});
-
-    startTouchStreaming(response, movieUrl, ANDROID_FFMPEG_OPTS);
-};
-
-startMovieStreaming = function(response, movieUrl, opts) {
-    var outputPath = "./public/data/movies/output.mp4";
-
-    if(fs.existsSync(outputPath) === true){
-        fs.unlinkSync(outputPath);
-    };
-
-    console.log('Start transcoding of ', movieUrl);
-
-	if(config.binaries === 'packaged'){
-		if(os.platform() === 'win32'){
-			var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
-		}else{
-			var ffmpegPath = './bin/ffmpeg/ffmpeg'
-		}
+	var ExecConfig
+	, outputPath = "./public/data/movies/output.mp4";
+	
+	if(os.platform() === 'win32'){
+		var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
+		ExecConfig = { env: process.env.ffmpegPath };
 	}
 
-    //TODO: Add quotes to fix not found issue
-    var moviepath = '"'+movieUrl+'"';
-    console.log('moviePath',moviepath);
+	if(fs.existsSync(outputPath) === true){
+		fs.unlinkSync(outputPath);
+	};       
 
-	proc = new ffmpeg({ source: movieUrl, nolog: true, timeout: FFMPEG_TIMEOUT })
-	proc.setFfmpegPath(ffmpegPath)
-	proc.addOptions(opts)
-	proc.saveToFile(outputPath, function(return_code, error){
-		if (!error){
-			console.log('file has been converted successfully', return_code);
+	probe(movieUrl, function(err, probeData) {
+		if(probeData.streams[0] !== 0 || probeData.streams[0] !== undefined){
+			var data = { 
+				'platform': platform,
+				'duration':probeData.streams[0].duration
+			}
+			response.json(data);  
 		} else {
-			console.log('file conversion error', error .red);
+			if(os.platform() === 'win32'){
+				dblite.bin = "./bin/sqlite3/sqlite3";
+			}
+			var db = dblite('./lib/database/mcjs.sqlite');
+			db.on('info', function (text) { console.log(text) });
+			db.on('error', function (err) { console.error('Database error: ' + err) });
+			db.query('SELECT * FROM movies WHERE local_name =? ', [ movieRequest ], {
+					runtime : String,
+				},
+				function(rows) {
+					if (typeof rows !== 'undefined' && rows.length > 0){
+						var data = { 
+							'platform': platform,
+							'duration': rows.runtime
+						}
+						response.json(data);  
+					} else {
+						console.log('Unknow movie duration, falling back to estimated duration.' .red);
+						var data = { 
+							'platform': platform,
+							'duration': 9000
+						}
+						response.json(data);  
+					}
+				}
+			);
 		}
+			
+		switch (platform) {
+			case "browser":
+				var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -preset ultraFast -acodec copy -sc_threshold 0 -movflags +frag_keyframe+empty_moov '+outputPath
+				break;
+			case "android":
+				var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -preset ultraFast -acodec copy -sc_threshold 0 -movflags +frag_keyframe+empty_moov '+outputPath
+				break;
+			case "ios":
+				var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -preset ultraFast -acodec mp3 -ac 2 -ab 160k -sc_threshold 0 -movflags +frag_keyframe+empty_moov '+outputPath
+				break;
+			default:
+				console.log("Unknown platform: " + platform .red);
+				break;
+		}
+		
+		
+		var exec = require('child_process').exec
+		, child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
+			if (err) {
+				console.log('FFMPEG error: ',err) ;
+			} else{
+				console.log('Transcoding complete');
+			}
+		});
+
+		child.stdout.on('data', function(data) { console.log(data.toString()); });
+		child.stderr.on('data', function(data) { console.log(data.toString()); });			
+
 	});
-};
-
-startTouchStreaming = function(response, movieUrl, opts) {
-    if(config.binaries === 'packaged'){
-        if(os.platform() === 'win32'){
-            var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
-        }else{
-            var ffmpegPath = './bin/ffmpeg/ffmpeg'
-        }
-    }
-
-    proc = new ffmpeg({ source: movieUrl, nolog: true, timeout: FFMPEG_TIMEOUT })
-    proc.setFfmpegPath(ffmpegPath)
-    proc.addOptions(opts)
-    proc.writeToStream(response, function(return_code, error){
-        if (!error){
-            console.log('file has been converted successfully', return_code);
-        } else {
-            console.log('file conversion error', error .red);
-        }
-    });
 };

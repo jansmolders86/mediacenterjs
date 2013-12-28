@@ -30,6 +30,7 @@ var express = require('express')
     , fileHandler = require('./lib/utils/file-utils')
 	, Youtube = require('youtube-api')
     , http = require('http')
+	, os = require('os')
 	, jade = require('jade')
 	, configuration_handler = require('./lib/handlers/configuration-handler');
 
@@ -236,13 +237,9 @@ app.post('/clearCache', function(req, res){
 
         // Init Database
         var dblite = require('dblite')
-        if(config.binaries === 'packaged'){
-            if(config.platform === 'OSX'){
-                dblite.bin = "./bin/sqlite3/osx/sqlite3";
-            }else {
-                dblite.bin = "./bin/sqlite3/sqlite3";
-            }
-        }
+		if(os.platform() === 'win32'){
+			dblite.bin = "./bin/sqlite3/sqlite3";
+		}
         var db = dblite('./lib/database/mcjs.sqlite');
         db.on('info', function (text) { console.log(text) });
         db.on('error', function (err) {

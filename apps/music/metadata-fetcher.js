@@ -2,6 +2,7 @@
 var dblite = require('dblite'),
 	fs = require('fs'),
 	path = require('path'),
+	os = require('os'),
 	file_utils = require('../../lib/utils/file-utils'),
 	ajax_utils = require('../../lib/utils/ajax-utils'),
 	app_cache_handler = require('../../lib/handlers/app-cache-handler'),
@@ -11,21 +12,12 @@ var dblite = require('dblite'),
 /* Variables */
 // Init Database
 var dblite = require('dblite')
-if(config.binaries === 'packaged'){
-    if(config.platform === 'OSX'){
-        dblite.bin = "./bin/sqlite3/osx/sqlite3";
-    }else {
-        dblite.bin = "./bin/sqlite3/sqlite3";
-    }
+if(os.platform() === 'win32'){
+	dblite.bin = "./bin/sqlite3/sqlite3";
 }
 var db = dblite('./lib/database/mcjs.sqlite');
 db.on('info', function (text) { console.log(text) });
-db.on('error', function (err) {
-    if(config.binaries !== 'packaged'){
-        console.log('You choose to use locally installed binaries instead of the binaries included. /n Please install them. Eg type "apt-get install sqlite3"');
-    }
-    console.error('Database error: ' + err)
-});
+db.on('error', function (err) { console.error('Database error: ' + err) });
 
 /* Public Methods */
 
