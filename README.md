@@ -117,8 +117,10 @@ Install NodeJS (minimal version 0.10.x)
 http://nodejs.org/download/
 
 Before starting the server please download the following zip and place the contents (bin folder) in the root dir of mediacenterjs. 
+
 https://github.com/jansmolders86/mediacenterjs-windows-binaries/archive/master.zip
-After you have downloaded MediacenterJS binaries and placed them in the root of the folder, click on the .bat file (in Windows) to start the project. 
+
+After you have downloaded MediacenterJS binaries and placed them in the root of the folder, click on the .bat file (mediacenterjs.bat) to start the project. 
 
 If you close this window, MCJS will stop working. You can also see useful information about what the server is doing, including error messages and other useful information.
 
