@@ -5,6 +5,14 @@ var colors = require('colors')
 	, fs = require('fs.extra')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
+	var dblite = require('dblite');
+	if(os.platform() === 'win32'){
+		dblite.bin = "./bin/sqlite3/sqlite3";
+	}
+	var db = dblite('./lib/database/mcjs.sqlite');
+	db.on('info', function (text) { console.log(text) });
+	db.on('error', function (err) { console.error('Database error: ' + err) });
+
 /* Public Methods */
 
 /**
@@ -64,11 +72,7 @@ exports.startPlayback = function(response, movieUrl, movieFile, platform) {
 /* Private Methods */
 
 GetMovieDurarion = function(response, movieUrl, movieFile, platform, callback) {
-	var probe = require('node-ffprobe')
-	, dblite = require('dblite');
-	
-	console.log('Probing file for metadata');
-	
+	var probe = require('node-ffprobe');
 	probe(movieUrl, function(err, probeData) {
 		if(probeData.streams[0].duration !== 0 && probeData.streams[0].duration !== undefined && probeData.streams[0].duration !== "N/A" ){
 			console.log('Metadata found, continuing...');
@@ -78,35 +82,54 @@ GetMovieDurarion = function(response, movieUrl, movieFile, platform, callback) {
 			}
 		   callback(data);
 		} else {
-			if(os.platform() === 'win32'){
-				dblite.bin = "./bin/sqlite3/sqlite3";
-			}
-			var db = dblite('./lib/database/mcjs.sqlite');
-			db.on('info', function (text) { console.log(text) });
-			db.on('error', function (err) { console.error('Database error: ' + err) });
-			db.query('SELECT * FROM movies WHERE local_name =? ', [ movieFile ], {
-					runtime : String,
-				},
-				function(rows) {
-					if (typeof rows !== 'undefined' && rows.length > 0){
-						console.log('Falling back to IMDB runtime information',rows.runtime .blue);
-						var data = { 
-							'platform': platform,
-							'duration': rows.runtime
-						}
-						callback(data);
-					} else {
-						console.log('Unknown movie duration, falling back to estimated duration.' .red);
-						var data = { 
-							'platform': platform,
-							'duration': 9000
-						}
-						callback(data);
+			console.log('Falling back to IMDB runtime information' .blue);
+			loadMetadataFromDatabase(movieFile, platform, function(data){
+				if(data !== null){
+					callback(data);
+				} else{
+					console.log('Unknown movie duration, falling back to estimated duration.' .red);
+					var data = { 
+						'platform': platform,
+						'duration': 9000
 					}
+					callback(data);
 				}
-			);
+			});
+			
 		}
 
 	});
 
 };
+
+loadMetadataFromDatabase = function(movieFile, platform, callback) {
+	var original_title =  movieFile.replace(/(avi|mkv|mpeg|mpg|mov|mp4|wmv)$/,"")
+
+	db.query('SELECT * FROM movies WHERE original_name =? ', [ original_title ], {
+			local_name 		: String,
+			original_name  : String,
+			poster_path  	: String,
+			backdrop_path  : String,
+			imdb_id  		: String,
+			rating  			: String,
+			certification  : String,
+			genre  			: String,
+			runtime  		: String,
+			overview  		: String,
+			cd_number  		: String
+		},
+		function(rows) {
+			if (typeof rows !== 'undefined' && rows.length > 0){
+				var runtime = parseInt(rows[0].runtime) * 60;
+				console.log('Runtime found', rows[0].runtime);
+				var data = { 
+					'platform': platform,
+					'duration': runtime
+				}
+				callback(data);
+			} else {
+				callback(null);
+			}
+		}
+	);
+}

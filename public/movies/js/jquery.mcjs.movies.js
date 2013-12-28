@@ -156,7 +156,7 @@
 						movie.genre(movieData.genre);
 						movie.runtime(movieData.runtime);
 						movie.overview(movieData.overview);
-						movie.title(movieData.original_name);
+						movie.title(movieData.local_name);
 						movie.cdNumber(movieData.cd_number);
 						
 						visibleMovie.addClass('showDetails '+o.fadeClass);

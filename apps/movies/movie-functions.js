@@ -21,10 +21,11 @@ exports.initMovieDb = function() {
 
     db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number VARCHAR)");
     return db;
-}; 
+};
 
 exports.loadItems = function (req, res){
 	file_utils.getLocalFiles(config.moviepath, SUPPORTED_FILETYPES, function(err, files) {
+ 
 		var movies = [];
 		for(var i = 0, l = files.length; i < l; ++i){
 			var movieFiles = files[i].file;
@@ -47,9 +48,9 @@ exports.playMovie = function (req, res, platform, movieRequest){
 		if (err) console.log(err .red);
 		if (file) {
 			var movieUrl = file.href
-			, stat = fs.statSync(movieUrl)
 			, movie_playback_handler = require('./movie-playback-handler');
-			movie_playback_handler.startPlayback(res, movieUrl, stat, platform);
+			
+			movie_playback_handler.startPlayback(res, movieUrl, movieRequest, platform);
     
 		} else {
 			console.log("File " + movieRequest + " could not be found!" .red);

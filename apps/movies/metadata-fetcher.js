@@ -24,6 +24,7 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
  * @param callback           The Callback
  */
 exports.fetchMetadataForMovie = function(movieTitle, callback) {
+	var originalTitle = movieTitle;
 	var movieInfos = movie_title_cleaner.cleanupTitle(movieTitle);
 	movieTitle = movieInfos.title;
 
@@ -66,7 +67,7 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 					genre = result.genres[0].name;
 				}
 				var rating = 'Unknown',
-					original_title = movieTitle,
+					original_title = originalTitle,
 					imdb_id = '',
 					runtime = 'Unknown',
 					overview = '',
@@ -74,7 +75,7 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 				 
 				if(result !== null){
 					rating = result.vote_average.toString();
-					original_title = result.original_title;
+					original_title = originalTitle;
 					imdb_id = result.imdb_id;
 					runtime = result.runtime;
 					overview = result.overview;
