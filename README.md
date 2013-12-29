@@ -55,7 +55,7 @@ What's coming up
 ==================
 * Tv show app functionality
 * Better Music app functionality
-* Better inbrowser streaming
+* Better streaming
 
 Known issues: video/audio playback
 ==================
@@ -66,9 +66,9 @@ These issues are known issues and current browser/platform limitations.
 I'm trying to figure out how to get around these limitations.
 
 * IOS: Video is not seekable
-* Browser: Duration and playback length are often not valid. This is due to the fact that the transcoding process is still in heavy development.
+* Browser: Seeking beyond buffer not workign yet.
 * Android: not seekable & mp3 playback not working
-* Ubuntu: Audio playback of mp3 not supported by default
+* Ubuntu: Needs 3rd party audio codecs to play mp3
 
 What still needs to be done
 ==================
