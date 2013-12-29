@@ -42,18 +42,19 @@ p a:hover{text-decoration:none;}
 /* Homepage Tiles */
 
 .tile{
-	width:160px;
-	height:169px;
-	float:left;
-	margin:2px 10px 10px 2px;
+	width: 155px;
+	height: 165px;
+	float: left;
+	margin: 2px 15px 10px 2px;
 	list-style:none;
-	border: 4px solid #f1f1f1;
 	display:none;
 }
 
-.title.focused,
-.tile:hover{
-	border: 4px solid #FB8521;
+.tile > a{
+	background:#000; 	
+	width: 150px;
+	height: 165px;
+	display:block;
 }
 
 .tile .info{
@@ -62,8 +63,42 @@ p a:hover{text-decoration:none;}
 	width:100%;
 }
 
-.tile h2{ font-size:13px; font-family:arial; }
+.title.focused > a >img,
+.tile:hover > a >img {
+	opacity: 0.6;
+}
+
+#tiles{
+	width:100%;
+	height:100%;
+	position:relative;
+	margin:20px auto 0;
+	overflow:hidden;
+}
+
+.tile .info .remove{ float:right; font-size:12px; }
+.tile .info .remove img{
+	width:12px;
+	height:12px;
+	float:left;
+	margin:2px 5px 0 0;
+}
+.tile img{ width:160px; height:169px;}
 .tile a{ float:left; padding:0 10px 3px 0; display:block; }
+.tile:hover{ cursor:pointer; }
+
+.upgrade-right {float:right; margin-right: 200px;}
+.upgrade{ 
+	margin:0px; 
+	padding:10px 0px; 
+	color:#fff;
+	width: 250px;
+	text-align:center;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+	background:#3598DC; 
+}
 
 /* Date and Time */
 
