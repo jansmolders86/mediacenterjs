@@ -210,6 +210,10 @@ SETUP FAQ
 		'Error module 'colors' not found'
 		
 		npm install colors
+		
+		
+* if you get an 'Socket is not open' error on Windows, please place the bin folder inside the MCJS folder. You can download the binaries here: https://github.com/jansmolders86/mediacenterjs-windows-binaries/archive/master.zip
+
 
 Running MediacenterJS
 -------------
