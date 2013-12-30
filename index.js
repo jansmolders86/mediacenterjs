@@ -77,15 +77,6 @@ app.all('*', function(req, res, next) {
 });
 
 /*Chmod files*/
-if(fs.existsSync('./bin/ffmpeg/ffmpeg') === true){
-    fs.chmodSync('./bin/ffmpeg/ffmpeg', 0755);
-}
-if(fs.existsSync('./bin/sqlite3/sqlite3') === true){
-    fs.chmodSync('./bin/sqlite3/sqlite3', 0755);
-}
-if(fs.existsSync('./bin/sqlite3/osx/sqlite3') === true){
-    fs.chmodSync('./bin/sqlite3/osx/sqlite3', 0755);
-}
 if(fs.existsSync('./lib/database/mcjs.sqlite') === true){
     fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
 } else {
