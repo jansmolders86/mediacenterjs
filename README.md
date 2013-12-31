@@ -197,11 +197,7 @@ SETUP FAQ
 
 * If you get an 'EACCESS' error, please set the following permissions and run the server using 'sudo'
  
-     sudo chmod 755 bin/sqlite3/sqlite3 lib/database/mcjs.sqlite
-            or on OSX
-     sudo chmod 755 bin/sqlite3/osx/sqlite3 lib/database/mcjs.sqlite
-
-     sudo node server
+         sudo chmod 755 lib/database/mcjs.sqlite
 	 
 * if you get an 'PACKAGENAME is not installed' error, please install the package with NPM.
 
