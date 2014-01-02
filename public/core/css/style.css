@@ -262,7 +262,8 @@ html.dim{background:#222;}
 	width:100%;
 }
 
-.title.focused > a >img,
+.tile.focused{border:0!important;}
+.tile.focused img,
 .tile:hover > a >img {
 	opacity: 0.6;
 }
