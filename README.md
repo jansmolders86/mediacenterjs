@@ -60,11 +60,6 @@ What's coming up
 Known issues: video/audio playback
 ==================
 
-* Currently the music app is in heavy development so functionality can be broken.
-
-These issues are known issues and current browser/platform limitations.
-I'm trying to figure out how to get around these limitations.
-
 * Mobile device streaming still in heavy development
 * Browser: Seeking beyond buffer not working yet.
 
