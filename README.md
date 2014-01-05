@@ -128,64 +128,73 @@ Setup Ubuntu 13.x/ Mint 15 / Debian Weezy / OSX
 -------------
 
 please paste the following commands in your terminal:
-	
-	// MediacenterJS Dependencies:
-	sudo add-apt-repository ppa:chris-lea/node.js
-	sudo apt-get update
-	sudo apt-get install python-software-properties python g++ make nodejs sqlite3 -y
-	
+
+```sh
+# MediacenterJS Dependencies:
+sudo add-apt-repository ppa:chris-lea/node.js
+sudo apt-get update
+sudo apt-get install python-software-properties python g++ make nodejs sqlite3 -y
+```
+
 If you do not have a recent version of FFMPEG installed on your system you need to compile a new build:
+
+```sh
+# FFMPEG Dependencies
+sudo apt-get update
+sudo apt-get -y install autoconf automake build-essential git libass-dev libgpac-dev \
+ libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libx11-dev \
+ libxext-dev libxfixes-dev pkg-config texi2html zlib1g-dev libmp3lame-dev yasm libopus-dev
+
+mkdir ~/ffmpeg_sources
 	
-	//FFMPEG Dependencies
-	sudo apt-get update
-	sudo apt-get -y install autoconf automake build-essential git libass-dev libgpac-dev \
-  	libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libx11-dev \
-  	libxext-dev libxfixes-dev pkg-config texi2html zlib1g-dev libmp3lame-dev yasm libopus-dev
-	mkdir ~/ffmpeg_sources
+# Install xh264
+cd ~/ffmpeg_sources
+git clone --depth 1 git://git.videolan.org/x264.git
+cd x264
+./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static --disable-asm
+make
+make install
+make distclean
 	
-	//Install xh264
-	cd ~/ffmpeg_sources
-	git clone --depth 1 git://git.videolan.org/x264.git
-	cd x264
-	./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static --disable-asm
-	make
-	make install
-	make distclean
-	
-	//Install FFMPEG
-	cd ~/ffmpeg_sources
-	git clone --depth 1 git://source.ffmpeg.org/ffmpeg
-	cd ffmpeg
-	PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig"
-	export PKG_CONFIG_PATH
-	./configure --prefix="$HOME/ffmpeg_build" \
-	  --extra-cflags="-I$HOME/ffmpeg_build/include" --extra-ldflags="-L$HOME/ffmpeg_build/lib" \
-	  --bindir="$HOME/bin" --extra-libs="-ldl" --enable-gpl --enable-libass \
-	  --enable-libmp3lame --enable-libtheora --enable-libvorbis \
-	  --enable-libx264 --enable-nonfree --enable-x11grab
-	make
-	make install
-	make distclean
-	hash -r
-	. ~/.profile
-	
+# Install FFMPEG
+cd ~/ffmpeg_sources
+git clone --depth 1 git://source.ffmpeg.org/ffmpeg
+cd ffmpeg
+PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig"
+export PKG_CONFIG_PATH
+./configure --prefix="$HOME/ffmpeg_build" \
+   --extra-cflags="-I$HOME/ffmpeg_build/include" --extra-ldflags="-L$HOME/ffmpeg_build/lib" \
+   --bindir="$HOME/bin" --extra-libs="-ldl" --enable-gpl --enable-libass \
+   --enable-libmp3lame --enable-libtheora --enable-libvorbis \
+   --enable-libx264 --enable-nonfree --enable-x11grab
+make
+make install
+make distclean
+hash -r
+. ~/.profile
+```
+
 For more information and troubleshooting: https://trac.ffmpeg.org/wiki/UbuntuCompilationGuide
 	
 
 If you use a Git clone of MediacenterJS please use:
 
-	sudo apt-get install git (If you do not have git installed yet)
-	git clone https://github.com/jansmolders86/mediacenterjs.git
-	cd mediacenterjs
-	npm install
-	
+```sh
+sudo apt-get install git (If you do not have git installed yet)
+git clone https://github.com/jansmolders86/mediacenterjs.git
+cd mediacenterjs
+npm install
+```
+
 If you want to use NPM to install MediacenterJS use:
 
-	npm install mediacenterjs
-	cd mediacenterjs
-	
-	node server
-	Use 'sudo node server' if you use a port below 1000
+```sh
+npm install mediacenterjs
+cd mediacenterjs
+node server
+```
+
+Use 'sudo node server' if you use a port below 1000
 
 Folder setup
 -------------
@@ -196,17 +205,20 @@ SETUP FAQ
 -------------
 
 * If you get an 'EACCESS' error, please set the following permissions and run the server using 'sudo'
- 
-         sudo chmod 755 lib/database/mcjs.sqlite
-	 
+
+```sh 
+sudo chmod 755 lib/database/mcjs.sqlite
+```
+
 * if you get an 'PACKAGENAME is not installed' error, please install the package with NPM.
 
 	Exampe:
 	
 		'Error module 'colors' not found'
-		
+
+		```sh		
 		npm install colors
-		
+		```
 		
 * if you get an 'Socket is not open' error on Windows, please place the bin folder inside the MCJS folder. You can download the binaries here: https://github.com/jansmolders86/mediacenterjs-windows-binaries/archive/master.zip
 
@@ -250,16 +262,22 @@ How should I format my movie library and files?
 MediacenterJS will look in the specified directory for video files. It will look in subdirectories of the specified dir for additional video files.
 so the possible directories can be:
 
-	specifiedPath/fight club.avi
-	
+```sh
+specifiedPath/fight club.avi
+```
+
 or  
 
-	specifiedPath/f/fight club.avi
-	
+```sh
+specifiedPath/f/fight club.avi
+```
+
 or even
 
-	specifiedPath/f/MyfavouriteMovies/fight club.avi
-	
+```sh
+specifiedPath/f/MyfavouriteMovies/fight club.avi
+```
+
 ###Filename conventions###
 MCJS will use the filenname to try to get the correct movie details. This way the server does not have to look inside the files to get the metadata, which speeds up the process.
 As you can gather the more precise the title of the movie, the better the scraper will know which movie it is.
@@ -321,13 +339,15 @@ __index.js__
 
 If we look at the hello world example, you will see the following contents
 
-	// Choose your render engine. The default choice is JADE:  http://jade-lang.com/
-	exports.engine = 'jade';
+```js
+// Choose your render engine. The default choice is JADE:  http://jade-lang.com/
+exports.engine = 'jade';
 
-	// Render the index page
-	exports.index = function(req, res, next){
-		res.render('hello');
-	};
+// Render the index page
+exports.index = function(req, res, next){
+	res.render('hello');
+};
+```
 	
 * The render engine is the way the view is written down. Currently only JADE is supported.
 * The exports.index is the initial route to the app. And in this case will render the hello.jade file in the views folder.
@@ -352,27 +372,29 @@ __Basic routing__
 I tried to implement the routing as RESTfull as possible. This means if your app frontend sends a GET request, it can do so in three layers. A required base level with for instance an ID, a optional second level with a subid for example or an action and finally a third level with usually an action.
 Which results in a get handler which could look something like this:
 
-	exports.get = function(req, res, next){		
-		var requiredId = req.params.id  		//Initial param after base name. example: /movies/12
-		, optionalParam = req.params.optionalParam	//Second param after initial param. example: /movies/12/info
-		, action = req.params.action;			//Third param example: /music/muse/bliss/info
+```js
+exports.get = function(req, res, next){		
+	var requiredId = req.params.id  		//Initial param after base name. example: /movies/12
+	  , optionalParam = req.params.optionalParam	//Second param after initial param. example: /movies/12/info
+	  , action = req.params.action;			//Third param example: /music/muse/bliss/info
 		
-		if(!action){
-			//No third route
-			switch(optionalParam) {
-				case('play'):
-					//Do something with root/action in this case 'play'
+	if(!action){
+		//No third route
+		switch(optionalParam) {
+			case('play'):
+				//Do something with root/action in this case 'play'
 				break;
-				default:
-					//Do nothing 
+			default:
+				//Do nothing 
 				break;		
-			}
-		} else if (!optionalParam && !action){
-			//Do something with root id, no second route
-		} else if(action === 'play') {
-			//Do something with root/subid/action
-		};
+		}
+	} else if (!optionalParam && !action){
+		//Do something with root id, no second route
+	} else if(action === 'play') {
+		//Do something with root/subid/action
 	}
+};
+```
 
 Of course this is just a basic layer. 
 You can extend this in your own route.js file in your app folder.
@@ -383,20 +405,22 @@ Although the basic routing is pretty generic and should be sufficient most of th
 
 The 'NAME' will be replaced with the app name (folder name / namespace). You do not have to hard code it. But you can also add routes outside your app namespace. For Example:
 
-	{
-		"track": [{
-			"method": "get",
-			"path": "/NAME/track/:album/:track"
-		}],
-		"album": [{
-			"method":"post",
-			"path": "/NAME/album"
-		}],
-		"lookup": [{
-			"method":"get",
-			"path": "/configuration"
-		}]
-	}
+```js
+{
+	"track": [{
+		"method": "get",
+		"path": "/NAME/track/:album/:track"
+	}],
+	"album": [{
+		"method":"post",
+		"path": "/NAME/album"
+	}],
+	"lookup": [{
+		"method":"get",
+		"path": "/configuration"
+	}]
+}
+```
 	
 __Remote control__ 
 
