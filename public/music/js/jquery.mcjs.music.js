@@ -90,15 +90,14 @@
         self.name           = data;
         self.isActive       = ko.observable(false);
         self.playTrack  	= function () {
-            //todo: check current active by name (data)
+        		$('li.'+o.selectedClass).removeClass(o.selectedClass);
+
             if(self.isActive(true)){
                 self.isActive(false);
             }
             self.isActive(true);
             var trackname = self.name;
             _trackClickHandler(o, trackname);
-
-
         };
     }
 	
@@ -174,7 +173,7 @@
 			if (o.musicCache[title]) {
 				setTimeout(function(){
 					var musicData = data[0];
-                    o.music = o.musicCache[title];
+               o.music = o.musicCache[title];
 					
 					o.music.thumbnail(musicData.cover);
 					o.music.year(musicData.year);
@@ -192,7 +191,7 @@
                         });
                         o.music.tracks(array);
                     }
-                    
+                    o.tracks = musicData.tracks;
 					currentAlbum.addClass('coverfound');
 					
 				},500);
@@ -314,8 +313,8 @@
 	
 	function _nextTrack(o,album,songTitle){		
 		var random = false;
-		
-		index = o.tracks.indexOf(songTitle);
+		var index = o.tracks.indexOf(songTitle);
+
 		if(index >= 0 && index < o.tracks.length - 1){
 		   nextItem = o.tracks[index + 1];
 		   songTitle = nextItem;
@@ -324,7 +323,7 @@
 		}		
 
 		var track = '/music/'+album+'/'+nextItem+'/play';
-		
+
 		$('li.'+o.selectedClass).removeClass(o.selectedClass);
 		$(o.trackListSelector).find('li:contains('+nextItem+')').addClass(o.selectedClass);
 
