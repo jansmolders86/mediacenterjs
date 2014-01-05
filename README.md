@@ -65,10 +65,8 @@ Known issues: video/audio playback
 These issues are known issues and current browser/platform limitations.
 I'm trying to figure out how to get around these limitations.
 
-* IOS: Video is not seekable
-* Browser: Seeking beyond buffer not workign yet.
-* Android: not seekable & mp3 playback not working
-* Ubuntu: Needs 3rd party audio codecs to play mp3
+* Mobile device streaming still in heavy development
+* Browser: Seeking beyond buffer not working yet.
 
 What still needs to be done
 ==================
@@ -196,6 +194,7 @@ node server
 
 Use 'sudo node server' if you use a port below 1000
 
+
 Folder setup
 -------------
 
@@ -221,6 +220,8 @@ sudo chmod 755 lib/database/mcjs.sqlite
 		```
 		
 * if you get an 'Socket is not open' error on Windows, please place the bin folder inside the MCJS folder. You can download the binaries here: https://github.com/jansmolders86/mediacenterjs-windows-binaries/archive/master.zip
+
+* No audio on Ubuntu: Ubuntu needs 3rd party audio codecs to play mp3.
 
 
 Running MediacenterJS
