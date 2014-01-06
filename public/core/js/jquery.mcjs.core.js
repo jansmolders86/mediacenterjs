@@ -51,7 +51,7 @@
 				, viewportHeight	    : $(window).height()
 				, confirmMessage 	    : undefined
 				, succesMessage 	    : undefined
-                , RemoteIdle            : true
+                , RemoteIdle            : false
                 , screenSaverTimeout    : 900000
 			});
 			
@@ -382,7 +382,6 @@
 			if (data.screensaver === 'dim'){
 
                 setInterval(function(){
-                    console.log('Interval');
                     if(o.RemoteIdle === false ){
                         if(typeof videojs == 'function'){
                             if(videojs("player").paused()){
