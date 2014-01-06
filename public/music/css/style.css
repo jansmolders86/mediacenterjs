@@ -61,13 +61,12 @@ ul.music li a{
 }
 
 ul.music li.focused{ 
-    border:0; 
-    border-left: 4px solid #FB8521 !important;
 	cursor: pointer;
 	border-radius: 5px;
 	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1); 
 	cursor:pointer; 
 }
+
 ul.music li.playing a{ 
 	background:url(img/playing.png) no-repeat left 8px; 
 	padding-left:25px; 
@@ -85,7 +84,9 @@ ul.music > li.active{ width:90%; height:90%; }
 ul.music > li.active .overlay{ visibility:hidden; }
 ul.music .overlay{ width:0; height:0; }
 ul.music > li img.coverfound{ width:120px; height:120px; margin:0px; } 
-ul.music > li.coverfound:hover .overlay{
+
+ul.music > li.coverfound:hover .overlay,
+ul.music > li.coverfound.focused .overlay{
 	position:absolute;
 	top:0;
 	left:0;
