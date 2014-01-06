@@ -203,7 +203,7 @@
     
     function _remoteControlExtention(o){
         //Remote Control extender
-        if(io !== undefined){
+        if(io){
             $.ajax({
                 url: '/configuration/', 
                 type: 'get'

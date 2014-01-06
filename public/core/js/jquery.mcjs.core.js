@@ -47,10 +47,12 @@
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
 				$that: $that
-				, viewportWidth		: $(window).width()
-				, viewportHeight	: $(window).height()
-				, confirmMessage 	: undefined
-				, succesMessage 	: undefined
+				, viewportWidth		    : $(window).width()
+				, viewportHeight	    : $(window).height()
+				, confirmMessage 	    : undefined
+				, succesMessage 	    : undefined
+                , RemoteIdle            : true
+                , screenSaverTimeout    : 900000
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -176,7 +178,7 @@
 	
 	//Socket.io handler for remote control
 	function _websocketHandler(o, $that){
-		if(io !== undefined){
+		if(io){
 			$.ajax({
 					url: '/configuration/', 
 					type: 'get'
@@ -294,16 +296,23 @@
 	}
 	
 	function _goRight(o, item){
-		if ($(o.focused).next(item).length == 0)item.eq(0).addClass('focused');
+        o.RemoteIdle = false;
+		if ($(o.focused).next(item).length == 0){
+            item.eq(0).addClass('focused');
+        }
 		$(o.focused).removeClass('focused').next(item).addClass('focused').scrollintoview({direction: "vertical"});
 	}	
 	
 	function _goLeft(o, item){
-		if (item.prev(item).length == 0) item.eq(-1).addClass('focused');
+        o.RemoteIdle = false;
+		if (item.prev(item).length == 0){ 
+            item.eq(-1).addClass('focused');
+        }
 		$(o.focused).removeClass('focused').prev().addClass('focused').scrollintoview({direction: "vertical"});
 	}	
 	
 	function _pressEnter(o, item){
+        o.RemoteIdle = false;
 		if ($(o.focused).length > 0){
 			if ($(o.focused).find('.'+o.clickableItemClass).length > 0) {
 				if($(o.focused).find('.'+o.clickableItemClass).is('input').length > 0){
@@ -342,6 +351,7 @@
 	}	
 
 	function _goBack(o){
+        o.RemoteIdle = false;
         if( !$(document.activeElement).is("input:focus")){
             if ($('.backlink').length > 0){
                 if($('body').hasClass('playingMovie')){
@@ -370,20 +380,45 @@
 			type: 'get'
 		}).done(function(data){
 			if (data.screensaver === 'dim'){
-				var timeout = 600000; //10 min //TODO: make editable
+
+                setInterval(function(){
+                    console.log('Interval');
+                    if(o.RemoteIdle === false ){
+                        if(typeof videojs == 'function'){
+                            if(videojs("player").paused()){
+                                $("html, body, #wrapper, #header").addClass("dim");
+                                o.RemoteIdle = true;
+                                
+                                clearInterval(o.screenSaverTimeout);
+                            }
+                        } else {
+                            $("html, body, #wrapper, #header").addClass("dim");
+                            o.RemoteIdle = true;
+                            clearInterval(o.screenSaverTimeout);
+                        }
+                    } else {
+                        clearInterval(o.screenSaverTimeout);
+                    }
+                },o.screenSaverTimeout);
+
 				$(document).bind("idle.idleTimer", function(){
-					if(videojs("player").paused()){
-						$("html, body, #wrapper, #header").addClass("dim")
-					} else{
-						return;
-					}
+                    if(typeof videojs == 'function'){
+                        if(videojs("player").paused()){
+                            $("html, body, #wrapper, #header").addClass("dim");
+                        } else{
+                            return;
+                        }
+                    }else {
+                        $("html, body, #wrapper, #header").addClass("dim");
+                    }                    
 				});
 
 				$(document).bind("active.idleTimer", function(){
 					$("html, body, #wrapper, #header").removeClass("dim")
 				});
 				
-				$.idleTimer(timeout);
+				$.idleTimer(o.screenSaverTimeout);
+
 			} else if(data.screensaver === 'off'){
 				return;
 			}
