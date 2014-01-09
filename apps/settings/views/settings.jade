@@ -38,11 +38,11 @@ block body
                     a.btn#oauth(href="#") Register OAuth
                     label(for="oauthKey")
                 .row.wrap.mcjs-rc-controllable
-                    a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="movies") #{lingua.settings_clear_cache_movies}
+                    a.btn.cachelink.mcjs-rc-clickable(data-cachelink="movies") #{lingua.settings_clear_cache_movies}
                 .row.wrap.mcjs-rc-controllable
-                    a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="music") #{lingua.settings_clear_cache_music}
+                    a.btn.cachelink.mcjs-rc-clickable(data-cachelink="music") #{lingua.settings_clear_cache_music}
                 .row.wrap.mcjs-rc-controllable
-                    a.btn.cachelink.mcjs-rc-clickable(href="",data-cachelink="tv") #{lingua.settings_clear_cache_tv}
+                    a.btn.cachelink.mcjs-rc-clickable(data-cachelink="tv") #{lingua.settings_clear_cache_tv}
                 .row.mcjs-rc-controllable
                     label(for="moviepath") #{lingua.setting_movielocation}
                     input#moviepath.mcjs-rc-clickable(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation,  data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")

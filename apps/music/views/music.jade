@@ -56,7 +56,7 @@ block body
 					// /ko
 				#tracklist
 					ul#tracks(data-bind="foreach: tracks")
-						li.mcjs-rc-controllable(data-bind="click: playTrack , css : {'selected' : isActive}")
+						li.mcjs-rc-controllable.mcjs-rc-clickable(data-bind="click: playTrack , css : {'selected' : isActive}")
 							i.play.icon
 							.title(data-bind="text:name")
 		// /ko		
