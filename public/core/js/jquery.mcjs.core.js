@@ -284,6 +284,7 @@
 					}
 				break;
 				case 13 : //enter
+                    e.preventDefault();
 					_pressEnter(o);
 				break;
 				case 8  : //backspace
@@ -333,22 +334,25 @@
             $("html, body, #wrapper, #header").removeClass("dim");
         }
 		if ($(o.focused).length > 0){
+            console.log('focsued found')
 			if ($(o.focused).find('.'+o.clickableItemClass).length > 0) {
-				if($(o.focused).find('.'+o.clickableItemClass).is('input').length > 0){
-					if($(o.focused).find('.'+o.clickableItemClass).is('input[type=submit]')){
-						$(o.focused).find('.'+o.clickableItemClass).click();
+                console.log('clickable found')
+				if($(o.focused+' > .'+o.clickableItemClass).is('input')){
+					if($(o.focused+' > .'+o.clickableItemClass).is('input[type=submit]')){
+                        console.log('Submit!')
+						$(o.focused+' > .'+o.clickableItemClass).click();
 					}
-					$(o.focused).find('.'+o.clickableItemClass).focus();
-				} else if($(o.focused).find('.'+o.clickableItemClass).is('a')) {
-					if (typeof $(o.focused).find('.'+o.clickableItemClass).attr('href') !== 'undefined' && $(o.focused).find('.'+o.clickableItemClass).attr('href') !== false){
+					$(o.focused+' >.'+o.clickableItemClass).focus();
+				} else if($(o.focused+' > .'+o.clickableItemClass).is('a')) {
+					if (typeof $(o.focused+' > .'+o.clickableItemClass).attr('href') !== 'undefined' && $(o.focused).find('.'+o.clickableItemClass).attr('href') !== false){
 						document.location = $(o.focused).find('.'+o.clickableItemClass).attr('href');
 					}
-				} else if($(o.focused).find('a').length > 0) {
-					if (typeof $(o.focused).find('a').attr('href') !== 'undefined' && $(o.focused).find('a').attr('href') !== false){
-						document.location = $(o.focused).find('a').attr('href');
+				} else if($(o.focused+' > a').length > 0) {
+					if (typeof $(o.focused+' > a').attr('href') !== 'undefined' && $(o.focused).find('a').attr('href') !== false){
+						document.location = $(o.focused+' > a').attr('href');
 					}
 				} else {
-					$(o.focused).find('.'+o.clickableItemClass).click();
+					$(o.focused+' > .'+o.clickableItemClass).click();
 				}
 			} else if($(o.focused).hasClass(o.clickableItemClass)){
 				if($(o.focused).is('input')){
