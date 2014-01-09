@@ -42,10 +42,10 @@ block body
 	#wrapper
 		// ko if: music().length > 0
 		ul.music(data-bind="foreach: music")
-			li.movieposter.boxed.mcjs-rc-controllable(data-bind="click: showAlbum , css : {'active' : viewDetails}")
+			li.movieposter.boxed.mcjs-rc-controllable(data-bind="css : {'mcjs-rc-active' : viewDetails}")
 				img.cover(data-bind="attr: { src: thumbnail }")
-				.overlay
-				a.title(data-bind="text:localName", style="visibility:hidden;")
+				.overlay.mcjs-rc-clickable(data-bind="click: showAlbum")
+				span.title(data-bind="text:localName", style="visibility:hidden;")
 				#albumInfo		
 					h2(data-bind="text:title")
 					// ko if: genre() !== 'Unknown' && genre() !== null

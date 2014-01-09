@@ -115,10 +115,9 @@ p a:hover{text-decoration:none;}
 	position:relative;
 }
 
-.focused{ 
-	border-left: 4px solid #FB8521;
+.focused{
+    background-color: #EFEFEF;
 	cursor: pointer;
-	border-radius: 5px;
 	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1); 
 	cursor:pointer; 
 }

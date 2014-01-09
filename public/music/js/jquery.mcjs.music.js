@@ -84,13 +84,13 @@
             }
 		};
 	}
-    
+
     var Track = function (o, data) {
         var self            = this;
         self.name           = data;
         self.isActive       = ko.observable(false);
         self.playTrack  	= function () {
-        		$('li.'+o.selectedClass).removeClass(o.selectedClass);
+        	$('li.'+o.selectedClass).removeClass(o.selectedClass);
 
             if(self.isActive(true)){
                 self.isActive(false);
@@ -110,11 +110,10 @@
 	}
     
     function _backHandler(o){
-        if (!$(o.musicListSelector+' > li').hasClass('active')){	
+        if (!$(o.musicListSelector+' > li').hasClass('active')){
             window.location = '/';
-        } else if ( $(o.musicListSelector+' > li').hasClass('active')) {
+        } else if ( $(o.musicListSelector+' > li').hasClass(o.activeSubLevel)) {
             $(o.musicListSelector+' > li').removeClass('active').show();
-            $('body').removeClass('albumview');
         }
     }
 	
@@ -198,44 +197,6 @@
 			}
 		});
 	}
-    
-    /*** Remote extension ***/
-    
-    function _remoteControlExtention(o){
-        //Remote Control extender
-        if(io){
-            $.ajax({
-                url: '/configuration/', 
-                type: 'get'
-            }).done(function(data){
-                var socket = io.connect(data.localIP+':'+data.remotePort);
-                socket.on('connect', function(data){
-                    socket.emit('remote');
-                });
-
-                socket.on('controlling', function(data){
-                    var focused = $('.'+o.focusedClass)
-                    ,accesibleItem = $('li.mcjs-rc-tracklist-control');
-
-                    if(data.action === "enter"){ 
-                        var currentItem = focused;
-                        if(focused.length > 0){
-                            _trackClickHandler(o, currentItem);
-                        }
-                    }
-                    
-                    if(data.action === "shuffle"){ 
-                        _randomTrack(o);
-                    }
-                    
-                    if(data.action === "back"){ 
-                        _backHandler(o);
-                    }
-
-                });
-            });
-        }	
-    }
 	
     /*** Playback Handling ***/
     
@@ -244,8 +205,7 @@
         , songTitle = album
         , random = false
         , album = 'none';
-        
-        //$(".title:contains('"+self.localName()+"')").parent('li').addClass(o.selectedClass);
+
         _playTrack(o,track,album,songTitle,random);
     }
     
@@ -367,7 +327,8 @@
 		, backLinkSelector: '.backlink' 
 		, playerID: 'player' 
 		, selectedClass: 'selected' 
-		, focusedClass: 'focused' 
+		, focusedClass: 'focused'
+        , activeSubLevel :'.mcjs-rc-active',
 	};
 
 })(jQuery);

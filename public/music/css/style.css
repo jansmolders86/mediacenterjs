@@ -33,7 +33,7 @@ ul.music > li img{
 	margin:0;
 }
 
-ul.music > li.active img{ margin: 20px 0 0 40px; }
+ul.music > li.mcjs-rc-active img{ margin: 20px 0 0 40px; }
 ul.music > li.coverfound{ cursor:pointer; }
 ul.music > li img{ visibility:hidden; }
 ul.music > li.coverfound img{ visibility:visible; }
@@ -77,11 +77,11 @@ ul.music li.playing a{
 
 ul.music > li > .title{ width:0; height:0; } 
 ul.music > li #albumInfo h2{ font-size:12px; font-family:arial; width: 100px;}
-ul.music > li.active #albumInfo h2{ font-size:30px; font-family: 'Open Sans Condensed', sans-serif; width: 500px; margin-top:5px;}
-ul.music > li.active,
-ul.music > li.active #tracklist{ display:block!important; }
-ul.music > li.active{ width:90%; height:90%; }
-ul.music > li.active .overlay{ visibility:hidden; }
+ul.music > li.mcjs-rc-active #albumInfo h2{ font-size:30px; font-family: 'Open Sans Condensed', sans-serif; width: 320px; margin-top:5px;}
+ul.music > li.mcjs-rc-active,
+ul.music > li.mcjs-rc-active #tracklist{ display:block!important; }
+ul.music > li.mcjs-rc-active{ width:90%; height:90%; }
+ul.music > li.mcjs-rc-active .overlay{ visibility:hidden; }
 ul.music .overlay{ width:0; height:0; }
 ul.music > li img.coverfound{ width:120px; height:120px; margin:0px; } 
 
@@ -101,8 +101,7 @@ ul.music > li.coverfound.focused .overlay{
     color: #444;
     display: none;
     position: relative;
-    float: left;
-    width: 92%;
+    width: 82%;
     height: 600px;
     z-index: 9;
     padding: 20px;
@@ -183,7 +182,7 @@ li .title{display:inline-block;}
 .random.hidden{display:none;}
 
 .random:hover,
-.random.active{ background:url(img/random-icon.png)no-repeat left bottom; }
+.random.mcjs-rc-active{ background:url(img/random-icon.png)no-repeat left bottom; }
 
 #player{position:fixed; left:0; bottom:0px !important; z-index:99; visibility:hidden; }
 #player.show{ visibility:visible; }

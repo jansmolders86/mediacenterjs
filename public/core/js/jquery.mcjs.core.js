@@ -51,7 +51,7 @@
 				, viewportHeight	    : $(window).height()
 				, confirmMessage 	    : undefined
 				, succesMessage 	    : undefined
-                , RemoteIdle            : false
+                , RemoteIdle            : true
                 , screenSaverTimeout    : 900000
 			});
 			
@@ -191,14 +191,14 @@
 					socket.on('controlling', function(data){
 						switch(data.action) {
 							case "goLeft" :
-								if($(o.accesibleItem).length > 0){
-									var item = $(o.accesibleItem);
+								if($(o.accessibleElement).length > 0){
+									var item = $(o.accessibleElement);
 									_goLeft(o, item);
 								}
 							break;
 							case "goRight" :
-								if($(o.accesibleItem).length > 0){
-									var item = $(o.accesibleItem);
+								if($(o.accessibleElement).length > 0){
+									var item = $(o.accessibleElement);
 									_goRight(o, item);
 								}
 							break;
@@ -262,14 +262,24 @@
 
 			switch(e.keyCode) {
 				case 39 : //next
-					if($(o.accesibleItem).length > 0){
-						var item = $(o.accesibleItem);
+					if($(o.accessibleElement).length > 0){
+                        if($(o.activeSubLevelElement).length > 0){
+                               console.log('asd')
+                            var item = $('.music > li:visible').find("#tracks:visible > li.mcjs-rc-controllable:first")
+                        } else{
+						    var item = $(o.accessibleElement);
+                        }
 						_goRight(o, item);
 					}
 				break;
 				case 37 : //prev
-					if($(o.accesibleItem).length > 0){
-						var item = $(o.accesibleItem);
+					if($(o.accessibleElement).length > 0){
+                        if( $(o.activeSubLevelElement).length > 0){
+                            console.log('asd')
+                            var item = $('.music > li:visible').find("#tracks:visible > li.mcjs-rc-controllable:first")
+                        } else{
+                            var item = $(o.accessibleElement);
+                        }
 						_goLeft(o, item);
 					}
 				break;
@@ -297,22 +307,31 @@
 	
 	function _goRight(o, item){
         o.RemoteIdle = false;
-		if ($(o.focused).next(item).length == 0){
-            item.eq(0).addClass('focused');
+        if($("html, body, #wrapper, #header").hasClass("dim")){
+            $("html, body, #wrapper, #header").removeClass("dim");
         }
-		$(o.focused).removeClass('focused').next(item).addClass('focused').scrollintoview({direction: "vertical"});
+		if ($(o.focused).next(item).length == 0){
+            item.eq(0).addClass('focused').scrollintoview({direction: "vertical"});
+        }
+		$(o.focused).removeClass('focused').next().addClass('focused').scrollintoview({direction: "vertical"});
 	}	
 	
 	function _goLeft(o, item){
         o.RemoteIdle = false;
-		if (item.prev(item).length == 0){ 
-            item.eq(-1).addClass('focused');
+        if($("html, body, #wrapper, #header").hasClass("dim")){
+            $("html, body, #wrapper, #header").removeClass("dim");
+        }
+		if (item.prev(item).length == 0){
+            item.eq(-1).addClass('focused').scrollintoview({direction: "vertical"});
         }
 		$(o.focused).removeClass('focused').prev().addClass('focused').scrollintoview({direction: "vertical"});
 	}	
 	
 	function _pressEnter(o, item){
         o.RemoteIdle = false;
+        if($("html, body, #wrapper, #header").hasClass("dim")){
+            $("html, body, #wrapper, #header").removeClass("dim");
+        }
 		if ($(o.focused).length > 0){
 			if ($(o.focused).find('.'+o.clickableItemClass).length > 0) {
 				if($(o.focused).find('.'+o.clickableItemClass).is('input').length > 0){
@@ -348,30 +367,40 @@
 				return;
 			}
 		}
-	}	
+	}
 
 	function _goBack(o){
         o.RemoteIdle = false;
+
         if( !$(document.activeElement).is("input:focus")){
-            if ($('.backlink').length > 0){
-                if($('body').hasClass('playingMovie')){
-                    document.location='/movies/';
-                } else {
-                    var attrHref = $('.backlink').attr('href');
-                    if (typeof attrHref !== undefined && attrHref !== false){
-                        var attrHref = $('.backlink').attr('href');
-                        document.location = attrHref;
-                    } else {
-                        $('.backlink').click();
-                    }
+            if($('body').hasClass('playingMovie')){
+                document.location='/movies/';
+            } else if( $(o.activeSubLevelElement).length > 0){
+
+                $(o.activeSubLevelElement).removeClass(o.activeSubLevelClass);
+
+                if($(o.accessibleElement).is(":hidden")){
+                    $(o.accessibleElement).show();
                 }
-			} else if( !$(document.activeElement).is("input:focus") ){
+
+            }else if( $(o.backElement).length > 0 && $(o.activeSubLevelElement).length < 1){
+                var attrHref = $(o.backElement).attr('href');
+                if (typeof attrHref !== undefined && attrHref !== false && $(o.backElement).is('[href]')){
+                    var attrHref = $(o.backElement).attr('href');
+                    document.location = attrHref;
+                } else if($(o.backElement).hasClass(o.clickableItemClass)){
+                    $(o.backElement).click();
+                } else {
+                    window.history.go(-1);
+                }
+            } else {
                 window.history.go(-1);
-			}
+            }
 		}
 	}
-	
-	
+
+
+
 	/************ Screensaver ***************/
 	
 	function _screensaver(o, $that){
@@ -441,7 +470,10 @@
 		datasetKey: 'mcjs', //always lowercase
 		debug : false,
 		focused : '.focused',
-		accesibleItem :'.mcjs-rc-controllable',
-		clickableItemClass : 'mcjs-rc-clickable'
+		accessibleElement :'.mcjs-rc-controllable',
+		activeSubLevelElement :'.mcjs-rc-active',
+		activeSubLevelClass :'mcjs-rc-active',
+		clickableItemClass : 'mcjs-rc-clickable',
+        backElement : '.backlink'
 	}
 })(jQuery);
