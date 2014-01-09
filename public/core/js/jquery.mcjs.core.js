@@ -391,13 +391,11 @@
             if($('body').hasClass('playingMovie')){
                 document.location='/movies/';
             } else if( $(o.activeSubLevelElement).length > 0){
-
                 $(o.activeSubLevelElement).removeClass(o.activeSubLevelClass);
-
                 if($(o.accessibleElement).is(":hidden")){
                     $(o.accessibleElement).show();
                 }
-
+                $(o.focusedElement).removeClass(o.focusedElementClass);
             }else if( $(o.backElement).length > 0 && $(o.activeSubLevelElement).length < 1){
                 var attrHref = $(o.backElement).attr('href');
                 if (typeof attrHref !== undefined && attrHref !== false && $(o.backElement).is('[href]')){
