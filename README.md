@@ -14,8 +14,10 @@ __Heavy work in progress, Alpha version (0.0.53)__
 
 __version 0.0.53__
 
+* Improved remote control/keyboard accesibility 
+* Improved music App code
 * Moved Windows binaries, Linux dependencies need to be installed manually from now on.
-* Playing 'on the fly' transcoding video now works.
+* Playing 'on the fly' transcoding video now works for browsers.
 * Self updating. The application is now updateable from the app itself. No need to use GIT or NPM.
 
 Why use it?
