@@ -101,6 +101,7 @@ exports.fetchMetadataForAlbum = function(albumTitle, callback) {
 /* Private Methods */
 
 loadMetadataFromDatabase = function(albumTitle, callback) {
+    console.log('Getting data from database...');
 	db.query('SELECT * FROM music WHERE filename = ? ', [ albumTitle ], {
 			filename	: String,
 			title		: String,
