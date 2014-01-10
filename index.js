@@ -27,6 +27,7 @@ var express = require('express')
 	, mcjsRouting = require('./lib/routing/routing')
 	, remoteControl = require('./lib/utils/remote-control')
 	, versionChecker = require('./lib/utils/version-checker')
+	, userInfo = require('./lib/utils/client-info')
     , fileHandler = require('./lib/utils/file-utils')
 	, Youtube = require('youtube-api')
     , http = require('http')
@@ -106,7 +107,10 @@ app.use(function(req, res) {
     res.status(500).render('404',{ selectedTheme: config.theme});
 });
 
-app.get("/", function(req, res, next) {  
+app.get("/", function(req, res, next) {
+
+    userInfo.storeUserInfo(req);
+
 	if(	 config.language === '' || config.location === '' || config.moviepath === undefined){
 
 		var localIP = getIPAddresses()
