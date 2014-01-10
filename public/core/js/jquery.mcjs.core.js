@@ -326,7 +326,7 @@
 		$(o.focusedElement).removeClass(o.focusedClass).prev().addClass(o.focusedClass).scrollintoview({direction: "vertical"});
 	}	
 	
-	function _pressEnter(o, item){
+	function _pressEnter(o){
         o.RemoteIdle = false;
         if($("html, body, #wrapper, #header").hasClass("dim")){
             $("html, body, #wrapper, #header").removeClass("dim");
