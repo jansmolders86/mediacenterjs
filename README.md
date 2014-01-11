@@ -52,6 +52,8 @@ What currently works?
 * Page visibility API
 * YouTube app
 * Version manager
+* Device manager
+* Parental control functionality
 
 What's coming up
 ==================
