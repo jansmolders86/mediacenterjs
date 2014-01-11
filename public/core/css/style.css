@@ -67,21 +67,22 @@ body *{
 
 h1,
 h2,
-h3,
+h3 { font-family: 'Open Sans Condensed', sans-serif; text-transform:uppercase; font-weight: 300;}
+
 h4,
 h5,
-h6{ font-family: 'Open Sans Condensed', sans-serif; text-transform:uppercase; font-weight: 300;}
+h6{ font-family: 'Open Sans', sans-serif; text-transform:uppercase; font-weight: 300;}
 
 h1{ font-size:36px; }
 h2{ font-size:30px;}
 
 h3 {
 	margin:0;
-	margin-top:-20px;
 	padding:0;
 	font-weight:normal;
 	font-size:24px; 
 }
+h4 { font-size:12px;}
 h3 a{
 	font-size:24px; 
 	text-decoration:none;
@@ -149,6 +150,14 @@ p a:hover{text-decoration:none;}
 	padding: 0;
 	margin:0;
 	display: inline-block;
+}
+
+#header h4{
+    position: absolute;
+    bottom: -10px;
+    left: 157px;
+    text-transform: none;
+    font-size: 12px;
 }
 
 #content{
@@ -482,6 +491,19 @@ em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red;
 	bottom:0;
 	left:0;
 }
+
+/* Table styling */
+
+table{
+    table-layout: fixed;
+    margin:10px 0;
+}
+
+table td,
+table th{text-align: left; padding: 5px 10px;}
+
+table tr > td:first-child,
+table tr > th:first-child{ padding-left:0px;}
 
 /* Remote control styling */
 #remote #color-wrapper{

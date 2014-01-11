@@ -62,6 +62,8 @@ block body
         #header
             img.logo(src="/core/css/img/logo.png")
             h1 MediacenterJS
+            -if(allowed === 'no')
+                h4 Parental lock enabled
             div.upgrade-right.boxed(style="display:none;")
                 a.btn.upgrade
             #dateandtime

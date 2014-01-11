@@ -11,20 +11,22 @@ a:hover{color:#333;}
 
 h1,
 h2,
-h3,
+h3 { font-family: 'Open Sans Condensed', sans-serif; text-transform:uppercase; font-weight: 300;}
+
 h4,
 h5,
-h6{ font-family: 'Open Sans Condensed', sans-serif; font-weight:300; text-transform:uppercase; }
+h6{ font-family: 'Open Sans', sans-serif; text-transform:uppercase; font-weight: 300;}
 
 h1{ font-size:36px; }
-h2{ font-size:30px; }
+h2{ font-size:30px;}
+
 h3 {
-	margin:0;
-	margin-top:-20px;
-	padding:0;
-	font-weight:normal;
-	font-size:24px; 
+    margin:0;
+    padding:0;
+    font-weight:normal;
+    font-size:24px;
 }
+h4 { font-size:12px;}
 h3 a{
 	font-size:24px; 
 	text-decoration:none;

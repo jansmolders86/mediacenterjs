@@ -27,7 +27,7 @@ var express = require('express')
 	, mcjsRouting = require('./lib/routing/routing')
 	, remoteControl = require('./lib/utils/remote-control')
 	, versionChecker = require('./lib/utils/version-checker')
-	, userInfo = require('./lib/utils/client-info')
+	, DeviceInfo = require('./lib/utils/device-utils')
     , fileHandler = require('./lib/utils/file-utils')
 	, Youtube = require('youtube-api')
     , http = require('http')
@@ -43,6 +43,20 @@ if(config.language === ""){
 } else {
 	language = config.language;
 }
+
+
+/*Create database*/
+if(fs.existsSync('./lib/database/') === false){
+    fs.mkdirSync('./lib/database/');
+    fs.openSync('./lib/database/mcjs.sqlite', 'w');
+    fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
+}
+
+if(fs.existsSync('./lib/database/mcjs.sqlite') === false){
+    fs.openSync('./lib/database/mcjs.sqlite', 'w');
+    fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
+}
+
 
 process.env.NODE_ENV = 'development';
 
@@ -77,19 +91,6 @@ app.all('*', function(req, res, next) {
   next();
 });
 
-/*Create database*/
- if(fs.existsSync('./lib/database/') === false){
-     	fs.mkdirSync('./lib/database/');
- 		fs.openSync('./lib/database/mcjs.sqlite', 'w');
- 		fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
- }
- 
- if(fs.existsSync('./lib/database/mcjs.sqlite') === false){
- 		fs.openSync('./lib/database/mcjs.sqlite', 'w');
- 		fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
- }
-
-
 app.configure('development', function(){   
 	app.enable('verbose errors');
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));  
@@ -109,7 +110,7 @@ app.use(function(req, res) {
 
 app.get("/", function(req, res, next) {
 
-    userInfo.storeUserInfo(req);
+    DeviceInfo.storeDeviceInfo(req);
 
 	if(	 config.language === '' || config.location === '' || config.moviepath === undefined){
 
@@ -179,13 +180,19 @@ app.get("/", function(req, res, next) {
 		var time = dateFormat(now, "HH:MM");
 		var date = dateFormat(now, "dd-mm-yyyy");
 		req.setMaxListeners(0);
-		res.render('index', {
-			title: 'Homepage',
-			selectedTheme: config.theme,
-			time: time,
-			date: date,
-			apps: apps
-		});	
+
+        DeviceInfo.isDeviceAllowed(req, function(allowed){
+            res.render('index', {
+                title: 'Homepage',
+                selectedTheme: config.theme,
+                time: time,
+                date: date,
+                allowed: allowed,
+                apps: apps
+            });
+        });
+
+
 	}
 });
 
@@ -205,6 +212,20 @@ function getIPAddresses() {
 
 	return ipAddresses;
 }
+
+app.post('/lockClient', function(req, res){
+    var incommingDevice = req.body;
+    var incommingDeviceID = Object.keys(incommingDevice);
+    var deviceID = incommingDeviceID.toString();
+    DeviceInfo.lockDevice(req,res,deviceID);
+});
+
+app.post('/unlockClient', function(req, res){
+    var incommingDevice = req.body;
+    var incommingDeviceID = Object.keys(incommingDevice);
+    var deviceID = incommingDeviceID.toString();
+    DeviceInfo.unlockDevice(req,res,deviceID);
+});
 
 app.post('/removeModule', function(req, res){
 	var incommingModule = req.body
@@ -234,20 +255,13 @@ app.post('/clearCache', function(req, res){
 			return res.send('Error clearing cache', e);
 		}
 
-        // Init Database
         var dblite = require('dblite')
-		if(os.platform() === 'win32'){
-			dblite.bin = "./bin/sqlite3/sqlite3";
-		}
+        if(os.platform() === 'win32'){
+            dblite.bin = "./bin/sqlite3/sqlite3";
+        }
         var db = dblite('./lib/database/mcjs.sqlite');
         db.on('info', function (text) { console.log(text) });
-        db.on('error', function (err) {
-            if(config.binaries !== 'packaged'){
-                console.log('You choose to use locally installed binaries instead of the binaries included. /n Please install them. Eg type "apt-get install sqlite3"');
-            }
-            console.error('Database error: ' + err)
-        });
-
+        db.on('error', function (err) { console.error('Database error: ' + err) });
         db.query('DROP TABLE IF EXISTS ' + cache);
 
 		return res.send('done');

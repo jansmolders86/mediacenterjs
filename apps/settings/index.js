@@ -21,11 +21,25 @@ exports.engine = 'jade';
 var express = require('express')
 , app = express()
 , fs = require('fs')
+, os = require('os')
 , ini = require('ini')
 , http = require('http')
+, DeviceInfo = require('../../lib/utils/device-utils')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
-exports.index = function(req, res, next){	
+var dblite = require('dblite')
+if(os.platform() === 'win32'){
+    dblite.bin = "./bin/sqlite3/sqlite3";
+}
+var db = dblite('./lib/database/mcjs.sqlite');
+db.on('info', function (text) { console.log(text) });
+db.on('error', function (err) { console.error('Database error: ' + err) });
+
+
+exports.index = function(req, res, next){
+
+    DeviceInfo.storeDeviceInfo(req);
+
 	var allThemes = new Array()
 	, availableLanguages = []
 	, availablethemes = fs.readdirSync('./public/themes/')
@@ -41,26 +55,42 @@ exports.index = function(req, res, next){
 			availableLanguages.push(languageCode);
 		}
 	});
+	
 
-	res.render('settings',{
-		movielocation: config.moviepath,
-		selectedTheme: config.theme,
-		musiclocation : config.musicpath,
-		tvlocation : config.tvpath,
-		localIP : config.localIP,
-        selectedBinaryType : config.binaries,
-		remotePort : config.remotePort,
-		language: config.language,
-		availableLanguages: availableLanguages,
-		location: config.location,
-		screensaver: config.screensaver,
-		spotifyUser: config.spotifyUser,
-		spotifyPass: config.spotifyPass,
-		themes:allThemes,
-		port: config.port,
-		oauth: config.oauth,
-		oauthKey: config.oauthKey
-	});		
+	db.query('SELECT * FROM devices', { 
+		device_id: String,
+		last_seen: String,
+        is_active: String
+	}, function(rows) {
+		var devices;
+		if (typeof rows !== 'undefined' && rows.length > 0) {
+			devices = rows; 
+		}
+	
+		res.render('settings',{
+			movielocation: config.moviepath,
+			selectedTheme: config.theme,
+			musiclocation : config.musicpath,
+			tvlocation : config.tvpath,
+			localIP : config.localIP,
+	        selectedBinaryType : config.binaries,
+			remotePort : config.remotePort,
+			language: config.language,
+			availableLanguages: availableLanguages,
+			location: config.location,
+			screensaver: config.screensaver,
+			spotifyUser: config.spotifyUser,
+			spotifyPass: config.spotifyPass,
+			themes:allThemes,
+			devices:devices,
+			port: config.port,
+			oauth: config.oauth,
+			oauthKey: config.oauthKey
+		});	
+	
+	});
+
+		
 };
 exports.get = function(req, res, next) {
 	var infoRequest = req.params.id
