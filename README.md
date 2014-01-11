@@ -35,7 +35,6 @@ What currently works?
 * Show time and date on dashboard
 * Dynamic dashboard
 * Basic keyboard controls
-* Onscreen keyboard
 * Movie indexing
 * Multi-language support
 * Display movies with Poster, Backdrop and information 
