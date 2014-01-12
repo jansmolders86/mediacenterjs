@@ -57,7 +57,7 @@ What currently works?
 What's coming up
 ==================
 * Tv show app functionality
-* Better Music app functionality
+* Sharing playback state between devices
 * Better streaming
 
 Known issues: video/audio playback
