@@ -20,6 +20,9 @@
 		},{
 			"name": "Stefan Hoffman",
 			"email": "stefhoff@go4more.de"
+		},{
+			"name": "Ionică Bizău",
+			"email": "bizauionica@gmail.com"
 		}
 	],
 	"licenses": [{
@@ -64,6 +67,6 @@
         "adm-zip":"0.4.3",
         "wget":">=0.0.1",
         "socket.io": "~0.9.16",
-        "youtube-api": "~0.1.1"
+        "youtube-api": "~0.2.0"
     }
 }
