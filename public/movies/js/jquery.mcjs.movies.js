@@ -71,7 +71,7 @@
 
             var movieTitle = that.localName();
             var url = _checkPlatform(o, movieTitle);
-			_playMovie(o, url);
+            _playMovie(o,url,movieTitle);
 		};
 	}
 
@@ -129,7 +129,7 @@
             if(window.location.hash) {
                 var movieTitle =window.location.hash.substring(1);
                 var url = _checkPlatform(o, movieTitle);
-                _playMovie(o,url);
+                _playMovie(o,url,movieTitle);
             } else{
                 _lazyload(o);
             }
@@ -324,10 +324,9 @@
 		});
 	}
 
-	function _playMovie(o,url){
+	function _playMovie(o,url,movieTitle){
     
         $('body').animate({backgroundColor: '#000'},500).addClass('playingMovie');
-        var myPlayer;
 
         $('#wrapper, .movies, #header').hide();
 
@@ -335,7 +334,12 @@
         
         if($('#'+o.playerID).length > 1) {
             $('#'+o.playerID).remove();
-        } 
+        }
+
+
+        var fileName =  movieTitle.replace(/\.[^.]*$/,'')
+        , outputName =  fileName.replace(" ", "-")
+        , videoUrl =  "/data/movies/"+outputName+".mp4";
                 
 		$.ajax({
 			url: url,
@@ -346,8 +350,9 @@
                 $('#wrapper, .movies, #header, #backdrop').hide();
                 $('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
 
-                var player = document.getElementsByTagName('video')[0];
-                player.src = "/data/movies/output.mp4";
+
+                var player = document.getElementsByTagName('video')[0]
+                player.src = videoUrl;
                 player.load();
                 player.play();
 				
@@ -385,7 +390,7 @@
                 }
 
             } else if(data.platform === 'browser'){
-                $('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" data-setup="{bufferedTimeRange.start('+data.duration+'), bufferedTimeRange.end('+data.duration+')}" controls preload="none" width="100%" height="100%"><source src="/data/movies/output.mp4" type="video/mp4"></video>');
+                $('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" data-setup="{bufferedTimeRange.start('+data.duration+'), bufferedTimeRange.end('+data.duration+')}" controls preload="none" width="100%" height="100%"><source src="'+videoUrl+'" type="video/mp4"></video>');
                 
 				var player = videojs(o.playerID);
 				var currentTime = 0;

@@ -23,8 +23,11 @@ var colors = require('colors')
  * @param platform          The target platform
  */
 exports.startPlayback = function(response, movieUrl, movieFile, platform) {
-	var ExecConfig = {  maxBuffer: 9000*1024 }
-	, outputPath = "./public/data/movies/output.mp4";
+
+    var fileName =  movieFile.replace(/\.[^.]*$/,'')
+        , outputName =  fileName.replace(" ", "-")
+        , ExecConfig = {  maxBuffer: 9000*1024 }
+        , outputPath = "./public/data/movies/"+outputName+".mp4";
 	
 	if(os.platform() === 'win32'){
 		var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
@@ -74,30 +77,38 @@ exports.startPlayback = function(response, movieUrl, movieFile, platform) {
 GetMovieDurarion = function(response, movieUrl, movieFile, platform, callback) {
 	var probe = require('node-ffprobe');
 	probe(movieUrl, function(err, probeData) {
-		if(probeData.streams[0].duration !== 0 && probeData.streams[0].duration !== undefined && probeData.streams[0].duration !== "N/A" ){
-			console.log('Metadata found, continuing...');
-			var data = { 
-				'platform': platform,
-				'duration':probeData.streams[0].duration
-			}
-		   callback(data);
-		} else {
-			console.log('Falling back to IMDB runtime information' .blue);
-			loadMetadataFromDatabase(movieFile, platform, function(data){
-				if(data !== null){
-					callback(data);
-				} else{
-					console.log('Unknown movie duration, falling back to estimated duration.' .red);
-					var data = { 
-						'platform': platform,
-						'duration': 9000
-					}
-					callback(data);
-				}
-			});
-			
-		}
+        if(!err){
+            if(probeData !== undefined || probeData.streams[0].duration !== 0 && probeData.streams[0].duration !== undefined && probeData.streams[0].duration !== "N/A" ){
+                console.log('Metadata found, continuing...');
+                var data = {
+                    'platform': platform,
+                    'duration':probeData.streams[0].duration
+                }
+               callback(data);
+            } else {
+                console.log('Falling back to IMDB runtime information' .blue);
+                loadMetadataFromDatabase(movieFile, platform, function(data){
+                    if(data !== null){
+                        callback(data);
+                    } else{
+                        console.log('Unknown movie duration, falling back to estimated duration.' .red);
+                        var data = {
+                            'platform': platform,
+                            'duration': 9000
+                        }
+                        callback(data);
+                    }
+                });
 
+            }
+        }else {
+            console.log('Using fallback length due to error: ',err);
+            var data = {
+                'platform': platform,
+                'duration': 9000
+            }
+            callback(data);
+        }
 	});
 
 };
