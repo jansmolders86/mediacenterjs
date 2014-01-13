@@ -107,25 +107,26 @@ block body
                     input#port.mcjs-rc-clickable(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true", data-msg-required="This field is required.")
                 .row.wrap.mcjs-rc-controllable
                     br
-                    strong Connected devices:
-                    table
-                        thead
-                            tr
-                                th Client ID
-                                th Last seen
-                                th Is allowed
-                                th Parental lock
-                        tbody
-                            - each device in devices
-                                tr.mcjs-rc-controllable
-                                    td.device= device.device_id
-                                    td.seen= device.last_seen
-                                    td.active= device.is_active
-                                    td
-                                        -if (device.is_active === 'yes')
-                                            a.parentalControl.btn.mcjs-rc-clickable.lock Lock this device
-                                        -else
-                                            a.parentalControl.btn.mcjs-rc-clickable.unlock UnLock this device
+                    -if(allowed === 'yes')
+                        strong Connected devices:
+                        table
+                            thead
+                                tr
+                                    th Device ID
+                                    th Last seen
+                                    th Is allowed
+                                    th Parental lock
+                            tbody
+                                - each device in devices
+                                    tr.mcjs-rc-controllable
+                                        td.device= device.device_id
+                                        td.seen= device.last_seen
+                                        td.active= device.is_active
+                                        td
+                                            -if (device.is_active === 'yes')
+                                                a.parentalControl.btn.mcjs-rc-clickable.lock Lock this device
+                                            -else
+                                                a.parentalControl.btn.mcjs-rc-clickable.unlock UnLock this device
                 .row.mcjs-rc-controllable
                             input.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
                             input(type="hidden",name="screensaver",value="dim")

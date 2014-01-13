@@ -66,27 +66,30 @@ exports.index = function(req, res, next){
 		if (typeof rows !== 'undefined' && rows.length > 0) {
 			devices = rows; 
 		}
-	
-		res.render('settings',{
-			movielocation: config.moviepath,
-			selectedTheme: config.theme,
-			musiclocation : config.musicpath,
-			tvlocation : config.tvpath,
-			localIP : config.localIP,
-	        selectedBinaryType : config.binaries,
-			remotePort : config.remotePort,
-			language: config.language,
-			availableLanguages: availableLanguages,
-			location: config.location,
-			screensaver: config.screensaver,
-			spotifyUser: config.spotifyUser,
-			spotifyPass: config.spotifyPass,
-			themes:allThemes,
-			devices:devices,
-			port: config.port,
-			oauth: config.oauth,
-			oauthKey: config.oauthKey
-		});	
+
+        DeviceInfo.isDeviceAllowed(req, function(allowed){
+            res.render('settings',{
+                movielocation: config.moviepath,
+                selectedTheme: config.theme,
+                musiclocation : config.musicpath,
+                tvlocation : config.tvpath,
+                localIP : config.localIP,
+                selectedBinaryType : config.binaries,
+                remotePort : config.remotePort,
+                language: config.language,
+                availableLanguages: availableLanguages,
+                location: config.location,
+                screensaver: config.screensaver,
+                spotifyUser: config.spotifyUser,
+                spotifyPass: config.spotifyPass,
+                themes:allThemes,
+                devices:devices,
+                allowed: allowed,
+                port: config.port,
+                oauth: config.oauth,
+                oauthKey: config.oauthKey
+            });
+        });
 	
 	});
 
