@@ -91,3 +91,21 @@ exports.filter = function (req, res, movieRequest){
 		}
 	});
 };
+
+exports.sendState = function (req, res){
+    var incommingData = req.body
+    , movieTitle = incommingData.movieTitle
+    , progression = incommingData.currentTime;
+
+    var dblite = require('dblite')
+    if(os.platform() === 'win32'){
+        dblite.bin = "./bin/sqlite3/sqlite3";
+    }
+    var db = dblite('./lib/database/mcjs.sqlite');
+    db.on('info', function (text) { console.log(text) });
+    db.on('error', function (err) { console.error('Database error: ' + err) });
+
+    db.query("CREATE TABLE IF NOT EXISTS progressionmarker (movietitle TEXT PRIMARY KEY, progression VARCHAR)");
+    db.query('INSERT OR REPLACE INTO playback VALUES(?,?)', [movieTitle, progression]);
+}
+

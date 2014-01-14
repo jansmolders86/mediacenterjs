@@ -336,7 +336,6 @@
             $('#'+o.playerID).remove();
         }
 
-
         var fileName =  movieTitle.replace(/\.[^.]*$/,'')
         , outputName =  fileName.replace(" ", "-")
         , videoUrl =  "/data/movies/"+outputName+".mp4";
@@ -390,54 +389,74 @@
                 }
 
             } else if(data.platform === 'browser'){
-                $('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" data-setup="{bufferedTimeRange.start('+data.duration+'), bufferedTimeRange.end('+data.duration+')}" controls preload="none" width="100%" height="100%"><source src="'+videoUrl+'" type="video/mp4"></video>');
-                
-				var player = videojs(o.playerID);
-				var currentTime = 0;
-				player.ready(function() {
-                    setTimeout(function(){
-                        $('.vjs-loading-spinner, #backdrop').hide();
 
-                        player.load();                     
-                        player.play();
-                        _setDurationOfMovie(player, data);
-                        _pageVisibility(o);
-                    },5000);	
+                if(data.pogression !== undefined && data.pogression !== 0){
+                    alert('continue playing?');
+                } else {
 
-                    player.on('error', function(e){ 
-                        console.log('Error', e); 
+                    $('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" data-setup="{bufferedTimeRange.start('+data.duration+'), bufferedTimeRange.end('+data.duration+')}" controls preload="none" width="100%" height="100%"><source src="'+videoUrl+'" type="video/mp4"></video>');
+
+                    var player = videojs(o.playerID);
+                    var currentTime = 0;
+                    player.ready(function() {
+                        setTimeout(function(){
+                            $('.vjs-loading-spinner, #backdrop').hide();
+
+                            player.load();
+                            player.play();
+                            _setDurationOfMovie(player, data);
+                            _pageVisibility(o);
+                        },5000);
+
+                        player.on('error', function(e){
+                            console.log('Error', e);
+                        });
+
+                        player.on('timeupdate', function(e){
+                           _setDurationOfMovie(player, data);
+                        });
+
+                        player.on('progress', function(e){
+                            _setDurationOfMovie(player, data);
+                        });
+
+                        player.on('pause', function(e){
+                            currentTime = player.currentTime();
+                            var movieData = {
+                                'movieTitle': movieTitle,
+                                'currentTime': currentTime
+                            }
+                            $.ajax({
+                                url: '/movies/sendState',
+                                type: 'post',
+                                data: movieData
+                            });
+                        });
+
+                        player.on('loadeddata', function(e){
+                            _setDurationOfMovie(player, data);
+                        });
+
+                        player.on('loadedmetadata', function(e){
+                            if(currentTime > 0){
+                                player.currentTime(currentTime);
+                            }
+                        });
+
+                        player.on('ended', function(e){
+                            currentTime = player.currentTime();
+                            var actualDuration = data.duration;
+                            if( currentTime < actualDuration){
+                                player.load();
+                                player.play();
+                            } else{
+                                window.location.replace("/movies/");
+                            }
+                        });
+
                     });
-                    
-                    player.on('timeupdate', function(e){
-                       _setDurationOfMovie(player, data);
-                    });
-                    
-                    player.on('progress', function(e){
-                        _setDurationOfMovie(player, data);
-					});
-                    
-                    player.on('loadeddata', function(e){
-						_setDurationOfMovie(player, data);
-					});
-					
-                    player.on('loadedmetadata', function(e){
-						if(currentTime > 0){
-							player.currentTime(currentTime);
-						}
-                    });
-					
-                    player.on('ended', function(e){
-						currentTime = player.currentTime();
-						var actualDuration = data.duration;
-						if( currentTime < actualDuration){
-							player.load(); 							
-							player.play();	
-						} else{
-							window.location.replace("/movies/");
-						}
-                    });
-                    
-                });
+
+                }
             }
         });
 

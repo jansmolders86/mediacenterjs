@@ -48,15 +48,15 @@ exports.get = function(req, res){
 				break;
 		}	
 	}
-	
-	if(!platform){
-		switch(optionalParam) {
-			case('info'):
-				var movieName = infoRequest.replace(/\+/g, " ");
-				functions.handler(req, res, infoRequest);
-			break;
-		}
-	}
+
+    if(!platform){
+        switch(optionalParam) {
+            case('info'):
+                var movieName = infoRequest.replace(/\+/g, " ");
+                functions.handler(req, res, infoRequest);
+                break;
+        }
+    }
     
     
     if(platform !== undefined && optionalParam === 'play'){
@@ -77,3 +77,11 @@ exports.get = function(req, res){
     }
     
 };
+
+
+exports.post = function(req, res){
+    var infoRequest = req.params.id;
+    if(infoRequest === 'sendState'){
+        functions.sendState(req, res);
+    }
+}
