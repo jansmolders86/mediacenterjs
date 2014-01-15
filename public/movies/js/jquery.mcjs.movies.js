@@ -343,7 +343,7 @@
         }
 
         var fileName =  movieTitle.replace(/\.[^.]*$/,'')
-        , outputName =  fileName.replace(" ", "-")
+        , outputName =  fileName.replace(/ /g, "-")
         , videoUrl =  "/data/movies/"+outputName+".mp4";
                 
 		$.ajax({
