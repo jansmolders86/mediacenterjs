@@ -345,121 +345,128 @@
 			type: 'get'
 		}).done(function(data){
             if(data.platform === 'android' || data.platform === 'ios'){
-				
+
                 $('#wrapper, .movies, #header, #backdrop').hide();
-                $('body').append('<video id="'+o.playerID+'" controls width="100%" height="100%"></video>');
+                $('body').append('<video id="'+o.playerID+'" controls poster width="100%" height="100%"></video>');
+                var setProgression = parseFloat(data.progression);
+                alert(setProgression);
 
-
-                var player = document.getElementsByTagName('video')[0]
+                var player = document.getElementById(o.playerID);
                 player.src = videoUrl;
                 player.load();
+
+                player.currentTime = setProgression;
+
                 player.play();
-				
-				player.onerror = function(e){ 
-					console.log('Error', e);
-				};
-			
-				player.ontimeupdate = function(e){ 
-				   _setDurationOfMovie(player, data);
-				};
-				
-				player.onprogress = function(e){ 
-					_setDurationOfMovie(player, data);
-				};
-				
-				player.onloadeddata = function(e){ 
-					_setDurationOfMovie(player, data);
-				};
-				
-				player.onloadedmetadata = function(e){ 
-					if(currentTime > 0){
-						player.currentTime(currentTime);
-					}
-				};
+
+                player.onerror = function(e){
+                    console.log('Error', e);
+                };
+
+                player.ontimeupdate = function(e){
+                    _setDurationOfMovie(player, data);
+                };
+
+                player.onprogress = function(e){
+                    _setDurationOfMovie(player, data);
+                };
+
+                player.onloadeddata = function(e){
+                    _setDurationOfMovie(player, data);
+                };
+
+                player.onloadedmetadata = function(e){
+                    var setProgression = parseFloat(data.progression);
+                    player.currentTime = setProgression;
+                };
+
+                player.addEventListener('canplay', function() {
+                    player.load();
+                    var setProgression = parseFloat(data.progression);
+                    player.currentTime = setProgression;
+                    player.play();
+                });
 
                 player.onended = function(e){
-					currentTime = player.currentTime();
-					var actualDuration = data.duration;
-					if( currentTime < actualDuration){
-						player.load(); 							
-						player.play();	
-					} else{
-						window.location.replace("/movies/");
-					}
+                    currentTime = player.currentTime();
+                    var actualDuration = data.duration;
+                    if( currentTime < actualDuration){
+                        player.load();
+                        player.play();
+                    } else{
+                        window.location.replace("/movies/");
+                    }
                 }
 
             } else if(data.platform === 'browser'){
+                $('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" data-setup="{bufferedTimeRange.start('+data.duration+'), bufferedTimeRange.end('+data.duration+')}" controls preload="none" width="100%" height="100%"><source src="'+videoUrl+'" type="video/mp4"></video>');
 
-                if(data.pogression !== undefined && data.pogression !== 0){
-                    alert('continue playing?');
-                } else {
 
-                    $('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" data-setup="{bufferedTimeRange.start('+data.duration+'), bufferedTimeRange.end('+data.duration+')}" controls preload="none" width="100%" height="100%"><source src="'+videoUrl+'" type="video/mp4"></video>');
+                var player = videojs(o.playerID);
+                var currentTime = parseFloat(data.progression);
+                player.ready(function() {
+                    setTimeout(function(){
+                        $('.vjs-loading-spinner, #backdrop').hide();
 
-                    var player = videojs(o.playerID);
-                    var currentTime = 0;
-                    player.ready(function() {
-                        setTimeout(function(){
-                            $('.vjs-loading-spinner, #backdrop').hide();
+                        player.load();
 
-                            player.load();
-                            player.play();
-                            _setDurationOfMovie(player, data);
-                            _pageVisibility(o);
-                        },5000);
+                        var setProgression = parseFloat(data.progression);
+                        player.currentTime(setProgression);
 
-                        player.on('error', function(e){
-                            console.log('Error', e);
-                        });
+                        player.play();
 
-                        player.on('timeupdate', function(e){
-                           _setDurationOfMovie(player, data);
-                        });
+                        _setDurationOfMovie(player, data);
+                        _pageVisibility(o);
+                    },5000);
 
-                        player.on('progress', function(e){
-                            _setDurationOfMovie(player, data);
-                        });
-
-                        player.on('pause', function(e){
-                            currentTime = player.currentTime();
-                            var movieData = {
-                                'movieTitle': movieTitle,
-                                'currentTime': currentTime
-                            }
-                            $.ajax({
-                                url: '/movies/sendState',
-                                type: 'post',
-                                data: movieData
-                            });
-                        });
-
-                        player.on('loadeddata', function(e){
-                            _setDurationOfMovie(player, data);
-                        });
-
-                        player.on('loadedmetadata', function(e){
-                            if(currentTime > 0){
-                                player.currentTime(currentTime);
-                            }
-                        });
-
-                        player.on('ended', function(e){
-                            currentTime = player.currentTime();
-                            var actualDuration = data.duration;
-                            if( currentTime < actualDuration){
-                                player.load();
-                                player.play();
-                            } else{
-                                window.location.replace("/movies/");
-                            }
-                        });
-
+                    player.on('error', function(e){
+                        console.log('Error', e);
                     });
 
-                }
+                    player.on('timeupdate', function(e){
+                       _setDurationOfMovie(player, data);
+                    });
+
+                    player.on('progress', function(e){
+                        _setDurationOfMovie(player, data);
+                    });
+
+                    player.on('pause', function(e){
+                        currentTime = player.currentTime();
+                        var movieData = {
+                            'movieTitle': movieTitle,
+                            'currentTime': currentTime
+                        }
+                        $.ajax({
+                            url: '/movies/sendState',
+                            type: 'post',
+                            data: movieData
+                        });
+                    });
+
+                    player.on('loadeddata', function(e){
+                        _setDurationOfMovie(player, data);
+                    });
+
+                    player.on('loadedmetadata', function(e){
+                        if(currentTime > 0){
+                            player.currentTime(currentTime);
+                        }
+                    });
+
+                    player.on('ended', function(e){
+                        currentTime = player.currentTime();
+                        var actualDuration = data.duration;
+                        if( currentTime < actualDuration){
+                            player.load();
+                            player.play();
+                        } else{
+                            window.location.replace("/movies/");
+                        }
+                    });
+                });
             }
         });
-
 	}
 	
 	function _setDurationOfMovie(player, data){

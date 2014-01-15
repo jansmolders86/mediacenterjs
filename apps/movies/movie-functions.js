@@ -9,19 +9,17 @@ var fs = require('fs.extra')
 /* Constants */
 var SUPPORTED_FILETYPES = new RegExp("(avi|mkv|mpeg|mov|mp4|wmv)$","g");
 
-exports.initMovieDb = function() {
-    // Init Database
-    var dblite = require('dblite')
-    if(os.platform() === 'win32'){
-        dblite.bin = "./bin/sqlite3/sqlite3";
-    }
-    var db = dblite('./lib/database/mcjs.sqlite');
-	db.on('info', function (text) { console.log(text) });
-	db.on('error', function (err) { console.error('Database error: ' + err) });
+var dblite = require('dblite')
+if(os.platform() === 'win32'){
+    dblite.bin = "./bin/sqlite3/sqlite3";
+}
+var db = dblite('./lib/database/mcjs.sqlite');
+db.on('info', function (text) { console.log(text) });
+db.on('error', function (err) { console.error('Database error: ' + err) });
 
-    db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number VARCHAR)");
-    return db;
-};
+//Create tables
+db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number VARCHAR)");
+db.query("CREATE TABLE IF NOT EXISTS progressionmarker (movietitle TEXT PRIMARY KEY, progression TEXT)");
 
 exports.loadItems = function (req, res){
 	file_utils.getLocalFiles(config.moviepath, SUPPORTED_FILETYPES, function(err, files) {
@@ -64,8 +62,6 @@ exports.handler = function (req, res, movieRequest){
 	var downloader = require('downloader');
 	var metadata_fetcher = require('./metadata-fetcher');
 
-	this.initMovieDb();
-
 	console.log('Searching for ' + movieRequest + ' in database');
 	metadata_fetcher.fetchMetadataForMovie(movieRequest, function(metadata) {
 		res.json(metadata);
@@ -73,7 +69,6 @@ exports.handler = function (req, res, movieRequest){
 };
 
 exports.getGenres = function (req, res){
-	var db = this.initMovieDb();
 	db.query('SELECT genre FROM movies', function(rows) {
 		if (typeof rows !== 'undefined' && rows.length > 0){
 			var allGenres = rows[0][0].replace(/\r\n|\r|\n| /g,","),
@@ -84,7 +79,6 @@ exports.getGenres = function (req, res){
 };
 
 exports.filter = function (req, res, movieRequest){
-	var db = this.initMovieDb();
 	db.query('SELECT * FROM movies WHERE genre =?', [movieRequest], { local_name: String }, function(rows) {
 		if (typeof rows !== 'undefined' && rows.length > 0) {
 			res.json(rows);
@@ -97,15 +91,6 @@ exports.sendState = function (req, res){
     , movieTitle = incommingData.movieTitle
     , progression = incommingData.currentTime;
 
-    var dblite = require('dblite')
-    if(os.platform() === 'win32'){
-        dblite.bin = "./bin/sqlite3/sqlite3";
-    }
-    var db = dblite('./lib/database/mcjs.sqlite');
-    db.on('info', function (text) { console.log(text) });
-    db.on('error', function (err) { console.error('Database error: ' + err) });
-
-    db.query("CREATE TABLE IF NOT EXISTS progressionmarker (movietitle TEXT PRIMARY KEY, progression VARCHAR)");
-    db.query('INSERT OR REPLACE INTO playback VALUES(?,?)', [movieTitle, progression]);
+    db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?)', [movieTitle, progression]);
 }
 

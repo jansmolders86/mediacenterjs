@@ -34,21 +34,22 @@ exports.startPlayback = function(response, movieUrl, movieFile, platform) {
 		ExecConfig = {  maxBuffer: 9000*1024, env: process.env.ffmpegPath };
 	}
 
-
     GetMovieDurarion(response, movieUrl, movieFile, platform, function(data){
         var movieDuration = data;
         checkProgression(movieFile, function(progression){
-
             if(progression !== 0 && progression !== undefined){
+                console.log('Progression found...');
                 var movieProgression = progression;
 
                 if(fs.existsSync(outputPath) === false){
-                    // Assume file was transcoded.
-                    //TODO: Add check to check if transcoding was completed.
+                    // Start transcode if file was deleted.
                     startTranscoding(platform, movieUrl, outputPath, ExecConfig);
                 };
 
+                //TODO: Add check to check if transcoding was completed.
+
             } else {
+                console.log('Progression not found, starting transcode...');
                 var movieProgression = 0;
 
                 // Cleanup just to be safe
@@ -82,7 +83,7 @@ GetMovieDurarion = function(response, movieUrl, movieFile, platform, callback) {
                 callback(data);
             } else {
                 console.log('Falling back to IMDB runtime information' .blue);
-                loadMetadataFromDatabase(movieFile, platform, function(data){
+                getDurationFromDatabase(movieFile, platform, function(data){
                     if(data !== null){
                         callback(data);
                     } else{
@@ -102,7 +103,7 @@ GetMovieDurarion = function(response, movieUrl, movieFile, platform, callback) {
 
 };
 
-loadMetadataFromDatabase = function(movieFile, platform, callback) {
+getDurationFromDatabase = function(movieFile, platform, callback) {
 	var original_title =  movieFile.replace(/(avi|mkv|mpeg|mpg|mov|mp4|wmv)$/,"")
 
 	db.query('SELECT * FROM movies WHERE original_name =? ', [ original_title ], {
@@ -123,7 +124,7 @@ loadMetadataFromDatabase = function(movieFile, platform, callback) {
 				var runtime = parseInt(rows[0].runtime) * 60;
 				console.log('Runtime found', rows[0].runtime);
 				var data = runtime;
-				callback(data);
+                callback(data);
 			} else {
 				callback(null);
 			}
