@@ -24,10 +24,13 @@ var colors = require('colors')
  */
 exports.startPlayback = function(response, movieUrl, movieFile, platform) {
 
+
     var fileName =  movieFile.replace(/\.[^.]*$/,'')
-        , outputName =  fileName.replace(" ", "-")
+        , outputName =  fileName.replace(/ /g,"-")
         , ExecConfig = {  maxBuffer: 9000*1024 }
         , outputPath = "./public/data/movies/"+outputName+".mp4";
+		
+		console.log('outputName', outputName)
 	
 	if(os.platform() === 'win32'){
 		var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
