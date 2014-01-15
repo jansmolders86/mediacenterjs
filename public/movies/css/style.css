@@ -212,6 +212,18 @@ span.title{visibility:hidden; width:0; height:0;}
 #genres { position:absolute; top: 240px; left: 96px;}
 #genres li{ float:left; margin-right:20px;}
 
+
+#player.mobile-player  .vjs-control-bar{
+    bottom:100px;
+    background:red;
+    left:0;
+}
+
+#header h4 {
+    bottom: -9px;
+    left: 310px;
+}
+
 /*
 .imdbrating{
 	color:#ddd;

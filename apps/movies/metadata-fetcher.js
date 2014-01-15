@@ -45,6 +45,7 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 
 			var poster_path = null;
 			var backdrop_path = null;
+            var adult = false;
 			
 			if(result !== null){
 				poster_path = result.poster_path;
@@ -71,7 +72,8 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 					imdb_id = '',
 					runtime = 'Unknown',
 					overview = '',
-					certification =''
+					certification ='',
+                    adult = 'false';
 				 
 				if(result !== null){
 					rating = result.vote_average.toString();
@@ -79,10 +81,13 @@ exports.fetchMetadataForMovie = function(movieTitle, callback) {
 					imdb_id = result.imdb_id;
 					runtime = result.runtime;
 					overview = result.overview;
+                    var adultRating = result.adult;
+                    adult = adultRating.toString();
 				}
 				
-				var metadata = [ movieTitle, original_title, poster_path.replace(/\\/g,"/"), backdrop_path.replace(/\\/g,"/"), imdb_id, rating, certification, genre, runtime, overview, movieInfos.cd ];
+				var metadata = [ movieTitle, original_title, poster_path.replace(/\\/g,"/"), backdrop_path.replace(/\\/g,"/"), imdb_id, rating, certification, genre, runtime, overview, movieInfos.cd, adult ];
 				storeMetadataInDatabase(metadata, function() {
+                    console.log('data stored in database!');
 					loadMetadataFromDatabase(movieTitle, callback);
 				});
 			});
@@ -104,7 +109,8 @@ loadMetadataFromDatabase = function(movieTitle, callback) {
 			genre  			: String,
 			runtime  		: String,
 			overview  		: String,
-			cd_number  		: String
+			cd_number  		: String,
+            adult           : String
 		},
 		function(rows) {
 			if (typeof rows !== 'undefined' && rows.length > 0){
@@ -120,7 +126,7 @@ loadMetadataFromDatabase = function(movieTitle, callback) {
 };
 
 storeMetadataInDatabase = function(metadata, callback) {
-	db.query('INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?,?)', metadata);
+	db.query('INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', metadata);
 	callback();
 };
 

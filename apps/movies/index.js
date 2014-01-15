@@ -24,10 +24,19 @@ var express = require('express')
 , fs = require('fs.extra')
 , helper = require('../../lib/helpers.js')
 , config = require('../../lib/handlers/configuration-handler').getConfiguration()
+, DeviceInfo = require('../../lib/utils/device-utils')
 , functions = require('./movie-functions');
 
 exports.index = function(req, res){
-	res.render('movies', { selectedTheme: config.theme });
+
+    DeviceInfo.isDeviceAllowed(req, function(allowed){
+        res.render('movies', {
+            title: 'Movies',
+            selectedTheme: config.theme,
+            allowed: allowed
+        });
+    });
+
 };
 
 exports.get = function(req, res){

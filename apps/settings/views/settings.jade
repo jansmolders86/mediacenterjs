@@ -107,7 +107,7 @@ block body
                     input#port.mcjs-rc-clickable(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true", data-msg-required="This field is required.")
                 .row.wrap.mcjs-rc-controllable
                     br
-                    -if(allowed === 'yes')
+                    -if(allowed === 'yes' && devices !== undefined)
                         strong Connected devices:
                         table
                             thead
@@ -123,7 +123,7 @@ block body
                                         td.seen= device.last_seen
                                         td.active= device.is_active
                                         td
-                                            -if (device.is_active === 'yes')
+                                            -if (device.is_active !== undefined && device.is_active === 'yes')
                                                 a.parentalControl.btn.mcjs-rc-clickable.lock Lock this device
                                             -else
                                                 a.parentalControl.btn.mcjs-rc-clickable.unlock UnLock this device

@@ -64,6 +64,7 @@
 		this.overview 		= ko.observable();
 		this.title 			= ko.observable();
 		this.cdNumber 		= ko.observable();
+		this.adult   		= ko.observable();
 		this.isActive 		= ko.observable();
 		this.playMovie = function () {
             window.location.hash = that.localName();
@@ -158,8 +159,13 @@
 						movie.overview(movieData.overview);
 						movie.title(movieData.local_name);
 						movie.cdNumber(movieData.cd_number);
-						
-						visibleMovie.addClass('showDetails '+o.fadeClass);
+						movie.adult(movieData.adult);
+
+                        if($('#header > h4').length > 0 && movieData.adult === 'yes'){
+                            visibleMovie.hide();
+                        } else {
+                            visibleMovie.addClass('showDetails '+o.fadeClass);
+                        }
 						
 					},500);
 				}
@@ -344,50 +350,65 @@
 			url: url,
 			type: 'get'
 		}).done(function(data){
-            if(data.platform === 'android' || data.platform === 'ios'){
 
-                $('#wrapper, .movies, #header, #backdrop').hide();
-                $('body').append('<video id="'+o.playerID+'" controls poster width="100%" height="100%"></video>');
-                var setProgression = parseFloat(data.progression);
-                alert(setProgression);
+            $('body').append('<video id="'+o.playerID+'" poster class="video-js vjs-default-skin" controls preload="none" width="100%" height="100%"><source src="'+videoUrl+'" type="video/mp4"></video>');
 
-                var player = document.getElementById(o.playerID);
-                player.src = videoUrl;
-                player.load();
+            var player = videojs(o.playerID);
+            var currentTime = parseFloat(data.progression);
+            player.ready(function() {
+                setTimeout(function(){
+                    $('.vjs-loading-spinner, #backdrop').hide();
 
-                player.currentTime = setProgression;
-
-                player.play();
-
-                player.onerror = function(e){
-                    console.log('Error', e);
-                };
-
-                player.ontimeupdate = function(e){
-                    _setDurationOfMovie(player, data);
-                };
-
-                player.onprogress = function(e){
-                    _setDurationOfMovie(player, data);
-                };
-
-                player.onloadeddata = function(e){
-                    _setDurationOfMovie(player, data);
-                };
-
-                player.onloadedmetadata = function(e){
-                    var setProgression = parseFloat(data.progression);
-                    player.currentTime = setProgression;
-                };
-
-                player.addEventListener('canplay', function() {
                     player.load();
+
                     var setProgression = parseFloat(data.progression);
-                    player.currentTime = setProgression;
+                    player.currentTime(setProgression);
+
                     player.play();
+
+                    _setDurationOfMovie(player, data);
+                    _pageVisibility(o);
+                },5000);
+
+                player.on('error', function(e){
+                    console.log('Error', e);
                 });
 
-                player.onended = function(e){
+                player.on('timeupdate', function(e){
+                   _setDurationOfMovie(player, data);
+                });
+
+                player.on('progress', function(e){
+                    _setDurationOfMovie(player, data);
+                });
+
+                player.on('pause', function(e){
+                    currentTime = player.currentTime();
+                    var movieData = {
+                        'movieTitle': movieTitle,
+                        'currentTime': currentTime
+                    }
+                    $.ajax({
+                        url: '/movies/sendState',
+                        type: 'post',
+                        data: movieData
+                    });
+                });
+
+                player.on('loadeddata', function(e){
+                    _setDurationOfMovie(player, data);
+                    if(currentTime > 0){
+                        player.currentTime(currentTime);
+                    }
+                });
+
+                player.on('loadedmetadata', function(e){
+                    if(currentTime > 0){
+                        player.currentTime(currentTime);
+                    }
+                });
+
+                player.on('ended', function(e){
                     currentTime = player.currentTime();
                     var actualDuration = data.duration;
                     if( currentTime < actualDuration){
@@ -396,76 +417,9 @@
                     } else{
                         window.location.replace("/movies/");
                     }
-                }
-
-            } else if(data.platform === 'browser'){
-                $('body').append('<video id="'+o.playerID+'" class="video-js vjs-default-skin" data-setup="{bufferedTimeRange.start('+data.duration+'), bufferedTimeRange.end('+data.duration+')}" controls preload="none" width="100%" height="100%"><source src="'+videoUrl+'" type="video/mp4"></video>');
-
-
-                var player = videojs(o.playerID);
-                var currentTime = parseFloat(data.progression);
-                player.ready(function() {
-                    setTimeout(function(){
-                        $('.vjs-loading-spinner, #backdrop').hide();
-
-                        player.load();
-
-                        var setProgression = parseFloat(data.progression);
-                        player.currentTime(setProgression);
-
-                        player.play();
-
-                        _setDurationOfMovie(player, data);
-                        _pageVisibility(o);
-                    },5000);
-
-                    player.on('error', function(e){
-                        console.log('Error', e);
-                    });
-
-                    player.on('timeupdate', function(e){
-                       _setDurationOfMovie(player, data);
-                    });
-
-                    player.on('progress', function(e){
-                        _setDurationOfMovie(player, data);
-                    });
-
-                    player.on('pause', function(e){
-                        currentTime = player.currentTime();
-                        var movieData = {
-                            'movieTitle': movieTitle,
-                            'currentTime': currentTime
-                        }
-                        $.ajax({
-                            url: '/movies/sendState',
-                            type: 'post',
-                            data: movieData
-                        });
-                    });
-
-                    player.on('loadeddata', function(e){
-                        _setDurationOfMovie(player, data);
-                    });
-
-                    player.on('loadedmetadata', function(e){
-                        if(currentTime > 0){
-                            player.currentTime(currentTime);
-                        }
-                    });
-
-                    player.on('ended', function(e){
-                        currentTime = player.currentTime();
-                        var actualDuration = data.duration;
-                        if( currentTime < actualDuration){
-                            player.load();
-                            player.play();
-                        } else{
-                            window.location.replace("/movies/");
-                        }
-                    });
                 });
-            }
+            });
+
         });
 	}
 	
@@ -474,6 +428,7 @@
 		player.bufferedPercent(0);
 		$('.vjs-duration-display .vjs-control-text').text(videoDuration);
 	}
+
     
     function _resetBackdrop(o){
         //Remove img and reintroduce it to stop the animation and load the correct backdrop img
