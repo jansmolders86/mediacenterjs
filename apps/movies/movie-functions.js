@@ -19,7 +19,7 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 
 //Create tables
 db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number TEXT, adult TEXT)");
-db.query("CREATE TABLE IF NOT EXISTS progressionmarker (movietitle TEXT PRIMARY KEY, progression TEXT)");
+db.query("CREATE TABLE IF NOT EXISTS progressionmarker (movietitle TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
 
 exports.loadItems = function (req, res){
 	file_utils.getLocalFiles(config.moviepath, SUPPORTED_FILETYPES, function(err, files) {
@@ -89,8 +89,9 @@ exports.filter = function (req, res, movieRequest){
 exports.sendState = function (req, res){
     var incommingData = req.body
     , movieTitle = incommingData.movieTitle
-    , progression = incommingData.currentTime;
+    , progression = incommingData.currentTime
+    , transcodingstatus = 'pending';
 
-    db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?)', [movieTitle, progression]);
+    db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)', [movieTitle, progression, transcodingstatus]);
 }
 
