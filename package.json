@@ -67,6 +67,6 @@
         "adm-zip":"0.4.3",
         "wget":">=0.0.1",
         "socket.io": "~0.9.16",
-        "youtube-api": "~0.2.0"
+        "youtube-api": "~0.2.1"
     }
 }
