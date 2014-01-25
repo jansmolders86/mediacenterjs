@@ -459,7 +459,7 @@ This app makes heavy use of:
 
 * Sylvain https://github.com/flyinva for his French translation
 * Adam https://github.com/brutalhonesty for his YouTube App
-* Ionică Bizău https://github.com/IonicaBizau for the Youtube app API
+* Ionică Bizău https://github.com/IonicaBizau for the [Youtube API NPM module](https://github.com/IonicaBizau/youtube-api)
 * Luis Eduardo Brito https://github.com/luiseduardobrito for his Portuguese translation
 * Kasper Isager https://github.com/kasperisager for his Danish translation
 * Jussi Vatjus https://github.com/jupe for his code support
