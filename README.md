@@ -176,7 +176,7 @@ For more information and troubleshooting: https://trac.ffmpeg.org/wiki/UbuntuCom
 If you use a Git clone of MediacenterJS please use:
 
 ```sh
-sudo apt-get install git (If you do not have git installed yet)
+sudo apt-get install git # If you do not have git installed yet
 git clone https://github.com/jansmolders86/mediacenterjs.git
 cd mediacenterjs
 npm install
@@ -211,11 +211,11 @@ sudo chmod 755 lib/database/mcjs.sqlite
 
 	Exampe:
 	
-		'Error module 'colors' not found'
+	> 'Error module 'colors' not found'
 
-		```sh		
-		npm install colors
-		```
+	```sh		
+	npm install colors
+	```
 		
 * if you get an 'Socket is not open' error on Windows, please place the bin folder inside the MCJS folder. You can download the binaries here: https://github.com/jansmolders86/mediacenterjs-windows-binaries/archive/master.zip
 
