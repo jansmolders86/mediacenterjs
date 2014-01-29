@@ -22,113 +22,65 @@ exports.engine = 'jade';
 var express = require('express')
 , app = express()
 , fs = require('fs.extra')
-, downloader = require('downloader')
-, file_utils = require('../../lib/utils/file-utils')
-, ajax_utils = require('../../lib/utils/ajax-utils')
-, app_cache_handler = require('../../lib/handlers/app-cache-handler')
-, Trakt = require('trakt')
-, trakt = new Trakt({username: 'mediacenterjs', password: 'mediacenterjs'})
-, colors = require('colors')
-, config = require('../../lib/handlers/configuration-handler').getConfiguration();
+, helper = require('../../lib/helpers.js')
+, config = require('../../lib/handlers/configuration-handler').getConfiguration()
+, DeviceInfo = require('../../lib/utils/device-utils')
+, functions = require('./tv-functions');
 
-exports.index = function(req, res, next){	
-	var dir = config.tvpath
-	, fileTypes = new RegExp("\.(avi|mkv|mpeg|mov|mp4)","g");;
+exports.index = function(req, res){
 
-	file_utils.getLocalFiles(dir, fileTypes, function(status, files){
-		res.render('tv',{
-			tvshows: files,
-			selectedTheme: config.theme,
-			status: status
-		});
-	});
+    DeviceInfo.isDeviceAllowed(req, function(allowed){
+        res.render('tv', {
+            title: 'tv',
+            selectedTheme: config.theme,
+            allowed: allowed
+        });
+    });
 
 };
 
+exports.get = function(req, res){
+	var infoRequest = req.params.id,
+		optionalParam = req.params.optionalParam,
+		platform = req.params.action;
 
-exports.post = function(req, res, next){	
-	var title = 'No data found...'
-	, genre = 'No data found...'
-	, certification = 'No data found...'
-	, banner = '/tv/images/banner.png';
-
-	var incommingFile = req.body
-	, tvRequest = incommingFile.tvTitle;
-
-	//Check if folder already exists
-	app_cache_handler.ensureCacheDirExists('tv', tvRequest);
-	checkDirForCorruptedFiles(tvRequest);
-
-	var options = { query: tvRequest };
-	trakt.request('search', 'shows', options, function(err, result) {
-		if (err) {
-			console.log('error retrieving tvshow info', err .red);
-		} else {
-			var tvSearchResult = result[0];
-			if (tvSearchResult !== undefined && tvSearchResult !== '' && tvSearchResult !== null) {
-				downloadCache(tvSearchResult,function(banner) {
-						var localImageDir = '/data/tv/'+tvRequest+'/',
-						localCover = banner.match(/[^/]+$/);
-
-						banner = localImageDir+localCover;
-						title = tvSearchResult.title;
-						genre = tvSearchResult.genre;
-						certification = tvSearchResult.certification;
-
-						writeData(title,genre,certification,banner);
-				});
-			} else {
-				writeData(title,genre,certification,banner);
-			}
-		}
-	});
-	
-	
-	function downloadCache(tvSearchResult,callback){
-		if (typeof tvSearchResult){
-			var banner = tvSearchResult.images.banner
-			, downloadDir = app_cache_handler.getCacheDir('tv', tvRequest) + '/';
-			
-			downloader.on('done', function(msg) { console.log('done', msg .green); });
-			downloader.on('error', function(msg) { console.log('error', msg .red); });
-			downloader.download(banner, downloadDir);
-		} else{
-			banner = '/tv/images/banner.png';
-		}
-		callback(banner);
+    if (!optionalParam) {
+        if(infoRequest === 'loadItems') {
+            functions.loadItems(req,res);
+        }
 	}
 
-	function checkDirForCorruptedFiles(tvRequest){
-		var checkDir = app_cache_handler.getCacheDir('tv', tvRequest);
-		
-		if(fs.existsSync(checkDir + '/data.js')){
-			fs.stat(checkDir + '/data.js', function (err, stats) {
-				if(stats.size == 0){
-					file_utils.removeBadDir(checkDir, res.send);
-				} else {
-					fs.readFile(checkDir + '/data.js', 'utf8', function (err, data) {
-						if(!err) {
-							res.send(data);
-						} else {
-							file_utils.removeBadDir(checkDir, res.send);
-						}
-					});
-				}
-			});
-		} else {
-			file_utils.removeBadDir(checkDir, res.send);
-		}
-	}
-	
-	function writeData(title,genre,certification,banner){		
-		var scraperdata = [];
-
-		scraperdata[0] = { title:title, genre:genre, certification:certification, banner:banner };
-		var dataToWrite = JSON.stringify(scraperdata, null, 4);
-		var writePath = app_cache_handler.getCacheDir('tv', tvRequest) + '/data.js';
-
-		ajax_utils.writeToFile(writePath, dataToWrite, function(data) {
-			res.send(data);
-		});
-	}
+    if(!platform){
+        if(optionalParam === 'info') {
+            var tvShowName = infoRequest.replace(/\+/g, " ");
+            functions.handler(req, res, infoRequest);
+        }
+    }
+    
+    
+    if(platform !== undefined && optionalParam === 'play'){
+        switch(platform) {
+            case('browser'):
+                var tvShowName = infoRequest.replace(/\+/g, " ");
+                console.log('Incomming playback request for', tvShowName);
+                functions.playMovie(req, res, platform, tvShowName);
+            break;
+            case('ios'):
+                functions.playMovie(req, res, platform, infoRequest);
+            break;
+            case('android'):
+                var tvShowName = infoRequest.replace(/\+/g, " ");
+                functions.playMovie(req, res, platform, infoRequest);
+            break;
+        }
+    }
+    
 };
+
+
+exports.post = function(req, res){
+    var infoRequest = req.params.id;
+    if(infoRequest === 'sendState'){
+        functions.sendState(req, res);
+    }
+}

@@ -1,26 +1,251 @@
-.tvshow{
+/*
+	MediaCenterJS - A NodeJS based mediacenter solution
+
+    Copyright (C) 2013 - Jan Smolders
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+/* Default override */
+body,html{ overflow-y:auto; overflow-x:hidden;}
+
+#backdrop{
+	box-shadow:none;
+	padding: 10px 0 0 100px;
+	position:fixed;
+	top:0;
+	z-index:2;
+	width:100%;
+	height:130px;
+	-moz-box-shadow: 0 2px 6px #333;
+	-webkit-box-shadow: 0 2px 6px #333;
+	box-shadow: 0 2px 6px #333;
+}
+
+#header.scrolling{ opacity:0.9;}
+#header{height:60px; z-index:3; position:fixed; top:0; }
+#header h1{z-index:4; margin-top:0px;}
+#wrapper{ padding-top:230px;z-index:1; }
+
+#backdrop{
+	height:200px;
+	overflow:hidden;
+	width:100%;
+	background:url(img/backdrop.png) repeat-x;
+	-webkit-transition: opacity 1s ease-in-out;
+	-moz-transition: opacity 1s ease-in-out;
+	-ms-transition: opacity 1s ease-in-out;
+	-o-transition: opacity 1s ease-in-out;
+	transition: opacity 1s ease-in-out;
+	-webkit-transition: height 1s ease-in-out;
+	-moz-transition: height 1s ease-in-out;
+	-ms-transition: height 1s ease-in-out;
+	-o-transition: height 1s ease-in-out;
+	transition: height 1s ease-in-out;
+}
+
+#backdrop.shrink{  
+	filter: alpha(opacity=0.3);
+	opacity: 0.3;
+	height:50px;
+}
+
+#backdrop img{	height:auto; }
+a.backlink { margin-top: 0px; z-index:4; }
+
+/* Movie App styling */
+
+#moviebrowser{ width:100%; height:100%; margin: 60px 0;}
+.movie-loading{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:200px;
+    height:200px;
+}
+
+.loading.icon{
+    -webkit-animation: icon-loading 0.5s linear infinite;
+    -ms-animation: icon-loading 0.5s linear infinite;
+    animation: icon-loading 0.5s linear infinite;
+    font-size:48px;
+    color:#fb8521;
+}
+
+.movies{
+	margin: 0 auto;
+	padding: 0;
+	list-style: none;
+	display: block;
+	position: relative;
+	width:95%;
+	min-height:1000px;
+	overflow:hidden;
+}
+
+.movieposter .overlay{ width:0; height:0; }
+
+.movieposter.showDetails.focused .overlay,
+.movieposter.showDetails:hover .overlay{
+	background:url(img/cover-overlay.png) no-repeat;
+	width:250px;
+	height:278px;
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:6;
+	cursor:pointer;
+	border-radius:2px;
+}
+
+.movieposter.showDetails .cdNumber{
+	width:90px;
+	height:80px;
+	background:url(img/cdnumber-bg.png) no-repeat;
+	position:absolute;
+	top: 0px;
+	right:0px;
+	z-index:3;
+}
+
+.movieposter.showDetails .cdNumber > span{
+	color:#fff;
+	font-size:14px;
+	-webkit-transform: rotate(44.5deg);  /* Chrome, Safari 3.1+ */
+    -moz-transform: rotate(44.5deg);  /* Firefox 3.5-15 */
+    -ms-transform: rotate(44.5deg);  /* IE 9 */
+    -o-transform: rotate(44.5deg);  /* Opera 10.50-12.00 */
+	transform: rotate(44.5deg);
+	font-weight:bold;
+	margin-left: 47px;
+	margin-top: 15px;
+}
+
+.movieposter img{
+	margin:0 0 20px 0;
+    display:block;
+	width:100%;
+	height:auto;
+	padding:0;
+	border:0;
+}
+
+.movieposter span{
+	display:block;
 	float:left;
-	margin:10px;
-
+	font-size: 14px;
+	color:#fff;
+	margin-top:10px;
+	text-transform:capitalize;
 }
-.tvshow{
-	-moz-box-shadow: 0 0px 5px #888;
-	-webkit-box-shadow: 0 0px 5px #888;
-	box-shadow: 0 0px 5px #888;
+
+span.title{visibility:hidden; width:0; height:0;}
+
+.movieposter{
+	float:left;
+	height:550px;
+	list-style:none;
+	z-index:3;
+	position:relative;
+	width:250px;
+	padding: 0px;
+	margin: 0px 10px 20px 0;
+    border: 1px solid #e7e7e7;
+    border-radius:2px;
+	display:block;
 	background:#fff;
+	-webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+	border-bottom: 0.2em solid rgba(0, 0, 0, 0.2);
+	border-radius: 0.33em;
+	-webkit-transition: -webkit-box-shadow 0.2s ease;
+	transition: box-shadow 0.2s ease;
 }
 
-.tvshow img{
-	width:32px;
-	height:32px;
-	margin:20px 0 0 40px;
-}
 
-.tvshow img.coverfound{
-	width:758px;
-	height:140px;
+.movieposter a{ float:left; }
+.movieposter .imageWrapper {width:250px;  height:278px; overflow:hidden;}
+.movieposter .overview{
+	padding:10px; 
+	font-size:11px; 
+	line-height:17px; 
 	margin:0;
+	max-height:207px;
+	position:relative;
+	overflow:hidden;
 }
 
-#tvshowBanners{max-width:1556px; margin:0 auto;}
-.info{margin:10px 5px 5px}
+.movieposter.showDetails .specs{
+	float: left;
+	color: #666;
+	line-height: 19px;
+	width: 250px;
+	background:#F6F1ED;
+	height:35px;
+	position:absolute;
+	bottom:0;
+	left:0;
+	color:#9F9384;
+	border-top: 1px solid #e7e7e7;
+}
+
+.overview h1{ 
+	margin: 0px 0 10px 0;
+	font-size: 18px;
+	max-width: 230px;
+	text-transform: none;
+	font-family: 'Open Sans', sans-serif;
+}
+.specs p{font-size:12px; float:left; margin:10px 0 0 9px;}
+
+#genres { position:absolute; top: 240px; left: 96px;}
+#genres li{ float:left; margin-right:20px;}
+
+
+#player.mobile-player  .vjs-control-bar{
+    bottom:100px;
+    background:red;
+    left:0;
+}
+
+#header h4 {
+    bottom: -9px;
+    left: 310px;
+}
+
+/*
+.imdbrating{
+	color:#ddd;
+	font-size:14px;
+	text-align:left;
+	width:80px;
+	float:left;
+}
+.imdbrating p{ margin:10px 0 20px 0; }
+.imdbrating h3{font-size:30px;}
+
+.certification{
+	border:2px solid #000;
+	background-color:#fff;
+	font-family:Palatino;
+	font-weight:bold;
+	font-size:24px;
+	color:#000;
+	display:inline-block;
+	float:right;
+	margin-top:10px;
+	text-align:center;
+	padding:3px 5px;
+}
+*/

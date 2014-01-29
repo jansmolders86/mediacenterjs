@@ -18,7 +18,9 @@
 (function($){
 
 	var ns = 'mcjstv';
-	var methods = {};
+	var methods = {
+
+	};
 
 	function _init(options) {
 		var opts = $.extend(true, {}, $.fn.mcjstv.defaults, options);
@@ -28,70 +30,311 @@
 				
 			// add data to the defaults (e.g. $node caches etc)	
 			o = $.extend(true, o, { 
-				$that: $that
+				$that: $that,
+				tvShowCache : []
 			});
 			
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
 			
-			$('body').scroll( function(){
-				_lazyload(o);
-			});
-			_lazyload(o);
-
-			$('.overlay').click(function(e) {
-				e.preventDefault();	
-				var url = '/tv/video/' + $(this).attr('data-tvshow')
-				//TODO: Go to season
-				//_playTVShow(url)
-			});
+			_setViewmodel(o);
+			_getItems(o);
 			
+			$that.on('scroll resize', function() {
+				_lazyload(o);
+				_positionElement(o);
+
+			});	
+
 		});
 	}
 	
 	/**** Start of custom functions ***/
 	
-	function _lazyload(o){
-		//Set timeout for fast scrolling
-		setTimeout(function(){
-			var WindowTop = $('body').scrollTop()
-			, WindowBottom = WindowTop + $('body').height();
+	// Create tvShow model
+	//TODO: put in separate file 
+	var Tvshow = function (o, json) {
+		var that = this;
+		this.localName 		= ko.observable(json);
+		this.title 		    = ko.observable();
+		this.banner 	    = ko.observable();
+		this.genre 			= ko.observable();
+        this.certification 	= ko.observable();
+		this.isActive 		= ko.observable();
+		this.playtvShow = function () {
+            window.location.hash = that.localName();
+            that.isActive(o.activetvShowId);
 
-			$(".tvshow").each(function(){
-				var offsetTop = $(this).offset().top
-				, offsetBottom = offsetTop + $(this).height();
+            var tvShowTitle = that.localName();
+            var url = _checkPlatform(o, tvShowTitle);
+            _playtvShow(o,url,tvShowTitle);
+		};
+	}
 
-				if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
-					var title = $(this).find('span.title').html()
-					, visibleTv = $(this);
-					_handlevisibleTVShows(o, title, visibleTv)
-					$(this).attr("loaded",true);
-				}
-			});	
-		},500);
+    function _checkPlatform(o, tvShowTitle){
+        if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
+            var url = '/tv/'+tvShowTitle+'/play/ios';
+        } else if(navigator.userAgent.toLowerCase().indexOf("android") > -1){
+            var url = '/tv/'+tvShowTitle+'/play/android';
+        }else {
+            var url = '/tv/'+tvShowTitle+'/play/browser';
+        }
+        return url;
+    }
+
+	
+	function _positionElement(o){
+		var startFromTopInit = $('#tvShowbrowser').offset().top > 50;
+		if (startFromTopInit){
+            $('#backdrop').removeClass('shrink');
+        } else {
+            $('#backdrop').addClass('shrink');
+		}
+	};
+
+	
+	function _setViewmodel(o){
+		if (!o.viewModel) {
+			// create initial viewmodel
+			o.viewModel = {};
+			o.viewModel.tvshow = ko.observableArray();
+			ko.applyBindings(o.viewModel,o.$that[0]);
+		}	
 	}
 	
-	function _handlevisibleTVShows(o, title, visibleTv){
-		if(title !== undefined){
+	function _getItems(o){
+		$.ajax({
+			url: '/tv/loadItems',
+			type: 'get',
+			dataType: 'json'
+		}).done(function(data){
+			var listing = [];
+			$.each(data, function () {
+
+                console.log('sdf', data);
+
+				// create tvShow model for each tvShow
+				var tvShow = new Tvshow(o, this);
+				listing.push(tvShow);
+				
+				// add model to cache
+				o.tvShowCache[this] = tvShow;
+			});
+
+			// Fill viewmodel with tvShow model per item
+			o.viewModel.tvshow(listing);
+			o.viewModel.tvshow.sort();
+
+            if(window.location.hash) {
+                var tvShowTitle =window.location.hash.substring(1);
+                var url = _checkPlatform(o, tvShowTitle);
+                _playtvShow(o,url,tvShowTitle);
+            } else{
+                _lazyload(o);
+            }
+
+		});
+	}
+	
+	function _handleVisibletvShows(o, tvShowTitle, visibletvShow, title){
+        console.log('asd')
+		var url = '/tv/'+tvShowTitle+'/info';
+		if(tvShowTitle !== undefined){
 			$.ajax({
-				url: '/tv/post/', 
-				type: 'post',
-				data: {tvTitle : title}
+				url: url, 
+				type: 'get'
 			}).done(function(data){
-				if (data == 'bad dir'){
-					_handlevisibleTVShows(o, title, visibleTv)
-				} else {
-					var tvData = $.parseJSON(data);
-					console.log(tvData[0])
+				// If current item is in cache, fill item with values
+
+				if (o.tvShowCache[title]) {
 					setTimeout(function(){
-						visibleTv.find('img').attr('src', '');
-						visibleTv.find('img').attr('src',tvData[0].banner).addClass('coverfound');		
-					},400);
+						var tvShowData = data[0]
+						, tvShow = o.tvShowCache[title];
+						 
+						tvShow.title(tvShowData.title);
+						tvShow.banner(tvShowData.banner);
+						tvShow.genre(tvShowData.genre);
+						tvShow.certification(tvShowData.certification);
+
+                        visibletvShow.addClass('showDetails '+o.fadeClass);
+						
+					},500);
 				}
 			});
 		}		
 	}
 	
+	function _lazyload(o){
+		//TODO: Make this an KO extender
+		setTimeout(function(){
+			//Set time-out for fast scrolling
+			var WindowTop = $('body').scrollTop()
+			, WindowBottom = WindowTop + $('body').height();
+
+			$(o.tvShowListSelector+' > li').each(function(){
+				var offsetTop = $(this).offset().top
+				, offsetBottom = offsetTop + $(this).height();
+
+				//if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
+					var title = $(this).find('span.title').html();
+
+                console.log('title',title)
+
+					if (title !== undefined){
+						var tvShowTitle = title.replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv)$/,"")
+						, visibletvShow = $(this);
+
+                        console.log('tvShowTitle',tvShowTitle)
+
+						_handleVisibletvShows(o, tvShowTitle, visibletvShow, title);
+					}
+					$(this).attr("loaded",true);
+				//}
+			});	
+		},500);
+	}
+	
+	
+	/******** Jquery only functions *********/
+
+	function _playtvShow(o,url,tvShowTitle){
+    
+        $('body').animate({backgroundColor: '#000'},500).addClass('playingtvShow');
+
+        $('#wrapper, .tvShows, #header').hide();
+
+
+        if($('#'+o.playerID).length > 1) {
+            $('#'+o.playerID).remove();
+        }
+
+        var fileName =  tvShowTitle.replace(/\.[^.]*$/,'')
+        , outputName =  fileName.replace(/ /g, "-")
+        , videoUrl =  "/data/tv/"+outputName+".mp4";
+                
+		$.ajax({
+			url: url,
+			type: 'get'
+		}).done(function(data){
+
+            $('body').append('<video id="'+o.playerID+'" poster class="video-js vjs-default-skin" controls preload="none" width="100%" height="100%"><source src="'+videoUrl+'" type="video/mp4"></video>');
+
+            var player = videojs(o.playerID);
+            var currentTime = parseFloat(data.progression);
+            player.ready(function() {
+                setTimeout(function(){
+                    $('.vjs-loading-spinner, #backdrop').hide();
+
+                    player.load();
+
+                    var setProgression = parseFloat(data.progression);
+                    player.currentTime(setProgression);
+
+                    player.play();
+
+                    _setDurationOftvShow(player, data);
+                    _pageVisibility(o);
+                },5000);
+
+                player.on('error', function(e){
+                    console.log('Error', e);
+                });
+
+                player.on('timeupdate', function(e){
+                   _setDurationOftvShow(player, data);
+                });
+
+                player.on('progress', function(e){
+                    _setDurationOftvShow(player, data);
+                });
+
+                player.on('pause', function(e){
+                    currentTime = player.currentTime();
+                    var tvShowData = {
+                        'tvShowTitle': tvShowTitle,
+                        'currentTime': currentTime
+                    }
+                    $.ajax({
+                        url: '/tvShows/sendState',
+                        type: 'post',
+                        data: tvShowData
+                    });
+
+                    $('.vjs-slider').on('click',function(e) {
+                        console.log('click!',this)
+                        if (e.target === this){
+                            e.preventDefault();
+                        }
+                    });
+                });
+
+                player.on('loadeddata', function(e){
+                    _setDurationOftvShow(player, data);
+                    if(currentTime > 0){
+                        player.currentTime(currentTime);
+                    }
+                });
+
+                player.on('loadedmetadata', function(e){
+                    if(currentTime > 0){
+                        player.currentTime(currentTime);
+                    }
+                });
+
+                player.on('ended', function(e){
+                    currentTime = player.currentTime();
+                    var actualDuration = data.duration;
+                    if( currentTime < actualDuration){
+                        player.load();
+                        player.play();
+                    } else{
+                        player.dispose();
+                        window.location.replace("/tv/");
+                    }
+                });
+
+            });
+
+
+        });
+	}
+	
+	function _setDurationOftvShow(player, data){
+	   var videoDuration = player.duration(data.duration);  
+		player.bufferedPercent(0);
+		$('.vjs-duration-display .vjs-control-text').text(videoDuration);
+	}
+	
+	function _pageVisibility(o){
+		var hidden, visibilityChange; 
+		if (typeof document.hidden !== "undefined") {
+			hidden = "hidden";
+			visibilityChange = "visibilitychange";
+		} else if (typeof document.mozHidden !== "undefined") {
+			hidden = "mozHidden";
+			visibilityChange = "mozvisibilitychange";
+		} else if (typeof document.msHidden !== "undefined") {
+			hidden = "msHidden";
+			visibilityChange = "msvisibilitychange";
+		} else if (typeof document.webkitHidden !== "undefined") {
+			hidden = "webkitHidden";
+			visibilityChange = "webkitvisibilitychange";
+		}
+		
+		function handleVisibilityChange() {
+			if (document[hidden]) {
+				videojs(o.playerID).pause();
+			} else if (sessionStorage.isPaused !== "true") {
+				videojs(o.playerID).play();
+			}
+		}
+
+		if (typeof document.addEventListener === "undefined" || typeof hidden === "undefined") {
+			console.log("The Page Visibility feature requires a browser such as Google Chrome that supports the Page Visibility API.");
+		} else {
+			document.addEventListener(visibilityChange, handleVisibilityChange, false);
+		}
+	}
 
 	/**** End of custom functions ***/
 	
@@ -106,6 +349,23 @@
 	};
 	
 	/* default values for this plugin */
-	$.fn.mcjstv.defaults = {};
+	$.fn.mcjstv.defaults = {		
+		datasetKey: 'mcjstv' //always lowercase
+		, tvShowListSelector: '.tvshows'
+		, backdrophandler: 'title'
+		, posterClass: 'tvShowposter' 
+		, playerSelector: '#player' 
+		, headerSelector: '#header' 
+		, wrapperSelector: '#wrapper'
+		, genreSelector: 'genres' 
+		, backLinkSelector: '.backlink' 
+		, playerID: 'player' 
+		, overlayselector : '.overlay'
+        , activetvShowId : 'active'
+		, fadeClass: 'fadein' 
+		, fadeSlowClass: 'fadeinslow' 
+		, focusedClass: 'focused'
+		, scrollingClass: 'scrolling'
+	};
 
 })(jQuery);
