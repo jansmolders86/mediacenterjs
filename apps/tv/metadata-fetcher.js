@@ -1,6 +1,7 @@
 /* Global Imports */
 var fs = require('fs'),
 	os = require('os'),
+	path = require('path'),
 	app_cache_handler = require('../../lib/handlers/app-cache-handler'),
 	config = require('../../lib/handlers/configuration-handler').getConfiguration(),
 	tv_title_cleaner = require('../../lib/utils/title-cleaner');
@@ -25,43 +26,50 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 exports.fetchMetadataForTvShow = function(tvShow, callback) {
 	var originalTitle = tvShow;
 	var tvShowInfos = tv_title_cleaner.cleanupTitle(tvShow);
-    tvShow = tvShowInfos.title;
+   var tvTitle = tvShowInfos.title;
 
-	app_cache_handler.ensureCacheDirExists('tv', tvShow);
 	loadMetadataFromDatabase(tvShow, function (result) {
 		if (result) {
-			// Movie is already in the database.
 			callback(result);
 			return;
 		}
 
-		// New Movie. Fetch Metadata...
-		fetchMetadataFromTrakt(tvShow, function(err, result) {
+		fetchMetadataFromTrakt(tvTitle, function(err, result) {
+			var banneImage = "/tv/css/img/nodata.jpg";
+			var title = tvTitle;
+			var genre = "No data";
+			var certification = "No data";
+			
 			if (err) {
 				console.error(err);
 				callback([]);
+			} else {
+				var traktResult = result;
+				app_cache_handler.ensureCacheDirExists('tv', tvTitle);
+				var banner	= traktResult.images.banner;
+				var banneImage = path.basename(banner);
 			}
 
-            if(result !== null){
-                var title           = result.title;
-                var banner          = result.images.banner;
-                var genre           = result.genre;
-                var certification   = result.certification;
-			}
-			
-			downloadTvShowBanner(banner, tvShow, function(err) {
-				var banner = 'tv/css/img/nodata.jpg';
-				
+			downloadTvShowBanner(banner, tvTitle, function(err) {
+
 				if (err) {
 					console.error(err);
-				} else {
-                banner = app_cache_handler.getFrontendCachePath('tv', tvShow, banner);
+				} 
+				
+            if(traktResult !== null){  
+                if(traktResult.genre !== undefined){
+             		genre = traktResult.genre;
+                }
+            	 if (traktResult.certification !== undefined) {
+                	certification = traktResult.certification;
+                }
 				}
 				
-				var metadata = [originalTitle, title, banner, genre, certification ];
+				var metadata = [originalTitle, tvTitle, banneImage, genre, certification ];
+				console.log('metadata',metadata);
 				storeMetadataInDatabase(metadata, function() {
-                    console.log('data stored in database!');
-					loadMetadataFromDatabase(tvShow, callback);
+               console.log('data stored in database!');
+					loadMetadataFromDatabase(tvTitle, callback);
 				});
 			});
 		});
@@ -70,12 +78,12 @@ exports.fetchMetadataForTvShow = function(tvShow, callback) {
 
 /* Private Methods */
 
-loadMetadataFromDatabase = function(movieTitle, callback) {
-	db.query('SELECT * FROM tvshows WHERE local_name =? ', [ movieTitle ], {
-            localName 		: String,
-            title 		    : String,
-            banner  	    : String,
-            genre  	        : String,
+loadMetadataFromDatabase = function(tvTitle, callback) {
+	db.query('SELECT * FROM tvshows WHERE localName =? ', [ tvTitle ], {
+            localName 			: String,
+            title 		    	: String,
+            banner  	    		: String,
+            genre  	        	: String,
             certification  	: String
 		},
 		function(rows) {
