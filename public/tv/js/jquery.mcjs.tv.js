@@ -110,9 +110,6 @@
 		}).done(function(data){
 			var listing = [];
 			$.each(data, function () {
-
-                console.log('sdf', data);
-
 				// create tvShow model for each tvShow
 				var tvShow = new Tvshow(o, this);
 				listing.push(tvShow);
@@ -137,7 +134,6 @@
 	}
 	
 	function _handleVisibletvShows(o, tvShowTitle, visibletvShow, title){
-        console.log('asd')
 		var url = '/tv/'+tvShowTitle+'/info';
 		if(tvShowTitle !== undefined){
 			$.ajax({
@@ -150,7 +146,7 @@
 					setTimeout(function(){
 						var tvShowData = data[0]
 						, tvShow = o.tvShowCache[title];
-						 
+
 						tvShow.title(tvShowData.title);
 						tvShow.banner(tvShowData.banner);
 						tvShow.genre(tvShowData.genre);
@@ -165,7 +161,6 @@
 	}
 	
 	function _lazyload(o){
-		//TODO: Make this an KO extender
 		setTimeout(function(){
 			//Set time-out for fast scrolling
 			var WindowTop = $('body').scrollTop()
@@ -175,21 +170,17 @@
 				var offsetTop = $(this).offset().top
 				, offsetBottom = offsetTop + $(this).height();
 
-				//if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
+				if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
 					var title = $(this).find('span.title').html();
-
-                console.log('title',title)
 
 					if (title !== undefined){
 						var tvShowTitle = title.replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv)$/,"")
 						, visibletvShow = $(this);
 
-                        console.log('tvShowTitle',tvShowTitle)
-
 						_handleVisibletvShows(o, tvShowTitle, visibletvShow, title);
 					}
 					$(this).attr("loaded",true);
-				//}
+				}
 			});	
 		},500);
 	}
@@ -361,7 +352,7 @@
 		, backLinkSelector: '.backlink' 
 		, playerID: 'player' 
 		, overlayselector : '.overlay'
-        , activetvShowId : 'active'
+        	, activetvShowId : 'active'
 		, fadeClass: 'fadein' 
 		, fadeSlowClass: 'fadeinslow' 
 		, focusedClass: 'focused'
