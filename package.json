@@ -47,7 +47,6 @@
         "fs-extra"          : "0.8.1",
         "dateformat"        : "1.0.4-1.2.3",
         "downloader"        : "0.1.2",
-        "fluent-ffmpeg"     : "1.5.2",
         "jade"              : "0.35.0",
         "lingua"            : "0.3.6",
         "node-ffprobe"      : "1.2.2",
