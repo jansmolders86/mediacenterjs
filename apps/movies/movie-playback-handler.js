@@ -1,6 +1,5 @@
 /* Global imports */
 var colors = require('colors')
-	, ffmpeg = require('fluent-ffmpeg')
 	, os = require('os')
 	, fs = require('fs.extra')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
