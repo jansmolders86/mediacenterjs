@@ -3,7 +3,7 @@ var fs = require('fs'),
 	os = require('os'),
 	app_cache_handler = require('../../lib/handlers/app-cache-handler'),
 	config = require('../../lib/handlers/configuration-handler').getConfiguration(),
-	movie_title_cleaner = require('../../lib/utils/title-cleaner');
+	tv_title_cleaner = require('../../lib/utils/title-cleaner');
 
 /* Variables */
 // Init Database
@@ -50,12 +50,12 @@ exports.fetchMetadataForTvShow = function(tvShow, callback) {
 			}
 			
 			downloadTvShowBanner(banner, tvShow, function(err) {
-				var magmi/conf/magmi.ini = '/tv/css/img/nodata.jpg';
+				var banner = 'tv/css/img/nodata.jpg';
 				
 				if (err) {
 					console.error(err);
 				} else {
-                    magmi/conf/magmi.ini = app_cache_handler.getFrontendCachePath('tv', tvShow, banner);
+                banner = app_cache_handler.getFrontendCachePath('tv', tvShow, banner);
 				}
 				
 				var metadata = [originalTitle, title, banner, genre, certification ];
