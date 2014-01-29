@@ -415,10 +415,13 @@
                         player.load();
                         player.play();
                     } else{
+                        player.dispose();
                         window.location.replace("/movies/");
                     }
                 });
+
             });
+
 
         });
 	}
