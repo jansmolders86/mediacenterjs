@@ -209,7 +209,7 @@ sudo chmod 755 lib/database/mcjs.sqlite
 
 * if you get an 'PACKAGENAME is not installed' error, please install the package with NPM.
 
-	Exampe:
+	Example:
 	
 	> 'Error module 'colors' not found'
 
@@ -283,23 +283,23 @@ As you can gather the more precise the title of the movie, the better the scrape
 
 Asside from the title you can make it even easier for the scraper to recognize the movie by adding the date of release like so:
 	
-	Fight Club (1999).avi
+	> 'Fight Club (1999).avi'
 	
 If your filenames are 'messy', the system will try to clean them up before sending the title to the scraper.
 Text like release group names,dividers,file type or quality will be filtered out of the filename on the server.
 so:
 
-	Fight.Club.iMMORTALS.(1999).xvid-R5.torrent.avi 
+	> 'Fight.Club.iMMORTALS.(1999).xvid-R5.torrent.avi'
 	
 will become 
 
-	Fight Club (1999).avi
+	> 'Fight Club (1999).avi'
 	
 But to get the best result you should clean up your filenames as best as possible.
 
 If a movie is split into multiple pieces, you can specify it in the filename as well. It is best to format it like this:
 
-	Fight Club (1999) CD1.avi
+	> 'Fight Club (1999) CD1.avi'
 	
 What can the music player do? 
 -------------
@@ -313,11 +313,11 @@ If you add an image in the directory and name it appropriately, this image will 
 
 So if it is a single like a live recording or a mixtape, just add an image with exactly the same name as the mp3 in the same directory. For example:
 
-	01 - Giorgio Moroder - Output - Brooklyn - N.Y.C.jpg
+	> '01 - Giorgio Moroder - Output - Brooklyn - N.Y.C.jpg'
 	
 If you have an album, the music player will look for a image file with the following names: 
 
-	"cover" or "front"
+	> '"cover" or "front"'
 	
 This image will be copied to the cache of MCJS so it can be used without restrictions. So you can even delete the image in the local dir and as long as you don't clear the cache, the image will be used.
 If no image is provided, the player will contact the Discogs scraper and try to get the art ther. (Although there are plans to port discogs to lastFM.)
