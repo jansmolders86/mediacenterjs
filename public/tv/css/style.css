@@ -19,61 +19,13 @@
 
 /* Default override */
 body,html{ overflow-y:auto; overflow-x:hidden;}
-
-#backdrop{
-	box-shadow:none;
-	padding: 10px 0 0 100px;
-	position:fixed;
-	top:0;
-	z-index:2;
-	width:100%;
-	height:130px;
-	-moz-box-shadow: 0 2px 6px #333;
-	-webkit-box-shadow: 0 2px 6px #333;
-	box-shadow: 0 2px 6px #333;
-}
-
-#header.scrolling{ opacity:0.9;}
 #header{height:60px; z-index:3; position:fixed; top:0; }
 #header h1{z-index:4; margin-top:0px;}
-#wrapper{ padding-top:230px;z-index:1; }
-
-#backdrop{
-	height:200px;
-	overflow:hidden;
-	width:100%;
-	background:url(img/backdrop.png) repeat-x;
-	-webkit-transition: opacity 1s ease-in-out;
-	-moz-transition: opacity 1s ease-in-out;
-	-ms-transition: opacity 1s ease-in-out;
-	-o-transition: opacity 1s ease-in-out;
-	transition: opacity 1s ease-in-out;
-	-webkit-transition: height 1s ease-in-out;
-	-moz-transition: height 1s ease-in-out;
-	-ms-transition: height 1s ease-in-out;
-	-o-transition: height 1s ease-in-out;
-	transition: height 1s ease-in-out;
-}
-
-#backdrop.shrink{  
-	filter: alpha(opacity=0.3);
-	opacity: 0.3;
-	height:50px;
-}
-
-#backdrop img{	height:auto; }
 a.backlink { margin-top: 0px; z-index:4; }
 
-/* Movie App styling */
+#wrapper {margin-top:60px;}
 
-#moviebrowser{ width:100%; height:100%; margin: 60px 0;}
-.movie-loading{
-    position:absolute;
-    left:50%;
-    top:50%;
-    width:200px;
-    height:200px;
-}
+#tvshowbrowser{ width:100%; height:100%; margin:0;}
 
 .loading.icon{
     -webkit-animation: icon-loading 0.5s linear infinite;
@@ -83,24 +35,24 @@ a.backlink { margin-top: 0px; z-index:4; }
     color:#fb8521;
 }
 
-.movies{
+.tvshows{
 	margin: 0 auto;
 	padding: 0;
 	list-style: none;
 	display: block;
 	position: relative;
-	width:95%;
+	width:780px;
 	min-height:1000px;
 	overflow:hidden;
 }
 
-.movieposter .overlay{ width:0; height:0; }
+.tvposter .overlay{ width:0; height:0; }
 
-.movieposter.showDetails.focused .overlay,
-.movieposter.showDetails:hover .overlay{
+.tvposter.showDetails.focused .overlay,
+.tvposter.showDetails:hover .overlay{
 	background:url(img/cover-overlay.png) no-repeat;
-	width:250px;
-	height:278px;
+    height:140px;
+    width:758px;
 	position:absolute;
 	top:0;
 	left:0;
@@ -109,30 +61,7 @@ a.backlink { margin-top: 0px; z-index:4; }
 	border-radius:2px;
 }
 
-.movieposter.showDetails .cdNumber{
-	width:90px;
-	height:80px;
-	background:url(img/cdnumber-bg.png) no-repeat;
-	position:absolute;
-	top: 0px;
-	right:0px;
-	z-index:3;
-}
-
-.movieposter.showDetails .cdNumber > span{
-	color:#fff;
-	font-size:14px;
-	-webkit-transform: rotate(44.5deg);  /* Chrome, Safari 3.1+ */
-    -moz-transform: rotate(44.5deg);  /* Firefox 3.5-15 */
-    -ms-transform: rotate(44.5deg);  /* IE 9 */
-    -o-transform: rotate(44.5deg);  /* Opera 10.50-12.00 */
-	transform: rotate(44.5deg);
-	font-weight:bold;
-	margin-left: 47px;
-	margin-top: 15px;
-}
-
-.movieposter img{
+.tvposter img{
 	margin:0 0 20px 0;
     display:block;
 	width:100%;
@@ -141,7 +70,7 @@ a.backlink { margin-top: 0px; z-index:4; }
 	border:0;
 }
 
-.movieposter span{
+.tvposter span{
 	display:block;
 	float:left;
 	font-size: 14px;
@@ -152,13 +81,13 @@ a.backlink { margin-top: 0px; z-index:4; }
 
 span.title{visibility:hidden; width:0; height:0;}
 
-.movieposter{
+.tvposter{
 	float:left;
-	height:550px;
+    height:140px;
+    width:758px;
 	list-style:none;
-	z-index:3;
+	z-index:99;
 	position:relative;
-	width:250px;
 	padding: 0px;
 	margin: 0px 10px 20px 0;
     border: 1px solid #e7e7e7;
@@ -174,9 +103,9 @@ span.title{visibility:hidden; width:0; height:0;}
 }
 
 
-.movieposter a{ float:left; }
-.movieposter .imageWrapper {width:250px;  height:278px; overflow:hidden;}
-.movieposter .overview{
+.tvposter a{ float:left; }
+.tvposter .imageWrapper { height:140px; width:758px; overflow:hidden;}
+.tvposter .overview{
 	padding:10px; 
 	font-size:11px; 
 	line-height:17px; 
@@ -184,20 +113,6 @@ span.title{visibility:hidden; width:0; height:0;}
 	max-height:207px;
 	position:relative;
 	overflow:hidden;
-}
-
-.movieposter.showDetails .specs{
-	float: left;
-	color: #666;
-	line-height: 19px;
-	width: 250px;
-	background:#F6F1ED;
-	height:35px;
-	position:absolute;
-	bottom:0;
-	left:0;
-	color:#9F9384;
-	border-top: 1px solid #e7e7e7;
 }
 
 .overview h1{ 
@@ -209,31 +124,8 @@ span.title{visibility:hidden; width:0; height:0;}
 }
 .specs p{font-size:12px; float:left; margin:10px 0 0 9px;}
 
-#genres { position:absolute; top: 240px; left: 96px;}
-#genres li{ float:left; margin-right:20px;}
-
-
-#player.mobile-player  .vjs-control-bar{
-    bottom:100px;
-    background:red;
-    left:0;
-}
-
-#header h4 {
-    bottom: -9px;
-    left: 310px;
-}
 
 /*
-.imdbrating{
-	color:#ddd;
-	font-size:14px;
-	text-align:left;
-	width:80px;
-	float:left;
-}
-.imdbrating p{ margin:10px 0 20px 0; }
-.imdbrating h3{font-size:30px;}
 
 .certification{
 	border:2px solid #000;

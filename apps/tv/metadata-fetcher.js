@@ -47,7 +47,7 @@ exports.fetchMetadataForTvShow = function(tvShow, callback) {
 				var traktResult = result;
 				app_cache_handler.ensureCacheDirExists('tv', tvTitle);
 				var banner	= traktResult.images.banner;
-				var banneImage = path.basename(banner);
+				var banneImage = '/data/tv/'+tvTitle+'/'+path.basename(banner);
 			}
 
 			downloadTvShowBanner(banner, tvTitle, function(err) {

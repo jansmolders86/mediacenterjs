@@ -23,6 +23,9 @@ db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, 
 
 exports.loadItems = function (req, res){
 	file_utils.getLocalFiles(config.tvpath, SUPPORTED_FILETYPES, function(err, files) {
+
+        console.log('files', files);
+
 		var tvShows = [];
 		for(var i = 0, l = files.length; i < l; ++i){
 			var tvShowFiles = files[i].file;
