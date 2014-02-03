@@ -1,11 +1,11 @@
-![logo] (http://www.mediacenterjs.com/global/images/github/logo.png) MediacenterJS
+![logo](http://www.mediacenterjs.com/global/images/github/logo.png) MediacenterJS
 =============
 
 __A NodeJS based Mediacenter__ 
 
 Website: http://www.mediacenterjs.com
 
-![Dashboard] (http://www.mediacenterjs.com/global/images/github/screen1.png)
+![Dashboard](http://www.mediacenterjs.com/global/images/github/screen1.png)
 
 Status: 
 =======
