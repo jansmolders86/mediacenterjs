@@ -229,7 +229,7 @@ the server.js will make sure you do not have to restart the actual application (
 
 Of course, if you change the port, you need to use that port after the initial setup.
 
-![Remote] (http://www.mediacenterjs.com/global/images/github/remote.png)
+![Remote](http://www.mediacenterjs.com/global/images/github/remote.png)
 
 Using the remote control
 -------------
@@ -241,7 +241,7 @@ Integrated with Mediacenterjs is a handly remote control you can use on your mob
 If your phone is connected to the same wifi this should work automatically and the message on the bottom of the screen should say "Remote connected". If for some reason the IP is different and the remote is not connected you can fill in a different IP by pressing the three dotts at the top left corner. This will bring up the settings menu where you can customize all the MCJS settings.
 	
 
-![Movies] (http://www.mediacenterjs.com/global/images/github/second.png)
+![Movies](http://www.mediacenterjs.com/global/images/github/second.png)
 
 What can the movie browser/player do? 
 -------------
