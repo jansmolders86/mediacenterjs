@@ -148,8 +148,12 @@ downloadMovieFanart = function(poster_path, backdrop_path, movieTitle, callback)
 	if (poster_path && backdrop_path) {
 		var path = require('path');
 
-		var poster_url = "http://cf2.imgobject.com/t/p/w342",
-			backdrop_url = "http://cf2.imgobject.com/t/p/w1920";
+        var baseUrl = 'http://image.tmdb.org'
+		var poster_size = "/t/p/w342"
+        var backdrop_size = "/t/p/w1920";
+
+        var poster_url = baseUrl+poster_size
+        var backdrop_url = baseUrl+backdrop_size
 
 		try {
 			app_cache_handler.downloadDataToCache('movies', movieTitle, poster_url + poster_path, function(err) {
