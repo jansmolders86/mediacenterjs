@@ -28,25 +28,23 @@ exports.fetchMetadataForTvShow = function(tvShow, callback) {
 	var tvShowInfos = tv_title_cleaner.cleanupTitle(tvShow);
     var tvTitle = tvShowInfos.title;
 
+    console.log('Starting lookup...');
     getEpisodeData( tvTitle, function(episodedata) {
         var showTitle = episodedata.tvShowTitle;
 
+        console.log('Epsiode for lookup',showTitle);
         loadShowMetadataFromDatabase(showTitle, function (result) {
             if (result) {
-                console.log('tvShow found in database', result);
+                console.log('tvShow '+ showTitle +' found in database', result);
                 callback(result);
                 return;
             }
-
-            console.log('New tvShow, getting data!');
+            console.log('New show!',showTitle);
             loadEpisodeMetadataFromDatabase(tvShow, function (result) {
                 if (result) {
-                    console.log('tvEpisode found in database', result);
-
                     getMetadataForShow(tvShow, function(showMetaData){
-                        console.log('Found show metadata', showMetaData);
                         storeShowMetadataInDatabase(showMetaData, function() {
-                            console.log('Show data stored in database!', showMetaData);
+                            console.log('Show data stored in database!');
                             var tvShowtitle = showMetaData.title;
                             loadShowMetadataFromDatabase(tvShowtitle, callback);
                         });
@@ -60,8 +58,9 @@ exports.fetchMetadataForTvShow = function(tvShow, callback) {
                         var showMetadata = [originalTitle, showTitle, season, episode ];
 
                         storeEpisodeMetadataInDatabase(showMetadata, function() {
-                            console.log('Epsiode data stored in database...', showMetadata);
+                            console.log('Epsiode data stored in database...');
                             var tvShowtitle = showMetadata.showTitle;
+
                             loadShowMetadataFromDatabase(tvShowtitle, callback);
                         });
                     });
@@ -79,7 +78,7 @@ exports.fetchMetadataForTvShow = function(tvShow, callback) {
 getMetadataForShow = function(tvTitle, callback){
     var genre = "No data";
     var certification = "No data";
-    var showTitle = 'Unknown show';
+    var showTitle = 'unknown show';
 
     getMetadataFromTrakt(tvTitle, function(err, result){
         if (err) {
@@ -101,7 +100,7 @@ getMetadataForShow = function(tvTitle, callback){
 
                 if(traktResult !== null){
                     if(traktResult.genres !== undefined){
-                        genre = traktResult.genre;
+                        genre = traktResult.genres;
                     }
                     if (traktResult.certification !== undefined) {
                         certification = traktResult.certification;
@@ -110,6 +109,8 @@ getMetadataForShow = function(tvTitle, callback){
                         showTitle = traktResult.title;
                     }
                 }
+
+                showTitle.toLowerCase();
 
                 var showMetaData = [showTitle, bannerImage, genre, certification];
                 callback(showMetaData);
@@ -131,20 +132,20 @@ loadEpisodeMetadataFromDatabase = function(tvTitle, callback) {
 		},
 		function(rows) {
 			if (typeof rows !== 'undefined' && rows.length > 0){
-				console.log('found info for tvShow' .green);
+				console.log('found info for tvepisode' .green);
 				console.log(rows)
 				callback(rows);
 			} else {
-				console.log('new tvshow' .green);
+				console.log('new tvepisode' .green);
 				callback(null);
 			}
 		}
 	);
 };
 
-loadShowMetadataFromDatabase = function(tvTitle, callback) {
-    db.query('SELECT * FROM tvshows WHERE title =? ', [ tvTitle ], {
-            localName 			: String,
+loadShowMetadataFromDatabase = function(tvShowtitle, callback) {
+    db.query('SELECT * FROM tvshows WHERE title =? ', [ tvShowtitle ], {
+            title 			    : String,
             banner 		    	: String,
             genre  	            : String,
             certification  	    : String
@@ -164,11 +165,13 @@ loadShowMetadataFromDatabase = function(tvTitle, callback) {
 
 
 storeShowMetadataInDatabase = function(metadata, callback) {
+    db.query("CREATE TABLE IF NOT EXISTS tvshows (title TEXT PRIMARY KEY,banner VARCHAR, genre VARCHAR, certification VARCHAR)");
 	db.query('INSERT OR REPLACE INTO tvshows VALUES(?,?,?,?)', metadata);
 	callback();
 };
 
 storeEpisodeMetadataInDatabase = function(metadata, callback) {
+    db.query("CREATE TABLE IF NOT EXISTS tvepisodes (localName TEXT PRIMARY KEY,title VARCHAR, season VARCHAR, epsiode VARCHAR)");
     db.query('INSERT OR REPLACE INTO tvepisodes VALUES(?,?,?,?)', metadata);
     callback();
 };

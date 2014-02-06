@@ -18,8 +18,6 @@ db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 //Create tables
-db.query("CREATE TABLE IF NOT EXISTS tvepisodes (localName TEXT PRIMARY KEY,title VARCHAR, season VARCHAR, epsiode VARCHAR)");
-db.query("CREATE TABLE IF NOT EXISTS tvshows (title TEXT PRIMARY KEY,banner VARCHAR, genre VARCHAR, certification VARCHAR)");
 db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
 
 exports.loadItems = function (req, res){
