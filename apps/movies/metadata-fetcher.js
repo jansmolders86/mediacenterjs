@@ -24,6 +24,8 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
  * @param callback           The Callback
  */
 exports.fetchMetadataForMovie = function(movieTitle, callback) {
+	db.query("CREATE TABLE IF NOT EXISTS movies (local_name TEXT PRIMARY KEY,original_name VARCHAR, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number TEXT, adult TEXT)");
+
 	var originalTitle = movieTitle;
 	var movieInfos = movie_title_cleaner.cleanupTitle(movieTitle);
 	movieTitle = movieInfos.title;
