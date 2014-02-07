@@ -20,17 +20,17 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 
 /**
  * Fetches the Metadata for the specified TV show from Trakt.
- * @param tvShow         The Title of the tvShow
+ * @param episode        The Title of the episode
  * @param callback       The Callback
  */
-exports.fetchMetadataForTvShow = function(tvShow, callback) {
+exports.fetchMetadataForTvShow = function(episode, callback) {
     // Clean incoming episode title
-	var originalTitle = tvShow;
-	var tvShowInfos = tv_title_cleaner.cleanupTitle(tvShow);
-    var tvTitle = tvShowInfos.title;
+	var originalTitle = episode;
+	var episodeInfo = tv_title_cleaner.cleanupTitle(episode);
+    var episodeTitle = episodeInfo.title;
 
     // Get show title
-    getEpisodeData( tvTitle, function(episodedata) {
+    getEpisodeData(episodeTitle, function(episodedata) {
         var showTitle = episodedata.tvShowTitle;
 
         // Load tv show from database
@@ -43,33 +43,33 @@ exports.fetchMetadataForTvShow = function(tvShow, callback) {
             }
 
             // If NOT found, check if episode already exists in db
-            loadEpisodeMetadataFromDatabase(tvShow, function (result) {
+            loadEpisodeMetadataFromDatabase(originalTitle, function (result) {
                 // If found, Get show data
                 if (result) {
-                    getMetadataForShow(tvTitle, function(showMetaData){
-                        var TvshowTitle = showMetaData[0]
+					// Check if show is already in db
+					loadShowMetadataFromDatabase(showTitle, function (result) {
+						if (result !== null) {
+							callback(result);
+							return;
+						}
+						
+						getMetadataForShow(showTitle, function(showMetaData){
+							var TvshowTitle = showMetaData[0];
 
-                        loadShowMetadataFromDatabase(TvshowTitle, function (result) {
+							// Store show data in db and do lookup again
+							storeShowMetadataInDatabase(showMetaData, function() {
+								
+								loadShowMetadataFromDatabase(TvshowTitle, function (result) {
+									if (result !== null) {
+										callback(result);
+										return;
+									}
+								});
 
-                            if (result !== null) {
-                                callback(result);
-                                return;
-                            }
+							});
+						});
+					});
 
-                            // Store show data in db and do lookup again
-                            storeShowMetadataInDatabase(TvshowTitle, function() {
-
-                                loadShowMetadataFromDatabase(TvshowTitle, function (result) {
-                                    if (result !== null) {
-                                        callback(result);
-                                        return;
-                                    }
-                                });
-
-                            });
-
-                        });
-                    });
                 } else {
 
                     // If NOT found, Get episode data
@@ -81,9 +81,29 @@ exports.fetchMetadataForTvShow = function(tvShow, callback) {
 
                         // Store episode data in db and do lookup again
                         storeEpisodeMetadataInDatabase(showMetadata, function() {
+							var TvshowTitle = showMetaData[0]
+							loadShowMetadataFromDatabase(TvshowTitle, function (result) {
+								if (result !== null) {
+									callback(result);
+									return;
+								}
+								getMetadataForShow(TvshowTitle, function(newshowMetaData){
+									var newTvshowTitle = newshowMetaData[0]
+									// Store show data in db and do lookup again
+									storeShowMetadataInDatabase(newshowMetaData, function() {
 
-                            callback(showMetadata);
+										loadShowMetadataFromDatabase(newTvshowTitle, function (result) {
+											if (result !== null) {
+												callback(result);
+												return;
+											} else{
+												console.log('Cannot resolve tvShow' .red);
+											}
+										});
 
+									});
+								});
+							});
                         });
                     });
                 }
