@@ -31,7 +31,7 @@ exports.fetchMetadataForTvShow = function(episode, callback) {
 
     // Get show title
     getEpisodeData(episodeTitle, function(episodedata) {
-        var showTitle = episodedata.tvShowTitle;
+        var showTitle = episodedata.episodeTitle;
 
         // Load tv show from database
         loadShowMetadataFromDatabase(showTitle, function (result) {
@@ -73,21 +73,21 @@ exports.fetchMetadataForTvShow = function(episode, callback) {
                 } else {
 
                     // If NOT found, Get episode data
-                    getEpisodeData( tvShow, function(episodedata) {
-                        var season = episodedata.tvShowSeason
-                        , episode = episodedata.tvShowEpisode
-                        , showTitle = episodedata.tvShowTitle
-                        , showMetadata = [originalTitle, showTitle, season, episode ];
+                    getEpisodeData( episodeTitle, function(episodedata) {
+                        var season = episodedata.episodeSeason
+                        , number = episodedata.episodeNumber
+                        , title = episodedata.episodeTitle
+                        , episodeMetadata = [originalTitle, title, season, number ];
 
                         // Store episode data in db and do lookup again
-                        storeEpisodeMetadataInDatabase(showMetadata, function() {
-							var TvshowTitle = showMetaData[0]
-							loadShowMetadataFromDatabase(TvshowTitle, function (result) {
+                        storeEpisodeMetadataInDatabase(episodeMetadata, function() {
+							var newEpisodeTitle = episodeMetadata[0]
+							loadShowMetadataFromDatabase(newEpisodeTitle, function (result) {
 								if (result !== null) {
 									callback(result);
 									return;
 								}
-								getMetadataForShow(TvshowTitle, function(newshowMetaData){
+								getMetadataForShow(newEpisodeTitle, function(newshowMetaData){
 									var newTvshowTitle = newshowMetaData[0]
 									// Store show data in db and do lookup again
 									storeShowMetadataInDatabase(newshowMetaData, function() {
@@ -251,16 +251,16 @@ downloadTvShowBanner = function(banner, tvShow, callback) {
 	}
 };
 
-getEpisodeData = function(tvTitle, callback){
-    var tvshowdata = tvTitle.replace(/[sS]([0-9]{2})[eE]([0-9]{2})/, '')
-    , tvShowSeasonMatch = tvTitle.match(/[sS]([0-9]{2})/)
-    , tvShowEpisodeMatch = tvTitle.match(/[eE]([0-9]{2})/)
-    , season = tvShowSeasonMatch[0].replace(/[sS]/,"")
-    , episode = tvShowEpisodeMatch[0].replace(/[eE]/,"")
+getEpisodeData = function(episodeFilename, callback){
+    var episodeTitle 		= episodeFilename.replace(/[sS]([0-9]{2})[eE]([0-9]{2})/, '')
+    , episodeSeasonMatch 	= episodeFilename.match(/[sS]([0-9]{2})/)
+    , episodeNumberMatch 	= episodeFilename.match(/[eE]([0-9]{2})/)
+    , episodeSeason 		= episodeSeasonMatch[0].replace(/[sS]/,"")
+    , episodeNumber 		= episodeNumberMatch[0].replace(/[eE]/,"")
     , episodeData = {
-        "tvShowTitle"      : tvshowdata.toLowerCase(),
-        "tvShowSeason"     : season,
-        "tvShowEpisode"    : episode
+        "episodeTitle"      : episodeTitle.toLowerCase(),
+        "episodeSeason"     : episodeSeason,
+        "episodeNumber"    	: episodeNumber
     }
     callback(episodeData);
 }
