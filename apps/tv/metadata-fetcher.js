@@ -19,55 +19,75 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 /* Public Methods */
 
 /**
- * Fetches the Metadata for the specified Movie from themoviedb.org.
+ * Fetches the Metadata for the specified TV show from Trakt.
  * @param tvShow         The Title of the tvShow
- * @param callback           The Callback
+ * @param callback       The Callback
  */
 exports.fetchMetadataForTvShow = function(tvShow, callback) {
+    // Clean incoming episode title
 	var originalTitle = tvShow;
 	var tvShowInfos = tv_title_cleaner.cleanupTitle(tvShow);
     var tvTitle = tvShowInfos.title;
 
-    console.log('Starting lookup...');
+    // Get show title
     getEpisodeData( tvTitle, function(episodedata) {
         var showTitle = episodedata.tvShowTitle;
 
-        console.log('Epsiode for lookup',showTitle);
+        // Load tv show from database
         loadShowMetadataFromDatabase(showTitle, function (result) {
-            if (result) {
-                console.log('tvShow '+ showTitle +' found in database', result);
+
+            // If found, send show data
+            if (result !== null) {
                 callback(result);
                 return;
             }
-            console.log('New show!',showTitle);
+
+            // If NOT found, check if episode already exists in db
             loadEpisodeMetadataFromDatabase(tvShow, function (result) {
+                // If found, Get show data
                 if (result) {
-                    getMetadataForShow(tvShow, function(showMetaData){
-                        storeShowMetadataInDatabase(showMetaData, function() {
-                            console.log('Show data stored in database!');
-                            var tvShowtitle = showMetaData.title;
-                            loadShowMetadataFromDatabase(tvShowtitle, callback);
+                    getMetadataForShow(tvTitle, function(showMetaData){
+                        var TvshowTitle = showMetaData[0]
+
+                        loadShowMetadataFromDatabase(TvshowTitle, function (result) {
+
+                            if (result !== null) {
+                                callback(result);
+                                return;
+                            }
+
+                            // Store show data in db and do lookup again
+                            storeShowMetadataInDatabase(TvshowTitle, function() {
+
+                                loadShowMetadataFromDatabase(TvshowTitle, function (result) {
+                                    if (result !== null) {
+                                        callback(result);
+                                        return;
+                                    }
+                                });
+
+                            });
+
                         });
                     });
                 } else {
-                    console.log('New episode, getting data!');
+
+                    // If NOT found, Get episode data
                     getEpisodeData( tvShow, function(episodedata) {
-                        var season = episodedata.tvShowSeason;
-                        var episode = episodedata.tvShowEpisode;
-                        var showTitle = episodedata.tvShowTitle;
-                        var showMetadata = [originalTitle, showTitle, season, episode ];
+                        var season = episodedata.tvShowSeason
+                        , episode = episodedata.tvShowEpisode
+                        , showTitle = episodedata.tvShowTitle
+                        , showMetadata = [originalTitle, showTitle, season, episode ];
 
+                        // Store episode data in db and do lookup again
                         storeEpisodeMetadataInDatabase(showMetadata, function() {
-                            console.log('Epsiode data stored in database...');
-                            var tvShowtitle = showMetadata.showTitle;
 
-                            loadShowMetadataFromDatabase(tvShowtitle, callback);
+                            callback(showMetadata);
+
                         });
                     });
                 }
-
             });
-
         });
     });
 };
@@ -87,7 +107,6 @@ getMetadataForShow = function(tvTitle, callback){
             var traktResult = result;
             var banner	= traktResult.images.banner;
 
-
             showTitle = traktResult.title;
             app_cache_handler.ensureCacheDirExists('tv', showTitle);
 
@@ -106,12 +125,11 @@ getMetadataForShow = function(tvTitle, callback){
                         certification = traktResult.certification;
                     }
                     if(traktResult.title !== undefined){
-                        showTitle = traktResult.title;
+                        var showTitleResult = traktResult.title;
                     }
                 }
 
-                showTitle.toLowerCase();
-
+                var showTitle = showTitleResult.toLowerCase();
                 var showMetaData = [showTitle, bannerImage, genre, certification];
                 callback(showMetaData);
 
@@ -133,7 +151,6 @@ loadEpisodeMetadataFromDatabase = function(tvTitle, callback) {
 		function(rows) {
 			if (typeof rows !== 'undefined' && rows.length > 0){
 				console.log('found info for tvepisode' .green);
-				console.log(rows)
 				callback(rows);
 			} else {
 				console.log('new tvepisode' .green);
@@ -144,6 +161,7 @@ loadEpisodeMetadataFromDatabase = function(tvTitle, callback) {
 };
 
 loadShowMetadataFromDatabase = function(tvShowtitle, callback) {
+    console.log('Looking for tvShow', tvShowtitle);
     db.query('SELECT * FROM tvshows WHERE title =? ', [ tvShowtitle ], {
             title 			    : String,
             banner 		    	: String,
@@ -152,11 +170,10 @@ loadShowMetadataFromDatabase = function(tvShowtitle, callback) {
         },
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
-                console.log('found info for tvShow' .green);
-                console.log(rows)
+                console.log('Found info for tvShow', tvShowtitle);
                 callback(rows);
             } else {
-                console.log('new tvshow' .green);
+                console.log('New tvshow',tvShowtitle);
                 callback(null);
             }
         }
@@ -165,7 +182,7 @@ loadShowMetadataFromDatabase = function(tvShowtitle, callback) {
 
 
 storeShowMetadataInDatabase = function(metadata, callback) {
-    db.query("CREATE TABLE IF NOT EXISTS tvshows (title TEXT PRIMARY KEY,banner VARCHAR, genre VARCHAR, certification VARCHAR)");
+    db.query("CREATE TABLE IF NOT EXISTS tvshows (title VARCHAR PRIMARY KEY,banner VARCHAR, genre VARCHAR, certification VARCHAR)");
 	db.query('INSERT OR REPLACE INTO tvshows VALUES(?,?,?,?)', metadata);
 	callback();
 };
@@ -221,7 +238,7 @@ getEpisodeData = function(tvTitle, callback){
     , season = tvShowSeasonMatch[0].replace(/[sS]/,"")
     , episode = tvShowEpisodeMatch[0].replace(/[eE]/,"")
     , episodeData = {
-        "tvShowTitle"      : tvshowdata,
+        "tvShowTitle"      : tvshowdata.toLowerCase(),
         "tvShowSeason"     : season,
         "tvShowEpisode"    : episode
     }

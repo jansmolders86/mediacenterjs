@@ -1,11 +1,9 @@
-![logo](http://www.mediacenterjs.com/global/images/github/logo.png) MediacenterJS
+![logo](/public/core/css/img/logo.png) MediacenterJS
 =============
 
 __A NodeJS based Mediacenter__ 
 
 Website: http://www.mediacenterjs.com
-
-![Dashboard](http://www.mediacenterjs.com/global/images/github/screen1.png)
 
 Status: 
 =======
@@ -229,7 +227,6 @@ the server.js will make sure you do not have to restart the actual application (
 
 Of course, if you change the port, you need to use that port after the initial setup.
 
-![Remote](http://www.mediacenterjs.com/global/images/github/remote.png)
 
 Using the remote control
 -------------
@@ -240,8 +237,6 @@ Integrated with Mediacenterjs is a handly remote control you can use on your mob
 
 If your phone is connected to the same wifi this should work automatically and the message on the bottom of the screen should say "Remote connected". If for some reason the IP is different and the remote is not connected you can fill in a different IP by pressing the three dotts at the top left corner. This will bring up the settings menu where you can customize all the MCJS settings.
 	
-
-![Movies](http://www.mediacenterjs.com/global/images/github/second.png)
 
 What can the movie browser/player do? 
 -------------
@@ -321,8 +316,6 @@ If you have an album, the music player will look for a image file with the follo
 	
 This image will be copied to the cache of MCJS so it can be used without restrictions. So you can even delete the image in the local dir and as long as you don't clear the cache, the image will be used.
 If no image is provided, the player will contact the Discogs scraper and try to get the art ther. (Although there are plans to port discogs to lastFM.)
-
-A nice GUI detail: Once you start playback, the eq icon and header will change colour according to the dominant colour of the album art. 
 
 What is a MCJS App and how will it work?
 -------------
