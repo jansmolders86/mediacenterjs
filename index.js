@@ -245,26 +245,33 @@ app.post('/removeModule', function(req, res){
 app.post('/clearCache', function(req, res){
 	var app_cache_handler = require('./lib/handlers/app-cache-handler');
 	var incommingCache = req.body
-        , cache = incommingCache.cache;
-	
-	console.log('clearing ' + cache + ' cache');
-	app_cache_handler.clearCache(cache, function(err) {
-		if (err) {
-			console.log('Error removing module', e .red);
-			return res.send('Error clearing cache', e);
-		}
+        , cache = incommingCache.cache
+        , tableName = cache.split(',');
 
-        var dblite = require('dblite')
-        if(os.platform() === 'win32'){
-            dblite.bin = "./bin/sqlite3/sqlite3";
-        }
-        var db = dblite('./lib/database/mcjs.sqlite');
-        db.on('info', function (text) { console.log(text) });
-        db.on('error', function (err) { console.error('Database error: ' + err) });
-        db.query('DROP TABLE IF EXISTS ' + cache);
+    tableName.forEach(function(name) {
+        console.log('clearing ' + name + ' cache');
+        app_cache_handler.clearCache(name, function(err) {
+            if (err) {
+                console.log('Error removing module', e .red);
+                return res.send('Error clearing cache', e);
+            }
 
-		return res.send('done');
-	});
+            var dblite = require('dblite')
+            if(os.platform() === 'win32'){
+                dblite.bin = "./bin/sqlite3/sqlite3";
+            }
+            var db = dblite('./lib/database/mcjs.sqlite');
+            db.on('info', function (text) { console.log(text) });
+            db.on('error', function (err) { console.error('Database error: ' + err) });
+            db.query('DROP TABLE IF EXISTS ' + name);
+
+
+        });
+    });
+
+    return res.send('done');
+
+
 });
 
 app.get('/checkForUpdate', function(req, res){
