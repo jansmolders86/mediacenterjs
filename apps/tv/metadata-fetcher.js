@@ -133,8 +133,6 @@ getMetadataForShow = function(tvTitle, callback){
             downloadTvShowBanner(banner, showTitle, function(err) {
                 if (err) {
                     var bannerImage= "/tv/css/img/nodata.jpg";
-                } else {
-                    var bannerImage = '/data/tv/'+tvTitle+'/'+path.basename(banner);
                 }
 
                 if(traktResult !== null){
@@ -146,6 +144,8 @@ getMetadataForShow = function(tvTitle, callback){
                     }
                     if(traktResult.title !== undefined){
                         var showTitleResult = traktResult.title;
+
+                        var bannerImage = '/data/tv/'+showTitleResult+'/'+path.basename(banner);
                     }
                 }
 
