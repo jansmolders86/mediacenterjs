@@ -6,8 +6,7 @@ var fs = require('fs.extra')
 	, os = require('os')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
-/* Constants */
-var SUPPORTED_FILETYPES = new RegExp("(avi|mkv|mpeg|mov|mp4|wmv)$","g");
+
 
 var dblite = require('dblite')
 if(os.platform() === 'win32'){
@@ -17,23 +16,48 @@ var db = dblite('./lib/database/mcjs.sqlite');
 db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
+exports.fetchItems = function (req, res){
+    console.log('Running index')
+    var rootPath = path.dirname(module.parent.parent.parent.filename)
+        , fileLocation = 'node '+rootPath+'/lib/utils/metadata/movie-metadata.js'
+        , exec = require('child_process').exec
+        , child = exec(fileLocation, { maxBuffer: 9000*1024 }, function(err, stdout, stderr) {
+            if (err) {
+                console.log('Metadata fetcher error: ',err) ;
+            } else{
+                console.log('Done scraping');
+            }
+        });
+
+    child.stdout.on('data', function(data) { console.log(data.toString()); });
+    child.stderr.on('data', function(data) { console.log(data.toString()); });
+};
+
 exports.loadItems = function (req, res){
-	file_utils.getLocalFiles(config.moviepath, SUPPORTED_FILETYPES, function(err, files) {
- 
-		var movies = [];
-		for(var i = 0, l = files.length; i < l; ++i){
-			var movieFiles = files[i].file;
-			var movieTitles = movieFiles.substring(movieFiles.lastIndexOf("/")).replace(/^\/|\/$/g, '');
-
-			//single
-			if(movieTitles === '' && files[i].file !== undefined){
-				movieTitles = files[i].file;
-			}
-
-			movies.push(movieTitles.split("/").pop());
-		}
-		res.json(movies);
-	});
+    db.query('SELECT * FROM movies',{
+            local_name 		: String,
+            original_name  	: String,
+            poster_path  	: String,
+            backdrop_path  	: String,
+            imdb_id  		: String,
+            rating  		: String,
+            certification  	: String,
+            genre  			: String,
+            runtime  		: String,
+            overview  		: String,
+            cd_number  		: String,
+            adult           : String
+        },
+        function(rows) {
+            if (typeof rows !== 'undefined' && rows.length > 0){
+                console.log('found info for movie', rows)
+                res.json(rows);
+            } else {
+                console.log('new movie' .green);
+                res.json(null);
+            }
+        }
+    );
 };
 
 exports.playMovie = function (req, res, platform, movieRequest){
@@ -51,17 +75,6 @@ exports.playMovie = function (req, res, platform, movieRequest){
 		}
 	});
 
-};
-
-exports.handler = function (req, res, movieRequest){
-	//Modules
-	var downloader = require('downloader');
-	var metadata_fetcher = require('./metadata-fetcher');
-
-	console.log('Searching for ' + movieRequest + ' in database');
-	metadata_fetcher.fetchMetadataForMovie(movieRequest, function(metadata) {
-		res.json(metadata);
-	});
 };
 
 exports.getGenres = function (req, res){

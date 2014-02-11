@@ -44,7 +44,6 @@ block body
                         img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }", src="/core/css/img/ajax-loader.gif")
                         // /ko
                     .overlay.mcjs-rc-clickable(data-bind="{click: playMovie}")
-                    span.title(data-bind="text:localName")
                     .overview
                         // ko if: overview() !== null
                         h1(data-bind="text:title")

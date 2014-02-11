@@ -50,22 +50,59 @@
 	}
 	
 	/**** Start of custom functions ***/
+
+
+    function _getItems(o){
+        $.ajax({
+            url: '/tv/loadItems',
+            type: 'get',
+            dataType: 'json'
+        }).done(function(data){
+                var listing = [];
+                $.each(data, function () {
+                    // create tvShow model for each tvShow
+                    var tvShow = new Tvshow(o, this);
+                    listing.push(tvShow);
+
+                    // add model to cache
+                    o.tvShowCache[this] = tvShow;
+                });
+
+                // Fill viewmodel with tvShow model per item
+                o.viewModel.tvshow(listing);
+                o.viewModel.tvshow.sort();
+
+                var title = $(this).find('span.episodeName').html();
+
+                if (title !== undefined){
+                    var tvShowTitle = title.replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv)$/,"")
+                        , visibletvShow = $(this);
+
+                    _handleVisibletvShows(o, tvShowTitle, visibletvShow, title);
+                }
+
+            });
+    }
+
+
+
+
 	
 	// Create tvShow model
 	//TODO: put in separate file 
 	var Tvshow = function (o, json) {
 		var that = this;
-		this.localName 		= ko.observable(json);
+        this.episodeName 	= ko.observable(json);
 		this.title 		    = ko.observable();
 		this.banner 	    = ko.observable();
 		this.genre 			= ko.observable();
         this.certification 	= ko.observable();
 		this.isActive 		= ko.observable();
 		this.playtvShow = function () {
-            window.location.hash = that.localName();
+            window.location.hash = that.episodeName();
             that.isActive(o.activetvShowId);
 
-            var tvShowTitle = that.localName();
+            var showTitle = that.title();
             var url = _checkPlatform(o, tvShowTitle);
             _playtvShow(o,url,tvShowTitle);
 		};
@@ -101,37 +138,7 @@
 			ko.applyBindings(o.viewModel,o.$that[0]);
 		}	
 	}
-	
-	function _getItems(o){
-		$.ajax({
-			url: '/tv/loadItems',
-			type: 'get',
-			dataType: 'json'
-		}).done(function(data){
-			var listing = [];
-			$.each(data, function () {
-				// create tvShow model for each tvShow
-				var tvShow = new Tvshow(o, this);
-				listing.push(tvShow);
-				
-				// add model to cache
-				o.tvShowCache[this] = tvShow;
-			});
 
-			// Fill viewmodel with tvShow model per item
-			o.viewModel.tvshow(listing);
-			o.viewModel.tvshow.sort();
-
-            if(window.location.hash) {
-                var tvShowTitle =window.location.hash.substring(1);
-                var url = _checkPlatform(o, tvShowTitle);
-                _playtvShow(o,url,tvShowTitle);
-            } else{
-                _lazyload(o);
-            }
-
-		});
-	}
 	
 	function _handleVisibletvShows(o, tvShowTitle, visibletvShow, title){
 		var url = '/tv/'+tvShowTitle+'/info';
@@ -142,6 +149,7 @@
 			}).done(function(data){
 				// If current item is in cache, fill item with values
 
+                   console.log('data', data);
 				if (o.tvShowCache[title]) {
 					setTimeout(function(){
 						var tvShowData = data[0]
@@ -159,32 +167,9 @@
 			});
 		}		
 	}
-	
-	function _lazyload(o){
-		setTimeout(function(){
-			//Set time-out for fast scrolling
-			var WindowTop = $('body').scrollTop()
-			, WindowBottom = WindowTop + $('body').height();
 
-			$(o.tvShowListSelector+' > li').each(function(){
-				var offsetTop = $(this).offset().top
-				, offsetBottom = offsetTop + $(this).height();
 
-				if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
-					var title = $(this).find('span.title').html();
 
-					if (title !== undefined){
-						var tvShowTitle = title.replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv)$/,"")
-						, visibletvShow = $(this);
-
-						_handleVisibletvShows(o, tvShowTitle, visibletvShow, title);
-					}
-					$(this).attr("loaded",true);
-				}
-			});	
-		},500);
-	}
-	
 	
 	/******** Jquery only functions *********/
 
@@ -291,7 +276,7 @@
 	}
 	
 	function _setDurationOftvShow(player, data){
-	   var videoDuration = player.duration(data.duration);  
+	   var videoDuration = player.duration(data.duration);
 		player.bufferedPercent(0);
 		$('.vjs-duration-display .vjs-control-text').text(videoDuration);
 	}

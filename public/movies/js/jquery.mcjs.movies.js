@@ -36,12 +36,10 @@
 			
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
-			
-			_setViewmodel(o);
+
 			_getItems(o);
 			
 			$that.on('scroll resize', function() {
-				_lazyload(o);
 				_positionElement(o);
 
 			});	
@@ -98,110 +96,40 @@
 	};
 
 	
-	function _setViewmodel(o){
-		if (!o.viewModel) {
-			// create initial viewmodel
-			o.viewModel = {};
-			o.viewModel.movies = ko.observableArray();
-			ko.applyBindings(o.viewModel,o.$that[0]);
-		}	
-	}
-	
 	function _getItems(o){
 		$.ajax({
 			url: '/movies/loadItems', 
 			type: 'get',
 			dataType: 'json'
-		}).done(function(data){	
-			var listing = [];
-			$.each(data, function () {
-				// create movie model for each movie
-				var movie = new Movie(o, this);
-				listing.push(movie);
-				
-				// add model to cache
-				o.movieCache[this] = movie;
-			});
-			
-			// Fill viewmodel with movie model per item
-			o.viewModel.movies(listing);
-			o.viewModel.movies.sort();
+		}).done(function(data){
 
-            if(window.location.hash) {
-                var movieTitle =window.location.hash.substring(1);
-                var url = _checkPlatform(o, movieTitle);
-                _playMovie(o,url,movieTitle);
-            } else{
-                _lazyload(o);
+
+            ko.applyBindings(new Movie(data));
+/*
+
+
+
+
+
+            console.log(ajaxResult);
+            i
+
+            if($('#header > h4').length > 0 && movieData.adult === 'yes'){
+                visibleMovie.hide();
+            } else {
+                visibleMovie.addClass('showDetails '+o.fadeClass);
             }
 
+            _focusedItem(o);
+            _scrollBackdrop(o);
+ */
 		});
-	}
-	
-	function _handleVisibleMovies(o, movieTitle, visibleMovie, title){
-		var url = '/movies/'+movieTitle+'/info';
-		if(movieTitle !== undefined){
-			$.ajax({
-				url: url, 
-				type: 'get'
-			}).done(function(data){
-				// If current item is in cache, fill item with values
 
-				if (o.movieCache[title]) {
-					setTimeout(function(){
-						var movieData = data[0]
-						, movie = o.movieCache[title];
-						 
-						movie.posterImage(movieData.poster_path);
-						movie.backdropImage(movieData.backdrop_path);
-						movie.genre(movieData.genre);
-						movie.runtime(movieData.runtime);
-						movie.overview(movieData.overview);
-						movie.title(movieData.local_name);
-						movie.cdNumber(movieData.cd_number);
-						movie.adult(movieData.adult);
 
-                        if($('#header > h4').length > 0 && movieData.adult === 'yes'){
-                            visibleMovie.hide();
-                        } else {
-                            visibleMovie.addClass('showDetails '+o.fadeClass);
-                        }
-						
-					},500);
-				}
-				
-				_focusedItem(o);
-                _scrollBackdrop(o);
-			});
-		}		
-	}
-	
-	function _lazyload(o){
-		//TODO: Make this an KO extender
-		setTimeout(function(){
-			//Set time-out for fast scrolling
-			var WindowTop = $('body').scrollTop()
-			, WindowBottom = WindowTop + $('body').height();
+    }
 
-			$(o.movieListSelector+' > li').each(function(){
-				var offsetTop = $(this).offset().top
-				, offsetBottom = offsetTop + $(this).height();
 
-				if(!$(this).attr("loaded") && WindowTop <= offsetBottom && WindowBottom >= offsetTop){
-					var title = $(this).find('span.title').html();
-					if (title !== undefined){
-						var movieTitle = title.replace(/(avi|mkv|mpeg|mpg|mov|mp4|wmv)$/,"")
-						, visibleMovie = $(this);
-						_handleVisibleMovies(o, movieTitle, visibleMovie, title);
-					}
-					$(this).attr("loaded",true);
-				}
-			});	
-		},500);
-	}
-	
-	
-	/******** Jquery only functions *********/
+	/******** Jquery only functions *******
 	
 	//TODO: Put in separate file
 	function _focusedItem(o){

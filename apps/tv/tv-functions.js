@@ -3,11 +3,8 @@ var fs = require('fs.extra')
 	, file_utils = require('../../lib/utils/file-utils')
 	, colors = require('colors')
 	, os = require('os')
-    , metadata_fetcher = require('./metadata-fetcher')
+    , path = require('path')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
-
-/* Constants */
-var SUPPORTED_FILETYPES = new RegExp("(avi|mkv|mpeg|mov|mp4|wmv)$","g");
 
 var dblite = require('dblite')
 if(os.platform() === 'win32'){
@@ -20,31 +17,20 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 //Create tables
 db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
 
-exports.loadItems = function (req, res){
-	file_utils.getLocalFiles(config.tvpath, SUPPORTED_FILETYPES, function(err, files) {
-		var tvShows = [];
-		for(var i = 0, l = files.length; i < l; ++i){
-			var tvShowFiles = files[i].file;
-			var tvShowTitles = tvShowFiles.substring(tvShowFiles.lastIndexOf("/")).replace(/^\/|\/$/g, '');
+exports.fetchData = function (req, res){
+    var rootPath = path.dirname(module.parent.parent.parent.filename)
+        , fileLocation = 'node '+rootPath+'/lib/utils/metadata/tv-metadata.js'
+        , exec = require('child_process').exec
+        , child = exec(fileLocation, { maxBuffer: 9000*1024 }, function(err, stdout, stderr) {
+            if (err) {
+                console.log('Metadata fetcher error: ',err) ;
+            } else{
+                console.log('Done scraping shows');
+            }
+        });
 
-			//single
-			if(tvShowTitles === '' && files[i].file !== undefined){
-				tvShowTitles = files[i].file;
-			}
-
-			tvShows.push(tvShowTitles.split("/").pop());
-		}
-
-		res.json(tvShows);
-	});
-};
-
-exports.handler = function (req, res, tvShowRequest){
-	console.log('Searching for ' + tvShowRequest + ' in database');
-
-	metadata_fetcher.fetchMetadataForTvShow(tvShowRequest, function(metadata) {
-		res.json(metadata);
-	});
+    child.stdout.on('data', function(data) { console.log(data.toString()); });
+    child.stderr.on('data', function(data) { console.log(data.toString()); });
 };
 
 exports.playtvShow = function (req, res, platform, tvShowRequest){

@@ -34,6 +34,7 @@ block body
                         // ko if: banner() !== null
                         img.tvbanner(data-bind="attr: { src: banner }", src="/core/css/img/ajax-loader.gif")
                         // /ko
-                    .overlay.mcjs-rc-clickable(data-bind="{click: playtvShow}")
+                    .overlay.mcjs-rc-clickable(data-bind="{click: getEpisodes}")
                     span.title(data-bind="text:localName")
+                    span.showTitle(data-bind="text:title")
             // /ko

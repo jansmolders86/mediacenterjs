@@ -46,7 +46,7 @@ exports.get = function(req, res){
 
     if (!optionalParam) {
         if(infoRequest === 'loadItems') {
-            functions.loadItems(req,res);
+            functions.fetchData(req,res);
         }
 	}
 
