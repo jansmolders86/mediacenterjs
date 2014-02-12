@@ -17,11 +17,11 @@ block additional_css
 
 block additional_scripts
     script(src="http://vjs.zencdn.net/4.3/video.js")
-    script(src="/movies/js/jquery.mcjs.movies.js")
+    script(src="/movies/js/knockout.movies.js")
     script.
         $(function(){
             $('body').mcjs();
-            $('body').mcjsm();
+          // $('body').mcjsm();
         });
 
 block body
@@ -33,22 +33,17 @@ block body
             h4 Parental lock enabled
     #backdrop
         img.backdropimg(src="/movies/css/img/backdrop.png")
-
     #wrapper
         #moviebrowser
             // ko if: movies().length > 0
             ul.movies(data-bind="foreach: movies")
-                li.movieposter.boxed.mcjs-rc-controllable(data-bind="attr: {'id':isActive}" )
+                li.movieposter.boxed.mcjs-rc-controllable
                     .imageWrapper
-                        // ko if: backdropImage() !== null && posterImage() !== null
-                        img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }", src="/core/css/img/ajax-loader.gif")
-                        // /ko
+                        img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }")
                     .overlay.mcjs-rc-clickable(data-bind="{click: playMovie}")
                     .overview
-                        // ko if: overview() !== null
                         h1(data-bind="text:title")
                         .summary(data-bind="text:overview")
-                        // /ko
                     .specs
                         // ko if: genre() !== undefined
                         p
@@ -56,7 +51,7 @@ block body
                         p
                             strong(data-bind="text:'Runtime: '+runtime()")
                         // /ko
-                    // ko if: cdNumber() !== '' && cdNumber() !== null && cdNumber() !== undefined
+                    // ko if: cdNumber() !== undefined
                     .cdNumber
                         span(data-bind="text:cdNumber")
                     // /ko

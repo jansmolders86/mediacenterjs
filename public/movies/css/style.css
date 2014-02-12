@@ -96,8 +96,8 @@ a.backlink { margin-top: 0px; z-index:4; }
 
 .movieposter .overlay{ width:0; height:0; }
 
-.movieposter.showDetails.focused .overlay,
-.movieposter.showDetails:hover .overlay{
+.movieposter.focused .overlay,
+.movieposter:hover .overlay{
 	background:url(img/cover-overlay.png) no-repeat;
 	width:250px;
 	height:278px;
@@ -109,7 +109,7 @@ a.backlink { margin-top: 0px; z-index:4; }
 	border-radius:2px;
 }
 
-.movieposter.showDetails .cdNumber{
+.movieposter .cdNumber{
 	width:90px;
 	height:80px;
 	background:url(img/cdnumber-bg.png) no-repeat;
@@ -119,7 +119,7 @@ a.backlink { margin-top: 0px; z-index:4; }
 	z-index:3;
 }
 
-.movieposter.showDetails .cdNumber > span{
+.movieposter .cdNumber > span{
 	color:#fff;
 	font-size:14px;
 	-webkit-transform: rotate(44.5deg);  /* Chrome, Safari 3.1+ */
@@ -186,7 +186,7 @@ span.title{visibility:hidden; width:0; height:0;}
 	overflow:hidden;
 }
 
-.movieposter.showDetails .specs{
+.movieposter .specs{
 	float: left;
 	color: #666;
 	line-height: 19px;
