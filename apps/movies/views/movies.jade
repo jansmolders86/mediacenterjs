@@ -18,10 +18,10 @@ block additional_css
 block additional_scripts
     script(src="http://vjs.zencdn.net/4.3/video.js")
     script(src="/movies/js/knockout.movies.js")
+    script(src="/movies/js/jquery.mcjs.movies.js")
     script.
         $(function(){
             $('body').mcjs();
-          // $('body').mcjsm();
         });
 
 block body
@@ -40,7 +40,7 @@ block body
                 li.movieposter.boxed.mcjs-rc-controllable
                     .imageWrapper
                         img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }")
-                    .overlay.mcjs-rc-clickable(data-bind="{click: playMovie}")
+                    .overlay.mcjs-rc-clickable
                     .overview
                         h1(data-bind="text:title")
                         .summary(data-bind="text:overview")

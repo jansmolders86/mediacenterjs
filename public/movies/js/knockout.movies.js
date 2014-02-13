@@ -15,6 +15,9 @@ addEventListener('load', function () {
 
         ko.applyBindings(viewModel);
 
+        // Init Jquery plugin
+        $('body').mcjsm();
+
     });
 });
 
@@ -42,10 +45,4 @@ function Movie(item) {
     this.title 			= ko.observable(item.title);
     this.cdNumber 		= ko.observable(item.cdNumber);
     this.adult   		= ko.observable(item.adult);
-    this.playMovie = function (data, event) {
-        var previousCount = this.title();
-        console.log('click', previousCount)
-
-        //_playMovie(o,url,movieTitle);
-    };
 }

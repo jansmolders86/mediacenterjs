@@ -50,10 +50,8 @@ exports.loadItems = function (req, res){
         },
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
-                console.log('found info for movie', rows)
                 res.json(rows);
             } else {
-                console.log('new movie' .green);
                 res.json(null);
             }
         }
