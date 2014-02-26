@@ -116,7 +116,7 @@ After you have downloaded MediacenterJS binaries and placed them in the root of 
 
 If you close this window, MCJS will stop working. You can also see useful information about what the server is doing, including error messages and other useful information.
 
-Setup Ubuntu 13.x/ Mint 15 / Debian Weezy / OSX
+Setup Ubuntu 13.x/ Mint 15 / Debian Weezy
 -------------
 
 please paste the following commands in your terminal:
@@ -167,8 +167,22 @@ hash -r
 ```
 
 For more information and troubleshooting: https://trac.ffmpeg.org/wiki/UbuntuCompilationGuide
-	
 
+Setup in OSX
+--------------------
+Use Homebrew to install ffmpeg. Install Homebrew from here (http://brew.sh/)	
+```sh
+ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+sudo chown -R $USER:admin /usr/local  (Homebrew can create syslinks)
+
+brew options ffmpeg ( shows additional options)
+brew install ffmpeg --with-fdk-aac --with-ffplay --with-freetype --with-frei0r --with-libass 
+--with-libvo-aacenc --with-libvorbis --with-libvpx --with-opencore-amr --with-openjpeg
+ --with-opus --with-rtmpdump --with-schroedinger --with-speex --with-theora --with-tools
+```
+
+Install MediaCenterJs 
+-----------------------
 If you use a Git clone of MediacenterJS please use:
 
 ```sh
@@ -176,6 +190,7 @@ sudo apt-get install git # If you do not have git installed yet
 git clone https://github.com/jansmolders86/mediacenterjs.git
 cd mediacenterjs
 npm install
+node server
 ```
 
 If you want to use NPM to install MediacenterJS use:
