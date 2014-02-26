@@ -170,16 +170,19 @@ For more information and troubleshooting: https://trac.ffmpeg.org/wiki/UbuntuCom
 
 Setup in OSX
 --------------------
-Use Homebrew to install ffmpeg. Intall Homebrew from here (http://brew.sh/)	
+Use Homebrew to install ffmpeg. Install Homebrew from here (http://brew.sh/)	
 ```sh
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
-sudo chown -R $USER:admin /usr/local  (Homebrew can create links)
+sudo chown -R $USER:admin /usr/local  (Homebrew can create syslinks)
+
 brew options ffmpeg ( shows additional options)
 brew install ffmpeg --with-fdk-aac --with-ffplay --with-freetype --with-frei0r --with-libass 
 --with-libvo-aacenc --with-libvorbis --with-libvpx --with-opencore-amr --with-openjpeg
  --with-opus --with-rtmpdump --with-schroedinger --with-speex --with-theora --with-tools
 ```
 
+Install MediaCenterJs 
+-----------------------
 If you use a Git clone of MediacenterJS please use:
 
 ```sh
