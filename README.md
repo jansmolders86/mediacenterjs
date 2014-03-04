@@ -473,6 +473,7 @@ This app makes heavy use of:
 * Terry MooreII https://github.com/TerryMooreII For the Javascript Jabber app and building the Plugin manager
 * Stefan Hoffman https://github.com/hoffi for his hudge contribution to the backend and German translation 
 * Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
+* Matthew Marino https://github.com/Karnith for his FFMPEG expertise
 * Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
 * Lucien Immink https://github.com/lucienimmink for his javascript knowledge/support
 * P.J. Onori for his icons
