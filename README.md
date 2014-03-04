@@ -468,6 +468,7 @@ This app makes heavy use of:
 * Ionică Bizău https://github.com/IonicaBizau for the [Youtube API NPM module](https://github.com/IonicaBizau/youtube-api)
 * Luis Eduardo Brito https://github.com/luiseduardobrito for his Portuguese translation
 * Kasper Isager https://github.com/kasperisager for his Danish translation
+* Robin Larsson	https://github.com/TankMasterRL for his Swedish translation
 * Jussi Vatjus https://github.com/jupe for his code support
 * Terry MooreII https://github.com/TerryMooreII For the Javascript Jabber app and building the Plugin manager
 * Stefan Hoffman https://github.com/hoffi for his hudge contribution to the backend and German translation 
