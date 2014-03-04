@@ -4,10 +4,10 @@ var fs = require('fs.extra')
 	, app_cache_handler = require('../../lib/handlers/app-cache-handler')
 	, colors = require('colors')
 	, os = require('os')
+    , metafetcher = require('../../lib/utils/metadata-fetcher')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
-
-
+var metaType = "movie";
 var dblite = require('dblite')
 if(os.platform() === 'win32'){
     dblite.bin = "./bin/sqlite3/sqlite3";
@@ -17,20 +17,7 @@ db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 exports.fetchItems = function (req, res){
-    console.log('Running index')
-    var rootPath = path.dirname(module.parent.parent.parent.filename)
-        , fileLocation = 'node '+rootPath+'/lib/utils/metadata/movie-metadata.js'
-        , exec = require('child_process').exec
-        , child = exec(fileLocation, { maxBuffer: 9000*1024 }, function(err, stdout, stderr) {
-            if (err) {
-                console.log('Metadata fetcher error: ',err) ;
-            } else{
-                console.log('Done scraping');
-            }
-        });
-
-    child.stdout.on('data', function(data) { console.log(data.toString()); });
-    child.stderr.on('data', function(data) { console.log(data.toString()); });
+    metafetcher.fetch(metaType);
 };
 
 exports.loadItems = function (req, res){
@@ -53,13 +40,14 @@ exports.loadItems = function (req, res){
                 res.json(rows);
             } else {
                 res.json(null);
+                console.log('Running index');
+                metafetcher.fetch(metaType);
             }
         }
     );
 };
 
 exports.playMovie = function (req, res, platform, movieRequest){
- 
 	file_utils.getLocalFile(config.moviepath, movieRequest, function(err, file) {
 		if (err) console.log(err .red);
 		if (file) {
@@ -72,7 +60,6 @@ exports.playMovie = function (req, res, platform, movieRequest){
 			console.log("File " + movieRequest + " could not be found!" .red);
 		}
 	});
-
 };
 
 exports.getGenres = function (req, res){
