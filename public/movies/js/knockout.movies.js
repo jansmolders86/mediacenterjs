@@ -1,22 +1,27 @@
 
 addEventListener('load', function () {
     doAjaxCall('/movies/loadItems', function(data){
-        var dataFromServer = ko.utils.parseJson(data);
+        if(data === 'Done'){
+            location.reload();
+        }   else {
+            var dataFromServer = ko.utils.parseJson(data);
 
-        mappedData = ko.utils.arrayMap(dataFromServer, function(item) {
-            return new Movie(item);
-        });
+            mappedData = ko.utils.arrayMap(dataFromServer, function(item) {
+                return new Movie(item);
+            });
 
-        viewModel = {
-            movies: ko.observableArray([])
-        };
+            viewModel = {
+                movies: ko.observableArray([])
+            };
 
-        viewModel.movies(mappedData);
+            viewModel.movies(mappedData);
 
-        ko.applyBindings(viewModel);
+            ko.applyBindings(viewModel);
 
-        // Init Jquery plugin
-        $('body').mcjsm();
+            // Init Jquery plugin
+            $('body').mcjsm();
+        }
+
 
     });
 });

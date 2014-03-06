@@ -25,7 +25,10 @@ var express = require('express')
 , helper = require('../../lib/helpers.js')
 , config = require('../../lib/handlers/configuration-handler').getConfiguration()
 , DeviceInfo = require('../../lib/utils/device-utils')
-, functions = require('./movie-functions');
+, functions = require('./movie-functions')
+, metafetcher = require('../../lib/utils/metadata-fetcher');
+
+var metaType = "movie";
 
 exports.index = function(req, res){
 
@@ -53,7 +56,7 @@ exports.get = function(req, res){
 				functions.getGenres(req, res);
 				break;
 			case('loadItems'):
-				functions.loadItems(req,res);
+                metafetcher.fetch(req, res, metaType);
 				break;
 		}	
 	}

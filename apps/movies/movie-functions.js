@@ -17,7 +17,7 @@ db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 exports.fetchItems = function (req, res){
-    metafetcher.fetch(metaType);
+    metafetcher.fetch(req, res, metaType);
 };
 
 exports.loadItems = function (req, res){
@@ -40,8 +40,7 @@ exports.loadItems = function (req, res){
                 res.json(rows);
             } else {
                 res.json(null);
-                console.log('Running index');
-                metafetcher.fetch(metaType);
+                metafetcher.fetch(req, res, metaType);
             }
         }
     );
