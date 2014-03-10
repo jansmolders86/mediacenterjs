@@ -56,19 +56,10 @@ exports.get = function(req, res){
 				functions.getGenres(req, res);
 				break;
 			case('loadItems'):
-                metafetcher.fetch(req, res, metaType);
+                functions.loadItems(req, res);
 				break;
 		}	
 	}
-
-    if(!platform){
-        switch(optionalParam) {
-            case('info'):
-                var movieName = infoRequest.replace(/\+/g, " ");
-                functions.handler(req, res, infoRequest);
-                break;
-        }
-    }
     
     
     if(platform !== undefined && optionalParam === 'play'){
