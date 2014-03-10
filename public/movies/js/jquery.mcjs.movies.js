@@ -43,23 +43,17 @@
             $that.on('scroll resize', function() {
                 _positionElement(o);
             });
+
+
+            $('.overlay').on('click',function(){
+                var movieTitle = $(this).parent().find('h1').text();
+                var url = '/movies/'+movieTitle+'/play/';
+                _playMovie(o,url,movieTitle);
+            });
         });
     }
 
     /**** Start of custom functions ***/
-
-
-
-    function _checkPlatform(o, movieTitle){
-        if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
-            var url = '/movies/'+movieTitle+'/play/ios';
-        } else if(navigator.userAgent.toLowerCase().indexOf("android") > -1){
-            var url = '/movies/'+movieTitle+'/play/android';
-        }else {
-            var url = '/movies/'+movieTitle+'/play/browser';
-        }
-        return url;
-    }
 
 
     function _positionElement(o){

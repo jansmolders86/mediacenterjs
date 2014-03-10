@@ -1,10 +1,16 @@
 
 addEventListener('load', function () {
-    doAjaxCall('/movies/loadItems', function(data){
-        if(data === 'Done'){
+    var url= '/movies/loadItems';
+
+    doAjaxCall(url, function(data){
+        var incommingDataFromServer = data;
+        if(incommingDataFromServer === null ||  incommingDataFromServer == '') {
+            // todo: fix bug to reload page on first load...
+        }
+        else if(incommingDataFromServer === 'Done' ){
             location.reload();
-        }   else {
-            var dataFromServer = ko.utils.parseJson(data);
+        }  else {
+            var dataFromServer = ko.utils.parseJson(incommingDataFromServer);
 
             mappedData = ko.utils.arrayMap(dataFromServer, function(item) {
                 return new Movie(item);
@@ -21,8 +27,6 @@ addEventListener('load', function () {
             // Init Jquery plugin
             $('body').mcjsm();
         }
-
-
     });
 });
 
@@ -33,6 +37,8 @@ function doAjaxCall(url, callback){
     xmlhttp.onreadystatechange = function(){
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
             callback(xmlhttp.responseText);
+        } else {
+            console.log(xmlhttp.readyState);
         }
     }
     xmlhttp.open("GET", url, true);
@@ -41,13 +47,13 @@ function doAjaxCall(url, callback){
 
 function Movie(item) {
     var that = this;
-    this.localName 		= ko.observable(item.localName);
+    this.original_name 	= ko.observable(item.original_name);
+    this.movieTitle     = ko.observable(item.title);
     this.posterImage 	= ko.observable(item.poster_path);
     this.backdropImage	= ko.observable(item.backdrop_path);
     this.genre 			= ko.observable(item.genre);
     this.runtime 		= ko.observable(item.runtime);
     this.overview 		= ko.observable(item.overview);
-    this.title 			= ko.observable(item.title);
     this.cdNumber 		= ko.observable(item.cdNumber);
     this.adult   		= ko.observable(item.adult);
 }

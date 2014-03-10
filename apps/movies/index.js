@@ -25,10 +25,7 @@ var express = require('express')
 , helper = require('../../lib/helpers.js')
 , config = require('../../lib/handlers/configuration-handler').getConfiguration()
 , DeviceInfo = require('../../lib/utils/device-utils')
-, functions = require('./movie-functions')
-, metafetcher = require('../../lib/utils/metadata-fetcher');
-
-var metaType = "movie";
+, functions = require('./movie-functions');
 
 exports.index = function(req, res){
 
@@ -44,8 +41,7 @@ exports.index = function(req, res){
 
 exports.get = function(req, res){
 	var infoRequest = req.params.id,
-		optionalParam = req.params.optionalParam,
-		platform = req.params.action;
+		optionalParam = req.params.optionalParam;
 	
 	if(infoRequest === 'filter') {
 		functions.filter(req, res, optionalParam);
@@ -60,25 +56,11 @@ exports.get = function(req, res){
 				break;
 		}	
 	}
-    
-    
-    if(platform !== undefined && optionalParam === 'play'){
-        switch(platform) {
-            case('browser'):
-                var movieName = infoRequest.replace(/\+/g, " ");
-                console.log('Incomming playback request for', movieName);
-                functions.playMovie(req, res, platform, movieName);
-            break;
-            case('ios'):
-                functions.playMovie(req, res, platform, infoRequest);
-            break;
-            case('android'):
-                var movieName = infoRequest.replace(/\+/g, " ");
-                functions.playMovie(req, res, platform, infoRequest);
-            break;
-        }
+
+    if(optionalParam === 'play'){
+        var movieName = infoRequest.replace(/\+/g, " ");
+        functions.playMovie(req, res, movieName);
     }
-    
 };
 
 

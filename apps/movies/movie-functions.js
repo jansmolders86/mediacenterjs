@@ -17,13 +17,13 @@ db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 exports.fetchItems = function (req, res){
-    metafetcher.fetch(req, res, metaType);
+    metafetcher.fetch(req, res, metaType, false);
 };
 
 exports.loadItems = function (req, res){
     db.query('SELECT * FROM movies',{
-            local_name 		: String,
             original_name  	: String,
+            title 		    : String,
             poster_path  	: String,
             backdrop_path  	: String,
             imdb_id  		: String,
@@ -38,9 +38,10 @@ exports.loadItems = function (req, res){
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
                 res.json(rows);
+                metafetcher.fetch(req, res, metaType, true);
             } else {
                 res.json(null);
-                metafetcher.fetch(req, res, metaType);
+                metafetcher.fetch(req, res, metaType, true);
             }
         }
     );

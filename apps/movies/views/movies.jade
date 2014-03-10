@@ -42,7 +42,7 @@ block body
                         img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }")
                     .overlay.mcjs-rc-clickable
                     .overview
-                        h1(data-bind="text:title")
+                        h1(data-bind="text:movieTitle")
                         .summary(data-bind="text:overview")
                     .specs
                         // ko if: genre() !== undefined
@@ -55,4 +55,9 @@ block body
                     .cdNumber
                         span(data-bind="text:cdNumber")
                     // /ko
+                    span.hidden(data-bind="text:original_name")
+            // /ko
+
+            // ko ifnot: movies().length > 0
+            h2 Don't worry, your movies are being indexed, please wait...
             // /ko
