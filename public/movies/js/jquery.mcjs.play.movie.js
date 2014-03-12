@@ -15,128 +15,87 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-(function($){
-
-    var ns = 'mcjsm'
-    ,methods = {
-        playMovie: function playMovie(movieTitle) {
-            return this.each(function() {
-                var o = $.data(this, ns);
-                o.locked = false;
-                var url = '/movies/'+movieTitle+'/play/';
-                _playMovie(o,url,movieTitle);
-            })
-        }
-    };
+;(function($, window, document, undefined) {
+    'use strict';
+    var ns = 'mcjsplay',
+        methods = {
+            playMovie: function playMovie(movieTitle) {
+                return this.each(function() {
+                    var o = _getInstanceOptions(this);
+                    _playMovie(o,movieTitle);
+                });
+            }
+        };
 
     function _init(options) {
-        var opts = $.extend(true, {}, $.fn.mcjsm.defaults, options);
+
+        if (!_allDependenciesAvailable()) {return false ;}
+
+        var opts = $.extend(true, {}, $.fn[ns].defaults, options);
+
         return this.each(function() {
-            var $that = $(this);
-            var o = $.extend(true, {}, opts, $that.data(opts.datasetKey));
+
+            var $that = $(this),
+                o = $.extend(true, {}, opts, $that.data(opts.datasetKey));
 
             // add data to the defaults (e.g. $node caches etc)
             o = $.extend(true, o, {
-                $that: $that,
-                movieCache : []
+                $that : $that
             });
 
             // use extend(), so no o is used by value, not by reference
-            $.data(this, ns, $.extend(true, {}, o));
+            $.data(this, ns, $.extend(true, o, {}));
 
-            _focusedItem(o);
-            _scrollBackdrop(o);
-
-            $that.on('scroll resize', function() {
-                _positionHeader(o);
-            });
         });
     }
 
-    /**** Start of custom functions ***/
+    /* mandatory check for all the dependencies to external libraries */
+    function _allDependenciesAvailable() {
 
+        var err = [];
 
-    function _positionHeader(o){
-        var startFromTopInit = $('#moviebrowser').offset().top > 50;
-        if (startFromTopInit){
-            $('#backdrop').removeClass('shrink');
-        } else {
-            $('#backdrop').addClass('shrink');
+        // Examples. Add one such line for each dependency
+        // if (typeof $.fn.shared === 'undefined') err.push('$.fn.shared');
+
+        if (err.length > 0) {
+            alert(ns + ' jQuery plugin has missing lib(s): ' + err);
         }
-    };
-
-    function _focusedItem(o){
-        $(o.movieListSelector+' > li').on({
-            mouseenter: function() {
-                var newBackground = $(this).find("img."+o.posterClass).attr(o.backdrophandler);
-                $(this).addClass(o.focusedClass);
-                $(o.backdropClass).attr("src", newBackground).addClass(o.fadeClass);
-            },
-            mouseleave: function() {
-                $(o.backdropClass).removeClass(o.fadeClass);
-                if ($('li.'+o.posterClass+'.'+o.focusedClass).length) {
-                    $('li.'+o.posterClass+'.'+o.focusedClass).removeClass(o.focusedClass);
-                }
-            },
-            focus: function() {
-                $(this).addClass(o.focusedClass);
-                var newBackground = $(this).find("img."+o.posterClass).attr(o.backdrophandler);
-                $(o.backdropClass).attr("src", newBackground).addClass(o.fadeClass);
-            },
-            focusout: function() {
-                $(o.backdropClass).removeClass(o.fadeClass);
-                if ($('li.'+o.posterClass+'.'+o.focusedClass).length) {
-                    $('li.'+o.posterClass+'.'+o.focusedClass).removeClass(o.focusedClass);
-                }
-            }
-        });
-
-        if ($(o.movieListSelector+' > li'+o.focusedClass)){
-            var newBackground = $(this).find("img."+o.posterClass).attr(o.backdrophandler);
-            $(o.backdropClass).attr("src", newBackground).addClass(o.fadeSlowClass);
-        }
+        return err.length === 0;
     }
 
-    function _scrollBackdrop(o){
-        var duration = 40000;
-        $(o.backdropClass).animate({
-                top: '-380px'
-            },
-            {
-                easing: 'swing',
-                duration: duration,
-                complete: function(){
-                    $(o.backdropClass).animate({
-                            top: '-0px'
-                        },
-                        {
-                            easing: 'swing',
-                            duration: duration,
-                            complete: function(){
-                                if(o.stopScroll === false){
-                                    _scrollBackdrop(o);
-                                }
-                            }
-                        });
-                }
-            });
+    /* retrieve the options for an instance for public methods*/
+    function _getInstanceOptions(instance) {
+        var o = $.data(instance, ns);
+        if (!o) {
+            console.error( 'jQuery.fn.' + ns + ': a public method is invoked before initializing the plugin. "o" will be undefined.');
+        }
+
+        return o;
     }
 
+    /* private methods, names starting with a underscore
+     function _private_method_name(o){
 
-    function _playMovie(o,url,movieTitle){
-        $('body').animate({backgroundColor: '#000'},500).addClass('playingMovie');
+     }
+     */
 
-        $('#wrapper, .movies, #header').hide();
+    function _playMovie(o,movieTitle){
+        $('body').animate({backgroundColor: '#000'},500).addClass(o.playingClass);
+
+        $(o.headerSelector).hide();
+        $(o.movieListSelector).hide();
+        $(o.wrapperSelector).hide();
 
         _resetBackdrop(o);
 
-        if($('#'+o.playerID).length > 1) {
+        if($('#'+o.playerID).length > 0) {
             $('#'+o.playerID).remove();
         }
 
         var fileName =  movieTitle.replace(/\.[^.]*$/,'')
             , outputName =  fileName.replace(/ /g, "-")
-            , videoUrl =  "/data/movies/"+outputName+".mp4";
+            , videoUrl =  "/data/movies/"+outputName+".mp4"
+            , url = '/movies/'+movieTitle+'/play';
 
         $.ajax({
             url: url,
@@ -149,7 +108,8 @@
                 var currentTime = parseFloat(data.progression);
                 player.ready(function() {
                     setTimeout(function(){
-                        $('.vjs-loading-spinner, #backdrop').hide();
+                        $('.vjs-loading-spinner').hide();
+                        $(o.backdropWrapperSelector).hide();
 
                         player.load();
 
@@ -227,7 +187,7 @@
     function _resetBackdrop(o){
         //Remove img and reintroduce it to stop the animation and load the correct backdrop img
         //TODO add lookup on class title if no active item exists.
-        var newBackground = $('#'+o.activeMovieId).find("img."+o.posterClass).attr(o.backdrophandler);
+        var newBackground = $(o.activeMovieId).find("img."+o.posterClass).attr(o.backdrophandler);
         $(o.backdropClass).remove();
         $('#backdrop').append('<img src="'+newBackground+'" class="'+ o.backdropSelector+'">').addClass(o.fadeClass);
 
@@ -268,39 +228,32 @@
         }
     }
 
-    /**** End of custom functions ***/
-
-    $.fn.mcjsm = function( method ) {
-        if ( methods[method] ) {
-            return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
-        } else if ( typeof method === 'object' || !method ) {
-            return _init.apply( this, arguments );
+    $.fn[ns] = function(method) {
+        if (methods[method]) {
+            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        } else if ( typeof method === 'object' || !method) {
+            return _init.apply(this, arguments);
         } else {
-            $.error( 'Method ' +  method + ' does not exist on jQuery.fn.mcjsm' );
+            $.error( 'jQuery.fn.' + ns + '.' +  method + '() does not exist.');
         }
     };
 
     /* default values for this plugin */
-    $.fn.mcjsm.defaults = {
-        datasetKey: 'mcjsmovies' //always lowercase
+    $.fn[ns].defaults = {
+        datasetKey : ns.toLowerCase() //always lowercase
         , movieListSelector: '.movies'
         , backdropClass: '.backdropimg'
         , backdropSelector: 'backdropimg'
         , backdrophandler: 'title'
+        , headerSelector: '#header'
         , posterClass: 'movieposter'
         , playerSelector: '#player'
-        , headerSelector: '#header'
         , wrapperSelector: '#wrapper'
         , backdropWrapperSelector: '#backdrop'
-        , genreSelector: 'genres'
-        , backLinkSelector: '.backlink'
         , playerID: 'player'
-        , overlayselector : '.overlay'
-        , activeMovieId : 'active'
+        , playingClass : 'playing'
+        , activeMovieId : '#active'
         , fadeClass: 'fadein'
-        , fadeSlowClass: 'fadeinslow'
-        , focusedClass: 'focused'
-        , scrollingClass: 'scrolling'
     };
 
-})(jQuery);
+})(jQuery, this, this.document);

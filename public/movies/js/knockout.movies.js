@@ -27,6 +27,7 @@ addEventListener('load', function () {
 
             // Init Jquery plugin
             $('body').mcjsm();
+            $('body').mcjsplay();
         }
     });
 });
@@ -55,8 +56,10 @@ function Movie(item) {
     this.overview 		= ko.observable(item.overview);
     this.cdNumber 		= ko.observable(item.cdNumber);
     this.adult   		= ko.observable(item.adult);
+    this.isActive 		= ko.observable();
     this.playMovie = function () {
+        that.isActive('active');
         var movieTitle = that.original_name();
-        $('body').mcjsm('playMovie',movieTitle);
+        $('body').mcjsplay('playMovie',movieTitle);
     };
-}
+}r

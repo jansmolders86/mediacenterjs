@@ -17,8 +17,10 @@ block additional_css
 
 block additional_scripts
     script(src="http://vjs.zencdn.net/4.3/video.js")
+    script(src="/movies/js/jquery.mcjs.movie.functions.js")
+    script(src="/movies/js/jquery.mcjs.play.movie.js")
     script(src="/movies/js/knockout.movies.js")
-    script(src="/movies/js/jquery.mcjs.movies.js")
+
     script.
         $(function(){
             $('body').mcjs();
@@ -37,7 +39,7 @@ block body
         #moviebrowser
             // ko if: movies().length > 0
             ul.movies(data-bind="foreach: movies")
-                li.movieposter.boxed.mcjs-rc-controllable
+                li.movieposter.boxed.mcjs-rc-controllable(data-bind="attr: {'id':isActive}" )
                     .imageWrapper
                         img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }")
                     .overlay.mcjs-rc-clickable(data-bind="click: playMovie")
