@@ -17,7 +17,11 @@ db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 exports.fetchItems = function (req, res){
-    metafetcher.fetch(req, res, metaType, false);
+    metafetcher.fetch(req, res, metaType, function(state){
+        if(state === 'done'){
+            console.log('Movie index up to date');
+        }
+    });
 };
 
 exports.loadItems = function (req, res){
@@ -38,10 +42,32 @@ exports.loadItems = function (req, res){
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
                 res.json(rows);
-                metafetcher.fetch(req, res, metaType, true);
             } else {
-                res.json(null);
-                metafetcher.fetch(req, res, metaType, true);
+                console.log('Fetching movies');
+                metafetcher.fetch(req, res, metaType, function(state){
+                    if(state === 'done'){
+                        db.query('SELECT * FROM movies',{
+                            original_name  	: String,
+                            title 		    : String,
+                            poster_path  	: String,
+                            backdrop_path  	: String,
+                            imdb_id  		: String,
+                            rating  		: String,
+                            certification  	: String,
+                            genre  			: String,
+                            runtime  		: String,
+                            overview  		: String,
+                            cd_number  		: String,
+                            adult           : String
+                        }, function(rows) {
+                            if (typeof rows !== 'undefined' && rows.length > 0){
+                                res.json(rows);
+                            } else {
+                                console.log('Could not index any movies, please check given movie collection path');
+                            }
+                        });
+                    }
+                });
             }
         }
     );
@@ -90,4 +116,3 @@ exports.sendState = function (req, res){
 
     db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)', [movieTitle, progression, transcodingstatus]);
 }
-

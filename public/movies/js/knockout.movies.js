@@ -4,8 +4,9 @@ addEventListener('load', function () {
 
     doAjaxCall(url, function(data){
         var incommingDataFromServer = data;
+        console.log(incommingDataFromServer)
         if(incommingDataFromServer === null ||  incommingDataFromServer == '') {
-            // todo: fix bug to reload page on first load...
+            console.log('Waiting...')
         }
         else if(incommingDataFromServer === 'Done' ){
             location.reload();
@@ -37,8 +38,6 @@ function doAjaxCall(url, callback){
     xmlhttp.onreadystatechange = function(){
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
             callback(xmlhttp.responseText);
-        } else {
-            console.log(xmlhttp.readyState);
         }
     }
     xmlhttp.open("GET", url, true);
@@ -56,4 +55,8 @@ function Movie(item) {
     this.overview 		= ko.observable(item.overview);
     this.cdNumber 		= ko.observable(item.cdNumber);
     this.adult   		= ko.observable(item.adult);
+    this.playMovie = function () {
+        var movieTitle = that.original_name();
+        $('body').mcjsm('playMovie',movieTitle);
+    };
 }

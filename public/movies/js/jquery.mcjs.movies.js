@@ -17,9 +17,16 @@
  */
 (function($){
 
-    var ns = 'mcjsm';
-    var methods = {
-
+    var ns = 'mcjsm'
+    ,methods = {
+        playMovie: function playMovie(movieTitle) {
+            return this.each(function() {
+                var o = $.data(this, ns);
+                o.locked = false;
+                var url = '/movies/'+movieTitle+'/play/';
+                _playMovie(o,url,movieTitle);
+            })
+        }
     };
 
     function _init(options) {
@@ -41,14 +48,7 @@
             _scrollBackdrop(o);
 
             $that.on('scroll resize', function() {
-                _positionElement(o);
-            });
-
-
-            $('.overlay').on('click',function(){
-                var movieTitle = $(this).parent().find('h1').text();
-                var url = '/movies/'+movieTitle+'/play/';
-                _playMovie(o,url,movieTitle);
+                _positionHeader(o);
             });
         });
     }
@@ -56,7 +56,7 @@
     /**** Start of custom functions ***/
 
 
-    function _positionElement(o){
+    function _positionHeader(o){
         var startFromTopInit = $('#moviebrowser').offset().top > 50;
         if (startFromTopInit){
             $('#backdrop').removeClass('shrink');
@@ -65,9 +65,6 @@
         }
     };
 
-    /******** Jquery only functions *********/
-
-        //TODO: Put in separate file
     function _focusedItem(o){
         $(o.movieListSelector+' > li').on({
             mouseenter: function() {
@@ -125,77 +122,8 @@
             });
     }
 
-    function _showAndFilterAvailableGenres(o){
-        $.ajax({
-            url: '/movies/getGenres/',
-            type: 'get'
-        }).done(function(data){
-
-                if($('#'+o.genreSelector).length == 0){
-                    $(o.wrapperSelector).append('<ul id="'+o.genreSelector+'"></ul>')
-                } else{
-                    $(o.genreSelector).remove();
-                    $(o.wrapperSelector).append('<ul id="'+o.genreSelector+'"></ul>');
-                }
-
-                // Sort array and remove duplicates.
-                data.sort();
-                for ( var i = 1; i < data.length; i++ ) {
-                    if ( data[i] === data[ i - 1 ] ) data.splice( i--, 1 );
-                }
-
-                // Print sorted array
-                data.forEach(function(value, index) {
-                    $('#'+o.genreSelector).append('<li> <a href="'+value+'" class="genrelink">'+value+'</a></li>');
-                });
-                $('#'+o.genreSelector).append('<li> <a href="" class="showAll">All movies</a></li>');
-
-                $('.genrelink').on('click tap',function(e) {
-                    e.preventDefault();
-                    var selectedGenre = $(this).attr('href')
-                        , filterUrl = '/movies/filter/'+selectedGenre;
-
-                    $.ajax({
-                        url: filterUrl,
-                        type: 'get'
-                    }).done(function(data){
-
-                            $.ajax({
-                                url: filterUrl,
-                                type: 'get'
-                            }).done(function(data){
-                                    var listing = [];
-                                    $.each(data, function() {
-                                        var movieData 	= $(this)[0]
-                                            , local_name 	= movieData.local_name
-
-                                        // create movie model for each movie
-                                        var movie = new Movie(local_name);
-                                        listing.push(movie);
-
-                                        // add model to cache
-                                        o.movieCache[local_name] = movie;
-                                    });
-
-                                    // Fill viewmodel with movie model per item
-                                    o.viewModel.movies(listing);
-                                    o.viewModel.movies.sort();
-
-                                    _lazyload(o);
-                                });
-
-                        });
-                });
-
-                $('.showAll').on('click tap',function(e) {
-                    e.preventDefault();
-                    window.location.href = '/movies';
-                });
-            });
-    }
 
     function _playMovie(o,url,movieTitle){
-
         $('body').animate({backgroundColor: '#000'},500).addClass('playingMovie');
 
         $('#wrapper, .movies, #header').hide();
@@ -285,7 +213,6 @@
                     });
 
                 });
-
 
             });
     }

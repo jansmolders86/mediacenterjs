@@ -40,7 +40,7 @@ block body
                 li.movieposter.boxed.mcjs-rc-controllable
                     .imageWrapper
                         img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }")
-                    .overlay.mcjs-rc-clickable
+                    .overlay.mcjs-rc-clickable(data-bind="click: playMovie")
                     .overview
                         h1(data-bind="text:movieTitle")
                         .summary(data-bind="text:overview")
