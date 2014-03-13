@@ -42,14 +42,14 @@ a.backlink { margin-top: 0px; z-index:4; }
 	display: block;
 	position: relative;
 	width:780px;
-	min-height:1000px;
+	min-height:500px;
 	overflow:hidden;
 }
 
 .tvposter .overlay{ width:0; height:0; }
 
-.tvposter.showDetails.focused .overlay,
-.tvposter.showDetails:hover .overlay{
+.tvposter.focused .overlay,
+.tvposter:hover .overlay{
 	background:url(img/cover-overlay.png) no-repeat;
     height:140px;
     width:758px;
@@ -83,7 +83,7 @@ span.title{visibility:hidden; width:0; height:0;}
 
 .tvposter{
 	float:left;
-    height:140px;
+    min-height:140px;
     width:758px;
 	list-style:none;
 	z-index:99;
@@ -124,6 +124,23 @@ span.title{visibility:hidden; width:0; height:0;}
 }
 .specs p{font-size:12px; float:left; margin:10px 0 0 9px;}
 
+#episodes{
+    width:100%;
+    clear:both;
+    margin-bottom:20px;
+}
+
+#episodes li{
+    padding:10px;
+    margin:0;
+    position: relative;
+    overflow: hidden;
+}
+
+#episodes li:hover,
+#episodes li.focus{
+    background:#f1f1f1;
+}
 
 /*
 

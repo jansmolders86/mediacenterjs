@@ -1,347 +1,126 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
-	
-    Copyright (C) 2013 - Jan Smolders
+ MediaCenterJS - A NodeJS based mediacenter solution
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License.
+ Copyright (C) 2013 - Jan Smolders
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-(function($){
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-	var ns = 'mcjstv';
-	var methods = {
-
-	};
-
-	function _init(options) {
-		var opts = $.extend(true, {}, $.fn.mcjstv.defaults, options);
-		return this.each(function() {
-			var $that = $(this);
-			var o = $.extend(true, {}, opts, $that.data(opts.datasetKey));
-				
-			// add data to the defaults (e.g. $node caches etc)	
-			o = $.extend(true, o, { 
-				$that: $that,
-				tvShowCache : []
-			});
-			
-			// use extend(), so no o is used by value, not by reference
-			$.data(this, ns, $.extend(true, {}, o));
-			
-			_setViewmodel(o);
-			_getItems(o);
-			
-			$that.on('scroll resize', function() {
-				_lazyload(o);
-				_positionElement(o);
-
-			});	
-
-		});
-	}
-	
-	/**** Start of custom functions ***/
-
-
-    function _getItems(o){
-        $.ajax({
-            url: '/tv/loadItems',
-            type: 'get',
-            dataType: 'json'
-        }).done(function(data){
-                var listing = [];
-                $.each(data, function () {
-                    // create tvShow model for each tvShow
-                    var tvShow = new Tvshow(o, this);
-                    listing.push(tvShow);
-
-                    // add model to cache
-                    o.tvShowCache[this] = tvShow;
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+;(function($, window, document, undefined) {
+    'use strict';
+    var ns = 'mcjstv',
+        methods = {
+            getEpisodes: function getEpisodes(showTitle) {
+                return this.each(function() {
+                    var o = _getInstanceOptions(this);
+                    _getEpisodes(o,showTitle);
                 });
+            }
+        };
 
-                // Fill viewmodel with tvShow model per item
-                o.viewModel.tvshow(listing);
-                o.viewModel.tvshow.sort();
+    function _init(options) {
 
-                var title = $(this).find('span.episodeName').html();
+        if (!_allDependenciesAvailable()) {return false ;}
 
-                if (title !== undefined){
-                    var tvShowTitle = title.replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv)$/,"")
-                        , visibletvShow = $(this);
+        var opts = $.extend(true, {}, $.fn[ns].defaults, options);
 
-                    _handleVisibletvShows(o, tvShowTitle, visibletvShow, title);
-                }
+        return this.each(function() {
 
-            });
-    }
+            var $that = $(this),
+                o = $.extend(true, {}, opts, $that.data(opts.datasetKey));
 
-
-
-
-	
-	// Create tvShow model
-	//TODO: put in separate file 
-	var Tvshow = function (o, json) {
-		var that = this;
-        this.episodeName 	= ko.observable(json);
-		this.title 		    = ko.observable();
-		this.banner 	    = ko.observable();
-		this.genre 			= ko.observable();
-        this.certification 	= ko.observable();
-		this.isActive 		= ko.observable();
-		this.playtvShow = function () {
-            window.location.hash = that.episodeName();
-            that.isActive(o.activetvShowId);
-
-            var showTitle = that.title();
-            var url = _checkPlatform(o, tvShowTitle);
-            _playtvShow(o,url,tvShowTitle);
-		};
-	}
-
-    function _checkPlatform(o, tvShowTitle){
-        if( navigator.platform === 'iPad' || navigator.platform === 'iPhone' || navigator.platform === 'iPod' ){
-            var url = '/tv/'+tvShowTitle+'/play/ios';
-        } else if(navigator.userAgent.toLowerCase().indexOf("android") > -1){
-            var url = '/tv/'+tvShowTitle+'/play/android';
-        }else {
-            var url = '/tv/'+tvShowTitle+'/play/browser';
-        }
-        return url;
-    }
-
-	
-	function _positionElement(o){
-		var startFromTopInit = $('#tvShowbrowser').offset().top > 50;
-		if (startFromTopInit){
-            $('#backdrop').removeClass('shrink');
-        } else {
-            $('#backdrop').addClass('shrink');
-		}
-	};
-
-	
-	function _setViewmodel(o){
-		if (!o.viewModel) {
-			// create initial viewmodel
-			o.viewModel = {};
-			o.viewModel.tvshow = ko.observableArray();
-			ko.applyBindings(o.viewModel,o.$that[0]);
-		}	
-	}
-
-	
-	function _handleVisibletvShows(o, tvShowTitle, visibletvShow, title){
-		var url = '/tv/'+tvShowTitle+'/info';
-		if(tvShowTitle !== undefined){
-			$.ajax({
-				url: url, 
-				type: 'get'
-			}).done(function(data){
-				// If current item is in cache, fill item with values
-
-                   console.log('data', data);
-				if (o.tvShowCache[title]) {
-					setTimeout(function(){
-						var tvShowData = data[0]
-						, tvShow = o.tvShowCache[title];
-
-						tvShow.title(tvShowData.title);
-						tvShow.banner(tvShowData.banner);
-						tvShow.genre(tvShowData.genre);
-						tvShow.certification(tvShowData.certification);
-
-                        visibletvShow.addClass('showDetails '+o.fadeClass);
-						
-					},500);
-				}
-			});
-		}		
-	}
-
-
-
-	
-	/******** Jquery only functions *********/
-
-	function _playtvShow(o,url,tvShowTitle){
-    
-        $('body').animate({backgroundColor: '#000'},500).addClass('playingtvShow');
-
-        $('#wrapper, .tvShows, #header').hide();
-
-
-        if($('#'+o.playerID).length > 1) {
-            $('#'+o.playerID).remove();
-        }
-
-        var fileName =  tvShowTitle.replace(/\.[^.]*$/,'')
-        , outputName =  fileName.replace(/ /g, "-")
-        , videoUrl =  "/data/tv/"+outputName+".mp4";
-                
-		$.ajax({
-			url: url,
-			type: 'get'
-		}).done(function(data){
-
-            $('body').append('<video id="'+o.playerID+'" poster class="video-js vjs-default-skin" controls preload="none" width="100%" height="100%"><source src="'+videoUrl+'" type="video/mp4"></video>');
-
-            var player = videojs(o.playerID);
-            var currentTime = parseFloat(data.progression);
-            player.ready(function() {
-                setTimeout(function(){
-                    $('.vjs-loading-spinner, #backdrop').hide();
-
-                    player.load();
-
-                    var setProgression = parseFloat(data.progression);
-                    player.currentTime(setProgression);
-
-                    player.play();
-
-                    _setDurationOftvShow(player, data);
-                    _pageVisibility(o);
-                },5000);
-
-                player.on('error', function(e){
-                    console.log('Error', e);
-                });
-
-                player.on('timeupdate', function(e){
-                   _setDurationOftvShow(player, data);
-                });
-
-                player.on('progress', function(e){
-                    _setDurationOftvShow(player, data);
-                });
-
-                player.on('pause', function(e){
-                    currentTime = player.currentTime();
-                    var tvShowData = {
-                        'tvShowTitle': tvShowTitle,
-                        'currentTime': currentTime
-                    }
-                    $.ajax({
-                        url: '/tvShows/sendState',
-                        type: 'post',
-                        data: tvShowData
-                    });
-
-                    $('.vjs-slider').on('click',function(e) {
-                        console.log('click!',this)
-                        if (e.target === this){
-                            e.preventDefault();
-                        }
-                    });
-                });
-
-                player.on('loadeddata', function(e){
-                    _setDurationOftvShow(player, data);
-                    if(currentTime > 0){
-                        player.currentTime(currentTime);
-                    }
-                });
-
-                player.on('loadedmetadata', function(e){
-                    if(currentTime > 0){
-                        player.currentTime(currentTime);
-                    }
-                });
-
-                player.on('ended', function(e){
-                    currentTime = player.currentTime();
-                    var actualDuration = data.duration;
-                    if( currentTime < actualDuration){
-                        player.load();
-                        player.play();
-                    } else{
-                        player.dispose();
-                        window.location.replace("/tv/");
-                    }
-                });
-
+            // add data to the defaults (e.g. $node caches etc)
+            o = $.extend(true, o, {
+                $that : $that
             });
 
-
+            // use extend(), so no o is used by value, not by reference
+            $.data(this, ns, $.extend(true, o, {}));
         });
-	}
-	
-	function _setDurationOftvShow(player, data){
-	   var videoDuration = player.duration(data.duration);
-		player.bufferedPercent(0);
-		$('.vjs-duration-display .vjs-control-text').text(videoDuration);
-	}
-	
-	function _pageVisibility(o){
-		var hidden, visibilityChange; 
-		if (typeof document.hidden !== "undefined") {
-			hidden = "hidden";
-			visibilityChange = "visibilitychange";
-		} else if (typeof document.mozHidden !== "undefined") {
-			hidden = "mozHidden";
-			visibilityChange = "mozvisibilitychange";
-		} else if (typeof document.msHidden !== "undefined") {
-			hidden = "msHidden";
-			visibilityChange = "msvisibilitychange";
-		} else if (typeof document.webkitHidden !== "undefined") {
-			hidden = "webkitHidden";
-			visibilityChange = "webkitvisibilitychange";
-		}
-		
-		function handleVisibilityChange() {
-			if (document[hidden]) {
-				videojs(o.playerID).pause();
-			} else if (sessionStorage.isPaused !== "true") {
-				videojs(o.playerID).play();
-			}
-		}
+    }
 
-		if (typeof document.addEventListener === "undefined" || typeof hidden === "undefined") {
-			console.log("The Page Visibility feature requires a browser such as Google Chrome that supports the Page Visibility API.");
-		} else {
-			document.addEventListener(visibilityChange, handleVisibilityChange, false);
-		}
-	}
+    /* mandatory check for all the dependencies to external libraries */
+    function _allDependenciesAvailable() {
 
-	/**** End of custom functions ***/
-	
-	$.fn.mcjstv = function( method ) {
-		if ( methods[method] ) {
-			return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
-		} else if ( typeof method === 'object' || !method ) {
-			return _init.apply( this, arguments );
-		} else {
-			$.error( 'Method ' +  method + ' does not exist on jQuery.fn.mcjstv' );
-		}
-	};
-	
-	/* default values for this plugin */
-	$.fn.mcjstv.defaults = {		
-		datasetKey: 'mcjstv' //always lowercase
-		, tvShowListSelector: '.tvshows'
-		, backdrophandler: 'title'
-		, posterClass: 'tvShowposter' 
-		, playerSelector: '#player' 
-		, headerSelector: '#header' 
-		, wrapperSelector: '#wrapper'
-		, genreSelector: 'genres' 
-		, backLinkSelector: '.backlink' 
-		, playerID: 'player' 
-		, overlayselector : '.overlay'
-        	, activetvShowId : 'active'
-		, fadeClass: 'fadein' 
-		, fadeSlowClass: 'fadeinslow' 
-		, focusedClass: 'focused'
-		, scrollingClass: 'scrolling'
-	};
+        var err = [];
 
-})(jQuery);
+        // Examples. Add one such line for each dependency
+        // if (typeof $.fn.shared === 'undefined') err.push('$.fn.shared');
+
+        if (err.length > 0) {
+            alert(ns + ' jQuery plugin has missing lib(s): ' + err);
+        }
+        return err.length === 0;
+    }
+
+    /* retrieve the options for an instance for public methods*/
+    function _getInstanceOptions(instance) {
+        var o = $.data(instance, ns);
+        if (!o) {
+            console.error( 'jQuery.fn.' + ns + ': a public method is invoked before initializing the plugin. "o" will be undefined.');
+        }
+
+        return o;
+    }
+
+    /* private methods
+     */
+
+    function _getEpisodes(o,showTitle){
+        var url = "/tv/show/"+showTitle;
+        $.ajax({
+            url: url,
+            type: 'get'
+        }).complete(function(data) {
+            if($('#episodes').length > 0){
+                $('#episodes').remove();
+            }
+
+            if(data.responseText !== null || data !== undefined){
+
+                $('ul.tvshows').find('li').attr('title',showTitle).append('<ul id="episodes"></ul>');
+
+                var episodes = JSON.parse(data.responseText);
+                $.each(episodes, function(i, item) {
+
+                    var localName = item.localName;
+                    var episode = item.episode;
+
+                    $('#episodes').append('<li><a title="'+localName+'" class="episode">Episode '+episode+'</a></li>');
+                });
+
+                $('.episode').on('click', function(){
+                    console.log('click')
+                    var filename = $(this).attr('title');
+                    $('body').mcjsplay('play',filename);
+                });
+
+            }
+        });
+    }
+
+    $.fn[ns] = function(method) {
+        if (methods[method]) {
+            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        } else if ( typeof method === 'object' || !method) {
+            return _init.apply(this, arguments);
+        } else {
+            $.error( 'jQuery.fn.' + ns + '.' +  method + '() does not exist.');
+        }
+    };
+
+    /* default values for this plugin */
+    $.fn[ns].defaults = {
+        datasetKey : ns.toLowerCase() //always lowercase
+    };
+
+})(jQuery, this, this.document);

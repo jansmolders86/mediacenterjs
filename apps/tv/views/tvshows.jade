@@ -14,12 +14,9 @@ block additional_css
     link(rel='stylesheet', href='/tv/css/style.css')
 block additional_scripts
     script(src="http://vjs.zencdn.net/4.3/video.js")
+    script(src="/tv/js/knockout.tvshows.js")
     script(src="/tv/js/jquery.mcjs.tv.js")
-    script.
-        $(function(){
-            $('body').mcjs();
-            $('body').mcjstv();
-        });
+    script(src="/tv/js/jquery.mcjs.tvplay.js")
 block body
     #header
         a.backlink(href="/")
@@ -27,14 +24,17 @@ block body
         h1 #{lingua.tvshows}
     #wrapper
         #tvshowbrowser
-            // ko if: tvshow().length > 0
-            ul.tvshows(data-bind="foreach: tvshow")
-                li.tvposter.boxed.mcjs-rc-controllable(data-bind="attr: {'id':isActive}" )
+            // ko if: tvShows().length > 0
+            ul.tvshows(data-bind="foreach: tvShows")
+                li.tvposter.boxed.mcjs-rc-controllable(data-bind="attr: {title: title}")
                     .imageWrapper
                         // ko if: banner() !== null
-                        img.tvbanner(data-bind="attr: { src: banner }", src="/core/css/img/ajax-loader.gif")
+                        img.tvbanner(data-bind="attr: { src: banner }")
                         // /ko
-                    .overlay.mcjs-rc-clickable(data-bind="{click: getEpisodes}")
-                    span.title(data-bind="text:localName")
+                    .overlay.mcjs-rc-clickable(data-bind="{click: showEpisodes}")
                     span.showTitle(data-bind="text:title")
+            // /ko
+
+            // ko ifnot: tvShows().length > 0
+            h2 Don't worry, your tvshows are being indexed, please wait...
             // /ko
