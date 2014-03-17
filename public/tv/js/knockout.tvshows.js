@@ -4,7 +4,6 @@ addEventListener('load', function () {
 
     doAjaxCall(url, function(data){
         var incommingDataFromServer = data;
-        console.log(incommingDataFromServer)
         if(incommingDataFromServer === null ||  incommingDataFromServer == '') {
             console.log('Waiting...')
         }
@@ -24,7 +23,6 @@ addEventListener('load', function () {
             viewModel.tvShows(mappedData);
 
             ko.applyBindings(viewModel);
-
             $('body').mcjstv();
             $('body').mcjsplay();
         }

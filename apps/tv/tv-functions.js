@@ -38,31 +38,16 @@ exports.loadTvShow = function (req, res){
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
                 res.json(rows);
+                fetchData(req, res, metaType);
             } else {
                 console.log('Fetching tvshows');
-                metafetcher.fetch(req, res, metaType, function(state){
-                    if(state === 'done'){
-                        db.query('SELECT * FROM tvshows',{
-                            title 		    : String,
-                            banner        	: String,
-                            genre         	: String,
-                            certification  	: String
-                        }, function(rows) {
-                            if (typeof rows !== 'undefined' && rows.length > 0){
-                                res.json(rows);
-                            } else {
-                                console.log('Could not index any tv shows, please check given movie collection path');
-                            }
-                        });
-                    }
-                });
+                fetchData(req, res, metaType);
             }
         }
     );
 };
 
 exports.loadTvEpisodes = function (req, res, tvShow){
-    console.log(tvShow)
     db.query('SELECT * FROM tvepisodes WHERE title =? ', [ tvShow ], {
             localName   : String,
             title  	    : String,
@@ -70,7 +55,6 @@ exports.loadTvEpisodes = function (req, res, tvShow){
             episode  	: String
         },
         function(rows) {
-            console.log(rows)
             if (typeof rows !== 'undefined' && rows.length > 0){
                 res.json(rows);
             }
@@ -103,3 +87,25 @@ exports.sendState = function (req, res){
     db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)', [tvShowTitle, progression, transcodingstatus]);
 };
 
+
+/** Private functions **/
+
+fetchData = function(req, res, metaType) {
+    metafetcher.fetch(req, res, metaType, function(state){
+        if(state === 'done'){
+            db.query('SELECT * FROM tvshows',{
+                title 		    : String,
+                banner        	: String,
+                genre         	: String,
+                certification  	: String
+            }, function(rows) {
+                if (typeof rows !== 'undefined' && rows.length > 0){
+                    // TODO: Update frontend
+                    // res.json(rows);
+                } else {
+                    console.log('Could not index any tv shows, please check given movie collection path');
+                }
+            });
+        }
+    });
+}

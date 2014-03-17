@@ -42,32 +42,10 @@ exports.loadItems = function (req, res){
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
                 res.json(rows);
+                fetchData(req, res, metaType);
             } else {
                 console.log('Fetching movies');
-                metafetcher.fetch(req, res, metaType, function(state){
-                    if(state === 'done'){
-                        db.query('SELECT * FROM movies',{
-                            original_name  	: String,
-                            title 		    : String,
-                            poster_path  	: String,
-                            backdrop_path  	: String,
-                            imdb_id  		: String,
-                            rating  		: String,
-                            certification  	: String,
-                            genre  			: String,
-                            runtime  		: String,
-                            overview  		: String,
-                            cd_number  		: String,
-                            adult           : String
-                        }, function(rows) {
-                            if (typeof rows !== 'undefined' && rows.length > 0){
-                                res.json(rows);
-                            } else {
-                                console.log('Could not index any movies, please check given movie collection path');
-                            }
-                        });
-                    }
-                });
+                fetchData(req, res, metaType);
             }
         }
     );
@@ -115,4 +93,36 @@ exports.sendState = function (req, res){
     , transcodingstatus = 'pending';
 
     db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)', [movieTitle, progression, transcodingstatus]);
+}
+
+
+/** Private functions **/
+
+fetchData = function(req, res, metaType) {
+
+    metafetcher.fetch(req, res, metaType, function(state){
+        if(state === 'done'){
+            db.query('SELECT * FROM movies',{
+                original_name  	: String,
+                title 		    : String,
+                poster_path  	: String,
+                backdrop_path  	: String,
+                imdb_id  		: String,
+                rating  		: String,
+                certification  	: String,
+                genre  			: String,
+                runtime  		: String,
+                overview  		: String,
+                cd_number  		: String,
+                adult           : String
+            }, function(rows) {
+                if (typeof rows !== 'undefined' && rows.length > 0){
+                    // TODO: Update frontend
+                    // res.json(rows);
+                } else {
+                    console.log('Could not index any movies, please check given movie collection path');
+                }
+            });
+        }
+    });
 }

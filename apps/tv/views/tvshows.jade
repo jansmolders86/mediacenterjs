@@ -26,13 +26,14 @@ block body
         #tvshowbrowser
             // ko if: tvShows().length > 0
             ul.tvshows(data-bind="foreach: tvShows")
-                li.tvposter.boxed.mcjs-rc-controllable(data-bind="attr: {title: title}")
+                li.tvposter.boxed.mcjs-rc-controllable
                     .imageWrapper
                         // ko if: banner() !== null
                         img.tvbanner(data-bind="attr: { src: banner }")
                         // /ko
                     .overlay.mcjs-rc-clickable(data-bind="{click: showEpisodes}")
                     span.showTitle(data-bind="text:title")
+                    ul.episodes
             // /ko
 
             // ko ifnot: tvShows().length > 0

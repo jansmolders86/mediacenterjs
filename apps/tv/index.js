@@ -54,9 +54,9 @@ exports.get = function(req, res){
         functions.loadTvEpisodes(req, res, optionalParam);
     }
     
-    if(platform !== undefined && optionalParam === 'play'){
-            var tvShowName = infoRequest.replace(/\+/g, " ");
-            functions.playEpisode(req, res,  episode);
+    if(optionalParam === 'play'){
+        var episode = infoRequest.replace(/\+/g, " ");
+        functions.playEpisode(req, res,episode);
     }
     
 };

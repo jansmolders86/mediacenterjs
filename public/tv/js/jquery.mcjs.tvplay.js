@@ -19,7 +19,7 @@
     'use strict';
     var ns = 'mcjsplay',
         methods = {
-            playMovie: function playMovie(episode) {
+            play: function play(episode) {
                 return this.each(function() {
                     var o = _getInstanceOptions(this);
                     _play(o,episode);
@@ -73,11 +73,7 @@
         return o;
     }
 
-    /* private methods, names starting with a underscore
-     function _private_method_name(o){
-
-     }
-     */
+    /* private methods, names starting with a underscore */
 
     function _play(o,episode){
         $('body').animate({backgroundColor: '#000'},500).addClass(o.playingClass);
@@ -90,10 +86,10 @@
             $('#'+o.playerID).remove();
         }
 
-        var fileName =  movieTitle.replace(/\.[^.]*$/,'')
+        var fileName =  episode.replace(/\.[^.]*$/,'')
             , outputName =  fileName.replace(/ /g, "-")
             , videoUrl =  "/data/tv/"+outputName+".mp4"
-            , url = '/tv/'+movieTitle+'/play';
+            , url = '/tv/'+episode+'/play';
 
         $.ajax({
             url: url,
@@ -135,7 +131,7 @@
                     player.on('pause', function(e){
                         currentTime = player.currentTime();
                         var movieData = {
-                            'movieTitle': movieTitle,
+                            'movieTitle': episode,
                             'currentTime': currentTime
                         }
                         $.ajax({
@@ -166,7 +162,7 @@
                             player.play();
                         } else{
                             player.dispose();
-                            window.location.replace("/movies/");
+                            window.location.replace("/tv/");
                         }
                     });
 

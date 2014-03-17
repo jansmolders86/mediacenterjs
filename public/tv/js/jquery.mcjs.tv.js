@@ -15,6 +15,14 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/* TODO: Make this Knockout or angular.
+
+Currently implemented with jQuery is a very quick and dirty and way to heavy solution to keep the paste in the project.
+Refactor needed!
+
+*/
+
 ;(function($, window, document, undefined) {
     'use strict';
     var ns = 'mcjstv',
@@ -45,6 +53,9 @@
 
             // use extend(), so no o is used by value, not by reference
             $.data(this, ns, $.extend(true, o, {}));
+
+
+            $(o.episodesListElem +' > li').remove();
         });
     }
 
@@ -76,30 +87,36 @@
      */
 
     function _getEpisodes(o,showTitle){
+
         var url = "/tv/show/"+showTitle;
         $.ajax({
             url: url,
             type: 'get'
         }).complete(function(data) {
-            if($('#episodes').length > 0){
-                $('#episodes').remove();
-            }
-
             if(data.responseText !== null || data !== undefined){
 
-                $('ul.tvshows').find('li').attr('title',showTitle).append('<ul id="episodes"></ul>');
-
                 var episodes = JSON.parse(data.responseText);
-                $.each(episodes, function(i, item) {
 
-                    var localName = item.localName;
-                    var episode = item.episode;
+                $(o.showElem +' li').each(function() {
+                    var elem = $(this);
+                    var localTitle =  elem.find(o.titleElem).text();
 
-                    $('#episodes').append('<li><a title="'+localName+'" class="episode">Episode '+episode+'</a></li>');
+                    $.each(episodes, function(i, item) {
+
+                        var localName   = item.localName;
+                        var showTitle   = item.title;
+                        var episode     = item.episode;
+
+                        if(localTitle === showTitle){
+                            elem.find(o.episodesListElem).append('<li><a title="'+localName+'" class="episode">Episode '+episode+'</a></li>');
+                        }
+
+                    });
+
                 });
 
-                $('.episode').on('click', function(){
-                    console.log('click')
+                $('.episode').on('click', function(e){
+                    e.preventDefault();
                     var filename = $(this).attr('title');
                     $('body').mcjsplay('play',filename);
                 });
@@ -120,7 +137,12 @@
 
     /* default values for this plugin */
     $.fn[ns].defaults = {
-        datasetKey : ns.toLowerCase() //always lowercase
+        datasetKey          : ns.toLowerCase(), //always lowercase
+        showElem            : '.tvshows',
+        titleElem           : '.showTitle',
+        episodesListElem    : '.episodes',
+        episodeElem         : '.episode'
+
     };
 
 })(jQuery, this, this.document);

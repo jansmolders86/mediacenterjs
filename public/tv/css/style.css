@@ -50,7 +50,7 @@ a.backlink { margin-top: 0px; z-index:4; }
 
 .tvposter.focused .overlay,
 .tvposter:hover .overlay{
-	background:url(img/cover-overlay.png) no-repeat;
+    background-color: rgba(0, 0, 0, 0.3);
     height:140px;
     width:758px;
 	position:absolute;
@@ -124,21 +124,21 @@ span.title{visibility:hidden; width:0; height:0;}
 }
 .specs p{font-size:12px; float:left; margin:10px 0 0 9px;}
 
-#episodes{
+.episodes{
     width:100%;
     clear:both;
     margin-bottom:20px;
 }
 
-#episodes li{
+.episodes li{
     padding:10px;
     margin:0;
     position: relative;
     overflow: hidden;
 }
 
-#episodes li:hover,
-#episodes li.focus{
+.episodes li:hover,
+.episodes li.focus{
     background:#f1f1f1;
 }
 
