@@ -108,7 +108,7 @@ Setup Windows
 * Install NodeJS (minimal version 0.10.x)
 http://nodejs.org/download/
 
-* Download MediacenterJS from this repository.
+* Download MediacenterJS from this repository and unzip the contents of the zipfile in a directory of your choice.
 
 * Before doing anything else please download the following zip and place the contents (bin folder) in the root dir of mediacenterjs. 
 
