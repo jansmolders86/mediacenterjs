@@ -72,7 +72,7 @@ What is MediacenterJS?
 
 MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques and languages (HTML5/CSS/Javascript).
 The backend is based on Node.JS with jade templates producing easy to use code. 
-The goal is to make it possible to add an 'app' to MCJS even with limited knowledge of said front end techniques. 
+The goal is to make it possible to add an 'app' to MCJS even with limited knowledge of said frontend techniques. 
 
 Basic feature list:
 
@@ -105,14 +105,16 @@ Or download it directly from Github of course.
 Setup Windows
 -------------
 
-Install NodeJS (minimal version 0.10.x)
+* Install NodeJS (minimal version 0.10.x)
 http://nodejs.org/download/
 
-Before starting the server please download the following zip and place the contents (bin folder) in the root dir of mediacenterjs. 
+* Download MediacenterJS from this repository.
+
+* Before doing anything else please download the following zip and place the contents (bin folder) in the root dir of mediacenterjs. 
 
 https://github.com/jansmolders86/mediacenterjs-windows-binaries/archive/master.zip
 
-After you have downloaded MediacenterJS binaries and placed them in the root of the folder, click on the .bat file (mediacenterjs.bat) to start the project. 
+* After you have downloaded MediacenterJS binaries and placed them in the root of the folder, click on the .bat file (mediacenterjs.bat) to start the project. 
 
 If you close this window, MCJS will stop working. You can also see useful information about what the server is doing, including error messages and other useful information.
 
