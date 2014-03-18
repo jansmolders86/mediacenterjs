@@ -21,45 +21,11 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
 
 exports.fetchData = function (req, res){
-    metafetcher.fetch(req, res, metaType, function(state){
-        if(state === 'done'){
-            console.log('Movie index up to date');
-        }
-    });
+    fetchData(req, res, metaType);
 };
 
 exports.loadTvShow = function (req, res){
-    db.query('SELECT * FROM tvshows',{
-            title 		    : String,
-            banner        	: String,
-            genre         	: String,
-            certification  	: String
-        },
-        function(rows) {
-            if (typeof rows !== 'undefined' && rows.length > 0){
-                res.json(rows);
-                fetchData(req, res, metaType);
-            } else {
-                console.log('Fetching tvshows');
-                fetchData(req, res, metaType);
-            }
-        }
-    );
-};
-
-exports.loadTvEpisodes = function (req, res, tvShow){
-    db.query('SELECT * FROM tvepisodes WHERE title =? ', [ tvShow ], {
-            localName   : String,
-            title  	    : String,
-            season    	: String,
-            episode  	: String
-        },
-        function(rows) {
-            if (typeof rows !== 'undefined' && rows.length > 0){
-                res.json(rows);
-            }
-        }
-    );
+    fetchData(req, res, metaType);
 };
 
 
@@ -91,6 +57,9 @@ exports.sendState = function (req, res){
 /** Private functions **/
 
 fetchData = function(req, res, metaType) {
+
+    //TODO: Make this a promise
+    var count = 0;
     metafetcher.fetch(req, res, metaType, function(state){
         if(state === 'done'){
             db.query('SELECT * FROM tvshows',{
@@ -100,12 +69,56 @@ fetchData = function(req, res, metaType) {
                 certification  	: String
             }, function(rows) {
                 if (typeof rows !== 'undefined' && rows.length > 0){
-                    // TODO: Update frontend
-                    // res.json(rows);
+                    var ShowList = [];
+
+                    count = rows.length;
+                    console.log('Found '+count+' shows, getting additional data...')
+                    rows.forEach(function(item, value){
+                        var showTitle       = item.title
+                        , showBanner        = item.banner
+                        , showGenre         = item.genre
+                        , showCertification = item.certification;
+
+                        getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
+                            ShowList.push(availableEpisodes);
+                            count--;
+
+                            if(count === 0 ){
+                                res.json(ShowList);
+                            }
+                        });
+                    });
                 } else {
-                    console.log('Could not index any tv shows, please check given movie collection path');
+                    console.log('Could not index any tv shows, please check given movie collection path...');
                 }
             });
         }
     });
+}
+
+function getEpisodes(showTitle, showBanner, showGenre, showCertification, callback){
+    db.query('SELECT * FROM tvepisodes WHERE title =? ', [ showTitle ], {
+            localName   : String,
+            title  	    : String,
+            season    	: String,
+            episode  	: String
+        },
+        function(rows) {
+            if (typeof rows !== 'undefined' && rows.length > 0){
+
+                var episodes = rows;
+
+                var availableEpisodes = {
+                    "title"         : showTitle,
+                    "banner"        : showBanner,
+                    "genre"         : showGenre,
+                    "certification" : showCertification,
+                    "episodes"      : episodes
+                }
+
+                callback(availableEpisodes);
+
+            }
+        }
+    );
 }

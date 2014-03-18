@@ -28,7 +28,6 @@ var express = require('express')
 , functions = require('./tv-functions');
 
 exports.index = function(req, res){
-
     DeviceInfo.isDeviceAllowed(req, function(allowed){
         res.render('tvshows', {
             title: 'tvshows',
@@ -43,17 +42,12 @@ exports.get = function(req, res){
 		optionalParam = req.params.optionalParam,
 		platform = req.params.action;
 
-
     if (!optionalParam) {
         if(infoRequest === 'loadItems') {
             functions.loadTvShow(req, res);
         }
 	}
 
-    if(optionalParam !== undefined && infoRequest === 'show'){
-        functions.loadTvEpisodes(req, res, optionalParam);
-    }
-    
     if(optionalParam === 'play'){
         var episode = infoRequest.replace(/\+/g, " ");
         functions.playEpisode(req, res,episode);

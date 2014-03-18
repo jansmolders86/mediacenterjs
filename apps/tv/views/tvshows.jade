@@ -15,7 +15,6 @@ block additional_css
 block additional_scripts
     script(src="http://vjs.zencdn.net/4.3/video.js")
     script(src="/tv/js/knockout.tvshows.js")
-    script(src="/tv/js/jquery.mcjs.tv.js")
     script(src="/tv/js/jquery.mcjs.tvplay.js")
 block body
     #header
@@ -31,9 +30,12 @@ block body
                         // ko if: banner() !== null
                         img.tvbanner(data-bind="attr: { src: banner }")
                         // /ko
-                    .overlay.mcjs-rc-clickable(data-bind="{click: showEpisodes}")
+                    .overlay.mcjs-rc-clickable
                     span.showTitle(data-bind="text:title")
-                    ul.episodes
+                    ul.episodes(data-bind="foreach: episodes")
+                        li
+                            a(data-bind="text:'Episode '+$data.episode, click: $parent.playEpisode.bind($data.localName)")
+
             // /ko
 
             // ko ifnot: tvShows().length > 0

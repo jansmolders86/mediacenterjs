@@ -7,25 +7,21 @@ addEventListener('load', function () {
         if(incommingDataFromServer === null ||  incommingDataFromServer == '') {
             console.log('Waiting...')
         }
-        else if(incommingDataFromServer === 'Done' ){
-            location.reload();
-        }  else {
-            var dataFromServer = ko.utils.parseJson(incommingDataFromServer);
 
-            mappedData = ko.utils.arrayMap(dataFromServer, function(item) {
-                return new tvShow(item);
-            });
+        var dataFromServer = ko.utils.parseJson(incommingDataFromServer);
+        mappedData = ko.utils.arrayMap(dataFromServer, function(item) {
+            return new tvShow(item);
+        });
 
-            viewModel = {
-                tvShows: ko.observableArray([])
-            };
+        viewModel = {
+            tvShows: ko.observableArray([])
+        };
 
-            viewModel.tvShows(mappedData);
+        viewModel.tvShows(mappedData);
 
-            ko.applyBindings(viewModel);
-            $('body').mcjstv();
-            $('body').mcjsplay();
-        }
+        ko.applyBindings(viewModel);
+        $('body').mcjsplay();
+
     });
 });
 
@@ -48,8 +44,9 @@ function tvShow(item) {
     this.banner         = ko.observable(item.banner);
     this.genre 	        = ko.observable(item.genre);
     this.certification	= ko.observable(item.certification);
-    this.showEpisodes = function () {
-        var showTitle = that.title();
-        $('body').mcjstv('getEpisodes',showTitle);
+    this.episodes	    = ko.observableArray(item.episodes);
+    this.playEpisode = function (data) {
+        var filename = data.localName;
+        $('body').mcjsplay('play',filename);
     };
 }
