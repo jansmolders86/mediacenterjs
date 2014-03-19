@@ -20,12 +20,9 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 //Create tables
 db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
 
-exports.fetchData = function (req, res){
-    fetchData(req, res, metaType);
-};
 
 exports.loadTvShow = function (req, res){
-    fetchData(req, res, metaType);
+    fetchTVData(req, res, metaType);
 };
 
 
@@ -56,7 +53,7 @@ exports.sendState = function (req, res){
 
 /** Private functions **/
 
-fetchData = function(req, res, metaType) {
+fetchTVData = function(req, res, metaType) {
 
     //TODO: Make this a promise
     var count = 0;

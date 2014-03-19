@@ -30,11 +30,11 @@ block body
                         // ko if: banner() !== null
                         img.tvbanner(data-bind="attr: { src: banner }")
                         // /ko
-                    .overlay.mcjs-rc-clickable
+                    .overlay
                     span.showTitle(data-bind="text:title")
                     ul.episodes(data-bind="foreach: episodes")
-                        li
-                            a(data-bind="text:'Episode '+$data.episode, click: $parent.playEpisode.bind($data.localName)")
+                        li.mcjs-rc-controllable
+                            a(data-bind="text:'Episode '+$data.episode, click: $parent.playEpisode.bind($data.localName)").mcjs-rc-clickable
 
             // /ko
 

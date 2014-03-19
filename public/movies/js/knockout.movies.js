@@ -4,31 +4,24 @@ addEventListener('load', function () {
 
     doAjaxCall(url, function(data){
         var incommingDataFromServer = data;
-        console.log(incommingDataFromServer)
-        if(incommingDataFromServer === null ||  incommingDataFromServer == '') {
-            console.log('Waiting...')
-        }
-        else if(incommingDataFromServer === 'Done' ){
-            location.reload();
-        }  else {
-            var dataFromServer = ko.utils.parseJson(incommingDataFromServer);
+        var dataFromServer = ko.utils.parseJson(incommingDataFromServer);
 
-            mappedData = ko.utils.arrayMap(dataFromServer, function(item) {
-                return new Movie(item);
-            });
+        mappedData = ko.utils.arrayMap(dataFromServer, function(item) {
+            return new Movie(item);
+        });
 
-            viewModel = {
-                movies: ko.observableArray([])
-            };
+        viewModel = {
+            movies: ko.observableArray([])
+        };
 
-            viewModel.movies(mappedData);
+        viewModel.movies(mappedData);
 
-            ko.applyBindings(viewModel);
+        ko.applyBindings(viewModel);
 
-            // Init Jquery plugin
-            $('body').mcjsm();
-            $('body').mcjsplay();
-        }
+        // Init Jquery plugin
+        $('body').mcjsm();
+        $('body').mcjsplay();
+
     });
 });
 

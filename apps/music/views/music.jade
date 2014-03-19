@@ -26,14 +26,7 @@ block additional_css
 
 block additional_scripts
 	script(src="http://vjs.zencdn.net/4.3/video.js")
-	script(src="/music/js/jquery.mcjs.music.js")
-	
-	script.
-		$(function(){
-			$('body').mcjs();
-			$('body').mcjsm();
-		});
-
+	script(src="/music/js/knockout.music.js")
 block body
 	#header
 		a.backlink
@@ -43,7 +36,7 @@ block body
 		// ko if: music().length > 0
 		ul.music(data-bind="foreach: music")
 			li.movieposter.boxed.mcjs-rc-controllable(data-bind="css : {'mcjs-rc-active' : viewDetails}")
-				img.cover(data-bind="attr: { src: thumbnail }")
+				img.cover(data-bind="attr: { src: cover }")
 				.overlay.mcjs-rc-clickable(data-bind="click: showAlbum")
 				span.title(data-bind="text:localName", style="visibility:hidden;")
 				#albumInfo		

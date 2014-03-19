@@ -8,6 +8,7 @@ var fs = require('fs.extra')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
 var metaType = "movie";
+
 var dblite = require('dblite')
 if(os.platform() === 'win32'){
     dblite.bin = "./bin/sqlite3/sqlite3";
@@ -16,39 +17,9 @@ var db = dblite('./lib/database/mcjs.sqlite');
 db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
-exports.fetchItems = function (req, res){
-    metafetcher.fetch(req, res, metaType, function(state){
-        if(state === 'done'){
-            console.log('Movie index up to date');
-        }
-    });
-};
 
 exports.loadItems = function (req, res){
-    db.query('SELECT * FROM movies',{
-            original_name  	: String,
-            title 		    : String,
-            poster_path  	: String,
-            backdrop_path  	: String,
-            imdb_id  		: String,
-            rating  		: String,
-            certification  	: String,
-            genre  			: String,
-            runtime  		: String,
-            overview  		: String,
-            cd_number  		: String,
-            adult           : String
-        },
-        function(rows) {
-            if (typeof rows !== 'undefined' && rows.length > 0){
-                res.json(rows);
-                fetchData(req, res, metaType);
-            } else {
-                console.log('Fetching movies');
-                fetchData(req, res, metaType);
-            }
-        }
-    );
+    fetchData(req, res, metaType);
 };
 
 exports.playMovie = function (req, res, platform, movieRequest){
@@ -99,7 +70,6 @@ exports.sendState = function (req, res){
 /** Private functions **/
 
 fetchData = function(req, res, metaType) {
-
     metafetcher.fetch(req, res, metaType, function(state){
         if(state === 'done'){
             db.query('SELECT * FROM movies',{
@@ -117,8 +87,7 @@ fetchData = function(req, res, metaType) {
                 adult           : String
             }, function(rows) {
                 if (typeof rows !== 'undefined' && rows.length > 0){
-                    // TODO: Update frontend
-                    // res.json(rows);
+                    res.json(rows);
                 } else {
                     console.log('Could not index any movies, please check given movie collection path');
                 }
