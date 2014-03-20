@@ -27,6 +27,7 @@ block additional_css
 block additional_scripts
     script(src="http://vjs.zencdn.net/4.3/video.js")
     script(src="/music/js/knockout.music.js")
+    script(src="/music/js/jquery.mcjs.music.js")
 block body
     #header
         a.backlink
@@ -35,7 +36,7 @@ block body
     #wrapper
         // ko if: album().length > 0
         ul.music(data-bind="foreach: album")
-            li.movieposter.boxed.mcjs-rc-controllable(data-bind="css : {'mcjs-rc-active' : viewDetails}")
+            li.movieposter.boxed.mcjs-rc-controllable
 
                 // ko if: cover() == ''
                 img.cover(data-bind="attr: { src: '/music/css/img/nodata.jpg' }")
@@ -45,7 +46,7 @@ block body
                 img.cover(data-bind="attr: { src: cover }")
                 // /ko
 
-                .overlay.mcjs-rc-clickable(data-bind="click: showAlbum")
+                .overlay.mcjs-rc-clickable
                 span.title(data-bind="text:album", style="visibility:hidden;")
                 #albumInfo
                     h2(data-bind="text:album")
@@ -53,8 +54,8 @@ block body
                     .year(data-bind="text:year")
                     // /ko
                 #tracklist
-                    ul#tracks(data-bind="foreach: $parent.tracks")
-                        li.mcjs-rc-controllable.mcjs-rc-clickable(data-bind="click: playTrack , css : {'selected' : isActive}")
+                    ul#tracks(data-bind="foreach: tracks")
+                        li.mcjs-rc-controllable.mcjs-rc-clickable
                             i.play.icon
                             .title(data-bind="text:$data.title")
         // /ko

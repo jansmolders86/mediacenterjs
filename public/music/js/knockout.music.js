@@ -19,7 +19,7 @@ addEventListener('load', function () {
         ko.applyBindings(viewModel);
 
         //  Init Jquery plugins
-        //  $('body').mcjsm();
+            $('body').mcjsm();
         //  $('body').mcjsplay();
 
     });
@@ -45,20 +45,4 @@ function Album(item) {
     this.year		    = ko.observable(item.year);
     this.cover 		    = ko.observable(item.cover);
     this.tracks 		= ko.observableArray(item.tracks);
-    this.viewDetails    = ko.observable(false);
-    this.showAlbum  = function () {
-        that.viewDetails(false);
-        var album = that.localName();
-        o.currentAlbum = album;
-
-        if(that.isSingle() === true){
-            _playSingle(o, album);
-        } else {
-            that.viewDetails(true);
-            if(that.viewDetails(true) ){
-                $(o.musicListSelector+' > li').hide();
-            }
-
-        }
-    };
 }
