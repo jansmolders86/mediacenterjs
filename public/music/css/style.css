@@ -27,21 +27,20 @@ body{position:relative; min-height:100%; overflow:hidden;}
 
 ul.music{ list-style:none; height:100%; width: 100%; }
 ul.music > li img{
-	width:120px;
-	height:120px;
+	width:200px;
+	height:200px;
 	float:left;
 	margin:0;
 }
 
 ul.music > li.mcjs-rc-active img{ margin: 20px 0 0 40px; }
 ul.music > li.coverfound{ cursor:pointer; }
-ul.music > li img{ visibility:hidden; }
-ul.music > li.coverfound img{ visibility:visible; }
+
 ul.music > li{
 	background:#fff;
 	padding:0px;
-	width:120px;
-	height: 250px;
+	width:200px;
+	height: 300px;
 	border-radius:2px; 
     border:1px solid #e5e5e5;
 	position:relative;

@@ -1,57 +1,62 @@
 extends /layout
 
 block declarations
-	- additional_title = lingua.music;
-	- use_knockout = true;
+    - additional_title = lingua.music;
+    - use_knockout = true;
 
 block additional_css
-	link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
-	style.
-		.vjs-play-progress, .vjs-volume-level { background-color: #d96800!important; }
-		.vjs-control-bar, .vjs-big-play-button { background: rgba(171,171,171,0.7)!important; }
-		.vjs-slider { background: rgba(171,171,171,0.2333333333333333)!important; }
-		.vjs-fade-out { opacity: 1 !important; visibility: visible !important; }
-		.vjs-default-skin.vjs-controls-disabled .vjs-control-bar { display: block!important;}
-		.vjs-fullscreen-control{visibility:hidden!important;}
-		.vjs-default-skin.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar,
-		.vjs-default-skin.vjs-has-started .vjs-control-bar {
-			-webkit-transition: none;
-			-moz-transition: none;
-			-o-transition: none;
-			transition: none;
-			visibility:visible;
-			opacity:1; 
-		}
-	link(rel='stylesheet', href='/music/css/style.css')
+    link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
+    style.
+        .vjs-play-progress, .vjs-volume-level { background-color: #d96800!important; }
+        .vjs-control-bar, .vjs-big-play-button { background: rgba(171,171,171,0.7)!important; }
+        .vjs-slider { background: rgba(171,171,171,0.2333333333333333)!important; }
+        .vjs-fade-out { opacity: 1 !important; visibility: visible !important; }
+        .vjs-default-skin.vjs-controls-disabled .vjs-control-bar { display: block!important;}
+        .vjs-fullscreen-control{visibility:hidden!important;}
+        .vjs-default-skin.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar,
+        .vjs-default-skin.vjs-has-started .vjs-control-bar {
+            -webkit-transition: none;
+            -moz-transition: none;
+            -o-transition: none;
+            transition: none;
+            visibility:visible;
+            opacity:1;
+        }
+    link(rel='stylesheet', href='/music/css/style.css')
 
 block additional_scripts
-	script(src="http://vjs.zencdn.net/4.3/video.js")
-	script(src="/music/js/knockout.music.js")
+    script(src="http://vjs.zencdn.net/4.3/video.js")
+    script(src="/music/js/knockout.music.js")
 block body
-	#header
-		a.backlink
-			img(src="/core/icons/back.png")
-		h1 #{lingua.music}
-	#wrapper
-		// ko if: music().length > 0
-		ul.music(data-bind="foreach: music")
-			li.movieposter.boxed.mcjs-rc-controllable(data-bind="css : {'mcjs-rc-active' : viewDetails}")
-				img.cover(data-bind="attr: { src: cover }")
-				.overlay.mcjs-rc-clickable(data-bind="click: showAlbum")
-				span.title(data-bind="text:localName", style="visibility:hidden;")
-				#albumInfo		
-					h2(data-bind="text:title")
-					// ko if: genre() !== 'Unknown' && genre() !== null
-					.genre(data-bind="text:genre")
-					// /ko
-					// ko if: year() !== 'Unknown' && year() !== null
-					.year(data-bind="text:year")
-					// /ko
-				#tracklist
-					ul#tracks(data-bind="foreach: tracks")
-						li.mcjs-rc-controllable.mcjs-rc-clickable(data-bind="click: playTrack , css : {'selected' : isActive}")
-							i.play.icon
-							.title(data-bind="text:name")
-		// /ko		
-	video#player.video-js.vjs-default-skin(controls, preload="metadata", width="100%", height="33", data-setup="{}")
-		source(src="",type="audio/mp3")
+    #header
+        a.backlink
+            img(src="/core/icons/back.png")
+        h1 #{lingua.music}
+    #wrapper
+        // ko if: album().length > 0
+        ul.music(data-bind="foreach: album")
+            li.movieposter.boxed.mcjs-rc-controllable(data-bind="css : {'mcjs-rc-active' : viewDetails}")
+
+                // ko if: cover() == ''
+                img.cover(data-bind="attr: { src: '/music/css/img/nodata.jpg' }")
+                // /ko
+
+                // ko ifnot: cover() == ''
+                img.cover(data-bind="attr: { src: cover }")
+                // /ko
+
+                .overlay.mcjs-rc-clickable(data-bind="click: showAlbum")
+                span.title(data-bind="text:album", style="visibility:hidden;")
+                #albumInfo
+                    h2(data-bind="text:album")
+                    // ko if: year() !== 'Unknown' && year() !== null
+                    .year(data-bind="text:year")
+                    // /ko
+                #tracklist
+                    ul#tracks(data-bind="foreach: $parent.tracks")
+                        li.mcjs-rc-controllable.mcjs-rc-clickable(data-bind="click: playTrack , css : {'selected' : isActive}")
+                            i.play.icon
+                            .title(data-bind="text:$data.title")
+        // /ko
+    video#player.video-js.vjs-default-skin(controls, preload="metadata", width="100%", height="33", data-setup="{}")
+        source(src="",type="audio/mp3")

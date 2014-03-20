@@ -4,8 +4,6 @@ addEventListener('load', function () {
 
     doAjaxCall(url, function(data){
         var incommingDataFromServer = data;
-        console.log(incommingDataFromServer)
-
         var dataFromServer = ko.utils.parseJson(incommingDataFromServer);
 
         mappedData = ko.utils.arrayMap(dataFromServer, function(item) {
@@ -20,9 +18,9 @@ addEventListener('load', function () {
 
         ko.applyBindings(viewModel);
 
-        // Init Jquery plugins
-        $('body').mcjsm();
-        $('body').mcjsplay();
+        //  Init Jquery plugins
+        //  $('body').mcjsm();
+        //  $('body').mcjsplay();
 
     });
 });
@@ -42,13 +40,12 @@ function doAjaxCall(url, callback){
 
 function Album(item) {
     var that            = this;
-    this.localName 	    = ko.observable(item.localName);
-    this.cover  	    = ko.observable(item.cover);
-    this.title		    = ko.observable(item.title);
-    this.year 		    = ko.observable(item.year);
-    this.genre 		    = ko.observable(item.genre);
+    this.album 	        = ko.observable(item.album);
+    this.artist  	    = ko.observable(item.artist);
+    this.year		    = ko.observable(item.year);
+    this.cover 		    = ko.observable(item.cover);
+    this.tracks 		= ko.observableArray(item.tracks);
     this.viewDetails    = ko.observable(false);
-    this.tracks 	    = ko.observableArray(item);
     this.showAlbum  = function () {
         that.viewDetails(false);
         var album = that.localName();
@@ -64,4 +61,4 @@ function Album(item) {
 
         }
     };
-}r
+}
