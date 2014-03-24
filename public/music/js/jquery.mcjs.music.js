@@ -55,7 +55,8 @@
                 var random = false;
                 var album = $(this).parent().parent().find('span.title').text();
                 var currentItem = $(this).attr('title');
-
+				$('li.'+o.selectedClass).removeClass(o.selectedClass);
+				$(this).addClass(o.selectedClass);
                 _playTrack(o,currentItem, album, random);
             });
 
@@ -106,9 +107,6 @@
 
 
     function _playTrack(o,currentItem,album,random){
-        $('li.'+o.selectedClass).removeClass(o.selectedClass);
-        $(o.trackListSelector +'> li').attr('title',currentItem).addClass(o.selectedClass);
-
         if(!$('.random').length){
             $(o.playerSelector).append('<div class="random hidden">Random</div>')
         }
@@ -120,7 +118,7 @@
             var myPlayer = this;
 
             var url = '/music/'+currentItem+'/'+album+'/play/';
-            console.log('url', url);
+
             myPlayer.src(url);
             myPlayer.play();
 

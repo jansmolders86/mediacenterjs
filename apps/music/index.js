@@ -49,8 +49,6 @@ exports.get = function(req, res, next){
         var album = optionalParam.replace(/\+/g, " ");
         switch(action) {
             case('play'):
-                console.log('track',track)
-                console.log('album',album)
                 functions.playTrack(req, res, track, album);
             break;
             case('next'):

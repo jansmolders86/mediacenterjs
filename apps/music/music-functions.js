@@ -1,7 +1,8 @@
 var file_utils = require('../../lib/utils/file-utils')
     , os = require('os')
     , metafetcher = require('../../lib/utils/metadata-fetcher')
-	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
+	, config = require('../../lib/handlers/configuration-handler').getConfiguration()
+	, music_playback_handler = require('./music-playback-handler'); 
 
 var metaType = "music";
 
@@ -19,43 +20,45 @@ exports.loadItems = function(req, res){
 };
 
 exports.playTrack = function(req, res, track, album){
-	var music_playback_handler = require('./music-playback-handler');
 	music_playback_handler.startTrackPlayback(res, track);
 };
 
 exports.nextTrack = function(req, res, track, album){
-    var music_playback_handler = require('./music-playback-handler');
-
-
     db.query('SELECT * FROM tracks WHERE track IN (SELECT track FROM tracks WHERE album = ', [album], ' AND filename = ', [track], 'ORDER BY track ASC) AND filename != ', [track], {
             title       : String,
             track       : String,
             album       : String,
             artist      : String,
             year        : String,
-            filename    : String
+            filename    : String,
+			filepath	: String
         },
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
-
-                var completeAlbum ={
-                    "album"     : album,
-                    "artist"    : artist,
-                    "year"      : year,
-                    "cover"     : cover,
-                    "tracks"    : rows
-                }
-
-                callback(completeAlbum);
+                var track = rows[0].filename;
+				music_playback_handler.startTrackPlayback(res, track);
             }
         }
     );
-    music_playback_handler.startTrackPlayback(res, track);
+    
 };
 
 exports.randomTrack = function(req, res, track, album){
-    var music_playback_handler = require('./music-playback-handler');
-    music_playback_handler.startTrackPlayback(res, track);
+    db.query('SELECT * FROM tracks WHERE album =? ', [ album ], {
+            title   : String,
+            track   : String,
+            album   : String,
+            artist  : String,
+            year    : String,
+            filename: String
+        },
+        function(rows) {
+            if (typeof rows !== 'undefined' && rows.length > 0){
+				
+				music_playback_handler.startTrackPlayback(res, track);
+            }
+        }
+    );
 };
 
 /** Private functions **/

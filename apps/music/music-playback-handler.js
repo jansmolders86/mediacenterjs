@@ -29,7 +29,7 @@ exports.startTrackPlayback = function(response, track) {
         if (fileUrl) {
             startTrackStreaming(response, fileUrl);
         } else {
-            console.error('Could not find track ' + trackName + ' in album ' + albumTitle + '!');
+            console.error('Could not find file ' + track);
         }
     });
 };
@@ -58,6 +58,7 @@ startTrackStreaming = function(response, playbackPath) {
 getFilePathOfTrackInAlbum = function(track, callback) {
 
     db.query('SELECT * FROM tracks WHERE filename =? ', [ track ], {
+            title         	: String,
             track         	: String,
             album 		    : String,
             artist  	    : String,
@@ -67,7 +68,7 @@ getFilePathOfTrackInAlbum = function(track, callback) {
         },
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
-                callback(rows.filepath);
+                callback(rows[0].filepath);
             } else {
                 callback(null);
             }
