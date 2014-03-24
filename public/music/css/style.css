@@ -33,8 +33,6 @@ ul.music > li img{
 	margin:0;
 }
 
-ul.music > li.mcjs-rc-active img{ margin: 20px 0 0 40px; }
-
 ul.music > li{
 	background:#fff;
 	padding:0;
