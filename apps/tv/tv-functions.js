@@ -57,8 +57,8 @@ fetchTVData = function(req, res, metaType) {
 
     //TODO: Make this a promise
     var count = 0;
-    metafetcher.fetch(req, res, metaType, function(state){
-        if(state === 'done'){
+    metafetcher.fetch(req, res, metaType, function(type){
+        if(type === metaType){
             db.query('SELECT * FROM tvshows',{
                 title 		    : String,
                 banner        	: String,

@@ -55,4 +55,4 @@ function Movie(item) {
         var movieTitle = that.original_name();
         $('body').mcjsplay('playMovie',movieTitle);
     };
-}r
+}

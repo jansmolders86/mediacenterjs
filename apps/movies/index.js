@@ -58,8 +58,8 @@ exports.get = function(req, res){
 	}
 
     if(optionalParam === 'play'){
-        var movieName = infoRequest.replace(/\+/g, " ");
-        functions.playMovie(req, res, movieName);
+        var movieTitle = infoRequest.replace(/\+/g, " ");
+        functions.playMovie(req, res, movieTitle);
     }
 };
 

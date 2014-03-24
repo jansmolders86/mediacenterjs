@@ -16,7 +16,7 @@ db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 exports.loadItems = function(req, res){
-    fetchData(req, res, metaType);
+    fetchMusicData(req, res, metaType);
 };
 
 exports.playTrack = function(req, res, track, album){
@@ -64,12 +64,12 @@ exports.randomTrack = function(req, res, track, album){
 /** Private functions **/
 
 
-fetchData = function(req, res, metaType) {
+fetchMusicData = function(req, res, metaType) {
 
     //TODO: Make this a promise
     var count = 0;
-    metafetcher.fetch(req, res, metaType, function(state){
-        if(state === 'done'){
+    metafetcher.fetch(req, res, metaType, function(type){
+        if(type === metaType){
             db.query('SELECT * FROM albums', {
                     album 		    : String,
                     artist  	    : String,

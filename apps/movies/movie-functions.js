@@ -19,20 +19,20 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 
 
 exports.loadItems = function (req, res){
-    fetchData(req, res, metaType);
+    getData(req, res, metaType);
 };
 
-exports.playMovie = function (req, res, platform, movieRequest){
-	file_utils.getLocalFile(config.moviepath, movieRequest, function(err, file) {
+exports.playMovie = function (req, res, movieTitle){
+	file_utils.getLocalFile(config.moviepath, movieTitle, function(err, file) {
 		if (err) console.log(err .red);
 		if (file) {
 			var movieUrl = file.href
 			, movie_playback_handler = require('./movie-playback-handler');
 			
-			movie_playback_handler.startPlayback(res, movieUrl, movieRequest, platform);
+			movie_playback_handler.startPlayback(res, movieUrl, movieTitle);
     
 		} else {
-			console.log("File " + movieRequest + " could not be found!" .red);
+			console.log("File " + movieTitle + " could not be found!" .red);
 		}
 	});
 };
@@ -69,9 +69,10 @@ exports.sendState = function (req, res){
 
 /** Private functions **/
 
-fetchData = function(req, res, metaType) {
-    metafetcher.fetch(req, res, metaType, function(state){
-        if(state === 'done'){
+getData = function(req, res, metaType) {
+    metafetcher.fetch(req, res, metaType, function(type){
+        if(type === metaType){
+			
             db.query('SELECT * FROM movies',{
                 original_name  	: String,
                 title 		    : String,
