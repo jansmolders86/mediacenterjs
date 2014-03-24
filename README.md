@@ -56,6 +56,13 @@ What's coming up (Update)
 ==================
 * I decided to rewrite a large portion of the code. Fetching metadata will be a seperate process. This allows me to handle the data differently resulting in a faster more seamless experience. No more lazyloading and badly represented data.It also allows metadata gathering to be scheduled. This will also result in shorter, better code on front- and backend. This will take some time to get done though so bare with me. I'm developing this on a seperate branch so the master will remain stable(ish). Once this is done the TV app will work as well. Hopefully this big update will role sometime in march.
 
+
+__Coming features:__
+
+* Airplay
+* Scheduled data scraping
+* Streaming movies app
+
 Known issues: video/audio playback
 ==================
 
