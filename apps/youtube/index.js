@@ -28,6 +28,7 @@ var Youtube = require('youtube-api')
 , jade = require('jade')
 , configuration_handler = require('../../lib/handlers/configuration-handler')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
+
 exports.index = function(req, res, next){
 	res.render('youtube');
 };

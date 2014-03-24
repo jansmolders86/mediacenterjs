@@ -11,7 +11,7 @@ $(function() {
 		$(this).text(cleanedThemeName);
 	});
 
-    // Get key for mediacenterjs.com
+    // Get key
 	$.ajax({
 		type: "GET",
 		dataType: "jsonp",

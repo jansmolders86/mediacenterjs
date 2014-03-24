@@ -18,8 +18,8 @@ h1#error span {
 }
 input#search {
 	background-color: transparent !important;
-	border: 1px solid white;
-	color: white;
+	border: 1px solid #e7e7e7;
+	color: #333;
 	float: right;
 	margin-top: -4%;
 	width: 30%;
@@ -27,16 +27,16 @@ input#search {
 	margin-bottom: 10px;
 }
 input::-webkit-input-placeholder { /* WebKit browsers */
-    color: white;
+    color: #333;
 }
 input::-moz-placeholder { /* Firefox 19+ browsers */
-    color: white;
+    color: #333;
 }
 input:-moz-placeholder { /* Firefox 4-18 browsers */
-    color: white;
+    color: #333;
 }
 input:-ms-input-placeholder { /* IE 10 */
-	color: white;
+	color: #333;
 }
 label[for="search"] {
 	width: initial;
