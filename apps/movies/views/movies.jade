@@ -39,7 +39,7 @@ block body
         #moviebrowser
             // ko if: movies().length > 0
             ul.movies(data-bind="foreach: movies")
-                li.movieposter.boxed.mcjs-rc-controllable(data-bind="attr: {'id':isActive}" )
+                li.movieposter.boxed.mcjs-rc-controllable.hidden(data-bind="attr: {'id':isActive},css: { hidden: false }")
                     .imageWrapper
                         img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }")
                     .overlay.mcjs-rc-clickable(data-bind="click: playMovie")
@@ -61,5 +61,5 @@ block body
             // /ko
 
             // ko ifnot: movies().length > 0
-            h2 Don't worry, your movies are being indexed, please wait...
+            h2.loading Please wait...
             // /ko

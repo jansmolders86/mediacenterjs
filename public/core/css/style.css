@@ -202,6 +202,10 @@ a.backlink{
 
 /* Generic classes */
 
+.hidden{visibility:hidden;}
+
+.loading{position:absolute; top:200px; left:100px;}
+
 .boxed{
 	background:#fff;
 	border-radius:2px;

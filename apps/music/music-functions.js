@@ -99,7 +99,7 @@ fetchMusicData = function(req, res, metaType) {
                             });
                         });
                     } else {
-                        console.log('Could not index any tv shows, please check given movie collection path...');
+                        console.log('Could not index any albums, please check given music collection path...');
                     }
             });
         }

@@ -25,7 +25,7 @@ block body
         #tvshowbrowser
             // ko if: tvShows().length > 0
             ul.tvshows(data-bind="foreach: tvShows")
-                li.tvposter.boxed.mcjs-rc-controllable
+                li.tvposter.boxed.mcjs-rc-controllable.hidden(data-bind="css: { hidden: false }")
                     .imageWrapper
                         // ko if: banner() !== null
                         img.tvbanner(data-bind="attr: { src: banner }")
@@ -39,5 +39,5 @@ block body
             // /ko
 
             // ko ifnot: tvShows().length > 0
-            h2 Don't worry, your tvshows are being indexed, please wait...
+            h2.loading Please wait...
             // /ko
