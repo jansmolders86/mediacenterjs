@@ -1,6 +1,7 @@
 /* Global imports */
 var colors = require('colors'),
 	fs = require('fs.extra'),
+    os = require('os'),
 	Encoder = require('node-html-encoder').Encoder,
 	encoder = new Encoder('entity'),
 	config = require('../../lib/handlers/configuration-handler').getConfiguration(),
@@ -8,32 +9,29 @@ var colors = require('colors'),
 
 /* Public Methods */
 
+// Init Database
+var dblite = require('dblite')
+if(os.platform() === 'win32'){
+    dblite.bin = "./bin/sqlite3/sqlite3";
+}
+var db = dblite('./lib/database/mcjs.sqlite');
+db.on('info', function (text) { console.log(text) });
+db.on('error', function (err) { console.error('Database error: ' + err) });
+
 /**
  * Starts the playback of the provided track.
  * @param response              The HTTP-Response
  * @param albumTitle            The album title
  * @param trackName             The name of the track
  */
-exports.startTrackPlayback = function(response, albumTitle, trackName) {
-
-	// HTML-Decode albumTitle and trackName
-	trackName = encoder.htmlDecode(trackName);
-	albumTitle = encoder.htmlDecode(albumTitle);
-    
-	if (!albumTitle || albumTitle === 'none') {
-		var playbackPath = config.musicpath + trackName;
-		startTrackStreaming(response, playbackPath);
-	}
-	else if (albumTitle !== undefined) {
-		getFilePathOfTrackInAlbum(albumTitle, trackName, function(fileUrl) {
-            console.log('Playback albumTitle', fileUrl)
-			if (fileUrl) {
-				startTrackStreaming(response, fileUrl);
-			} else {
-				console.error('Could not find track ' + trackName + ' in album ' + albumTitle + '!');
-			}
-		})
-	}
+exports.startTrackPlayback = function(response, track) {
+    getFilePathOfTrackInAlbum(track, function(fileUrl) {
+        if (fileUrl) {
+            startTrackStreaming(response, fileUrl);
+        } else {
+            console.error('Could not find track ' + trackName + ' in album ' + albumTitle + '!');
+        }
+    });
 };
 
 /* Private Methods */
@@ -57,21 +55,22 @@ startTrackStreaming = function(response, playbackPath) {
 	stream.pipe(response);
 };
 
-getFilePathOfTrackInAlbum = function(albumTitle, trackName, callback) {
-	var dir = config.musicpath + albumTitle + '/';
-	var suffix = new RegExp("\.(mp3)","g");
+getFilePathOfTrackInAlbum = function(track, callback) {
 
-	file_utils.getLocalFiles(dir, suffix, function(err, files) {
-        
-		if (err){
-            console.log('Error getting files', err)
-            callback(null);
-        } 
-
-		files.forEach(function(file) {
-			if(file.file === trackName){
-				callback(file.href);
-			}
-		});
-	});
+    db.query('SELECT * FROM tracks WHERE filename =? ', [ track ], {
+            track         	: String,
+            album 		    : String,
+            artist  	    : String,
+            year            : String,
+            filename        : String,
+            filepath        : String
+        },
+        function(rows) {
+            if (typeof rows !== 'undefined' && rows.length > 0){
+                callback(rows.filepath);
+            } else {
+                callback(null);
+            }
+        }
+    );
 };

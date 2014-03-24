@@ -53,11 +53,10 @@ block body
                     // ko if: year() !== 'Unknown' && year() !== null
                     .year(data-bind="text:year")
                     // /ko
-                #tracklist
-                    ul#tracks(data-bind="foreach: tracks")
-                        li.mcjs-rc-controllable.mcjs-rc-clickable
-                            i.play.icon
-                            .title(data-bind="text:$data.title")
+                ul.tracks(data-bind="foreach: tracks")
+                    li.mcjs-rc-controllable.mcjs-rc-clickable(data-bind="attr:{ title: filename}")
+                        i.play.icon
+                        .title(data-bind="text:$data.title")
         // /ko
     video#player.video-js.vjs-default-skin(controls, preload="metadata", width="100%", height="33", data-setup="{}")
         source(src="",type="audio/mp3")

@@ -18,10 +18,44 @@ exports.loadItems = function(req, res){
     fetchData(req, res, metaType);
 };
 
-exports.playTrack = function(req, res, albumTitle, trackName){
+exports.playTrack = function(req, res, track, album){
 	var music_playback_handler = require('./music-playback-handler');
+	music_playback_handler.startTrackPlayback(res, track);
+};
 
-	music_playback_handler.startTrackPlayback(res, albumTitle, trackName);
+exports.nextTrack = function(req, res, track, album){
+    var music_playback_handler = require('./music-playback-handler');
+
+
+    db.query('SELECT * FROM tracks WHERE track IN (SELECT track FROM tracks WHERE album = ', [album], ' AND filename = ', [track], 'ORDER BY track ASC) AND filename != ', [track], {
+            title       : String,
+            track       : String,
+            album       : String,
+            artist      : String,
+            year        : String,
+            filename    : String
+        },
+        function(rows) {
+            if (typeof rows !== 'undefined' && rows.length > 0){
+
+                var completeAlbum ={
+                    "album"     : album,
+                    "artist"    : artist,
+                    "year"      : year,
+                    "cover"     : cover,
+                    "tracks"    : rows
+                }
+
+                callback(completeAlbum);
+            }
+        }
+    );
+    music_playback_handler.startTrackPlayback(res, track);
+};
+
+exports.randomTrack = function(req, res, track, album){
+    var music_playback_handler = require('./music-playback-handler');
+    music_playback_handler.startTrackPlayback(res, track);
 };
 
 /** Private functions **/
@@ -75,7 +109,8 @@ function getTracks(album, artist, year, cover, callback){
             track   : String,
             album   : String,
             artist  : String,
-            year    : String
+            year    : String,
+            filename: String
         },
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
