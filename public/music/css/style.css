@@ -19,11 +19,13 @@
 
 /* Default override */
 
-body{position:relative; min-height:100%; overflow:hidden;}
+body{position:relative; min-height:100%; overflow-x:hidden;}
 #header{ border-bottom:5px solid #fff; }
 #wrapper{padding:50px 100px; background:#e5e5e5;}
 
 /* Music App */
+
+h2.loading{top:30px;}
 
 ul.music{ list-style:none; height:100%; width: 100%; }
 ul.music > li img{
@@ -84,14 +86,14 @@ ul.music > li.mcjs-rc-active .overlay{ visibility:hidden; }
 ul.music .overlay{ width:0; height:0; }
 ul.music > li img.coverfound{ width:120px; height:120px; margin:0px; } 
 
-ul.music > li.coverfound:hover .overlay,
-ul.music > li.coverfound.focused .overlay{
+ul.music > li:hover .overlay,
+ul.music > li.focused .overlay{
 	position:absolute;
 	top:0;
 	left:0;
-	width:120px;
-	height:120px;
-	background:url(img/cover-overlay.png) no-repeat;
+	width:200px;
+	height:200px;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 /** Tracklist **/
@@ -176,3 +178,22 @@ li .title{display:inline-block;}
 #player.show{ visibility:visible; }
 
 
+@media only screen and (min-width: 320px) and (max-width: 529px) {
+    #wrapper{padding:10px 0px;}
+
+    ul.music > li{
+        width:155px;
+        height: 250px;
+        float:left;
+    }
+
+    ul.music > li:nth-child(odd){margin-left:10px;}
+
+    ul.music > li:hover .overlay,
+    ul.music > li.focused .overlay,
+    ul.music > li img{
+        width:155px;
+        height: 155px;
+    }
+
+}

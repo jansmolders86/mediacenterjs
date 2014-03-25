@@ -23,6 +23,7 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 #header h1{z-index:4; margin-top:0px;}
 a.backlink { margin-top: 0px; z-index:4; }
 
+h2.loading{top:30px;}
 #wrapper {margin-top:60px;}
 
 #tvshowbrowser{ width:100%; height:100%; margin:0;}

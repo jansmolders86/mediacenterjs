@@ -16,8 +16,24 @@ db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 exports.loadItems = function(req, res){
-    fetchMusicData(req, res, metaType);
+    db.query('SELECT * FROM albums', {
+        album 		    : String,
+        artist  	    : String,
+        year            : String,
+        cover           : String
+    },
+    function(rows) {
+        if (typeof rows !== 'undefined' && rows.length > 0){
+            getCompleteAlbumCollection(req, res, function(albums){
+                res.json(albums);
+            });
+        }else {
+            fetchMusicData(req, res, metaType);
+        }
+    });
 };
+
+
 
 exports.playTrack = function(req, res, track, album){
 	music_playback_handler.startTrackPlayback(res, track);
@@ -54,7 +70,14 @@ exports.randomTrack = function(req, res, track, album){
         },
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
-				
+				console.log(rows[0]);
+    /*
+                var randomProperty = function (obj) {
+                    var keys = Object.keys(obj)
+                    return obj[keys[ keys.length * Math.random() << 0]];
+                };
+    */
+
 				music_playback_handler.startTrackPlayback(res, track);
             }
         }
@@ -65,48 +88,56 @@ exports.randomTrack = function(req, res, track, album){
 
 
 fetchMusicData = function(req, res, metaType) {
-
-    //TODO: Make this a promise
     var count = 0;
     metafetcher.fetch(req, res, metaType, function(type){
         if(type === metaType){
-            db.query('SELECT * FROM albums', {
-                    album 		    : String,
-                    artist  	    : String,
-                    year            : String,
-                    cover           : String
-                },
-                function(rows) {
-                    if (typeof rows !== 'undefined' && rows.length > 0){
-                        var albums = [];
-
-                        count = rows.length;
-                        console.log('Found '+count+' albums, getting additional data...');
-                        rows.forEach(function(item, value){
-                            var album           = item.album
-                                , artist        = item.artist
-                                , year          = item.year
-                                , cover         = item.cover;
-
-                            getTracks(album, artist, year, cover, function(completeAlbum){
-                                albums.push(completeAlbum);
-                                count--;
-
-                                if(count === 0 ){
-                                    console.log('Sending data to client');
-                                    res.json(albums);
-                                }
-                            });
-                        });
-                    } else {
-                        console.log('Could not index any albums, please check given music collection path...');
-                    }
+            getCompleteAlbumCollection(req, res, function(albums){
+                res.json(albums);
             });
         }
     });
 }
 
-function getTracks(album, artist, year, cover, callback){
+getCompleteAlbumCollection = function (req, res, callback){
+    db.query('SELECT * FROM albums', {
+        album 		    : String,
+        artist  	    : String,
+        year            : String,
+        cover           : String
+    },
+    function(rows) {
+        if (typeof rows !== 'undefined' && rows.length > 0){
+            var albums = [];
+
+            count = rows.length;
+            console.log('Found '+count+' albums, getting additional data...');
+            rows.forEach(function(item, value){
+
+                if(item !== null && item !== undefined){
+                    var album           = item.album
+                        , artist        = item.artist
+                        , year          = item.year
+                        , cover         = item.cover;
+
+                    getTracks(album, artist, year, cover, function(completeAlbum){
+                        count--;
+                        albums.push(completeAlbum);
+
+                        if(count <= 1 ){
+                            console.log('Sending data to client');
+                            callback(albums);
+                        }
+                    });
+                }
+
+            });
+        } else {
+            console.log('Could not index any albums, please check given music collection path...');
+        }
+    });
+}
+
+getTracks = function (album, artist, year, cover, callback){
     db.query('SELECT * FROM tracks WHERE album =? ', [ album ], {
             title   : String,
             track   : String,
