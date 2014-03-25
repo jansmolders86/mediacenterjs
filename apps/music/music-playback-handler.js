@@ -43,12 +43,11 @@ startTrackStreaming = function(response, playbackPath) {
 
 	console.log('Playing track:', playbackPath .green);
 
-	response.writeHead(206, {
+	response.writeHead(200, {
 		'Connection': 'close',
 		'Content-Type': 'audio/mp3',
 		'Content-Length': end - start,
-		'Content-Range': 'bytes ' + start + '-' + end + '/' + fileStat.size,
-		'Transfer-Encoding': 'chunked'
+		'Content-Range': 'bytes ' + start + '-' + end + '/' + fileStat.size
 	});
 
 	var stream = fs.createReadStream(playbackPath);
