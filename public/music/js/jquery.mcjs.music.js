@@ -55,9 +55,11 @@
                 var random = false;
                 var album = $(this).parent().parent().find('span.title').text();
                 var currentItem = $(this).attr('title');
-				$('li.'+o.selectedClass).removeClass(o.selectedClass);
+                $('li.'+o.selectedClass).removeClass(o.selectedClass);
 				$(this).addClass(o.selectedClass);
-                _playTrack(o,currentItem, album, random);
+
+                var url = '/music/'+currentItem+'/'+album+'/play/';
+                _playTrack(o,currentItem, album, random, url);
             });
 
 
@@ -82,31 +84,22 @@
 
     function _nextTrack(o,currentItem,album){
         var random = false;
-        var url = '/music/'+currentItem+'/next';
+        var url = '/music/'+currentItem+'/'+album+'/next';
 
-        $.ajax({
-            url: url,
-            type: 'get'
-        }).done(function(data){
-            currentItem = data;
-            _playTrack(o,currentItem,album,random);
-        });
+        $('li.'+o.selectedClass).removeClass(o.selectedClass).next('li').addClass(o.selectedClass);
+        _playTrack(o,currentItem,album,random, url);
+
     }
 
     function _randomTrack(o, currentItem,album){
-        var url = '/music/'+currentItem+'/random';
+        var url = '/music/'+currentItem+'/'+album+'/random';
         var random = true;
-        $.ajax({
-            url: url,
-            type: 'get'
-        }).done(function(data){
-            currentItem = data;
-            _playTrack(o,currentItem, album,random);
-        });
+
+        _playTrack(o,currentItem, album,random, url);
     }
 
 
-    function _playTrack(o,currentItem,album,random){
+    function _playTrack(o,currentItem,album,random,url){
         if(!$('.random').length){
             $(o.playerSelector).append('<div class="random hidden">Random</div>')
         }
@@ -116,8 +109,6 @@
 
         videojs(o.playerID).ready(function(){
             var myPlayer = this;
-
-            var url = '/music/'+currentItem+'/'+album+'/play/';
 
             myPlayer.src(url);
             myPlayer.play();
@@ -129,7 +120,7 @@
                     $(this).addClass('active');
                 }
 
-                _randomTrack(o,currentItem);
+                _randomTrack(o,currentItem,album);
             });
 
             myPlayer.on("pause", function(){
@@ -149,11 +140,12 @@
             });
 
             myPlayer.on("ended", function(){
+                console.log('end!')
                 if(random === false){
                     $('.random').removeClass('active');
-                    _nextTrack(o,currentItem);
+                    _nextTrack(o,currentItem,album);
                 } else if(random === true){
-                    _randomTrack(o,currentItem);
+                    _randomTrack(o,currentItem,album);
                 }
             });
         });

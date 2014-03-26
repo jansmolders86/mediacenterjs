@@ -121,6 +121,13 @@ ul.music > li.focused .overlay{
 	border-bottom:1px solid #D9D9D9;
 }
 
+.tracks li .number{
+    display:inline-block;
+    color:#666;
+    margin-right:10px;
+    text-align: right;
+}
+
 .tracks li.even,
 .tracks li:hover,
 .tracks li.selected {background:#F7F7F7;}
@@ -178,6 +185,8 @@ li .title{display:inline-block;}
 #player.show{ visibility:visible; }
 
 
+/*** PHONE LAYOUT ***/
+
 @media only screen and (min-width: 320px) and (max-width: 529px) {
     #wrapper{padding:10px 0px;}
 
@@ -195,5 +204,12 @@ li .title{display:inline-block;}
         width:155px;
         height: 155px;
     }
+
+    .tracks{width:100%;}
+
+    ul.music > li.mcjs-rc-active{margin-left:10px;}
+    ul.music > li.mcjs-rc-active #albumInfo h2{font-size:18px;}
+
+    audio#player{width:30%!important;}
 
 }

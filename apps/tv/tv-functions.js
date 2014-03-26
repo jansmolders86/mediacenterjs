@@ -94,7 +94,7 @@ fetchTVData = function(req, res, metaType) {
 }
 
 function getEpisodes(showTitle, showBanner, showGenre, showCertification, callback){
-    db.query('SELECT * FROM tvepisodes WHERE title =? ', [ showTitle ], {
+    db.query('SELECT * FROM tvepisodes WHERE title = $title ORDER BY season', { title:showTitle }, {
             localName   : String,
             title  	    : String,
             season    	: String,

@@ -34,7 +34,7 @@ block body
                     span.showTitle(data-bind="text:title")
                     ul.episodes(data-bind="foreach: episodes")
                         li.mcjs-rc-controllable
-                            a(data-bind="text:'Episode '+$data.episode, click: $parent.playEpisode.bind($data.localName)").mcjs-rc-clickable
+                            a(data-bind="text:'Season'+$data.season +' - Episode '+$data.episode, click: $parent.playEpisode.bind($data.localName)").mcjs-rc-clickable
 
             // /ko
 

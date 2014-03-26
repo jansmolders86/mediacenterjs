@@ -842,7 +842,8 @@ table tr > th:first-child{ padding-left:0px;}
 @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
   /* For tablet landscape layouts only */
   
-}@media only screen and (min-width: 320px) and (max-width: 529px) {
+}
+@media only screen and (min-width: 320px) and (max-width: 529px) {
     /* For phone layouts only */
 
     #wrapper{padding:15px; }
@@ -850,6 +851,9 @@ table tr > th:first-child{ padding-left:0px;}
     #header h1{ font-size:28px; float:left; width:250px; padding-top:10px;}
     #dateandtime { position:absolute; right:10px; top:0px; }
 
+    .boxed{
+        width:35%;
+    }
     .tile{
         width: 155px;
         height: 165px;
@@ -858,6 +862,16 @@ table tr > th:first-child{ padding-left:0px;}
         list-style:none;
         display:none;
     }
+
+    input[type=text],
+    input[type=password],
+    select,
+    textarea{width:90%;}
+    .btn{display:block;width:90%;}
+
+    table{width:100%;}
+    table td{word-break: break-all;}
+    table .btn{font-size:11px;}
 
 }
 

@@ -222,6 +222,10 @@ select{ display:block; -webkit-appearance: none;}
     #header h1{ font-size:28px; float:left; width:250px; padding-top:10px;}
     #dateandtime { position:absolute; right:10px; top:0px; }
 
+    .boxed{
+        width:35%;
+    }
+
     .tile{
         width: 155px;
         height: 165px;

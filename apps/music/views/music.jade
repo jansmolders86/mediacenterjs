@@ -22,6 +22,7 @@ block additional_css
             visibility:visible;
             opacity:1;
         }
+        .vjs-control-bar{background-color: rgba(7,20,30,.7)!important;}
     link(rel='stylesheet', href='/music/css/style.css')
 
 block additional_scripts
@@ -56,6 +57,7 @@ block body
                 ul.tracks(data-bind="foreach: tracks")
                     li.mcjs-rc-controllable.mcjs-rc-clickable(data-bind="attr:{ title: filename}")
                         i.play.icon
+                        .number(data-bind="text:$data.track")
                         .title(data-bind="text:$data.title")
         // /ko
         

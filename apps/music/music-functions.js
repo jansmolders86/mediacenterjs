@@ -33,14 +33,12 @@ exports.loadItems = function(req, res){
     });
 };
 
-
-
 exports.playTrack = function(req, res, track, album){
 	music_playback_handler.startTrackPlayback(res, track);
 };
 
 exports.nextTrack = function(req, res, track, album){
-    db.query('SELECT * FROM tracks WHERE track IN (SELECT track FROM tracks WHERE album = ', [album], ' AND filename = ', [track], 'ORDER BY track ASC) AND filename != ', [track], {
+    db.query('SELECT * FROM tracks WHERE album = $album AND CAST(track as integer) > (SELECT track FROM tracks WHERE filename = $track) LIMIT 1 ',{album: album, track:track}, {
             title       : String,
             track       : String,
             album       : String,
@@ -53,14 +51,15 @@ exports.nextTrack = function(req, res, track, album){
             if (typeof rows !== 'undefined' && rows.length > 0){
                 var track = rows[0].filename;
 				music_playback_handler.startTrackPlayback(res, track);
+            } else {
+                console.log('error', rows)
             }
         }
     );
-    
 };
 
 exports.randomTrack = function(req, res, track, album){
-    db.query('SELECT * FROM tracks WHERE album =? ', [ album ], {
+    db.query('SELECT * FROM $album ORDER BY RANDOM() LIMIT 1 ', { album: album }, {
             title   : String,
             track   : String,
             album   : String,
@@ -70,15 +69,10 @@ exports.randomTrack = function(req, res, track, album){
         },
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
-				console.log(rows[0]);
-    /*
-                var randomProperty = function (obj) {
-                    var keys = Object.keys(obj)
-                    return obj[keys[ keys.length * Math.random() << 0]];
-                };
-    */
-
-				music_playback_handler.startTrackPlayback(res, track);
+                var track = rows[0].filename;
+                music_playback_handler.startTrackPlayback(res, track);
+            } else {
+                console.log('error', rows)
             }
         }
     );
@@ -138,7 +132,7 @@ getCompleteAlbumCollection = function (req, res, callback){
 }
 
 getTracks = function (album, artist, year, cover, callback){
-    db.query('SELECT * FROM tracks WHERE album =? ', [ album ], {
+    db.query('SELECT * FROM tracks WHERE album = $album ORDER BY track ', { album: album }, {
             title   : String,
             track   : String,
             album   : String,
