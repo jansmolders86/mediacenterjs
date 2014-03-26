@@ -298,7 +298,7 @@ specifiedPath/f/MyfavouriteMovies/fight club.avi
 MCJS will use the filenname to try to get the correct movie details. This way the server does not have to look inside the files to get the metadata, which speeds up the process.
 As you can gather the more precise the title of the movie, the better the scraper will know which movie it is.
 
-Asside from the title you can make it even easier for the scraper to recognize the movie by adding the date of release like so:
+Aside from the title you can make it even easier for the scraper to recognize the movie by adding the date of release like so:
 	
 	> 'Fight Club (1999).avi'
 	
@@ -322,22 +322,7 @@ What can the music player do?
 -------------
 
 Once you specify the location of your music, the music will look in the specified directory for mp3 files. 
-The I3d Tag will be used to determine the correct album information. If no correct ID3tag is found, the folder name will be used to determine the artist/album.
-
-Little side note, the way the ID3tag is used still needs to be improved, so compilation albums could give a mismatch.
-
-If you add an image in the directory and name it appropriately, this image will be used by the music player as the cover art.
-
-So if it is a single like a live recording or a mixtape, just add an image with exactly the same name as the mp3 in the same directory. For example:
-
-	> '01 - Giorgio Moroder - Output - Brooklyn - N.Y.C.jpg'
-	
-If you have an album, the music player will look for a image file with the following names: 
-
-	> '"cover" or "front"'
-	
-This image will be copied to the cache of MCJS so it can be used without restrictions. So you can even delete the image in the local dir and as long as you don't clear the cache, the image will be used.
-If no image is provided, the player will contact the Discogs scraper and try to get the art ther. (Although there are plans to port discogs to lastFM.)
+The I3d Tag will be used to determine the correct album information. 
 
 What is a MCJS App and how will it work?
 -------------
