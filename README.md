@@ -52,11 +52,9 @@ What currently works?
 * Device manager
 * Parental control functionality
 
-What's coming up
+What's coming up (Update)
 ==================
-* Tv show app functionality
-* Sharing playback state between devices
-* Better streaming
+* I decided to rewrite a large portion of the code. Fetching metadata will be a seperate process. This allows me to handle the data differently resulting in a faster more seamless experience. No more lazyloading and badly represented data.It also allows metadata gathering to be scheduled. This will also result in shorter, better code on front- and backend. This will take some time to get done though so bare with me. I'm developing this on a seperate branch so the master will remain stable(ish). Once this is done the TV app will work as well. Hopefully this big update will role sometime in march.
 
 Known issues: video/audio playback
 ==================
@@ -74,7 +72,7 @@ What is MediacenterJS?
 
 MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques and languages (HTML5/CSS/Javascript).
 The backend is based on Node.JS with jade templates producing easy to use code. 
-The goal is to make it possible to add an 'app' to MCJS even with limited knowledge of said front end techniques. 
+The goal is to make it possible to add an 'app' to MCJS even with limited knowledge of said frontend techniques. 
 
 Basic feature list:
 
@@ -107,18 +105,20 @@ Or download it directly from Github of course.
 Setup Windows
 -------------
 
-Install NodeJS (minimal version 0.10.x)
+* Install NodeJS (minimal version 0.10.x)
 http://nodejs.org/download/
 
-Before starting the server please download the following zip and place the contents (bin folder) in the root dir of mediacenterjs. 
+* Download MediacenterJS from this repository and unzip the contents of the zipfile in a directory of your choice.
+
+* Before doing anything else please download the following zip and place the contents (bin folder) in the root dir of mediacenterjs. 
 
 https://github.com/jansmolders86/mediacenterjs-windows-binaries/archive/master.zip
 
-After you have downloaded MediacenterJS binaries and placed them in the root of the folder, click on the .bat file (mediacenterjs.bat) to start the project. 
+* After you have downloaded MediacenterJS binaries and placed them in the root of the folder, click on the .bat file (mediacenterjs.bat) to start the project. 
 
 If you close this window, MCJS will stop working. You can also see useful information about what the server is doing, including error messages and other useful information.
 
-Setup Ubuntu 13.x/ Mint 15 / Debian Weezy / OSX
+Setup Ubuntu 13.x/ Mint 15 / Debian Weezy
 -------------
 
 please paste the following commands in your terminal:
@@ -169,8 +169,22 @@ hash -r
 ```
 
 For more information and troubleshooting: https://trac.ffmpeg.org/wiki/UbuntuCompilationGuide
-	
 
+Setup in OSX
+--------------------
+Use Homebrew to install ffmpeg. Install Homebrew from here (http://brew.sh/)	
+```sh
+ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+sudo chown -R $USER:admin /usr/local  (Homebrew can create syslinks)
+
+brew options ffmpeg ( shows additional options)
+brew install ffmpeg --with-fdk-aac --with-ffplay --with-freetype --with-frei0r --with-libass 
+--with-libvo-aacenc --with-libvorbis --with-libvpx --with-opencore-amr --with-openjpeg
+ --with-opus --with-rtmpdump --with-schroedinger --with-speex --with-theora --with-tools
+```
+
+Install MediaCenterJs 
+-----------------------
 If you use a Git clone of MediacenterJS please use:
 
 ```sh
@@ -178,6 +192,7 @@ sudo apt-get install git # If you do not have git installed yet
 git clone https://github.com/jansmolders86/mediacenterjs.git
 cd mediacenterjs
 npm install
+node server
 ```
 
 If you want to use NPM to install MediacenterJS use:
@@ -455,10 +470,12 @@ This app makes heavy use of:
 * Ionică Bizău https://github.com/IonicaBizau for the [Youtube API NPM module](https://github.com/IonicaBizau/youtube-api)
 * Luis Eduardo Brito https://github.com/luiseduardobrito for his Portuguese translation
 * Kasper Isager https://github.com/kasperisager for his Danish translation
+* Robin Larsson	https://github.com/TankMasterRL for his Swedish translation
 * Jussi Vatjus https://github.com/jupe for his code support
 * Terry MooreII https://github.com/TerryMooreII For the Javascript Jabber app and building the Plugin manager
 * Stefan Hoffman https://github.com/hoffi for his hudge contribution to the backend and German translation 
 * Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
+* Matthew Marino https://github.com/Karnith for his FFMPEG expertise
 * Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
 * Lucien Immink https://github.com/lucienimmink for his javascript knowledge/support
 * P.J. Onori for his icons
