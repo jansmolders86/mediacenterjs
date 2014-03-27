@@ -46,16 +46,34 @@ function cleanUp(output, dir) {
     var rimraf = require('rimraf');
     rimraf(dir, function (e) {
         if(e) {
-            console.log('Error removing module', e .red);
+            console.log('Error cleaning temp update folder', e .red);
         }
     });
 
-    if(fs.existsSync(output) === true){
-        fs.unlinkSync(output);
-        console.log('Done, restarting server...')
-        server.update = false;
-        server.start();
-    }
+    console.log('Install dependencies...');
+    var exec = require('child_process').exec
+        , child = exec('npm install', { maxBuffer: 9000*1024 }, function(err, stdout, stderror) {
+            if (err) {
+                console.log('Metadata fetcher error: ',err) ;
+            }
+        });
+
+    child.stdout.on('data', function(data) {
+        console.log(data.toString());
+    });
+    child.stderr.on('data', function(data) {
+        console.log(data.toString());
+    });
+
+    child.on('exit', function() {
+        console.log('Done installing dependencies...');
+        if(fs.existsSync(output) === true){
+            fs.unlinkSync(output);
+            console.log('Update complete, restarting server...')
+            server.update = false;
+            server.start();
+        }
+    });
 }
 
 server = {
@@ -125,7 +143,3 @@ server = {
 }
 
 server.start();
-
-
-
-

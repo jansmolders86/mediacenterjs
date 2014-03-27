@@ -1,6 +1,6 @@
 {
     "name": "mediacenterjs",
-    "version": "0.0.53",
+    "version": "0.0.60",
     "description": "A NodeJS based mediacenter for your browser",
     "homepage": "http://www.mediacenterjs.com",
     "author": {
@@ -70,6 +70,7 @@
         "adm-zip"           : "0.4.3",
         "wget"              : ">=0.0.1",
         "socket.io"         : "~0.9.16",
-        "youtube-api"       : "~0.2.2"
+        "youtube-api"       : "~0.2.2",
+        "lastfmapi"         : "~0.0.5"
     }
 }

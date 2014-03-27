@@ -41,8 +41,7 @@ exports.index = function(req, res){
 
 exports.get = function(req, res){
 	var infoRequest = req.params.id,
-		optionalParam = req.params.optionalParam,
-		platform = req.params.action;
+		optionalParam = req.params.optionalParam;
 	
 	if(infoRequest === 'filter') {
 		functions.filter(req, res, optionalParam);
@@ -53,38 +52,15 @@ exports.get = function(req, res){
 				functions.getGenres(req, res);
 				break;
 			case('loadItems'):
-				functions.loadItems(req,res);
+                functions.loadItems(req, res);
 				break;
 		}	
 	}
 
-    if(!platform){
-        switch(optionalParam) {
-            case('info'):
-                var movieName = infoRequest.replace(/\+/g, " ");
-                functions.handler(req, res, infoRequest);
-                break;
-        }
+    if(optionalParam === 'play'){
+        var movieTitle = infoRequest.replace(/\+/g, " ");
+        functions.playMovie(req, res, movieTitle);
     }
-    
-    
-    if(platform !== undefined && optionalParam === 'play'){
-        switch(platform) {
-            case('browser'):
-                var movieName = infoRequest.replace(/\+/g, " ");
-                console.log('Incomming playback request for', movieName);
-                functions.playMovie(req, res, platform, movieName);
-            break;
-            case('ios'):
-                functions.playMovie(req, res, platform, infoRequest);
-            break;
-            case('android'):
-                var movieName = infoRequest.replace(/\+/g, " ");
-                functions.playMovie(req, res, platform, infoRequest);
-            break;
-        }
-    }
-    
 };
 
 

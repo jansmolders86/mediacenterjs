@@ -19,9 +19,8 @@ var colors = require('colors')
  * @param response          The response to write the video stream to
  * @param movieUrl          The URL to the Movie
  * @param movieFile         The Movie-File
- * @param platform          The target platform
  */
-exports.startPlayback = function(response, movieUrl, movieFile, platform) {
+exports.startPlayback = function(response, movieUrl, movieFile) {
 
     var fileName =  movieFile.replace(/\.[^.]*$/,'')
         , outputName =  fileName.replace(/ /g,"-")
@@ -33,7 +32,7 @@ exports.startPlayback = function(response, movieUrl, movieFile, platform) {
 		ExecConfig = {  maxBuffer: 9000*1024, env: process.env.ffmpegPath };
 	}
 
-    GetMovieDurarion(response, movieUrl, movieFile, platform, function(data){
+    GetMovieDurarion(response, movieUrl, movieFile, function(data){
         var movieDuration = data;
         checkProgression(movieFile, function(data){
             if(data.progression !== 0 && data !== undefined){
@@ -41,7 +40,7 @@ exports.startPlayback = function(response, movieUrl, movieFile, platform) {
 
                 if(fs.existsSync(outputPath) === false || data.transcodingstatus === 'pending'){
                     // Start transcode if file was deleted.
-                    startTranscoding(platform, movieUrl, movieFile, outputPath, ExecConfig);
+                    startTranscoding(movieUrl, movieFile, outputPath, ExecConfig);
                 };
 
             } else {
@@ -51,12 +50,11 @@ exports.startPlayback = function(response, movieUrl, movieFile, platform) {
                     if(fs.existsSync(outputPath) === true ){
                         fs.unlinkSync(outputPath);
                     };
-                    startTranscoding(platform, movieUrl, movieFile, outputPath, ExecConfig);
+                    startTranscoding(movieUrl, movieFile, outputPath, ExecConfig);
                 }
             }
 
             var movieInfo = {
-                'platform': platform,
                 'duration': movieDuration,
                 'progression': movieProgression
             }
@@ -69,7 +67,7 @@ exports.startPlayback = function(response, movieUrl, movieFile, platform) {
 
 /* Private Methods */
 
-GetMovieDurarion = function(response, movieUrl, movieFile, platform, callback) {
+GetMovieDurarion = function(response, movieUrl, movieFile, callback) {
 	var probe = require('node-ffprobe');
 	probe(movieUrl, function(err, probeData) {
         if(!err){
@@ -79,7 +77,7 @@ GetMovieDurarion = function(response, movieUrl, movieFile, platform, callback) {
                 callback(data);
             } else {
                 console.log('Falling back to IMDB runtime information' .blue);
-                getDurationFromDatabase(movieFile, platform, function(data){
+                getDurationFromDatabase(movieFile, function(data){
                     if(data !== null){
                         callback(data);
                     } else{
@@ -99,7 +97,7 @@ GetMovieDurarion = function(response, movieUrl, movieFile, platform, callback) {
 
 };
 
-getDurationFromDatabase = function(movieFile, platform, callback) {
+getDurationFromDatabase = function(movieFile, callback) {
 	var original_title =  movieFile.replace(/(avi|mkv|mpeg|mpg|mov|mp4|wmv)$/,"")
 
 	db.query('SELECT * FROM movies WHERE original_name =? ', [ original_title ], {
@@ -152,9 +150,9 @@ checkProgression = function(movieFile, callback) {
 }
 
 
-startTranscoding = function(platform, movieUrl, movieFile, outputPath, ExecConfig){
+startTranscoding = function(movieUrl, movieFile, outputPath, ExecConfig){
 
-    var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -sc_threshold 0 -s 1280x720 -profile:v baseline -keyint_min 150 -deinterlace -maxrate 10000000 -bufsize 10000000 -b 1200k -acodec aac -ar 48000 -ab 192k -strict experimental -movflags +frag_keyframe+empty_moov '+outputPath
+    var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -sc_threshold 0 -s 1280x720 -profile:v baseline -keyint_min 150 -deinterlace -maxrate 10000000 -bufsize 10000000 -b 1200k -acodec aac -ar 48000 -ab 192k -strict experimental -movflags +frag_keyframe+empty_moov '+outputPath;
     var exec = require('child_process').exec
     , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
         if (err) {
@@ -168,4 +166,5 @@ startTranscoding = function(platform, movieUrl, movieFile, outputPath, ExecConfi
 
     child.stdout.on('data', function(data) { console.log(data.toString()); });
     child.stderr.on('data', function(data) { console.log(data.toString()); });
+    child.on('exit', function() {  console.error('Child process exited'); });
 }

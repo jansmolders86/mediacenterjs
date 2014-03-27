@@ -3,11 +3,11 @@ var fs = require('fs.extra')
 	, file_utils = require('../../lib/utils/file-utils')
 	, colors = require('colors')
 	, os = require('os')
-    , metadata_fetcher = require('./metadata-fetcher')
+    , path = require('path')
+    , metafetcher = require('../../lib/utils/metadata-fetcher')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
-/* Constants */
-var SUPPORTED_FILETYPES = new RegExp("(avi|mkv|mpeg|mov|mp4|wmv)$","g");
+var metaType = "tv";
 
 var dblite = require('dblite')
 if(os.platform() === 'win32'){
@@ -20,41 +20,20 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 //Create tables
 db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
 
-exports.loadItems = function (req, res){
-	file_utils.getLocalFiles(config.tvpath, SUPPORTED_FILETYPES, function(err, files) {
-		var tvShows = [];
-		for(var i = 0, l = files.length; i < l; ++i){
-			var tvShowFiles = files[i].file;
-			var tvShowTitles = tvShowFiles.substring(tvShowFiles.lastIndexOf("/")).replace(/^\/|\/$/g, '');
 
-			//single
-			if(tvShowTitles === '' && files[i].file !== undefined){
-				tvShowTitles = files[i].file;
-			}
-
-			tvShows.push(tvShowTitles.split("/").pop());
-		}
-
-		res.json(tvShows);
-	});
+exports.loadTvShow = function (req, res){
+    fetchTVData(req, res, metaType);
 };
 
-exports.handler = function (req, res, tvShowRequest){
-	console.log('Searching for ' + tvShowRequest + ' in database');
 
-	metadata_fetcher.fetchMetadataForTvShow(tvShowRequest, function(metadata) {
-		res.json(metadata);
-	});
-};
-
-exports.playtvShow = function (req, res, platform, tvShowRequest){
+exports.playEpisode = function (req, res, tvShowRequest){
     file_utils.getLocalFile(config.tvpath, tvShowRequest, function(err, file) {
         if (err) console.log(err .red);
         if (file) {
             var tvShowUrl = file.href
             , tvShow_playback_handler = require('./tv-playback-handler');
 
-            tvShow_playback_handler.startPlayback(res, tvShowUrl, tvShowRequest, platform);
+            tvShow_playback_handler.startPlayback(res, tvShowUrl, tvShowRequest);
 
         } else {
             console.log("File " + tvShowRequest + " could not be found!" .red);
@@ -71,3 +50,72 @@ exports.sendState = function (req, res){
     db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)', [tvShowTitle, progression, transcodingstatus]);
 };
 
+
+/** Private functions **/
+
+fetchTVData = function(req, res, metaType) {
+
+    //TODO: Make this a promise
+    var count = 0;
+    metafetcher.fetch(req, res, metaType, function(type){
+        if(type === metaType){
+            db.query('SELECT * FROM tvshows',{
+                title 		    : String,
+                banner        	: String,
+                genre         	: String,
+                certification  	: String
+            }, function(rows) {
+                if (typeof rows !== 'undefined' && rows.length > 0){
+                    var ShowList = [];
+
+                    count = rows.length;
+                    console.log('Found '+count+' shows, getting additional data...')
+                    rows.forEach(function(item, value){
+                        var showTitle       = item.title
+                        , showBanner        = item.banner
+                        , showGenre         = item.genre
+                        , showCertification = item.certification;
+
+                        getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
+                            ShowList.push(availableEpisodes);
+                            count--;
+
+                            if(count === 0 ){
+                                res.json(ShowList);
+                            }
+                        });
+                    });
+                } else {
+                    console.log('Could not index any tv shows, please check given movie collection path...');
+                }
+            });
+        }
+    });
+}
+
+function getEpisodes(showTitle, showBanner, showGenre, showCertification, callback){
+    db.query('SELECT * FROM tvepisodes WHERE title = $title ORDER BY season asc', { title:showTitle }, {
+            localName   : String,
+            title  	    : String,
+            season    	: Number,
+            episode  	: Number
+        },
+        function(rows) {
+            if (typeof rows !== 'undefined' && rows.length > 0){
+
+                var episodes = rows;
+
+                var availableEpisodes = {
+                    "title"         : showTitle,
+                    "banner"        : showBanner,
+                    "genre"         : showGenre,
+                    "certification" : showCertification,
+                    "episodes"      : episodes
+                }
+
+                callback(availableEpisodes);
+
+            }
+        }
+    );
+}

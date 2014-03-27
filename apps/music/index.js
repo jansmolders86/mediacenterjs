@@ -44,8 +44,19 @@ exports.get = function(req, res, next){
 	} else if (!optionalParam){
 		//Do nothing
 		return;
-	} else  if(action === 'play') {
-		var albumTitle = infoRequest.replace(/\+/g, " ");
-		functions.playTrack(req, res, albumTitle, optionalParam);
-	};
+	} else {
+        var track = infoRequest.replace(/\+/g, " ");
+        var album = optionalParam.replace(/\+/g, " ");
+        switch(action) {
+            case('play'):
+                functions.playTrack(req, res, track, album);
+            break;
+            case('next'):
+                functions.nextTrack(req, res, track, album);
+            break;
+            case('random'):
+                functions.randomTrack(req, res, track, album);
+            break;
+        }
+    }
 }

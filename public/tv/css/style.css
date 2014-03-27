@@ -23,6 +23,7 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 #header h1{z-index:4; margin-top:0px;}
 a.backlink { margin-top: 0px; z-index:4; }
 
+h2.loading{top:30px;}
 #wrapper {margin-top:60px;}
 
 #tvshowbrowser{ width:100%; height:100%; margin:0;}
@@ -42,23 +43,8 @@ a.backlink { margin-top: 0px; z-index:4; }
 	display: block;
 	position: relative;
 	width:780px;
-	min-height:1000px;
+	min-height:500px;
 	overflow:hidden;
-}
-
-.tvposter .overlay{ width:0; height:0; }
-
-.tvposter.showDetails.focused .overlay,
-.tvposter.showDetails:hover .overlay{
-	background:url(img/cover-overlay.png) no-repeat;
-    height:140px;
-    width:758px;
-	position:absolute;
-	top:0;
-	left:0;
-	z-index:6;
-	cursor:pointer;
-	border-radius:2px;
 }
 
 .tvposter img{
@@ -83,7 +69,7 @@ span.title{visibility:hidden; width:0; height:0;}
 
 .tvposter{
 	float:left;
-    height:140px;
+    min-height:140px;
     width:758px;
 	list-style:none;
 	z-index:99;
@@ -91,7 +77,6 @@ span.title{visibility:hidden; width:0; height:0;}
 	padding: 0px;
 	margin: 0px 10px 20px 0;
     border: 1px solid #e7e7e7;
-    border-radius:2px;
 	display:block;
 	background:#fff;
 	-webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
@@ -124,6 +109,23 @@ span.title{visibility:hidden; width:0; height:0;}
 }
 .specs p{font-size:12px; float:left; margin:10px 0 0 9px;}
 
+.episodes{
+    width:100%;
+    clear:both;
+    margin-bottom:20px;
+}
+
+.episodes li{
+    padding:10px;
+    margin:0;
+    position: relative;
+    overflow: hidden;
+}
+
+.episodes li:hover,
+.episodes li.focus{
+    background:#f1f1f1;
+}
 
 /*
 
@@ -141,3 +143,23 @@ span.title{visibility:hidden; width:0; height:0;}
 	padding:3px 5px;
 }
 */
+
+
+
+/*** PHONE LAYOUT ***/
+
+@media only screen and (min-width: 320px) and (max-width: 529px) {
+    #wrapper{padding:10px 0px;}
+
+
+    .tvshows{
+        width:100%;
+    }
+
+    .tvposter{
+        width:100%;
+        min-height:100px;
+    }
+
+    .tvposter .imageWrapper { height:140px; width:100%; overflow:hidden;}
+}

@@ -4,10 +4,10 @@ var fs = require('fs.extra')
 	, app_cache_handler = require('../../lib/handlers/app-cache-handler')
 	, colors = require('colors')
 	, os = require('os')
+    , metafetcher = require('../../lib/utils/metadata-fetcher')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
-/* Constants */
-var SUPPORTED_FILETYPES = new RegExp("(avi|mkv|mpeg|mov|mp4|wmv)$","g");
+var metaType = "movie";
 
 var dblite = require('dblite')
 if(os.platform() === 'win32'){
@@ -17,50 +17,23 @@ var db = dblite('./lib/database/mcjs.sqlite');
 db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
+
 exports.loadItems = function (req, res){
-	file_utils.getLocalFiles(config.moviepath, SUPPORTED_FILETYPES, function(err, files) {
- 
-		var movies = [];
-		for(var i = 0, l = files.length; i < l; ++i){
-			var movieFiles = files[i].file;
-			var movieTitles = movieFiles.substring(movieFiles.lastIndexOf("/")).replace(/^\/|\/$/g, '');
-
-			//single
-			if(movieTitles === '' && files[i].file !== undefined){
-				movieTitles = files[i].file;
-			}
-
-			movies.push(movieTitles.split("/").pop());
-		}
-		res.json(movies);
-	});
+    getData(req, res, metaType);
 };
 
-exports.playMovie = function (req, res, platform, movieRequest){
- 
-	file_utils.getLocalFile(config.moviepath, movieRequest, function(err, file) {
+exports.playMovie = function (req, res, movieTitle){
+	file_utils.getLocalFile(config.moviepath, movieTitle, function(err, file) {
 		if (err) console.log(err .red);
 		if (file) {
 			var movieUrl = file.href
 			, movie_playback_handler = require('./movie-playback-handler');
 			
-			movie_playback_handler.startPlayback(res, movieUrl, movieRequest, platform);
+			movie_playback_handler.startPlayback(res, movieUrl, movieTitle);
     
 		} else {
-			console.log("File " + movieRequest + " could not be found!" .red);
+			console.log("File " + movieTitle + " could not be found!" .red);
 		}
-	});
-
-};
-
-exports.handler = function (req, res, movieRequest){
-	//Modules
-	var downloader = require('downloader');
-	var metadata_fetcher = require('./metadata-fetcher');
-
-	console.log('Searching for ' + movieRequest + ' in database');
-	metadata_fetcher.fetchMetadataForMovie(movieRequest, function(metadata) {
-		res.json(metadata);
 	});
 };
 
@@ -93,3 +66,33 @@ exports.sendState = function (req, res){
     db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)', [movieTitle, progression, transcodingstatus]);
 }
 
+
+/** Private functions **/
+
+getData = function(req, res, metaType) {
+    metafetcher.fetch(req, res, metaType, function(type){
+        if(type === metaType){
+			
+            db.query('SELECT * FROM movies',{
+                original_name  	: String,
+                title 		    : String,
+                poster_path  	: String,
+                backdrop_path  	: String,
+                imdb_id  		: String,
+                rating  		: String,
+                certification  	: String,
+                genre  			: String,
+                runtime  		: String,
+                overview  		: String,
+                cd_number  		: String,
+                adult           : String
+            }, function(rows) {
+                if (typeof rows !== 'undefined' && rows.length > 0){
+                    res.json(rows);
+                } else {
+                    console.log('Could not index any movies, please check given movie collection path');
+                }
+            });
+        }
+    });
+}

@@ -28,15 +28,13 @@ var express = require('express')
 , functions = require('./tv-functions');
 
 exports.index = function(req, res){
-
     DeviceInfo.isDeviceAllowed(req, function(allowed){
-        res.render('tv', {
-            title: 'tv',
+        res.render('tvshows', {
+            title: 'tvshows',
             selectedTheme: config.theme,
             allowed: allowed
         });
     });
-
 };
 
 exports.get = function(req, res){
@@ -46,33 +44,13 @@ exports.get = function(req, res){
 
     if (!optionalParam) {
         if(infoRequest === 'loadItems') {
-            functions.loadItems(req,res);
+            functions.loadTvShow(req, res);
         }
 	}
 
-    if(!platform){
-        if(optionalParam === 'info') {
-            var tvShowName = infoRequest.replace(/\+/g, " ");
-            functions.handler(req, res, infoRequest);
-        }
-    }
-    
-    
-    if(platform !== undefined && optionalParam === 'play'){
-        switch(platform) {
-            case('browser'):
-                var tvShowName = infoRequest.replace(/\+/g, " ");
-                console.log('Incomming playback request for', tvShowName);
-                functions.playMovie(req, res, platform, tvShowName);
-            break;
-            case('ios'):
-                functions.playMovie(req, res, platform, infoRequest);
-            break;
-            case('android'):
-                var tvShowName = infoRequest.replace(/\+/g, " ");
-                functions.playMovie(req, res, platform, infoRequest);
-            break;
-        }
+    if(optionalParam === 'play'){
+        var episode = infoRequest.replace(/\+/g, " ");
+        functions.playEpisode(req, res,episode);
     }
     
 };
