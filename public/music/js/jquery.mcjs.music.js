@@ -84,7 +84,7 @@
 
     function _nextTrack(o,currentItem,album){
         var random = false;
-        var activeItem = $('li.'+o.selectedClass).attr('title');
+        var activeItem = $('li.'+o.selectedClass+':first').attr('title');
         var url = '/music/'+activeItem+'/'+album+'/next';
 
         $('li.'+o.selectedClass).removeClass(o.selectedClass).next('li').addClass(o.selectedClass);
