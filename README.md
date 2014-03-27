@@ -93,12 +93,15 @@ A complete documentation will be available when the project reaches Beta status.
 # User manual
 
 [Installing MediacenterJS:](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:---installing-MediacenterJS)
+
 [Guidelines media library:](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:-Guidelines-media-library)
+
 [Using the remote control:](https://github.com/jansmolders86/mediacenterjs/wiki/User-Manual:-Using-the-remote-control)
 
 # Developer manual
 
 [Explanation app framework:](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-app-framework)
+
 [Start building an app using the app generator:](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Start-building-an-app-using-the-app-generator)
 
 Translations
