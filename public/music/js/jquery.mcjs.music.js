@@ -84,10 +84,11 @@
 
     function _nextTrack(o,currentItem,album){
         var random = false;
-        var url = '/music/'+currentItem+'/'+album+'/next';
+        var activeItem = $('li.'+o.selectedClass).attr('title');
+        var url = '/music/'+activeItem+'/'+album+'/next';
 
         $('li.'+o.selectedClass).removeClass(o.selectedClass).next('li').addClass(o.selectedClass);
-        _playTrack(o,currentItem,album,random, url);
+        _playTrack(o,activeItem,album,random, url);
 
     }
 
@@ -142,6 +143,7 @@
             myPlayer.on("ended", function(){
                 if(random === false){
                     $('.random').removeClass('active');
+
                     _nextTrack(o,currentItem,album);
                 } else if(random === true){
                     _randomTrack(o,currentItem,album);

@@ -19,15 +19,16 @@ exports.loadItems = function(req, res){
     db.query('SELECT * FROM albums', {
         album 		    : String,
         artist  	    : String,
-        year            : String,
+        year            : Number,
         cover           : String
     },
     function(rows) {
-        if (typeof rows !== 'undefined' && rows.length > 0){
-            getCompleteAlbumCollection(req, res, function(albums){
+        var albumCount = Object.keys(rows).length;
+        if(albumCount > 0){
+            getCompleteAlbumCollection(req, res, function (albums) {
                 res.json(albums);
             });
-        }else {
+        }else{
             fetchMusicData(req, res, metaType);
         }
     });
@@ -38,7 +39,10 @@ exports.playTrack = function(req, res, track, album){
 };
 
 exports.nextTrack = function(req, res, track, album){
-    db.query('SELECT * FROM tracks WHERE album = $album AND CAST(track as integer) > (SELECT track FROM tracks WHERE filename = $track) LIMIT 1 ',{album: album, track:track}, {
+
+    var currentTrack = track;
+    console.log('Previous',currentTrack);
+    db.query('SELECT * FROM tracks WHERE album = $album AND CAST(track as integer) > (SELECT track FROM tracks WHERE filename = $track) LIMIT 1 ',{album: album, track:currentTrack}, {
             title       : String,
             track       : Number,
             album       : String,
@@ -49,8 +53,14 @@ exports.nextTrack = function(req, res, track, album){
         },
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
-                var track = rows[0].filename;
-				music_playback_handler.startTrackPlayback(res, track);
+                var nextTrack = rows[0].filename;
+                if(currentTrack === nextTrack){
+                    return;
+                } else{
+                    console.log('NextTrack',nextTrack);
+                    music_playback_handler.startTrackPlayback(res, nextTrack);
+                }
+
             } else {
                 console.log('error', rows)
             }
