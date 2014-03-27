@@ -8,7 +8,7 @@ Website: http://www.mediacenterjs.com
 Status: 
 =======
 
-__Heavy work in progress, Alpha version (0.0.53)__
+__Heavy work in progress__
 
 __version 0.0.53__
 
@@ -92,17 +92,17 @@ A complete documentation will be available when the project reaches Beta status.
 
 # User manual
 
-[Installing MediacenterJS:](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:---installing-MediacenterJS)
+[Installing MediacenterJS](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:---installing-MediacenterJS)
 
-[Guidelines media library:](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:-Guidelines-media-library)
+[Guidelines media library](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:-Guidelines-media-library)
 
-[Using the remote control:](https://github.com/jansmolders86/mediacenterjs/wiki/User-Manual:-Using-the-remote-control)
+[Using the remote control](https://github.com/jansmolders86/mediacenterjs/wiki/User-Manual:-Using-the-remote-control)
 
 # Developer manual
 
-[Explanation app framework:](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-app-framework)
+[Explanation app framework](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-app-framework)
 
-[Start building an app using the app generator:](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Start-building-an-app-using-the-app-generator)
+[Start building an app using the app generator](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Start-building-an-app-using-the-app-generator)
 
 Translations
 -------------
