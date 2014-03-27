@@ -140,7 +140,6 @@
             });
 
             myPlayer.on("ended", function(){
-                console.log('end!')
                 if(random === false){
                     $('.random').removeClass('active');
                     _nextTrack(o,currentItem,album);

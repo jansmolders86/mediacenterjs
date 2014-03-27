@@ -40,10 +40,10 @@ exports.playTrack = function(req, res, track, album){
 exports.nextTrack = function(req, res, track, album){
     db.query('SELECT * FROM tracks WHERE album = $album AND CAST(track as integer) > (SELECT track FROM tracks WHERE filename = $track) LIMIT 1 ',{album: album, track:track}, {
             title       : String,
-            track       : String,
+            track       : Number,
             album       : String,
             artist      : String,
-            year        : String,
+            year        : Number,
             filename    : String,
 			filepath	: String
         },
@@ -61,10 +61,10 @@ exports.nextTrack = function(req, res, track, album){
 exports.randomTrack = function(req, res, track, album){
     db.query('SELECT * FROM $album ORDER BY RANDOM() LIMIT 1 ', { album: album }, {
             title   : String,
-            track   : String,
+            track   : Number,
             album   : String,
             artist  : String,
-            year    : String,
+            year    : Number,
             filename: String
         },
         function(rows) {
@@ -96,7 +96,7 @@ getCompleteAlbumCollection = function (req, res, callback){
     db.query('SELECT * FROM albums', {
         album 		    : String,
         artist  	    : String,
-        year            : String,
+        year            : Number,
         cover           : String
     },
     function(rows) {
@@ -132,12 +132,12 @@ getCompleteAlbumCollection = function (req, res, callback){
 }
 
 getTracks = function (album, artist, year, cover, callback){
-    db.query('SELECT * FROM tracks WHERE album = $album ORDER BY track ', { album: album }, {
+    db.query('SELECT * FROM tracks WHERE album = $album ORDER BY track asc ', { album: album }, {
             title   : String,
-            track   : String,
+            track   : Number,
             album   : String,
             artist  : String,
-            year    : String,
+            year    : Number,
             filename: String
         },
         function(rows) {
