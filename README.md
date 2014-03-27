@@ -10,7 +10,7 @@ Status:
 
 __Heavy work in progress__
 
-__version 0.0.53__
+__version 0.0.60__
 
 * Improved remote control/keyboard accesibility 
 * Improved music App code
