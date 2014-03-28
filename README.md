@@ -61,14 +61,8 @@ What is MediacenterJS?
 =========================
 
 MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques and languages (HTML5/CSS/Javascript).
-The backend is based on Node.JS with jade templates producing easy to use code. 
-The goal is to make it possible to add an 'app' to MCJS even with limited knowledge of said frontend techniques. 
+The backend is based on Node.JS with jade templates producing easy to use code allowing developers to add an 'app' to MCJS even with limited knowledge of said frontend techniques. 
 
-Basic feature list:
-
-* Multiple apps like YouTube, weather, Spotify etc.
-* Movie, tv and music database with information and playback
-* Easy to use app framework
 
 What do I need to have installed? 
 ==========================
