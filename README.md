@@ -28,14 +28,11 @@ Current features:
 * Basic keyboard controls
 * Movie indexing
 * Multi-language support
-* Display movies with Poster, Backdrop and information 
+* Display movies, tvshow and music information 
 * Local caching of information and images
-* Transcoding and playback of movies and music
+* Transcoding and playback of movies, tv shows and music
 * Weather information based on location
-* Basic transcoding of movies and music
-* Retrieving of tv show information
 * Basic screensaver
-* Lazy loading of movie and music items
 * I3d tag support
 * Remote control
 * Plugin manager
