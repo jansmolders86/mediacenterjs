@@ -21,32 +21,13 @@ exports.get = function(req, res, next){
 	, optionalParam = req.params.optionalParam
 	, action = req.params.action;
 	
-	if (optionalParam === undefined){
-		switch(infoRequest) {
-			case('loadItems'):
-				functions.loadItems(req,res);
-			default:
-				return;
-			break;		
-		}	
+	if (infoRequest == 'loadItems'){
+		functions.loadItems(req,res);
 	}
 	
-	if(!action){
-		switch(optionalParam) {
-			case('info'):
-                var musicName = infoRequest.replace(/\+/g, " ");
-				functions.getInfo(req, res, musicName);
-			break;	
-			case('loadItems'):
-				functions.loadItems(req,res);
-			break;	
-		}
-	} else if (!optionalParam){
-		//Do nothing
-		return;
-	} else {
-        var track = infoRequest.replace(/\+/g, " ");
-        var album = optionalParam.replace(/\+/g, " ");
+	if(action){
+		var track = infoRequest.replace(/\+/g, " ");
+		var album = optionalParam.replace(/\+/g, " ");
         switch(action) {
             case('play'):
                 functions.playTrack(req, res, track, album);

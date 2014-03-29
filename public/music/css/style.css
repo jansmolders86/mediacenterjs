@@ -130,8 +130,8 @@ ul.music > li.focused .overlay{
 
 .tracks li.even,
 .tracks li:hover,
-.tracks li.selected {background:#F7F7F7;}
-.tracks li.selected .eq{visibility:visible;}
+.tracks li.selected:last-child{background:#F7F7F7;}
+.tracks li.selected:last-child .eq{visibility:visible;}
 
 #albumInfo{
 	position:relative;

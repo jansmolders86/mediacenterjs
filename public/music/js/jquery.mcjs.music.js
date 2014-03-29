@@ -84,12 +84,9 @@
 
     function _nextTrack(o,currentItem,album){
         var random = false;
-        var activeItem = $('li.'+o.selectedClass+':first').attr('title');
+        var activeItem = $('li.'+o.selectedClass+':last').attr('title');
         var url = '/music/'+activeItem+'/'+album+'/next';
-
-        $('li.'+o.selectedClass).removeClass(o.selectedClass).next('li').addClass(o.selectedClass);
         _playTrack(o,activeItem,album,random, url);
-
     }
 
     function _randomTrack(o, currentItem,album){

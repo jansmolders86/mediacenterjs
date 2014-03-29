@@ -44,10 +44,13 @@ if(config.language === ""){
 	language = config.language;
 }
 
-console.log = function(d) { //
-  log_file.write(util.format(d) + '\n');
-  log_stdout.write(util.format(d) + '\n');
+var log_file = fs.createWriteStream(__dirname + '/log.log', {flags : 'w', encoding: 'utf-8'});
+var log_stdout = process.stdout;
+/*console.log = function(d) {
+  log_file.write(d.toString()+ "\n");
+  log_stdout.write(d.toString()+ "\n");
 };
+*/
 
 /*Create database*/
 if(fs.existsSync('./lib/database/') === false){
@@ -60,9 +63,6 @@ if(fs.existsSync('./lib/database/mcjs.sqlite') === false){
     fs.openSync('./lib/database/mcjs.sqlite', 'w');
     fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
 }
-
-var log_file = fs.createWriteStream(__dirname + '/log.log', {flags : 'w', encoding: 'utf-8'});
-var log_stdout = process.stdout;
 
 process.env.NODE_ENV = 'development';
 
@@ -364,10 +364,10 @@ app.set('port', process.env.PORT || 3000);
 // Open App socket
 if (config.port == "" || config.port == undefined ){
 	var defaultPort = app.get('port');
-	console.log('First run, Setup running on localhost:' + defaultPort);
+	console.log('First run, Setup running on localhost:' + defaultPort + "\n");
 	app.listen(parseInt(defaultPort));
 } else{
-	var message = "MediacenterJS listening on port:" + config.port;
+	var message = "MediacenterJS listening on port:" + config.port + "\n";
 	console.log(message.green.bold);
 	app.listen(parseInt(config.port));
 }

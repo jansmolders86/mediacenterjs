@@ -4,8 +4,6 @@ var file_utils = require('../../lib/utils/file-utils')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration()
 	, music_playback_handler = require('./music-playback-handler'); 
 
-var metaType = "music";
-
 // Init Database
 var dblite = require('dblite')
 if(os.platform() === 'win32'){
@@ -24,13 +22,7 @@ exports.loadItems = function(req, res){
     },
     function(rows) {
         var albumCount = Object.keys(rows).length;
-        if(albumCount > 0){
-            getCompleteAlbumCollection(req, res, function (albums) {
-                res.json(albums);
-            });
-        }else{
-            fetchMusicData(req, res, metaType);
-        }
+        fetchMusicData(req, res);
     });
 };
 
@@ -39,9 +31,8 @@ exports.playTrack = function(req, res, track, album){
 };
 
 exports.nextTrack = function(req, res, track, album){
-
+	console.log('track', track)
     var currentTrack = track;
-    console.log('Previous',currentTrack);
     db.query('SELECT * FROM tracks WHERE album = $album AND CAST(track as integer) > (SELECT track FROM tracks WHERE filename = $track) LIMIT 1 ',{album: album, track:currentTrack}, {
             title       : String,
             track       : Number,
@@ -91,54 +82,55 @@ exports.randomTrack = function(req, res, track, album){
 /** Private functions **/
 
 
-fetchMusicData = function(req, res, metaType) {
+fetchMusicData = function(req, res) {
     var count = 0;
-    metafetcher.fetch(req, res, metaType, function(type){
-        if(type === metaType){
-            getCompleteAlbumCollection(req, res, function(albums){
-                res.json(albums);
-            });
-        }
-    });
+	var dataType = 'music';
+    metafetcher.fetch(req, res, dataType, function(type){
+        if(type){
+		
+			getAlbums(function(rows){
+		
+				var albums = [];
+
+				count = rows.length;
+				console.log('Found '+count+' albums, getting additional data...');
+				rows.forEach(function(item, value){
+
+					if(item !== null && item !== undefined){
+						var album           = item.album
+							, artist        = item.artist
+							, year          = item.year
+							, cover         = item.cover;
+
+						getTracks(album, artist, year, cover, function(completeAlbum){
+							count--;
+							albums.push(completeAlbum);
+							if(count === 0 ){
+								console.log('Sending data to client');
+								return res.json(albums);
+								res.end();
+							}
+						});
+					}
+
+				});
+			});
+		}
+	});
 }
 
-getCompleteAlbumCollection = function (req, res, callback){
-    db.query('SELECT * FROM albums', {
-        album 		    : String,
-        artist  	    : String,
-        year            : Number,
-        cover           : String
-    },
-    function(rows) {
-        if (typeof rows !== 'undefined' && rows.length > 0){
-            var albums = [];
-
-            count = rows.length;
-            console.log('Found '+count+' albums, getting additional data...');
-            rows.forEach(function(item, value){
-
-                if(item !== null && item !== undefined){
-                    var album           = item.album
-                        , artist        = item.artist
-                        , year          = item.year
-                        , cover         = item.cover;
-
-                    getTracks(album, artist, year, cover, function(completeAlbum){
-                        count--;
-                        albums.push(completeAlbum);
-
-                        if(count <= 1 ){
-                            console.log('Sending data to client');
-                            callback(albums);
-                        }
-                    });
-                }
-
-            });
-        } else {
-            console.log('Could not index any albums, please check given music collection path...');
-        }
-    });
+getAlbums = function(callback){
+	db.query('SELECT * FROM albums ORDER BY album asc', {
+		album 		    : String,
+		artist  	    : String,
+		year            : Number,
+		cover           : String
+	},
+	function(rows) {
+		if (typeof rows !== 'undefined' && rows.length > 0){
+			callback(rows);
+		}
+	});
 }
 
 getTracks = function (album, artist, year, cover, callback){
