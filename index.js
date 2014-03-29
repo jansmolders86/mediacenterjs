@@ -20,6 +20,7 @@
 var express = require('express')
 	, app = express()
 	, fs = require ('fs')
+	, util = require('util')
 	, dateFormat = require('dateformat')
 	, lingua = require('lingua')
 	, colors = require('colors')
@@ -43,6 +44,10 @@ if(config.language === ""){
 	language = config.language;
 }
 
+console.log = function(d) { //
+  log_file.write(util.format(d) + '\n');
+  log_stdout.write(util.format(d) + '\n');
+};
 
 /*Create database*/
 if(fs.existsSync('./lib/database/') === false){
@@ -56,6 +61,8 @@ if(fs.existsSync('./lib/database/mcjs.sqlite') === false){
     fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
 }
 
+var log_file = fs.createWriteStream(__dirname + '/log.log', {flags : 'w', encoding: 'utf-8'});
+var log_stdout = process.stdout;
 
 process.env.NODE_ENV = 'development';
 

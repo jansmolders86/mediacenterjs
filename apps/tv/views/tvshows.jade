@@ -1,43 +1,42 @@
 extends /layout
 block declarations
-    - additional_title = lingua.tvshows;
-    - use_knockout = true;
+	- additional_title = lingua.tvshows;
+	- use_knockout = true;
 block additional_css
-    link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
-    style.
-        .vjs-play-progress, .vjs-volume-level { background-color: #d96800!important; }
-        .vjs-control-bar, .vjs-big-play-button { background: rgba(171,171,171,0.3)!important; }
-        .vjs-slider { background: rgba(171,171,171,0.3)!important; }
-        .vjs-fullscreen.vjs-user-inactive { cursor: none; }
-        .vjs-default-skin .vjs-control-bar { font-size: 90% }
-        .vjs-big-play-button{visibility:hidden;}
-    link(rel='stylesheet', href='/tv/css/style.css')
+	link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
+	style.
+		.vjs-play-progress, .vjs-volume-level { background-color: #d96800!important; }
+		.vjs-control-bar, .vjs-big-play-button { background: rgba(171,171,171,0.3)!important; }
+		.vjs-slider { background: rgba(171,171,171,0.3)!important; }
+		.vjs-fullscreen.vjs-user-inactive { cursor: none; }
+		.vjs-default-skin .vjs-control-bar { font-size: 90% }
+		.vjs-big-play-button{visibility:hidden;}
+	link(rel='stylesheet', href='/tv/css/style.css')
 block additional_scripts
-    script(src="http://vjs.zencdn.net/4.3/video.js")
-    script(src="/tv/js/knockout.tvshows.js")
-    script(src="/tv/js/jquery.mcjs.tvplay.js")
+	script(src="http://vjs.zencdn.net/4.3/video.js")
+	script(src="/tv/js/knockout.tvshows.js")
+	script(src="/tv/js/jquery.mcjs.tvplay.js")
 block body
-    #header
-        a.backlink(href="/")
-            img(src="/core/icons/back.png")
-        h1 #{lingua.tvshows}
-    #wrapper
-        #tvshowbrowser
-            // ko if: tvShows().length > 0
-            ul.tvshows(data-bind="foreach: tvShows")
-                li.tvposter.boxed.mcjs-rc-controllable.hidden(data-bind="css: { hidden: false }")
-                    .imageWrapper
-                        // ko if: banner() !== null
-                        img.tvbanner(data-bind="attr: { src: banner }")
-                        // /ko
-                    .overlay
-                    span.showTitle(data-bind="text:title")
-                    ul.episodes(data-bind="foreach: episodes")
-                        li.mcjs-rc-controllable
-                            a(data-bind="text:'Season'+$data.season +' - Episode '+$data.episode, click: $parent.playEpisode.bind($data.localName)").mcjs-rc-clickable
+	#header
+		a.backlink(href="/") &#xe113;
+		h1 #{lingua.tvshows}
+	#wrapper
+		#tvshowbrowser
+			// ko if: tvShows().length > 0
+			ul.tvshows(data-bind="foreach: tvShows")
+				li.tvposter.boxed.mcjs-rc-controllable.hidden(data-bind="css: { hidden: false }")
+					.imageWrapper
+						// ko if: banner() !== null
+						img.tvbanner(data-bind="attr: { src: banner }")
+						// /ko
+					.overlay
+					span.showTitle(data-bind="text:title")
+					ul.episodes(data-bind="foreach: episodes")
+						li.mcjs-rc-controllable
+							a(data-bind="text:'Season'+$data.season +' - Episode '+$data.episode, click: $parent.playEpisode.bind($data.localName)").mcjs-rc-clickable
 
-            // /ko
+			// /ko
 
-            // ko ifnot: tvShows().length > 0
-            h2.loading Please wait...
-            // /ko
+			// ko ifnot: tvShows().length > 0
+			h2.loading Please wait...
+			// /ko

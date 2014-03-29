@@ -26,6 +26,16 @@
 	
 */
 
+@font-face {
+	font-family: 'Metrize-Icons';
+	src:url('fonts/Metrize-Icons.eot');
+	src:url('fonts/Metrize-Icons.eot?#iefix') format('embedded-opentype'),
+		url('fonts/Metrize-Icons.svg#Metrize-Icons') format('svg'),
+		url('fonts/Metrize-Icons.woff') format('woff'),
+		url('fonts/Metrize-Icons.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
 
 html{
 	margin:0; 
@@ -198,6 +208,10 @@ a.backlink{
 	margin-right:30px;
 	width: 32px;
 	height:32px;
+	font-family: 'Metrize-Icons';
+	-webkit-font-smoothing: antialiased;
+	font-size: 40px;
+	color: #747474;
 }
 
 /* Generic classes */

@@ -146,6 +146,10 @@ a.backlink{
 	margin-right:30px;
 	width: 32px;
 	height:32px;
+	font-family: 'Metrize-Icons';
+	-webkit-font-smoothing: antialiased;
+	font-size: 40px;
+	color: #747474;
 }
 
 .homepage h1{text-transform: none; font-weight:300;}
