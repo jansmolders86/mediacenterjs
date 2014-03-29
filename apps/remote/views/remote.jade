@@ -1,7 +1,7 @@
 extends /layout
 
 block declarations
-	- additional_title = 'Remote'; //- TODO: Translate this
+	- additional_title = '#{lingua.Remote}'; //- TODO: Translate this
 	- body_id = 'remote';
 	- include_validation = true;
 
@@ -109,13 +109,13 @@ block body
 		form#setupRemote.validate-form(action='/submitRemote',method='post')
 			.row
 				label #{lingua.setting_movielocation}
-				input(name="moviepath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+				input(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 			.row
 				label #{lingua.setting_musiclocation}
-				input(name="musicpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/music/", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+				input(name="musicpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 			.row
 				label #{lingua.setting_tvlocation}
-				input(name="tvpath",type="text",placeholder="C:/temp/ or /mnt/media/hdd/movies/", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
+				input(name="tvpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
 			.row
 				label #{lingua.setting_language}
 				select#language(name="language")
@@ -129,7 +129,7 @@ block body
 				input(name="remotePort",type="text",placeholder="3001", value= remotePort,data-rule-required="true")	
 			.row
 				label #{lingua.setting_location}
-				input(name="location",type="text",placeholder="ie london or amsterdam", value= location,data-rule-required="true")					
+				input(name="location",type="text",placeholder="#{lingua.settings_placeholder_location}", value= location,data-rule-required="true")					
 			.row
 				label Spotify Username
 				input(name="spotifyUser",type="text", value=spotifyUser)					
@@ -143,7 +143,7 @@ block body
 						option(selected=theme) #{theme}
 			.row
 				label #{lingua.setting_port}
-				input(name="port",type="text",placeholder="ie 3000 or 1337", value= port ,data-rule-required="true")
+				input(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true")
 			.row
 				input(type="submit",value="#{lingua.setting_submit}")	
 				input(name="screensaver",type="hidden",value= screensaver) 

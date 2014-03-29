@@ -48,9 +48,9 @@ block body
 					.specs
 						// ko if: genre() !== undefined
 						p
-							strong(data-bind="text:'Genre: '+genre()")
+							strong(data-bind="text:'#{lingua.movies_genre}: '+genre()")
 						p
-							strong(data-bind="text:'Runtime: '+runtime()")
+							strong(data-bind="text:'#{lingua.movies_Runtime}: '+runtime()+' min'")
 						// /ko
 					// ko if: cdNumber() !== undefined
 					.cdNumber
@@ -60,5 +60,5 @@ block body
 			// /ko
 
 			// ko ifnot: movies().length > 0
-			h2.loading Please wait...
+			h2.loading #{lingua.loading}
 			// /ko

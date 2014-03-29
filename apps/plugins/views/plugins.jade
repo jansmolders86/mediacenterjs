@@ -20,11 +20,11 @@ block body
 	#header
 		div.pull-left
 			a.backlink &#xe113;
-			h1	Plugins		
+			h1 #{lingua.plugin_header}
 			
 		div.loading.boxed.pull-left
 			img(src="/core/css/img/ajax-loader.gif") 
-			p Loading modules...
+			p #{lingua.plugin_loading} 
 
 		div.pull-right.boxed(data-bind="visible:upgradeAll().length > 0")
 			a.btn.upgrade.upgrade-all(data-bind="{click: upgradeAllPlugins.bind($data, upgradeAll() )}") Upgrade All
@@ -40,14 +40,14 @@ block body
 					div.desc(data-bind="text:desc")
 					div.version(data-bind="text:version")
 				// ko if: isInstalled() === false 
-				a.btn.install.mcjs-rc-clickable(data-bind="{click: install}")	Install plugin
+				a.btn.install.mcjs-rc-clickable(data-bind="{click: install}")	#{lingua.plugin_install}
 				// /ko	
 				// ko if: isInstalled() === true 
-				a.btn.remove.mcjs-rc-clickable(data-bind="{click: remove}") Remove plugin
+				a.btn.remove.mcjs-rc-clickable(data-bind="{click: remove}") #{lingua.plugin_remove}
 				// /ko	
 				// ko if: isUpgradable() === true 
-				a.btn.upgrade.mcjs-rc-clickable(data-bind="{click: upgrade}") Upgrade plugin
+				a.btn.upgrade.mcjs-rc-clickable(data-bind="{click: upgrade}") 
 				// /ko
 				.additional-info
-					div.author(data-bind="text:'By: '+ author()")
-					div.date(data-bind="text:'Added: '+date()")
+					div.author(data-bind="text:'#{lingua.plugin_by}: '+ author()")
+					div.date(data-bind="text:'#{lingua.plugin_added}: '+date()")

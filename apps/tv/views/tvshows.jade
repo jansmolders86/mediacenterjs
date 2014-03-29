@@ -33,10 +33,10 @@ block body
 					span.showTitle(data-bind="text:title")
 					ul.episodes(data-bind="foreach: episodes")
 						li.mcjs-rc-controllable
-							a(data-bind="text:'Season'+$data.season +' - Episode '+$data.episode, click: $parent.playEpisode.bind($data.localName)").mcjs-rc-clickable
+							a(data-bind="text:'#{lingua.tvshows_season}'+$data.season +' - #{lingua.tvshows_episode} '+$data.episode, click: $parent.playEpisode.bind($data.localName)").mcjs-rc-clickable
 
 			// /ko
 
 			// ko ifnot: tvShows().length > 0
-			h2.loading Please wait...
+			h2.loading #{lingua.loading}
 			// /ko
