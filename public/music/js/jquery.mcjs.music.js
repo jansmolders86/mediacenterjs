@@ -56,8 +56,11 @@
                 var album = $(this).parent().parent().find('span.title').text();
                 var currentItem = $(this).attr('title');
                 $('li.'+o.selectedClass).removeClass(o.selectedClass);
-				$(this).addClass(o.selectedClass);
-
+				
+				if( $('ul.music > li.'+o.activeClass+' > span.title').text()  === album){
+					$(this).addClass(o.selectedClass);
+				}
+				
                 var url = '/music/'+currentItem+'/'+album+'/play/';
                 _playTrack(o,currentItem, album, random, url);
             });
@@ -84,8 +87,13 @@
 
     function _nextTrack(o,currentItem,album){
         var random = false;
-        var activeItem = $('li.'+o.selectedClass+':last').attr('title');
-        var url = '/music/'+activeItem+'/'+album+'/next';
+		
+		if( $('ul.music > li.'+o.activeClass+' > span.title').text()  === album){
+			var activeItem = $('li.'+o.selectedClass).nextAll('li:first').attr('title');
+			var url = '/music/'+activeItem+'/'+album+'/play';
+			$('li.'+o.selectedClass).removeClass(o.selectedClass).nextAll('li:first').addClass(o.selectedClass);
+		}	
+		
         _playTrack(o,activeItem,album,random, url);
     }
 
