@@ -184,7 +184,20 @@ li .title{display:inline-block;}
 #player{position:fixed; left:0; bottom:0 !important; z-index:99; visibility:hidden; }
 #player.show{ visibility:visible; }
 
+/** VideoJS override to keep controlbar visible **/
 
+.vjs-fade-out { opacity: 1 !important; visibility: visible !important; }
+.vjs-default-skin.vjs-controls-disabled .vjs-control-bar { display: block!important;}
+.vjs-fullscreen-control{visibility:hidden!important;}
+.vjs-default-skin.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar,
+.vjs-default-skin.vjs-has-started .vjs-control-bar {
+	-webkit-transition: none!important;
+	-moz-transition: none!important;
+	-o-transition: none!important;
+	transition: none!important;
+	visibility:visible!important;
+	opacity:1!important;
+}
 /*** PHONE LAYOUT ***/
 
 @media only screen and (min-width: 320px) and (max-width: 529px) {

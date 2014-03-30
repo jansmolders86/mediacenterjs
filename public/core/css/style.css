@@ -842,6 +842,15 @@ table tr > th:first-child{ padding-left:0px;}
     filter: alpha(opacity = 90);
 }
 
+.vjs-default-skin { color: #eee1e1!important; }
+.vjs-default-skin .vjs-play-progress,
+.vjs-default-skin .vjs-volume-level { background-color: #eb8100!important; }
+.vjs-default-skin .vjs-control-bar,
+.vjs-default-skin .vjs-big-play-button { background: rgba(51,51,51,0.71)!important; }
+.vjs-default-skin .vjs-slider { background: rgba(51,51,51,0.23666666666666666)!important; }
+.vjs-default-skin .vjs-control-bar { font-size: 121%!important; }
+.vjs-big-play-button{visibility:hidden!important;}
+.vjs-fullscreen.vjs-user-inactive { cursor: none!important; }
 
 
 /***** -----------------   MEDIA QUERIES  ---------------------- *****/
