@@ -69,7 +69,7 @@ What do I need to have installed?
 
 * FFmpeg installed
 * NodeJS installed
-* A modern browser like Chrome or Firefox
+* A modern browser like Chrome(ium)
 * An internet connection
 
 Partial documentation 
