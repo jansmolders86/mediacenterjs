@@ -91,6 +91,8 @@ A complete documentation will be available when the project reaches Beta status.
 
 [Start building an app using the app generator](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Start-building-an-app-using-the-app-generator)
 
+[Helper functions](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Helper-functions)
+
 [Front end and view explantation](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:--front-end)
 
 Translations
