@@ -69,7 +69,7 @@ What do I need to have installed?
 
 * FFmpeg installed
 * NodeJS installed
-* A modern browser like Chrome or Firefox
+* A modern browser like Chrome(ium)
 * An internet connection
 
 Partial documentation 
@@ -91,9 +91,13 @@ A complete documentation will be available when the project reaches Beta status.
 
 [Start building an app using the app generator](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Start-building-an-app-using-the-app-generator)
 
+[Helper functions](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Helper-functions)
+
+[Front end and view explantation](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:--front-end)
+
 Translations
 -------------
-For now, all the translation files are stored in the public/translation folder.
+For now, all the translation files are stored in the public/translations folder.
 Feel free to contribute by translating.
 
 ###Credits###
