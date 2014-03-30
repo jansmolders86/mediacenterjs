@@ -10,7 +10,7 @@ if(os.platform() === 'win32'){
     dblite.bin = "./bin/sqlite3/sqlite3";
 }
 var db = dblite('./lib/database/mcjs.sqlite');
-db.on('info', function (text) { console.log(text) });
+db.on('info', function (text) { console.log('Database info:', text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 exports.loadItems = function(req, res){
@@ -86,8 +86,7 @@ fetchMusicData = function(req, res) {
     var count = 0;
 	var dataType = 'music';
     metafetcher.fetch(req, res, dataType, function(type){
-        if(type){
-		
+        if(type === dataType){
 			getAlbums(function(rows){
 		
 				var albums = [];
@@ -120,17 +119,24 @@ fetchMusicData = function(req, res) {
 }
 
 getAlbums = function(callback){
+	console.log('Getting albums...');
+	setTimeout(function(){
 	db.query('SELECT * FROM albums ORDER BY album asc', {
 		album 		    : String,
 		artist  	    : String,
 		year            : Number,
 		cover           : String
 	},
-	function(rows) {
+	function(err, rows) {
+		if(err){
+			console.log('Database error: ' + err);
+		}
 		if (typeof rows !== 'undefined' && rows.length > 0){
+			console.log('Found albums...', rows[0])
 			callback(rows);
 		}
 	});
+	},5000);
 }
 
 getTracks = function (album, artist, year, cover, callback){
