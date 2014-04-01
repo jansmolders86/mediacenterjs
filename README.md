@@ -42,13 +42,6 @@ Current features:
 * Device manager
 * Parental control functionality
 
-
-__Upcoming features:__
-
-* Airplay
-* Scheduled data scraping
-* Streaming movies app
-
 Known issues:
 ==================
 
@@ -61,13 +54,13 @@ What is MediacenterJS?
 =========================
 
 MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques and languages (HTML5/CSS/Javascript).
-The backend is based on Node.JS with jade templates producing easy to use code allowing developers to add an 'app' to MCJS even with limited knowledge of said frontend techniques. 
-
+The backend is based on Node.JS with ExpressJS and jade templates producing easy to use code allowing developers to add an 'app' to MCJS even with limited knowledge of said frontend techniques. 
+The server application runs on Windows, MAC and Linux systems. 
 
 What do I need to have installed? 
 ==========================
 
-* FFmpeg installed
+* FFmpeg installed (included for Windows) 
 * NodeJS installed
 * A modern browser like Chrome(ium)
 * An internet connection
@@ -97,16 +90,8 @@ A complete documentation will be available when the project reaches Beta status.
 
 Translations
 -------------
-For now, all the translation files are stored in the public/translations folder.
+For now, all the translation files are stored in the /public/translations folder.
 Feel free to contribute by translating.
-
-###Credits###
-
-This app makes heavy use of:
-
-* Express (https://github.com/visionmedia/express)
-* Node-Fluent-FFmpeg (https://github.com/schaermu/node-fluent-ffmpeg)
-* VideoJS (http://www.videojs.com/)
 
 ###Special thanks to:###
 
@@ -125,15 +110,6 @@ This app makes heavy use of:
 * Lucien Immink https://github.com/lucienimmink for his javascript knowledge/support
 * P.J. Onori for his icons
 
-###Thanks to the following people for their donation:###
-
-* Koen Peters http://geekyplugins.com/
-* Friso Geerlings 
-
-This application will run on Windows, MAC and Linux systems. 
-
-***There will be a specific Linux distro using a kiosk, debian distro.***
-
 I'm building MCJS in my free time so if you want to encourage me to continue this enormous project, feel free to do so.
 
 [![Donate](http://www.mediacenterjs.com/global/images/github/paypal-donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
@@ -141,4 +117,4 @@ I'm building MCJS in my free time so if you want to encourage me to continue thi
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
 This application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
 
-Copyright (C) 2013-14 - Jan Smolders
+Copyright (C) 2014 - Jan Smolders

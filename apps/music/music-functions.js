@@ -103,7 +103,11 @@ fetchMusicData = function(req, res) {
 
 						getTracks(album, artist, year, cover, function(completeAlbum){
 							count--;
-							albums.push(completeAlbum);
+
+                            if(completeAlbum !== ''){
+                                albums.push(completeAlbum);
+                            }
+
 							if(count === 0 ){
 								console.log('Sending data to client');
 								return res.json(albums);
@@ -119,7 +123,6 @@ fetchMusicData = function(req, res) {
 }
 
 getAlbums = function(callback){
-	console.log('Getting albums...');
 	setTimeout(function(){
 	db.query('SELECT * FROM albums ORDER BY album asc', {
 		album 		    : String,
@@ -132,11 +135,10 @@ getAlbums = function(callback){
 			console.log('Database error: ' + err);
 		}
 		if (typeof rows !== 'undefined' && rows.length > 0){
-			console.log('Found albums...', rows[0])
 			callback(rows);
 		}
 	});
-	},5000);
+	},1000);
 }
 
 getTracks = function (album, artist, year, cover, callback){
@@ -150,7 +152,6 @@ getTracks = function (album, artist, year, cover, callback){
         },
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
-
                 var completeAlbum ={
                     "album"     : album,
                     "artist"    : artist,
@@ -159,8 +160,12 @@ getTracks = function (album, artist, year, cover, callback){
                     "tracks"    : rows
                 }
 
-                callback(completeAlbum);
+
+            } else {
+                var completeAlbum = '';
             }
+
+            callback(completeAlbum);
         }
     );
 }
