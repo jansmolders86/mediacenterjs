@@ -1,50 +1,17 @@
 extends /layout
 
 block declarations
-	- additional_title = lingua.music;
-	- use_knockout = true;
+    - additional_title = lingua.music;
+    - use_angular = true;
 
 block additional_css
-	link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
-	link(rel='stylesheet', href='/music/css/style.css')
+    link(rel='stylesheet', href='/music/css/style.css')
 
 block additional_scripts
-	script(src="http://vjs.zencdn.net/4.3/video.js")
-	script(src="/music/js/knockout.music.js")
-	script(src="/music/js/jquery.mcjs.music.js")
+    script(src="/music/js/components/audioplayer.js")
+    script(src="/music/js/app.js")
+    script(src="/music/js/controllers/main.js")
+
 block body
-	#header
-		a.backlink &#xe113;
-		h1 #{lingua.music}
-	#wrapper
-		// ko if: album().length > 0
-		ul.music(data-bind="foreach: album")
-			li.movieposter.boxed.mcjs-rc-controllable.hidden(data-bind="css: { hidden: false }")
-
-				// ko if: cover() == ''
-				img.cover(data-bind="attr: { src: '/music/css/img/nodata.jpg' }")
-				// /ko
-
-				// ko ifnot: cover() == ''
-				img.cover(data-bind="attr: { src: cover }")
-				// /ko
-
-				.overlay.mcjs-rc-clickable
-				span.title(data-bind="text:album", style="visibility:hidden;")
-				#albumInfo
-					h2(data-bind="text:album")
-					// ko if: year() !== 'Unknown' && year() !== null
-					.year(data-bind="text:year")
-					// /ko
-				ul.tracks(data-bind="foreach: tracks")
-					li.mcjs-rc-controllable.mcjs-rc-clickable(data-bind="attr:{ title: filename}")
-						i.play.icon
-						.number(data-bind="text:$data.track")
-						.title(data-bind="text:$data.title")
-		// /ko
-		
-		// ko ifnot: album().length > 0
-		h2.loading #{lingua.loading}
-		// /ko
-	audio#player.video-js.vjs-default-skin(controls, preload="metadata", width="100%", height="33", data-setup="{}")
-		source(src="",type="audio/mp3")
+    #wrapper()
+        .container(ng-view="")

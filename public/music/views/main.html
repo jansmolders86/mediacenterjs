@@ -1,0 +1,14 @@
+<header class="jumbotron">
+    <h1>'Allo, 'Allo!</h1>
+    <p class="lead">
+        Here is your sweet-ass audio player: <br>
+        <audio-player></audio-player>
+    </p>
+</header>
+
+<ul class="albums">
+    <li ng-repeat="item in data | startFrom:currentTrack | limitTo:pageSize"
+        ng-style="{'background-image':'url({{item.image}})'}"
+        title="{{item.artist.name}} - {{item.title}}"
+        data-file="{{item.file}}"></li>
+</ul>
