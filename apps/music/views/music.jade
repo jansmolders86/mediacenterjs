@@ -1,17 +1,47 @@
-extends /layout
+doctype 5
+html(lang="en", ng-app="musicApp")
+    head
+        meta(charset="UTF-8")
+        link(rel='stylesheet', href='/core/css/style.css')
+        link(rel='stylesheet', href='/core/css/icon.css')
+        link(rel='stylesheet', href='/music/css/style.css')
+        script(src="/core/js/jquery-1.8.2.min.js")
+        script(src="/core/js/socket.io.min.js")
+        script(src="/core/js/jquery.mcjs.core.js")
+        script(src="/core/js/plugins/angular/angular.min.js")
+        script(src="/core/js/plugins/angular/angular-route.min.js")
+        script(src="/music/js/app.js")
+        title Music
+        body(ng-controller="musicCtrl")
+            #header
+                a.backlink(ng-click="player.playlist.remove(album)") &#xe113;
+                h1 #{lingua.music}
+            #wrapper
+                section#library
+                    ul.albums
+                        li.album(ng-repeat="album in albums", ng-click="player.playlist.add(album)")
+                            img(src="{{album.cover}}")
+                            span.album-title {{album.album}}
+                            span.album-artist {{album.artist}}
+                            span.album-year {{album.year}}
 
-block declarations
-    - additional_title = lingua.music;
-    - use_angular = true;
+                ul#album
+                    li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
+                        img(src="{{album.cover}}")
+                        span.album-title {{album.album}}
+                        span.album-artist {{album.artist}}
+                        span.album-year {{album.year}}
+                        ol.tracks
+                            li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
+                                span.track-title {{track.title}}
 
-block additional_css
-    link(rel='stylesheet', href='/music/css/style.css')
-
-block additional_scripts
-    script(src="/music/js/components/audioplayer.js")
-    script(src="/music/js/app.js")
-    script(src="/music/js/controllers/main.js")
-
-block body
-    #wrapper()
-        .container(ng-view="")
+                #player
+                    ul.nav
+                        li
+                            i.control.play.icon(ng-click="player.play()",ng-hide="player.playing")
+                        li
+                            i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
+                        li
+                            i.control.backward.icon(ng-click="player.previous()")
+                        li
+                            i.control.forward.icon(ng-click="player.next()")

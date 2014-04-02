@@ -104,8 +104,10 @@ fetchMusicData = function(req, res) {
 						getTracks(album, artist, year, cover, function(completeAlbum){
 							count--;
 							albums.push(completeAlbum);
-							if(count === 0 ){
+                            console.log('count',count)
+							if(count === 1 ){
 								console.log('Sending data to client');
+
 								return res.json(albums);
 								res.end();
 							}
@@ -121,46 +123,51 @@ fetchMusicData = function(req, res) {
 getAlbums = function(callback){
 	console.log('Getting albums...');
 	setTimeout(function(){
-	db.query('SELECT * FROM albums ORDER BY album asc', {
-		album 		    : String,
-		artist  	    : String,
-		year            : Number,
-		cover           : String
-	},
-	function(err, rows) {
-		if(err){
-			console.log('Database error: ' + err);
-		}
-		if (typeof rows !== 'undefined' && rows.length > 0){
-			console.log('Found albums...', rows[0])
-			callback(rows);
-		}
-	});
-	},5000);
+        db.query('SELECT * FROM albums ORDER BY album asc', {
+            album 		    : String,
+            artist  	    : String,
+            year            : Number,
+            cover           : String
+        },
+        function(err, rows) {
+            if(err){
+                console.log('Database error: ' + err);
+            }
+            if (typeof rows !== 'undefined' && rows.length > 0){
+                console.log('Found albums...');
+                callback(rows);
+            }
+        });
+	},1000);
 }
 
 getTracks = function (album, artist, year, cover, callback){
-    db.query('SELECT * FROM tracks WHERE album = $album ORDER BY track asc ', { album: album }, {
-            title   : String,
-            track   : Number,
-            album   : String,
-            artist  : String,
-            year    : Number,
-            filename: String
-        },
-        function(rows) {
-            if (typeof rows !== 'undefined' && rows.length > 0){
+    setTimeout(function() {
+        db.query('SELECT * FROM tracks WHERE album = $album ORDER BY track asc ', { album: album }, {
+                title: String,
+                track: Number,
+                album: String,
+                artist: String,
+                year: Number,
+                filename: String
+            },
+            function (rows) {
+                if (typeof rows !== 'undefined' && rows.length > 0) {
 
-                var completeAlbum ={
-                    "album"     : album,
-                    "artist"    : artist,
-                    "year"      : year,
-                    "cover"     : cover,
-                    "tracks"    : rows
+                    if(year === 0 || year === null){
+                        year = '';
+                    }
+                    var completeAlbum = {
+                        "album": album,
+                        "artist": artist,
+                        "year": year,
+                        "cover": cover,
+                        "tracks": rows
+                    }
+
+                    callback(completeAlbum);
                 }
-
-                callback(completeAlbum);
             }
-        }
-    );
+        );
+    },2000);
 }

@@ -15,66 +15,74 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#library{
+    clear:both;
+    width:90%;
+}
+
+.album.current{
+    width:90%;
+    position: absolute;
+    top:0;
+    left:0;
+    background:#fff;
+    padding:50px;
+}
+
+#library .album{
+    width:174px;
+    height: 250px;
+    float:left;
+    background:#fff;
+    margin:20px;
+}
+
+#library .album img{
+    width:174px;
+    height:174px;
+}
+
+.album-title,
+.album-artist,
+.album-year{
+    font-size:12px;
+    font-weight:bold;
+    width:100%;
+    clear:both;
+    display:block;
+}
+
+#library .album .album-artist,
+#library .album .album-year {
+    font-weight: normal;
+}
 
 .albums {
     margin:0;
     padding:0;
 }
 
-.albums li {
-    list-style:none;
-    margin:10px;
-    display:inline-block;
-    width: 120px;
-    height: 120px;
-    background-color: #eee;
-    background-size: cover;
-    border: 1px solid #333;
+.album.current ol{
+    list-style-type: decimal;
+    list-style-position: inside;
 }
 
-/* minimal CSS to get started with component. feel free to override in main.css */
-audio-player .paused .play-text,
-audio-player .pause-text {
-    display:inline-block;
-}
-audio-player .play-text,
-audio-player .paused .pause-text {
-    display:none;
-}
-audio-player * {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+.album.current li{
+    padding:5px 0;
+    border-bottom:1px solid #ccc;
+    min-height: 25px;
+    line-height: 25px;
 }
 
-/*** PHONE LAYOUT ***/
-
-@media only screen and (min-width: 320px) and (max-width: 529px) {
-    #wrapper{padding:10px 0px;}
-
-    ul.music > li{
-        width:155px;
-        height: 250px;
-        float:left;
-    }
-
-    ul.music > li:nth-child(odd){margin-left:10px;}
-
-    ul.music > li:hover .overlay,
-    ul.music > li.focused .overlay,
-    ul.music > li img{
-        width:155px;
-        height: 155px;
-    }
-
-    .tracks{width:100%;}
-
-    ul.music > li.mcjs-rc-active{margin-left:10px;}
-    ul.music > li.mcjs-rc-active #albumInfo h2{font-size:18px;}
-
-    audio#player{width:30%!important;}
-
+.album.current li:hover {
+    background:#e7e7e7;
 }
+
+#player{
+    bottom:200px;
+    left:40%;
+}
+
+#player i{ display:inline-block; padding:5px;}
+
+

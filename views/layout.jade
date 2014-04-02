@@ -1,12 +1,15 @@
 doctype 5
+
 html(lang="en")
     head
         block declarations
             - var additional_title = undefined;
             - var use_knockout = false;
+            - var use_angular = false;
             - var include_validation = false;
             - var body_id = '';
             - var body_class = '';
+            - var angular_app = undefined;
 
         if !additional_title
             title MediacenterJS
@@ -32,7 +35,6 @@ html(lang="en")
             link(rel='stylesheet', href='/themes/' + selectedTheme)
 
         block additional_css
-
 
         script(src="/core/js/jquery-1.8.2.min.js")
         script(src="/core/js/jquery-ui-1.10.3.min.js")
@@ -76,6 +78,7 @@ html(lang="en")
 
         block additional_scripts
 
-    body(id=body_id, class=body_class)
-        block body
+
+body(id=body_id, class=body_class)
+    block body
 
