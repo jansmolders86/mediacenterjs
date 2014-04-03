@@ -11,6 +11,11 @@
         });
     };
 
+    musicApp.factory('audio', function($document) {
+        var audio = $document[0].createElement('audio');
+        return audio;
+    });
+
     musicApp.factory('player', function(audio, $rootScope) {
         var player,
             playlist = [],
@@ -24,7 +29,7 @@
             playlist: playlist,
             current: current,
             playing: false,
-
+            active : false,
             play: function(track, album) {
                 if (!playlist.length) return;
 
@@ -36,9 +41,6 @@
                 player.playing = true;
                 paused = false;
             },
-
-
-
             pause: function() {
                 if (player.playing) {
                     audio.pause();
@@ -46,13 +48,12 @@
                     paused = true;
                 }
             },
-
             reset: function() {
                 player.pause();
                 current.album = 0;
                 current.track = 0;
+                player.active = false;
             },
-
             next: function() {
                 if (!playlist.length) return;
                 paused = false;
@@ -64,7 +65,6 @@
                 }
                 if (player.playing) player.play();
             },
-
             previous: function() {
                 if (!playlist.length) return;
                 paused = false;
@@ -81,12 +81,14 @@
 	    playlist.add = function(album) {
 	        if (playlist.indexOf(album) != -1) return;
 	        playlist.push(album);
+            player.active = true;
 	    };
 
 	    playlist.remove = function(album) {
 	        var index = playlist.indexOf(album);
 	        if (index == current.album) player.reset();
 	        playlist.splice(index, 1);
+            player.active = false;
 	    };
 
 	    audio.addEventListener('ended', function() {
@@ -96,11 +98,5 @@
 	    return player;
   });
 
-
-  // extract the audio for making the player easier to test
-  musicApp.factory('audio', function($document) {
-	    var audio = $document[0].createElement('audio');
-	    return audio;
-  });
 
 })(window);

@@ -14,16 +14,7 @@ db.on('info', function (text) { console.log('Database info:', text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 exports.loadItems = function(req, res){
-    db.query('SELECT * FROM albums', {
-        album 		    : String,
-        artist  	    : String,
-        year            : Number,
-        cover           : String
-    },
-    function(rows) {
-        var albumCount = Object.keys(rows).length;
-        fetchMusicData(req, res);
-    });
+    fetchMusicData(req, res);
 };
 
 exports.playTrack = function(req, res, track, album){
@@ -45,13 +36,9 @@ exports.nextTrack = function(req, res, track, album){
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
                 var nextTrack = rows[0].filename;
-                if(currentTrack === nextTrack){
-                    return;
-                } else{
-                    console.log('NextTrack',nextTrack);
-                    music_playback_handler.startTrackPlayback(res, nextTrack);
-                }
-
+                if(currentTrack === nextTrack)
+                console.log('NextTrack',nextTrack);
+                music_playback_handler.startTrackPlayback(res, nextTrack);
             } else {
                 console.log('error', rows)
             }
@@ -104,10 +91,8 @@ fetchMusicData = function(req, res) {
 						getTracks(album, artist, year, cover, function(completeAlbum){
 							count--;
 							albums.push(completeAlbum);
-                            console.log('count',count)
 							if(count === 1 ){
 								console.log('Sending data to client');
-
 								return res.json(albums);
 								res.end();
 							}
@@ -156,6 +141,9 @@ getTracks = function (album, artist, year, cover, callback){
 
                     if(year === 0 || year === null){
                         year = '';
+                    }
+                    if(cover === '' || cover === null){
+                        cover = '/music/css/img/nodata.jpg';
                     }
                     var completeAlbum = {
                         "album": album,
