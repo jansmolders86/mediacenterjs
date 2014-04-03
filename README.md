@@ -10,8 +10,9 @@ Status:
 
 __Heavy work in progress__
 
-__version 0.0.60__
+__version 0.0.61__
 
+* Music app refactored using Angular
 * Improved mobile styling
 * Metadata gathering is a seperate process 
 * TV app works
