@@ -14,16 +14,7 @@ db.on('info', function (text) { console.log('Database info:', text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 exports.loadItems = function(req, res){
-    db.query('SELECT * FROM albums', {
-        album 		    : String,
-        artist  	    : String,
-        year            : Number,
-        cover           : String
-    },
-    function(rows) {
-        var albumCount = Object.keys(rows).length;
-        fetchMusicData(req, res);
-    });
+    fetchMusicData(req, res);
 };
 
 exports.playTrack = function(req, res, track, album){
@@ -45,13 +36,9 @@ exports.nextTrack = function(req, res, track, album){
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
                 var nextTrack = rows[0].filename;
-                if(currentTrack === nextTrack){
-                    return;
-                } else{
-                    console.log('NextTrack',nextTrack);
-                    music_playback_handler.startTrackPlayback(res, nextTrack);
-                }
-
+                if(currentTrack === nextTrack)
+                console.log('NextTrack',nextTrack);
+                music_playback_handler.startTrackPlayback(res, nextTrack);
             } else {
                 console.log('error', rows)
             }
@@ -103,12 +90,8 @@ fetchMusicData = function(req, res) {
 
 						getTracks(album, artist, year, cover, function(completeAlbum){
 							count--;
-
-                            if(completeAlbum !== ''){
-                                albums.push(completeAlbum);
-                            }
-
-							if(count === 0 ){
+							albums.push(completeAlbum);
+							if(count === 1 ){
 								console.log('Sending data to client');
 								return res.json(albums);
 								res.end();
@@ -123,49 +106,56 @@ fetchMusicData = function(req, res) {
 }
 
 getAlbums = function(callback){
+	console.log('Getting albums...');
 	setTimeout(function(){
-	db.query('SELECT * FROM albums ORDER BY album asc', {
-		album 		    : String,
-		artist  	    : String,
-		year            : Number,
-		cover           : String
-	},
-	function(err, rows) {
-		if(err){
-			console.log('Database error: ' + err);
-		}
-		if (typeof rows !== 'undefined' && rows.length > 0){
-			callback(rows);
-		}
-	});
+        db.query('SELECT * FROM albums ORDER BY album asc', {
+            album 		    : String,
+            artist  	    : String,
+            year            : Number,
+            cover           : String
+        },
+        function(err, rows) {
+            if(err){
+                console.log('Database error: ' + err);
+            }
+            if (typeof rows !== 'undefined' && rows.length > 0){
+                console.log('Found albums...');
+                callback(rows);
+            }
+        });
 	},1000);
 }
 
 getTracks = function (album, artist, year, cover, callback){
-    db.query('SELECT * FROM tracks WHERE album = $album ORDER BY track asc ', { album: album }, {
-            title   : String,
-            track   : Number,
-            album   : String,
-            artist  : String,
-            year    : Number,
-            filename: String
-        },
-        function(rows) {
-            if (typeof rows !== 'undefined' && rows.length > 0){
-                var completeAlbum ={
-                    "album"     : album,
-                    "artist"    : artist,
-                    "year"      : year,
-                    "cover"     : cover,
-                    "tracks"    : rows
+    setTimeout(function() {
+        db.query('SELECT * FROM tracks WHERE album = $album ORDER BY track asc ', { album: album }, {
+                title: String,
+                track: Number,
+                album: String,
+                artist: String,
+                year: Number,
+                filename: String
+            },
+            function (rows) {
+                if (typeof rows !== 'undefined' && rows.length > 0) {
+
+                    if(year === 0 || year === null){
+                        year = '';
+                    }
+                    if(cover === '' || cover === null){
+                        cover = '/music/css/img/nodata.jpg';
+                    }
+                    var completeAlbum = {
+                        "album": album,
+                        "artist": artist,
+                        "year": year,
+                        "cover": cover,
+                        "tracks": rows
+                    }
+
+                    callback(completeAlbum);
                 }
-
-
-            } else {
-                var completeAlbum = '';
             }
-
-            callback(completeAlbum);
-        }
-    );
+        );
+    },2000);
 }

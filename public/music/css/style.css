@@ -1,7 +1,7 @@
 /*
 	MediaCenterJS - A NodeJS based mediacenter solution
 	
-    Copyright (C) 2013 - Jan Smolders
+    Copyright (C) 2014 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,213 +16,148 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#header h1 { padding-top: 9px;}
 
-/* Default override */
+/** Library **/
 
-body{position:relative; min-height:100%; overflow-x:hidden;}
-#header{ border-bottom:5px solid #fff; }
-#wrapper{padding:50px 100px; background:#e5e5e5;}
-
-/* Music App */
-
-h2.loading{top:30px;}
-
-ul.music{ list-style:none; height:100%; width: 100%; }
-ul.music > li img{
-	width:200px;
-	height:200px;
-	float:left;
-	margin:0;
-}
-
-ul.music > li{
-	background:#fff;
-	padding:0;
-	width:200px;
-	height: 300px;
-	border-radius:2px; 
-    border:1px solid #e5e5e5;
-	position:relative;
-	margin:0 10px 10px 0;
-	cursor:pointer;
-	float:left;
-}
-
-ul.music li a{	
-	width:110px;
-	height:32px;
-	float:left;
-	font-size:12px;
-	margin:5px 0 0 5px;
-	overflow:hidden;
-}
-
-ul.music li.focused{ 
-	cursor: pointer;
-	border-radius: 5px;
-	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
-}
-
-ul.music li.active{
+#container{
+    padding:100px 80px;
+    position:relative;
+    min-height: 100%;
+    height:100%;
     width:100%;
-    height:auto;
-    overflow:hidden;
 }
 
-ul.music li.playing a{ 
-	background:url(img/playing.png) no-repeat left 8px; 
-	padding-left:25px; 
-	width:85px; 
-	position:relative;
-	overflow:hidden;
+#library{
+    float:left;
 }
 
-ul.music > li > .title{ width:0; height:0; } 
-ul.music > li #albumInfo h2{ width: 100px; font-size:12px; font-family: 'Open Sans', sans-serif; font-weight:400; }
-ul.music > li.mcjs-rc-active #albumInfo h2{ font-size:30px; width: 500px; margin-top:5px;}
-
-ul.music > li.mcjs-rc-active{ width:100%; height:90%; }
-ul.music > li.mcjs-rc-active .overlay{ visibility:hidden; }
-ul.music .overlay{ width:0; height:0; }
-ul.music > li img.coverfound{ width:120px; height:120px; margin:0px; } 
-
-ul.music > li:hover .overlay,
-ul.music > li.focused .overlay{
-	position:absolute;
-	top:0;
-	left:0;
-	width:200px;
-	height:200px;
-    background-color: rgba(0, 0, 0, 0.3);
+#library.side{
+    margin-left:400px;
 }
 
-/** Tracklist **/
-
-.tracks{
-    color: #444;
-    display: none;
-    position: relative;
-    z-index: 9;
-    padding:20px 0 0 0;
-    overflow: hidden;
-	list-style: none;
-	margin:0 0 50px 0;
-	width:100%;
+#library .album{
+    width:174px;
+    height: 250px;
+    float:left;
+    background:#fff;
+    margin:15px;
+    position:relative;
+    cursor:pointer;
 }
 
-.tracks li{
-	cursor:pointer;
-	line-height:25px;
+#library.side .album img,
+#library.side .album span{
+    opacity:0.5;
+    position:relative;
+    cursor:pointer;
+}
+
+#library.side .album:hover img,
+#library.side .album:hover span{
+    opacity:1;
+}
+
+#library .album img{
+    width:174px;
+    height:174px;
+}
+
+.album-title,
+.album-artist,
+.album-year{
+    font-size:12px;
+    font-weight:bold;
     width:100%;
-	color:#444;
-	margin-bottom:2px;
-	font-size:14px;
-	padding:5px 0 5px 5px;
-	border-bottom:1px solid #D9D9D9;
+    clear:both;
+    display:block;
 }
 
-.tracks li .number{
-    display:inline-block;
-    color:#666;
-    margin-right:10px;
-    text-align: right;
+#library .album .album-artist,
+#library .album .album-year {
+    font-weight: normal;
 }
 
-.tracks li.even,
-.tracks li:hover,
-.tracks li.selected:last-child{background:#F7F7F7;}
-.tracks li.selected:last-child .eq{visibility:visible;}
-
-#albumInfo{
-	position:relative;
-	overflow:hidden;
-	float:left;
-	padding-left:10px;
-    z-index: 9;
+.albums {
+    margin:0;
+    padding:0;
 }
 
-#albumInfo h2{
-	color:#444;
-	font-size:22px;
-	padding:5px 0;
-	margin:0 0 5px 0;
-	display: block;
-	font-weight: normal;
+.album.current ol{
+    list-style-type: decimal;
+    list-style-position: inside;
+    margin:0;
+    padding:0;
 }
 
-#albumInfo .year,
-#albumInfo .genre{ color:#333; font-size:14px; }
+/** Playlist **/
 
-ul.music > li.mcjs-rc-active #albumInfo .year{font-size:18px;}
+#playlist {
+    float: left;
+    width: 358px;
+    background: #e7e7e7;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+    min-height: 100%;
+    height: auto;
+    position: absolute;
+    top:75px;
+    left:0px;
+    border-right:1px solid #ccc;
+}
 
-/** State control **/
+#playlist img{ margin-bottom:5px; cursor:pointer;}
+#playlist .album-title{font-size:14px;}
+#playlist .album{ margin-top:10px; padding:10px; }
 
-i.play { visibility:hidden; font-size:14px; display:inline-block;}
-.selected i.play { visibility:visible; font-size: 14px; display:inline-block;}
-li.playing.pause a{ background:url(img/pause-icon.png) no-repeat -2px 12px !important; }
-li .title{display:inline-block;}
+#playlist .album li{
+    padding:5px 0;
+    border-bottom:1px solid #ccc;
+    min-height: 25px;
+    line-height: 25px;
+    cursor:pointer;
+}
+
+#playlist .album li:hover{ background:#fff; }
+
+#playlist .album li .play{
+    visibility:hidden;
+    font-size:12px;
+}
+#playlist .album li.current .play{
+    visibility:visible;
+}
 
 /** Player **/
 
-.random{
-	width: 25px;
-	height: 16px;
-	position: absolute;
-	bottom: 6px;
-	left: 150px;
-	cursor: pointer;
-	background:url(img/random-icon.png)no-repeat left top;
-	text-indent:-9999px;
-	display:block;
+#player{
+    width:150px;
+    padding-bottom:50px;
+    margin-left:20px;
+    bottom: 0;
+    left: 80px;
+    z-index:99;
+    position: relative!important;
+    margin-top: 20px;
 }
 
-.random.hidden{display:none;}
-
-.random:hover,
-.random.mcjs-rc-active{ background:url(img/random-icon.png)no-repeat left bottom; }
-
-#player{position:fixed; left:0; bottom:0 !important; z-index:99; visibility:hidden; }
-#player.show{ visibility:visible; }
-
-/** VideoJS override to keep controlbar visible **/
-
-.vjs-fade-out { opacity: 1 !important; visibility: visible !important; }
-.vjs-default-skin.vjs-controls-disabled .vjs-control-bar { display: block!important;}
-.vjs-fullscreen-control{visibility:hidden!important;}
-.vjs-default-skin.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar,
-.vjs-default-skin.vjs-has-started .vjs-control-bar {
-	-webkit-transition: none!important;
-	-moz-transition: none!important;
-	-o-transition: none!important;
-	transition: none!important;
-	visibility:visible!important;
-	opacity:1!important;
+#player i{
+    display:block;
+    padding:5px;
+    float:left;
+    font-size:32px;
+    color:#333;
 }
-/*** PHONE LAYOUT ***/
+
 
 @media only screen and (min-width: 320px) and (max-width: 529px) {
-    #wrapper{padding:10px 0px;}
-
-    ul.music > li{
-        width:155px;
-        height: 250px;
-        float:left;
-    }
-
-    ul.music > li:nth-child(odd){margin-left:10px;}
-
-    ul.music > li:hover .overlay,
-    ul.music > li.focused .overlay,
-    ul.music > li img{
-        width:155px;
-        height: 155px;
-    }
-
-    .tracks{width:100%;}
-
-    ul.music > li.mcjs-rc-active{margin-left:10px;}
-    ul.music > li.mcjs-rc-active #albumInfo h2{font-size:18px;}
-
-    audio#player{width:30%!important;}
-
+    /* For phone layouts only */
+    #container{padding:0px;}
+    #header h1 { padding-top: 2px;}
+    #library{padding-left:5px;}
+    #library.side{display:none;}
+    #library .album{ width:160px; margin:5px;}
+    #library .album img{ width:160px; height:160px;}
+    #playlist {padding-bottom:100px;}
 }

@@ -1,50 +1,53 @@
-extends /layout
+doctype 5
+html(lang="en", ng-app="musicApp")
+    head
+        meta(name="mobile-web-app-capable" content="yes")
+        meta(name="apple-mobile-web-app-capable" content="yes")
+        meta(name="apple-mobile-web-app-status-bar-style" content="black")
+        meta(charset="utf-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        link(rel='stylesheet', href='/core/css/style.css')
+        link(rel='stylesheet', href='/core/css/icon.css')
+        link(rel='stylesheet', href='/music/css/style.css')
+        script(src="/core/js/jquery-1.8.2.min.js")
+        script(src="/core/js/socket.io.min.js")
+        script(src="/core/js/jquery.mcjs.core.js")
+        script(src="/core/js/plugins/angular/angular.min.js")
+        script(src="/core/js/plugins/angular/angular-route.min.js")
+        script(src="/music/js/app.js")
+        title Music
+        body(ng-controller="musicCtrl")
+            #header
+                a.backlink(href="/") &#xe113;
+                h1 #{lingua.music}
+            #container
+                ul#playlist(ng-show="player.active")
+                    li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
+                        img(ng-src="{{album.cover}}", ng-click="player.playlist.remove(album)")
+                        span.album-title {{album.album}}
+                        span.album-artist {{album.artist}}
+                        span.album-year {{album.year}}
+                        ol.tracks
+                            li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
+                                i.play.icon
+                                span.track-title {{track.title}}
+                    #player(ng-show="player.active")
+                        ul.nav
+                            li
+                                i.control.backward.icon(ng-click="player.previous()")
+                            li
+                                i.control.play.icon(ng-click="player.play()",ng-hide="player.playing")
+                            li
+                                i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
+                            li
+                                i.control.forward.icon(ng-click="player.next()")
 
-block declarations
-	- additional_title = lingua.music;
-	- use_knockout = true;
+                section#library(ng-class="{side: player.active}")
+                    ul.albums
+                        li.album(ng-repeat="album in albums", ng-click="player.playlist.add(album)")
+                            img(ng-src="{{album.cover}}")
+                            span.album-title {{album.album}}
+                            span.album-artist {{album.artist}}
+                            span.album-year {{album.year}}
 
-block additional_css
-	link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
-	link(rel='stylesheet', href='/music/css/style.css')
-
-block additional_scripts
-	script(src="http://vjs.zencdn.net/4.3/video.js")
-	script(src="/music/js/knockout.music.js")
-	script(src="/music/js/jquery.mcjs.music.js")
-block body
-	#header
-		a.backlink &#xe113;
-		h1 #{lingua.music}
-	#wrapper
-		// ko if: album().length > 0
-		ul.music(data-bind="foreach: album")
-			li.movieposter.boxed.mcjs-rc-controllable.hidden(data-bind="css: { hidden: false }")
-
-				// ko if: cover() == ''
-				img.cover(data-bind="attr: { src: '/music/css/img/nodata.jpg' }")
-				// /ko
-
-				// ko ifnot: cover() == ''
-				img.cover(data-bind="attr: { src: cover }")
-				// /ko
-
-				.overlay.mcjs-rc-clickable
-				span.title(data-bind="text:album", style="visibility:hidden;")
-				#albumInfo
-					h2(data-bind="text:album")
-					// ko if: year() !== 'Unknown' && year() !== null
-					.year(data-bind="text:year")
-					// /ko
-				ul.tracks(data-bind="foreach: tracks")
-					li.mcjs-rc-controllable.mcjs-rc-clickable(data-bind="attr:{ title: filename}")
-						i.play.icon
-						.number(data-bind="text:$data.track")
-						.title(data-bind="text:$data.title")
-		// /ko
-		
-		// ko ifnot: album().length > 0
-		h2.loading #{lingua.loading}
-		// /ko
-	audio#player.video-js.vjs-default-skin(controls, preload="metadata", width="100%", height="33", data-setup="{}")
-		source(src="",type="audio/mp3")
+                h2.loading(ng-show="!albums") #{lingua.loading}

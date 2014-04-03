@@ -22,12 +22,12 @@ exports.get = function(req, res, next){
 	, action = req.params.action;
 	
 	if (infoRequest == 'loadItems'){
-		functions.loadItems(req,res);
+        functions.loadItems(req,res);
 	}
 	
 	if(action){
-		var track = infoRequest.replace(/\+/g, " ");
-		var album = optionalParam.replace(/\+/g, " ");
+		var album = infoRequest.replace(/\+/g, " ");
+        var track = optionalParam.replace(/\+/g, " ");
         switch(action) {
             case('play'):
                 functions.playTrack(req, res, track, album);
