@@ -83,9 +83,7 @@
 
 	    playlist.remove = function(album) {
 	        var index = playlist.indexOf(album);
-	        if (index == current.album) {
-				player.reset();
-			}
+	        if (index == current.album) player.reset();
 	        playlist.splice(index, 1);
 	    };
 

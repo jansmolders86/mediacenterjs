@@ -34,7 +34,7 @@ html(lang="en", ng-app="musicApp")
                             li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
                                 i.play.icon
                                 span.track-title {{track.title}}
-                    #player(ng-show="player.active")
+                    #player(ng-show="player.playlist.length > 0")
                         ul.nav
                             li
                                 i.control.backward.icon(ng-click="player.previous()")
