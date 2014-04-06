@@ -29,7 +29,6 @@
             playlist: playlist,
             current: current,
             playing: false,
-            active : false,
             play: function(track, album) {
                 if (!playlist.length) return;
 
@@ -52,7 +51,6 @@
                 player.pause();
                 current.album = 0;
                 current.track = 0;
-                player.active = false;
             },
             next: function() {
                 if (!playlist.length) return;
@@ -81,14 +79,14 @@
 	    playlist.add = function(album) {
 	        if (playlist.indexOf(album) != -1) return;
 	        playlist.push(album);
-            player.active = true;
 	    };
 
 	    playlist.remove = function(album) {
 	        var index = playlist.indexOf(album);
-	        if (index == current.album) player.reset();
+	        if (index == current.album) {
+				player.reset();
+			}
 	        playlist.splice(index, 1);
-            player.active = false;
 	    };
 
 	    audio.addEventListener('ended', function() {

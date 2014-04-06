@@ -24,7 +24,7 @@ html(lang="en", ng-app="musicApp")
                 a.backlink(href="/") &#xe113;
                 h1 #{lingua.music}
             #container
-                ul#playlist(ng-show="player.active")
+                ul#playlist(ng-show="player.playlist.length > 0")
                     li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
                         img(ng-src="{{album.cover}}", ng-click="player.playlist.remove(album)")
                         span.album-title {{album.album}}
@@ -45,7 +45,7 @@ html(lang="en", ng-app="musicApp")
                             li
                                 i.control.forward.icon(ng-click="player.next()")
 
-                section#library(ng-class="{side: player.active}")
+                section#library(ng-class="{side: player.playlist.length > 0}")
                     ul.albums
                         li.album(ng-repeat="album in albums", ng-click="player.playlist.add(album)")
                             img(ng-src="{{album.cover}}")
