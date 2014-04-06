@@ -79,6 +79,8 @@ A complete documentation will be available when the project reaches Beta status.
 
 [Using the remote control](https://github.com/jansmolders86/mediacenterjs/wiki/User-Manual:-Using-the-remote-control)
 
+[FAQ](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:-FAQ)
+
 # Developer manual
 
 [Explanation app framework](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-app-framework)
