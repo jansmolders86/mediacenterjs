@@ -24,12 +24,14 @@
     padding:100px 80px;
     position:relative;
     min-height: 100%;
-    height:100%;
     width:75%;
 }
 
 #library{
     float:left;
+	height:100%;
+	max-height:100%;
+	overflow-x:hidden;
 }
 
 #library.side{
@@ -41,7 +43,7 @@
     height: 250px;
     float:left;
     background:#fff;
-    margin:15px;
+    margin:10px;
     position:relative;
     cursor:pointer;
 }
@@ -54,8 +56,14 @@
 }
 
 #library.side .album:hover img,
+#library.side .album.focused img
 #library.side .album:hover span{
     opacity:1;
+}
+
+#library .album:hover img,
+#library .album.focused img{
+	opacity:0.5;
 }
 
 #library .album img{
@@ -125,11 +133,22 @@
     visibility:hidden;
     font-size:12px;
 }
-#playlist .album.current ol li.current .play{
-    visibility:visible;
+#playlist .album.current ol li.current .play{ visibility:visible;}
+#playlist .album ol{ padding-left:0;}
+#playlist .remove{
+	position: absolute;
+	top: 25px;
+	left: 140px;
+	color: #fff;
+	font-size: 32px;
+	z-index: 1;
+	display:none;
+	cursor:pointer;
 }
 
-#playlist .album ol{ padding-left:0;}
+#playlist .album img{ z-index: 2; }
+#playlist .list:hover img{ opacity:0.3 }
+#playlist .list:hover .remove{display:block;}
 
 /** Player **/
 

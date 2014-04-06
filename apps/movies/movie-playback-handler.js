@@ -21,7 +21,6 @@ var colors = require('colors')
  * @param movieFile         The Movie-File
  */
 exports.startPlayback = function(response, movieUrl, movieFile) {
-
     var fileName =  movieFile.replace(/\.[^.]*$/,'')
         , outputName =  fileName.replace(/ /g,"-")
         , ExecConfig = {  maxBuffer: 9000*1024 }
@@ -50,7 +49,11 @@ exports.startPlayback = function(response, movieUrl, movieFile) {
                     if(fs.existsSync(outputPath) === true ){
                         fs.unlinkSync(outputPath);
                     };
-                    startTranscoding(movieUrl, movieFile, outputPath, ExecConfig);
+					if(fs.existsSync(movieUrl)){
+						startTranscoding(movieUrl, movieFile, outputPath, ExecConfig);
+					} else{
+						console.log('Movie file '+ movieUrl + 'not found, did you move or delete it?');
+					}
                 }
             }
 
@@ -151,7 +154,6 @@ checkProgression = function(movieFile, callback) {
 
 
 startTranscoding = function(movieUrl, movieFile, outputPath, ExecConfig){
-
     var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -sc_threshold 0 -s 1280x720 -profile:v baseline -keyint_min 150 -deinterlace -maxrate 10000000 -bufsize 10000000 -b 1200k -acodec aac -ar 48000 -ab 192k -strict experimental -movflags +frag_keyframe+empty_moov '+outputPath;
     var exec = require('child_process').exec
     , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {

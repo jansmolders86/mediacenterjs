@@ -123,7 +123,7 @@ getAlbums = function(callback){
                 callback(rows);
             }
         });
-	},1000);
+	},300);
 }
 
 getTracks = function (album, artist, year, cover, callback){
@@ -157,5 +157,5 @@ getTracks = function (album, artist, year, cover, callback){
                 }
             }
         );
-    },2000);
+    },500);
 }
