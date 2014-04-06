@@ -91,7 +91,7 @@ fetchMusicData = function(req, res) {
 						getTracks(album, artist, year, cover, function(completeAlbum){
 							count--;
 							albums.push(completeAlbum);
-							if(count === 1 ){
+							if(count == 0 ){
 								console.log('Sending data to client');
 								return res.json(albums);
 								res.end();
