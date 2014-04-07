@@ -421,50 +421,109 @@
 			url: '/configuration/', 
 			type: 'get'
 		}).done(function(data){
-			if (data.screensaver === 'dim'){
 
-                setInterval(function(){
-                    if(o.RemoteIdle === false ){
-                        if(typeof videojs == 'function'){
-                            if(videojs("player").paused()){
+            setInterval(function(){
+                if(o.RemoteIdle === false ){
+                    if(typeof videojs == 'function'){
+                        if(videojs("player").paused()){
+
+                            if (data.screensaver === 'dim') {
                                 $("html, body, #wrapper, #header").addClass("dim");
                                 o.RemoteIdle = true;
-                                
-                                clearInterval(o.screenSaverTimeout);
+                            } else if(data.screensaver === 'off') {
+                                return;
+                            } else if (data.screensaver === 'backdrop') {
+                                _backdropScreensaver(o);
+                                o.RemoteIdle = true;
                             }
-                        } else {
-                            $("html, body, #wrapper, #header").addClass("dim");
-                            o.RemoteIdle = true;
                             clearInterval(o.screenSaverTimeout);
                         }
                     } else {
+                        if (data.screensaver === 'dim') {
+                            $("html, body, #wrapper, #header").addClass("dim");
+                            o.RemoteIdle = true;
+
+                        }else if(data.screensaver === 'off') {
+                            return;
+                        } else if (data.screensaver === 'backdrop') {
+                            _backdropScreensaver(o);
+                            o.RemoteIdle = true;
+                        }
                         clearInterval(o.screenSaverTimeout);
                     }
-                },o.screenSaverTimeout);
+                } else {
+                    clearInterval(o.screenSaverTimeout);
+                }
+            },o.screenSaverTimeout);
 
-				$(document).bind("idle.idleTimer", function(){
-                    if(typeof videojs == 'function'){
-                        if(videojs("player").paused()){
+            $(document).bind("idle.idleTimer", function(){
+                if(typeof videojs == 'function'){
+                    if(videojs("player").paused()){
+
+                        if (data.screensaver === 'dim') {
                             $("html, body, #wrapper, #header").addClass("dim");
-                        } else{
+                        }else if(data.screensaver === 'off') {
                             return;
+                        } else if (data.screensaver === 'backdrop') {
+                            _backdropScreensaver(o);
                         }
-                    }else {
+                    } else{
+                        return;
+                    }
+                }else {
+                    if (data.screensaver === 'dim') {
                         $("html, body, #wrapper, #header").addClass("dim");
-                    }                    
-				});
+                    }else if(data.screensaver === 'off') {
+                        return;
+                    } else if (data.screensaver === 'backdrop') {
+                        _backdropScreensaver(o);
+                    }
+                }
+            });
 
-				$(document).bind("active.idleTimer", function(){
-					$("html, body, #wrapper, #header").removeClass("dim")
-				});
-				
-				$.idleTimer(o.screenSaverTimeout);
+            $(document).bind("active.idleTimer", function(){
+                if (data.screensaver === 'dim') {
+                    $("html, body, #wrapper, #header").removeClass("dim");
+                }else if(data.screensaver === 'off') {
+                    return;
+                } else if (data.screensaver === 'backdrop') {
+                    $("#screensaver").remove();
+                    $("#wrapper, #header").css("display","block");
+                }
+            });
 
-			} else if(data.screensaver === 'off'){
-				return;
-			}
+            $.idleTimer(o.screenSaverTimeout);
+
 		});
 	}
+
+    function _backdropScreensaver(o){
+        $.ajax({
+            url: '/movies/backdrops/',
+            type: 'get'
+        }).done(function(data) {
+            var img_array = data;
+            var index = 0;
+            var interval = 5000;
+
+            setTimeout(function () {
+                $("#wrapper, #header").css("display","none");
+                $('body').append('<img width="100%" height="100%" id="screensaver" src="" class="fadein" />');
+
+                $('#screensaver').fadeToggle(function(event){
+                    $('#screensaver').attr('src',img_array[index++ % img_array.length]).removeClass('fadein').addClass('fadein');
+                });
+
+                setTimeout(arguments.callee, interval);
+            }, interval);
+
+        });
+    }
+
+
+    function _enableScreensaver(o){
+
+    }
 
 	/**** End of custom functions ***/
 	

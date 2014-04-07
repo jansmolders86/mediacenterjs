@@ -54,6 +54,9 @@ exports.get = function(req, res){
 			case('loadItems'):
                 functions.loadItems(req, res);
 				break;
+            case('backdrops'):
+                functions.backdrops(req, res);
+                break;
 		}	
 	}
 

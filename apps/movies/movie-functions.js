@@ -22,6 +22,35 @@ exports.loadItems = function (req, res){
     getData(req, res, metaType);
 };
 
+exports.backdrops = function (req, res){
+    db.query('SELECT * FROM movies',{
+        original_name  	: String,
+        title 		    : String,
+        poster_path  	: String,
+        backdrop_path  	: String,
+        imdb_id  		: String,
+        rating  		: String,
+        certification  	: String,
+        genre  			: String,
+        runtime  		: String,
+        overview  		: String,
+        cd_number  		: String,
+        adult           : String
+    }, function(rows) {
+        if (typeof rows !== 'undefined' && rows.length > 0){
+            var backdropArray = [];
+            rows.forEach(function(item){
+               var backdrop = item.backdrop_path;
+               backdropArray.push(backdrop)
+            });
+            res.json(backdropArray);
+        } else {
+            console.log('Could not index any movies, please check given movie collection path');
+        }
+    });
+};
+
+
 exports.playMovie = function (req, res, movieTitle){
 	file_utils.getLocalFile(config.moviepath, movieTitle, function(err, file) {
 		if (err) console.log(err .red);
