@@ -510,9 +510,9 @@
                 $("#wrapper, #header").css("display","none");
                 $('body').append('<img width="100%" height="100%" id="screensaver" src="" class="fadein" />');
 
-                $('#screensaver').fadeToggle(function(event){
-                    $('#screensaver').attr('src',img_array[index++ % img_array.length]).removeClass('fadein').addClass('fadein');
-                });
+                $("#screensaver").fadeOut(interval, function() {
+                    $("#screensaver").attr("src",img_array[index++ % img_array.length]);
+                }).fadeIn(interval);
 
                 setTimeout(arguments.callee, interval);
             }, interval);

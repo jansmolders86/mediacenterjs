@@ -97,6 +97,11 @@ block body
 						label(for="spotifyPass") #{lingua.setting_spotify_password}
 						input#spotifyPass.mcjs-rc-clickable(name="spotifyPass",type="password", value=spotifyPass)
 				.row.mcjs-rc-controllable
+					label(for="screensaver") Screensaver
+					select#screensaver.mcjs-rc-clickable(name="screensaver")
+						- for saver in availableScreensavers
+							option(value=saver, selected=saver == screensaver) #{saver}
+				.row.mcjs-rc-controllable
 					label(for="theme") #{lingua.setting_theme}
 					select#theme.mcjs-rc-clickable(name="theme")
 						- for theme in themes
@@ -128,5 +133,4 @@ block body
 												a.parentalControl.btn.mcjs-rc-clickable.unlock #{lingua.settings_device_btn_unlock}
 				.row.mcjs-rc-controllable
 							input.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
-							input(type="hidden",name="screensaver",value="dim")
 							input.oauth(name="oauth" type="hidden")

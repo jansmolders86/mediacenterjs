@@ -55,7 +55,8 @@ exports.index = function(req, res, next){
 			availableLanguages.push(languageCode);
 		}
 	});
-	
+
+    var availableScreensavers = ['dim','backdrop','off'];
 
 	db.query('SELECT * FROM devices', { 
 		device_id: String,
@@ -78,6 +79,7 @@ exports.index = function(req, res, next){
                 remotePort : config.remotePort,
                 language: config.language,
                 availableLanguages: availableLanguages,
+                availableScreensavers: availableScreensavers,
                 location: config.location,
                 screensaver: config.screensaver,
                 spotifyUser: config.spotifyUser,
