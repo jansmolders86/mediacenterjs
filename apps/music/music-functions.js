@@ -14,99 +14,90 @@ db.on('info', function (text) { console.log('Database info:', text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 exports.loadItems = function(req, res){
-    fetchMusicData(req, res);
+    getAlbums(function(rows){
+        if(rows !== null) {
+            var albums = [];
+
+            var count = rows.length;
+            console.log('Found ' + count + ' albums, getting additional data...');
+            rows.forEach(function (item, value) {
+
+                if (item !== null && item !== undefined) {
+                    var album = item.album
+                        , artist = item.artist
+                        , year = item.year
+                        , cover = item.cover;
+
+                    getTracks(album, artist, year, cover, function (completeAlbum) {
+                        count--;
+                        albums.push(completeAlbum);
+                        if (count == 0) {
+                            console.log('Sending data to client');
+                            return res.json(albums);
+                            res.end();
+                            var serveToFrontEnd = false;
+                            fetchMusicData(req, res, serveToFrontEnd);
+                        }
+                    });
+                }
+
+            });
+        } else {
+            var serveToFrontEnd = true;
+            fetchMusicData(req, res, serveToFrontEnd);
+        }
+    });
 };
 
 exports.playTrack = function(req, res, track, album){
+
+
 	music_playback_handler.startTrackPlayback(res, track);
-};
-
-exports.nextTrack = function(req, res, track, album){
-	console.log('track', track)
-    var currentTrack = track;
-    db.query('SELECT * FROM tracks WHERE album = $album AND CAST(track as integer) > (SELECT track FROM tracks WHERE filename = $track) LIMIT 1 ',{album: album, track:currentTrack}, {
-            title       : String,
-            track       : Number,
-            album       : String,
-            artist      : String,
-            year        : Number,
-            filename    : String,
-			filepath	: String
-        },
-        function(rows) {
-            if (typeof rows !== 'undefined' && rows.length > 0){
-                var nextTrack = rows[0].filename;
-                if(currentTrack === nextTrack)
-                console.log('NextTrack',nextTrack);
-                music_playback_handler.startTrackPlayback(res, nextTrack);
-            } else {
-                console.log('error', rows)
-            }
-        }
-    );
-};
-
-exports.randomTrack = function(req, res, track, album){
-    db.query('SELECT * FROM $album ORDER BY RANDOM() LIMIT 1 ', { album: album }, {
-            title   : String,
-            track   : Number,
-            album   : String,
-            artist  : String,
-            year    : Number,
-            filename: String
-        },
-        function(rows) {
-            if (typeof rows !== 'undefined' && rows.length > 0){
-                var track = rows[0].filename;
-                music_playback_handler.startTrackPlayback(res, track);
-            } else {
-                console.log('error', rows)
-            }
-        }
-    );
 };
 
 /** Private functions **/
 
 
-fetchMusicData = function(req, res) {
+fetchMusicData = function(req, res, serveToFrontEnd) {
     var count = 0;
 	var dataType = 'music';
     metafetcher.fetch(req, res, dataType, function(type){
         if(type === dataType){
 			getAlbums(function(rows){
-		
-				var albums = [];
+		        if(rows !== null) {
+                    var albums = [];
 
-				count = rows.length;
-				console.log('Found '+count+' albums, getting additional data...');
-				rows.forEach(function(item, value){
+                    count = rows.length;
+                    console.log('Found ' + count + ' albums, getting additional data...');
+                    rows.forEach(function (item, value) {
 
-					if(item !== null && item !== undefined){
-						var album           = item.album
-							, artist        = item.artist
-							, year          = item.year
-							, cover         = item.cover;
+                        if (item !== null && item !== undefined) {
+                            var album = item.album
+                                , artist = item.artist
+                                , year = item.year
+                                , cover = item.cover;
 
-						getTracks(album, artist, year, cover, function(completeAlbum){
-							count--;
-							albums.push(completeAlbum);
-							if(count == 0 ){
-								console.log('Sending data to client');
-								return res.json(albums);
-								res.end();
-							}
-						});
-					}
+                            getTracks(album, artist, year, cover, function (completeAlbum) {
+                                count--;
+                                albums.push(completeAlbum);
+                                if (count == 0) {
+                                    console.log('Sending data to client');
+                                    if(serveToFrontEnd === true){
+                                        return res.json(albums);
+                                        res.end();
+                                    }
+                                }
+                            });
+                        }
 
-				});
+                    });
+                }
 			});
 		}
 	});
 }
 
 getAlbums = function(callback){
-	console.log('Getting albums...');
 	setTimeout(function(){
         db.query('SELECT * FROM albums ORDER BY album asc', {
             album 		    : String,
@@ -115,12 +106,13 @@ getAlbums = function(callback){
             cover           : String
         },
         function(err, rows) {
-            if(err){
-                console.log('Database error: ' + err);
-            }
+            if(err) console.log('Database error: ' + err);
+
             if (typeof rows !== 'undefined' && rows.length > 0){
                 console.log('Found albums...');
                 callback(rows);
+            } else {
+                callback(null);
             }
         });
 	},300);
