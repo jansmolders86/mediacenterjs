@@ -142,13 +142,11 @@
 	color: #fff;
 	font-size: 32px;
 	z-index: 1;
-	display:none;
 	cursor:pointer;
 }
 
 #playlist .album img{ z-index: 2; }
 #playlist .list:hover img{ opacity:0.3 }
-#playlist .list:hover .remove{display:block;}
 
 /** Player **/
 
@@ -174,11 +172,11 @@
 
 @media only screen and (min-width: 320px) and (max-width: 529px) {
     /* For phone layouts only */
-    #container{padding:0px;}
+    #container{padding:0px; width:100%;}
     #header h1 { padding-top: 2px;}
-    #library{padding-left:5px;}
+    #library{padding-left:5px; }
     #library.side{display:none;}
-    #library .album{ width:160px; margin:5px;}
-    #library .album img{ width:160px; height:160px;}
+    #library .album{ width:150px; margin:5px;}
+    #library .album img{ width:150px; height:150px;}
     #playlist {padding-bottom:100px;}
 }
