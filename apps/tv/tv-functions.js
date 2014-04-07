@@ -22,7 +22,42 @@ db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, 
 
 
 exports.loadTvShow = function (req, res){
-    fetchTVData(req, res, metaType);
+    db.query('SELECT * FROM tvshows',{
+        title 		    : String,
+        banner        	: String,
+        genre         	: String,
+        certification  	: String
+    }, function(rows) {
+        if (typeof rows !== 'undefined' && rows.length > 0){
+            var ShowList = [];
+
+            count = rows.length;
+            console.log('Found '+count+' shows, getting additional data...')
+            rows.forEach(function(item, value){
+                var showTitle       = item.title
+                    , showBanner        = item.banner
+                    , showGenre         = item.genre
+                    , showCertification = item.certification;
+
+                getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
+                    if(availableEpisodes !== null) {
+                        ShowList.push(availableEpisodes);
+                        count--;
+
+                        if (count === 0) {
+                            res.json(ShowList);
+
+                            var serveToFrontEnd = false;
+                            fetchTVData(req, res, metaType, serveToFrontEnd);
+                        }
+                    }
+                });
+            });
+        } else {
+            var serveToFrontEnd = true;
+            fetchTVData(req, res, metaType, serveToFrontEnd);
+        }
+    });
 };
 
 
@@ -53,7 +88,7 @@ exports.sendState = function (req, res){
 
 /** Private functions **/
 
-fetchTVData = function(req, res, metaType) {
+fetchTVData = function(req, res, metaType, serveToFrontEnd) {
 
     //TODO: Make this a promise
     var count = 0;
@@ -77,11 +112,13 @@ fetchTVData = function(req, res, metaType) {
                         , showCertification = item.certification;
 
                         getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
-                            ShowList.push(availableEpisodes);
-                            count--;
+                            if(availableEpisodes !== null) {
+                                ShowList.push(availableEpisodes);
+                                count--;
 
-                            if(count === 0 ){
-                                res.json(ShowList);
+                                if (count === 0 && serveToFrontEnd !== false) {
+                                    res.json(ShowList);
+                                }
                             }
                         });
                     });
@@ -115,6 +152,8 @@ function getEpisodes(showTitle, showBanner, showGenre, showCertification, callba
 
                 callback(availableEpisodes);
 
+            } else {
+                callback(null);
             }
         }
     );

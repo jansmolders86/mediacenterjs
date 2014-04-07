@@ -19,7 +19,29 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 
 
 exports.loadItems = function (req, res){
-    getData(req, res, metaType);
+    db.query('SELECT * FROM movies',{
+        original_name  	: String,
+        title 		    : String,
+        poster_path  	: String,
+        backdrop_path  	: String,
+        imdb_id  		: String,
+        rating  		: String,
+        certification  	: String,
+        genre  			: String,
+        runtime  		: String,
+        overview  		: String,
+        cd_number  		: String,
+        adult           : String
+    }, function(rows) {
+        if (typeof rows !== 'undefined' && rows.length > 0){
+            res.json(rows);
+            var serveToFrontEnd = false;
+            getData(req, res, metaType, serveToFrontEnd);
+        } else {
+            var serveToFrontEnd = true;
+            getData(req, res, metaType, serveToFrontEnd);
+        }
+    });
 };
 
 exports.backdrops = function (req, res){
@@ -98,7 +120,7 @@ exports.sendState = function (req, res){
 
 /** Private functions **/
 
-getData = function(req, res, metaType) {
+getData = function(req, res, metaType, serveToFrontEnd) {
     metafetcher.fetch(req, res, metaType, function(type){
         if(type === metaType){
 			
@@ -117,7 +139,11 @@ getData = function(req, res, metaType) {
                 adult           : String
             }, function(rows) {
                 if (typeof rows !== 'undefined' && rows.length > 0){
-                    res.json(rows);
+
+                    if(serveToFrontEnd !== false){
+                        res.json(rows);
+                    }
+
                 } else {
                     console.log('Could not index any movies, please check given movie collection path');
                 }
