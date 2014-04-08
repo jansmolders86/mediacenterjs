@@ -20,12 +20,13 @@ var colors = require('colors')
  * @param movieUrl          The URL to the Movie
  * @param movieFile         The Movie-File
  */
-exports.startPlayback = function(response, movieUrl, movieFile) {
+exports.startPlayback = function(response, movieUrl, movieFile, subtitleUrl, subtitleTitle) {
     var fileName =  movieFile.replace(/\.[^.]*$/,'')
         , outputName =  fileName.replace(/ /g,"-")
         , ExecConfig = {  maxBuffer: 9000*1024 }
-        , outputPath = "./public/data/movies/"+outputName+".mp4";
-	
+        , outputPath = "./public/data/movies/"+outputName+".mp4"
+        , hasSub = false;
+
 	if(os.platform() === 'win32'){
 		var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
 		ExecConfig = {  maxBuffer: 9000*1024, env: process.env.ffmpegPath };
@@ -33,6 +34,13 @@ exports.startPlayback = function(response, movieUrl, movieFile) {
 
     GetMovieDurarion(response, movieUrl, movieFile, function(data){
         var movieDuration = data;
+
+        if(fs.existsSync(subtitleUrl)){
+            var subOutput = "./public/data/movies/"+subtitleTitle;
+            fs.writeFileSync(subOutput, fs.readFileSync(subtitleUrl));
+            hasSub = true;
+        }
+
         checkProgression(movieFile, function(data){
             if(data.progression !== 0 && data !== undefined){
                 var movieProgression = data.progression;
@@ -46,7 +54,7 @@ exports.startPlayback = function(response, movieUrl, movieFile) {
                 var movieProgression = 0;
 
                 if( data.transcodingstatus === 'pending'){
-                    if(fs.existsSync(outputPath) === true ){
+                    if(fs.existsSync(outputPath)){
                         fs.unlinkSync(outputPath);
                     };
 					if(fs.existsSync(movieUrl)){
@@ -59,7 +67,8 @@ exports.startPlayback = function(response, movieUrl, movieFile) {
 
             var movieInfo = {
                 'duration': movieDuration,
-                'progression': movieProgression
+                'progression': movieProgression,
+                'subtitle': hasSub
             }
 
             response.json(movieInfo);

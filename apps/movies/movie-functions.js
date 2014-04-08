@@ -79,8 +79,16 @@ exports.playMovie = function (req, res, movieTitle){
 		if (file) {
 			var movieUrl = file.href
 			, movie_playback_handler = require('./movie-playback-handler');
-			
-			movie_playback_handler.startPlayback(res, movieUrl, movieTitle);
+
+            var subtitleUrl = movieUrl;
+            subtitleUrl = subtitleUrl.split(".");
+            subtitleUrl = subtitleUrl[0]+".srt";
+
+            var subtitleTitle = movieTitle;
+            subtitleTitle = subtitleTitle.split(".");
+            subtitleTitle = subtitleTitle[0]+".srt";
+
+            movie_playback_handler.startPlayback(res, movieUrl, movieTitle, subtitleUrl, subtitleTitle);
     
 		} else {
 			console.log("File " + movieTitle + " could not be found!" .red);

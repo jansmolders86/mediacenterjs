@@ -95,6 +95,7 @@
         var fileName =  movieTitle.replace(/\.[^.]*$/,'')
             , outputName =  fileName.replace(/ /g, "-")
             , videoUrl =  "/data/movies/"+outputName+".mp4"
+            , subtitleUrl =  "/data/movies/"+outputName+".srt"
             , url = '/movies/'+movieTitle+'/play';
 
         $.ajax({
@@ -103,6 +104,10 @@
         }).done(function(data){
 
                 $('body').append('<video id="'+o.playerID+'" poster class="video-js vjs-default-skin" controls preload="none" width="100%" height="100%"><source src="'+videoUrl+'" type="video/mp4"></video>');
+
+                if(data.subtitle === true){
+                    $('#'+o.playerID).append('<track kind="captions" src="'+subtitleUrl+'" srclang="nl" label="English" default>');
+                }
 
                 var player = videojs(o.playerID);
                 var currentTime = parseFloat(data.progression);
