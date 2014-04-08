@@ -3,7 +3,6 @@
     "version": "0.0.61",
     "description": "A NodeJS based mediacenter for your browser",
     "homepage": "http://www.mediacenterjs.com",
-	"main": "main.html",
     "author": {
         "name": "Jan Smolders",
         "email": "jansmolders86@gmail.com"
