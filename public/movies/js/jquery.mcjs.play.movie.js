@@ -106,7 +106,7 @@
                 $('body').append('<video id="'+o.playerID+'" poster class="video-js vjs-default-skin" controls preload="none" width="100%" height="100%"><source src="'+videoUrl+'" type="video/mp4"></video>');
 
                 if(data.subtitle === true){
-                    $('#'+o.playerID).append('<track kind="captions" src="'+subtitleUrl+'" srclang="nl" label="English" default>');
+                    $('#'+o.playerID).append('<track kind="captions" src="'+subtitleUrl+'" srclang="en" label="Subtitle" default>');
                 }
 
                 var player = videojs(o.playerID);

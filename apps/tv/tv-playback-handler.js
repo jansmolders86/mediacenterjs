@@ -25,15 +25,23 @@ exports.startPlayback = function(response, episodeUrl, episode) {
     var fileName =  episode.replace(/\.[^.]*$/,'')
         , outputName =  fileName.replace(/ /g,"-")
         , ExecConfig = {  maxBuffer: 9000*1024 }
-        , outputPath = "./public/data/tv/"+outputName+".mp4";
+        , outputPath = "./public/data/tv/"+outputName+".mp4"
+        , hasSub = false;
 
     if(os.platform() === 'win32'){
-        var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
+        var ffmpegPath = './bin/ffmpeg/ffmpeg.exe';
         ExecConfig = {  maxBuffer: 9000*1024, env: process.env.ffmpegPath };
     }
 
     GetDurarion(response, episodeUrl, episode, function(data){
         var movieDuration = data;
+
+        if(fs.existsSync(subtitleUrl)){
+            var subOutput = "./public/data/tv/"+subtitleTitle;
+            fs.writeFileSync(subOutput, fs.readFileSync(subtitleUrl));
+            hasSub = true;
+        }
+
         checkProgression(episode, function(data){
             if(data.progression !== 0 && data !== undefined){
                 var movieProgression = data.progression;
@@ -56,7 +64,8 @@ exports.startPlayback = function(response, episodeUrl, episode) {
 
             var movieInfo = {
                 'duration': movieDuration,
-                'progression': movieProgression
+                'progression': movieProgression,
+                'subtitle': hasSub
             }
 
             response.json(movieInfo);

@@ -68,7 +68,15 @@ exports.playEpisode = function (req, res, tvShowRequest){
             var tvShowUrl = file.href
             , tvShow_playback_handler = require('./tv-playback-handler');
 
-            tvShow_playback_handler.startPlayback(res, tvShowUrl, tvShowRequest);
+            var subtitleUrl = tvShowUrl;
+            subtitleUrl = subtitleUrl.split(".");
+            subtitleUrl = subtitleUrl[0]+".srt";
+
+            var subtitleTitle = tvShowRequest;
+            subtitleTitle = subtitleTitle.split(".");
+            subtitleTitle = subtitleTitle[0]+".srt";
+
+            tvShow_playback_handler.startPlayback(res, tvShowUrl, tvShowRequest, subtitleUrl, subtitleTitle);
 
         } else {
             console.log("File " + tvShowRequest + " could not be found!" .red);
