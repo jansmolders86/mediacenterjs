@@ -56,13 +56,13 @@
 }
 
 #library.side .album:hover img,
-#library.side .album.focused img
+#library.side .album.current img
 #library.side .album:hover span{
     opacity:1;
 }
 
 #library .album:hover img,
-#library .album.focused img{
+#library .album.current img{
 	opacity:0.5;
 }
 

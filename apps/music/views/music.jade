@@ -12,9 +12,13 @@ html(lang="en", ng-app="musicApp")
 		link(rel='stylesheet', href='/music/css/style.css')
 		if selectedTheme
 			link(rel='stylesheet', href='/themes/' + selectedTheme)
+		script(src="/core/js/jquery-1.8.2.min.js")
+		script(src="/core/js/socket.io.min.js")
+		script(src="/core/js/jquery.mcjs.core.js")
 		script(src="/core/js/plugins/angular/angular.min.js")
 		script(src="/core/js/plugins/angular/angular-route.min.js")
 		script(src="/music/js/app.js")
+		script(src="/music/js/remote.js")
 		title Music
 		body(ng-controller="musicCtrl")
 			#header
@@ -46,14 +50,10 @@ html(lang="en", ng-app="musicApp")
 
 				section#library(ng-class="{side: player.playlist.length > 0}")
 					ul.albums
-						li.album(ng-repeat="album in albums", ng-click="player.playlist.add(album)")
+						li.album(ng-repeat="album in albums", ng-click="player.playlist.add(album)",ng-class="{current: focused == $index }")
 							img(ng-src="{{album.cover}}")
 							span.album-title {{album.album}}
 							span.album-artist {{album.artist}}
 							span.album-year {{album.year}}
 
 				h2.loading(ng-show="!albums") #{lingua.loading}
-				
-			script(src="/core/js/jquery-1.8.2.min.js")
-			script(src="/core/js/socket.io.min.js")
-			script(src="/core/js/jquery.mcjs.core.js")	

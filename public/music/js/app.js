@@ -4,10 +4,12 @@
 
     var musicApp = angular.module('musicApp', []);
 
-    window.musicCtrl = function($scope, $http, player) {
+    window.musicCtrl = function($scope, $http, player, socket, audio) {
         $scope.player = player;
+        $scope.focused = 0;
         $http.get('/music/loadItems').success(function(data) {
             $scope.albums = data;
+            remote(socket, $scope, player, audio);
         });
     };
 
@@ -16,7 +18,7 @@
         return audio;
     });
 
-    musicApp.factory('player', function(audio, $rootScope) {
+    musicApp.factory('player', function(audio, socket, $rootScope) {
         var player,
             playlist = [],
             paused = false,
@@ -92,7 +94,36 @@
 	    }, false);
 
 	    return player;
-  });
+    });
+
+
+    musicApp.factory('socket', function ($rootScope) {
+        var socket = io.connect('http://127.0.0.1:3001');
+        socket.on('connect', function(data){
+            socket.emit('screen');
+        });
+        return {
+            on: function (eventName, callback) {
+                socket.on(eventName, function () {
+                    var args = arguments;
+                    $rootScope.$apply(function () {
+                        callback.apply(socket, args);
+                    });
+                });
+            },
+            emit: function (eventName, data, callback) {
+                socket.emit(eventName, data, function () {
+                    var args = arguments;
+                    $rootScope.$apply(function () {
+                        if (callback) {
+                            callback.apply(socket, args);
+                        }
+                    });
+                })
+            }
+        };
+    });
+
 
 
 })(window);
