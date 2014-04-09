@@ -907,37 +907,27 @@ table tr > th:first-child{ padding-left:0px;}
 
 
 .glinein{
-	-webkit-animation: glide-in 0.5s;
-	-moz-animation: glide-in 0.5s;
-    -o-animation: glide-in 0.5s;
+    -webkit-animation: glide-in 0.5s;
     animation: glide-in 0.5s;
 }
 
 .fadein{
-	-webkit-animation: fade-in 1s;
-	-moz-animation:  fade-in 1s;
-    -o-animation: fade-in 1s;
+   -webkit-animation: fade-in 1s;
     animation: fade-in 1s;
 }
 
 .fadeinslow{
-	-webkit-animation: fade-in 2s;
-	-moz-animation:  fade-in 2s;
-    -o-animation: fade-in 2s;
+    -webkit-animation: fade-in 2s;
     animation: fade-in 2s;
 }
 
 .fadeout{
-	-webkit-animation: fade-out 2s;
-	-moz-animation:  fade-out 2s;
-    -o-animation: fade-out 2s;
+    -webkit-animation: fade-out 2s;
     animation: fade-out 2s;
 }
 
 .flipin{ 
-	-webkit-animation: flip-in 1s;
-	-moz-animation: flip-in 1s;
-    -o-animation: flip-in 1s;
+    -webkit-animation: flip-in 1s;
     animation: flip-in 1s;
 }
 
@@ -966,80 +956,24 @@ table tr > th:first-child{ padding-left:0px;}
 		transform-origin: 100% 100%;
 	}
 }
-@-moz-keyframes flip-in {
-	0%  { 
-		opacity: 0.0; 
-		-webkit-transform: translate3d(0, 0, 0);
-		-webkit-transform: perspective(600px) rotateY(50deg);
-		-moz-transform: perspective(600px) rotateY(50deg);
-		-ms-transform: perspective(600px) rotateY(50deg);
-		transform: perspective(600px) rotateY(50deg);
-		-webkit-transform-origin: 100% 20%;
-		-moz-transform-origin: 100% 20%;
-		-ms-transform-origin: 100% 20%;
-		transform-origin: 100% 20%;
-	}
-	100% { 
-		opacity: 1.0; 
-		-webkit-transform: translate3d(0, 0, 0);
-		-webkit-transform: perspective(0px) rotateY(0deg);
-		-moz-transform: perspective(0px) rotateY(0deg);
-		-ms-transform: perspective(0px) rotateY(0deg);
-		transform: perspective(0px) rotateY(0deg);
-		-webkit-transform-origin: 100% 100%;
-		-moz-transform-origin: 100% 100%;
-		-ms-transform-origin: 100% 100%;
-		transform-origin: 100% 100%;
-	}
-}
-@-o-keyframes flip-in {
-	0%  { 
-		opacity: 0.0; 
-		-webkit-transform: translate3d(0, 0, 0);
-		-webkit-transform: perspective(600px) rotateY(50deg);
-		-moz-transform: perspective(600px) rotateY(50deg);
-		-ms-transform: perspective(600px) rotateY(50deg);
-		transform: perspective(600px) rotateY(50deg);
-		-webkit-transform-origin: 100% 20%;
-		-moz-transform-origin: 100% 20%;
-		-ms-transform-origin: 100% 20%;
-		transform-origin: 100% 20%;
-	}
-	100% { 
-		opacity: 1.0; 
-		-webkit-transform: translate3d(0, 0, 0);
-		-webkit-transform: perspective(0px) rotateY(0deg);
-		-moz-transform: perspective(0px) rotateY(0deg);
-		-ms-transform: perspective(0px) rotateY(0deg);
-		transform: perspective(0px) rotateY(0deg);
-		-webkit-transform-origin: 100% 100%;
-		-moz-transform-origin: 100% 100%;
-		-ms-transform-origin: 100% 100%;
-		transform-origin: 100% 100%;
-	}
-}
 @keyframes flip-in {
 	0%  { 
 		opacity: 0.0; 
-		-webkit-transform: translate3d(0, 0, 0);
-		-webkit-transform: perspective(600px) rotateY(50deg);
-		-moz-transform: perspective(600px) rotateY(50deg);
+		transform: translate3d(0, 0, 0);
+		transform: perspective(600px) rotateY(50deg);
 		-ms-transform: perspective(600px) rotateY(50deg);
 		transform: perspective(600px) rotateY(50deg);
-		-webkit-transform-origin: 100% 20%;
-		-moz-transform-origin: 100% 20%;
+		transform-origin: 100% 20%;
 		-ms-transform-origin: 100% 20%;
 		transform-origin: 100% 20%;
 	}
 	100% { 
 		opacity: 1.0; 
-		-webkit-transform: translate3d(0, 0, 0);
-		-webkit-transform: perspective(0px) rotateY(0deg);
-		-moz-transform: perspective(0px) rotateY(0deg);
+		transform: translate3d(0, 0, 0);
+		transform: perspective(0px) rotateY(0deg);
 		-ms-transform: perspective(0px) rotateY(0deg);
 		transform: perspective(0px) rotateY(0deg);
-		-webkit-transform-origin: 100% 100%;
-		-moz-transform-origin: 100% 100%;
+		transform-origin: 100% 100%;
 		-ms-transform-origin: 100% 100%;
 		transform-origin: 100% 100%;
 	}
@@ -1051,34 +985,18 @@ table tr > th:first-child{ padding-left:0px;}
 	0%  { opacity: 0.0; -webkit-transform: translate3d(0, 0, 0);}
 	100% { opacity: 1.0; -webkit-transform: translate3d(0, 0, 0);}
 }
-@-moz-keyframes fade-in {
-	0%  { opacity: 0.0;  -webkit-transform: translate3d(0, 0, 0);}
-	100% { opacity: 1.0;  -webkit-transform: translate3d(0, 0, 0);}
-}
-@-o-keyframes fade-in {
-	0%  { opacity: 0.0;  -webkit-transform: translate3d(0, 0, 0);}
-	100% { opacity: 1.0;  -webkit-transform: translate3d(0, 0, 0);}
-}
 @keyframes fade-in {
-	0%  { opacity: 0.0;  -webkit-transform: translate3d(0, 0, 0);}
-	100% { opacity: 1.0;  -webkit-transform: translate3d(0, 0, 0);}
+	0%  { opacity: 0.0; transform: translate3d(0, 0, 0);}
+	100% { opacity: 1.0; transform: translate3d(0, 0, 0);}
 }
 
 @-webkit-keyframes glide-in {
 	0%{margin-left:-30px; opacity: 0.0; -webkit-transform: translate3d(0, 0, 0);} 
 	100%{margin-left:0; opacity: 1.0; -webkit-transform: translate3d(0, 0, 0);}
 }	
-@-moz-keyframes glide-in {
-	0%{margin-left:-30px; opacity: 0.0; -webkit-transform: translate3d(0, 0, 0);} 
-	100%{margin-left:0; opacity: 1.0; -webkit-transform: translate3d(0, 0, 0);}
-}
-@-o-keyframes glide-in {
-	0%{margin-left:-30px; opacity: 0.0; -webkit-transform: translate3d(0, 0, 0);} 
-	100%{margin-left:0; opacity: 1.0; -webkit-transform: translate3d(0, 0, 0);}
-}
 @keyframes glide-in {
-	0%{margin-left:-30px; opacity: 0.0; -webkit-transform: translate3d(0, 0, 0);} 
-	100%{margin-left:0; opacity: 1.0; -webkit-transform: translate3d(0, 0, 0);}
+	0%{margin-left:-30px; opacity: 0.0; transform: translate3d(0, 0, 0);} 
+	100%{margin-left:0; opacity: 1.0; transform: translate3d(0, 0, 0);}
 }
 
 
@@ -1086,17 +1004,9 @@ table tr > th:first-child{ padding-left:0px;}
 	0%  { opacity: 1.0; -webkit-transform: translate3d(0, 0, 0); }
 	100% { opacity: 0.0; -webkit-transform: translate3d(0, 0, 0); }
 }
-@-moz-keyframes fade-out {
-	0%  { opacity: 1.0; -webkit-transform: translate3d(0, 0, 0); }
-	100% { opacity: 0.0; -webkit-transform: translate3d(0, 0, 0); }
-}
-@-o-keyframes fade-out {
-	0%  { opacity: 1.0; -webkit-transform: translate3d(0, 0, 0); }
-	100% { opacity: 0.0; -webkit-transform: translate3d(0, 0, 0); }
-}
 @keyframes fade-out {
-	0%  { opacity: 1.0; -webkit-transform: translate3d(0, 0, 0); }
-	100% { opacity: 0.0; -webkit-transform: translate3d(0, 0, 0); }
+	0%  { opacity: 1.0; transform: translate3d(0, 0, 0); }
+	100% { opacity: 0.0; transform: translate3d(0, 0, 0); }
 }
 
 
