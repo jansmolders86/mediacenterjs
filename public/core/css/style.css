@@ -501,6 +501,7 @@ em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red;
 	position:absolute;
 	bottom:0;
 	left:0;
+    z-index:99999!important;
 }
 
 /* Table styling */
