@@ -20,7 +20,7 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 *   @param episodeUrl       The URL to the episode
  * @param episode           The episode
  */
-exports.startPlayback = function(response, episodeUrl, episode) {
+exports.startPlayback = function(response, episodeUrl, episode, subtitleUrl, subtitleTitle) {
 
     var fileName =  episode.replace(/\.[^.]*$/,'')
         , outputName =  fileName.replace(/ /g,"-")

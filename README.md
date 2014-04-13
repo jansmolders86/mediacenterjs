@@ -9,15 +9,6 @@ Status:
 =======
 
 __Heavy work in progress__
-
-__version 0.0.61__
-
-* Music app refactored using Angular
-* Improved mobile styling
-* Metadata gathering is a seperate process 
-* TV app works
-* Front and backend code refactor
-* Auto updater extended
 		
 Current features:
 ===========
@@ -32,6 +23,7 @@ Current features:
 * Display movies, tvshow and music information 
 * Local caching of information and images
 * Transcoding and playback of movies, tv shows and music
+* Subtitle support
 * Weather information based on location
 * Basic screensaver
 * I3d tag support
@@ -49,13 +41,14 @@ Known issues:
 * Mobile device streaming still in heavy development
 * Browser: Seeking beyond buffer not working yet.
 
-* Other issues have been added that need to be fixed before Beta status can be reached.
+* Other issues and/or tasksa have been added in order to reach Beta status.
 
 What is MediacenterJS?
 =========================
 
 MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques and languages (HTML5/CSS/Javascript).
-The backend is based on Node.JS with ExpressJS and jade templates producing easy to use code allowing developers to add an 'app' to MCJS even with limited knowledge of said frontend techniques. 
+The backend is based on Node.JS with ExpressJS and JADE templates producing easy to use code. 
+Allowing developers to add an 'app' to MCJS even with limited knowledge of said frontend techniques. 
 The server application runs on Windows, MAC and Linux systems. 
 
 What do I need to have installed? 
@@ -121,3 +114,5 @@ For questions/contributions feel free to email me at: jansmolders86@gmail.com
 This application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
 
 Copyright (C) 2014 - Jan Smolders
+
+[![Analytics](https://ga-beacon.appspot.com/UA-49988223-1/mediacenterjs/index)](https://github.com/igrigorik/ga-beacon)
