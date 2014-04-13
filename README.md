@@ -114,3 +114,5 @@ For questions/contributions feel free to email me at: jansmolders86@gmail.com
 This application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
 
 Copyright (C) 2014 - Jan Smolders
+
+[![Analytics](https://ga-beacon.appspot.com/UA-49988223-1/mediacenterjs/index)](https://github.com/igrigorik/ga-beacon)
