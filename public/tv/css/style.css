@@ -24,9 +24,6 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 a.backlink { margin-top: 0px; z-index:4; }
 
 h2.loading{top:30px;}
-#wrapper {margin-top:60px;}
-
-#tvshowbrowser{ width:100%; height:100%; margin:0;}
 
 .loading.icon{
     -webkit-animation: icon-loading 0.5s linear infinite;
@@ -36,7 +33,7 @@ h2.loading{top:30px;}
     color:#fb8521;
 }
 
-.tvshows{
+#tvshows{
 	margin: 0 auto;
 	padding: 0;
 	list-style: none;
@@ -47,16 +44,16 @@ h2.loading{top:30px;}
 	overflow:hidden;
 }
 
-.tvposter img{
+.tvshow img{
 	margin:0 0 20px 0;
     display:block;
-	width:100%;
-	height:auto;
+	width:780px;
+	height:140px;
 	padding:0;
 	border:0;
 }
 
-.tvposter span{
+.tvshow span{
 	display:block;
 	float:left;
 	font-size: 14px;
@@ -67,10 +64,10 @@ h2.loading{top:30px;}
 
 span.title{visibility:hidden; width:0; height:0;}
 
-.tvposter{
+.tvshow{
 	float:left;
     min-height:140px;
-    width:758px;
+    width:780px;
 	list-style:none;
 	z-index:99;
 	position:relative;
@@ -88,9 +85,9 @@ span.title{visibility:hidden; width:0; height:0;}
 }
 
 
-.tvposter a{ float:left; }
-.tvposter .imageWrapper { height:140px; width:758px; overflow:hidden;}
-.tvposter .overview{
+.tvshow a{ float:left; }
+.tvshow .imageWrapper { height:140px; width:758px; overflow:hidden;}
+.tvshow .overview{
 	padding:10px; 
 	font-size:11px; 
 	line-height:17px; 
@@ -112,6 +109,8 @@ span.title{visibility:hidden; width:0; height:0;}
 .episodes{
     width:100%;
     clear:both;
+    padding:0;
+    margin:0;
     margin-bottom:20px;
 }
 
@@ -120,6 +119,8 @@ span.title{visibility:hidden; width:0; height:0;}
     margin:0;
     position: relative;
     overflow: hidden;
+    color:#333;
+    cursor:pointer;
 }
 
 .episodes li:hover,
