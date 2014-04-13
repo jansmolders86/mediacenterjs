@@ -1,7 +1,5 @@
 'use strict';
 
-/* Controllers */
-
 var tvApp = angular.module('tvApp', []);
 
 tvApp.controller('tvCtrl', function($scope, $http) {
@@ -14,26 +12,16 @@ tvApp.controller('tvCtrl', function($scope, $http) {
         var localName = data;
         
         $http.get('/tv/'+localName+'/play').success(function(data) {
-            setTimeout(function(){
-                var fileName    =  localName   
-                    , outputFile  = fileName.replace(/ /g, "-")
-                    , extentionlessFile = outputFile.replace(/\.[^/.]+$/, "")
-                    , videoUrl    =  "/data/tv/"+extentionlessFile+".mp4"
-                    , setup = {
-                        'techOrder' : ['html5', 'flash'],
-                        'controls' : true,
-                        'preload' : 'auto',
-                        'autoplay' : true
-                    };
-                
-                videojs('player', setup, function(){
-                    this.src({
-                        type : "video/mp4", 
-                        src: videoUrl 
-                    });
-                });
-            },5000);
+
+            var fileName                =  localName   
+                , outputFile            = fileName.replace(/ /g, "-")
+                , extentionlessFile     = outputFile.replace(/\.[^/.]+$/, "")
+                , videoUrl              =  "/data/tv/"+extentionlessFile+".mp4"
+                , playerID              = 'player'
+                , homeURL               = '/tv/';
+            
+            videoJSHandler(playerID, data, videoUrl, localName,homeURL, 5000);
+
         });
     }
 });
-
