@@ -110,7 +110,9 @@ function _pageVisibility(playerID){
 function postAjaxCall(url, params){
     var xmlhttp;
     xmlhttp = new XMLHttpRequest();
-    xmlhttp.setRequestHeader("Content-type", "text/plain");
+    xmlhttp.setRequestHeader("Content-type", "application/json");
+    xmlhttp.setRequestHeader("Content-length", params.length);
+    xmlhttp.setRequestHeader("Connection", "close");
     xmlhttp.onreadystatechange = function(){
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
            // callback(xmlhttp.responseText);
