@@ -1,95 +1,79 @@
 
 function videoJSHandler(playerID, data, url, title, homeURL, timeout){
-    setTimeout(function(){
-        var setup = {
-            'techOrder' : ['html5'],
-            'controls'  : true,
-            'preload'   : 'auto',
-            'autoplay'  : false
-        };
+    var player = videojs(playerID);
+    player.ready(function() {
 
-
-        videojs(playerID, setup, function(){
-            this.src({
-                type : "video/mp4", 
-                src: url 
+        setTimeout(function(){
+            player.src({
+                type    : "video/mp4", 
+                src     : url 
             });
-
 
             var setProgression = parseFloat(data.progression);
-            this.currentTime(setProgression);
-            this.play();
+            player.currentTime(setProgression);
+            player.play();
 
-            _setDurationOfMovie(videojs, data);
+            _setDurationOfMovie(player, data);
             _pageVisibility(playerID); 
+        },timeout);
 
+    });
+
+    var currentTime = parseFloat(data.progression);
+    player.on('error', function(e){
+            console.log('Error', e);
         });
 
-        var currentTime = parseFloat(data.progression);
-        videojs.on('error', function(e){
-                console.log('Error', e);
-            });
+        player.on('timeupdate', function(e){
+            _setDurationOfMovie(player, data);
+        });
 
-            videojs.on('timeupdate', function(e){
-                _setDurationOfMovie(this, data);
-            });
+        player.on('progress', function(e){
+            _setDurationOfMovie(player, data);
+        });
 
-            videojs.on('progress', function(e){
-                _setDurationOfMovie(this, data);
-            });
+        player.on('pause', function(e){
+            currentTime = player.currentTime();
+            var movieData = {
+                'movieTitle': title,
+                'currentTime': currentTime
+            }
+            postAjaxCall('/movies/sendState', movieData);
+        });
 
-            videojs.on('pause', function(e){
-                currentTime = player.currentTime();
-                var movieData = {
-                    'movieTitle': title,
-                    'currentTime': currentTime
-                }
-                $.ajax({
-                    url: '/movies/sendState',
-                    type: 'post',
-                    data: movieData
-                });
-            });
+        player.on('loadeddata', function(e){
+            _setDurationOfMovie(player, data);
+            if(currentTime > 0){
+                player.currentTime(currentTime);
+            }
+        });
 
-            videojs.on('loadeddata', function(e){
-                _setDurationOfMovie(this, data);
-                if(currentTime > 0){
-                    this.currentTime(currentTime);
-                }
-            });
+        player.on('loadedmetadata', function(e){
+            if(currentTime > 0){
+                player.currentTime(currentTime);
+            }
+        });
 
-            player.on('loadedmetadata', function(e){
-                if(currentTime > 0){
-                    this.currentTime(currentTime);
-                }
-            });
-
-            videojs.on('ended', function(e){
-                currentTime = this.currentTime();
-                var actualDuration = data.duration;
-                if( currentTime < actualDuration){
-                    this.load();
-                    this.play();
-                } else{
-                    this.dispose();
-                    window.location.replace(homeURL);
-                }
-            });
-
-    },timeout);
+        player.on('ended', function(e){
+            currentTime = this.currentTime();
+            var actualDuration = data.duration;
+            if( currentTime < actualDuration){
+                player.load();
+                player.play();
+            } else{
+                player.dispose();
+                window.location.replace(homeURL);
+            }
+        });
+    
 }
 
 
 
 function _setDurationOfMovie(player, data){
     var videoDuration = player.duration(data.duration);
-    player.bufferedPercent(0);
-    // TODO: Update time with angular 
-    // $('.vjs-duration-display .vjs-control-text').text(videoDuration);
+    player.bufferedPercent(0); 
 }
-
-
-
 
 function _pageVisibility(playerID){
     var hidden, visibilityChange;
@@ -121,3 +105,21 @@ function _pageVisibility(playerID){
         document.addEventListener(visibilityChange, handleVisibilityChange, false);
     }
 }
+
+
+function postAjaxCall(url, params){
+    var xmlhttp;
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.setRequestHeader("Content-type", "text/plain");
+    xmlhttp.onreadystatechange = function(){
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+           // callback(xmlhttp.responseText);
+        }
+    }
+    xmlhttp.open("POST", url, true);
+    xmlhttp.send(params);
+}
+
+
+
+
