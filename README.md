@@ -82,7 +82,7 @@ A complete documentation will be available when the project reaches Beta status.
 
 [Helper functions](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Helper-functions)
 
-[Front end and view explantation](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:--front-end)
+[Front end and view explantation](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:--front-end-and-view-explanation)
 
 Translations
 -------------
