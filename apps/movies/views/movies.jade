@@ -1,57 +1,57 @@
 extends /layout
 
 block declarations
-	- additional_title = lingua.movies;
-	- use_knockout = true;
+    - additional_title = lingua.movies;
+    - use_knockout = true;
 
 block additional_css
-	link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
-	link(rel='stylesheet', href='/movies/css/style.css')
+    link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
+    link(rel='stylesheet', href='/movies/css/style.css')
 
 block additional_scripts
-	script(src="http://vjs.zencdn.net/4.3/video.js")
-	script(src="/movies/js/jquery.mcjs.movie.functions.js")
-	script(src="/movies/js/jquery.mcjs.play.movie.js")
-	script(src="/movies/js/knockout.movies.js")
-
-	script.
-		$(function(){
-			$('body').mcjs();
-		});
+    script(src="http://vjs.zencdn.net/4.3/video.js")
+    script(src="/movies/js/jquery.mcjs.movie.functions.js")
+    script(src="/movies/js/knockout.movies.js")
+    script(src="/core/js/video.js")
+    script.
+        $(function(){
+            $('body').mcjs();
+        });
 
 block body
-	#header
-		a.backlink(href="/") &#xe113;
-		h1 #{lingua.movies}
-		-if(allowed === 'no')
-			h4 Parental lock enabled
-	#backdrop
-		img.backdropimg(src="/movies/css/img/backdrop.png")
-	#wrapper
-		#moviebrowser
-			// ko if: movies().length > 0
-			ul.movies(data-bind="foreach: movies")
-				li.movieposter.boxed.mcjs-rc-controllable.hidden(data-bind="attr: {'id':isActive},css: { hidden: false }")
-					.imageWrapper
-						img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }")
-					.overlay.mcjs-rc-clickable(data-bind="click: playMovie")
-					.overview
-						h1(data-bind="text:movieTitle")
-						.summary(data-bind="text:overview")
-					.specs
-						// ko if: genre() !== undefined
-						p
-							strong(data-bind="text:'#{lingua.movies_genre}: '+genre()")
-						p
-							strong(data-bind="text:'#{lingua.movies_Runtime}: '+runtime()+' min'")
-						// /ko
-					// ko if: cdNumber() !== undefined
-					.cdNumber
-						span(data-bind="text:cdNumber")
-					// /ko
-					span.hidden(data-bind="text:original_name")
-			// /ko
+    #header
+        a.backlink(href="/") &#xe113;
+        h1 #{lingua.movies}
+        -if(allowed === 'no')
+            h4 Parental lock enabled
+    #backdrop
+        img.backdropimg(src="/movies/css/img/backdrop.png")
+    #wrapper
+        #moviebrowser
+            // ko if: movies().length > 0
+            ul.movies(data-bind="foreach: movies")
+                li.movieposter.boxed.mcjs-rc-controllable.hidden(data-bind="attr: {'id':isActive},css: { hidden: false }")
+                    .imageWrapper
+                        img.movieposter(data-bind="attr: { title: backdropImage, src: posterImage }")
+                    .overlay.mcjs-rc-clickable(data-bind="click: playMovie")
+                    .overview
+                        h1(data-bind="text:movieTitle")
+                        .summary(data-bind="text:overview")
+                    .specs
+                        // ko if: genre() !== undefined
+                        p
+                            strong(data-bind="text:'#{lingua.movies_genre}: '+genre()")
+                        p
+                            strong(data-bind="text:'#{lingua.movies_Runtime}: '+runtime()+' min'")
+                        // /ko
+                    // ko if: cdNumber() !== undefined
+                    .cdNumber
+                        span(data-bind="text:cdNumber")
+                    // /ko
+                    span.hidden(data-bind="text:original_name")
+            // /ko
 
-			// ko ifnot: movies().length > 0
-			h2.loading #{lingua.loading}
-			// /ko
+            // ko ifnot: movies().length > 0
+            h2.loading #{lingua.loading}
+            // /ko
+    video#player.video-js.vjs-default-skin.hidden(data-bind="css: { hidden: !$root.isActive }",width="100%", height="100%", controls, preload="metadata")        

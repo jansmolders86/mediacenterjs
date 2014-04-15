@@ -1,7 +1,7 @@
 /*
 	MediaCenterJS - A NodeJS based mediacenter solution
 	
-    Copyright (C) 2013 - Jan Smolders
+    Copyright (C) 2014 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

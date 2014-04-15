@@ -217,6 +217,7 @@ a.backlink{
 /* Generic classes */
 
 .hidden{visibility:hidden;}
+.hidden.vjs-has-started{visibility:visible;}
 
 .loading{position:absolute; top:200px; left:100px;}
 

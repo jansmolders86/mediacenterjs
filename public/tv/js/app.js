@@ -14,13 +14,14 @@ tvApp.controller('tvCtrl', function($scope, $http) {
         $http.get('/tv/'+localName+'/play').success(function(data) {
 
             var fileName                =  localName   
-                , outputFile            = fileName.replace(/ /g, "-")
-                , extentionlessFile     = outputFile.replace(/\.[^/.]+$/, "")
-                , videoUrl              =  "/data/tv/"+extentionlessFile+".mp4"
-                , playerID              = 'player'
-                , homeURL               = '/tv/';
+                , outputFile            =   fileName.replace(/ /g, "-")
+                , extentionlessFile     =   outputFile.replace(/\.[^/.]+$/, "")
+                , videoUrl              =   "/data/tv/"+extentionlessFile+".mp4"
+                , subtitleUrl           =   "/data/tv/"+extentionlessFile+".srt"  
+                , playerID              =   'player'
+                , homeURL               =   '/tv/';
             
-            videoJSHandler(playerID, data, videoUrl, localName,homeURL, 5000);
+            videoJSHandler(playerID, data, videoUrl, subtitleUrl, localName,homeURL, 5000);
 
         });
     }

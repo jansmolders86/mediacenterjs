@@ -20,23 +20,9 @@ addEventListener('load', function () {
 
         // Init Jquery plugin
         $('body').mcjsm();
-        $('body').mcjsplay();
 
     });
 });
-
-
-function doAjaxCall(url, callback){
-    var xmlhttp;
-    xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function(){
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
-            callback(xmlhttp.responseText);
-        }
-    }
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
-}
 
 function Movie(item) {
     var that = this;
@@ -53,6 +39,29 @@ function Movie(item) {
     this.playMovie = function () {
         that.isActive('active');
         var movieTitle = that.original_name();
-        $('body').mcjsplay('playMovie',movieTitle);
+        
+        var fileName                =   movieTitle   
+            , outputFile            =   fileName.replace(/ /g, "-")
+            , extentionlessFile     =   outputFile.replace(/\.[^/.]+$/, "")
+            , videoUrl              =   "/data/movies/"+extentionlessFile+".mp4"
+            , subtitleUrl           =   "/data/movies/"+extentionlessFile+".srt"  
+            , playerID              =   'player'
+            , homeURL               =   '/movies/';
+
+        doAjaxCall('/movies/'+movieTitle+'/play', function(data){
+            videoJSHandler(playerID, data, videoUrl, subtitleUrl, movieTitle, homeURL, 5000);
+        });
     };
+}
+
+function doAjaxCall(url, callback){
+    var xmlhttp;
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function(){
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+            callback(xmlhttp.responseText);
+        }
+    }
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
 }
