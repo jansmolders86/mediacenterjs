@@ -9,7 +9,40 @@ Status:
 =======
 
 __Heavy work in progress__
-		
+
+What is MediacenterJS?
+=========================
+
+MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques and languages (HTML5/CSS/Javascript).
+The backend is based on Node.JS with ExpressJS and JADE templates producing easy to use code. 
+Allowing developers to add an 'app' to MCJS even with limited knowledge of said frontend techniques. 
+The server application runs on Windows, MAC and Linux systems. 
+
+Partial documentation 
+==========================
+I'm writing the documentation as I'm coding so the documentation may not always be complete or coherent. 
+A complete documentation will be available when the project reaches Beta status.
+
+# User manual
+
+[Installing MediacenterJS](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:---installing-MediacenterJS)
+
+[Guidelines media library](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:-Guidelines-media-library)
+
+[Using the remote control](https://github.com/jansmolders86/mediacenterjs/wiki/User-Manual:-Using-the-remote-control)
+
+[FAQ](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:-FAQ)
+
+# Developer manual
+
+[Explanation app framework](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-app-framework)
+
+[Start building an app using the app generator](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Start-building-an-app-using-the-app-generator)
+
+[Helper functions](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Helper-functions)
+
+[Front end and view explantation](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:--front-end-and-view-explanation)
+
 Current features:
 ===========
 
@@ -42,47 +75,6 @@ Known issues:
 * Browser: Seeking beyond buffer not working yet.
 
 * Other issues and/or tasksa have been added in order to reach Beta status.
-
-What is MediacenterJS?
-=========================
-
-MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques and languages (HTML5/CSS/Javascript).
-The backend is based on Node.JS with ExpressJS and JADE templates producing easy to use code. 
-Allowing developers to add an 'app' to MCJS even with limited knowledge of said frontend techniques. 
-The server application runs on Windows, MAC and Linux systems. 
-
-What do I need to have installed? 
-==========================
-
-* FFmpeg installed (included for Windows) 
-* NodeJS installed
-* A modern browser like Chrome(ium)
-* An internet connection
-
-Partial documentation 
-==========================
-I'm writing the documentation as I'm coding so the documentation may not always be complete or coherent. 
-A complete documentation will be available when the project reaches Beta status.
-
-# User manual
-
-[Installing MediacenterJS](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:---installing-MediacenterJS)
-
-[Guidelines media library](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:-Guidelines-media-library)
-
-[Using the remote control](https://github.com/jansmolders86/mediacenterjs/wiki/User-Manual:-Using-the-remote-control)
-
-[FAQ](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:-FAQ)
-
-# Developer manual
-
-[Explanation app framework](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-app-framework)
-
-[Start building an app using the app generator](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Start-building-an-app-using-the-app-generator)
-
-[Helper functions](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Helper-functions)
-
-[Front end and view explantation](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:--front-end-and-view-explanation)
 
 Translations
 -------------
