@@ -89,8 +89,11 @@ exports.sendState = function (req, res){
     , tvShowTitle = incommingData.tvShowTitle
     , progression = incommingData.currentTime
     , transcodingstatus = 'pending';
-
-    db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)', [tvShowTitle, progression, transcodingstatus]);
+    
+    if(tvShowTitle !== undefined && progression !== undefined){
+        var progressionData = [tvShowTitle, progression, transcodingstatus];
+        db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)',progressionData );
+    }
 };
 
 

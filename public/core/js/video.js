@@ -75,8 +75,8 @@ function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, t
 
         if(title !== undefined && currentTime !== undefined ){
            var movieData = {
-                'movieTitle': title,
-                'currentTime': currentTime
+                'movieTitle'    : title,
+                'currentTime'   : currentTime
             }
             postAjaxCall('/movies/sendState', movieData);
         }
@@ -153,8 +153,8 @@ function postAjaxCall(url, params){
     var xmlhttp;
     xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", url, true);
-    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xmlhttp.send(params);
+    xmlhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+    xmlhttp.send(JSON.stringify(params));
 }
 
 

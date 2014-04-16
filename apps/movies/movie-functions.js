@@ -114,15 +114,19 @@ exports.filter = function (req, res, movieRequest){
 	});
 };
 
-exports.sendState = function (req, res){
+exports.sendState = function (req, res){ 
     db.query("CREATE TABLE IF NOT EXISTS progressionmarker (movietitle TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
 
-    var incommingData = req.body
-    , movieTitle = incommingData.movieTitle
-    , progression = incommingData.currentTime
+    var incommingData   = req.body
+    , movieTitle        = incommingData.movieTitle
+    , progression       = incommingData.currentTime
     , transcodingstatus = 'pending';
-
-    db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)', [movieTitle, progression, transcodingstatus]);
+    
+    if(movieTitle !== undefined && progression !== undefined){
+        var progressionData = [movieTitle, progression, transcodingstatus];
+        db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)', progressionData);
+    }
+   
 }
 
 
