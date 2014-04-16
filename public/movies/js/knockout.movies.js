@@ -49,7 +49,8 @@ function Movie(item) {
             , homeURL               =   '/movies/';
 
         doAjaxCall('/movies/'+movieTitle+'/play', function(data){
-            videoJSHandler(playerID, data, videoUrl, subtitleUrl, movieTitle, homeURL, 5000);
+            var movieData = JSON.stringify(data);
+            videoJSHandler(playerID, movieData, videoUrl, subtitleUrl, movieTitle, homeURL, 5000);
         });
     };
 }

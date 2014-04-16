@@ -32,6 +32,7 @@
 
 function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, timeout){
     var player = videojs(playerID);
+    var actualDuration = data.duration;
     player.ready(function() {
 
         setTimeout(function(){
@@ -98,7 +99,6 @@ function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, t
 
     player.on('ended', function(e){
         currentTime = this.currentTime();
-        var actualDuration = data.duration;
         if( currentTime < actualDuration){
             player.load();
             player.play();
