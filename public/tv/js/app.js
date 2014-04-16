@@ -7,6 +7,9 @@ tvApp.controller('tvCtrl', function($scope, $http) {
         $scope.tvshows = data;
     });
     
+    $scope.orderProp = 'genre';
+          
+                                     
     $scope.playEpisode = function(data){
         $scope.playing = true;
         var localName = data;

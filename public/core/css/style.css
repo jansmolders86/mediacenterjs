@@ -170,6 +170,19 @@ p a:hover{text-decoration:none;}
     font-size: 12px;
 }
 
+#header #search{     
+    position: absolute; 
+    left:315px; 
+    top:15px;
+    width:250px;
+}
+#header  #filter{
+    position: absolute; 
+    right:100px; 
+    top:15px;
+    width:200px;
+}
+
 #content{
 	width:800px;
 	margin:0;
@@ -365,13 +378,18 @@ textarea{
 	-webkit-transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
 	transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
 	box-shadow: 0em 0em 0em 0em rgba(0, 0, 0, 0.3) inset;
-	-webkit-appearance: none;
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 	-moz-box-sizing: border-box;
 	-ms-box-sizing: border-box;
 	box-sizing: border-box;
 	width:40%;
 	float:left;
+}
+
+input[type=text],
+input[type=password],
+textarea{
+	-webkit-appearance: none;    
 }
 
 input[type=text].error,

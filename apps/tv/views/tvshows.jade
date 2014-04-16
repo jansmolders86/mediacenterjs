@@ -22,14 +22,23 @@ html(lang="en", ng-app="tvApp")
         script(src="/tv/js/app.js")
         script(src="/core/js/video.js")
         script(src="/music/js/remote.js")
+
         title tvshows
         body(ng-controller="tvCtrl")
             #header
                 a.backlink(href="/") &#xe113;
-                h1 #{lingua.tv}
+                h1 #{lingua.tvshows}
+                
+                
+                input#search(ng-model="query", type="text", placeholder="Search")
+               
+                select#filter(ng-model="orderProp")
+                    option(value="title")   Alphabetical
+                    option(value="genre")   Genre
+               
             #container
                 ul#tvshows
-                    li.tvshow(ng-repeat="tvshow in tvshows")
+                    li.tvshow(ng-repeat="tvshow in tvshows | filter:query | orderBy:orderProp")
                         img(ng-src="{{tvshow.banner}}")
                         span.title {{tvshow.title}}
                         ol.episodes
