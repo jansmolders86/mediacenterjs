@@ -31,8 +31,8 @@
  **/
 
 function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, timeout){
-    var player = videojs(playerID);
-    var actualDuration = data.duration;
+    var player          = videojs(playerID);
+    var actualDuration  = data.duration;
     player.ready(function() {
 
         setTimeout(function(){
@@ -42,13 +42,13 @@ function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, t
             });
             
             if(data.subtitle === true){
-                var track = document.createElement("track");
-                track.src = subtitleUrl
+                var track   = document.createElement("track");
+                track.src   = subtitleUrl
                 track.label = 'Subtitle'
                 document.getElementById(playerID).appendChild(track);
             }
 
-            var setProgression = parseFloat(data.progression);
+            var setProgression  = parseFloat(data.progression);
             player.currentTime(setProgression);
             player.play();
 
@@ -106,11 +106,8 @@ function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, t
             player.dispose();
             window.location.replace(homeURL);
         }
-    });
-    
+    });    
 }
-
-
 
 function _setDurationOfMovie(player, data){
     var videoDuration = player.duration(data.duration);
@@ -120,17 +117,17 @@ function _setDurationOfMovie(player, data){
 function _pageVisibility(playerID){
     var hidden, visibilityChange;
     if (typeof document.hidden !== "undefined") {
-        hidden = "hidden";
-        visibilityChange = "visibilitychange";
+        hidden              = "hidden";
+        visibilityChange    = "visibilitychange";
     } else if (typeof document.mozHidden !== "undefined") {
-        hidden = "mozHidden";
-        visibilityChange = "mozvisibilitychange";
+        hidden              = "mozHidden";
+        visibilityChange    = "mozvisibilitychange";
     } else if (typeof document.msHidden !== "undefined") {
-        hidden = "msHidden";
-        visibilityChange = "msvisibilitychange";
+        hidden              = "msHidden";
+        visibilityChange    = "msvisibilitychange";
     } else if (typeof document.webkitHidden !== "undefined") {
-        hidden = "webkitHidden";
-        visibilityChange = "webkitvisibilitychange";
+        hidden              = "webkitHidden";
+        visibilityChange    = "webkitvisibilitychange";
     }
 
     function handleVisibilityChange(playerID) {
@@ -147,7 +144,6 @@ function _pageVisibility(playerID){
         document.addEventListener(visibilityChange, handleVisibilityChange, false);
     }
 }
-
 
 function postAjaxCall(url, params){
     var xmlhttp;

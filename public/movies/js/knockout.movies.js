@@ -36,11 +36,10 @@ function Movie(item) {
     this.cdNumber 		= ko.observable(item.cdNumber);
     this.adult   		= ko.observable(item.adult);
     this.isActive 		= ko.observable();
-    this.playMovie = function () {
+    this.playMovie      = function () {
         that.isActive('active');
-        var movieTitle = that.original_name();
-        
-        var fileName                =   movieTitle   
+        var movieTitle = that.original_name()
+            , fileName              =   movieTitle   
             , outputFile            =   fileName.replace(/ /g, "-")
             , extentionlessFile     =   outputFile.replace(/\.[^/.]+$/, "")
             , videoUrl              =   "/data/movies/"+extentionlessFile+".mp4"
@@ -49,7 +48,7 @@ function Movie(item) {
             , homeURL               =   '/movies/';
 
         doAjaxCall('/movies/'+movieTitle+'/play', function(data){
-            var movieData = JSON.stringify(data);
+            var movieData = JSON.parse(data);     
             videoJSHandler(playerID, movieData, videoUrl, subtitleUrl, movieTitle, homeURL, 5000);
         });
     };
