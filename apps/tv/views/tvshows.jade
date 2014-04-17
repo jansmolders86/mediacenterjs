@@ -1,35 +1,49 @@
-extends /layout
-block declarations
-	- additional_title = lingua.tvshows;
-	- use_knockout = true;
-block additional_css
-	link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
-	link(rel='stylesheet', href='/tv/css/style.css')
-block additional_scripts
-	script(src="http://vjs.zencdn.net/4.3/video.js")
-	script(src="/tv/js/knockout.tvshows.js")
-	script(src="/tv/js/jquery.mcjs.tvplay.js")
-block body
-	#header
-		a.backlink(href="/") &#xe113;
-		h1 #{lingua.tvshows}
-	#wrapper
-		#tvshowbrowser
-			// ko if: tvShows().length > 0
-			ul.tvshows(data-bind="foreach: tvShows")
-				li.tvposter.boxed.mcjs-rc-controllable.hidden(data-bind="css: { hidden: false }")
-					.imageWrapper
-						// ko if: banner() !== null
-						img.tvbanner(data-bind="attr: { src: banner }")
-						// /ko
-					.overlay
-					span.showTitle(data-bind="text:title")
-					ul.episodes(data-bind="foreach: episodes")
-						li.mcjs-rc-controllable
-							a(data-bind="text:'#{lingua.tvshows_season}'+$data.season +' - #{lingua.tvshows_episode} '+$data.episode, click: $parent.playEpisode.bind($data.localName)").mcjs-rc-clickable
+doctype 5
+html(lang="en", ng-app="tvApp")
+    head
+        meta(name="mobile-web-app-capable" content="yes")
+        meta(name="apple-mobile-web-app-capable" content="yes")
+        meta(name="apple-mobile-web-app-status-bar-style" content="black")
+        meta(charset="utf-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
+        link(rel='stylesheet', href='/core/css/style.css')
+        link(rel='stylesheet', href='/core/css/icon.css')
+        link(rel='stylesheet', href='/tv/css/style.css')
+        link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
+        if selectedTheme
+            link(rel='stylesheet', href='/themes/' + selectedTheme)
+        script(src="/core/js/plugins/jquery/jquery-1.8.2.min.js")
+        script(src="http://vjs.zencdn.net/4.3/video.js")
+        script(src="/core/js/plugins/socket.io.min.js")
+        script(src="/core/js/jquery.mcjs.core.js")
+        script(src="/core/js/plugins/angular/angular.min.js")
+        script(src="/core/js/plugins/angular/angular-route.min.js")
+        script(src="/tv/js/app.js")
+        script(src="/core/js/video.js")
+        script(src="/music/js/remote.js")
 
-			// /ko
+        title tvshows
+        body(ng-controller="tvCtrl")
+            #header
+                a.backlink(href="/") &#xe113;
+                h1 #{lingua.tvshows}
+                
+                
+                input#search(ng-model="query", type="text", placeholder="Search")
+               
+                select#filter(ng-model="orderProp")
+                    option(value="title")   Alphabetical
+                    option(value="genre")   Genre
+               
+            #container
+                ul#tvshows
+                    li.tvshow(ng-repeat="tvshow in tvshows | filter:query | orderBy:orderProp")
+                        img(ng-src="{{tvshow.banner}}")
+                        span.title {{tvshow.title}}
+                        ol.episodes
+                            li(ng-repeat="episode in tvshow.episodes", ng-click="playEpisode(episode.localName)") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
 
-			// ko ifnot: tvShows().length > 0
-			h2.loading #{lingua.loading}
-			// /ko
+                h2.loading(ng-show="!tvshows") #{lingua.loading}
+                
+            video#player.video-js.vjs-default-skin(width="100%", height="100%", ng-show="playing", controls, preload="metadata")

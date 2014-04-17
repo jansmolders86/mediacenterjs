@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 
 (function(window) {
 
@@ -11,6 +11,8 @@
             $scope.albums = data;
             remote(socket, $scope, player, audio);
         });
+        
+        $scope.orderProp = 'genre';
     };
 
     musicApp.factory('audio', function($document) {

@@ -1,59 +1,66 @@
 doctype 5
 html(lang="en", ng-app="musicApp")
-	head
-		meta(name="mobile-web-app-capable" content="yes")
-		meta(name="apple-mobile-web-app-capable" content="yes")
-		meta(name="apple-mobile-web-app-status-bar-style" content="black")
-		meta(charset="utf-8")
-		meta(name="viewport" content="width=device-width, initial-scale=1.0")
-		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
-		link(rel='stylesheet', href='/core/css/style.css')
-		link(rel='stylesheet', href='/core/css/icon.css')
-		link(rel='stylesheet', href='/music/css/style.css')
-		if selectedTheme
-			link(rel='stylesheet', href='/themes/' + selectedTheme)
-		script(src="/core/js/jquery-1.8.2.min.js")
-		script(src="/core/js/socket.io.min.js")
-		script(src="/core/js/jquery.mcjs.core.js")
-		script(src="/core/js/plugins/angular/angular.min.js")
-		script(src="/core/js/plugins/angular/angular-route.min.js")
-		script(src="/music/js/app.js")
-		script(src="/music/js/remote.js")
-		title Music
-		body(ng-controller="musicCtrl")
-			#header
-				a.backlink(href="/") &#xe113;
-				h1 #{lingua.music}
-			#container
-				ul#playlist(ng-show="player.playlist.length > 0")
-					li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
-						.list( ng-click="player.playlist.remove(album)")
-							img(ng-src="{{album.cover}}")
-							i.remove.circle.icon
-						span.album-title {{album.album}}
-						span.album-artist {{album.artist}}
-						span.album-year {{album.year}}
-						ol.tracks
-							li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
-								i.play.icon
-								span.track-title {{track.title}}
-					#player(ng-show="player.playlist.length > 0")
-						ul.nav
-							li
-								i.control.backward.icon(ng-click="player.previous()")
-							li
-								i.control.play.icon(ng-click="player.play()",ng-hide="player.playing")
-							li
-								i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
-							li
-								i.control.forward.icon(ng-click="player.next()")
+    head
+        meta(name="mobile-web-app-capable" content="yes")
+        meta(name="apple-mobile-web-app-capable" content="yes")
+        meta(name="apple-mobile-web-app-status-bar-style" content="black")
+        meta(charset="utf-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
+        link(rel='stylesheet', href='/core/css/style.css')
+        link(rel='stylesheet', href='/core/css/icon.css')
+        link(rel='stylesheet', href='/music/css/style.css')
+        if selectedTheme
+            link(rel='stylesheet', href='/themes/' + selectedTheme)
+        script(src="/core/js/plugins/jquery/jquery-1.8.2.min.js")
+        script(src="/core/js/plugins/socket.io.min.js")
+        script(src="/core/js/jquery.mcjs.core.js")
+        script(src="/core/js/plugins/angular/angular.min.js")
+        script(src="/core/js/plugins/angular/angular-route.min.js")
+        script(src="/music/js/app.js")
+        script(src="/music/js/remote.js")
+        title Music
+        body(ng-controller="musicCtrl")
+            #header
+                a.backlink(href="/") &#xe113;
+                h1 #{lingua.music}
+                
+                input#search(ng-model="query", type="text", placeholder="Search")
+               
+                select#filter(ng-model="orderProp")
+                    option(value="title")   Alphabetical
+                    option(value="genre")   Genre
+                
+            #container
+                ul#playlist(ng-show="player.playlist.length > 0")
+                    li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
+                        .list( ng-click="player.playlist.remove(album)")
+                            img(ng-src="{{album.cover}}")
+                            i.remove.circle.icon
+                        span.album-title {{album.album}}
+                        span.album-artist {{album.artist}}
+                        span.album-year {{album.year}}
+                        ol.tracks
+                            li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
+                                i.play.icon
+                                span.track-title {{track.title}}
+                    #player(ng-show="player.playlist.length > 0")
+                        ul.nav
+                            li
+                                i.control.backward.icon(ng-click="player.previous()")
+                            li
+                                i.control.play.icon(ng-click="player.play()",ng-hide="player.playing")
+                            li
+                                i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
+                            li
+                                i.control.forward.icon(ng-click="player.next()")
 
-				section#library(ng-class="{side: player.playlist.length > 0}")
-					ul.albums
-						li.album(ng-repeat="album in albums", ng-click="player.playlist.add(album)",ng-class="{current: focused == $index }")
-							img(ng-src="{{album.cover}}")
-							span.album-title {{album.album}}
-							span.album-artist {{album.artist}}
-							span.album-year {{album.year}}
+                section#library(ng-class="{side: player.playlist.length > 0}")
+                    ul.albums
+                        li.album(ng-repeat="album in albums | filter:query | orderBy:orderProp", ng-click="player.playlist.add(album)",ng-class="{current: focused == $index }")
+                            img(ng-src="{{album.cover}}")
+                            span.album-title {{album.album}}
+                            span.album-artist {{album.artist}}
+                            span.album-year {{album.year}}
 
-				h2.loading(ng-show="!albums") #{lingua.loading}
+                h2.loading(ng-show="!albums") #{lingua.loading}

@@ -68,8 +68,7 @@ exports.get = function(req, res){
 
 
 exports.post = function(req, res){
-    var infoRequest = req.params.id;
-    if(infoRequest === 'sendState'){
+    if(req.params.id === 'sendState'){
         functions.sendState(req, res);
     }
 }
