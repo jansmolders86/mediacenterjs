@@ -43,10 +43,10 @@ if(config.language === ""){
 } else {
 	language = config.language;
 }
-
+/*
 var log_file = fs.createWriteStream(__dirname + '/log.log', {flags : 'w', encoding: 'utf-8'});
 var log_stdout = process.stdout;
-/*console.log = function(d) {
+console.log = function(d) {
   log_file.write(d.toString()+ "\n");
   log_stdout.write(d.toString()+ "\n");
 };
