@@ -1,3 +1,9 @@
+# 0.0.65 / 04-19-2014
+
+* Added Windows installer
+* improvements to setup
+* tv app refactored using Angular
+
 # 0.0.61 / 04-10-2014
 
 * Subtitle support

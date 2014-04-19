@@ -1,6 +1,6 @@
 {
     "name": "mediacenterjs",
-    "version": "0.0.61",
+    "version": "0.0.65",
     "description": "A NodeJS based mediacenter for your browser",
     "homepage": "http://www.mediacenterjs.com",
     "author": {
