@@ -1,10 +1,23 @@
 extends layout
 
 block body
-	#header
-		h1 Setup MediacenterJS
-	#wrapper
-		#content
-			p Thank you for taking the time to setup MediacenterJS. 
-			p Simply press the button below if you kept the port the same (3000). Otherwise please alter the port in the address bar and start exploring what MediaCenterJS has to offer. For documentation please visit GitHub. (link available on mediacenterjs.com)
-			a.btn(href="/") Launch MediacenterJS
+    #header
+        h1 Setup MediacenterJS
+    #wrapper
+        #content
+            p Thank you for taking the time to setup MediacenterJS. 
+            p Simply press the button below if you kept the port the same (3000). Otherwise please alter the port in the address bar and start exploring what MediaCenterJS has to offer. For documentation please visit GitHub. (link available on mediacenterjs.com)
+            
+            p This version of MediacenterJS is a preview build which means functionalility can still break. Hopefully this build will give you a good idea of the finished product.
+            
+            a.btn(href="/") Launch MediacenterJS
+            
+    script.
+        $(function(){
+            $('.btn').bind('click', false).addClass('disabled');
+        
+        setTimeout(function(){
+            $('.btn').unbind('click', false).removeClass('disabled');
+        },5000);
+
+        });
