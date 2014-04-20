@@ -59,11 +59,12 @@ getFilePathOfTrackInAlbum = function(track, callback) {
     db.query('SELECT * FROM tracks WHERE filename =? ', [ track ], {
             title         	: String,
             track         	: String,
-            album 		    : String,
-            artist  	    : String,
-            year            : String,
-            filename        : String,
-            filepath        : String
+            album  		: String,
+            artist  	    	: String,
+            year            	: String,
+            genre		: String,
+            filename        	: String,
+            filepath        	: String
         },
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
