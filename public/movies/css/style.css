@@ -16,10 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-/* Default override */
-body,html{ overflow-y:auto; overflow-x:hidden;}
-
 #backdrop{
 	box-shadow:none;
 	padding: 10px 0 0 100px;
@@ -34,7 +30,7 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 }
 
 #header.scrolling{ opacity:0.9;}
-#header{height:60px; z-index:3; position:fixed; top:0; }
+#header{height:60px; z-index:3; position:fixed!important; top:0; }
 #header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
 #wrapper{ padding-top:230px;z-index:1; }
 
@@ -53,15 +49,21 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 	-ms-transition: height 1s ease-in-out;
 	-o-transition: height 1s ease-in-out;
 	transition: height 1s ease-in-out;
+    padding:0;
 }
 
-#backdrop.shrink{  
+body.shrink #backdrop{  
 	filter: alpha(opacity=0.3);
 	opacity: 0.3;
 	height:50px;
 }
 
-#backdrop img{	height:auto; }
+#backdropimg{	
+    height:auto;
+    float:left;
+    display:block;
+    position: relative;
+}
 a.backlink { margin-top: 0px; z-index:4; }
 
 /* Movie App styling */
@@ -249,3 +251,22 @@ span.title{visibility:hidden; width:0; height:0;}
 	padding:3px 5px;
 }
 */
+
+.slide{
+    -webkit-animation: backdrop-slide 10s linear infinite;
+    animation: backdrop-slide 10s linear infinite;
+}
+
+@-webkit-keyframes backdrop-slide {
+    0%{ top:-180px; }
+    25%{ top:0; }
+    100%{ top:-180px; }
+}
+
+@keyframes backdrop-slide {
+    0%{ top:-180px; }
+    50%{ top:0; }
+    100%{ top:-180px; }
+}
+
+
