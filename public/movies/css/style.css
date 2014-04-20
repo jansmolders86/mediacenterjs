@@ -49,6 +49,7 @@
 	-ms-transition: height 1s ease-in-out;
 	-o-transition: height 1s ease-in-out;
 	transition: height 1s ease-in-out;
+    padding:0;
 }
 
 body.shrink #backdrop{  
@@ -57,7 +58,12 @@ body.shrink #backdrop{
 	height:50px;
 }
 
-#backdrop img{	height:auto; }
+#backdropimg{	
+    height:auto;
+    float:left;
+    display:block;
+    position: relative;
+}
 a.backlink { margin-top: 0px; z-index:4; }
 
 /* Movie App styling */
@@ -245,3 +251,22 @@ span.title{visibility:hidden; width:0; height:0;}
 	padding:3px 5px;
 }
 */
+
+.slide{
+    -webkit-animation: backdrop-slide 10s linear infinite;
+    animation: backdrop-slide 10s linear infinite;
+}
+
+@-webkit-keyframes backdrop-slide {
+    0%{ top:-180px; }
+    25%{ top:0; }
+    100%{ top:-180px; }
+}
+
+@keyframes backdrop-slide {
+    0%{ top:-180px; }
+    50%{ top:0; }
+    100%{ top:-180px; }
+}
+
+

@@ -35,13 +35,13 @@ html(lang="en", ng-app="movieApp")
                     option(value="title")   Alphabetical
                     option(value="genre")   Genre
             #backdrop
-                img.backdropimg(src="/movies/css/img/backdrop.png")
+                img#backdropimg.slide(src="/movies/css/img/backdrop.png")
             #wrapper  
                 #moviebrowser
                     ul.movies
-                        li.movieposter.boxed(ng-repeat="movie in movies | filter:query | orderBy:orderProp")
+                        li.movieposter.boxed(ng-repeat="movie in movies | filter:query | orderBy:orderProp", ng-mouseover="changeBackdrop(movie.backdrop_path)")
                             .imageWrapper
-                                img.movieposter(ng-src="{{movie.poster_path}}")
+                                img.movieposter(ng-src="{{movie.poster_path}}", onerror="this.src='/movies/css/img/nodata.jpg'")
                             .overlay.mcjs-rc-clickable(ng-click="playMovie(movie.original_name)")
                             .overview
                                 h1 {{movie.movieTitle}}

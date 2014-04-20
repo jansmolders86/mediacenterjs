@@ -8,7 +8,6 @@ movieApp.controller('movieCtrl', function($scope, $http,$document,$window) {
     });
     
     $scope.orderProp = 'genre';
-          
                                      
     $scope.playMovie = function(data){
         $scope.playing = true;
@@ -27,6 +26,11 @@ movieApp.controller('movieCtrl', function($scope, $http,$document,$window) {
             videoJSHandler(playerID, data, videoUrl, subtitleUrl, localName,homeURL, 5000);
 
         });
+    }
+    
+    $scope.changeBackdrop = function(backdrop){
+        var elem = document.getElementById("backdropimg");
+        elem.src = backdrop;
     }
 });
 
