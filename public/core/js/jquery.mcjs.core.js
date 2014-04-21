@@ -88,7 +88,7 @@
 	
 	function _initpages(o, $that){
 		
-		// Setup frontend validation
+		// Setup frontend translations
 		$.ajax({
 			url: '/configuration/', 
 			type: 'get'
