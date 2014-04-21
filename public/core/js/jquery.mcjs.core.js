@@ -52,7 +52,7 @@
 				, confirmMessage 	    : undefined
 				, succesMessage 	    : undefined
                 , RemoteIdle            : true
-                , screenSaverTimeout    : 900
+                , screenSaverTimeout    : 900000
 			});
 			
 			// use extend(), so no o is used by value, not by reference
