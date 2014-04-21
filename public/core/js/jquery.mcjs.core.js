@@ -52,7 +52,7 @@
 				, confirmMessage 	    : undefined
 				, succesMessage 	    : undefined
                 , RemoteIdle            : true
-                , screenSaverTimeout    : 90000
+                , screenSaverTimeout    : 900
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -233,6 +233,7 @@
                         return;
                     } else if (data.screensaver === 'backdrop') {
                         $('body > div').css('display', 'none');
+                        $("body").addClass('screensaver');
                         _backdropScreensaver(o);
                     }
                 }
@@ -245,6 +246,7 @@
                     return;
                 } else if (data.screensaver === 'backdrop') {
                     $("#screensaver").remove();
+                    $("body").removeClass('screensaver');
                     $("body > div").css("display","block");
                 }
             });
@@ -264,9 +266,8 @@
             var interval = 5000;
 
             setTimeout(function () {
-                $('body').append('<img width="100%" height="100%" id="screensaver" src="" class="fadein fullscreen" />');
-                $("#screensaver").removeClass('fadein')
-                $("#screensaver").attr("src",img_array[index++ % img_array.length]).addClass('fadein');
+                $('body').append('<img width="100%" height="100%" id="screensaver" src="" class="fullscreen" />');
+                $("#screensaver").attr("src",img_array[index++ % img_array.length]);
                 setTimeout(arguments.callee, interval);
             }, interval);
 

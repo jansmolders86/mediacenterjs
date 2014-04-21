@@ -67,6 +67,8 @@ body *{
 	-o-transition: all 0.2s ease;
 	transition: all 0.2s ease;
 } 
+
+body.screensaver{overflow:hidden!important;}
   
 .overlay{
 	-webkit-transition: none;
@@ -196,8 +198,6 @@ p a:hover{text-decoration:none;}
 	top:0; 
 	left:0;
 	-webkit-animation: fade-in 4s; 
-	-moz-animation:  fade-in 4s; 
-    -o-animation: fade-in 4s; 
     animation: fade-in 4s; 
 	margin:0;
 	padding:0;
@@ -226,13 +226,6 @@ a.backlink{
 	color: #747474;
 }
 
-body > #screensaver{
-    z-index:999999;
-    position: absolute;
-    top:0;
-    left:0;
-    display:block!important;
-}
 
 /* Generic classes */
 
@@ -285,6 +278,17 @@ html.dim{background:#222;}
     color:#222!important;
 }
 .dim img{ opacity:0.6 !important;}
+
+
+body > #screensaver{
+    z-index:999999;
+    position: absolute;
+    top:0;
+    left:0;
+    display:block!important;
+	-webkit-animation: screensaver 5s linear infinite; 
+    animation: screensaver 5s linear infinite; 
+}
 
 /* Homepage */
 
@@ -1043,6 +1047,23 @@ table tr > th:first-child{ padding-left:0px;}
 @keyframes fade-out {
 	0%  { opacity: 1.0; transform: translate3d(0, 0, 0); }
 	100% { opacity: 0.0; transform: translate3d(0, 0, 0); }
+}
+
+@-webkit-keyframes screensaver {
+	0%  { opacity:0;  -webkit-transform: translate3d(0, 0, 0);}
+	25% { opacity:0.5; width:105%; height: 105%; -webkit-transform: translate3d(0, 0, 0);}
+    50% { opacity:1; width:110%; height: 110%;  -webkit-transform: translate3d(0, 0, 0);}
+    75% { opacity:1; width:115%; height: 115%;  -webkit-transform: translate3d(0, 0, 0);}
+    75% { opacity:0.5; width:105%; height: 105%;  -webkit-transform: translate3d(0, 0, 0);}
+    100% {opacity:0; width:100%; height: 100%; -webkit-transform: translate3d(0, 0, 0);} 
+}
+@keyframes screensaver {
+	0%  { opacity:0;  -webkit-transform: translate3d(0, 0, 0);}
+	25% { opacity:0.5; width:105%; height: 105%; -webkit-transform: translate3d(0, 0, 0);}
+    50% { opacity:1; width:110%; height: 110%;  -webkit-transform: translate3d(0, 0, 0);}
+    75% { opacity:1; width:115%; height: 115%;  -webkit-transform: translate3d(0, 0, 0);}
+    75% { opacity:0.5; width:105%; height: 105%;  -webkit-transform: translate3d(0, 0, 0);}
+    100% {opacity:0; width:100%; height: 100%; -webkit-transform: translate3d(0, 0, 0);} 
 }
 
 
