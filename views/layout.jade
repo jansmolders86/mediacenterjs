@@ -3,13 +3,14 @@ doctype 5
 html(lang="en")
     head
         block declarations
-            - var additional_title = undefined;
-            - var use_knockout = false;
-            - var use_angular = false;
-            - var include_validation = false;
-            - var body_id = '';
-            - var body_class = '';
-            - var angular_app = undefined;
+            - var additional_title      = undefined;
+            - var use_knockout          = false;
+            - var use_angular           = false;
+            - var include_validation    = false;
+            - var include_remote        = true;
+            - var body_id               = '';
+            - var body_class            = '';
+            - var angular_app           = undefined;
 
         if !additional_title
             title MediacenterJS
@@ -61,6 +62,13 @@ html(lang="en")
             script(src="/core/js/plugins/validation/jquery.validate.min.js")
             script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
             script(src="/core/js/plugins/validation/jquery.validate.rules.js")
+            
+        if include_remote
+            script(src="/core/js/jquery.remote.js")
+            script. 
+                $(function(){
+                    $('body').mcjsRemote();
+                });
 
         script(src="/core/js/jquery.mcjs.core.js")
 

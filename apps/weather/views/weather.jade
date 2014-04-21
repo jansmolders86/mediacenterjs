@@ -1,7 +1,8 @@
 extends /layout
 
 block declarations
-	- additional_title = lingua.weather;
+	- additional_title     = lingua.weather;
+    - include_remote       = true;
 
 block additional_css
 	link(rel='stylesheet', href='/weather/css/style.css')
