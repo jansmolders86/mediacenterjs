@@ -23,7 +23,7 @@ body,html{ overflow-y:auto; overflow-x:hidden;}
 #header h1{z-index:4; margin-top:0px;}
 a.backlink { margin-top: 0px; z-index:4; }
 
-h2.loading{top:30px;}
+h2.loading{top:80px;}
 
 .loading.icon{
     -webkit-animation: icon-loading 0.5s linear infinite;
