@@ -1,137 +1,137 @@
 extends /layout
 
 block declarations
-	- additional_title     = lingua.settings; 
-	- include_validation   = true;
+    - additional_title     = lingua.settings; 
+    - include_validation   = true;
     - include_remote       = true;
 
 block additional_css
-	link(rel='stylesheet', href='/settings/css/style.css')
+    link(rel='stylesheet', href='/settings/css/style.css')
 
 block additional_scripts
-	script(src='/core/js/oauth.min.js')
-	script.
-		$(function() {
-			$('body').mcjs();
+    script(src='/core/js/oauth.min.js')
+    script.
+        $(function() {
+            $('body').mcjs();
 
-			$('.parentalControl').on('click', function(e){
-				e.preventDefault();
-				var that = $(this);
-				var clientIDField =	 that.parent().parent().find('.device').text();
+            $('.parentalControl').on('click', function(e){
+                e.preventDefault();
+                var that = $(this);
+                var clientIDField =	 that.parent().parent().find('.device').text();
 
-				if(that.hasClass('lock')){
-					var url	 = '/lockClient';
-				} else if(that.hasClass('unlock')){
-					var url	 = '/unlockClient';
-				}
+                if(that.hasClass('lock')){
+                    var url	 = '/lockClient';
+                } else if(that.hasClass('unlock')){
+                    var url	 = '/unlockClient';
+                }
 
-				$.ajax({
-					url: url,
-					type: 'post',
-					data: clientIDField
-				}).done(function(data){
-					if(data === 'done'){
-						setTimeout(function(){
-							location.reload();
-						},2000);
-					}
-				});
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: clientIDField
+                }).done(function(data){
+                    if(data === 'done'){
+                        setTimeout(function(){
+                            location.reload();
+                        },2000);
+                    }
+                });
 
 
-			});
+            });
 
-		});
+        });
 
-	script(src="/settings/js/jquery.mcjs.settings.js")
+    script(src="/settings/js/jquery.mcjs.settings.js")
 
 block body
-	#header.settings
-		a.backlink(href="/") &#xe113;
-		h1	#{lingua.settings}
-	#wrapper
-		.ui-widget
-			.message
-				.message
-		#settings
-			input.oauthKeyHidden(name="oauthKey" type="hidden")
-			form#setup.validate-form(action='/submit',method='post')
-				h2 #{lingua.setting_header} 
-				div#oauthContainer.mcjs-rc-controllable.row
-					span.info
-						span.quote &ldquo;
-						span #{lingua.setting_oauth_explanation} 
-						span.quote &rdquo;
-					input#oauthKey.mcjs-rc-clickable(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
-					a.btn#oauth(href="#") #{lingua.setting_register_oauth}
-					label(for="oauthKey")
-				.row.wrap.mcjs-rc-controllable
-					a.btn.cachelink.mcjs-rc-clickable(data-cachelink="movies") #{lingua.settings_clear_cache_movies}
-				.row.wrap.mcjs-rc-controllable
-					a.btn.cachelink.mcjs-rc-clickable(data-cachelink="albums,tracks") #{lingua.settings_clear_cache_music}
-				.row.wrap.mcjs-rc-controllable
-					a.btn.cachelink.mcjs-rc-clickable(data-cachelink="tvepisodes,tvshows") #{lingua.settings_clear_cache_tv}
-				.row.wrap.mcjs-rc-controllable
-					a.btn.cachelink.mcjs-rc-clickable(data-cachelink="devices") #{lingua.settings_clear_cache_device} 
-				.row.mcjs-rc-controllable
-					label(for="moviepath") #{lingua.setting_movielocation}
-					input#moviepath.mcjs-rc-clickable(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation,data-rule-path="true",	data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
-				.row.mcjs-rc-controllable
-					label(for="musicpath") #{lingua.setting_musiclocation}
-					input#musicpath.mcjs-rc-clickable(name="musicpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= musiclocation,  data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
-				.row.mcjs-rc-controllable
-					label(for="tvpath") #{lingua.setting_tvlocation}
-					input#tvpath.mcjs-rc-clickable(name="tvpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= tvlocation, data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
-				.row.mcjs-rc-controllable
-					label(for="language") #{lingua.setting_language}
-					select#language.mcjs-rc-clickable(name="language")
-						- for lang in availableLanguages
-							option(value=lang, selected=lang == language) #{lang}
-				.row.mcjs-rc-controllable
-					label(for="location") #{lingua.setting_location}
-					input#location.mcjs-rc-clickable(name="location",type="text",placeholder="#{lingua.settings_placeholder_location}", value= location,data-rule-required="true", data-msg-required="This field is required.")
-				if spotifyUser !== ""
-					.row.mcjs-rc-controllable
-						label(for="spotifyUser") #{lingua.setting_spotify_user}
-						input#spotifyUser.mcjs-rc-clickable(name="spotifyUser",type="text", value=spotifyUser)
-				if spotifyPass !== ""
-					.row.mcjs-rc-controllable
-						label(for="spotifyPass") #{lingua.setting_spotify_password}
-						input#spotifyPass.mcjs-rc-clickable(name="spotifyPass",type="password", value=spotifyPass)
-				.row.mcjs-rc-controllable
-					label(for="screensaver") Screensaver
-					select#screensaver.mcjs-rc-clickable(name="screensaver")
-						- for saver in availableScreensavers
-							option(value=saver, selected=saver == screensaver) #{saver}
-				.row.mcjs-rc-controllable
-					label(for="theme") #{lingua.setting_theme}
-					select#theme.mcjs-rc-clickable(name="theme")
-						- for theme in themes
-							option(selected=theme) #{theme}
-				.row.mcjs-rc-controllable
-					label(for="port") #{lingua.setting_port}
-					input#port.mcjs-rc-clickable(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true", data-msg-required="This field is required.")
-				.row.wrap.mcjs-rc-controllable
-					br
-					-if(allowed === 'yes' && devices !== undefined)
-						strong #{lingua.settings_device_connected}:
-						table
-							thead
-								tr
-									th #{lingua.settings_device_id}: 
-									th #{lingua.settings_device_seen}:
-									th #{lingua.settings_device_allowed}:
-									th #{lingua.settings_device_parental}:
-							tbody
-								- each device in devices
-									tr.mcjs-rc-controllable
-										td.device= device.device_id
-										td.seen= device.last_seen
-										td.active= device.is_active
-										td
-											-if (device.is_active !== undefined && device.is_active === 'yes')
-												a.parentalControl.btn.mcjs-rc-clickable.lock #{lingua.settings_device_btn_lock}
-											-else
-												a.parentalControl.btn.mcjs-rc-clickable.unlock #{lingua.settings_device_btn_unlock}
-				.row.mcjs-rc-controllable
-							input.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
-							input.oauth(name="oauth" type="hidden")
+    #header.settings
+        a.backlink(href="/") &#xe113;
+        h1	#{lingua.settings}
+    #wrapper
+        .ui-widget
+            .message
+                .message
+        #settings
+            input.oauthKeyHidden(name="oauthKey" type="hidden")
+            form#setup.validate-form(action='/submit',method='post')
+                h2 #{lingua.setting_header} 
+                div#oauthContainer.mcjs-rc-controllable.row
+                    span.info
+                        span.quote &ldquo;
+                        span #{lingua.setting_oauth_explanation} 
+                        span.quote &rdquo;
+                    input#oauthKey.mcjs-rc-clickable(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
+                    a.btn#oauth(href="#") #{lingua.setting_register_oauth}
+                    label(for="oauthKey")
+                .row.wrap.mcjs-rc-controllable
+                    a.btn.cachelink.mcjs-rc-clickable(data-cachelink="movies") #{lingua.settings_clear_cache_movies}
+                .row.wrap.mcjs-rc-controllable
+                    a.btn.cachelink.mcjs-rc-clickable(data-cachelink="albums,tracks") #{lingua.settings_clear_cache_music}
+                .row.wrap.mcjs-rc-controllable
+                    a.btn.cachelink.mcjs-rc-clickable(data-cachelink="tvepisodes,tvshows") #{lingua.settings_clear_cache_tv}
+                .row.wrap.mcjs-rc-controllable
+                    a.btn.cachelink.mcjs-rc-clickable(data-cachelink="devices") #{lingua.settings_clear_cache_device} 
+                .row.mcjs-rc-controllable
+                    label(for="moviepath") #{lingua.setting_movielocation}
+                    input#moviepath.mcjs-rc-clickable(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation,data-rule-path="true",	data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
+                .row.mcjs-rc-controllable
+                    label(for="musicpath") #{lingua.setting_musiclocation}
+                    input#musicpath.mcjs-rc-clickable(name="musicpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= musiclocation,  data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
+                .row.mcjs-rc-controllable
+                    label(for="tvpath") #{lingua.setting_tvlocation}
+                    input#tvpath.mcjs-rc-clickable(name="tvpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= tvlocation, data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
+                .row.mcjs-rc-controllable
+                    label(for="language") #{lingua.setting_language}
+                    select#language.mcjs-rc-clickable(name="language")
+                        - for lang in availableLanguages
+                            option(value=lang, selected=lang == language) #{lang}
+                .row.mcjs-rc-controllable
+                    label(for="location") #{lingua.setting_location}
+                    input#location.mcjs-rc-clickable(name="location",type="text",placeholder="#{lingua.settings_placeholder_location}", value= location,data-rule-required="true", data-msg-required="This field is required.")
+                if spotifyUser !== ""
+                    .row.mcjs-rc-controllable
+                        label(for="spotifyUser") #{lingua.setting_spotify_user}
+                        input#spotifyUser.mcjs-rc-clickable(name="spotifyUser",type="text", value=spotifyUser)
+                if spotifyPass !== ""
+                    .row.mcjs-rc-controllable
+                        label(for="spotifyPass") #{lingua.setting_spotify_password}
+                        input#spotifyPass.mcjs-rc-clickable(name="spotifyPass",type="password", value=spotifyPass)
+                .row.mcjs-rc-controllable
+                    label(for="screensaver") Screensaver
+                    select#screensaver.mcjs-rc-clickable(name="screensaver")
+                        - for saver in availableScreensavers
+                            option(value=saver, selected=saver == screensaver) #{saver}
+                .row.mcjs-rc-controllable
+                    label(for="theme") #{lingua.setting_theme}
+                    select#theme.mcjs-rc-clickable(name="theme")
+                        - for theme in themes
+                            option(selected=theme) #{theme}
+                .row.mcjs-rc-controllable
+                    label(for="port") #{lingua.setting_port}
+                    input#port.mcjs-rc-clickable(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true", data-msg-required="This field is required.")
+                .row.wrap.mcjs-rc-controllable
+                    br
+                    -if(allowed === 'yes' && devices !== undefined)
+                        strong #{lingua.settings_device_connected}:
+                        table
+                            thead
+                                tr
+                                    th #{lingua.settings_device_id}: 
+                                    th #{lingua.settings_device_seen}:
+                                    th #{lingua.settings_device_allowed}:
+                                    th #{lingua.settings_device_parental}:
+                            tbody
+                                - each device in devices
+                                    tr.mcjs-rc-controllable
+                                        td.device= device.device_id
+                                        td.seen= device.last_seen
+                                        td.active= device.is_active
+                                        td
+                                            -if (device.is_active !== undefined && device.is_active === 'yes')
+                                                a.parentalControl.btn.mcjs-rc-clickable.lock #{lingua.settings_device_btn_lock}
+                                            -else
+                                                a.parentalControl.btn.mcjs-rc-clickable.unlock #{lingua.settings_device_btn_unlock}
+                .row.mcjs-rc-controllable
+                            input.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
+                            input.oauth(name="oauth" type="hidden")
