@@ -226,6 +226,14 @@ a.backlink{
 	color: #747474;
 }
 
+body > #screensaver{
+    z-index:999999;
+    position: absolute;
+    top:0;
+    left:0;
+    display:block!important;
+}
+
 /* Generic classes */
 
 .hidden{visibility:hidden;}

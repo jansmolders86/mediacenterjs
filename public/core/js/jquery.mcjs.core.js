@@ -52,7 +52,7 @@
 				, confirmMessage 	    : undefined
 				, succesMessage 	    : undefined
                 , RemoteIdle            : true
-                , screenSaverTimeout    : 900000
+                , screenSaverTimeout    : 90000
 			});
 			
 			// use extend(), so no o is used by value, not by reference
@@ -220,6 +220,7 @@
                         }else if(data.screensaver === 'off') {
                             return;
                         } else if (data.screensaver === 'backdrop') {
+                            $('body > div').css('display', 'none');
                             _backdropScreensaver(o);
                         }
                     } else{
@@ -231,6 +232,7 @@
                     }else if(data.screensaver === 'off') {
                         return;
                     } else if (data.screensaver === 'backdrop') {
+                        $('body > div').css('display', 'none');
                         _backdropScreensaver(o);
                     }
                 }
@@ -243,7 +245,7 @@
                     return;
                 } else if (data.screensaver === 'backdrop') {
                     $("#screensaver").remove();
-                    $("#wrapper, #header").css("display","block");
+                    $("body > div").css("display","block");
                 }
             });
 
@@ -262,22 +264,13 @@
             var interval = 5000;
 
             setTimeout(function () {
-                $("#wrapper, #header").css("display","none");
-                $('body').append('<img width="100%" height="100%" id="screensaver" src="" class="fadein" />');
-
-                $("#screensaver").fadeOut(interval, function() {
-                    $("#screensaver").attr("src",img_array[index++ % img_array.length]);
-                }).fadeIn(interval);
-
+                $('body').append('<img width="100%" height="100%" id="screensaver" src="" class="fadein fullscreen" />');
+                $("#screensaver").removeClass('fadein')
+                $("#screensaver").attr("src",img_array[index++ % img_array.length]).addClass('fadein');
                 setTimeout(arguments.callee, interval);
             }, interval);
 
         });
-    }
-
-
-    function _enableScreensaver(o){
-
     }
 
 	/**** End of custom functions ***/
