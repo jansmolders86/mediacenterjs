@@ -1,34 +1,34 @@
 extends /layout
 
 block declarations
-	- additional_title     = lingua.weather;
+    - additional_title     = lingua.weather;
     - include_remote       = true;
 
 block additional_css
-	link(rel='stylesheet', href='/weather/css/style.css')
+    link(rel='stylesheet', href='/weather/css/style.css')
 
 block additional_scripts
-	script(src="/weather/js/jquery.mcjs.weather.js")
-	script.
-		$(function(){
-			$('body').mcjs();
-			$('body').mcjsw();
-		});
+    script(src="/weather/js/jquery.mcjs.weather.js")
+    script.
+        $(function(){
+            $('body').mcjs();
+            $('body').mcjsw();
+        });
 
 block body
-	#backdrop
-		img.backdropimg.fullscreen(src="/core/css/img/backdrop.png")
-	#header
-		a.backlink(href="/") &#xe113;
-		h1	
-	#wrapper
-	.infoPanel
-		.current
-			h2
-			.degrees
-			.feelslike
-			.weathertype
-				.icon
-				.text
-		ul.forecast
-		div(style="clear: both;")
+    #backdrop
+        img.backdropimg.fullscreen(src="/core/css/img/backdrop.png")
+    #header
+        a.backlink(href="/") &#xe113;
+        h1	
+    #wrapper
+    .infoPanel
+        .current
+            h2
+            .degrees
+            .feelslike
+            .weathertype
+                .icon
+                .text
+        ul.forecast
+        div(style="clear: both;")
