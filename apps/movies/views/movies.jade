@@ -22,6 +22,11 @@ html(lang="en", ng-app="movieApp")
         script(src="/movies/js/app.js")
         script(src="/core/js/video.js")
         script(src="/music/js/remote.js")
+        script.
+            $(function(){
+                $('body').mcjs();
+            });
+            
 
         title #{lingua.movies}
         body(ng-controller="movieCtrl",scroll,ng-class="{shrink:boolChangeClass}")
@@ -35,7 +40,7 @@ html(lang="en", ng-app="movieApp")
                     option(value="title")   Alphabetical
                     option(value="genre")   Genre
             #backdrop
-                img#backdropimg.slide(src="/movies/css/img/backdrop.png")
+                img#backdropimg.slide.fullscreen(src="/movies/css/img/backdrop.png")
             #wrapper  
                 #moviebrowser
                     ul.movies

@@ -22,6 +22,11 @@ html(lang="en", ng-app="tvApp")
         script(src="/tv/js/app.js")
         script(src="/core/js/video.js")
         script(src="/music/js/remote.js")
+        script.
+            $(function(){
+                $('body').mcjs();
+            });
+            
 
         title tvshows
         body(ng-controller="tvCtrl")

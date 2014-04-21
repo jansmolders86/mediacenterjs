@@ -19,6 +19,11 @@ html(lang="en", ng-app="musicApp")
         script(src="/core/js/plugins/angular/angular-route.min.js")
         script(src="/music/js/app.js")
         script(src="/music/js/remote.js")
+        script.
+            $(function(){
+                $('body').mcjs();
+            });
+            
         title Music
         body(ng-controller="musicCtrl")
             #header
