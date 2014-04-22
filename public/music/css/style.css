@@ -151,7 +151,7 @@
 /** Player **/
 
 #player{
-    width:150px;
+    width:320px;
     padding-bottom:50px;
     margin-left:20px;
     bottom: 0;
@@ -169,6 +169,66 @@
     color:#333;
 }
 
+#player .left{float:left;}
+#player .middle{float: left; margin-left: 96px;}
+#player .right{float:right;}
+
+/*
+
+#progressBar { 
+    border:1px solid #ccc; 
+    color:#fff; 
+    width:295px; 
+    height:15px;
+    border-radius:5px;
+    padding:0;
+    margin:0 0 20px 0;
+}
+#progress {
+   background-color:#FB8521;
+   height:15px;
+   display:block;
+}
+*/
+
+.ui.progress {
+    border: 1px solid rgba(0,0,0,.1);
+    width: 100%;
+    height: 35px;
+    background-color: #FAFAFA;
+    padding: 5px;
+    border-radius: .3125em;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+
+.bar{
+    -webkit-animation: progress-striped 3s linear infinite;
+    -webkit-background-size: 30px 30px;
+    background-size: 30px 30px;
+    display: inline-block;
+    height: 100%;
+    background-color: #CCC;
+    border-radius: 3px;
+    -webkit-transition: width 1s ease-in-out,background-color 1s ease-out;
+    -moz-transition: width 1s ease-in-out,background-color 1s ease-out;
+    transition: width 1s ease-in-out,background-color 1s ease-out;
+    background-image: linear-gradient(135deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+}
+
+@-webkit-keyframes progress-striped{
+    0%{background-position:0 0}
+    100%{background-position:60px 0}
+}
+
+@keyframes progress-striped{
+    0%{background-position:0 0}
+    100%{background-position:60px 0}
+}
 
 @media only screen and (min-width: 320px) and (max-width: 529px) {
     /* For phone layouts only */

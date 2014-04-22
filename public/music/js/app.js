@@ -112,6 +112,10 @@
 	    audio.addEventListener('ended', function() {
 	        $rootScope.$apply(player.next);
 	    }, false);
+        
+        audio.addEventListener("timeupdate", function(){
+            updateProgress(audio);
+        }, false);
 
 	    return player;
     });
@@ -143,5 +147,15 @@
             }
         };
     });
+    
+    function updateProgress(audio) {
+       var progress = document.getElementById("progress");
+       var value = 0;
+       if (audio.currentTime > 0) {
+          value = Math.floor((100 / audio.duration) * audio.currentTime);
+       }
+       progress.style.width = value + "%";
+    }
 
 })(window);
+

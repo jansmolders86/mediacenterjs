@@ -54,13 +54,16 @@ html(lang="en", ng-app="musicApp")
                                 span.track-title {{track.title}}
                     #player(ng-show="player.playlist.length > 0")
                         ul.nav
-                            li
+                            li#progressBar.ui.active.striped.progress
+                                span#progress.bar
+                                
+                            li.left
                                 i.control.backward.icon(ng-click="player.previous()")
-                            li
+                            li.middle
                                 i.control.play.icon(ng-click="player.play()",ng-hide="player.playing")
-                            li
+                            li.middle
                                 i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
-                            li
+                            li.right
                                 i.control.forward.icon(ng-click="player.next()")
 
                 section#library(ng-class="{side: player.playlist.length > 0}")
