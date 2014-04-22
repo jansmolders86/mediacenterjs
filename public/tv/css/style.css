@@ -25,6 +25,8 @@ a.backlink { margin-top: 0px; z-index:4; }
 
 h2.loading{top:80px;}
 
+#container{padding:50px;}
+
 .loading.icon{
     -webkit-animation: icon-loading 0.5s linear infinite;
     -ms-animation: icon-loading 0.5s linear infinite;
@@ -39,18 +41,23 @@ h2.loading{top:80px;}
 	list-style: none;
 	display: block;
 	position: relative;
-	width:780px;
+	width:100%;
 	min-height:500px;
 	overflow:hidden;
 }
 
+#tvshows.side{
+    margin-left:300px;
+}
+
 .tvshow img{
-	margin:0 0 20px 0;
+	margin:0;
     display:block;
 	width:780px;
 	height:140px;
 	padding:0;
 	border:0;
+    opacity:1;
 }
 
 .tvshow span{
@@ -62,17 +69,15 @@ h2.loading{top:80px;}
 	text-transform:capitalize;
 }
 
-span.title{visibility:hidden; width:0; height:0;}
-
 .tvshow{
 	float:left;
-    min-height:140px;
+    min-height:100px;
     width:780px;
 	list-style:none;
 	z-index:99;
 	position:relative;
 	padding: 0px;
-	margin: 0px 10px 20px 0;
+	margin: 20px;
     border: 1px solid #e7e7e7;
 	display:block;
 	background:#fff;
@@ -82,8 +87,13 @@ span.title{visibility:hidden; width:0; height:0;}
 	border-radius: 0.33em;
 	-webkit-transition: -webkit-box-shadow 0.2s ease;
 	transition: box-shadow 0.2s ease;
+    cursor:pointer;
 }
 
+.tvshow:hover img,
+.tvshow.current img{
+    opacity:0.5;  
+}
 
 .tvshow a{ float:left; }
 .tvshow .imageWrapper { height:140px; width:758px; overflow:hidden;}
@@ -121,13 +131,53 @@ span.title{visibility:hidden; width:0; height:0;}
     overflow: hidden;
     color:#333;
     cursor:pointer;
+    padding-left:30px;
 }
 
 .episodes li:hover,
-.episodes li.focus{
+.episodes li.focus,
+.episodes li.current{
     background:#f1f1f1;
 }
 
+/** Playlist **/
+
+#playlist {
+    float: left;
+    width: 358px;
+    background: #e7e7e7;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+    min-height: 100%;
+    height: auto;
+    position: absolute;
+    top:75px;
+    left:0px;
+    border-right:1px solid #ccc;
+}
+
+#playlist .header{
+    clear: both;
+    width: 335px;
+    position: relative;
+    overflow: hidden;
+    padding-left: 30px;
+    cursor: pointer;
+    margin:20px 0;
+}
+
+#playlist .tvshow{ margin-top:10px; padding:10px; }
+#playlist .tvshow-title{font-size:20px; color:#333;}
+#playlist .tvshow li{
+    padding:5px 0;
+    border-bottom:1px solid #ccc;
+    min-height: 25px;
+    line-height: 25px;
+    cursor:pointer;
+}
+
+#playlist .tvshow li:hover{ background:#fff; }
 
 /*
 
@@ -151,17 +201,5 @@ span.title{visibility:hidden; width:0; height:0;}
 /*** PHONE LAYOUT ***/
 
 @media only screen and (min-width: 320px) and (max-width: 529px) {
-    #wrapper{padding:10px 0px;}
-
-
-    .tvshows{
-        width:100%;
-    }
-
-    .tvposter{
-        width:100%;
-        min-height:100px;
-    }
-
-    .tvposter .imageWrapper { height:140px; width:100%; overflow:hidden;}
+    #container{padding:10px 0px;}
 }

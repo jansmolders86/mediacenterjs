@@ -27,6 +27,7 @@
         $http.get('/music/loadItems').success(function(data) {
             $scope.albums = data;
             remote(socket, $scope, player, audio);
+            keyevents(socket, $scope, player, audio);
         });
         
         $scope.orderProp = 'genre';
@@ -142,7 +143,5 @@
             }
         };
     });
-
-
 
 })(window);

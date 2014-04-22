@@ -15,30 +15,30 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-function remote(socket, $scope, player, audio){
+function remote(socket, $scope, player){
     var albums = $scope.albums;
     socket.on('controlling', function(data){
         switch(data.action) {
             case "goLeft" :
-                goLeft(socket, $scope, player, audio);
+                goLeft(socket, $scope, player);
                 break;
             case "goRight" :
-                goRight(socket, $scope, player, audio);
+                goRight(socket,$scope, player);
                 break;
             case "enter" :
-                pushEnter(socket, $scope, player, audio);
+                pushEnter(socket,$scope, player);
                 break;
             case "pause" :
-                pushPause(socket, $scope, player, audio);
+                pushPause(socket,$scope);
                 break;
             case "back" :
-                pushBack(socket, $scope, player, audio);
+                pushBack(socket,$scope, player);
                 break;
             case "mute" :
-                pushMute(socket, $scope, player, audio);   
+                pushMute(socket,$scope);   
                 break;
             case "dashboard" :
-                pushDashboard(socket, $scope, player, audio);
+                pushDashboard(socket,$scope);
                 break;
         }
     });
@@ -46,36 +46,37 @@ function remote(socket, $scope, player, audio){
 
 
 // Catch and set keyevents
-function keyevents(socket, $scope, player, audio){
+function keyevents(socket, $scope, player){
     document.onkeydown=onKeyDownHandler; 
     
     function onKeyDownHandler(e){
+        
         if (typeof e == 'undefined' && window.event) { e = window.event; }
 
         switch(e.keyCode) {
-            case 39 : //next
-                goRight(socket, $scope, player, audio);
+            case 39 :   //next
+                goRight(socket, $scope, player);
             break;
-            case 37 : //prev
-                goLeft(socket, $scope, player, audio);
+            case 37 :   //prev
+                goLeft(socket, $scope, player);
             break;
-            case 13 : //enter
+            case 13 :   //enter
                 e.preventDefault();
-                pushEnter(socket, $scope, player, audio);
+                pushEnter(socket, $scope, player);
             break;
-            case 8  : //backspace
+            case 8  :   //backspace
                 e.preventDefault();
-                pushBack(socket, $scope, player, audio);
+                pushBack(socket, $scope, player);
             break;
-            case 32 :  //space
-                pushPause(socket, $scope, player, audio);
+            case 32 :   //space
+                pushPause(socket, $scope);
             break;
         }
     };
 }
 
 
-function goLeft(socket, $scope, player, audio){
+function goLeft(socket, $scope, player){
     if(player.playlist.length === 0){
         var index = $scope.focused;
         index--;
@@ -90,11 +91,11 @@ function goLeft(socket, $scope, player, audio){
 }
 
 
-function goRight(socket, $scope, player, audio){
+function goRight(socket, $scope, player){
    if(player.playlist.length === 0) {
         var index = $scope.focused;
         index++;
-        if (index >= $scope.albums.length) {
+        if (index >= $scope.tvshows.length) {
             index = 0;
         }
         $scope.focused = index;
@@ -104,10 +105,10 @@ function goRight(socket, $scope, player, audio){
     $scope.$apply();
 }
 
-function pushEnter(socket, $scope, player, audio){
+function pushEnter(socket, $scope, player){
     if(player.playlist.length === 0) {
         var index = $scope.focused;
-        var album = $scope.albums[index];
+        var album = $scope.tvshows[index];
         player.playlist.push(album);
     } else {
         player.play();
@@ -115,36 +116,36 @@ function pushEnter(socket, $scope, player, audio){
     $scope.$apply();
 }
 
-function pushPause(socket, $scope, player, audio){
-    if(player.playing === true) {
-        player.pause();
+function pushPause(socket, $scope){
+    if($scope.playing === true) {
+        videojs("player").pause();
     } else {
-        player.play();
+        videojs("player").play();
     }
     $scope.$apply();
 }
 
-function pushBack(socket, $scope, player, audio){
+function pushBack(socket, $scope, player){
     if(player.playlist.length > 0) {
-        var album = player.playlist[player.current.album];
-        player.playlist.remove(album);
+        var tvshow = player.playlist[player.current.tvshow];
+        player.playlist.remove(tvshow);
     } else {
         window.location = "/";
     }
     $scope.$apply();
 }
 
-function pushMute(socket, $scope, player, audio){
-    var mute = false;
-    if(player.playing === true && mute === false) {
-        audio.mute = true;
-        mute = true;
-    } else {
-        audio.mute = false;
+function pushMute(socket, $scope){
+    if($scope.playing === true) {
+        if(videojs("player").volume() === 0){
+            videojs("player").volume(1)
+        } else {
+            videojs("player").volume(0);
+        }
     }
     $scope.$apply();
 }
 
-function pushDashboard(socket, $scope, player, audio){
+function pushDashboard(socket, $scope){
     window.location = "/";
 }

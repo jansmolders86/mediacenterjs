@@ -99,6 +99,7 @@ a.backlink { margin-top: 0px; z-index:4; }
 .movieposter .overlay{ width:0; height:0; }
 
 .movieposter.focused .overlay,
+.movieposter.current .overlay,
 .movieposter:hover .overlay{
 	background:url(img/cover-overlay.png) no-repeat;
 	width:250px;

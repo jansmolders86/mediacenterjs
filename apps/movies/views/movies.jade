@@ -16,12 +16,15 @@ html(lang="en", ng-app="movieApp")
         script(src="/core/js/plugins/jquery/jquery-1.8.2.min.js")
         script(src="http://vjs.zencdn.net/4.3/video.js")
         script(src="/core/js/plugins/socket.io.min.js")
+        script(src="/core/js/plugins/jquery/jquery.scrollintoview.min.js")
+        script(src="/core/js/plugins/jquery/jquery.idle-timer.js")
+        script(src="/core/js/plugins/jquery/jquery.i18n.properties.-1.0.9.js")
         script(src="/core/js/jquery.mcjs.core.js")
         script(src="/core/js/plugins/angular/angular.min.js")
         script(src="/core/js/plugins/angular/angular-route.min.js")
         script(src="/movies/js/app.js")
         script(src="/core/js/video.js")
-        script(src="/music/js/remote.js")
+        script(src="/movies/js/remote.js")
         script.
             $(function(){
                 $('body').mcjs();
@@ -44,7 +47,7 @@ html(lang="en", ng-app="movieApp")
             #wrapper  
                 #moviebrowser
                     ul.movies
-                        li.movieposter.boxed(ng-repeat="movie in movies | filter:query | orderBy:orderProp", ng-mouseover="changeBackdrop(movie.backdrop_path)")
+                        li.movieposter.boxed(ng-repeat="movie in movies | filter:query | orderBy:orderProp", ng-mouseover="changeBackdrop(movie.backdrop_path)", ng-class="{current: focused == $index }")
                             .imageWrapper
                                 img.movieposter(ng-src="{{movie.poster_path}}", onerror="this.src='/movies/css/img/nodata.jpg'")
                             .overlay.mcjs-rc-clickable(ng-click="playMovie(movie.original_name)")
