@@ -49,7 +49,6 @@ movieApp.directive("scroll", function ($document,$window) {
              } else {
                  $scope.boolChangeClass = false;
              }
-            $scope.$apply();
         });
     };
 });
@@ -92,7 +91,6 @@ function playMovie(data, $http){
             , subtitleUrl           =   "/data/movies/"+extentionlessFile+".srt"  
             , playerID              =   'player'
             , homeURL               =   '/movies/';
-
         videoJSHandler(playerID, data, videoUrl, subtitleUrl, orginalName,homeURL, 5000);
 
     });  

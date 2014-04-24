@@ -87,7 +87,9 @@ function goLeft(socket, $scope, player){
     } else {
         player.previous();
     }
-    $scope.$apply();
+    $scope.$apply(function(){
+        $scope.focused;
+    });
 }
 
 
@@ -102,7 +104,9 @@ function goRight(socket, $scope, player){
     }else {
         player.next();
     } 
-    $scope.$apply();
+    $scope.$apply(function(){
+        $scope.focused;
+    });
 }
 
 function pushEnter(socket, $scope, player){
@@ -113,7 +117,6 @@ function pushEnter(socket, $scope, player){
     } else {
         player.play();
     }
-    $scope.$apply();
 }
 
 function pushPause(socket, $scope){
@@ -122,7 +125,6 @@ function pushPause(socket, $scope){
     } else {
         videojs("player").play();
     }
-    $scope.$apply();
 }
 
 function pushBack(socket, $scope, player){
@@ -132,7 +134,6 @@ function pushBack(socket, $scope, player){
     } else {
         window.location = "/";
     }
-    $scope.$apply();
 }
 
 function pushMute(socket, $scope){
@@ -143,7 +144,6 @@ function pushMute(socket, $scope){
             videojs("player").volume(0);
         }
     }
-    $scope.$apply();
 }
 
 function pushDashboard(socket, $scope){

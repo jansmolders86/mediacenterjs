@@ -83,7 +83,9 @@ function goLeft(socket, $scope){
         index = 0;
     }
     $scope.focused = index;
-    $scope.$apply();
+    $scope.$apply(function(){
+        $scope.focused;
+    });
 }
 
 
@@ -94,12 +96,13 @@ function goRight(socket, $scope){
         index = 0;
     }
     $scope.focused = index;
-    $scope.$apply();
+    $scope.$apply(function(){
+        $scope.focused;
+    });
 }
 
 function pushEnter(socket, $scope){
     $scope.playMovie($scope.movies[$scope.focused].original_name);
-    $scope.$apply();
 }
 
 function pushPause(socket, $scope){
@@ -108,7 +111,6 @@ function pushPause(socket, $scope){
     } else {
         videojs("player").play();
     }
-    $scope.$apply();
 }
 
 function pushBack(socket, $scope){
@@ -118,7 +120,6 @@ function pushBack(socket, $scope){
     } else {
         window.location = "/";
     }
-    $scope.$apply();
 }
 
 function pushMute(socket, $scope){
@@ -129,7 +130,6 @@ function pushMute(socket, $scope){
             videojs("player").volume(0);
         }
     }
-    $scope.$apply();
 }
 
 function pushDashboard(socket, $scope, player, audio){

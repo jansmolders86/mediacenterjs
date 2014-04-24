@@ -86,7 +86,9 @@ function goLeft(socket, $scope, player, audio){
     } else {
         player.previous();
     }
-    $scope.$apply();
+    $scope.$apply(function(){
+        $scope.focused;
+    });
 }
 
 
@@ -101,7 +103,9 @@ function goRight(socket, $scope, player, audio){
     }else {
         player.next();
     } 
-    $scope.$apply();
+    $scope.$apply(function(){
+        $scope.focused;
+    });
 }
 
 function pushEnter(socket, $scope, player, audio){
@@ -112,7 +116,6 @@ function pushEnter(socket, $scope, player, audio){
     } else {
         player.play();
     }
-    $scope.$apply();
 }
 
 function pushPause(socket, $scope, player, audio){
@@ -121,7 +124,6 @@ function pushPause(socket, $scope, player, audio){
     } else {
         player.play();
     }
-    $scope.$apply();
 }
 
 function pushBack(socket, $scope, player, audio){
@@ -131,7 +133,6 @@ function pushBack(socket, $scope, player, audio){
     } else {
         window.location = "/";
     }
-    $scope.$apply();
 }
 
 function pushMute(socket, $scope, player, audio){
@@ -142,7 +143,6 @@ function pushMute(socket, $scope, player, audio){
     } else {
         audio.mute = false;
     }
-    $scope.$apply();
 }
 
 function pushDashboard(socket, $scope, player, audio){
