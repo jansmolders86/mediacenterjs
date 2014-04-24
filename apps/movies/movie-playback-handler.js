@@ -45,7 +45,7 @@ exports.startPlayback = function(response, movieUrl, movieFile, subtitleUrl, sub
             if(data.progression !== 0 && data !== undefined){
                 var movieProgression = data.progression;
 
-                if(fs.existsSync(outputPath) === false || data.transcodingstatus === 'pending'){
+                if(!fs.existsSync(outputPath) || data.transcodingstatus === 'pending'){
                     // Start transcode if file was deleted.
                     startTranscoding(movieUrl, movieFile, outputPath, ExecConfig);
                 };
@@ -54,14 +54,23 @@ exports.startPlayback = function(response, movieUrl, movieFile, subtitleUrl, sub
                 var movieProgression = 0;
 
                 if( data.transcodingstatus === 'pending'){
-                    if(fs.existsSync(outputPath)){
-                        fs.unlinkSync(outputPath);
-                    };
-					if(fs.existsSync(movieUrl)){
-						startTranscoding(movieUrl, movieFile, outputPath, ExecConfig);
-					} else{
-						console.log('Movie file '+ movieUrl + 'not found, did you move or delete it?');
-					}
+                    fs.exists(outputPath, function(e,exists){
+                        if(!e){
+                            
+                            if(exists){
+                                fs.unlinkSync(outputPath);
+                            }
+                            
+
+                            if(fs.existsSync(movieUrl)){
+                                startTranscoding(movieUrl, movieFile, outputPath, ExecConfig);
+                            } else{
+                                console.log('Movie file '+ movieUrl + 'not found, did you move or delete it?');
+                            }
+                        }
+                    });
+               
+					
                 }
             }
 
@@ -163,19 +172,25 @@ checkProgression = function(movieFile, callback) {
 
 
 startTranscoding = function(movieUrl, movieFile, outputPath, ExecConfig){
-    var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -sc_threshold 0 -s 1280x720 -profile:v baseline -keyint_min 150 -deinterlace -maxrate 10000000 -bufsize 10000000 -b 1200k -acodec aac -ar 48000 -ab 192k -strict experimental -movflags +frag_keyframe+empty_moov '+outputPath;
-    var exec = require('child_process').exec
-    , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
-        if (err) {
-            console.log('FFMPEG error: ',err) ;
-        } else{
-            console.log('Transcoding complete');
+    
+    if(!fs.existsSync(outputPath)){
+        
+       var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -sc_threshold 0 -s 1280x720 -profile:v baseline -keyint_min 150 -deinterlace -maxrate 10000000 -bufsize 10000000 -b 1200k -acodec aac -ar 48000 -ab 192k -strict experimental -frag_duration 1000 -movflags +frag_keyframe+empty_moov '+outputPath;
+        var exec = require('child_process').exec
+        , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
+            if (err) {
+                console.log('FFMPEG error: ',err) ;
+            } else{
+                console.log('Transcoding complete');
 
-            db.query('UPDATE progressionmarker SET transcodingstatus = "done" WHERE movietitle =? ', [ movieFile ]);
-        }
-    });
+                db.query('UPDATE progressionmarker SET transcodingstatus = "done" WHERE movietitle =? ', [ movieFile ]);
+            }
+        });
 
-    child.stdout.on('data', function(data) { console.log(data.toString()); });
-    child.stderr.on('data', function(data) { console.log(data.toString()); });
-    child.on('exit', function() {  console.error('Child process exited'); });
+        child.stdout.on('data', function(data) { console.log(data.toString()); });
+        child.stderr.on('data', function(data) { console.log(data.toString()); });
+        child.on('exit', function() {  console.error('Child process exited'); });
+        
+    }
+  
 }
