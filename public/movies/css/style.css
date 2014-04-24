@@ -16,6 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+body.playing > div{display:none;}
+body.playing > #player{display:block;}
+
 #backdrop{
 	box-shadow:none;
 	padding: 10px 0 0 100px;
@@ -268,6 +271,26 @@ span.title{visibility:hidden; width:0; height:0;}
     0%{ top:-180px; }
     50%{ top:0; }
     100%{ top:-180px; }
+}
+
+
+@media only screen and (min-width: 320px) and (max-width: 529px) {
+    /* For phone layouts only */
+    .movieposter{
+        width:200px;
+        margin:0;
+    }
+    
+    #wrapper{ padding:230px 10px 10px 10px; }
+    
+   .movieposter img{
+        margin:0 0 20px 0;
+        display:block;
+        width:200px;
+        height:auto;
+        padding:0;
+        border:0;
+    }
 }
 
 

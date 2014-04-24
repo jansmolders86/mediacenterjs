@@ -16,6 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+body.playing > div{display:none;}
+body.playing > #player{display:block;}
 
 /* Default override */
 body,html{ overflow-y:auto; overflow-x:hidden;}

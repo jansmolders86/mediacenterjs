@@ -32,7 +32,7 @@ html(lang="en", ng-app="movieApp")
             
 
         title #{lingua.movies}
-        body(ng-controller="movieCtrl",scroll,ng-class="{shrink:boolChangeClass}")
+        body(ng-controller="movieCtrl",scroll,ng-class="{shrink:boolChangeClass, playing:playing}")
             #header
                 a.backlink(href="/") &#xe113;
                 h1 #{lingua.movies}
