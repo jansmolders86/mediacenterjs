@@ -54,11 +54,21 @@ exports.startPlayback = function(response, episodeUrl, episode, subtitleUrl, sub
             } else {
                 var movieProgression = 0;
 
-                if( data.transcodingstatus === 'pending'){
-                    if(fs.existsSync(outputPath) === true ){
-                        fs.unlinkSync(outputPath);
-                    };
-                    startTranscoding(episodeUrl, episode, outputPath, ExecConfig);
+                if( data.transcodingstatus === 'pending'){      
+                    fs.exists(outputPath, function(e,exists){
+                        if(!e){
+                            
+                            if(exists){
+                                fs.unlinkSync(outputPath);
+                            }
+                            
+                            if(fs.existsSync(movieUrl)){
+                                startTranscoding(episodeUrl, episode, outputPath, ExecConfig);
+                            } else{
+                                console.log('Episode '+ episodeUrl + 'not found, did you move or delete it?');
+                            }
+                        }
+                    });
                 }
             }
 
@@ -125,20 +135,21 @@ checkProgression = function(episode, callback) {
 
 
 startTranscoding = function( episodeUrl, episode, outputPath, ExecConfig){
+    if(!fs.existsSync(outputPath)){
+        var ffmpeg = 'ffmpeg -i "'+episodeUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -sc_threshold 0 -s 1280x720 -profile:v baseline -keyint_min 150 -deinterlace -maxrate 10000000 -bufsize 10000000 -b 1200k -acodec aac -ar 48000 -ab 192k -strict experimental -movflags +frag_keyframe+empty_moov '+outputPath;
+        var exec = require('child_process').exec
+            , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
+                if (err) {
+                    console.log('FFMPEG error: ',err) ;
+                } else{
+                    console.log('Transcoding complete');
 
-    var ffmpeg = 'ffmpeg -i "'+episodeUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -sc_threshold 0 -s 1280x720 -profile:v baseline -keyint_min 150 -deinterlace -maxrate 10000000 -bufsize 10000000 -b 1200k -acodec aac -ar 48000 -ab 192k -strict experimental -movflags +frag_keyframe+empty_moov '+outputPath;
-    var exec = require('child_process').exec
-        , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
-            if (err) {
-                console.log('FFMPEG error: ',err) ;
-            } else{
-                console.log('Transcoding complete');
+                    db.query('UPDATE progressionmarker SET transcodingstatus = "done" WHERE movietitle =? ', [ episode ]);
+                }
+            });
 
-                db.query('UPDATE progressionmarker SET transcodingstatus = "done" WHERE movietitle =? ', [ episode ]);
-            }
-        });
-
-    child.stdout.on('data', function(data) { console.log(data.toString()); });
-    child.stderr.on('data', function(data) { console.log(data.toString()); });
-    child.on('exit', function() {  console.error('Child process exited'); });
+        child.stdout.on('data', function(data) { console.log(data.toString()); });
+        child.stderr.on('data', function(data) { console.log(data.toString()); });
+        child.on('exit', function() {  console.error('Child process exited'); });
+    }
 }
