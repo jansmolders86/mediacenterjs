@@ -62,7 +62,7 @@ exports.startPlayback = function(response, episodeUrl, episode, subtitleUrl, sub
                                 fs.unlinkSync(outputPath);
                             }
                             
-                            if(fs.existsSync(movieUrl)){
+                            if(fs.existsSync(episodeUrl)){
                                 startTranscoding(episodeUrl, episode, outputPath, ExecConfig);
                             } else{
                                 console.log('Episode '+ episodeUrl + 'not found, did you move or delete it?');
