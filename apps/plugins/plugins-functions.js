@@ -188,7 +188,7 @@ exports.pluginManager = function(req, res, pluginName, action){
 
 	var cb = function(err, result){
 		if (err){
-			console.log('Error: Unable to ' + action + ' plugin: ' + name + '\n' + error);
+			console.log('Error: Unable to ' + action + ' plugin: ' + name + '\n' + err);
 			showError();
 		}else{
 			console.log('Plugins.pluginManager: ' + action + 'ed.');
