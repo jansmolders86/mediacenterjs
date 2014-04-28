@@ -18,7 +18,7 @@ db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 
-exports.loadItems = function (req, res){
+exports.loadItems = function (req, res, serveToFrontEnd){
     db.query('SELECT * FROM movies',{
         original_name  	: String,
         title 		    : String,
@@ -34,11 +34,19 @@ exports.loadItems = function (req, res){
         adult           : String
     }, function(rows) {
         if (typeof rows !== 'undefined' && rows.length > 0){
-            res.json(rows);
-            var serveToFrontEnd = false;
+            
+            if(serveToFrontEnd !== false){
+                res.json(rows);
+            }
+            
+            if(serveToFrontEnd === null){
+                serveToFrontEnd = false;
+            }
             getData(req, res, metaType, serveToFrontEnd);
         } else {
-            var serveToFrontEnd = true;
+            if(serveToFrontEnd === null){
+                serveToFrontEnd = true;
+            }
             getData(req, res, metaType, serveToFrontEnd);
         }
     });

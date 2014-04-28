@@ -40,11 +40,12 @@ exports.index = function(req, res){
 exports.get = function(req, res){
 	var infoRequest = req.params.id,
 		optionalParam = req.params.optionalParam,
-		platform = req.params.action;
+		platform = req.params.action,
+        serveToFrontEnd = null
 
     if (!optionalParam) {
         if(infoRequest === 'loadItems') {
-            functions.loadTvShow(req, res);
+            functions.loadItems(req, res, serveToFrontEnd);
         }
 	}
 

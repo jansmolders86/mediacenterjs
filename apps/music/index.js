@@ -18,11 +18,12 @@ exports.index = function(req, res, next){
 
 exports.get = function(req, res, next){	
 	var infoRequest = req.params.id
-	, optionalParam = req.params.optionalParam
-	, action = req.params.action;
+        , optionalParam = req.params.optionalParam
+        , action = req.params.action
+        , serveToFrontEnd = null;
 	
 	if (infoRequest == 'loadItems'){
-        functions.loadItems(req,res);
+        functions.loadItems(req,res, serveToFrontEnd);
 	}
 	
 	if(action){

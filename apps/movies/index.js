@@ -41,7 +41,8 @@ exports.index = function(req, res){
 
 exports.get = function(req, res){
 	var infoRequest = req.params.id,
-		optionalParam = req.params.optionalParam;
+		optionalParam = req.params.optionalParam,
+        serveToFrontEnd = null
 	
 	if(infoRequest === 'filter') {
 		functions.filter(req, res, optionalParam);
@@ -52,7 +53,7 @@ exports.get = function(req, res){
 				functions.getGenres(req, res);
 				break;
 			case('loadItems'):
-                functions.loadItems(req, res);
+                functions.loadItems(req, res, serveToFrontEnd);
 				break;
             case('backdrops'):
                 functions.backdrops(req, res);

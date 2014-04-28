@@ -21,7 +21,7 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
 
 
-exports.loadTvShow = function (req, res){
+exports.loadItems = function (req, res, serveToFrontEnd){
     db.query('SELECT * FROM tvshows',{
         title 		    : String,
         banner        	: String,
@@ -45,16 +45,22 @@ exports.loadTvShow = function (req, res){
                         count--;
 
                         if (count === 0) {
-                            res.json(ShowList);
+                            if(serveToFrontEnd !== false){
+                                res.json(ShowList);
+                            }
 
-                            var serveToFrontEnd = false;
+                            if(serveToFrontEnd === null){
+                                serveToFrontEnd = false;
+                            }
                             fetchTVData(req, res, metaType, serveToFrontEnd);
                         }
                     }
                 });
             });
         } else {
-            var serveToFrontEnd = true;
+            if(serveToFrontEnd === null){
+                serveToFrontEnd = true;
+            }
             fetchTVData(req, res, metaType, serveToFrontEnd);
         }
     });
@@ -150,9 +156,7 @@ function getEpisodes(showTitle, showBanner, showGenre, showCertification, callba
         },
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
-
                 var episodes = rows;
-
                 var availableEpisodes = {
                     "title"         : showTitle,
                     "banner"        : showBanner,

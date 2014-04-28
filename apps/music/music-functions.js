@@ -13,7 +13,7 @@ var db = dblite('./lib/database/mcjs.sqlite');
 db.on('info', function (text) { console.log('Database info:', text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
-exports.loadItems = function(req, res){
+exports.loadItems = function(req, res, serveToFrontEnd){
     getAlbums(function(rows){
         if(rows !== null) {
             var albums = [];
@@ -33,10 +33,14 @@ exports.loadItems = function(req, res){
                         count--;
                         albums.push(completeAlbum);
                         if (count == 0) {
-                            console.log('Sending data to client');
-                            return res.json(albums);
-                            res.end();
-                            var serveToFrontEnd = false;
+                            if(serveToFrontEnd !== false){
+                                console.log('Sending data to client');
+                                return res.json(albums);
+                                res.end();
+                            }
+                            if(serveToFrontEnd === null){
+                                serveToFrontEnd = false;
+                            }
                             fetchMusicData(req, res, serveToFrontEnd);
                         }
                     });
@@ -44,7 +48,9 @@ exports.loadItems = function(req, res){
 
             });
         } else {
-            var serveToFrontEnd = true;
+            if(serveToFrontEnd === null){
+                serveToFrontEnd = true;
+            }
             fetchMusicData(req, res, serveToFrontEnd);
         }
     });

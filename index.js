@@ -33,7 +33,9 @@ var express = require('express')
     , http = require('http')
 	, os = require('os')
 	, jade = require('jade')
-	, configuration_handler = require('./lib/handlers/configuration-handler');
+	, configuration_handler = require('./lib/handlers/configuration-handler')
+    , schedule = require('node-schedule')
+    , rule = new schedule.RecurrenceRule();
 
 var config = configuration_handler.initializeConfiguration();
 
@@ -43,14 +45,7 @@ if(config.language === ""){
 } else {
 	language = config.language;
 }
-/*
-var log_file = fs.createWriteStream(__dirname + '/log.log', {flags : 'w', encoding: 'utf-8'});
-var log_stdout = process.stdout;
-console.log = function(d) {
-  log_file.write(d.toString()+ "\n");
-  log_stdout.write(d.toString()+ "\n");
-};
-*/
+
 
 /*Create database*/
 if(fs.existsSync('./lib/database/') === false){
@@ -88,6 +83,30 @@ app.configure(function(){
 	app.use(app.router);
 	app.locals.pretty = true;
 	app.locals.basedir = __dirname + '/views';
+});
+
+// Schedule scraping every 30 minutes
+rule.minute = 30;
+var j = schedule.scheduleJob(rule, function(){
+    var moviesfunctions = require('./apps/movies/movie-functions')
+        , musicfunctions = require('./apps/music/music-functions')
+        , tvfunctions = require('./apps/tv/tv-functions')
+        , serveToFrontEnd = false
+        , req // Dummy variable
+        , res; // Dummy variable
+    
+    // Movies
+    moviesfunctions.loadItems(req, res, serveToFrontEnd);
+    
+    // Music
+    setTimeout(function(){    
+        musicfunctions.loadItems(req, res, serveToFrontEnd);
+    },10000);
+    
+    // TV
+    setTimeout(function(){    
+        tvfunctions.loadItems(req, res, serveToFrontEnd);
+    },20000);
 });
 
 /* CORS */
