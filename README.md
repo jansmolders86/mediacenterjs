@@ -67,6 +67,7 @@ Current features:
 * Version manager
 * Device manager
 * Parental control functionality
+* Scheduled tasks
 
 Known issues:
 ==================
