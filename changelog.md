@@ -1,3 +1,11 @@
+
+# 0.0.66 - "Aquaman" (Final release before Beta) 
+__04-28-2014__
+
+* Added Windows installer
+* improvements to setup
+* tv app refactored using Angular
+
 # 0.0.65 / 04-19-2014
 
 * Added Windows installer
