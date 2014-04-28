@@ -1,4 +1,3 @@
-
 # 0.0.66 - "Aquaman" (Final release before Beta) 
 __04-28-2014__
 
@@ -6,13 +5,15 @@ __04-28-2014__
 * improvements to setup
 * tv app refactored using Angular
 
-# 0.0.65 / 04-19-2014
+# 0.0.65 
+__04-19-2014__
 
 * Added Windows installer
 * improvements to setup
 * tv app refactored using Angular
 
-# 0.0.61 / 04-10-2014
+# 0.0.61 
+__04-10-2014__
 
 * Subtitle support
 * Music app refactored using Angular
@@ -22,7 +23,8 @@ __04-28-2014__
 * Front and backend code refactor
 * Auto updater extended
 
-# 0.0.60 / 03-30-2014
+# 0.0.60 
+__03-30-2014__
 
 * Improved mobile styling
 * Metadata gathering is a seperate process
@@ -30,7 +32,8 @@ __04-28-2014__
 * Front and backend code refactor
 * Auto updater extended
 
-# 0.0.53 / 25-30-2014
+# 0.0.53 
+__25-30-2014__
 
 * Improved remote control/keyboard accesibility
 * Improved music App code
