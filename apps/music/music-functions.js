@@ -115,9 +115,12 @@ getAlbums = function(callback){
         function(err, rows) {
             if(err) console.log('Database error: ' + err);
 
-            if (typeof rows !== 'undefined' && rows.length > 0){
-                console.log('Found albums...');
-                callback(rows);
+            if (rows !== undefined && rows !== null ){
+                console.log(rows);
+                if(rows.length > 0){
+                    console.log('Found albums...');
+                    callback(rows);
+                }
             } else {
                 callback(null);
             }

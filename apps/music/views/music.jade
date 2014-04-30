@@ -47,7 +47,7 @@ html(lang="en", ng-app="musicApp")
                             i.remove.circle.icon
                         span.album-title {{album.album}}
                         span.album-artist {{album.artist}}
-                        span.album-year {{album.year}}
+                        span.album-year(ng-show="album.year !== 0") {{album.year}}
                         ol.tracks
                             li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
                                 i.play.icon
@@ -72,6 +72,6 @@ html(lang="en", ng-app="musicApp")
                             img(ng-src="{{album.cover}}")
                             span.album-title {{album.album}}
                             span.album-artist {{album.artist}}
-                            span.album-year {{album.year}}
+                            span.album-year(ng-show="album.year !== 0") {{album.year}}
 
                 h2.loading(ng-show="!albums") #{lingua.loading}
