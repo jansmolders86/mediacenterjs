@@ -43,6 +43,8 @@ A complete documentation will be available when the project reaches Beta status.
 
 [Front end and view explantation](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:--front-end-and-view-explanation)
 
+[Create a new theme](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Themes)
+
 Current features:
 ===========
 
