@@ -18,9 +18,6 @@ The backend is based on Node.JS with ExpressJS and JADE templates.
 The MVC structure allows developers to add an 'app' or 'plugin' to MCJS with ease. 
 The server application runs on Windows, MAC and Linux systems, the client runs in every modern browser (Chrome is preferable though).
 
-Documentation 
-==========================
-
 # User manual
 
 [Installing MediacenterJS](https://github.com/jansmolders86/mediacenterjs/wiki/User-manual:---installing-MediacenterJS)
@@ -72,6 +69,7 @@ Current features:
 Supported file formats:
 ==================
 Video: AVI/MOV/WMV/MP4/MKV/MPEG
+
 AUDIO: MP3 
 
 Known issues:
