@@ -14,6 +14,7 @@ db.on('info', function (text) { console.log('Database info:', text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 exports.loadItems = function(req, res, serveToFrontEnd){
+    console.log('Getting album data')
     getAlbums(function(rows){
         if(rows !== null) {
             var albums = [];
@@ -66,6 +67,7 @@ exports.playTrack = function(req, res, track, album){
 fetchMusicData = function(req, res, serveToFrontEnd) {
     var count = 0;
 	var dataType = 'music';
+    console.log('Fetching metadata')
     metafetcher.fetch(req, res, dataType, function(type){
         if(type === dataType){
 			getAlbums(function(rows){
@@ -104,6 +106,7 @@ fetchMusicData = function(req, res, serveToFrontEnd) {
 }
 
 getAlbums = function(callback){
+    console.log('Looking for stored albums.');
 	setTimeout(function(){
         db.query('SELECT * FROM albums ORDER BY album asc', {
             album   : String,
@@ -116,12 +119,15 @@ getAlbums = function(callback){
             if(err) console.log('Database error: ' + err);
 
             if (rows !== undefined && rows !== null ){
-                console.log(rows);
                 if(rows.length > 0){
                     console.log('Found albums...');
                     callback(rows);
+                } else {
+                    console.log('No albums found... Indexing.');
+                    callback(null);
                 }
             } else {
+                console.log('No albums found... Indexing.');
                 callback(null);
             }
         });
