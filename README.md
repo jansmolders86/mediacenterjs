@@ -13,15 +13,13 @@ __Heavy work in progress__
 What is MediacenterJS?
 =========================
 
-MediacenterJS is/will be a mediacenter like for instance XBMC but based 100% on frontend techniques and languages (HTML5/CSS/Javascript).
-The backend is based on Node.JS with ExpressJS and JADE templates producing easy to use code. 
-Allowing developers to add an 'app' to MCJS even with limited knowledge of said frontend techniques. 
-The server application runs on Windows, MAC and Linux systems. 
+MediacenterJS is a mediacenter (like for instance XBMC) running completely from the comfort of your browser.
+The backend is based on Node.JS with ExpressJS and JADE templates. 
+The MVC structure allows developers to add an 'app' or 'plugin' to MCJS with ease. 
+The server application runs on Windows, MAC and Linux systems, the client runs in every modern browser (Chrome is preferable though).
 
-Partial documentation 
+Documentation 
 ==========================
-I'm writing the documentation as I'm coding so the documentation may not always be complete or coherent. 
-A complete documentation will be available when the project reaches Beta status.
 
 # User manual
 
@@ -52,7 +50,7 @@ Current features:
 * MVC 'App' Framework
 * Clientside setup
 * Dynamic dashboard
-* Basic keyboard controls
+* Keyboard controls
 * Movie indexing
 * Multi-language support
 * Display movies, tvshow and music information 
@@ -69,15 +67,19 @@ Current features:
 * Version manager
 * Device manager
 * Parental control functionality
-* Scheduled tasks
+* Basic scheduled tasks
+
+Supported file formats:
+==================
+Video: AVI/MOV/WMV/MP4/MKV/MPEG
+AUDIO: MP3 
 
 Known issues:
 ==================
 
 * Mobile device streaming still in heavy development
 * Browser: Seeking beyond buffer not working yet.
-
-* Other issues and/or tasksa have been added in order to reach Beta status.
+* Also be sure to check the open issues before filing a new one
 
 Translations
 -------------
