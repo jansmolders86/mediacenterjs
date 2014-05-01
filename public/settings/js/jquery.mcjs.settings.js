@@ -5,12 +5,6 @@ $(function() {
     // pretty form init
 	$("[type=checkbox], [type=radio]").prettyForm();
 
-    //Set theme
-	$('#theme').find('option').each(function(){
-		var cleanedThemeName = $(this).html().replace(/\.(css)/i,"");
-		$(this).text(cleanedThemeName);
-	});
-
     // Get key
 	$.ajax({
 		type: "GET",

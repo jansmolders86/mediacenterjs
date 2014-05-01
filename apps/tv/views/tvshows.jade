@@ -11,9 +11,10 @@ html(lang="en", ng-app="tvApp")
         link(rel='stylesheet', href='/core/css/icon.css')
         link(rel='stylesheet', href='/tv/css/style.css')
         link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
-        if selectedTheme
-            link(rel='stylesheet', href='/themes/' + selectedTheme)
         script(src="/core/js/plugins/jquery/jquery-1.8.2.min.js")
+        if selectedTheme
+            link(rel='stylesheet', href='/themes/' + selectedTheme +'/style.css')
+            script(src='/themes/' + selectedTheme +'/script.js')
         script(src="http://vjs.zencdn.net/4.3/video.js")
         script(src="/core/js/plugins/socket.io.min.js")
         script(src="/core/js/plugins/jquery/jquery.scrollintoview.min.js")

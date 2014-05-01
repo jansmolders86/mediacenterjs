@@ -31,14 +31,15 @@ html(lang="en")
         link(rel='stylesheet', href='/core/css/style.css')
         link(rel='stylesheet', href='/core/css/icon.css')
         link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css')
-
-        if selectedTheme
-            link(rel='stylesheet', href='/themes/' + selectedTheme)
-
-        block additional_css
-
+        
         script(src="/core/js/plugins/jquery/jquery-1.8.2.min.js")
         script(src="/core/js/plugins/jquery/jquery-ui-1.10.3.min.js")
+
+        if selectedTheme
+            link(rel='stylesheet', href='/themes/' + selectedTheme +'/style.css')
+            script(src='/themes/' + selectedTheme +'/script.js')
+
+        block additional_css
 
         if use_knockout
             script(src="/core/js/plugins/knockout-2.3.0.js")

@@ -309,6 +309,8 @@ body > #screensaver{
     padding:0;
 }
 
+.tile > a > span{ display:none }
+
 .tile .info{
 	font-size:14px;
 	float:left;

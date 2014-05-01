@@ -7,28 +7,6 @@ block declarations
 block additional_scripts
     script.
         $(function() {
-            var index = 0;
-            var length = $("ul").children().length;
-            var delays = [
-                200,
-                100,
-                200,
-                100
-            ];
-
-            function delayNext(){
-                setTimeout(function() {
-                    $("ul li:eq(" + index + ")").show().addClass("flipin");
-                    index++;
-
-                    if (index == length)
-                        index = 0;
-
-                    delayNext();
-                }, delays[index]);
-            }
-
-            delayNext();
 
             $.ajax({
                 url: '/checkForUpdate',
@@ -76,3 +54,4 @@ block body
                     li.tile.boxed.mcjs-rc-controllable
                         a(href="/" + item.appLink + "/").mcjs-rc-clickable
                             img(src="/" + item.tileLink + "/tile.png")
+                            span=item.tileLink
