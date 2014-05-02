@@ -1,7 +1,7 @@
 extends /layout
 
 block declarations
-    - additional_title     = lingua.settings; 
+    - additional_title     = lingua.settings;
     - include_validation   = true;
     - include_remote       = true;
 
@@ -9,7 +9,7 @@ block additional_css
     link(rel='stylesheet', href='/settings/css/style.css')
 
 block additional_scripts
-    script(src='/core/js/oauth.min.js')
+    script(src='/core/js/plugins/oauth.min.js')
     script.
         $(function() {
             $('body').mcjs();
@@ -55,11 +55,11 @@ block body
         #settings
             input.oauthKeyHidden(name="oauthKey" type="hidden")
             form#setup.validate-form(action='/submit',method='post')
-                h2 #{lingua.settings_header} 
+                h2 #{lingua.settings_header}
                 div#oauthContainer.mcjs-rc-controllable.row
                     span.info
                         span.quote &ldquo;
-                        span #{lingua.setting_oauth_explanation} 
+                        span #{lingua.setting_oauth_explanation}
                         span.quote &rdquo;
                     input#oauthKey.mcjs-rc-clickable(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
                     a.btn#oauth(href="#") #{lingua.setting_register_oauth}
@@ -71,7 +71,7 @@ block body
                 .row.wrap.mcjs-rc-controllable
                     a.btn.cachelink.mcjs-rc-clickable(data-cachelink="tvepisodes,tvshows") #{lingua.settings_clear_cache_tv}
                 .row.wrap.mcjs-rc-controllable
-                    a.btn.cachelink.mcjs-rc-clickable(data-cachelink="devices") #{lingua.settings_clear_cache_device} 
+                    a.btn.cachelink.mcjs-rc-clickable(data-cachelink="devices") #{lingua.settings_clear_cache_device}
                 .row.mcjs-rc-controllable
                     label(for="moviepath") #{lingua.setting_movielocation}
                     input#moviepath.mcjs-rc-clickable(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation,data-rule-path="true",	data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
@@ -117,7 +117,7 @@ block body
                         table
                             thead
                                 tr
-                                    th #{lingua.settings_device_id}: 
+                                    th #{lingua.settings_device_id}:
                                     th #{lingua.settings_device_seen}:
                                     th #{lingua.settings_device_allowed}:
                                     th #{lingua.settings_device_parental}:
