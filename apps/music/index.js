@@ -31,6 +31,7 @@ exports.get = function(req, res, next){
         var track = optionalParam.replace(/\+/g, " ");
         switch(action) {
             case('play'):
+                console.log('track', track)
                 functions.playTrack(req, res, track, album);
             break;
             case('next'):
