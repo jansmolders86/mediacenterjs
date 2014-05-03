@@ -87,6 +87,8 @@ Feel free to contribute by translating.
 ###Special thanks to:###
 
 * Sylvain https://github.com/flyinva for his French translation
+* Domenico Luciani https://github.com/dlion for his Italian translation
+* Doğan Aydın https://github.com/doganaydin for his Turkish translation
 * Adam https://github.com/brutalhonesty for his YouTube App
 * Ionică Bizău https://github.com/IonicaBizau for the [Youtube API NPM module](https://github.com/IonicaBizau/youtube-api)
 * Luis Eduardo Brito https://github.com/luiseduardobrito for his Portuguese translation
