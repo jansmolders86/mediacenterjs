@@ -46,6 +46,7 @@ body{
     height:100%; 
     min-height:100%; 
     background:#000;
+    color:#999999;
 }
 
 body.homepage{
@@ -199,6 +200,52 @@ body.homepage #backdrop{
 	position:relative;
 }
 
+/* Settings */
+
+.appSettings{
+    background: url(img/settings.jpg) no-repeat;
+    background-size:cover;  
+    overflow: hidden;
+}
+
+.appSettings h2{ color:#fff;} 
+
+.appSettings #header{
+    height:40px !important;
+    padding:10px !important;
+}
+
+.appSettings #settings{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background:rgba(0, 0, 0, 0.7); 
+    border:1px solid #5d5f62;
+    margin: 0;
+    padding: 0;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.appSettings #setup{
+    border-left:400px solid rgba(0, 0, 0, 0.7);
+    background: transparent;
+    border-radius: 0;
+    overflow-y: scroll;
+    height:600px;
+}
+
+/* movies */
+
+.appMovies #backdrop{height:100%; z-index:1;}
+
+.appMovies .movieposter .imageWrapper,
+.appMovies .movieposter.current .overlay{width: 273px;}
+.appMovies .movieposter {background:rgba(0, 0, 0, 0.7);}
+
 .focused{
     background-color: #EFEFEF;
 	cursor: pointer;
@@ -266,20 +313,29 @@ label,
 
 input[type=submit],
 a.btn{
-	background-color:#fb8521;
+    background: #6db3f2; 
+    background: -moz-linear-gradient(top,  #6db3f2 0%, #54a3ee 50%, #3690f0 51%, #1e69de 100%); 
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6db3f2), color-stop(50%,#54a3ee), color-stop(51%,#3690f0), color-stop(100%,#1e69de));
+    background: -webkit-linear-gradient(top,  #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); 
+    background: -o-linear-gradient(top,  #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); 
+    background: -ms-linear-gradient(top,  #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); 
+    background: linear-gradient(to bottom,  #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6db3f2', endColorstr='#1e69de',GradientType=0 );
+
 	padding:10px;
 	font-family: 'Open Sans', sans-serif;
 	color:#fff;
 	font-size:18px;
 	border:0;
-	border-radius:5px;
-	border-radius: 0.2em;
+	border-radius: 0;
 	-webkit-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
 	-moz-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
 	box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
 }
 .btn.focused,
-.btn:hover{	background-color:#fff; color:#fb8521;}
+.btn:hover,
+button:hover,
+input[type=submit]:hover{	color:#ddd!important;}
 
 
 em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red; font-style: normal; font-size: 13px;}
@@ -436,6 +492,19 @@ em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red;
 @keyframes fade-out {
 	0%  { opacity: 1.0; transform: translate3d(0, 0, 0); }
 	100% { opacity: 0.0; transform: translate3d(0, 0, 0); }
+}
+
+
+@-webkit-keyframes backdrop-slide {
+    0%{ top:0; }
+    25%{ top:0; }
+    100%{ top:0; }
+}
+
+@keyframes backdrop-slide {
+    0%{ top:0; }
+    25%{ top:0; }
+    100%{ top:0; }
 }
 
 

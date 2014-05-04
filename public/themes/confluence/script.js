@@ -69,6 +69,36 @@ $(function() {
             items: 1
         }
     });
+    
+    setTimeout(function(){          
+        $("ul.movies").carouFredSel({
+            width: '100%',
+            responsive: true,
+            height: 'auto',
+            align: 'left',
+            items:{
+                visible : {
+                    min    : 3,
+                    max    : 5
+                },
+                start : 1,
+                width:310,
+                height: 'variable'
+            },
+            scroll: {
+                items : 1,
+                easing: 'swing',
+                fx: 'scroll'
+            },
+            auto: false,
+            prev: "left",
+            next: "right",
+            swipe: {
+                onTouch: true,
+                items: 1
+            }
+        });
+    },1000);
 
 
 });
