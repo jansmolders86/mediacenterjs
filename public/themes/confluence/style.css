@@ -10,7 +10,7 @@ a:hover{color:#333;}
 
 h1,
 h2,
-h3 { font-family: 'Open Sans Condensed', sans-serif; text-transform:uppercase; font-weight: 300;}
+h3 { font-family: 'Open Sans', sans-serif; text-transform:uppercase; font-weight: 300;}
 
 h4,
 h5,
@@ -63,13 +63,12 @@ body.homepage #backdrop{
     top: auto;
     left:0; 
     width:100%; 
-    height:200px;
-    background:#000;
-	background-image: radial-gradient(center top, ellipse cover, #333333, #020202);
-	background-image: -o-radial-gradient(center top, ellipse cover, #333333, #020202);
-	background-image: -ms-radial-gradient(center top, ellipse cover, #333333, #020202);
-	background-image: -moz-radial-gradient(center top, ellipse cover, #333333, #020202);
-	background-image: -webkit-radial-gradient(center top, ellipse cover, #333333, #020202);
+    height:100px;
+    background:#000;s
+    background: -webkit-linear-gradient(#323232, #070707); 
+    background: -o-linear-gradient(#323232, #070707); 
+    background: -moz-linear-gradient(#323232, #070707); 
+    background: linear-gradient(#323232, #070707);
 } 
 
 #header{
@@ -80,26 +79,29 @@ body.homepage #backdrop{
 
 /* Homepage Tiles */
 
-.tile:first-child{
-    margin-left:30px;   
+#tiles{
+    background: url(img/tile-bg.png) repeat-x;
+	width:100%;
+	height:80px;
+	position:absolute;
+	overflow:visible;
+    top: 20%s;
+    left:0;
 }
 
-.tile{
-    background:transparent!important;
+#tiles .tile{
     display:block;
-    border-right:1px solid #505050; 
-    margin:10px;
-    height:70px;
-    padding:0 40px!important;
-    width:auto;
-    line-height: 70px;
+    margin:0px;
+    width:310px;
+    line-height: 60px;
     text-align: center;
+    background: transparent;
 }
 .tile img{
 	display:none;
 }
 
-.tile > a{
+#tiles .tile > a{
 	background:transparent!important;	
 	width:100%;
 	height:100%;
@@ -107,13 +109,41 @@ body.homepage #backdrop{
     padding:0;
 }
 
-.tile > a > span{ 
+#tiles .tile > a > span{ 
     color:#505050; 
     text-transform: uppercase; 
     font-size:50px;
     display:block;
     font-weight: 800;
+    border-right:1px solid #171C1F; 
+    padding: 15px 40px 0;
     font-family:arial;
+}
+
+.tile ul{ 
+    display: none;
+    background: #000609;
+    border:1px solid #343034;
+    position: absolute;
+    top: 96px;
+    left: -200px;
+    width: 600px;
+    border-bottom-left-radius: 34px;
+    border-bottom-right-radius: 34px;
+    padding: 0 20px;
+}
+
+.tile:hover ul,
+.tile.focused ul{display: block;}
+
+.tile ul li{
+    float: left;   
+}
+
+.tile ul li a{
+    border-right:1px solid #171C1F; 
+    padding:0 40px!important;
+    color:#999999;
 }
 
 .tile .info{
@@ -124,34 +154,15 @@ body.homepage #backdrop{
 
 .tile.focused{border:0!important;}
 
-.tile.focused span,
-.tile:hover span {
+#tiles .tile.focused span,
+#tiles .tile:hover span,
+#tiles .tile ul li a:hover{
 	text-shadow: 0px 0px 17px rgba(203, 210, 206, 1);
     color:#fff;
 }
 
-#tiles{
-    border-top:3px solid #505050; 
-    border-bottom:3px solid #3f3f3f; 
-	width:100%;
-	height:90px;
-	position:relative;
-	overflow:hidden;
-    background:#000;
-	background-image: radial-gradient(center top, ellipse cover, #333333, #020202);
-	background-image: -o-radial-gradient(center top, ellipse cover, #333333, #020202);
-	background-image: -ms-radial-gradient(center top, ellipse cover, #333333, #020202);
-	background-image: -moz-radial-gradient(center top, ellipse cover, #333333, #020202);
-	background-image: -webkit-radial-gradient(center top, ellipse cover, #333333, #020202);
-    margin-top: 250px;
-    -moz-box-shadow: inset 0 0 8px rgba(0,0,0, 0.25);
-    -webkit-box-shadow: inset 0 0 8px rgba(0,0,0, 0.25);
-    box-shadow: inset 0 0 8px rgba(0,0,0, 0.25);
-}
-
 .tile img{ width:100%; height:100%;}
 .tile:hover{ cursor:pointer; }
-
 .upgrade-right {float:right; margin-right: 200px;}
 .upgrade{ 
 	margin:0px; 
@@ -176,6 +187,8 @@ body.homepage #backdrop{
     font-family: 'Open Sans',sans-serif;
     
 }
+
+#dateandtime .date{font-size:18px; }
 
 /* Content */
 
