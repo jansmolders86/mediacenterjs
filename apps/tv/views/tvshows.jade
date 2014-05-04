@@ -33,7 +33,7 @@ html(lang="en", ng-app="tvApp")
             
 
         title tvshows
-        body(ng-controller="tvCtrl",ng-class="{playing:playing}")
+        body.appTv(ng-controller="tvCtrl",ng-class="{playing:playing}")
             #header
                 a.backlink(href="/") &#xe113;
                 h1 #{lingua.tvshows}
