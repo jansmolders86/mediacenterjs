@@ -1,9 +1,10 @@
 extends /layout
 
 block declarations
-    - additional_title     = lingua.settings;
-    - include_validation   = true;
-    - include_remote       = true;
+    - additional_title      = lingua.settings;
+    - body_class            = 'appSettings';
+    - include_validation    = true;
+    - include_remote        = true;
 
 block additional_css
     link(rel='stylesheet', href='/settings/css/style.css')
