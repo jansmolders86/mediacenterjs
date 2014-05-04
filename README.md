@@ -1,7 +1,7 @@
 ![logo](/public/core/css/img/logo.png) MediacenterJS
 =============
 
-__A NodeJS based Mediacenter__ 
+__A NodeJS based media center__ 
 
 Website: http://www.mediacenterjs.com
 
@@ -13,7 +13,7 @@ __Heavy work in progress__
 What is MediacenterJS?
 =========================
 
-MediacenterJS is a mediacenter (like for instance XBMC) running completely from the comfort of your browser.
+MediacenterJS is a media center (like for instance XBMC) running completely from the comfort of your browser.
 The backend is based on Node.JS with ExpressJS and JADE templates. 
 The MVC structure allows developers to add an 'app' or 'plugin' to MCJS with ease. 
 The server application runs on Windows, MAC and Linux systems, the client runs in every modern browser (Chrome is preferable though).
