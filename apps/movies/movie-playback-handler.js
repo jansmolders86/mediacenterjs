@@ -175,7 +175,7 @@ startTranscoding = function(movieUrl, movieFile, outputPath, ExecConfig){
     
     if(!fs.existsSync(outputPath)){
         
-       var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -sc_threshold 0 -s 1280x720 -profile:v baseline -keyint_min 150 -deinterlace -maxrate 10000000 -bufsize 10000000 -b 1200k -acodec aac -ar 48000 -ab 192k -strict experimental -frag_duration 1000 -movflags +frag_keyframe+empty_moov '+outputPath;
+       var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -sc_threshold 0 -s 1280x720 -profile:v baseline -keyint_min 150 -deinterlace -maxrate 10000000 -bufsize 10000000 -b 1200k -acodec aac -ar 48000 -ab 192k -strict experimental -frag_duration 1000 -movflags +frag_keyframe+empty_moov "'+outputPath+'"';
         var exec = require('child_process').exec
         , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
             if (err) {
