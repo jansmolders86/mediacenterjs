@@ -3,7 +3,8 @@
 
 __A NodeJS based media center__ 
 
-Website: http://www.mediacenterjs.com
+Website: http://www.mediacenterjs.com 
+(Now hosted on Github for more stability!)
 
 Status: 
 =======
