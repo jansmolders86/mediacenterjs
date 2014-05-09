@@ -14,7 +14,7 @@ block additional_scripts
 		$(function() {
 			var userLang = navigator.language || navigator.userLanguage;
 			userLang = userLang.replace(/-.*/,'');
-			if(userLang.match(/nl|en|fr|da|de|pt|sv|tr|it|ru|ua/g)){
+			if(userLang.match(/nl|en|fr|da|de|pt|sv|tr|it|ru|ua|es/g)){
 				$('input#language').val(userLang);
 			} else{
 				$('input#language').val('en');
