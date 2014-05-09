@@ -88,6 +88,7 @@ Feel free to contribute by translating.
 ###Special thanks to these contributors:###
 
 * Sylvain https://github.com/flyinva for his French translation
+* Alberto Jerez https://github.com/ajerez  for his Spanish translation
 * Domenico Luciani https://github.com/dlion for his Italian translation
 * Alexey Bobyrev https://github.com/sfate for his Russian and Ukrainian translation
 * Doğan Aydın https://github.com/doganaydin for his Turkish translation
