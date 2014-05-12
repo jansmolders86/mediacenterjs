@@ -88,25 +88,27 @@ app.configure(function(){
 // Schedule scraping every 30 minutes
 rule.minute = 30;
 var j = schedule.scheduleJob(rule, function(){
-    var moviesfunctions = require('./apps/movies/movie-functions')
-        , musicfunctions = require('./apps/music/music-functions')
-        , tvfunctions = require('./apps/tv/tv-functions')
-        , serveToFrontEnd = false
-        , req // Dummy variable
-        , res; // Dummy variable
-    
-    // Movies
-    moviesfunctions.loadItems(req, res, serveToFrontEnd);
-    
-    // Music
-    setTimeout(function(){    
-        musicfunctions.loadItems(req, res, serveToFrontEnd);
-    },10000);
-    
-    // TV
-    setTimeout(function(){    
-        tvfunctions.loadItems(req, res, serveToFrontEnd);
-    },20000);
+    if(fs.existsSync('./lib/database/mcjs-sqlite-journal') === false){
+        var moviesfunctions = require('./apps/movies/movie-functions')
+            , musicfunctions = require('./apps/music/music-functions')
+            , tvfunctions = require('./apps/tv/tv-functions')
+            , serveToFrontEnd = false
+            , req // Dummy variable
+            , res; // Dummy variable
+
+        // Movies
+        moviesfunctions.loadItems(req, res, serveToFrontEnd);
+
+        // Music
+        setTimeout(function(){    
+            musicfunctions.loadItems(req, res, serveToFrontEnd);
+        },10000);
+
+        // TV
+        setTimeout(function(){    
+            tvfunctions.loadItems(req, res, serveToFrontEnd);
+        },20000);
+    }
 });
 
 /* CORS */

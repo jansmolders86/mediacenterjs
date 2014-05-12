@@ -72,6 +72,7 @@
         "socket.io"         : "~0.9.16",
         "youtube-api"       : "~0.2.2",
         "node-schedule"     : "~0.1.13",
-        "lastfmapi"         : "~0.0.5"
+        "lastfmapi"         : "~0.0.5",
+		"graceful-fs"		: "~2.0.3"
     }
 }
