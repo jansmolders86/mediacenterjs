@@ -16,10 +16,10 @@ block body
             
     script.
         $(function(){
-            $('.btn').bind('click', false).addClass('disabled');
+            $('.btn').bind('click', false).addClass('btn-disabled');
         
         setTimeout(function(){
-            $('.btn').unbind('click', false).removeClass('disabled');
+            $('.btn').unbind('click', false).removeClass('btn-disabled');
         },5000);
 
         });

@@ -66,9 +66,14 @@ h2{
 	-ms-box-sizing: border-box;
 	box-sizing: border-box;
 }
-.btn.remove{background:#7E8C8C;}
-.btn.install{background:#27AE61;}
-.btn.upgrade{background:#3598DC; margin-top: -20px;}
+.btn.remove{background:#7E8C8C; box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #535d5d, 0px 5px 3px #ddd;}
+.btn.install{background:#27AE61; box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #2c714a, 0px 5px 3px #ddd;}
+.btn.upgrade{background:#3598DC; margin-top: -20px; box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #10517e, 0px 5px 3px #ddd;}
+
+.btn.remove:hover{background:#adb8b8;}
+.btn.install:hover{background:#40d881;}
+.btn.upgrade:hover{background:#68b8ef;}
+
 .btn.upgrade.upgrade-all{ margin-top:5px;}
 
 li.boxed.focused .btn,

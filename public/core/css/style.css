@@ -79,7 +79,7 @@ body.screensaver{overflow:hidden!important;}
 
 h1,
 h2,
-h3 { font-family: 'Open Sans Condensed', sans-serif; text-transform:uppercase; font-weight: 300;}
+h3 { font-family: 'Open Sans', sans-serif; text-transform:uppercase; font-weight: 300;}
 
 h4,
 h5,
@@ -455,44 +455,36 @@ input[type=radio]{
 label,
 .label{ font-size:16px; font-family: 'Open Sans', sans-serif; display:block; width:320px; float:left;  }
 
-input[type=submit],
-.btn,
-.button{
-	background-color:#fb8521;
-	padding:10px;
-	font-family: 'Open Sans', sans-serif;
-	color:#fff;
-	cursor:pointer; 
-	text-align:center;
-	font-size:18px;
-	display: inline-block;
-	border:0;
-	border-radius:5px;
-	border-radius: 0.2em;
-	-webkit-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
-	-moz-box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
-	box-shadow: 0em -0.185rem 0em rgba(0, 0, 0, 0.1) inset;
+.btn {
+  display:block;
+  font-size:16px;
+  font-weight:300;
+  color:#fff;
+  text-decoration:none;
+  text-align:center;
+  padding:10px;
+  margin-left:auto;
+  margin-right:auto;
+  left:30px;
+  position:relative;
+  cursor:pointer;
+  border: none;
+  background: #fb8521;
+  border-radius:5px;
+  box-shadow: inset 0px 1px 0px #2ab7ec, 0px 4px 0px 0px #c96311, 0px 7px 5px #ddd;
 }
 
+.btn:hover{ color:#fff; background: #f5994c; }
+.btn:active { top:3px; box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #c96311, 0px 5px 3px #ddd; }
+.btn.btn-alternative{ background: #0074a2; box-shadow: inset 0px 1px 0px #2ab7ec, 0px 4px 0px 0px #074057, 0px 7px 5px #ddd;}
+.btn.btn-alternative:hover{ background: #1c8fbd; }
+.btn.btn-alternative:active{ box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #074057, 0px 5px 3px #ddd; }
 .btn.disabled,
 .btn.disabled:hover,
-.btn.disabled.focused{
+.btn-alternative:active{
     background-color:#ddd;
     color:#fff;
-}
-
-
-.btn.focused,
-.button.focused,
-.button:hover,
-.btn:hover,
-input[type=submit]:hover{	
-	background-color:#fff; 
-	color:#fb8521;
-	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	box-sizing: border-box;
+    box-shadow: inset 0px 1px 0px #2ab7ec, 0px 4px 0px 0px #c96311, 0px 7px 5px #ddd;
 }
 
 .floatright{ float:right; }

@@ -63,7 +63,7 @@ block body
                         span #{lingua.setting_oauth_explanation}
                         span.quote &rdquo;
                     input#oauthKey.mcjs-rc-clickable(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
-                    a.btn#oauth(href="#") #{lingua.setting_register_oauth}
+                    a.btn.btn-alternative#oauth(href="#") #{lingua.setting_register_oauth}
                     label(for="oauthKey")
                 .row.wrap.mcjs-rc-controllable
                     a.btn.cachelink.mcjs-rc-clickable(data-cachelink="movies") #{lingua.settings_clear_cache_movies}
@@ -134,5 +134,5 @@ block body
                                             -else
                                                 a.parentalControl.btn.mcjs-rc-clickable.unlock #{lingua.settings_device_btn_unlock}
                 .row.mcjs-rc-controllable
-                            input.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
+                            input.btn.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
                             input.oauth(name="oauth" type="hidden")
