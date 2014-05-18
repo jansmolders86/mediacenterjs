@@ -122,7 +122,7 @@
 
 
     musicApp.factory('socket', function ($rootScope) {
-        var socket = io.connect('http://127.0.0.1:3001');
+        var socket = io.connect(document.domain + ':3001');
         socket.on('connect', function(data){
             socket.emit('screen');
         });
