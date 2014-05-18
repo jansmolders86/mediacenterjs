@@ -19,7 +19,7 @@
 
 var movieApp = angular.module('movieApp', []);
 
-movieApp.controller('movieCtrl', function($scope, $http,$document,$window, socket) {
+movieApp.controller('movieCtrl', function($scope, $http, $document, $window, socket) {
     $scope.focused = 0;
     $http.get('/movies/loadItems').success(function(data) {
         $scope.movies = data;
@@ -54,7 +54,7 @@ movieApp.directive("scroll", function ($document,$window) {
 });
 
 movieApp.factory('socket', function ($rootScope) {
-    var socket = io.connect('http://127.0.0.1:3001');
+    var socket = io.connect(document.domain + ':3001');
     socket.on('connect', function(data){
         socket.emit('screen');
     });
