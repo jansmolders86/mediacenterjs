@@ -55,7 +55,7 @@
 					url: '/configuration/', 
 					type: 'get'
 				}).done(function(data){
-					var socket = io.connect(data.localIP+':'+data.remotePort);
+					var socket = io.connect(document.domain+':'+data.remotePort);
 					socket.on('connect', function(data){
 						socket.emit('screen');
 					});
