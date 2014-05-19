@@ -171,16 +171,16 @@ p a:hover{text-decoration:none;}
     font-size: 12px;
 }
 
-#header #search{     
-    position: absolute; 
-    left:315px; 
-    top:15px;
-    width:250px;
+#header #search {
+    position: absolute;
+    right: 500px;
+    top: 9px;
+    width: 250px;
 }
 #header  #filter{
     position: absolute; 
     right:100px; 
-    top:15px;
+    top:9px;
     width:200px;
 }
 

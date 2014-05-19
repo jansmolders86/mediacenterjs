@@ -3,14 +3,14 @@
 
 /* Typography */
 
-html{ background-color:#f6f6f6; }
+html{ background-color:#eeeeee; }
 body{ font-family: 'Open Sans', sans-serif; color: #747474; }
 a{ color:#444;}
 a:hover{color:#333;}
 
 h1,
 h2,
-h3 { font-family: 'Open Sans Condensed', sans-serif; text-transform:uppercase; font-weight: 300;}
+h3 { font-family: 'Open Sans', sans-serif; text-transform:uppercase; font-weight: 300;}
 
 h4,
 h5,
@@ -99,8 +99,9 @@ p a:hover{text-decoration:none;}
 
 /* Date and Time */
 
+#dateandtime{top: 3px;}
 #dateandtime .date,
-#dateandtime .time{	text-align:right; font-size:27px; font-family: 'Open Sans Condensed', sans-serif;}
+#dateandtime .time{	text-align:right; font-weight: 300; font-size:20px; font-family: 'Open Sans', sans-serif; color:#f5f5f5;}
 
 /* Content */
 
@@ -119,25 +120,20 @@ p a:hover{text-decoration:none;}
 }
 
 #header{
-	height:75px;
+	height:60px;
 	width:100%;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box; 
     box-sizing: border-box;
-	padding:10px 200px 15px 100px;
+	padding:5px 100px 10px 100px;
 	position:relative;
 	float:left;
-	background:#fff;
+	background:#373737;
 	overflow:hidden;
 	-webkit-animation: glide-in 0.5s; 
 	-moz-animation: glide-in 0.5s; 
     -o-animation: glide-in 0.5s; 
-    animation: glide-in 0.5s; 
-	background:#fff;
-	-moz-box-shadow: 0px 0px 0px 1px;
-	box-shadow: 0px 0px 0px 1px;
-	-webkit-box-shadow: 0px 0px 0px 1px;
-	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    animation: glide-in 0.5s;
 }
 
 a.backlink{ 
@@ -150,7 +146,7 @@ a.backlink{
 	font-family: 'Metrize-Icons';
 	-webkit-font-smoothing: antialiased;
 	font-size: 40px;
-	color: #747474;
+	color:#f5f5f5;
 }
 
 .homepage h1{text-transform: none; font-weight:300;}
@@ -162,6 +158,9 @@ a.backlink{
 	padding: 0;
 	margin:0;
 	display: inline-block;
+    color:#f5f5f5;
+    font-size: 30px;
+    padding-top:6px;
 }
 
 #content{
@@ -212,6 +211,29 @@ label,
 }
 
 em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red; font-style: normal; font-size: 13px;}
+
+input[type=text],
+input[type=password],
+select,
+textarea{
+	margin: 0;
+	padding: 0.85em 1.2em;
+	font-size: 0.875em;
+	background-color: #FFFFFF;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	outline: none;
+	color: rgba(0, 0, 0, 0.7);
+	border-radius: 0;
+	-webkit-transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
+	transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
+	box-shadow: 0em 0em 0em 0em rgba(0, 0, 0, 0.3) inset;
+	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+	width:40%;
+	float:left;
+}
 
 /* Player */
 

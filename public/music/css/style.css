@@ -23,7 +23,6 @@
 #container{
     padding:100px 80px;
     position:relative;
-    min-height: 100%;
     width:75%;
 }
 
@@ -34,7 +33,7 @@
 	overflow-x:hidden;
 }
 
-#library.side{
+.side{
     margin-left:300px;
 }
 
@@ -43,7 +42,7 @@
     height: 250px;
     float:left;
     background:#fff;
-    margin:10px;
+    margin:5px;
     position:relative;
     cursor:pointer;
 }
@@ -76,9 +75,16 @@
 .album-year{
     font-size:12px;
     font-weight:bold;
-    width:100%;
+    width: 155px;
     clear:both;
     display:block;
+}
+
+.album-title{
+    height:20px; 
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 #library .album .album-artist,
@@ -98,21 +104,30 @@
     padding:0;
 }
 
+.album-info{padding:10px;}
+
 /** Playlist **/
 
 #playlist {
     float: left;
     width: 358px;
-    background: #e7e7e7;
+    background: #f5f5f5;
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
     min-height: 100%;
     height: auto;
     position: absolute;
-    top:75px;
+    top:0px;
     left:0px;
-    border-right:1px solid #ccc;
+    z-index:9999;
+}
+
+#playlist h2{
+    height: 40px;
+    padding: 10px;
+    background: #e7e7e7;
+    margin: 0;
 }
 
 #playlist img{ margin-bottom:5px; cursor:pointer;}
@@ -120,8 +135,8 @@
 #playlist .album{ margin-top:10px; padding:10px; }
 
 #playlist .album li{
-    padding:5px 0;
-    border-bottom:1px solid #ccc;
+    padding:3px 0;
+    border-bottom: 1px solid #e4e4e4;
     min-height: 25px;
     line-height: 25px;
     cursor:pointer;
@@ -136,13 +151,13 @@
 #playlist .album.current ol li.current .play{ visibility:visible;}
 #playlist .album ol{ padding-left:0;}
 #playlist .remove{
-	position: absolute;
-	top: 25px;
-	left: 140px;
-	color: #fff;
-	font-size: 32px;
-	z-index: 1;
-	cursor:pointer;
+    position: absolute;
+    top: 78px;
+    left: 182px;
+    color: #333;
+    font-size: 24px;
+    z-index: 1;
+    cursor: pointer;
 }
 
 #playlist .album img{ z-index: 2; }
@@ -151,14 +166,12 @@
 /** Player **/
 
 #player{
-    width:320px;
-    padding-bottom:50px;
-    margin-left:20px;
-    bottom: 0;
-    left: 80px;
+    width:76.2%;
+    height:90px;
+    background:#333;
     z-index:99;
-    position: relative!important;
-    margin-top: 20px;
+    bottom:0;
+    left: 358px!important;
 }
 
 #player i{
@@ -166,69 +179,29 @@
     padding:5px;
     float:left;
     font-size:32px;
-    color:#333;
+    color:#f5f5f5;
 }
+
+#player .nav{width: 250px;}
 
 #player .left{float:left;}
-#player .middle{float: left; margin-left: 96px;}
+#player .middle{float: left; margin-left: 65px;}
 #player .right{float:right;}
 
-/*
-
-#progressBar { 
-    border:1px solid #ccc; 
-    color:#fff; 
-    width:295px; 
-    height:15px;
-    border-radius:5px;
-    padding:0;
-    margin:0 0 20px 0;
-}
-#progress {
-   background-color:#FB8521;
-   height:15px;
-   display:block;
-}
-*/
-
 .ui.progress {
-    border: 1px solid rgba(0,0,0,.1);
     width: 100%;
-    height: 35px;
-    background-color: #FAFAFA;
-    padding: 5px;
-    border-radius: .3125em;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    box-sizing: border-box;
-    margin-bottom: 20px;
+    height: 30px;
+    background-color: #333;
+    margin-bottom:5px;
 }
 
 
 .bar{
-    -webkit-animation: progress-striped 3s linear infinite;
-    -webkit-background-size: 30px 30px;
-    background-size: 30px 30px;
     display: inline-block;
     height: 100%;
-    background-color: #CCC;
-    border-radius: 3px;
-    -webkit-transition: width 1s ease-in-out,background-color 1s ease-out;
-    -moz-transition: width 1s ease-in-out,background-color 1s ease-out;
-    transition: width 1s ease-in-out,background-color 1s ease-out;
-    background-image: linear-gradient(135deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+    background-color: #747474;
 }
 
-@-webkit-keyframes progress-striped{
-    0%{background-position:0 0}
-    100%{background-position:60px 0}
-}
-
-@keyframes progress-striped{
-    0%{background-position:0 0}
-    100%{background-position:60px 0}
-}
 
 @media only screen and (min-width: 320px) and (max-width: 529px) {
     /* For phone layouts only */

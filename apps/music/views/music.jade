@@ -6,7 +6,7 @@ html(lang="en", ng-app="musicApp")
         meta(name="apple-mobile-web-app-status-bar-style" content="black")
         meta(charset="utf-8")
         meta(name="viewport" content="width=device-width, initial-scale=1.0")
-        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans')
+        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans:300,400,600,700,800')
         link(rel='stylesheet', href='/core/css/style.css')
         link(rel='stylesheet', href='/core/css/icon.css')
         link(rel='stylesheet', href='/music/css/style.css')
@@ -31,7 +31,7 @@ html(lang="en", ng-app="musicApp")
         title Music
         body.appMusic(ng-controller="musicCtrl")
             #header
-                a.backlink(href="/") &#xe113;
+                a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
                 h1 #{lingua.music}
                 
                 input#search(ng-model="query", type="text", placeholder="Search")
@@ -41,38 +41,42 @@ html(lang="en", ng-app="musicApp")
                     option(value="genre")   Genre
                 
             #container
-                ul#playlist(ng-show="player.playlist.length > 0")
-                    li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
-                        .list( ng-click="player.playlist.remove(album)")
-                            img(ng-src="{{album.cover}}")
-                            i.remove.circle.icon
-                        span.album-title {{album.album}}
-                        span.album-artist {{album.artist}}
-                        span.album-year(ng-show="album.year !== 0") {{album.year}}
-                        ol.tracks
-                            li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
-                                i.play.icon
-                                span.track-title {{track.title}}
-                    #player(ng-show="player.playlist.length > 0")
-                        ul.nav
-                            li#progressBar.ui.active.striped.progress
-                                span#progress.bar
-                                
-                            li.left
-                                i.control.backward.icon(ng-click="player.previous()")
-                            li.middle
-                                i.control.play.icon(ng-click="player.play()",ng-hide="player.playing")
-                            li.middle
-                                i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
-                            li.right
-                                i.control.forward.icon(ng-click="player.next()")
+                #playlist(ng-show="player.playlist.length > 0")
+                    h2 Playlist
+                    ul
+                        li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
+                            .list( ng-click="player.playlist.remove(album)")
+                                img(ng-src="{{album.cover}}")
+                                i.remove.circle.icon
+                            .album-info
+                                span.album-title {{album.album}}
+                                span.album-artist {{album.artist}}
+                                span.album-year(ng-show="album.year !== 0") {{album.year}}
+                            ol.tracks
+                                li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
+                                    i.play.icon
+                                    span.track-title {{track.title}}
 
                 section#library(ng-class="{side: player.playlist.length > 0}")
                     ul.albums
                         li.album(ng-repeat="album in albums | filter:query | orderBy:orderProp", ng-click="player.playlist.add(album)",ng-class="{current: focused == $index }")
                             img(ng-src="{{album.cover}}")
-                            span.album-title {{album.album}}
-                            span.album-artist {{album.artist}}
-                            span.album-year(ng-show="album.year !== 0") {{album.year}}
+                            .album-info
+                                span.album-title {{album.album}}
+                                span.album-artist {{album.artist}}
+                                span.album-year(ng-show="album.year !== 0") {{album.year}}
 
                 h2.loading(ng-show="!albums") #{lingua.loading}
+                
+            #player(ng-show="player.playlist.length > 0")
+                #progressBar.ui.active.striped.progress
+                    span#progress.bar
+                ul.nav
+                    li.left
+                        i.control.backward.icon(ng-click="player.previous()")
+                    li.middle
+                        i.control.play.icon(ng-click="player.play()",ng-hide="player.playing")
+                    li.middle
+                        i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
+                    li.right
+                        i.control.forward.icon(ng-click="player.next()")
