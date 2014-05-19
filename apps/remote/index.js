@@ -23,39 +23,76 @@ var express = require('express')
 , app = express()
 , fs = require('fs')
 , ini = require('ini')
+, os = require('os')
+, config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
+, DeviceInfo = require('../../lib/utils/device-utils')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
-exports.index = function(req, res, next){	
-	var allThemes = new Array()
-	, availableLanguages = []
-	, availablethemes = fs.readdirSync('./public/themes/')
-	, availableTranslations = fs.readdirSync('./public/translations/');
-	
-	availablethemes.forEach(function(file){
-		allThemes.push(file);
-	});
-		
-	availableTranslations.forEach(function(file){
-		if (file.match('translation')){
-			var languageCode = file.replace(/translation_|.json/g,"")
-			availableLanguages.push(languageCode);
-		}
-	});
+var dblite = require('dblite')
+if(os.platform() === 'win32'){
+    dblite.bin = "./bin/sqlite3/sqlite3";
+}
+var db = dblite('./lib/database/mcjs.sqlite');
+db.on('info', function (text) { console.log(text) });
+db.on('error', function (err) { console.error('Database error: ' + err) });
 
-	res.render('remote',{
-		movielocation: config.moviepath,
-		selectedTheme: config.theme,
-		musiclocation : config.musicpath,
-		tvlocation : config.tvpath,
-		language: config.language,
-		availableLanguages: availableLanguages,
-		location: config.location,
-		localIP : config.localIP,
-		remotePort : config.remotePort,
-		screensaver: config.screensaver,
-		spotifyUser: config.spotifyUser,
-		spotifyPass: config.spotifyPass,
-		themes:allThemes,
-		port: config.port
-	});		
+exports.index = function(req, res, next){	
+
+    DeviceInfo.storeDeviceInfo(req);
+
+    var allThemes = new Array()
+    , availableLanguages = []
+    , availablethemes = fs.readdirSync('./public/themes/')
+    , availableTranslations = fs.readdirSync('./public/translations/');
+
+    availablethemes.forEach(function(file){
+        allThemes.push(file);
+    });
+
+    availableTranslations.forEach(function(file){
+        if (file.match('translation')){
+            var languageCode = file.replace(/translation_|.json/g,"")
+            availableLanguages.push(languageCode);
+        }
+    });
+
+    var availableScreensavers = ['dim','backdrop','off'];
+
+    db.query('SELECT * FROM devices', { 
+        device_id: String,
+        last_seen: String,
+        is_active: String
+    }, function(rows) {
+        var devices;
+        if (typeof rows !== 'undefined' && rows.length > 0) {
+            devices = rows; 
+         }
+
+        DeviceInfo.isDeviceAllowed(req, function(allowed){
+            res.render('remote',{
+                movielocation: config.moviepath,
+                selectedTheme: config.theme,
+                musiclocation : config.musicpath,
+                tvlocation : config.tvpath,
+                localIP : config.localIP,
+                selectedBinaryType : config.binaries,
+                remotePort : config.remotePort,
+                language: config.language,
+                availableLanguages: availableLanguages,
+                availableScreensavers: availableScreensavers,
+                location: config.location,
+                screensaver: config.screensaver,
+                spotifyUser: config.spotifyUser,
+                spotifyPass: config.spotifyPass,
+                themes:allThemes,
+                devices:devices,
+                allowed: allowed,
+                port: config.port,
+                oauth: config.oauth,
+                oauthKey: config.oauthKey
+            });
+        });
+
+    });
+
 };
