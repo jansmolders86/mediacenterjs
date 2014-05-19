@@ -19,13 +19,11 @@
 
 var tvApp = angular.module('tvApp', []);
 
-tvApp.controller('tvCtrl', function($scope, $http, socket, player){
+tvApp.controller('tvCtrl', function($scope, $http, player){
     $scope.player = player;
     $scope.focused = 0;
     $http.get('/tv/loadItems').success(function(data) {
         $scope.tvshows = data;
-        remote(socket, $scope, player);
-        keyevents(socket, $scope, player);
     });
     
     $scope.orderProp = 'genre';
@@ -34,36 +32,56 @@ tvApp.controller('tvCtrl', function($scope, $http, socket, player){
         $scope.playing = true;
         playEpisode(data, $http);
     }
-});
-
-tvApp.factory('socket', function ($rootScope) {
-    var socket = io.connect(document.domain + ':3001');
-    socket.on('connect', function(data){
-        socket.emit('screen');
-    });
-    return {
-        on: function (eventName, callback) {
-            socket.on(eventName, function () {
-                var args = arguments;
-                $rootScope.$apply(function () {
-                    callback.apply(socket, args);
+    
+    
+    var setupSocket = {
+        async: function() {
+            var promise = $http.get('/configuration/').then(function (response) {
+                var configData  = response.data;
+                var socket      = io.connect(configData.localIP + ':'+configData.remotePort);
+                socket.on('connect', function(data){
+                    socket.emit('screen');
                 });
-            });
-        },
-        emit: function (eventName, data, callback) {
-            socket.emit(eventName, data, function () {
-                var args = arguments;
-                $rootScope.$apply(function () {
-                    if (callback) {
-                        callback.apply(socket, args);
+                return {
+                    on: function (eventName, callback) {
+                        socket.on(eventName, function () {
+                            var args = arguments;
+                            $scope.$apply(function () {
+                                callback.apply(socket, args);
+                            });
+                        });             
+
+                    },
+                    emit: function (eventName, data, callback) {
+                        socket.emit(eventName, data, function () {
+                            var args = arguments;
+                            $scope.$apply(function () {
+                                if (callback) {
+                                    callback.apply(socket, args);
+                                }
+                            });
+                        });
                     }
-                });
-            })
+                };
+                return data;
+            });
+            return promise;
         }
-    };
+    };            
+
+
+    setupSocket.async().then(function(data) {
+        if (typeof data.on !== "undefined") {
+            $scope.remote       = remote(data, $scope, player);
+            $scope.keyevents    = keyevents(data, $scope, player);
+        }
+    });
+    
+    
 });
 
-tvApp.factory('player', function( socket, $rootScope) {
+
+tvApp.factory('player', function( $rootScope) {
         var player,
             playlist = [],
             current = {
@@ -119,7 +137,7 @@ tvApp.factory('player', function( socket, $rootScope) {
 	    };
 
 	    return player;
-    });
+});
 
 
 function playEpisode(data, $http){

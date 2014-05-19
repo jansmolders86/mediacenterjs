@@ -17,73 +17,73 @@
 */
 'use strict';
 
-var movieApp = angular.module('movieApp', []);
+var movieApp = angular.module('movieApp', [
+    'movieApp.scroll'
+]);
 
-movieApp.controller('movieCtrl', function($scope, $http, $document, $window, socket) {
+movieApp.controller('movieCtrl', function($scope, $http) {
     $scope.focused = 0;
     $http.get('/movies/loadItems').success(function(data) {
         $scope.movies = data;
-        remote(socket, $scope);
-        keyevents(socket, $scope);
-    });
-    
-    $scope.orderProp = 'genre';
-                                     
-    $scope.playMovie = function(data){
-        $scope.playing = true;
-        playMovie(data, $http);
-    }
-    
-    $scope.changeBackdrop = function(backdrop){
-        var elem = document.getElementById("backdropimg");
-        elem.src = backdrop;
-    }
-});
-
-
-movieApp.directive("scroll", function ($document,$window) {
-    return function($scope, element, attrs) {
-       angular.element($window).bind("scroll", function() {
-             if (this.pageYOffset >= 100) {
-                 $scope.boolChangeClass = true;
-             } else {
-                 $scope.boolChangeClass = false;
-             }
-        });
-    };
-});
-
-movieApp.factory('socket', function ($rootScope) {
-    var socket = io.connect(document.domain + ':3001');
-    socket.on('connect', function(data){
-        socket.emit('screen');
-    });
-    return {
-        on: function (eventName, callback) {
-            socket.on(eventName, function () {
-                var args = arguments;
-                $rootScope.$apply(function () {
-                    callback.apply(socket, args);
-                });
-            });
-        },
-        emit: function (eventName, data, callback) {
-            socket.emit(eventName, data, function () {
-                var args = arguments;
-                $rootScope.$apply(function () {
-                    if (callback) {
-                        callback.apply(socket, args);
-                    }
-                });
-            })
+        $scope.orderProp = 'genre';
+        $scope.playMovie = function(data){
+            $scope.playing = true;
+            playMovie(data, $http);
         }
-    };
+
+        $scope.changeBackdrop = function(backdrop){
+            var elem = document.getElementById("backdropimg");
+            elem.src = backdrop;
+        }
+        
+        var setupSocket = {
+            async: function() {
+                var promise = $http.get('/configuration/').then(function (response) {
+                    var configData  = response.data;
+                    var socket      = io.connect(configData.localIP + ':'+configData.remotePort);
+                    socket.on('connect', function(data){
+                        socket.emit('screen');
+                    });
+                    return {
+                        on: function (eventName, callback) {
+                            socket.on(eventName, function () {
+                                var args = arguments;
+                                $scope.$apply(function () {
+                                    callback.apply(socket, args);
+                                });
+                            });             
+
+                        },
+                        emit: function (eventName, data, callback) {
+                            socket.emit(eventName, data, function () {
+                                var args = arguments;
+                                $scope.$apply(function () {
+                                    if (callback) {
+                                        callback.apply(socket, args);
+                                    }
+                                });
+                            });
+                        }
+                    };
+                    return data;
+                });
+                return promise;
+            }
+        };
+        
+        setupSocket.async().then(function(data) {
+            if (typeof data.on !== "undefined") {
+                $scope.remote       = remote(data, $scope);
+                $scope.keyevents    = keyevents(data, $scope);
+            }
+        });
+
+    });
 });
 
 function playMovie(data, $http){
     var orginalName = data;
     $http.get('/movies/'+orginalName+'/play').success(function(data) {
-
         var fileName                =  orginalName   
             , outputFile            =   fileName.replace(/ /g, "-")
             , extentionlessFile     =   outputFile.replace(/\.[^/.]+$/, "")
@@ -92,6 +92,5 @@ function playMovie(data, $http){
             , playerID              =   'player'
             , homeURL               =   '/movies/';
         videoJSHandler(playerID, data, videoUrl, subtitleUrl, orginalName,homeURL, 5000);
-
     });  
 }

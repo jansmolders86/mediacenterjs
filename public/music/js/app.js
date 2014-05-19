@@ -21,13 +21,55 @@
 
     var musicApp = angular.module('musicApp', []);
 
-    window.musicCtrl = function($scope, $http, player, socket, audio) {
+    window.musicCtrl = function($scope, $http, player,  audio) {
         $scope.player = player;
         $scope.focused = 0;
         $http.get('/music/loadItems').success(function(data) {
             $scope.albums = data;
-            remote(socket, $scope, player, audio);
-            keyevents(socket, $scope, player, audio);
+
+        });
+        
+        var setupSocket = {
+            async: function() {
+                var promise = $http.get('/configuration/').then(function (response) {
+                    var configData  = response.data;
+                    var socket      = io.connect(configData.localIP + ':'+configData.remotePort);
+                    socket.on('connect', function(data){
+                        socket.emit('screen');
+                    });
+                    return {
+                        on: function (eventName, callback) {
+                            socket.on(eventName, function () {
+                                var args = arguments;
+                                $scope.$apply(function () {
+                                    callback.apply(socket, args);
+                                });
+                            });             
+
+                        },
+                        emit: function (eventName, data, callback) {
+                            socket.emit(eventName, data, function () {
+                                var args = arguments;
+                                $scope.$apply(function () {
+                                    if (callback) {
+                                        callback.apply(socket, args);
+                                    }
+                                });
+                            });
+                        }
+                    };
+                    return data;
+                });
+                return promise;
+            }
+        };            
+        
+
+        setupSocket.async().then(function(data) {
+            if (typeof data.on !== "undefined") {
+                $scope.remote       = remote(data, $scope, player, audio);
+                $scope.keyevents    = keyevents(data, $scope, player, audio);
+            }
         });
         
         $scope.orderProp = 'genre';
@@ -38,7 +80,7 @@
         return audio;
     });
 
-    musicApp.factory('player', function(audio, socket, $rootScope) {
+    musicApp.factory('player', function(audio,  $rootScope) {
         var player,
             playlist = [],
             paused = false,
@@ -120,34 +162,6 @@
 	    return player;
     });
 
-
-    musicApp.factory('socket', function ($rootScope) {
-        var socket = io.connect(document.domain + ':3001');
-        socket.on('connect', function(data){
-            socket.emit('screen');
-        });
-        return {
-            on: function (eventName, callback) {
-                socket.on(eventName, function () {
-                    var args = arguments;
-                    $rootScope.$apply(function () {
-                        callback.apply(socket, args);
-                    });
-                });
-            },
-            emit: function (eventName, data, callback) {
-                socket.emit(eventName, data, function () {
-                    var args = arguments;
-                    $rootScope.$apply(function () {
-                        if (callback) {
-                            callback.apply(socket, args);
-                        }
-                    });
-                })
-            }
-        };
-    });
-    
     function updateProgress(audio) {
        var progress = document.getElementById("progress");
        var value = 0;

@@ -1,7 +1,7 @@
 extends /layout
 
 block declarations
-	- additional_title = '#{lingua.Remote}'; //- TODO: Translate this
+	- additional_title = lingua.Remote;
 	- body_id = 'remote';
 	- include_validation = true;
 
@@ -145,7 +145,7 @@ block body
 				label #{lingua.setting_port}
 				input(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true")
 			.row
-				input(type="submit",value="#{lingua.setting_submit}")	
+				input.btn(type="submit",value="#{lingua.setting_submit}")	
 				input(name="screensaver",type="hidden",value= screensaver) 
 	
 	i.ellipsis.vertical.icon.settings

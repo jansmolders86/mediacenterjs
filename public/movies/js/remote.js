@@ -16,7 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function remote(socket, $scope){
-    var albums = $scope.albums;
     socket.on('controlling', function(data){
         switch(data.action) {
             case "goLeft" :
@@ -135,3 +134,5 @@ function pushMute(socket, $scope){
 function pushDashboard(socket, $scope, player, audio){
     window.location = "/";
 }
+
+
