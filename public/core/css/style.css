@@ -751,6 +751,7 @@ table tr > th:first-child{ padding-left:0px;}
 
 #remote #keyboard-wrapper input[type=text]{ margin-bottom:10px;}
 #remote #keyboard-wrapper.show{	display:block; }
+#remote input[type=submit]{width:63%;}
 
 .mcjs-rm-controllable{border:3px solid rgba(255,255,255,0) }
 .mcjs-rm-controllable.focused{ border-color:rgba(251,133,33,0.8);}
