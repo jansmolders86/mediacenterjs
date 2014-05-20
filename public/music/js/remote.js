@@ -64,7 +64,6 @@ function keyevents(socket, $scope, player, audio){
                 pushEnter(socket, $scope, player, audio);
             break;
             case 8  : //backspace
-                e.preventDefault();
                 pushBack(socket, $scope, player, audio);
             break;
             case 32 :  //space
@@ -127,11 +126,14 @@ function pushPause(socket, $scope, player, audio){
 }
 
 function pushBack(socket, $scope, player, audio){
-    if(player.playlist.length > 0) {
-        var album = player.playlist[player.current.album];
-        player.playlist.remove(album);
-    } else {
-        window.location = "/";
+    if(!document.activeElement === input){
+        e.preventDefault();
+        if(player.playlist.length > 0) {
+            var album = player.playlist[player.current.album];
+            player.playlist.remove(album);
+        } else {
+            window.location = "/";
+        }
     }
 }
 

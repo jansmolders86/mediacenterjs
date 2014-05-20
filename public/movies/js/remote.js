@@ -64,7 +64,6 @@ function keyevents(socket, $scope){
                 pushEnter(socket, $scope);
             break;
             case 8  :   //backspace
-                e.preventDefault();
                 pushBack(socket, $scope);
             break;
             case 32 :   //space
@@ -113,11 +112,14 @@ function pushPause(socket, $scope){
 }
 
 function pushBack(socket, $scope){
-    if($scope.playing === true) {
-        videojs("player").destroy();
-        window.location = "/movies/";
-    } else {
-        window.location = "/";
+    if(!document.activeElement === input){
+        e.preventDefault();
+        if($scope.playing === true) {
+            videojs("player").destroy();
+            window.location = "/movies/";
+        } else {
+            window.location = "/";
+        }
     }
 }
 

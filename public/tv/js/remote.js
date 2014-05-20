@@ -65,7 +65,6 @@ function keyevents(socket, $scope, player){
                 pushEnter(socket, $scope, player);
             break;
             case 8  :   //backspace
-                e.preventDefault();
                 pushBack(socket, $scope, player);
             break;
             case 32 :   //space
@@ -128,11 +127,14 @@ function pushPause(socket, $scope){
 }
 
 function pushBack(socket, $scope, player){
-    if(player.playlist.length > 0) {
-        var tvshow = player.playlist[player.current.tvshow];
-        player.playlist.remove(tvshow);
-    } else {
-        window.location = "/";
+    if(!document.activeElement === input){
+        e.preventDefault();
+        if(player.playlist.length > 0) {
+            var tvshow = player.playlist[player.current.tvshow];
+            player.playlist.remove(tvshow);
+        } else {
+            window.location = "/";
+        }
     }
 }
 
