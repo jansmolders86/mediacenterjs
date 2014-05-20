@@ -248,6 +248,8 @@ a.backlink{
 	cursor:pointer; 
 }
 
+.clear{clear:both; position: relative; overflow: hidden;}
+
 
 .message{
 	text-align: center; 
@@ -355,24 +357,10 @@ body > #screensaver{
 
 /***** -----------------   FORM ELEMENTS / SETTINGS ---------------------- *****/
 /* 						Please edit this in your own theme. 					*/
-#setup{ 
-	width:100%; 
-	height:100%; 
-	position: relative;
-	background-color: #FFFFFF;
-	margin:0;
-	padding: 1em;
-	border-radius: 5px 5px 5px 5px;
-	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	box-sizing: border-box;
-	overflow:hidden;
-}
-#setup input[type=submit]{display:block; padding:10px 30px;}
+
 #hiddenSetting{visibility:hidden; width:0; height:0; float:left;}
 
-.row{ min-height:30px; width:90%; float:left; padding:10px;}
+.row{ min-height:30px; width:90%; float:left; padding:10px; position:relative;}
 .row.wrap{width:auto; clear:none;}
 .row a.cachelink{ margin:5px 0; display:inline-block;}
 
@@ -465,7 +453,6 @@ label,
   padding:10px;
   margin-left:auto;
   margin-right:auto;
-  left:30px;
   position:relative;
   cursor:pointer;
   border: none;
