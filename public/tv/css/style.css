@@ -147,16 +147,22 @@ h2.loading{top:80px;}
 #playlist {
     float: left;
     width: 358px;
-    background: #e7e7e7;
+    background: #FEFEFE;
     overflow-y: auto;
     overflow-x: hidden;
-    height: 100%;
-    min-height: 100%;
-    height: auto;
+    height: 100vh;
     position: absolute;
-    top:75px;
+    top:0px;
     left:0px;
-    border-right:1px solid #ccc;
+    z-index:9;
+}
+
+
+#playlist h2{
+    height: 40px;
+    padding: 10px;
+    background: #e7e7e7;
+    margin: 0;
 }
 
 #playlist .header{

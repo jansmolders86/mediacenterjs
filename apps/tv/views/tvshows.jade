@@ -45,16 +45,18 @@ html(lang="en", ng-app="tvApp")
                     option(value="title")   Alphabetical
                     option(value="genre")   Genre
             #container
-                ul#playlist(ng-show="player.playlist.length > 0")
-                    li.currentshow(ng-repeat="tvshow in player.playlist", ng-class="{current: player.current.tvshow == $index}")
-                        .header( ng-click="player.playlist.remove(tvshow)")
-                            span.tvshow-title {{tvshow.title}}
-                            i.remove.circle.icon
-                        ol.episodes
-                            li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode.localName)") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
-                ul#tvshows(ng-class="{side: player.playlist.length > 0}")
-                    li.tvshow(ng-repeat="tvshow in tvshows | filter:query | orderBy:orderProp",ng-click="player.playlist.add(tvshow)", ng-class="{current: focused == $index}")
-                        img(ng-src="{{tvshow.banner}}")
+                #playlist(ng-show="player.playlist.length > 0")
+                    h2 Playlist
+                    ul
+                        li.currentshow(ng-repeat="tvshow in player.playlist", ng-class="{current: player.current.tvshow == $index}")
+                            .header( ng-click="player.playlist.remove(tvshow)")
+                                span.tvshow-title {{tvshow.title}}
+                                i.remove.circle.icon
+                            ol.episodes
+                                li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode.localName)") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
+                    ul#tvshows(ng-class="{side: player.playlist.length > 0}")
+                        li.tvshow(ng-repeat="tvshow in tvshows | filter:query | orderBy:orderProp",ng-click="player.playlist.add(tvshow)", ng-class="{current: focused == $index}")
+                            img(ng-src="{{tvshow.banner}}")
                         
                 h2.loading(ng-show="!tvshows") #{lingua.loading}
                 
