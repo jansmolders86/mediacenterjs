@@ -55,6 +55,7 @@ html(lang="en", ng-app="musicApp")
                             ol.tracks
                                 li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
                                     i.play.icon
+                                    span.track-number {{track.track}}
                                     span.track-title {{track.title}}
 
                 section#library(ng-class="{side: player.playlist.length > 0}")

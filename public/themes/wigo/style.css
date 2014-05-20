@@ -4,7 +4,7 @@
 /* Typography */
 
 html{ background-color:#eeeeee; }
-body{ font-family: 'Open Sans', sans-serif; color: #747474; }
+body{ font-family: 'Open Sans', sans-serif; color: #747474; font-weight: 300;}
 a{ color:#444;}
 a:hover{color:#333;}
 
@@ -128,12 +128,37 @@ p a:hover{text-decoration:none;}
 	padding:5px 100px 10px 100px;
 	position:relative;
 	float:left;
-	background:#373737;
+    background:#3B3F40;
 	overflow:hidden;
 	-webkit-animation: glide-in 0.5s; 
 	-moz-animation: glide-in 0.5s; 
     -o-animation: glide-in 0.5s; 
     animation: glide-in 0.5s;
+}
+
+#header #search,
+#header #filter{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 400px;
+    height: 60px;
+    border: 0;
+    background: #f5f5f5;
+    -webkit-transition: width 0.5s ease-in-out;
+    -moz-transition: width 0.5s ease-in-out;
+    -o-transition: width 0.5s ease-in-out;
+    transition: width 0.5s ease-in-out;
+}
+
+#header #search:focus{
+    width:600px;
+}
+
+#header #filter{
+    right: 350px;
+    /*Disable filter temorarily untill better implemented */
+    display:none;
 }
 
 a.backlink{ 
@@ -218,7 +243,7 @@ select,
 textarea{
 	margin: 0;
 	padding: 0.85em 1.2em;
-	font-size: 0.875em;
+	font-size: 18px;
 	background-color: #FFFFFF;
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	outline: none;
@@ -233,7 +258,19 @@ textarea{
 	box-sizing: border-box;
 	width:40%;
 	float:left;
+    background: #f5f5f5;
 }
+
+#search::-webkit-input-placeholder::before { font-family: Icons; content:'\f002  '; color: #ddd }
+#search:-moz-placeholder::before  { font-family: Icons; content:'\f002  '; color: #ddd } 
+#search:-ms-input-placeholder::before  { font-family: Icons; content:'\f002  '; color: #ddd } 
+#search:-moz-placeholder::before  { font-family: Icons; content:'\f002  '; color: #ddd }
+
+#filter::-webkit-input-placeholder::before { font-family: Icons; content:'\f0c9  '; color: #ddd }
+#filter:-moz-placeholder::before  { font-family: Icons; content:'\f0c9  '; color: #ddd } 
+#filter:-ms-input-placeholder::before  { font-family: Icons; content:'\f0c9  '; color: #ddd } 
+#filter:-moz-placeholder::before  { font-family: Icons; content:'\f0c9  '; color: #ddd }
+
 
 /* Player */
 
@@ -249,23 +286,20 @@ textarea{
 
 @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
     /* For tablet portrait layouts only */
-
 }
 
 @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
     /* For tablet landscape layouts only */
 
-}@media only screen and (min-width: 320px) and (max-width: 529px) {
+}
+@media only screen and (min-width: 320px) and (max-width: 529px) {
     /* For phone layouts only */
 
     #wrapper{padding:15px; }
-    #header{ height:80px; padding:10px;}
-    #header h1{ font-size:28px; float:left; width:250px; padding-top:10px;}
-    #dateandtime { position:absolute; right:10px; top:0px; }
+    #header{ padding:5px 10px 10px;}
+    #dateandtime { position:absolute; right:20px; top:0px; }
 
-    .boxed{
-        width:35%;
-    }
+    .boxed{ width:35%;}
 
     .tile{
         width: 155px;
@@ -275,9 +309,24 @@ textarea{
         list-style:none;
         display:none;
     }
+    #filter{display:none;}
+    #header #search { width:300px; }
+
 
 }
 
+@media (min-width:530px) and  (max-width: 651px) {
+    #wrapper{padding:15px; }
+    #header{ padding:5px 10px 10px;}
+    #dateandtime { position:absolute; right:20px; top:0px; }
+    #filter{display:none;}
+    #header #search { width:300px;}
+
+}
+@media (min-width:651px) and (max-width: 980px) {
+
+
+}
 
 
 

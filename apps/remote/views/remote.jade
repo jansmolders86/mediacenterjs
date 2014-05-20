@@ -14,9 +14,6 @@ block additional_scripts
         $(function(){
             $('.validate-form').validate();
         
-            var viewPortHeight = $(window).height();
-            $('#settings, #setupRemote').height(viewPortHeight - 20);
-        
             window.scrollTo(0,0);
             
             $('i.ellipsis.vertical.icon.settings').on('click touchstart', function(){
