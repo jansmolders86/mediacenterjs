@@ -200,7 +200,7 @@ body{overflow: hidden;}
 }
 .track-title {
     display: inline-block;
-    width: 300px;
+    width: 250px;
 }
 
 .ui.progress {
