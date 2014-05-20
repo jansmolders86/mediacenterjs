@@ -46,7 +46,7 @@ h2{
 .info{float:left;}
 
 .additional-info{
-	background:#F6F1ED;
+	background:#f5f5f5;
 	height:35px;
 	position:absolute;
 	bottom:0;
@@ -66,8 +66,8 @@ h2{
 	-ms-box-sizing: border-box;
 	box-sizing: border-box;
 }
-.btn.remove{background:#7E8C8C; box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #535d5d, 0px 5px 3px #ddd;}
-.btn.install{background:#27AE61; box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #2c714a, 0px 5px 3px #ddd;}
+.btn.remove{background:#7E8C8C; box-shadow: inset 0px 1px 0px #535d5d, 0px 2px 0px 0px #535d5d, 0px 5px 3px #ddd;}
+.btn.install{background:#27AE61; box-shadow: inset 0px 1px 0px #2c714a, 0px 2px 0px 0px #2c714a, 0px 5px 3px #ddd;}
 .btn.upgrade{background:#3598DC; margin-top: -20px; box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #10517e, 0px 5px 3px #ddd;}
 
 .btn.remove:hover{background:#adb8b8;}
