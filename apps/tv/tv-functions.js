@@ -24,8 +24,6 @@ var fs = require('fs.extra')
     , metafetcher = require('../../lib/utils/metadata-fetcher')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
-var metaType = "tv";
-
 var dblite = require('dblite')
 if(os.platform() === 'win32'){
     dblite.bin = "./bin/sqlite3/sqlite3";
@@ -37,50 +35,14 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 //Create tables
 db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
 
-
 exports.loadItems = function (req, res, serveToFrontEnd){
-    db.query('SELECT * FROM tvshows',{
-        title 		    : String,
-        banner        	: String,
-        genre         	: String,
-        certification  	: String
-    }, function(rows) {
-        if (typeof rows !== 'undefined' && rows.length > 0){
-            var ShowList = [];
-
-            count = rows.length;
-            console.log('Found '+count+' shows, getting additional data...')
-            rows.forEach(function(item, value){
-                var showTitle       = item.title
-                    , showBanner        = item.banner
-                    , showGenre         = item.genre
-                    , showCertification = item.certification;
-
-                getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
-                    if(availableEpisodes !== null) {
-                        ShowList.push(availableEpisodes);
-                        count--;
-
-                        if (count === 0) {
-                            if(serveToFrontEnd !== false){
-                                res.json(ShowList);
-                            }
-
-                            if(serveToFrontEnd === null){
-                                serveToFrontEnd = false;
-                            }
-                            fetchTVData(req, res, metaType, serveToFrontEnd);
-                        }
-                    }
-                });
-            });
-        } else {
-            if(serveToFrontEnd === null){
-                serveToFrontEnd = true;
-            }
-            fetchTVData(req, res, metaType, serveToFrontEnd);
-        }
-    });
+    var metaType = "tv";
+    if(serveToFrontEnd == false){
+        fetchTVData(req, res, metaType, serveToFrontEnd);
+    } else{
+        serveToFrontEnd = true; 
+        fetchTVData(req, res, metaType, serveToFrontEnd);
+    }
 };
 
 
@@ -123,9 +85,8 @@ exports.sendState = function (req, res){
 /** Private functions **/
 
 fetchTVData = function(req, res, metaType, serveToFrontEnd) {
-
-    //TODO: Make this a promise
     var count = 0;
+    var itemsDone = 0;
     metafetcher.fetch(req, res, metaType, function(type){
         if(type === metaType){
             db.query('SELECT * FROM tvshows',{
@@ -138,6 +99,7 @@ fetchTVData = function(req, res, metaType, serveToFrontEnd) {
                     var ShowList = [];
 
                     count = rows.length;
+  
                     console.log('Found '+count+' shows, getting additional data...')
                     rows.forEach(function(item, value){
                         var showTitle       = item.title
@@ -148,16 +110,21 @@ fetchTVData = function(req, res, metaType, serveToFrontEnd) {
                         getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
                             if(availableEpisodes !== null) {
                                 ShowList.push(availableEpisodes);
-                                count--;
+                                itemsDone++;
 
-                                if (count === 0 && serveToFrontEnd !== false) {
+                                if (count === itemsDone && serveToFrontEnd === true) {
+                                    console.log('Done...')
                                     res.json(ShowList);
                                 }
                             }
                         });
+    
+                        
                     });
+                    
+
                 } else {
-                    console.log('Could not index any tv shows, please check given movie collection path...');
+                    console.log('Could not index any tv shows, please check given tv collection path...');
                 }
             });
         }
@@ -165,6 +132,7 @@ fetchTVData = function(req, res, metaType, serveToFrontEnd) {
 }
 
 function getEpisodes(showTitle, showBanner, showGenre, showCertification, callback){
+
     db.query('SELECT * FROM tvepisodes WHERE title = $title ORDER BY season asc', { title:showTitle }, {
             localName   : String,
             title  	    : String,
@@ -181,7 +149,6 @@ function getEpisodes(showTitle, showBanner, showGenre, showCertification, callba
                     "certification" : showCertification,
                     "episodes"      : episodes
                 }
-
                 callback(availableEpisodes);
 
             } else {
