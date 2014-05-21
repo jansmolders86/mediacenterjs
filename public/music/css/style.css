@@ -122,13 +122,13 @@ body{overflow: hidden;}
     z-index:9;
 }
 
-#playlist h2{
-    height: 40px;
-    padding: 10px;
-    background: #e7e7e7;
-    margin: 0;
+#playlist h2 {
+	height: 50px;
+	padding: 10px;
+	background: #fb8521;
+	margin: 0;
+	color: #fff;
 }
-
 #playlist ul{padding-bottom: 150px;}
 
 #playlist img{ margin-bottom:5px; cursor:pointer;}
