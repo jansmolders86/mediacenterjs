@@ -101,7 +101,7 @@ p a:hover{text-decoration:none;}
 
 #dateandtime{top: 3px;}
 #dateandtime .date,
-#dateandtime .time{	text-align:right; font-weight: 300; font-size:20px; font-family: 'Open Sans', sans-serif; color:#f5f5f5;}
+#dateandtime .time{	text-align:right; font-weight: 300; font-size:20px; font-family: 'Open Sans', sans-serif; color:#333;}
 
 /* Content */
 
@@ -134,6 +134,9 @@ p a:hover{text-decoration:none;}
     -o-animation: glide-in 0.5s; 
     animation: glide-in 0.5s;
 }
+
+.homepage #header{background:#fff; height:65px;}
+.homepage h1{color:#333;}
 
 #header #search,
 #header #filter{
