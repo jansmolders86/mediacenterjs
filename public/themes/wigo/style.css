@@ -135,7 +135,7 @@ p a:hover{text-decoration:none;}
     animation: glide-in 0.5s;
     border-bottom: 5px solid #fb8521;
 }
-
+.homepage{overflow:hidden;}
 .homepage #header{background:#fff; height:75px; padding-top:10px;}
 .homepage #header h1{color:#333;}
 
@@ -314,7 +314,7 @@ textarea{
     #filter{display:none;}
     #header #search { width:300px; }
 
-
+    .homepage{overflow-y:auto;}
 }
 
 @media (min-width:530px) and  (max-width: 651px) {
