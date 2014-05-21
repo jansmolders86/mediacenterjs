@@ -211,10 +211,15 @@ body{overflow: hidden;}
 }
 
 
-.bar{
-    display: inline-block;
-    height: 100%;
-    background-color: #747474;
+
+.bar {
+	display: inline-block;
+	height: 100%;
+	background-color: #747474;
+	webkit-transition: width 3s ease-in-out;
+	-moz-transition: width 3s ease-in-out;
+	-o-transition: width 3s ease-in-out;
+	transition: width 3s ease-in-out;
 }
 
 
