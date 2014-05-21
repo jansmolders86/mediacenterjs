@@ -135,8 +135,8 @@ p a:hover{text-decoration:none;}
     animation: glide-in 0.5s;
 }
 
-.homepage #header{background:#fff; height:65px;}
-.homepage h1{color:#333;}
+.homepage #header{background:#fff; height:75px; padding-top:10px;}
+.homepage #header h1{color:#333;}
 
 #header #search,
 #header #filter{
