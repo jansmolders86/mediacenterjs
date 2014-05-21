@@ -119,7 +119,7 @@ p a:hover{text-decoration:none;}
 }
 
 #header{
-	height:60px;
+	height:70px;
 	width:100%;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box; 
@@ -133,6 +133,7 @@ p a:hover{text-decoration:none;}
 	-moz-animation: glide-in 0.5s; 
     -o-animation: glide-in 0.5s; 
     animation: glide-in 0.5s;
+    border-bottom: 5px solid #fb8521;
 }
 
 .homepage #header{background:#fff; height:75px; padding-top:10px;}
