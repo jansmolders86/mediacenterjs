@@ -18,12 +18,12 @@ block additional_scripts
             $('.parentalControl').on('click', function(e){
                 e.preventDefault();
                 var that = $(this);
-                var clientIDField =	 that.parent().parent().find('.device').text();
+                var clientIDField =  that.parent().parent().find('.device').text();
 
                 if(that.hasClass('lock')){
-                    var url	 = '/lockClient';
+                    var url  = '/lockClient';
                 } else if(that.hasClass('unlock')){
-                    var url	 = '/unlockClient';
+                    var url  = '/unlockClient';
                 }
 
                 $.ajax({
@@ -42,8 +42,8 @@ block additional_scripts
             var itemHeight = $('.configurable-options').height();
             $('.cache-management').height(itemHeight);
             
-            var secondItemHeight = $('.access-table').height();
-            $('#oauthContainer').height(secondItemHeight);
+            var secondItemHeight = $('.access-table').height()
+            $("#oauthContainer").css("min-height",secondItemHeight+'px');
 
         });
 
@@ -52,7 +52,7 @@ block additional_scripts
 block body
     #header.settings
         a.backlink(href="/") &#xe113;
-        h1	#{lingua.settings}
+        h1  #{lingua.settings}
     #wrapper
         .ui-widget
             .message
@@ -68,7 +68,7 @@ block body
                     h2 Configurable Options 
                     .row.mcjs-rc-controllable
                         label(for="moviepath") #{lingua.setting_movielocation}
-                        input#moviepath.mcjs-rc-clickable.folder(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation,data-rule-path="true",	data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
+                        input#moviepath.mcjs-rc-clickable.folder(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation,data-rule-path="true",    data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
                         i.folder.icon
                     .row.mcjs-rc-controllable
                         label(for="musicpath") #{lingua.setting_musiclocation}
