@@ -109,6 +109,10 @@ block body
                                 option(selected=theme) #{theme}
                         i.photo.icon
                     .row.mcjs-rc-controllable
+                            label(for="schedule") When should data be gathered autmatically? 
+                            input#port.mcjs-rc-clickable(name="schedule",type="text",placeholder="eg. 12:30", value= schedule,data-rule-required="true", data-msg-required="This field is required.")
+                            i.time.icon 
+                    .row.mcjs-rc-controllable
                         label(for="port") #{lingua.setting_port}
                         input#port.mcjs-rc-clickable(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true", data-msg-required="This field is required.")
                         i.exchange.icon

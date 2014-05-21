@@ -85,6 +85,7 @@ exports.index = function(req, res, next){
                 spotifyUser: config.spotifyUser,
                 spotifyPass: config.spotifyPass,
                 themes:allThemes,
+                schedule:config.schedule,
                 devices:devices,
                 allowed: allowed,
                 port: config.port,

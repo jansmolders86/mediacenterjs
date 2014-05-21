@@ -28,24 +28,22 @@ var express = require('express')
 	, mcjsRouting = require('./lib/routing/routing')
 	, remoteControl = require('./lib/utils/remote-control')
 	, versionChecker = require('./lib/utils/version-checker')
+    , scheduler = require('./lib/utils/scheduler')
 	, DeviceInfo = require('./lib/utils/device-utils')
     , fileHandler = require('./lib/utils/file-utils')
     , http = require('http')
 	, os = require('os')
 	, jade = require('jade')
-	, configuration_handler = require('./lib/handlers/configuration-handler')
-    , schedule = require('node-schedule')
-    , rule = new schedule.RecurrenceRule();
+	, configuration_handler = require('./lib/handlers/configuration-handler');
 
 var config = configuration_handler.initializeConfiguration();
-
+var ruleSchedule = null;
 var language = null;
 if(config.language === ""){
 	language = 'en';
 } else {
 	language = config.language;
 }
-
 
 /*Create database*/
 if(fs.existsSync('./lib/database/') === false){
@@ -85,31 +83,7 @@ app.configure(function(){
 	app.locals.basedir = __dirname + '/views';
 });
 
-// Schedule scraping every 30 minutes
-rule.minute = 30;
-var j = schedule.scheduleJob(rule, function(){
-    if(fs.existsSync('./lib/database/mcjs-sqlite-journal') === false){
-        var moviesfunctions = require('./apps/movies/movie-functions')
-            , musicfunctions = require('./apps/music/music-functions')
-            , tvfunctions = require('./apps/tv/tv-functions')
-            , serveToFrontEnd = false
-            , req // Dummy variable
-            , res; // Dummy variable
 
-        // Movies
-        moviesfunctions.loadItems(req, res, serveToFrontEnd);
-
-        // Music
-        setTimeout(function(){    
-            musicfunctions.loadItems(req, res, serveToFrontEnd);
-        },10000);
-
-        // TV
-        setTimeout(function(){    
-            tvfunctions.loadItems(req, res, serveToFrontEnd);
-        },20000);
-    }
-});
 
 /* CORS */
 app.all('*', function(req, res, next) {
@@ -380,6 +354,9 @@ app.post('/submitRemote', function(req, res){
 //Socket.io Server
 remoteControl.remoteControl();
 
+//Scheduler
+scheduler.schedule();
+
 app.set('port', process.env.PORT || 3000);
 
 // Open App socket
@@ -392,3 +369,7 @@ if (config.port == "" || config.port == undefined ){
 	console.log(message.green.bold);
 	app.listen(parseInt(config.port));
 }
+
+
+
+
