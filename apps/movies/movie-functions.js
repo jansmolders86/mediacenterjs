@@ -24,8 +24,6 @@ var fs = require('fs.extra')
     , metafetcher = require('../../lib/utils/metadata-fetcher')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
-var metaType = "movie";
-
 var dblite = require('dblite')
 if(os.platform() === 'win32'){
     dblite.bin = "./bin/sqlite3/sqlite3";
@@ -36,38 +34,15 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 
 
 exports.loadItems = function (req, res, serveToFrontEnd){
-    db.query('SELECT * FROM movies',{
-        original_name  	: String,
-        title 		    : String,
-        poster_path  	: String,
-        backdrop_path  	: String,
-        imdb_id  		: String,
-        rating  		: String,
-        certification  	: String,
-        genre  			: String,
-        runtime  		: String,
-        overview  		: String,
-        cd_number  		: String,
-        adult           : String
-    }, function(rows) {
-        if (typeof rows !== 'undefined' && rows.length > 0){
-            
-            if(serveToFrontEnd !== false){
-                res.json(rows);
-            }
-            
-            if(serveToFrontEnd === null){
-                serveToFrontEnd = false;
-            }
-            getData(req, res, metaType, serveToFrontEnd);
-        } else {
-            if(serveToFrontEnd === null){
-                serveToFrontEnd = true;
-            }
-            getData(req, res, metaType, serveToFrontEnd);
-        }
-    });
+    var metaType = "movie";
+    if(serveToFrontEnd == false){
+        fetchMovieData(req, res, metaType, serveToFrontEnd);
+    } else{
+        serveToFrontEnd = true; 
+        fetchMovieData(req, res, metaType, serveToFrontEnd);
+    }
 };
+
 
 exports.backdrops = function (req, res){
     db.query('SELECT * FROM movies',{
@@ -96,6 +71,7 @@ exports.backdrops = function (req, res){
         }
     });
 };
+
 
 
 exports.playMovie = function (req, res, movieTitle){
@@ -157,7 +133,7 @@ exports.sendState = function (req, res){
 
 /** Private functions **/
 
-getData = function(req, res, metaType, serveToFrontEnd) {
+fetchMovieData = function(req, res, metaType, serveToFrontEnd) {
     metafetcher.fetch(req, res, metaType, function(type){
         if(type === metaType){
 			

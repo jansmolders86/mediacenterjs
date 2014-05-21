@@ -30,48 +30,14 @@ var db = dblite('./lib/database/mcjs.sqlite');
 db.on('info', function (text) { console.log('Database info:', text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
-exports.loadItems = function(req, res, serveToFrontEnd){
-    console.log('Getting album data')
-    getAlbums(function(rows){
-        if(rows !== null) {
-            var albums = [];
-
-            var count = rows.length;
-            console.log('Found ' + count + ' albums, getting additional data...');
-            rows.forEach(function (item, value) {
-
-                if (item !== null && item !== undefined) {
-                    var album       = item.album
-                        , artist    = item.artist
-                        , year      = item.year
-                        , genre     = item.genre
-                        , cover     = item.cover;
-
-                    getTracks(album, artist, year, genre, cover, function (completeAlbum) {
-                        count--;
-                        albums.push(completeAlbum);
-                        if (count == 0) {
-                            if(serveToFrontEnd !== false){
-                                console.log('Sending data to client');
-                                return res.json(albums);
-                                res.end();
-                            }
-                            if(serveToFrontEnd === null){
-                                serveToFrontEnd = false;
-                            }
-                            fetchMusicData(req, res, serveToFrontEnd);
-                        }
-                    });
-                }
-
-            });
-        } else {
-            if(serveToFrontEnd === null){
-                serveToFrontEnd = true;
-            }
-            fetchMusicData(req, res, serveToFrontEnd);
-        }
-    });
+exports.loadItems = function (req, res, serveToFrontEnd){
+    var metaType = "music";
+    if(serveToFrontEnd == false){
+        fetchMusicData(req, res, metaType, serveToFrontEnd);
+    } else{
+        serveToFrontEnd = true; 
+        fetchMusicData(req, res, metaType, serveToFrontEnd);
+    }
 };
 
 exports.playTrack = function(req, res, track, album){
@@ -81,12 +47,10 @@ exports.playTrack = function(req, res, track, album){
 /** Private functions **/
 
 
-fetchMusicData = function(req, res, serveToFrontEnd) {
+fetchMusicData = function(req, res, metaType, serveToFrontEnd) {
     var count = 0;
-	var dataType = 'music';
-    console.log('Fetching metadata')
-    metafetcher.fetch(req, res, dataType, function(type){
-        if(type === dataType){
+    metafetcher.fetch(req, res, metaType, function(type){
+        if(type === metaType){
 			getAlbums(function(rows){
 		        if(rows !== null) {
                     var albums = [];
