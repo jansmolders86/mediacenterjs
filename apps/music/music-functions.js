@@ -36,7 +36,7 @@ exports.loadItems = function (req, res, serveToFrontEnd){
         fetchMusicData(req, res, metaType, serveToFrontEnd);
     } else{
         serveToFrontEnd = true; 
-        getAlbums(function(rows){
+        getAlbums(req, res, function(rows){
             if(rows !== null) {
                 var albums = [];
 
@@ -58,8 +58,8 @@ exports.loadItems = function (req, res, serveToFrontEnd){
                                 console.log('Sending data to client');
                                 if(serveToFrontEnd === true){
                                     
-                                    serveToFrontEnd = false;
-                                    fetchMusicData(req, res, metaType, serveToFrontEnd);
+                                    //serveToFrontEnd = false;
+                                    //fetchMusicData(req, res, metaType, serveToFrontEnd);
                                     
                                     return res.json(albums);
                                     res.end();
@@ -86,8 +86,8 @@ fetchMusicData = function(req, res, metaType, serveToFrontEnd) {
     var count = 0;
     metafetcher.fetch(req, res, metaType, function(type){
         if(type === metaType){
-			getAlbums(function(rows){
-		        if(rows !== null) {
+	     getAlbums(req, res, function(rows){
+		 if(rows !== null) {
                     var albums = [];
 
                     count = rows.length;
@@ -121,33 +121,38 @@ fetchMusicData = function(req, res, metaType, serveToFrontEnd) {
 	});
 }
 
-getAlbums = function(callback){
+getAlbums = function(req, res, callback){
     console.log('Looking for stored albums.');
 	setTimeout(function(){
-        db.query('SELECT * FROM albums ORDER BY album asc', {
-            album   : String,
-            artist  : String,
-            year    : Number,
-            genre   : String,
-            cover   : String
-        },
-        function(err, rows) {
-            if(err) console.log('Database error: ' + err);
+		db.query('SELECT * FROM albums ORDER BY album asc', {
+		    album   : String,
+		    artist  : String,
+		    year    : Number,
+		    genre   : String,
+		    cover   : String
+		},
+		function(err, rows) {
+		    if(err){
+                console.log("DB error",err);
+			    var serveToFrontEnd = true;
+			    var metaType = 'music';
+                fetchMusicData(req, res, metaType, serveToFrontEnd);
+		    }
 
-            if (rows !== undefined && rows !== null ){
-                if(rows.length > 0){
-                    console.log('Found albums...');
-                    callback(rows);
-                } else {
-                    console.log('No albums found... Indexing.');
-                    callback(null);
-                }
-            } else {
-                console.log('No albums found... Indexing.');
-                callback(null);
-            }
-        });
-	},300);
+		    if (rows !== undefined && rows !== null ){
+		        if(rows.length > 0){
+		            console.log('Found albums...');
+		            callback(rows);
+		        } else {
+		            console.log('No albums found... Indexing.');
+		            callback(null);
+		        }
+		    } else {
+		        console.log('No albums found... Indexing.');
+		        callback(null);
+		    }
+		});
+    },300);
 }
 
 getTracks = function (album, artist, year, genre, cover, callback){

@@ -25,14 +25,19 @@ body{overflow: hidden;}
 #container{
     padding:100px 80px;
     position:relative;
-    width:75%;
+    width: 100vw;
 }
 
-#library{
-    float:left;
-	height:100%;
-	max-height:100%;
-	overflow-x:hidden;
+#library {
+    float: left;
+    height: 80vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100vw;
+}
+
+#library.side{
+    width: 80vw;
 }
 
 .side{
