@@ -23,7 +23,7 @@ body{overflow: hidden;}
 /** Library **/
 
 #container{
-    padding:100px 80px;
+    padding:100px 10px;
     position:relative;
     width: 100vw;
 }
