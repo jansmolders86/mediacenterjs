@@ -36,7 +36,42 @@ exports.loadItems = function (req, res, serveToFrontEnd){
         fetchMusicData(req, res, metaType, serveToFrontEnd);
     } else{
         serveToFrontEnd = true; 
-        fetchMusicData(req, res, metaType, serveToFrontEnd);
+        getAlbums(function(rows){
+            if(rows !== null) {
+                var albums = [];
+
+                count = rows.length;
+                console.log('Found ' + count + ' albums.');
+                rows.forEach(function (item, value) {
+
+                    if (item !== null && item !== undefined) {
+                        var album   = item.album
+                        , artist    = item.artist
+                        , year      = item.year
+                        , genre     = item.genre
+                        , cover     = item.cover;
+
+                        getTracks(album, artist, year, genre, cover, function (completeAlbum) {
+                            count--;
+                            albums.push(completeAlbum);
+                            if (count == 0) {
+                                console.log('Sending data to client');
+                                if(serveToFrontEnd === true){
+                                    
+                                    serveToFrontEnd = false;
+                                    fetchMusicData(req, res, metaType, serveToFrontEnd);
+                                    
+                                    return res.json(albums);
+                                    res.end();
+                                }
+
+                            }
+                        });
+                    }
+
+                });
+            } 
+        });
     }
 };
 

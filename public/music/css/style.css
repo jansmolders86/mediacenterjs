@@ -230,4 +230,11 @@ body{overflow: hidden;}
     #library .album{ width:150px; margin:5px;}
     #library .album img{ width:150px; height:150px;}
     #playlist {padding-bottom:100px;}
+
+    .album-title,
+    .album-artist,
+    .album-year{
+        width: 130px;
+    }
+
 }
