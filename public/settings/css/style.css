@@ -11,7 +11,7 @@ label[for="oauthKey"] {
 }
 
 #settings h2 {
-	width: 94.7%; 
+	width: 98%; 
 	padding-bottom: .2rem;
 	border-bottom: 1px solid rgba(0,0,0,.1);
 	clear:both;
@@ -40,11 +40,11 @@ label[for="oauthKey"] {
 }
 
 .cache-management,
-#oauthContainer{background:#43464F; float:left; width:340px; height: 100%; margin-left:10px;}
+#oauthContainer{background:#43464F; float:left; width:400px; height: 100%; margin-left:10px;}
 
 .access-table{background:#ddd; float:left; width:70%;}
 .configurable-options{background:#f5f5f5; float:left; width:70%;}
-#oauthContainer{background:#43464F; padding:20px; width:300px; padding: 20px 20px 30px;}
+#oauthContainer{background:#43464F; padding:20px; width:360px; padding: 20px 20px 30px;}
 
 .cache-management .btn{box-shadow: inset 0px 1px 0px #fb8521, 0px 4px 0px 0px #c96311, 0px 7px 5px #333; width: 240px;}
 
@@ -67,6 +67,11 @@ label[for="oauthKey"] {
 	overflow:hidden;
 }
 #setup input[type=submit]{display:block; padding:10px 30px; margin-left:320px; width: 385px;}
+
+#setup input[type=text], 
+#setup input[type=password], 
+#setup select, 
+#setup textarea { background:#fff;}
 
 i.icon{
     position:absolute;
