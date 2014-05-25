@@ -153,7 +153,7 @@ span.title{visibility:hidden; width:0; height:0;}
 
 .movieposter{
 	float:left;
-	height:550px;
+	height:558px;
 	list-style:none;
 	z-index:3;
 	position:relative;
@@ -176,11 +176,9 @@ span.title{visibility:hidden; width:0; height:0;}
 .movieposter a{ float:left; }
 .movieposter .imageWrapper {width:250px;  height:278px; overflow:hidden;}
 .movieposter .overview{
-	padding:10px; 
-	font-size:11px; 
-	line-height:17px; 
+	padding:10px 10px 20px 10px;
 	margin:0;
-	max-height:207px;
+	height:170px;
 	position:relative;
 	overflow:hidden;
 }
@@ -199,14 +197,30 @@ span.title{visibility:hidden; width:0; height:0;}
 	border-top: 1px solid #e7e7e7;
 }
 
-.overview h1{ 
+h1.movie-title{ 
 	margin: 0px 0 10px 0;
-	font-size: 18px;
-	max-width: 230px;
+    padding:10px 10px 0;
+	font-size: 21px;
+	width: 210px;
 	text-transform: none;
 	font-family: 'Open Sans', sans-serif;
+    font-weight:500;
+    text-transform: capitalize;
 }
 .specs p{font-size:12px; float:left; margin:10px 0 0 9px;}
+
+.summary{
+    height:100%;
+    top:0;
+    font-size:16px; 
+	line-height:23px; 
+    position: relative;
+}
+
+.movieposter:hover .summary{
+    -webkit-animation: overview-slide 15s linear infinite;
+    animation: overview-slide 15s linear infinite;
+}
 
 #genres { position:absolute; top: 240px; left: 96px;}
 #genres li{ float:left; margin-right:20px;}
@@ -264,6 +278,18 @@ span.title{visibility:hidden; width:0; height:0;}
     0%{ top:-180px; }
     50%{ top:0; }
     100%{ top:-180px; }
+}
+
+@-webkit-keyframes overview-slide {
+    25%{ top:0; }
+    98%{ top:-180px; }
+    100%{ top:0px; }
+}
+
+@keyframes overview-slide {
+    25%{ top:0; }
+    98%{ top:-180px; }
+    100%{ top:0px; }
 }
 
 
