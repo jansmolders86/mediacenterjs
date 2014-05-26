@@ -197,23 +197,6 @@ app.get("/", function(req, res, next) {
 	}
 });
 
-function getIPAddresses() {
-	var ipAddresses = []
-	    , interfaces = require('os').networkInterfaces();
-
-	for (var devName in interfaces) {
-		var iface = interfaces[devName];
-		for (var i = 0; i < iface.length; i++) {
-			var alias = iface[i];
-			if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
-				ipAddresses.push(alias.address);
-			}
-		}
-	}
-
-	return ipAddresses;
-}
-
 app.post('/lockClient', function(req, res){
     var incommingDevice = req.body;
     var incommingDeviceID = Object.keys(incommingDevice);
@@ -293,41 +276,6 @@ app.get('/doUpdate', function(req, res){
     });
 });
 
-function unzip(req, res, output, dir){
-    var src = 'https://codeload.github.com/jansmolders86/mediacenterjs/zip/master';
-    var outputFile = './master.zip';
-    var ExtractDir = './install'
-    var options = {};
-
-    if(fs.existsSync(dir) === false){
-        fs.mkdirSync(dir);
-    } else {
-        rimraf(dir, function (err) { 
-            if(err) {
-                console.log('Error removing temp folder', err .red);
-            } else {
-
-                fileHandler.downloadFile(src, outputFile, options, function(output){
-                    console.log('Done', output);
-                    setTimeout(function(){
-                        unzip(req, res, output, dir);
-                    },2000);
-                });
-            }
-        });
-    }
-    console.log("Unzipping New Version...");
-    var AdmZip = require("adm-zip");
-    var zip = new AdmZip(output);
-    zip.extractAllTo(ExtractDir, true);
-    
-    res.json('restarting');
-    setTimeout(function(){
-         fs.openSync('./configuration/update.js', 'w');
-    },1000);
-}
-
-
 app.post('/setuppost', function(req, res){
 	configuration_handler.saveSettings(req.body, function() {
 		res.render('finish');
@@ -368,6 +316,58 @@ if (config.port == "" || config.port == undefined ){
 	var message = "MediacenterJS listening on port:" + config.port + "\n";
 	console.log(message.green.bold);
 	app.listen(parseInt(config.port));
+}
+
+
+function unzip(req, res, output, dir){
+    var src = 'https://codeload.github.com/jansmolders86/mediacenterjs/zip/master';
+    var outputFile = './master.zip';
+    var ExtractDir = './install'
+    var options = {};
+
+    if(fs.existsSync(dir) === false){
+        fs.mkdirSync(dir);
+    } else {
+        rimraf(dir, function (err) { 
+            if(err) {
+                console.log('Error removing temp folder', err .red);
+            } else {
+
+                fileHandler.downloadFile(src, outputFile, options, function(output){
+                    console.log('Done', output);
+                    setTimeout(function(){
+                        unzip(req, res, output, dir);
+                    },2000);
+                });
+            }
+        });
+    }
+    console.log("Unzipping New Version...");
+    var AdmZip = require("adm-zip");
+    var zip = new AdmZip(output);
+    zip.extractAllTo(ExtractDir, true);
+
+    res.json('restarting');
+    setTimeout(function(){
+        fs.openSync('./configuration/update.js', 'w');
+    },1000);
+}
+
+function getIPAddresses() {
+    var ipAddresses = []
+    , interfaces = require('os').networkInterfaces();
+
+    for (var devName in interfaces) {
+        var iface = interfaces[devName];
+        for (var i = 0; i < iface.length; i++) {
+            var alias = iface[i];
+            if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+                ipAddresses.push(alias.address);
+            }
+        }
+    }
+
+    return ipAddresses;
 }
 
 

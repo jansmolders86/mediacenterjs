@@ -35,11 +35,11 @@ db.on('error', function (err) { console.error('Database error: ' + err) });
 
 exports.loadItems = function (req, res, serveToFrontEnd){
     var metaType = "movie";
-    if(serveToFrontEnd == false){
+    if(serveToFrontEnd === false){
         fetchMovieData(req, res, metaType, serveToFrontEnd);
     } else{
         serveToFrontEnd = true; 
-        fetchMovieData(req, res, metaType, serveToFrontEnd);
+        getMovies(req, res, metaType, serveToFrontEnd);
     }
 };
 
@@ -136,31 +136,39 @@ exports.sendState = function (req, res){
 fetchMovieData = function(req, res, metaType, serveToFrontEnd) {
     metafetcher.fetch(req, res, metaType, function(type){
         if(type === metaType){
-			
-            db.query('SELECT * FROM movies',{
-                original_name  	: String,
-                title 		    : String,
-                poster_path  	: String,
-                backdrop_path  	: String,
-                imdb_id  		: String,
-                rating  		: String,
-                certification  	: String,
-                genre  			: String,
-                runtime  		: String,
-                overview  		: String,
-                cd_number  		: String,
-                adult           : String
-            }, function(rows) {
-                if (typeof rows !== 'undefined' && rows.length > 0){
+            getMovies(req, res, metaType, serveToFrontEnd);
+        }
+    });             
+}
 
-                    if(serveToFrontEnd !== false){
-                        res.json(rows);
-                    }
+getMovies = function(req, res, metaType, serveToFrontEnd){
+    db.query('SELECT * FROM movies',{
+        original_name  	: String,
+        title 		    : String,
+        poster_path  	: String,
+        backdrop_path  	: String,
+        imdb_id  		: String,
+        rating  		: String,
+        certification  	: String,
+        genre  			: String,
+        runtime  		: String,
+        overview  		: String,
+        cd_number  		: String,
+        adult           : String
+    }, function(err, rows) {
+        if(err){
+            console.log("DB error",err);
+            serveToFrontEnd = true;
+            fetchMovieData(req, res, metaType, serveToFrontEnd);
+        }
+        if (typeof rows !== 'undefined' && rows.length > 0){
 
-                } else {
-                    console.log('Could not index any movies, please check given movie collection path');
-                }
-            });
+            if(serveToFrontEnd !== false){
+                res.json(rows);
+            }
+
+        } else {
+            console.log('Could not index any movies, please check given movie collection path');
         }
     });
 }

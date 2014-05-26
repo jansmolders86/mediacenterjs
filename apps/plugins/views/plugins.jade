@@ -23,15 +23,11 @@ block body
         div.pull-left
             a.backlink &#xe113;
             h1 #{lingua.plugin_header}
-            
-        div.loading.boxed.pull-left
-            img(src="/core/css/img/ajax-loader.gif") 
-            p #{lingua.plugin_loading} 
-
-        div.pull-right.boxed(data-bind="visible:upgradeAll().length > 0")
+        div.pull-right(data-bind="visible:upgradeAll().length > 0")
             a.btn.upgrade.upgrade-all(data-bind="{click: upgradeAllPlugins.bind($data, upgradeAll() )}") Upgrade All
-    
     #wrapper
+        div.loading.pull-left
+            h2 #{lingua.plugin_loading} 
         div.message.boxed(data-bind="visible:message() != ''")
             span(data-bind="html:message")
 

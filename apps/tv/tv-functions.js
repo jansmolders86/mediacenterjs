@@ -39,9 +39,9 @@ exports.loadItems = function (req, res, serveToFrontEnd){
     var metaType = "tv";
     if(serveToFrontEnd == false){
         fetchTVData(req, res, metaType, serveToFrontEnd);
-    } else{
+    } else{  
         serveToFrontEnd = true; 
-        fetchTVData(req, res, metaType, serveToFrontEnd);
+        getTvshows(req, res, metaType, serveToFrontEnd); 
     }
 };
 
@@ -85,50 +85,62 @@ exports.sendState = function (req, res){
 /** Private functions **/
 
 fetchTVData = function(req, res, metaType, serveToFrontEnd) {
-    var count = 0;
-    var itemsDone = 0;
     metafetcher.fetch(req, res, metaType, function(type){
         if(type === metaType){
-            db.query('SELECT * FROM tvshows',{
-                title 		    : String,
-                banner        	: String,
-                genre         	: String,
-                certification  	: String
-            }, function(rows) {
-                if (typeof rows !== 'undefined' && rows.length > 0){
-                    var ShowList = [];
-
-                    count = rows.length;
-  
-                    console.log('Found '+count+' shows, getting additional data...')
-                    rows.forEach(function(item, value){
-                        var showTitle       = item.title
-                        , showBanner        = item.banner
-                        , showGenre         = item.genre
-                        , showCertification = item.certification;
-
-                        getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
-                            if(availableEpisodes !== null) {
-                                ShowList.push(availableEpisodes);
-                                itemsDone++;
-
-                                if (count === itemsDone && serveToFrontEnd === true) {
-                                    console.log('Done...')
-                                    res.json(ShowList);
-                                }
-                            }
-                        });
-    
-                        
-                    });
-                    
-
-                } else {
-                    console.log('Could not index any tv shows, please check given tv collection path...');
-                }
-            });
+            getTvshows(req, res, metaType, serveToFrontEnd);
         }
     });
+}
+
+function getTvshows(req, res, metaType, serveToFrontEnd){
+    var count = 0;
+    var itemsDone = 0;
+    db.query('SELECT * FROM tvshows',{
+        title 		    : String,
+        banner        	: String,
+        genre         	: String,
+        certification  	: String
+    }, function(err, rows) {
+        if(err){
+            console.log("DB error",err);
+            serveToFrontEnd = true;
+            fetchTVData(req, res, metaType, serveToFrontEnd);
+        }
+        if (typeof rows !== 'undefined' && rows.length > 0){
+            var ShowList = [];
+
+            count = rows.length;
+
+            console.log('Found '+count+' shows, getting additional data...');
+            
+            rows.forEach(function(item, value){
+                var showTitle       = item.title
+                , showBanner        = item.banner
+                , showGenre         = item.genre
+                , showCertification = item.certification;
+
+                getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
+                    console.log(serveToFrontEnd)
+                    if(availableEpisodes !== null) {
+                        ShowList.push(availableEpisodes);
+                        itemsDone++;
+
+                        if (count === itemsDone && serveToFrontEnd === true) {
+                            console.log('Done...')
+                            res.json(ShowList);
+                        }
+                    }
+                });
+
+
+            });
+
+
+        } else {
+            console.log('Could not index any tv shows, please check given tv collection path...');
+        }
+    }); 
+    
 }
 
 function getEpisodes(showTitle, showBanner, showGenre, showCertification, callback){
