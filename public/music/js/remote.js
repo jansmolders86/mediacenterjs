@@ -42,6 +42,11 @@ function remote(socket, $scope, player, audio){
                 break;
         }
     });
+    
+    socket.on('sending', function(data){
+        $('#search').val(data);
+        $scope.query = data;
+    });
 }
 
 

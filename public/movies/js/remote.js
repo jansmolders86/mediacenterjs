@@ -41,6 +41,11 @@ function remote(socket, $scope){
                 break;
         }
     });
+
+    socket.on('sending', function(data){
+        $('#search').val(data);
+        $scope.query = data;
+    });
 }
 
 

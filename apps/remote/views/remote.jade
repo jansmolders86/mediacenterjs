@@ -8,6 +8,9 @@ block declarations
 block additional_metadata
     meta(name="HandheldFriendly" content="true")
     meta(name="viewport" content="width=device-width initial-scale=1, maximum-scale=1, user-scalable=no")
+    
+block additional_css
+    link(rel='stylesheet', href='/remote/css/style.css')
 
 block additional_scripts
     script.
@@ -84,9 +87,8 @@ block additional_scripts
                         
                         $(".shuffle.link").on('click',function(){
                             socket.emit('control',{action:"shuffle"}); 
-                        });					
+                        });	
                         
-
                         $("#sendValue").on('click',function(){
                             if($('#sendValueInput').val() !== ''){
                                 var keyValue = $('#sendValueInput').val();
@@ -136,15 +138,18 @@ block body
                     label Spotify Password
                     input(name="spotifyPass",type="password", value=spotifyPass)	
             .row
-                    label(for="screensaver") Screensaver
-                    select#screensaver(name="screensaver")
-                        - for saver in availableScreensavers
-                            option(value=saver, selected=saver == screensaver) #{saver}
+                label(for="screensaver") Screensaver
+                select#screensaver(name="screensaver")
+                    - for saver in availableScreensavers
+                        option(value=saver, selected=saver == screensaver) #{saver}
             .row
                 label #{lingua.setting_theme}
                 select#theme(name="theme")
                     - for theme in themes
                         option(selected=theme) #{theme}
+            .row.mcjs-rc-controllable
+                label(for="schedule") When should data be gathered autmatically? 
+                input#port.mcjs-rc-clickable(name="schedule",type="text",placeholder="eg. 12:30", value= schedule,data-rule-required="true", data-msg-required="This field is required.")
             .row
                 label #{lingua.setting_port}
                 input(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true")

@@ -1,0 +1,211 @@
+/* Remote control styling */
+#remote #color-wrapper{
+    background:#dcdcdc;
+    height:200px;
+    width:100%;
+    -moz-background-clip: border;  
+    -webkit-background-clip: border; 
+    background-clip: border-box;
+
+    -moz-background-clip: padding;  
+    -webkit-background-clip: padding; 
+    background-clip: padding-box;   
+
+    -moz-background-clip: content;   
+    -webkit-background-clip: content;  
+    background-clip: content-box; 
+
+    border-bottom:40px solid rgba(220,220,220,.5);
+    overflow:visible;
+}
+
+#remote i.ellipsis.vertical.icon.settings{ 
+    font-size:32px; 
+    z-index:9; 
+    padding:20px 30px 40px 20px;
+    position: absolute;
+    top: 0px;
+    left: 10px;
+    color:#333;
+}
+#remote .push{height:80px; width:100%;}
+
+#remote #remote-wrapper{
+    display:table;
+    width: 200px;
+    border-radius: 200px;
+    height:200px;
+    background:#fff;
+    margin:0 auto;
+
+    position:relative;
+
+    border: 10px solid rgba(255,255,255,.5);
+
+    -moz-background-clip: border;  
+    -webkit-background-clip: border; 
+    background-clip: border-box;
+
+    -moz-background-clip: padding;  
+    -webkit-background-clip: padding; 
+    background-clip: padding-box;   
+
+    -moz-background-clip: content;   
+    -webkit-background-clip: content;  
+    background-clip: content-box; 
+
+    -moz-box-shadow: inset 0 0 30px #ccc;
+    -webkit-box-shadow: inset 0 0 30px #ccc;
+    box-shadow: inset 0 0 30px #ccc;
+
+    z-index:9;
+}
+
+#remote #remote-wrapper div{
+    display:inline-block; 
+    margin-top:30px;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    -moz-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    -o-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    -ms-transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    transition: opacity 0.25s ease, background-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+#remote h1{
+    float:right;
+    color:#333;
+    font-family: 'Open Sans', sans-serif; 
+    font-weight:100;
+    font-size:20px;
+    margin:10px 20px 0 0px;
+    padding:0;
+    display:block;
+    text-align:right;
+}
+
+#remote h1 span{ font-size:14px; display:block;}
+
+#remote #remote-wrapper .left,
+#remote #remote-wrapper .right,
+#remote #remote-wrapper .enter,
+#remote #remote-wrapper .back,
+#remote #remote-wrapper .pause{ border-radius: 100px;position:absolute;}
+
+#remote #remote-wrapper .left,
+#remote #remote-wrapper .right,
+#remote #remote-wrapper .enter{top:32px;}
+
+#remote #remote-wrapper .left{left:5px;}
+#remote #remote-wrapper .right{right:5px;}
+#remote #remote-wrapper .enter{left:90px; top: 64px;}
+#remote #remote-wrapper .back{top: -10px; left: 90px;}
+#remote #remote-wrapper .pause{left: 45px; bottom: 10px;}
+
+#remote i.icon{font-size:20px;}	
+#remote #remote-wrapper div:hover > i.icon{	color: #fb8521;}
+
+#remote #plain-wrapper{ position:relative;}
+#remote #plain-wrapper .link{position: absolute; }
+
+#remote #plain-wrapper .fullscreen.link{ left: 5%; top: 30px;}
+#remote #plain-wrapper .mute.link{ right: 20%; top:100px;}
+#remote #plain-wrapper .keyboard.link{ left: 20%; top:100px;}
+#remote #plain-wrapper .dashboard.link{ left: 41%; top:150px; width:60px; height:60px; background:#fb8521;}
+#remote #plain-wrapper .dashboard.link > i{ font-size:34px; padding:2px 0 0 9px; color:#fff!important;}
+#remote #plain-wrapper .dashboard.link > i:hover{ color:#fff!important;}
+#remote #plain-wrapper .shuffle.link{ right: 5%; top: 30px;}
+
+#remote #plain-wrapper div{
+    background:#f7f7f7;
+    border: 5px solid rgba(220,220,220,.5);
+
+    width:50px;
+    height:50px;
+
+    -moz-background-clip: border;  
+    -webkit-background-clip: border; 
+    background-clip: border-box;
+
+    -moz-background-clip: padding;  
+    -webkit-background-clip: padding; 
+    background-clip: padding-box;   
+
+    -moz-background-clip: content;   
+    -webkit-background-clip: content;  
+    background-clip: content-box; 
+
+    -webkit-box-shadow: 0 5px 6px -6px #333;
+    -moz-box-shadow: 0 5px 6px -6px #333;
+    box-shadow: 0 5px 6px -6px #333;
+
+    border-radius:200px;	
+    text-align:center;
+}
+#remote #plain-wrapper div i.icon{ color:#333; line-height:50px; padding: 0 0 0 6px;}
+
+#remote #settings{
+    width:250px;
+    height:100vh;
+    position:absolute;
+    -webkit-box-shadow: 0 5px 6px -6px #333;
+    -moz-box-shadow: 0 5px 6px -6px #333;
+    box-shadow: 0 5px 6px -6px #333;
+    border-right:1px solid #ccc;
+    left:-250px;
+    top:0;
+    z-index:10;
+    background:#f7f7f7;
+    margin:0;
+    padding:10px 0;
+}
+
+#setupRemote{height:100vh;}
+
+#remote #settings.show{left:0;}
+#remote #settings #setupRemote{
+    width:240px; 
+    margin:0; 
+    padding-left:10px; 
+    overflow-y:scroll;
+    overflow-x:hidden;
+}
+#remote #settings .row{ width:210px; margin-top:10px;}
+#remote #settings label,
+#remote #settings span.label{color:#333; font-size:13px;width:200px; margin-bottom:10px;}
+
+#remote #main{
+    width:100%;
+    height:100%; 
+    min-height: 100%;
+    height:auto; 
+}
+
+#remote input,
+#remote select{width:87%;}
+#remote .status{bottom:10px; left:0; position:absolute; width:100%; text-align:center;}
+#remote #keyboard-wrapper{
+    width:100%;
+    height:100px;
+    position:absolute;
+    border-top:5px solid rgba(220,220,220,.8);
+    left:0px;
+    bottom:0px;
+    z-index:10;
+    background:#f7f7f7;
+    margin:0;
+    padding:10px 0;
+    display:none;
+    padding:20px;
+}
+
+#remote #keyboard-wrapper input[type=text]{ margin-bottom:10px;}
+#remote #keyboard-wrapper.show{	display:block; }
+#remote input[type=submit]{width:63%;}
+
+
+
+@media (orientation:landscape) {
+    #remote .status{bottom:-200px; left:0; position:absolute; width:100%; text-align:center;}
+    #remote #plain-wrapper .dasboard.link{ left: 45%; top:90px;}
+}
