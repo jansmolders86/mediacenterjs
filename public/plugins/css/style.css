@@ -74,7 +74,7 @@ h2{
 .btn.install:hover{background:#40d881;}
 .btn.upgrade:hover{background:#68b8ef;}
 
-.btn.upgrade.upgrade-all{ margin-top:5px;}
+.btn.upgrade.upgrade-all{ margin-top:5px; box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #10517e, 0px 5px 3px #333;}
 
 li.boxed.focused .btn,
 .btn:hover{ 
@@ -89,21 +89,9 @@ li.boxed.focused .btn,
 
 .version{display:none;}
 
-#header .loading{
-	position: absolute;
-	top: 10px;
-	left: 300px;
-	width:300px;
-}
-#header .loading img,
-#header .loading p{float:left; margin:0; font-weight:normal;}
-#header .loading p{margin:4px 0 0 10px;}
-
 .pull-left { float: left;}
 .pull-right {float:right;}
 .upgrade-all {margin:5px 0;}
-
-
 
 
 @media only screen and (min-width: 320px) and (max-width: 529px) {
