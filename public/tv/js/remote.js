@@ -82,6 +82,10 @@ function goLeft(socket, $scope, player){
         if (index <= 0 ){
             index = 0;
         }
+        
+        //jQuery
+        $('.current').scrollintoview({direction: "vertical"});
+        
         $scope.focused = index;
     } else {
         player.previous();
@@ -99,6 +103,10 @@ function goRight(socket, $scope, player){
         if (index >= $scope.tvshows.length) {
             index = 0;
         }
+       
+        //jQuery
+        $('.current').scrollintoview({direction: "vertical"});
+
         $scope.focused = index;
     }else {
         player.next();

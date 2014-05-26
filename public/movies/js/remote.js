@@ -81,6 +81,10 @@ function goLeft(socket, $scope){
         index = 0;
     }
     $scope.focused = index;
+    
+    //jQuery
+    $('.current').scrollintoview({direction: "vertical"});
+    
     $scope.$apply(function(){
         $scope.focused;
     });
@@ -94,6 +98,10 @@ function goRight(socket, $scope){
         index = 0;
     }
     $scope.focused = index;
+    
+    //jQuery
+    $('.current').scrollintoview({direction: "vertical"});
+    
     $scope.$apply(function(){
         $scope.focused;
     });
