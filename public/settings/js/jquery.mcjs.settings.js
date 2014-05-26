@@ -42,5 +42,17 @@ $(function() {
 		$('input.oauth').val(localStorage.getItem('oauth_token'));
 		$('input.oauthKeyHidden').val(localStorage.getItem('oauth_key'));
 	}
+    
+
+    $("#language option").each(function(){
+        var lang = $(this).text().toString();
+        var Langs = isoLangs[lang];
+        
+        if(Langs !== undefined){
+            $(this).text(Langs['nativeName']); 
+        }
+
+       
+    });
 
 });
