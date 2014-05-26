@@ -49,20 +49,20 @@ html(lang="en", ng-app="movieApp")
             #wrapper  
                 #moviebrowser
                     ul.movies
-                        li.movieposter.boxed(ng-repeat="movie in movies | filter:query | orderBy:orderProp", ng-mouseover="changeBackdrop(movie.backdrop_path)", ng-class="{current: focused == $index }")
-                            .imageWrapper
-                                img.movieposter(ng-src="{{movie.poster_path}}", onerror="this.src='/movies/css/img/nodata.jpg'")
-                            .overlay.mcjs-rc-clickable(ng-click="playMovie(movie.original_name)")
-                            h1.movie-title{{movie.title}}
-                            .overview
-                                .summary {{movie.overview}}
-                            .specs
-                                p
-                                    strong {{movie.genre}}
-                                p
-                                    strong #{lingua.movies_Runtime}: {{movie.runtime}} min
-                            .cdNumber(ng-show="movie.cdNumber.length > 0")
-                                span {{movie.cdNumber}}
+                        li.movieposter.boxed(ng-repeat="movie in movies | filter:query | orderBy:orderProp", ng-focus="changeBackdrop(movie.backdrop_path)", ng-mouseover="changeBackdrop(movie.backdrop_path)", ng-class="{current: focused == $index }")
+                                .imageWrapper
+                                    img.movieposter(ng-src="{{movie.poster_path}}", onerror="this.src='/movies/css/img/nodata.jpg'")
+                                .overlay.mcjs-rc-clickable(ng-click="playMovie(movie.original_name)")
+                                h1.movie-title{{movie.title}}
+                                .overview
+                                    .summary {{movie.overview}}
+                                .specs
+                                    p
+                                        strong {{movie.genre}}
+                                    p
+                                        strong #{lingua.movies_Runtime}: {{movie.runtime}} min
+                                .cdNumber(ng-show="movie.cdNumber.length > 0")
+                                    span {{movie.cdNumber}}
                             
                 h2.loading(ng-show="!movies") #{lingua.loading}
                 

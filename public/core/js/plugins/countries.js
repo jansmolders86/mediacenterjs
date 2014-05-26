@@ -145,7 +145,7 @@ var isoLangs = {
     },
     "da":{
         "name":"Danish",
-        "nativeName":"dansk"
+        "nativeName":"Dansk"
     },
     "dv":{
         "name":"Divehi; Dhivehi; Maldivian;",
