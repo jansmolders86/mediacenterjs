@@ -48,7 +48,8 @@ h2.loading{top:80px;}
 	overflow:hidden;
 }
 
-#tvshows.side{
+#tvshows.side,
+.side{
     margin-left:300px;
 }
 
