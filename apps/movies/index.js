@@ -53,6 +53,7 @@ exports.get = function(req, res){
 				functions.getGenres(req, res);
 				break;
 			case('loadItems'):
+                serveToFrontEnd = true;
                 functions.loadItems(req, res, serveToFrontEnd);
 				break;
             case('backdrops'):

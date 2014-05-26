@@ -45,6 +45,7 @@ exports.get = function(req, res){
 
     if (!optionalParam) {
         if(infoRequest === 'loadItems') {
+            serveToFrontEnd = true;
             functions.loadItems(req, res, serveToFrontEnd);
         }
 	}

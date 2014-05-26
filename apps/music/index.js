@@ -40,6 +40,7 @@ exports.get = function(req, res, next){
         , serveToFrontEnd = null;
 	
 	if (infoRequest == 'loadItems'){
+        serveToFrontEnd = true;
         functions.loadItems(req,res, serveToFrontEnd);
 	}
 	

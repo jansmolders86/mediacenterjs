@@ -39,8 +39,10 @@ exports.loadItems = function (req, res, serveToFrontEnd){
     var metaType = "tv";
     if(serveToFrontEnd == false){
         fetchTVData(req, res, metaType, serveToFrontEnd);
-    } else{  
-        serveToFrontEnd = true; 
+    } else if(serveToFrontEnd === undefined || serveToFrontEnd === null){
+        var serveToFrontEnd = true; 
+        getTvshows(req, res, metaType, serveToFrontEnd); 
+    }  else{  
         getTvshows(req, res, metaType, serveToFrontEnd); 
     }
 };

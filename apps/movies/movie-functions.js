@@ -37,6 +37,9 @@ exports.loadItems = function (req, res, serveToFrontEnd){
     var metaType = "movie";
     if(serveToFrontEnd === false){
         fetchMovieData(req, res, metaType, serveToFrontEnd);
+    } else if(serveToFrontEnd === undefined || serveToFrontEnd === null){
+        var serveToFrontEnd = true; 
+        getMovies(req, res, metaType, serveToFrontEnd);
     } else{
         serveToFrontEnd = true; 
         getMovies(req, res, metaType, serveToFrontEnd);
