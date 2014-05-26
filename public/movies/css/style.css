@@ -217,7 +217,9 @@ h1.movie-title{
     position: relative;
 }
 
-.movieposter:hover .summary{
+.movieposter:hover .summary,
+.movieposter.focused .summary,
+.movieposter.current .summary{
     -webkit-animation: overview-slide 15s linear infinite;
     animation: overview-slide 15s linear infinite;
 }

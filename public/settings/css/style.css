@@ -35,7 +35,7 @@ label[for="oauthKey"] {
     overflow:hidden; 
     position: relative; 
     width: 100%;
-    padding:20px 0;
+    padding:20px;
     margin-bottom:10px;
 }
 
@@ -44,7 +44,7 @@ label[for="oauthKey"] {
 
 .access-table{background:#ddd; float:left; width:70%;}
 .configurable-options{background:#f5f5f5; float:left; width:70%;}
-#oauthContainer{background:#43464F; padding:20px; width:360px; padding: 20px 20px 30px;}
+#oauthContainer{background:#43464F;}
 
 .cache-management .btn{box-shadow: inset 0px 1px 0px #fb8521, 0px 4px 0px 0px #c96311, 0px 7px 5px #333; width: 240px;}
 
