@@ -31,14 +31,13 @@ db.on('info', function (text) { console.log('Database info:', text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
 exports.loadItems = function (req, res, serveToFrontEnd){
-    console.log(serveToFrontEnd)
     var metaType = "music";
     if(serveToFrontEnd === false){
         fetchMusicData(req, res, metaType, serveToFrontEnd);
     } else if(serveToFrontEnd === undefined || serveToFrontEnd === null){
         var serveToFrontEnd = true; 
         getCompleteCollection(req, res, metaType, serveToFrontEnd);
-    }else {
+    } else {
         getCompleteCollection(req, res, metaType, serveToFrontEnd);
     }
 };

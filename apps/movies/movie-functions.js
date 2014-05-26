@@ -158,20 +158,20 @@ getMovies = function(req, res, metaType, serveToFrontEnd){
         overview  		: String,
         cd_number  		: String,
         adult           : String
-    }, function(err, rows) {
+    }, 
+    function(err, rows) {
         if(err){
             console.log("DB error",err);
             serveToFrontEnd = true;
             fetchMovieData(req, res, metaType, serveToFrontEnd);
         }
         if (typeof rows !== 'undefined' && rows.length > 0){
-
             if(serveToFrontEnd !== false){
                 res.json(rows);
             }
-
         } else {
-            console.log('Could not index any movies, please check given movie collection path');
+            serveToFrontEnd = true;
+            fetchMovieData(req, res, metaType, serveToFrontEnd);
         }
     });
 }
