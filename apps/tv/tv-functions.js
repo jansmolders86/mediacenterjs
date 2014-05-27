@@ -32,6 +32,9 @@ var db = dblite('./lib/database/mcjs.sqlite');
 db.on('info', function (text) { console.log(text) });
 db.on('error', function (err) { console.error('Database error: ' + err) });
 
+
+var getNewFiles = false;
+
 //Create tables
 db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
 
@@ -86,15 +89,19 @@ exports.sendState = function (req, res){
 
 /** Private functions **/
 
-fetchTVData = function(req, res, metaType, serveToFrontEnd) {
+fetchTVData = function(req, res, metaType, serveToFrontEnd,getNewFiles) {
     metafetcher.fetch(req, res, metaType, function(type){
         if(type === metaType){
-            getTvshows(req, res, metaType, serveToFrontEnd);
+            
+            if(getNewFiles === undefined){
+                getNewFiles = true; 
+            } 
+            getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles);
         }
     });
 }
 
-function getTvshows(req, res, metaType, serveToFrontEnd){
+function getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles){
     var count = 0;
     var itemsDone = 0;
     db.query('SELECT * FROM tvshows',{
@@ -106,36 +113,40 @@ function getTvshows(req, res, metaType, serveToFrontEnd){
         if(err){
             console.log("DB error",err);
             serveToFrontEnd = true;
-            fetchTVData(req, res, metaType, serveToFrontEnd);
+            getNewFiles = true;
+            fetchTVData(req, res, metaType, serveToFrontEnd, getNewFiles);
         }
-        if (typeof rows !== 'undefined' && rows.length){
-            var ShowList = [];
+        if (rows !== null && rows !== undefined) {
+                var ShowList = [];
+                var getNewFiles = false;
+                count = rows.length;
+                console.log('Found '+count+' shows, getting additional data...');
 
-            count = rows.length;
-            console.log('Found '+count+' shows, getting additional data...');
-            
-            rows.forEach(function(item, value){
-                var showTitle       = item.title
-                , showBanner        = item.banner
-                , showGenre         = item.genre
-                , showCertification = item.certification;
+                rows.forEach(function(item, value){
+                    var showTitle       = item.title
+                    , showBanner        = item.banner
+                    , showGenre         = item.genre
+                    , showCertification = item.certification;
 
-                getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
-                    console.log(serveToFrontEnd)
-                    if(availableEpisodes !== null) {
-                        ShowList.push(availableEpisodes);
-                        itemsDone++;
+                    getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
+                        if(availableEpisodes !== null) {
+                            ShowList.push(availableEpisodes);
+                            itemsDone++;
 
-                        if (count === itemsDone && serveToFrontEnd === true) {
-                            console.log('Done...');
-                            res.json(ShowList);
+                            if (count === itemsDone && serveToFrontEnd === true) {
+                                console.log('Done...');
+                                res.json(ShowList);
+                            }
                         }
-                    }
+                    });
                 });
-            });
         } else {
-            serveToFrontEnd = true;
-            fetchTVData(req, res, metaType, serveToFrontEnd);
+            if(getNewFiles = true){
+                serveToFrontEnd = true;
+                getNewFiles = false;
+                fetchTVData(req, res, metaType, serveToFrontEnd, getNewFiles);
+               
+            }   
         }
     }); 
     
