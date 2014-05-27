@@ -108,11 +108,10 @@ function getTvshows(req, res, metaType, serveToFrontEnd){
             serveToFrontEnd = true;
             fetchTVData(req, res, metaType, serveToFrontEnd);
         }
-        if (typeof rows !== 'undefined' && rows.length > 0){
+        if (typeof rows !== 'undefined' && rows.length){
             var ShowList = [];
 
             count = rows.length;
-
             console.log('Found '+count+' shows, getting additional data...');
             
             rows.forEach(function(item, value){
@@ -128,18 +127,15 @@ function getTvshows(req, res, metaType, serveToFrontEnd){
                         itemsDone++;
 
                         if (count === itemsDone && serveToFrontEnd === true) {
-                            console.log('Done...')
+                            console.log('Done...');
                             res.json(ShowList);
                         }
                     }
                 });
-
-
             });
-
-
         } else {
-            console.log('Could not index any tv shows, please check given tv collection path...');
+            serveToFrontEnd = true;
+            fetchTVData(req, res, metaType, serveToFrontEnd);
         }
     }); 
     
