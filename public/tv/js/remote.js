@@ -140,7 +140,7 @@ function pushPause(socket, $scope){
 }
 
 function pushBack(socket, $scope, player){
-    if(!document.activeElement === input){
+    if(!document.activeElement === $('input')){
         e.preventDefault();
         if(player.playlist.length > 0) {
             var tvshow = player.playlist[player.current.tvshow];

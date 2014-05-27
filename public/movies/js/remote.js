@@ -127,7 +127,7 @@ function pushPause(socket, $scope){
 }
 
 function pushBack(socket, $scope){
-    if(!document.activeElement === input){
+    if(!document.activeElement === $('input')){
         e.preventDefault();
         if($scope.playing === true) {
             videojs("player").destroy();

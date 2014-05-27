@@ -139,7 +139,7 @@ function pushPause(socket, $scope, player, audio){
 }
 
 function pushBack(socket, $scope, player, audio){
-    if(!document.activeElement === input){
+    if(!document.activeElement === $('input')){
         e.preventDefault();
         if(player.playlist.length > 0) {
             var album = player.playlist[player.current.album];
