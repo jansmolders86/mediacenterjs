@@ -62,7 +62,7 @@ exports.backdrops = function (req, res){
         cd_number  		: String,
         adult           : String
     }, function(rows) {
-        if (typeof rows !== 'undefined' && rows.length > 0){
+        if (rows !== null && rows !== undefined){
             var backdropArray = [];
             rows.forEach(function(item){
                var backdrop = item.backdrop_path;
@@ -165,7 +165,7 @@ getMovies = function(req, res, metaType, serveToFrontEnd){
             serveToFrontEnd = true;
             fetchMovieData(req, res, metaType, serveToFrontEnd);
         }
-        if (typeof rows !== 'undefined' && rows.length > 0){
+        if (rows !== null && rows !== undefined){
             if(serveToFrontEnd !== false){
                 res.json(rows);
             }
