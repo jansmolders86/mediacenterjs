@@ -66,31 +66,35 @@ getCompleteCollection = function(req, res, metaType, serveToFrontEnd){
             var albums = [];
 
             count = rows.length;
-            console.log('Found ' + count + ' albums, getting additional data...');
-            rows.forEach(function (item, value) {
+			if(count !== 0){
+				console.log('Found ' + count + ' albums, getting additional data...');
+				rows.forEach(function (item, value) {
 
-                if (item !== null && item !== undefined) {
-                    var album       = item.album
-                    , artist    = item.artist
-                    , year      = item.year
-                    , genre     = item.genre
-                    , cover     = item.cover;
+					if (item !== null && item !== undefined) {
+						var album       = item.album
+						, artist    = item.artist
+						, year      = item.year
+						, genre     = item.genre
+						, cover     = item.cover;
 
-                    getTracks(album, artist, year, genre, cover, function (completeAlbum) {
-                        count--;
-                        albums.push(completeAlbum);
-                        if (count == 0) {
-                            console.log('Indexing complete, serve to client:', serveToFrontEnd);
-                            if(serveToFrontEnd === true){
-                                console.log('Sending data to client');
-                                return res.json(albums);
-                                res.end();
-                            }
-                        }
-                    });
-                }
-
-            });
+						getTracks(album, artist, year, genre, cover, function (completeAlbum) {
+							count--;
+							albums.push(completeAlbum);
+							if (count == 0) {
+								console.log('Indexing complete, serve to client:', serveToFrontEnd);
+								if(serveToFrontEnd === true){
+									console.log('Sending data to client');
+									return res.json(albums);
+									res.end();
+								}
+							}
+						});
+					}
+				});
+			} else {
+				var metaType = 'music';
+				fetchMusicData(req, res, metaType, serveToFrontEnd);
+			}
         } else {
             var metaType = 'music';
             fetchMusicData(req, res, metaType, serveToFrontEnd);

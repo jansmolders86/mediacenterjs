@@ -120,26 +120,33 @@ function getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles){
                 var ShowList = [];
                 var getNewFiles = false;
                 count = rows.length;
-                console.log('Found '+count+' shows, getting additional data...');
+				
+				if(count !== 0){
+					console.log('Found '+count+' shows, getting additional data...');
 
-                rows.forEach(function(item, value){
-                    var showTitle       = item.title
-                    , showBanner        = item.banner
-                    , showGenre         = item.genre
-                    , showCertification = item.certification;
+					rows.forEach(function(item, value){
+						var showTitle       = item.title
+						, showBanner        = item.banner
+						, showGenre         = item.genre
+						, showCertification = item.certification;
 
-                    getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
-                        if(availableEpisodes !== null) {
-                            ShowList.push(availableEpisodes);
-                            itemsDone++;
+						getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
+							if(availableEpisodes !== null) {
+								ShowList.push(availableEpisodes);
+								itemsDone++;
 
-                            if (count === itemsDone && serveToFrontEnd === true) {
-                                console.log('Done...');
-                                res.json(ShowList);
-                            }
-                        }
-                    });
-                });
+								if (count === itemsDone && serveToFrontEnd === true) {
+									console.log('Done...');
+									res.json(ShowList);
+								}
+							}
+						});
+					});
+				} else {
+					serveToFrontEnd = true;
+					getNewFiles = false;
+					fetchTVData(req, res, metaType, serveToFrontEnd, getNewFiles);
+				}
         } else {
             if(getNewFiles = true){
                 serveToFrontEnd = true;
