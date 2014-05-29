@@ -69,9 +69,7 @@ exports.backdrops = function (req, res){
                backdropArray.push(backdrop)
             });
             res.json(backdropArray);
-        } else {
-            console.log('Could not index any movies, please check given movie collection path');
-        }
+        } 
     });
 };
 
