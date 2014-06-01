@@ -162,8 +162,7 @@ getMovies = function(req, res, metaType, serveToFrontEnd){
             console.log("DB error",err);
             serveToFrontEnd = true;
             fetchMovieData(req, res, metaType, serveToFrontEnd);
-        }
-        if (rows !== null && rows !== undefined){
+        } else if (rows !== null && rows !== undefined){
             if(serveToFrontEnd !== false){
                 res.json(rows);
             }

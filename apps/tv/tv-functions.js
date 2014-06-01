@@ -115,8 +115,7 @@ function getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles){
             serveToFrontEnd = true;
             getNewFiles = true;
             fetchTVData(req, res, metaType, serveToFrontEnd, getNewFiles);
-        }
-        if (rows !== null && rows !== undefined) {
+        } else if (rows !== null && rows !== undefined) {
                 var ShowList = [];
                 var getNewFiles = false;
                 count = rows.length;
