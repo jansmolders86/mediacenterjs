@@ -20,17 +20,11 @@ var fs = require('fs.extra')
 	, file_utils = require('../../lib/utils/file-utils')
 	, app_cache_handler = require('../../lib/handlers/app-cache-handler')
 	, colors = require('colors')
-	, os = require('os')
     , metafetcher = require('../../lib/utils/metadata-fetcher')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
-var dblite = require('dblite')
-if(os.platform() === 'win32'){
-    dblite.bin = "./bin/sqlite3/sqlite3";
-}
-var db = dblite('./lib/database/mcjs.sqlite');
-db.on('info', function (text) { console.log(text) });
-db.on('error', function (err) { console.error('Database error: ' + err) });
+    var database = require('../../lib/utils/database-connection');
+    var db = database.db;
 
 
 exports.loadItems = function (req, res, serveToFrontEnd){
@@ -135,6 +129,7 @@ exports.sendState = function (req, res){
 /** Private functions **/
 
 fetchMovieData = function(req, res, metaType, serveToFrontEnd) {
+    console.log('Fetching movie data...');
     metafetcher.fetch(req, res, metaType, function(type){
         if(type === metaType){
             getMovies(req, res, metaType, serveToFrontEnd);
@@ -143,6 +138,7 @@ fetchMovieData = function(req, res, metaType, serveToFrontEnd) {
 }
 
 getMovies = function(req, res, metaType, serveToFrontEnd){
+    console.log('Loading movie data...', serveToFrontEnd);
     db.query('SELECT * FROM movies',{
         original_name  	: String,
         title 		    : String,
@@ -162,11 +158,11 @@ getMovies = function(req, res, metaType, serveToFrontEnd){
             console.log("DB error",err);
             serveToFrontEnd = true;
             fetchMovieData(req, res, metaType, serveToFrontEnd);
-        } else if (rows !== null && rows !== undefined){
-            if(serveToFrontEnd !== false){
-                res.json(rows);
-            }
+        } else if (rows !== null && rows !== undefined && serveToFrontEnd !== false && rows.length > 0){
+            console.log('Sending data to client...');
+            res.json(rows);
         } else {
+            console.log('Getting data...');
             serveToFrontEnd = true;
             fetchMovieData(req, res, metaType, serveToFrontEnd);
         }

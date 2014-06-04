@@ -241,13 +241,8 @@ app.post('/clearCache', function(req, res){
                 return res.send('Error clearing cache', e);
             }
 
-            var dblite = require('dblite')
-            if(os.platform() === 'win32'){
-                dblite.bin = "./bin/sqlite3/sqlite3";
-            }
-            var db = dblite('./lib/database/mcjs.sqlite');
-            db.on('info', function (text) { console.log(text) });
-            db.on('error', function (err) { console.error('Database error: ' + err) });
+            var database = require('./lib/utils/database-connection');
+            var db = database.db;
             db.query('DROP TABLE IF EXISTS ' + name);
 
 

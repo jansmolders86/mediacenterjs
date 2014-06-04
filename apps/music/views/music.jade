@@ -15,6 +15,7 @@ html(lang="en", ng-app="musicApp")
             link(rel='stylesheet', href='/themes/' + selectedTheme +'/style.css')
             script(src='/themes/' + selectedTheme +'/script.js')
         script(src="/core/js/plugins/jquery/jquery.scrollintoview.min.js")
+        script(src="/core/js/plugins/fastclick.js")
         script(src="/core/js/plugins/jquery/jquery.idle-timer.js")
         script(src="/core/js/plugins/socket.io.min.js")
         script(src="/core/js/plugins/jquery/jquery.i18n.properties.-1.0.9.js")
@@ -26,6 +27,10 @@ html(lang="en", ng-app="musicApp")
         script.
             $(function(){
                 $('body').mcjs();
+                
+                window.addEventListener('load', function() {
+                    FastClick.attach(document.body);
+                }, false);
             });
             
         title Music

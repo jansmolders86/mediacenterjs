@@ -17,6 +17,7 @@ html(lang="en", ng-app="tvApp")
             script(src='/themes/' + selectedTheme +'/script.js')
         script(src="http://vjs.zencdn.net/4.3/video.js")
         script(src="/core/js/plugins/socket.io.min.js")
+        script(src="/core/js/plugins/fastclick.js")
         script(src="/core/js/plugins/jquery/jquery.scrollintoview.min.js")
         script(src="/core/js/plugins/jquery/jquery.idle-timer.js")
         script(src="/core/js/plugins/jquery/jquery.i18n.properties.-1.0.9.js")
@@ -29,6 +30,10 @@ html(lang="en", ng-app="tvApp")
         script.
             $(function(){
                 $('body').mcjs();
+                
+                window.addEventListener('load', function() {
+                    FastClick.attach(document.body);
+                }, false);
             });
             
 

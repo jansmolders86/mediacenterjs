@@ -16,19 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 var file_utils = require('../../lib/utils/file-utils')
-    , os = require('os')
     , metafetcher = require('../../lib/utils/metadata-fetcher')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration()
 	, music_playback_handler = require('./music-playback-handler'); 
 
-// Init Database
-var dblite = require('dblite')
-if(os.platform() === 'win32'){
-    dblite.bin = "./bin/sqlite3/sqlite3";
-}
-var db = dblite('./lib/database/mcjs.sqlite');
-db.on('info', function (text) { console.log('Database info:', text) });
-db.on('error', function (err) { console.error('Database error: ' + err) });
+    var database = require('../../lib/utils/database-connection');
+    var db = database.db;
 
 exports.loadItems = function (req, res, serveToFrontEnd){
     var metaType = "music";

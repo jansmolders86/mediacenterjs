@@ -19,19 +19,12 @@
 var fs = require('fs.extra')
 	, file_utils = require('../../lib/utils/file-utils')
 	, colors = require('colors')
-	, os = require('os')
     , path = require('path')
     , metafetcher = require('../../lib/utils/metadata-fetcher')
 	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
-var dblite = require('dblite')
-if(os.platform() === 'win32'){
-    dblite.bin = "./bin/sqlite3/sqlite3";
-}
-var db = dblite('./lib/database/mcjs.sqlite');
-db.on('info', function (text) { console.log(text) });
-db.on('error', function (err) { console.error('Database error: ' + err) });
-
+    var database = require('../../lib/utils/database-connection');
+    var db = database.db;
 
 var getNewFiles = false;
 
