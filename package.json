@@ -63,7 +63,7 @@
         "semver"            : ">=2.0.0",
         "async"             : "0.2.9",
         "musicmetadata"     : "0.2.5",
-        "dblite"            : "0.4.1",
+        "dblite"            : ">=0.5.0",
         "walk"              : ">=1.2.2",
         "underscore"        : "~1.5.2",
         "moviedb"           : "~0.1.0",
