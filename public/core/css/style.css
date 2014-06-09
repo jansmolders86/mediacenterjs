@@ -56,6 +56,7 @@ body{
 	position:relative;
 	font-family: 'Open Sans', sans-serif; 
 	color: #747474;
+    background:none;
 }
 
 img{border:0; display:block;}
@@ -213,10 +214,11 @@ p a:hover{text-decoration:none;}
 }
 
 
-a.backlink{ 
+a.backlink, 
+a.backlink:hover{ 
 	display:inline-block;
 	float:left; 
-	margin-top:5px; 
+    text-decoration:none;
 	margin-right:30px;
 	width: 32px;
 	height:32px;
