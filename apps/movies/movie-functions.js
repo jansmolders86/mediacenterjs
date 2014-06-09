@@ -69,7 +69,7 @@ exports.backdrops = function (req, res){
 
 
 
-exports.playMovie = function (req, res, movieTitle){
+exports.playMovie = function (req, res, platform, movieTitle){
 	file_utils.getLocalFile(config.moviepath, movieTitle, function(err, file) {
 		if (err) console.log(err .red);
 		if (file) {
@@ -84,7 +84,7 @@ exports.playMovie = function (req, res, movieTitle){
             subtitleTitle = subtitleTitle.split(".");
             subtitleTitle = subtitleTitle[0]+".srt";
 
-            movie_playback_handler.startPlayback(res, movieUrl, movieTitle, subtitleUrl, subtitleTitle);
+            movie_playback_handler.startPlayback(res, platform, movieUrl, movieTitle, subtitleUrl, subtitleTitle);
     
 		} else {
 			console.log("File " + movieTitle + " could not be found!" .red);

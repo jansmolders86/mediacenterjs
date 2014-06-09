@@ -83,7 +83,19 @@ movieApp.controller('movieCtrl', function($scope, $http) {
 
 function playMovie(data, $http){
     var orginalName = data;
-    $http.get('/movies/'+orginalName+'/play').success(function(data) {
+    
+    var platform = 'desktop';
+    if (navigator.userAgent.match(/Android/i)){
+        platform = 'android';
+    } else if(navigator.userAgent.match(/iPhone/i)
+            || navigator.userAgent.match(/iPhone/i)
+            || navigator.userAgent.match(/iPad/i)
+            || navigator.userAgent.match(/iPod/i))
+    {
+        platform = 'ios';    
+    }
+
+    $http.get('/movies/'+orginalName+'/play/'+platform).success(function(data) {
         var fileName                =  orginalName   
             , outputFile            =   fileName.replace(/ /g, "-")
             , extentionlessFile     =   outputFile.replace(/\.[^/.]+$/, "")

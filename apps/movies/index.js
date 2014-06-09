@@ -42,8 +42,14 @@ exports.index = function(req, res){
 exports.get = function(req, res){
 	var infoRequest = req.params.id,
 		optionalParam = req.params.optionalParam,
+        platform = req.params.action,
         serveToFrontEnd = null
 	
+    console.log('infoRequest',infoRequest)
+    console.log('optionalParam',optionalParam)
+    console.log('platform',platform)
+    
+    
 	if(infoRequest === 'filter') {
 		functions.filter(req, res, optionalParam);
 	}
@@ -61,10 +67,20 @@ exports.get = function(req, res){
                 break;
 		}	
 	}
-
-    if(optionalParam === 'play'){
+    
+    if(platform !== undefined && optionalParam === 'play'){
         var movieTitle = infoRequest.replace(/\+/g, " ");
-        functions.playMovie(req, res, movieTitle);
+        switch(platform) {
+            case('desktop'):
+                functions.playMovie(req, res, platform, movieTitle);
+                break;
+            case('ios'):
+                functions.playMovie(req, res, platform, movieTitle);
+                break;
+            case('android'):
+                functions.playMovie(req, res, platform, movieTitle);
+                break;
+        }
     }
 };
 

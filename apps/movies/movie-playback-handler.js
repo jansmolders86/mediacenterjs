@@ -37,17 +37,13 @@ var colors = require('colors')
  * @param movieUrl          The URL to the Movie
  * @param movieFile         The Movie-File
  */
-exports.startPlayback = function(response, movieUrl, movieFile, subtitleUrl, subtitleTitle) {
+exports.startPlayback = function(response,platform, movieUrl, movieFile, subtitleUrl, subtitleTitle) {
+    console.log('Getting ready to transcode '+movieFile+' for '+platform);
     var fileName =  movieFile.replace(/\.[^.]*$/,'')
         , outputName =  fileName.replace(/ /g,"-")
         , ExecConfig = {  maxBuffer: 9000*1024 }
         , outputPath = "./public/data/movies/"+outputName+".mp4"
         , hasSub = false;
-
-	if(os.platform() === 'win32'){
-		var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
-		ExecConfig = {  maxBuffer: 9000*1024, env: process.env.ffmpegPath };
-	}
 
     GetMovieDurarion(response, movieUrl, movieFile, function(data){
         var movieDuration = data;
@@ -64,7 +60,7 @@ exports.startPlayback = function(response, movieUrl, movieFile, subtitleUrl, sub
 
                 if(!fs.existsSync(outputPath) || data.transcodingstatus === 'pending'){
                     // Start transcode if file was deleted.
-                    startTranscoding(movieUrl, movieFile, outputPath, ExecConfig);
+                    startTranscoding(response,movieUrl,platform, movieFile, outputPath, ExecConfig);
                 };
 
             } else {
@@ -80,7 +76,7 @@ exports.startPlayback = function(response, movieUrl, movieFile, subtitleUrl, sub
                             
 
                             if(fs.existsSync(movieUrl)){
-                                startTranscoding(movieUrl, movieFile, outputPath, ExecConfig);
+                                startTranscoding(response,movieUrl,platform, movieFile, outputPath, ExecConfig);
                             } else{
                                 console.log('Movie file '+ movieUrl + 'not found, did you move or delete it?');
                             }
@@ -188,26 +184,111 @@ checkProgression = function(movieFile, callback) {
 }
 
 
-startTranscoding = function(movieUrl, movieFile, outputPath, ExecConfig){
+startTranscoding = function(response, movieUrl, platform,movieFile, outputPath, ExecConfig){
+    var ffmpeg = require('fluent-ffmpeg');
     
-    if(!fs.existsSync(outputPath)){
-        
-       var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -sc_threshold 0 -s 1280x720 -profile:v baseline -keyint_min 150 -deinterlace -maxrate 10000000 -bufsize 10000000 -b 1200k -acodec aac -ar 48000 -ab 192k -strict experimental -frag_duration 1000 -movflags +frag_keyframe+empty_moov "'+outputPath+'"';
-        var exec = require('child_process').exec
-        , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
-            if (err) {
-                console.log('FFMPEG error: ',err) ;
-            } else{
-                console.log('Transcoding complete');
-
-                db.query('UPDATE progressionmarker SET transcodingstatus = "done" WHERE movietitle =? ', [ movieFile ]);
-            }
-        });
-
-        child.stdout.on('data', function(data) { console.log(data.toString()); });
-        child.stderr.on('data', function(data) { console.log(data.toString()); });
-        child.on('exit', function() {  console.error('Child process exited'); });
-        
+    if(os.platform() === 'win32'){
+        var ffmpegPath = './bin/ffmpeg/ffmpeg.exe'
+        ExecConfig = {  maxBuffer: 9000*1024, env: process.env.ffmpegPath };
     }
-  
+    
+    var FFMPEG_TIMEOUT = 15000;
+    var MOBILE_FFMPEG_OPTS = [
+        '-threads 0', 
+        '-loglevel quiet',
+        '-ac 2', 
+        '-b:a 160000'];
+    
+    
+    if(!fs.existsSync(outputPath)){ 
+        if(platform === 'desktop'){
+            browserTranscoding(response, movieUrl, platform,movieFile, outputPath, ExecConfig);  
+        } else if(platform === 'android'){
+            androidTranscoding(response, movieUrl, platform,movieFile, outputPath, ExecConfig, ffmpeg, MOBILE_FFMPEG_OPTS, ffmpegPath, FFMPEG_TIMEOUT);
+        } else if(platform === 'ios'){
+            iosTranscoding(response, movieUrl, platform,movieFile, outputPath, ExecConfig, ffmpeg, MOBILE_FFMPEG_OPTS, ffmpegPath, FFMPEG_TIMEOUT);
+        }
+    }
+}
+
+browserTranscoding = function(response, movieUrl, platform,movieFile, outputPath, ExecConfig){
+    console.log('Starting transcoding for', platform);
+    var ffmpeg = 'ffmpeg -i "'+movieUrl+'" -g 52 -threads 0 -vcodec libx264 -coder 0 -flags -loop -pix_fmt yuv420p -crf 22 -subq 0 -sc_threshold 0 -s 1280x720 -profile:v baseline -keyint_min 150 -deinterlace -maxrate 10000000 -bufsize 10000000 -b 1200k -acodec aac -ar 48000 -ab 192k -strict experimental -frag_duration 1000 -movflags +frag_keyframe+empty_moov "'+outputPath+'"';
+    var exec = require('child_process').exec
+    , child = exec(ffmpeg, ExecConfig, function(err, stdout, stderr) {
+        if (err) {
+            console.log('FFMPEG error: ',err) ;
+        } else{
+            console.log('Transcoding complete');
+
+            db.query('UPDATE progressionmarker SET transcodingstatus = "done" WHERE movietitle =? ', [ movieFile ]);
+        }
+    });  
+    child.stdout.on('data', function(data) { console.log(data.toString()); });
+    child.stderr.on('data', function(data) { console.log(data.toString()); });
+    child.on('exit', function() {  console.error('Child process exited'); });
+}
+
+
+iosTranscoding = function(response, movieUrl, platform,movieFile, outputPath, ExecConfig, ffmpeg, MOBILE_FFMPEG_OPTS, ffmpegPath, FFMPEG_TIMEOUT){
+    console.log('Starting transcoding for', platform);
+    var IOS_FFMPEG_OPTS = [
+        '-vcodec libx264',
+        '-pix_fmt yuv420p',
+        '-s qvga',
+        '-segment_list_type m3u8',
+        '-map 0:v',
+        '-map 0:a:0',
+        '-c:a mp3',
+        '-f hls',
+        '-hls_time 10',
+        '-hls_list_size 6',
+        '-hls_wrap 18',
+        '-start_number 1',
+        '-deinterlace'].concat(MOBILE_FFMPEG_OPTS);
+
+    response.writeHead(200, { 
+        'Content-Type':'application/x-mpegURL', 
+        'Content-Length':movieFile.size	
+    });
+
+
+    var proc = new ffmpeg({ source: movieUrl, nolog: true, timeout: FFMPEG_TIMEOUT })
+    if(os.platform() === 'win32'){
+        proc.setFfmpegPath(ffmpegPath)
+    }
+    proc.addOptions(MOBILE_FFMPEG_OPTS)
+    proc.writeToStream(response, function(return_code, error){
+    });
+}
+
+androidTranscoding = function(response, movieUrl, platform,movieFile, outputPath, ExecConfig){
+    console.log('Starting transcoding for', platform);
+    response.writeHead(200, { 
+        'Content-Type':'video/webm', 
+        'Content-Length':movieFile.size
+    });
+
+    var ANDROID_FFMPEG_OPTS = [
+        '-vcodec libx264', 
+        '-vb 250k',
+        '-s 1280x720',
+        '-profile:v baseline',
+        '-keyint_min 150', 
+        '-pix_fmt yuv420p',
+        '-deinterlace',
+        '-c:a mp3', 
+        '-f mp4',
+        '-movflags',
+        'frag_keyframe+empty_moov']
+    .concat(MOBILE_FFMPEG_OPTS);
+
+    var proc = new ffmpeg({ source: movieUrl, nolog: true, timeout: FFMPEG_TIMEOUT })
+    if(os.platform() === 'win32'){
+        proc.setFfmpegPath(ffmpegPath)
+    }
+    proc.addOptions(MOBILE_FFMPEG_OPTS)
+    proc.writeToStream(response, function(return_code, error){
+    });
+
 }
