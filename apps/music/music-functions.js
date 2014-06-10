@@ -24,6 +24,9 @@ var file_utils = require('../../lib/utils/file-utils')
     var db = database.db;
 
 exports.loadItems = function (req, res, serveToFrontEnd){
+    db.query("CREATE TABLE IF NOT EXISTS albums (album TEXT PRIMARY KEY, artist TEXT, year INTEGER, genre TEXT, cover VARCHAR)");
+    db.query("CREATE TABLE IF NOT EXISTS tracks (title TEXT PRIMARY KEY, track INTEGER, album TEXT, artist TEXT, year INTEGER, genre TEXT, filename TEXT, filepath TEXT)");
+    
     var metaType = "music";
     var getNewFiles = true;
     if(serveToFrontEnd === false){
@@ -59,7 +62,7 @@ fetchMusicData = function(req, res, metaType, serveToFrontEnd, getNewFiles) {
 }
 
 
-getCompleteCollection = function(req, res, metaType, serveToFrontEnd, getNewFiles){ 
+getCompleteCollection = function(req, res, metaType, serveToFrontEnd, getNewFiles){    
     getAlbums(req, res, function(result){
         var count   = result.length;
         var albums  = [];
@@ -107,6 +110,7 @@ getAlbums = function(req, res, callback){
     },
     function(err, rows) {
         if(err){
+            db.query("CREATE TABLE IF NOT EXISTS albums (album TEXT PRIMARY KEY, artist TEXT, year INTEGER, genre TEXT, cover VARCHAR)");
             callback('none');
         } else if (rows !== undefined && rows !== null ){
             callback(rows);
@@ -128,6 +132,7 @@ getTracks = function (album, artist, year, genre, cover, callback){
         },
         function (err, rows) {
             if(err){
+                db.query("CREATE TABLE IF NOT EXISTS tracks (title TEXT PRIMARY KEY, track INTEGER, album TEXT, artist TEXT, year INTEGER, genre TEXT, filename TEXT, filepath TEXT)");
                 console.log('getTracks',err);
                 callback('err');
             }
