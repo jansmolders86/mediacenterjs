@@ -17,6 +17,10 @@
 */
 body{overflow: hidden;}
 
+.col-md-1 {
+width: 9.333333%;
+}
+
 #header{z-index:5;}
 #header h1 { padding-top: 9px;}
 
@@ -45,13 +49,11 @@ body{overflow: hidden;}
 }
 
 #library .album{
-    width:174px;
-    height: 250px;
-    float:left;
     background:#fff;
     margin:5px;
     position:relative;
     cursor:pointer;
+    height: 300px;
 }
 
 #library.side .album img,
@@ -69,11 +71,6 @@ body{overflow: hidden;}
 #library .album:hover img,
 #library .album.current img{
 	opacity:0.5;
-}
-
-#library .album img{
-    width:174px;
-    height:174px;
 }
 
 .album-title,
@@ -96,11 +93,6 @@ body{overflow: hidden;}
 #library .album .album-artist,
 #library .album .album-year {
     font-weight: normal;
-}
-
-.albums {
-    margin:0;
-    padding:0;
 }
 
 .album.current ol{
@@ -146,6 +138,7 @@ body{overflow: hidden;}
     min-height: 25px;
     line-height: 25px;
     cursor:pointer;
+    list-style: none;
 }
 
 #playlist .album li:hover{ background:#fff; }
@@ -228,18 +221,6 @@ body{overflow: hidden;}
 
 @media only screen and (min-width: 320px) and (max-width: 529px) {
     /* For phone layouts only */
-    #container{padding:0px; width:100%;}
-    #header h1 { padding-top: 2px;}
-    #library{padding-left:5px; }
     #library.side{display:none;}
-    #library .album{ width:150px; margin:5px;}
-    #library .album img{ width:150px; height:150px;}
     #playlist {padding-bottom:100px;}
-
-    .album-title,
-    .album-artist,
-    .album-year{
-        width: 130px;
-    }
-
 }

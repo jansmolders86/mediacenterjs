@@ -47,6 +47,10 @@ function remote(socket, $scope, player, audio){
         $('#search').val(data);
         $scope.query = data;
     });
+    
+    socket.on('server ready', function(data){ 
+        console.log('server ready!');
+    }) ;
 }
 
 

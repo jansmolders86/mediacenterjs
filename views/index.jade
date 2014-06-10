@@ -36,9 +36,7 @@ block additional_scripts
         });
 
 block body
-        #backdrop
-            img.backdropimg(src="/core/css/img/backdrop.png")
-        #header
+        header
             img.logo(src="/core/css/img/logo.png")
             h1 MediacenterJS
             -if(allowed === 'no')
@@ -48,10 +46,11 @@ block body
             #dateandtime
                 .time=time
                 .date=date
-        #wrapper
-            ul#tiles
-                each item in apps
-                    li.tile.boxed.mcjs-rc-controllable
-                        a(href="/" + item.appLink + "/").mcjs-rc-clickable
-                            img(src="/" + item.tileLink + "/tile.png")
-                            span=item.tileLink
+        .container
+            .row
+                ul#tiles
+                    each item in apps
+                        li.tile.boxed.mcjs-rc-controllable
+                            a(href="/" + item.appLink + "/").mcjs-rc-clickable
+                                img(src="/" + item.tileLink + "/tile.png")
+                                span=item.tileLink

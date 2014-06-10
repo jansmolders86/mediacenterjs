@@ -41,7 +41,7 @@ function remote(socket, $scope, player){
                 pushDashboard(socket,$scope);
                 break;
         }
-    });
+    }).removeListener('controlling', function(){});
     
     socket.on('sending', function(data){
         $('#search').val(data);

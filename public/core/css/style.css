@@ -134,7 +134,7 @@ p a:hover{text-decoration:none;}
 
 .homepage h1{text-transform: none; font-weight:300;}
 
-#header{
+header{
 	height:75px;
 	width:100%;
 	-webkit-box-sizing: border-box;
@@ -156,15 +156,15 @@ p a:hover{text-decoration:none;}
 	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
 }
 
-#header .logo{ float:left; height:45px; margin:0px 10px 0 0px; }
+header .logo{ float:left; height:45px; margin:0px 10px 0 0px; }
 
-#header h1{
+header h1{
 	padding: 0;
 	margin:0;
 	display: inline-block;
 }
 
-#header h4{
+header h4{
     position: absolute;
     bottom: -10px;
     left: 157px;
@@ -172,13 +172,13 @@ p a:hover{text-decoration:none;}
     font-size: 12px;
 }
 
-#header #search {
+header #search {
     position: absolute;
     right: 500px;
     top: 9px;
     width: 250px;
 }
-#header  #filter{
+header  #filter{
     position: absolute; 
     right:100px; 
     top:9px;
@@ -304,8 +304,9 @@ body > #screensaver{
 	display:none;
 }
 
+.tile { background:transparent; }
+
 .tile > a{
-	background:#000; 	
 	width: 100%;
 	height:  100%;
 	display:block;
@@ -323,7 +324,7 @@ body > #screensaver{
 .tile.focused{border:0!important;}
 .tile.focused img,
 .tile:hover > a >img {
-	opacity: 0.6;
+	opacity: 0.5;
 }
 
 #tiles{
@@ -361,10 +362,6 @@ body > #screensaver{
 
 #hiddenSetting{visibility:hidden; width:0; height:0; float:left;}
 
-.row{ min-height:30px; width:90%; float:left; padding:10px; position:relative;}
-.row.wrap{width:auto; clear:none;}
-.row a.cachelink{ margin:5px 0; display:inline-block;}
-
 input[type=text],
 input[type=password],
 select,
@@ -374,18 +371,13 @@ textarea{
 	font-size: 0.875em;
 	background-color: #FFFFFF;
 	border: 1px solid rgba(0, 0, 0, 0.15);
-	outline: none;
 	color: rgba(0, 0, 0, 0.7);
 	border-radius: 0.3125em;
 	-webkit-transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
 	transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
 	box-shadow: 0em 0em 0em 0em rgba(0, 0, 0, 0.3) inset;
-	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	box-sizing: border-box;
-	width:40%;
-	float:left;
+    height: 60px!important;
+    line-height: 60px!important;
 }
 
 input[type=text],

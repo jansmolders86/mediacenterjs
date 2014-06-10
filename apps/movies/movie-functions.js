@@ -29,6 +29,10 @@ var fs = require('fs.extra')
 
 exports.loadItems = function (req, res, serveToFrontEnd){
     var metaType = "movie";
+    
+    db.query("CREATE TABLE IF NOT EXISTS movies (original_name TEXT PRIMARY KEY, title TEXT, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number TEXT, adult TEXT)");
+
+    
     if(serveToFrontEnd === false){
         fetchMovieData(req, res, metaType, serveToFrontEnd);
     } else if(serveToFrontEnd === undefined || serveToFrontEnd === null){
@@ -102,13 +106,6 @@ exports.getGenres = function (req, res){
 	});
 };
 
-exports.filter = function (req, res, movieRequest){
-	db.query('SELECT * FROM movies WHERE genre =?', [movieRequest], { local_name: String }, function(rows) {
-		if (typeof rows !== 'undefined' && rows.length > 0) {
-			res.json(rows);
-		}
-	});
-};
 
 exports.sendState = function (req, res){ 
     db.query("CREATE TABLE IF NOT EXISTS progressionmarker (movietitle TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
@@ -155,6 +152,7 @@ getMovies = function(req, res, metaType, serveToFrontEnd){
     }, 
     function(err, rows) {
         if(err){
+            db.query("CREATE TABLE IF NOT EXISTS movies (original_name TEXT PRIMARY KEY, title TEXT, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number TEXT, adult TEXT)");
             console.log("DB error",err);
             serveToFrontEnd = true;
             fetchMovieData(req, res, metaType, serveToFrontEnd);

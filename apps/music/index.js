@@ -31,6 +31,10 @@ exports.index = function(req, res, next){
 	res.render('music',{
 		selectedTheme: config.theme
 	});
+            
+    var socket = require('../../lib/utils/setup-socket');
+    var io = socket.io;
+    io.emit('status', {msg: 'hoi'});
 };
 
 exports.get = function(req, res, next){	
