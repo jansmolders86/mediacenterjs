@@ -113,7 +113,7 @@ app.get("/", function(req, res, next) {
 
     DeviceInfo.storeDeviceInfo(req);
 
-	if(	 config.language === '' || config.location === '' || config.moviepath === undefined){
+	if(config.language === '' || config.location === '' || config.moviepath === undefined){
 
 		var localIP = getIPAddresses()
 		, sendLocalIP = '';
@@ -192,8 +192,6 @@ app.get("/", function(req, res, next) {
                 apps: apps
             });
         });
-
-
 	}
 });
 
