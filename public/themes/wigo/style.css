@@ -153,27 +153,14 @@ header{
 .homepage header{background:#fff; height:75px; padding-top:10px;}
 .homepage header h1{color:#333;}
 
-header #search,
-header #filter{
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    width: 400px;
-    height: 65px;
-    border: 0;
-    background: #f5f5f5;
-    -webkit-transition: width 0.5s ease-in-out;
-    -moz-transition: width 0.5s ease-in-out;
-    -o-transition: width 0.5s ease-in-out;
-    transition: width 0.5s ease-in-out;
-}
-
-header #search:focus{
-    width:600px;
+header #search {
+    position:absolute;
+    right:0;
+    top:0;
+    height: 76px!important;
 }
 
 header #filter{
-    right: 350px;
     /*Disable filter temorarily untill better implemented */
     display:none;
 }

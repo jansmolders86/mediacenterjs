@@ -22,7 +22,12 @@ body.playing > #player{display:block;}
 header.scrolling{ opacity:0.9;}
 header{height:60px; z-index:3; position:fixed!important; top:0; }
 header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
-.container{ padding-top:230px;z-index:1; }
+.container-fluid{ padding-top:230px;z-index:1; }
+
+header #search{
+    margin-top: -6px;
+    margin-right: -100px;
+}
 
 #backdrop{
     box-shadow:none;
@@ -149,12 +154,49 @@ span.title{visibility:hidden; width:0; height:0;}
 }
 
 
+.movieposter{
+    position:relative;
+    cursor:pointer;
+    overflow:hidden;
+    margin:0;
+    padding:0;
+    background:none;
+    border:0;
+}
+
+.movieposter:hover .caption,
+.movieposter.current .caption{
+    height:300px;
+    -webkit-transition: height 0.5s ease-in-out;
+    -moz-transition: height 0.5s ease-in-out;
+    -o-transition: height 0.5s ease-in-out;
+    transition: height 0.5s ease-in-out;
+}
+
+
+.movieposter .caption{
+    height:0;
+    padding:0;
+    width:100%;
+    background:#fff;
+    position:absolute;
+    bottom:0;
+    left:0;
+    z-index: 5;
+}
+
+.movieposter .caption p{
+    padding:9px;
+    margin:0;
+}
+
+
 .movieposter a{ float:left; }
 .movieposter .imageWrapper {width:250px;  height:278px; overflow:hidden;}
 .movieposter .overview{
 	padding:10px 10px 20px 10px;
 	margin:0;
-	height:95px;
+	height:150px;
 	position:relative;
 	overflow:hidden;
 }
@@ -163,7 +205,7 @@ span.title{visibility:hidden; width:0; height:0;}
 	float: left;
 	color: #666;
 	line-height: 19px;
-	width: 250px;
+	width: 100%;
 	background:#f5f5f5;
 	height:35px;
 	position:absolute;

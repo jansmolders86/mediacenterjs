@@ -11,6 +11,7 @@ label[for="oauthKey"] {
 }
 
 a.cachelink,
+a.scraperlink,
 #oauth{
     margin: 5px auto;
     display: block;

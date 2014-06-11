@@ -40,16 +40,13 @@ html(lang="en", ng-app="tvApp")
 
         title tvshows
         body.appTv(ng-controller="tvCtrl",ng-class="{playing:playing}")
-            #header
+            header
                 a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
                 h1 #{lingua.tvshows}
                             
-                input#search(ng-model="query", type="text", placeholder="Search")
+                input#search.pull-right(ng-model="query", type="text", placeholder="Search")
                
-                select#filter(ng-model="orderProp")
-                    option(value="title")   Alphabetical
-                    option(value="genre")   Genre
-            #container
+            .container
                 #playlist(ng-show="player.playlist.length > 0")
                     h2 Playlist
                     ul

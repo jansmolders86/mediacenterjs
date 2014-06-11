@@ -40,11 +40,8 @@ html(lang="en", ng-app="musicApp")
                 a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
                 h1 #{lingua.music}
                 
-                input#search(ng-model="query", type="text", placeholder="Search")
-               
-                select#filter(ng-model="orderProp")
-                    option(value="title")   Alphabetical
-                    option(value="genre")   Genre
+                .row
+                    input#search.pull-right(ng-model="query", type="text", placeholder="Search")
                 
             .container
                     #playlist(ng-show="player.playlist.length > 0")
@@ -66,13 +63,14 @@ html(lang="en", ng-app="musicApp")
 
                     section#library(ng-class="{side: player.playlist.length > 0}")
                         .row
-                            .col-xs-8.col-sm-4.col-md-2(ng-repeat="album in albums | filter:query | orderBy:orderProp")
-                                .thumbnail.album(ng-click="player.playlist.add(album)",ng-class="{current: focused == $index }")
+                            .col-xs-8.col-sm-4.col-md-2.album-wrapper(ng-repeat="album in albums | filter:query | orderBy:orderProp")
+                                .thumbnail(ng-click="player.playlist.add(album)",ng-class="{current: focused == $index }")
                                     img(ng-src="{{album.cover}}")
                                     .caption
-                                        span.album-title {{album.album}}
-                                        span.album-artist {{album.artist}}
-                                        span.album-year(ng-show="album.year !== 0") {{album.year}}
+                                        p
+                                            span.album-title {{album.album}}
+                                            span.album-artist {{album.artist}}
+                                            span.album-year(ng-show="album.year !== 0") {{album.year}}
 
                     h2.loading(ng-show="!albums") #{lingua.loading}
                 

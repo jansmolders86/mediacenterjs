@@ -129,6 +129,10 @@ function pushEnter(socket, $scope, player){
     } else {
         player.play();
     }
+    
+    $scope.$apply(function(){
+        $scope.focused;
+    });
 }
 
 function pushPause(socket, $scope){

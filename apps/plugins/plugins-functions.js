@@ -89,11 +89,18 @@ exports.getAvailablePlugins = function(req, res){
 			for (var key in pluginList) {
 				var obj = pluginList[key];
 		   	  	var compareInfo = isPluginCurrentlyInstalled(installedPlugins, obj.name, obj.version);          
+
+                var d = new Date(obj.time);
+                var curr_date = d.getDate();
+                var curr_month = d.getMonth() + 1; //Months are zero based
+                var curr_year = d.getFullYear();
+                var showDate = curr_date + "-" + curr_month + "-" + curr_year;
+                
 		   		plugins.push({
 					name: obj.name.replace(pluginPrefix, ''), //Remove the Mediacenterjs-
 					desc: obj.description,
 					author: obj.maintainers[0].replace('=',''),
-					date: obj.time,
+                    date: showDate,
 					version: obj.version,
 					keywords: obj.keywords,
 					isInstalled: compareInfo.isInstalled,
