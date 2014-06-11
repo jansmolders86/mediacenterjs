@@ -17,15 +17,18 @@
 */
 body{overflow: hidden;}
 
-#header{z-index:5;}
-#header h1 { padding-top: 9px;}
+.col-md-1 {
+width: 9.333333%;
+}
+
+header{z-index:5;}
+header h1 { padding-top: 9px;}
 
 /** Library **/
 
-#container{
-    padding:100px 10px;
-    position:relative;
-    width: 100vw;
+.container-fluid{
+    padding:90px 20px;
+
 }
 
 #library {
@@ -37,43 +40,64 @@ body{overflow: hidden;}
 }
 
 #library.side{
-    width: 80vw;
+    width: 70vw;
 }
 
 .side{
     margin-left:370px;
 }
 
-#library .album{
-    width:174px;
-    height: 250px;
-    float:left;
+#library .thumbnail{
+    position:relative;
+    cursor:pointer;
+    overflow:hidden;
+    padding:0;
+    background:none;
+    border:0;
+}
+
+#library .thumbnail:hover .caption,
+#library .thumbnail.current .caption{
+    height:80px;
+    -webkit-transition: height 0.5s ease-in-out;
+    -moz-transition: height 0.5s ease-in-out;
+    -o-transition: height 0.5s ease-in-out;
+    transition: height 0.5s ease-in-out;
+}
+
+
+#library .thumbnail .caption{
+    height:0;
+    padding:0;
+    width:100%;
     background:#fff;
-    margin:5px;
+    position:absolute;
+    bottom:0;
+    left:0;
+}
+
+#library .thumbnail .caption p{
+    padding:9px;
+    margin:0;
+}
+
+#library .album-wrapper{max-width:270px;}
+
+#library.side .thumbnail img,
+#library.side .thumbnail span{
     position:relative;
     cursor:pointer;
 }
 
-#library.side .album img,
-#library.side .album span{
-    position:relative;
-    cursor:pointer;
-}
-
-#library.side .album:hover img,
-#library.side .album.current img
-#library.side .album:hover span{
+#library.side .thumbnail:hover img,
+#library.side .thumbnail.current img
+#library.side .thumbnail:hover span{
     opacity:1;
 }
 
-#library .album:hover img,
-#library .album.current img{
+#library .thumbnail:hover img,
+#library .thumbnail.current img{
 	opacity:0.5;
-}
-
-#library .album img{
-    width:174px;
-    height:174px;
 }
 
 .album-title,
@@ -81,26 +105,23 @@ body{overflow: hidden;}
 .album-year{
     font-size:12px;
     font-weight:bold;
-    width: 155px;
+    width: 100%;
     clear:both;
     display:block;
 }
 
 .album-title{
     height:20px; 
+    font-size:14px;
+    max-width:250px;
     text-overflow: ellipsis; 
     white-space: nowrap;
     overflow: hidden;
 }
 
-#library .album .album-artist,
-#library .album .album-year {
+#library .thumbnail .album-artist,
+#library .thumbnail .album-year {
     font-weight: normal;
-}
-
-.albums {
-    margin:0;
-    padding:0;
 }
 
 .album.current ol{
@@ -146,6 +167,7 @@ body{overflow: hidden;}
     min-height: 25px;
     line-height: 25px;
     cursor:pointer;
+    list-style: none;
 }
 
 #playlist .album li:hover{ background:#fff; }
@@ -158,12 +180,16 @@ body{overflow: hidden;}
 #playlist .album ol{ padding-left:0;}
 #playlist .remove{
     position: absolute;
-    top: 78px;
-    left: 182px;
-    color: #333;
+    top: 70px;
+    left: 310px;
+    color: #f5f5f5;
     font-size: 24px;
     z-index: 1;
     cursor: pointer;
+    background: #3B3F40;
+    padding: 10px 5px;
+    height: 44px;
+    width: 48px;
 }
 
 #playlist .album img{ z-index: 2; }
@@ -228,18 +254,6 @@ body{overflow: hidden;}
 
 @media only screen and (min-width: 320px) and (max-width: 529px) {
     /* For phone layouts only */
-    #container{padding:0px; width:100%;}
-    #header h1 { padding-top: 2px;}
-    #library{padding-left:5px; }
     #library.side{display:none;}
-    #library .album{ width:150px; margin:5px;}
-    #library .album img{ width:150px; height:150px;}
     #playlist {padding-bottom:100px;}
-
-    .album-title,
-    .album-artist,
-    .album-year{
-        width: 130px;
-    }
-
 }

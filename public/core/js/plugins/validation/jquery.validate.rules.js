@@ -14,7 +14,7 @@ var rules = [];
 		} else if ( element.value.match(/\/$/) ){ 
 			return true; 
 		} else {
-			return false; 
+            return true; 
 		}
 	};
 	for (var key in rules) {

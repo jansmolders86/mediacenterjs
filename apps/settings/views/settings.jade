@@ -51,7 +51,7 @@ block additional_scripts
     script(src="/settings/js/jquery.mcjs.settings.js")
 
 block body
-    #header.settings
+    header.settings
         a.backlink(href="/") &#xe113;
         h1  #{lingua.settings}
     #wrapper
@@ -60,87 +60,93 @@ block body
                 .message
         #settings
             input.oauthKeyHidden(name="oauthKey" type="hidden")
-            form#setup.validate-form(action='/submit',method='post')
+            form.form-horizontal#setup.validate-form(action='/submit',method='post')
                 h2 #{lingua.settings_header}
                 
-
-
-                .configurable-options      
+                .configurable-options.col-sm-12.col-md-10  
                     h2 Configurable Options 
-                    .row.mcjs-rc-controllable
-                        label(for="moviepath") #{lingua.setting_movielocation}
-                        input#moviepath.mcjs-rc-clickable.folder(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation,data-rule-path="true",    data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
-                        i.folder.icon
-                    .row.mcjs-rc-controllable
-                        label(for="musicpath") #{lingua.setting_musiclocation}
-                        input#musicpath.mcjs-rc-clickable.folder(name="musicpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= musiclocation,  data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
-                        i.folder.icon
-                    .row.mcjs-rc-controllable
-                        label(for="tvpath") #{lingua.setting_tvlocation}
-                        input#tvpath.mcjs-rc-clickable.folder(name="tvpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= tvlocation, data-rule-path="true",  data-msg-path="Specify a valid path. <br/>Please end with a slash and use forward slashes.")
-                        i.folder.icon
-                    .row.mcjs-rc-controllable
-                        label(for="language") #{lingua.setting_language}
-                        select#language.mcjs-rc-clickable(name="language")
-                            - for lang in availableLanguages
-                                option(value=lang, selected=lang == language) #{lang}
-                        i.flag.icon
-                    .row.mcjs-rc-controllable
-                        label(for="location") #{lingua.setting_location}
-                        input#location.mcjs-rc-clickable(name="location",type="text",placeholder="#{lingua.settings_placeholder_location}", value= location,data-rule-required="true", data-msg-required="This field is required.")
-                        i.globe.icon
+                    .form-group.mcjs-rc-controllable
+                        label.col-md-2(for="moviepath") #{lingua.setting_movielocation}
+                        .col-md-10
+                            input.form-control#moviepath.mcjs-rc-clickable.folder(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation,data-rule-path="true",data-rule-path="true" data-msg-path="Specify a valid path.")
+                    .form-group.mcjs-rc-controllable
+                        label.col-md-2(for="musicpath") #{lingua.setting_musiclocation}
+                        .col-md-10
+                            input.form-control#musicpath.mcjs-rc-clickable.folder(name="musicpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= musiclocation,  data-rule-path="true",  data-msg-path="Specify a valid path.")
+                    .form-group.mcjs-rc-controllable
+                        label.col-md-2(for="tvpath") #{lingua.setting_tvlocation}
+                        .col-md-10
+                            input.form-control#tvpath.mcjs-rc-clickable.folder(name="tvpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= tvlocation, data-rule-path="true",  data-msg-path="Specify a valid path.")
+                    .form-group.mcjs-rc-controllable
+                        label.col-md-2(for="language") #{lingua.setting_language}
+                        .col-md-10
+                            select.form-control#language.mcjs-rc-clickable(name="language")
+                                - for lang in availableLanguages
+                                    option(value=lang, selected=lang == language) #{lang}
+                    .form-group.mcjs-rc-controllable
+                        label.col-md-2(for="location") #{lingua.setting_location}
+                        .col-md-10
+                            input.form-control#location.mcjs-rc-clickable(name="location",type="text",placeholder="#{lingua.settings_placeholder_location}", value= location,data-rule-required="true", data-msg-required="This field is required.")
                     if spotifyUser !== ""
-                        .row.mcjs-rc-controllable
-                            label(for="spotifyUser") #{lingua.setting_spotify_user}
-                            input#spotifyUser.mcjs-rc-clickable(name="spotifyUser",type="text", value=spotifyUser)
+                        .form-group.mcjs-rc-controllable
+                            label.col-md-2(for="spotifyUser") #{lingua.setting_spotify_user}
+                            .col-md-10
+                                input#spotifyUser.mcjs-rc-clickable(name="spotifyUser",type="text", value=spotifyUser)
                     if spotifyPass !== ""
-                        .row.mcjs-rc-controllable
-                            label(for="spotifyPass") #{lingua.setting_spotify_password}
-                            input#spotifyPass.mcjs-rc-clickable(name="spotifyPass",type="password", value=spotifyPass)
-                    .row.mcjs-rc-controllable
-                        label(for="screensaver") Screensaver
-                        select#screensaver.mcjs-rc-clickable(name="screensaver")
-                            - for saver in availableScreensavers
-                                option(value=saver, selected=saver == screensaver) #{saver}
-                        i.hide.icon
-                    .row.mcjs-rc-controllable
-                        label(for="theme") #{lingua.setting_theme}
-                        select#theme.mcjs-rc-clickable(name="theme")
-                            - for theme in themes
-                                option(selected=theme) #{theme}
-                        i.photo.icon
-                    .row.mcjs-rc-controllable
-                            label(for="schedule") When should data be gathered autmatically? 
-                            input#port.mcjs-rc-clickable(name="schedule",type="text",placeholder="eg. 12:30", value= schedule,data-rule-required="true", data-msg-required="This field is required.")
-                            i.time.icon 
-                    .row.mcjs-rc-controllable
-                        label(for="port") #{lingua.setting_port}
-                        input#port.mcjs-rc-clickable(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true", data-msg-required="This field is required.")
-                        i.exchange.icon
-                    .row.mcjs-rc-controllable.submit-row
+                        .form-group.mcjs-rc-controllable
+                            label.col-md-2(for="spotifyPass") #{lingua.setting_spotify_password}
+                            .col-md-10
+                                input.form-control#spotifyPass.mcjs-rc-clickable(name="spotifyPass",type="password", value=spotifyPass)
+                    .form-group.mcjs-rc-controllable
+                        label.col-md-2(for="screensaver") Screensaver
+                        .col-md-10
+                            select.form-control#screensaver.mcjs-rc-clickable(name="screensaver")
+                                - for saver in availableScreensavers
+                                    option(value=saver, selected=saver == screensaver) #{saver}
+                    .form-group.mcjs-rc-controllable
+                        label.col-md-2(for="theme") #{lingua.setting_theme}
+                        .col-md-10
+                            select.form-control#theme.mcjs-rc-clickable(name="theme")
+                                - for theme in themes
+                                    option(selected=theme) #{theme}
+                    .form-group.mcjs-rc-controllable
+                            label.col-md-2(for="schedule") When should data be gathered autmatically? 
+                            .col-md-10
+                                input.form-control#port.mcjs-rc-clickable(name="schedule",type="text",placeholder="eg. 12:30", value= schedule,data-rule-required="true", data-msg-required="This field is required.")
+                    .form-group.mcjs-rc-controllable
+                        label.col-md-2(for="port") #{lingua.setting_port}
+                        .col-md-10
+                            input.form-control#port.mcjs-rc-clickable(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true", data-msg-required="This field is required.")
+                    .form-group.mcjs-rc-controllable.submit-row
                         input.btn.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
                         input.oauth(name="oauth" type="hidden")
                     
-                .cache-management    
+                .cache-management.col-sm-12.col-md-2     
                     h2 Cache management 
-                    .row.mcjs-rc-controllable
+                    .form-group.mcjs-rc-controllable
                         a.btn.cachelink.mcjs-rc-clickable(data-cachelink="movies") #{lingua.settings_clear_cache_movies}
-                    .row.mcjs-rc-controllable
+                    .form-group.mcjs-rc-controllable
                         a.btn.cachelink.mcjs-rc-clickable(data-cachelink="albums,tracks") #{lingua.settings_clear_cache_music}
-                    .row.mcjs-rc-controllable
+                    .form-group.mcjs-rc-controllable
                         a.btn.cachelink.mcjs-rc-clickable(data-cachelink="tvepisodes,tvshows") #{lingua.settings_clear_cache_tv}
-                    .row.mcjs-rc-controllable
+                    .form-group.mcjs-rc-controllable
                         a.btn.cachelink.mcjs-rc-clickable(data-cachelink="devices") #{lingua.settings_clear_cache_device}
+                    h2 Scraper data
+                    .form-group.mcjs-rc-controllable
+                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="movies") Get movie metadata
+                    .form-group.mcjs-rc-controllable
+                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="music") Get music metadata
+                    .form-group.mcjs-rc-controllable
+                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="tv") Get tv Metadata
+                    .form-group.mcjs-rc-controllable
 
-                .clear
-
-                .access-table  
+                .access-table.col-sm-12.col-md-10  
                     h2 Access management
-                    .row.mcjs-rc-controllable
+                    .form-group.mcjs-rc-controllable
                         br
                         -if(allowed === 'yes' && devices !== undefined)
                             strong #{lingua.settings_device_connected}:
-                            table
+                            table.table
                                 thead
                                     tr
                                         th #{lingua.settings_device_id}:
@@ -160,7 +166,7 @@ block body
                                                     a.parentalControl.btn.mcjs-rc-clickable.unlock #{lingua.settings_device_btn_unlock}
                                                     
                 
-                #oauthContainer
+                #oauthContainer.col-sm-12.col-md-2
                     h2 OAUTH Login
                     span.info
                         span.quote &ldquo;

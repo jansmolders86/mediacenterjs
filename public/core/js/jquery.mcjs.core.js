@@ -64,6 +64,8 @@
 			_resizeviewport(o, $(this)); 	// Strech bg to fullscreen
 			_screensaver(o, $(this));		// Init screensaver
 
+            
+            //TODO: place these in settings js
 			$('a.cachelink').click(function(e){
 				e.preventDefault();
 				var cacheLink = $(this).attr('data-cachelink')
@@ -72,6 +74,15 @@
 				, type = 'post';
 				_modalDialog(o, url, type,data);
 			});
+            
+            $('a.scraperlink').click(function(e){
+                e.preventDefault();
+                var scraperlink = $(this).attr('data-scraperlink')
+                , data = {scraperlink : scraperlink}
+                , url = '/getScraperData'
+                , type = 'post';
+                _modalDialog(o, url, type,data);
+            });
 		
 			$('.remove').click(function(e){
 				e.preventDefault();

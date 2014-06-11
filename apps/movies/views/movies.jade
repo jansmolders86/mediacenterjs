@@ -41,32 +41,29 @@ html(lang="en", ng-app="movieApp")
 
         title #{lingua.movies}
         body.appMovies(ng-controller="movieCtrl",scroll,ng-class="{shrink:boolChangeClass, playing:playing}")
-            #header
+            header
                 a.backlink(href="/") &#xe113;
                 h1 #{lingua.movies}
                 
-                input#search(ng-model="query", type="text", placeholder="Search")
-               
-                select#filter(ng-model="orderProp")
-                    option(value="title")   Alphabetical
-                    option(value="genre")   Genre
+                input#search.pull-right(ng-model="query", type="text", placeholder="Search")
+
             #backdrop
                 img#backdropimg.slide.fullscreen(src="/movies/css/img/backdrop.png")
-            #wrapper  
-                #moviebrowser
-                    ul.movies
-                        li.movieposter.boxed(ng-repeat="movie in movies | filter:query | orderBy:orderProp", ng-focus="changeBackdrop(movie.backdrop_path)", ng-mouseover="changeBackdrop(movie.backdrop_path)", ng-class="{current: focused == $index }")
-                                .imageWrapper
-                                    img.movieposter(ng-src="{{movie.poster_path}}", onerror="this.src='/movies/css/img/nodata.jpg'")
-                                .overlay.mcjs-rc-clickable(ng-click="playMovie(movie.original_name)")
-                                h1.movie-title{{movie.title}}
-                                .overview
-                                    .summary {{movie.overview}}
-                                .specs
-                                    p
-                                        strong {{movie.genre}}
-                                    p
-                                        strong #{lingua.movies_Runtime}: {{movie.runtime}} min
+            .container-fluid
+                .row
+                    .col-xs-8.col-sm-6.col-md-4.col-lg-2(ng-repeat="movie in movies | filter:query | orderBy:orderProp")
+                        .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-focus="changeBackdrop(movie.backdrop_path)", ng-mouseover="changeBackdrop(movie.backdrop_path)", ng-class="{current: focused == $index }",ng-click="playMovie(movie.original_name)")
+                                img.movieposter(ng-src="{{movie.poster_path}}", onerror="this.src='/movies/css/img/nodata.jpg'")
+                                .caption
+                                        p
+                                            h1.movie-title{{movie.title}}
+                                            .overview
+                                                .summary {{movie.overview}}
+                                            .specs
+                                                p
+                                                    strong {{movie.genre}}
+                                                p
+                                                    strong #{lingua.movies_Runtime}: {{movie.runtime}} min
                                 .cdNumber(ng-show="movie.cdNumber.length > 0")
                                     span {{movie.cdNumber}}
                             

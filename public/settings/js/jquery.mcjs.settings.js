@@ -51,8 +51,6 @@ $(function() {
         if(Langs !== undefined){
             $(this).text(Langs['nativeName']); 
         }
-
-       
     });
-
+    
 });

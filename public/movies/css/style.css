@@ -19,10 +19,10 @@
 body.playing > div{display:none;}
 body.playing > #player{display:block;}
 
-#header.scrolling{ opacity:0.9;}
-#header{height:60px; z-index:3; position:fixed!important; top:0; }
-#header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
-#wrapper{ padding-top:230px;z-index:1; }
+header.scrolling{ opacity:0.9;}
+header{height:60px; z-index:3; position:fixed!important; top:0; }
+header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
+.container-fluid{ padding-top:230px;z-index:1; }
 
 #backdrop{
     box-shadow:none;
@@ -64,7 +64,7 @@ a.backlink { margin-top: 0px; z-index:4; }
 
 /* Movie App styling */
 
-#moviebrowser{ width:100%; height:100%; margin: 60px 0;}
+
 .movie-loading{
     position:absolute;
     left:50%;
@@ -81,31 +81,9 @@ a.backlink { margin-top: 0px; z-index:4; }
     color:#fb8521;
 }
 
-.movies{
-	margin: 0 auto;
-	padding: 0;
-	list-style: none;
-	display: block;
-	position: relative;
-	width:95%;
-	min-height:1000px;
-	overflow:hidden;
-}
-
-.movieposter .overlay{ width:0; height:0; }
-
-.movieposter.focused .overlay,
-.movieposter.current .overlay,
-.movieposter:hover .overlay{
-	background:url(img/cover-overlay.png) no-repeat;
-	width:250px;
-	height:278px;
-	position:absolute;
-	top:0;
-	left:0;
-	z-index:6;
-	cursor:pointer;
-	border-radius:2px;
+.movieposter:hover img{
+    opacity: 0.5;
+    cursor: pointer;
 }
 
 .movieposter .cdNumber{
@@ -157,7 +135,6 @@ span.title{visibility:hidden; width:0; height:0;}
 	list-style:none;
 	z-index:3;
 	position:relative;
-	width:250px;
 	padding: 0px;
 	margin: 0px 10px 20px 0;
     border: 1px solid #e7e7e7;
@@ -167,9 +144,45 @@ span.title{visibility:hidden; width:0; height:0;}
 	-webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
 	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
 	border-bottom: 0.2em solid rgba(0, 0, 0, 0.2);
-	border-radius: 0.33em;
 	-webkit-transition: -webkit-box-shadow 0.2s ease;
 	transition: box-shadow 0.2s ease;
+}
+
+
+.movieposter{
+    position:relative;
+    cursor:pointer;
+    overflow:hidden;
+    margin:0;
+    padding:0;
+    background:none;
+    border:0;
+}
+
+.movieposter:hover .caption,
+.movieposter.current .caption{
+    height:300px;
+    -webkit-transition: height 0.5s ease-in-out;
+    -moz-transition: height 0.5s ease-in-out;
+    -o-transition: height 0.5s ease-in-out;
+    transition: height 0.5s ease-in-out;
+}
+
+
+.movieposter .caption{
+    height:0;
+    padding:0;
+    width:100%;
+    background:#fff;
+    position:absolute;
+    bottom:0;
+    left:0;
+    z-index: 5;
+}
+
+.movieposter .caption p{
+    padding:9px;
+    margin:0;
 }
 
 
@@ -178,7 +191,7 @@ span.title{visibility:hidden; width:0; height:0;}
 .movieposter .overview{
 	padding:10px 10px 20px 10px;
 	margin:0;
-	height:95px;
+	height:150px;
 	position:relative;
 	overflow:hidden;
 }
@@ -187,7 +200,7 @@ span.title{visibility:hidden; width:0; height:0;}
 	float: left;
 	color: #666;
 	line-height: 19px;
-	width: 250px;
+	width: 100%;
 	background:#f5f5f5;
 	height:35px;
 	position:absolute;

@@ -134,6 +134,7 @@ p a:hover{text-decoration:none;}
 
 .homepage h1{text-transform: none; font-weight:300;}
 
+header,
 #header{
 	height:75px;
 	width:100%;
@@ -156,14 +157,17 @@ p a:hover{text-decoration:none;}
 	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
 }
 
+header .logo,
 #header .logo{ float:left; height:45px; margin:0px 10px 0 0px; }
 
+header h1,
 #header h1{
 	padding: 0;
 	margin:0;
 	display: inline-block;
 }
 
+header h4,
 #header h4{
     position: absolute;
     bottom: -10px;
@@ -172,13 +176,13 @@ p a:hover{text-decoration:none;}
     font-size: 12px;
 }
 
-#header #search {
-    position: absolute;
-    right: 500px;
-    top: 9px;
-    width: 250px;
+header #search {
+    position:absolute;
+    right:0;
+    top:0;
+    height: 76px!important;
 }
-#header  #filter{
+header  #filter{
     position: absolute; 
     right:100px; 
     top:9px;
@@ -304,8 +308,9 @@ body > #screensaver{
 	display:none;
 }
 
+.tile { background:transparent; }
+
 .tile > a{
-	background:#000; 	
 	width: 100%;
 	height:  100%;
 	display:block;
@@ -323,7 +328,7 @@ body > #screensaver{
 .tile.focused{border:0!important;}
 .tile.focused img,
 .tile:hover > a >img {
-	opacity: 0.6;
+	opacity: 0.5;
 }
 
 #tiles{
@@ -361,10 +366,6 @@ body > #screensaver{
 
 #hiddenSetting{visibility:hidden; width:0; height:0; float:left;}
 
-.row{ min-height:30px; width:90%; float:left; padding:10px; position:relative;}
-.row.wrap{width:auto; clear:none;}
-.row a.cachelink{ margin:5px 0; display:inline-block;}
-
 input[type=text],
 input[type=password],
 select,
@@ -374,18 +375,13 @@ textarea{
 	font-size: 0.875em;
 	background-color: #FFFFFF;
 	border: 1px solid rgba(0, 0, 0, 0.15);
-	outline: none;
 	color: rgba(0, 0, 0, 0.7);
 	border-radius: 0.3125em;
 	-webkit-transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
 	transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
 	box-shadow: 0em 0em 0em 0em rgba(0, 0, 0, 0.3) inset;
-	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	box-sizing: border-box;
-	width:40%;
-	float:left;
+    height: 60px!important;
+    line-height: 60px!important;
 }
 
 input[type=text],
@@ -580,84 +576,7 @@ table tr > th:first-child{ padding-left:0px;}
 	.ui-bar .ui-btn-inner { height: 2.5em; padding: 0.5em 0; }
 }
 
-/* Custom scrollbars */
-
-.ps-container .ps-scrollbar-x {
-    position: absolute; /* please don't change 'position' */
-    bottom: 3px; /* there must be 'bottom' for ps-scrollbar-x */
-    height: 8px;
-    background-color: #aaa;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    opacity: 0;
-    filter: alpha(opacity = 0);
-    -o-transition: opacity .2s linear;
-    -webkit-transition: opacity.2s linear;
-    -moz-transition: opacity .2s linear;
-    transition: opacity .2s linear;
-	display:none;
-}
-
-.ps-container.ie6 .ps-scrollbar-x {
-    font-size: 0; /* fixed scrollbar height in xp sp3 ie6 */
-}
-
-.ps-container:hover .ps-scrollbar-x,
-.ps-container.hover .ps-scrollbar-x {
-    opacity: 0.6;
-    filter: alpha(opacity = 60);
-}
-
-.ps-container .ps-scrollbar-x:hover,
-.ps-container .ps-scrollbar-x.hover {
-    opacity: 0.9;
-    filter: alpha(opacity = 90);
-    cursor:default;
-}
-
-.ps-container .ps-scrollbar-x.in-scrolling {
-    opacity: 0.9;
-    filter: alpha(opacity = 90);
-}
-
-.ps-container .ps-scrollbar-y {
-    position: absolute; /* please don't change 'position' */
-    right: 3px; /* there must be 'right' for ps-scrollbar-y */
-    width: 8px;
-    background-color: #aaa;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    opacity: 0.4;
-    filter: alpha(opacity = 0.4);
-    -o-transition: opacity .4s linear;
-    -webkit-transition: opacity.4s linear;
-    -moz-transition: opacity .4s linear;
-    transition: opacity .4s linear;
-}
-
-.ps-container.ie .ps-scrollbar-y {
-    font-size: 0; /* fixed scrollbar height in xp sp3 ie6 */
-}
-
-.ps-container:hover .ps-scrollbar-y,
-.ps-container.hover .ps-scrollbar-y {
-    opacity: 0.6;
-    filter: alpha(opacity = 60);
-}
-
-.ps-container .ps-scrollbar-y:hover,
-.ps-container .ps-scrollbar-y.hover {
-    opacity: 0.9;
-    filter: alpha(opacity = 90);
-    cursor: default;
-}
-
-.ps-container .ps-scrollbar-y.in-scrolling {
-    opacity: 0.9;
-    filter: alpha(opacity = 90);
-}
+/* Video Js Default look */
 
 .vjs-default-skin { color: #eee1e1!important; }
 .vjs-default-skin .vjs-play-progress,
@@ -686,22 +605,7 @@ table tr > th:first-child{ padding-left:0px;}
 @media only screen and (min-width: 320px) and (max-width: 529px) {
     /* For phone layouts only */
 
-    #wrapper{padding:15px; }
-    #header{ height:80px; padding:10px;}
-    #header h1{ font-size:28px; float:left; width:250px; padding-top:10px;}
     #dateandtime { position:absolute; right:20px; top:0px; }
-
-    .boxed{
-        width:35%;
-    }
-    .tile{
-        width: 155px;
-        height: 165px;
-        float: left;
-        margin: 2px 5px 10px 2px;
-        list-style:none;
-        display:none;
-    }
 
     input[type=text],
     input[type=password],

@@ -47,6 +47,10 @@ function remote(socket, $scope, player, audio){
         $('#search').val(data);
         $scope.query = data;
     });
+    
+    socket.on('server ready', function(data){ 
+        console.log('server ready!');
+    }) ;
 }
 
 
@@ -128,6 +132,9 @@ function pushEnter(socket, $scope, player, audio){
     } else {
         player.play();
     }
+    $scope.$apply(function(){
+        player.playlist;
+    });
 }
 
 function pushPause(socket, $scope, player, audio){
@@ -140,7 +147,6 @@ function pushPause(socket, $scope, player, audio){
 
 function pushBack(socket, $scope, player, audio){
     if(!document.activeElement === $('input')){
-        e.preventDefault();
         if(player.playlist.length > 0) {
             var album = player.playlist[player.current.album];
             player.playlist.remove(album);

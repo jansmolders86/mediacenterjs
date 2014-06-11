@@ -29,7 +29,8 @@ var fs = require('fs.extra')
 var getNewFiles = false;
 
 //Create tables
-db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
+db.query("CREATE TABLE IF NOT EXISTS tvshows (title VARCHAR PRIMARY KEY,banner VARCHAR, genre VARCHAR, certification VARCHAR)");
+db.query("CREATE TABLE IF NOT EXISTS tvepisodes (localName TEXT PRIMARY KEY,title VARCHAR, season INTEGER, epsiode INTEGER)");
 
 exports.loadItems = function (req, res, serveToFrontEnd){
     var metaType = "tv";
@@ -69,6 +70,8 @@ exports.playEpisode = function (req, res, tvShowRequest){
 };
 
 exports.sendState = function (req, res){
+    db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
+
     var incommingData = req.body
     , tvShowTitle = incommingData.tvShowTitle
     , progression = incommingData.currentTime
@@ -109,6 +112,7 @@ function getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles){
         certification  	: String
     }, function(err, rows) {
         if(err){
+            db.query("CREATE TABLE IF NOT EXISTS tvshows (title VARCHAR PRIMARY KEY,banner VARCHAR, genre VARCHAR, certification VARCHAR)");
             console.log("DB error",err);
             serveToFrontEnd = true;
             getNewFiles = true;
@@ -154,6 +158,7 @@ function getEpisodes(showTitle, showBanner, showGenre, showCertification, callba
         },
         function(err, rows) {
             if(err){
+                db.query("CREATE TABLE IF NOT EXISTS tvepisodes (localName TEXT PRIMARY KEY,title VARCHAR, season INTEGER, epsiode INTEGER)");
                 callback('none');
             }
             if (typeof rows !== 'undefined' && rows.length > 0){

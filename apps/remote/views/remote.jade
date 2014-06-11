@@ -105,55 +105,55 @@ block additional_scripts
 
 block body
     #settings.hide
-        form#setupRemote.validate-form(action='/submitRemote',method='post')
-            .row
+        form#setupRemote.validate-form(action='/submitRemote',method='post', role="form")
+            .form-group
                 label #{lingua.setting_movielocation}
                 input(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-            .row
+            .form-group
                 label #{lingua.setting_musiclocation}
                 input(name="musicpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= musiclocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-            .row
+            .form-group
                 label #{lingua.setting_tvlocation}
                 input(name="tvpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= tvlocation, data-rule-required="true", data-rule-path="true",  data-msg-path="Specify a valid path. Please end with a slash.")
-            .row
+            .form-group
                 label #{lingua.setting_language}
                 select#language(name="language")
                     - for lang in availableLanguages
                         option(value=lang, selected=lang == language) #{lang}
-            .row
+            .form-group
                 label Local IP (for Remote)
                 input#localIP(name="localIP",type="text",placeholder="localhost", value= localIP,data-rule-required="true")	
-            .row
+            .form-group
                 label Remote port (specific port for Remote)
                 input(name="remotePort",type="text",placeholder="3001", value= remotePort,data-rule-required="true")	
-            .row
+            .form-group
                 label #{lingua.setting_location}
                 input(name="location",type="text",placeholder="#{lingua.settings_placeholder_location}", value= location,data-rule-required="true")
             if spotifyUser !== ""
-                .row
+                .form-group
                     label Spotify Username
                     input(name="spotifyUser",type="text", value=spotifyUser)	
             if spotifyPass !== ""
-                .row
+                .form-group
                     label Spotify Password
                     input(name="spotifyPass",type="password", value=spotifyPass)	
-            .row
+            .form-group
                 label(for="screensaver") Screensaver
                 select#screensaver(name="screensaver")
                     - for saver in availableScreensavers
                         option(value=saver, selected=saver == screensaver) #{saver}
-            .row
+            .form-group
                 label #{lingua.setting_theme}
                 select#theme(name="theme")
                     - for theme in themes
                         option(selected=theme) #{theme}
-            .row.mcjs-rc-controllable
+            .form-group.mcjs-rc-controllable
                 label(for="schedule") When should data be gathered autmatically? 
                 input#port.mcjs-rc-clickable(name="schedule",type="text",placeholder="eg. 12:30", value= schedule,data-rule-required="true", data-msg-required="This field is required.")
-            .row
+            .form-group
                 label #{lingua.setting_port}
                 input(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true")
-            .row
+            .form-group
                 input.btn(type="submit",value="#{lingua.setting_submit}")	
                 input(name="screensaver",type="hidden",value= screensaver) 
     

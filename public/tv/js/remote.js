@@ -41,7 +41,7 @@ function remote(socket, $scope, player){
                 pushDashboard(socket,$scope);
                 break;
         }
-    });
+    }).removeListener('controlling', function(){});
     
     socket.on('sending', function(data){
         $('#search').val(data);
@@ -129,6 +129,10 @@ function pushEnter(socket, $scope, player){
     } else {
         player.play();
     }
+    
+    $scope.$apply(function(){
+        $scope.focused;
+    });
 }
 
 function pushPause(socket, $scope){

@@ -13,6 +13,10 @@ body{
 	box-sizing: border-box;
     background:none;
 }
+body.homepage{
+    background:url("/core/css/img/backdrop.png") no-repeat;
+}
+
 a{ color:#444;}
 a:hover{color:#333;}
 
@@ -50,35 +54,37 @@ p a:hover{text-decoration:none;}
 
 /* Homepage Tiles */
 
+
 .tile{
-	width: 155px;
-	height: 165px;
-	float: left;
-	margin: 2px 15px 10px 2px;
-	list-style:none;
-	display:none;
+    width: 155px;
+    height: 165px;
+    float: left;
+    margin: 2px 15px 10px 2px;
+    list-style:none;
+    display:none;
 }
 
+.tile { background:transparent; }
+
 .tile > a{
-	background:#000; 	
-	width:100%;
-	height:100%;
-	display:block;
+    width: 100%;
+    height:  100%;
+    display:block;
     padding:0;
 }
 
 .tile > a > span{ display:none }
 
 .tile .info{
-	font-size:14px;
-	float:left;
-	width:100%;
+    font-size:14px;
+    float:left;
+    width:100%;
 }
 
 .tile.focused{border:0!important;}
 .tile.focused img,
 .tile:hover > a >img {
-	opacity: 0.6;
+    opacity: 0.5;
 }
 
 #tiles{
@@ -126,7 +132,7 @@ p a:hover{text-decoration:none;}
 	cursor:pointer; 
 }
 
-#header{
+header{
 	height:70px;
 	width:100%;
 	-webkit-box-sizing: border-box;
@@ -144,30 +150,17 @@ p a:hover{text-decoration:none;}
     border-bottom: 5px solid #fb8521;
 }
 .homepage{overflow:hidden;}
-.homepage #header{background:#fff; height:75px; padding-top:10px;}
-.homepage #header h1{color:#333;}
+.homepage header{background:#fff; height:75px; padding-top:10px;}
+.homepage header h1{color:#333;}
 
-#header #search,
-#header #filter{
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    width: 400px;
-    height: 65px;
-    border: 0;
-    background: #f5f5f5;
-    -webkit-transition: width 0.5s ease-in-out;
-    -moz-transition: width 0.5s ease-in-out;
-    -o-transition: width 0.5s ease-in-out;
-    transition: width 0.5s ease-in-out;
+header #search {
+    position:absolute;
+    right:0;
+    top:0;
+    height: 76px!important;
 }
 
-#header #search:focus{
-    width:600px;
-}
-
-#header #filter{
-    right: 350px;
+header #filter{
     /*Disable filter temorarily untill better implemented */
     display:none;
 }
@@ -189,9 +182,9 @@ a.backlink:hover{
 
 .homepage h1{text-transform: none; font-weight:300;}
 
-#header .logo{ float:left; height:45px; margin: 0px 10px 0 0px; }
+header .logo{ float:left; height:45px; margin: 0px 10px 0 0px; }
 
-#header h1{
+header h1{
 	width: 50%;
 	padding: 0;
     margin: 7px 0 0 0;
@@ -264,13 +257,13 @@ textarea{
 	-webkit-transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
 	transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
 	box-shadow: 0em 0em 0em 0em rgba(0, 0, 0, 0.3) inset;
-	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-	width:40%;
-	float:left;
     background: #f5f5f5;
+    height: 60px;
+    line-height: 60px;
 }
 
-label,.label{padding-top: 20px;}
+label,
+.label{padding-top: 20px;}
 
 #search::-webkit-input-placeholder::before { font-family: Icons; content:'\f002  '; color: #ddd }
 #search:-moz-placeholder::before  { font-family: Icons; content:'\f002  '; color: #ddd } 
@@ -290,55 +283,6 @@ label,.label{padding-top: 20px;}
 	bottom:0;
 	left:0;
 }
-
-/***** -----------------   MEDIA QUERIES  ---------------------- *****/
-
-
-
-@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
-    /* For tablet portrait layouts only */
-}
-
-@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
-    /* For tablet landscape layouts only */
-
-}
-@media only screen and (min-width: 320px) and (max-width: 529px) {
-    /* For phone layouts only */
-
-    #wrapper{padding:15px; }
-    #header{ padding:5px 10px 10px;}
-    #dateandtime { position:absolute; right:20px; top:0px; }
-
-    .boxed{ width:35%;}
-
-    .tile{
-        width: 155px;
-        height: 165px;
-        float: left;
-        margin: 2px 5px 10px 2px;
-        list-style:none;
-        display:none;
-    }
-    #filter{display:none;}
-    #header #search { width:300px; }
-
-    .homepage{overflow-y:auto;}
-}
-
-@media (min-width:530px) and  (max-width: 651px) {
-    #wrapper{padding:15px; }
-    #header{ padding:5px 10px 10px;}
-    #dateandtime { position:absolute; right:20px; top:0px; }
-    #filter{display:none;}
-    #header #search { width:300px;}
-
-}
-@media (min-width:651px) and (max-width: 980px) {
-
-
-}
-
 
 
 /***** -----------------   ANIMATIONS  ---------------------- *****/

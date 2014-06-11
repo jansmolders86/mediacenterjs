@@ -225,6 +225,28 @@ app.post('/removeModule', function(req, res){
 	});
 });
 
+app.post('/getScraperData', function(req, res){
+    var incommingLink = req.body
+    , scraperlink = incommingLink.scraperlink
+    , moviesfunctions = require('./apps/movies/movie-functions')
+    , musicfunctions = require('./apps/music/music-functions')
+    , tvfunctions = require('./apps/tv/tv-functions')
+    , serveToFrontEnd = false
+    , req // Dummy variable
+    , res; // Dummy variable
+
+    console.log(scraperlink)
+    if(scraperlink === 'movies'){
+        moviesfunctions.loadItems(req, res, serveToFrontEnd);
+    } else if (scraperlink === 'music'){
+        musicfunctions.loadItems(req, res, serveToFrontEnd);
+    } else if (scraperlink === 'tv'){
+        tvfunctions.loadItems(req, res, serveToFrontEnd);
+    }
+    
+});
+
+
 app.post('/clearCache', function(req, res){
 	var app_cache_handler = require('./lib/handlers/app-cache-handler');
 	var incommingCache = req.body
@@ -248,8 +270,6 @@ app.post('/clearCache', function(req, res){
     });
 
     return res.send('done');
-
-
 });
 
 app.get('/checkForUpdate', function(req, res){

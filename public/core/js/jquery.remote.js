@@ -50,6 +50,7 @@
 	
 	//Socket.io handler for remote control
 	function _websocketHandler(o, $that){
+        
 		if(io){
 			$.ajax({
 					url: '/configuration/', 
@@ -61,59 +62,61 @@
 					});
 
 					socket.on('controlling', function(data){
-						switch(data.action) {
-							case "goLeft" :
-								if($(o.accessibleElement).length > 0){
-									var item = $(o.accessibleElement);
-									_goLeft(o, item);
-								}
-							break;
-							case "goRight" :
-								if($(o.accessibleElement).length > 0){
-									var item = $(o.accessibleElement);
-									_goRight(o, item);
-								}
-							break;
-							case "back" :
-								_goBack(o);
-							break;
-							case "pause" :
-								if(videojs("player").paused()){
-									videojs("player").play();
-								} else {
-									videojs("player").pause();
-								}
-							break;
-							case "fullscreen" :
-								videojs("player").requestFullScreen();
-							break;
-							case "mute" :
-								if(videojs("player").volume() === 0){
-									videojs("player").volume(1)
-								} else {
-									videojs("player").volume(0);
-								}
-							break;							
-							case "enter" :
-								_pressEnter(o);
-							break;
-							case "dashboard" :
-								if(window.location.pathname === '/plugins/'){
-									$.ajax({
-										url: '/plugins/reloadServer', 
-										type: 'get',
-										dataType: 'json'
-									}).done(function(data){
-										setTimeout(function(){
-											document.location = '/';
-										},1000);
-									});
-								} else {
-									document.location = '/';
-								}
-							break;
-						}	
-					});
+                        switch(data.action) {
+                            case "goLeft" :
+                                if($(o.accessibleElement).length > 0){
+                                    var item = $(o.accessibleElement);
+                                    _goLeft(o, item);
+                                }
+                            break;
+                            case "goRight" :
+                                if($(o.accessibleElement).length > 0){
+                                    var item = $(o.accessibleElement);
+                                    _goRight(o, item);
+                                }
+                            break;
+                            case "back" :
+                                _goBack(o);
+                            break;
+                            case "pause" :
+                                if(videojs("player").paused()){
+                                    videojs("player").play();
+                                } else {
+                                    videojs("player").pause();
+                                }
+                            break;
+                            case "fullscreen" :
+                                videojs("player").requestFullScreen();
+                            break;
+                            case "mute" :
+                                if(videojs("player").volume() === 0){
+                                    videojs("player").volume(1)
+                                } else {
+                                    videojs("player").volume(0);
+                                }
+                            break;							
+                            case "enter" :
+                                _pressEnter(o);
+                            break;
+                            case "dashboard" :
+                                if(window.location.pathname === '/plugins/'){
+                                    $.ajax({
+                                        url: '/plugins/reloadServer', 
+                                        type: 'get',
+                                        dataType: 'json'
+                                    }).done(function(data){
+                                        setTimeout(function(){
+                                            document.location = '/';
+                                        },1000);
+                                    });
+                                } else {
+                                    document.location = '/';
+                                }
+                            break;
+                        }	
+                       
+					}).removeListener('controlling', function(){
+                    });
 
 					socket.on('sending', function(data){
 						$(o.focusedElement).find("input").val(data);
