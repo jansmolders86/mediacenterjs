@@ -122,31 +122,30 @@ getAlbums = function(req, res, callback){
 
 getTracks = function (album, artist, year, genre, cover, callback){
     db.query('SELECT * FROM tracks WHERE album = $album ORDER BY track asc ', { album: album }, {
-            title       : String,
-            track       : Number,
-            album       : String,
-            artist      : String,
-            year        : Number,
-            genre       : String,
-            filename    : String
-        },
-        function (err, rows) {
-            if(err){
-                db.query("CREATE TABLE IF NOT EXISTS tracks (title TEXT PRIMARY KEY, track INTEGER, album TEXT, artist TEXT, year INTEGER, genre TEXT, filename TEXT, filepath TEXT)");
-                console.log('getTracks',err);
-                callback('err');
-            }
-            if (typeof rows !== 'undefined' && rows.length > 0) {
-                var completeAlbum = {
-                    "album"     : album,
-                    "artist"    : artist,
-                    "year"      : year,
-                    "genre"     : genre,
-                    "cover"     : cover,
-                    "tracks"    : rows
-                }
-                callback(completeAlbum);
-            }
+        title       : String,
+        track       : Number,
+        album       : String,
+        artist      : String,
+        year        : Number,
+        genre       : String,
+        filename    : String
+    },
+    function (err, rows) {
+        if(err){
+            db.query("CREATE TABLE IF NOT EXISTS albums (album TEXT PRIMARY KEY, artist TEXT, year INTEGER, genre TEXT, cover VARCHAR)");
+            callback('err');
         }
-    );
+        if (typeof rows !== 'undefined' && rows.length > 0) {
+            var completeAlbum = {
+                "album"     : album,
+                "artist"    : artist,
+                "year"      : year,
+                "genre"     : genre,
+                "cover"     : cover,
+                "tracks"    : rows
+            }
+            callback(completeAlbum);
+        }
+    });
 }
+             

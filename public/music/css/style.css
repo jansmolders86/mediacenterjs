@@ -54,6 +54,7 @@ header h1 { padding-top: 9px;}
     padding:0;
     background:none;
     border:0;
+    border-radius: 0;
 }
 
 #library .thumbnail:hover .caption,
