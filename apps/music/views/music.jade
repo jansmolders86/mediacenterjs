@@ -25,6 +25,7 @@ html(lang="en", ng-app="musicApp")
         script(src="/core/js/plugins/angular/angular-route.min.js")
         script(src="/music/js/app.js")
         script(src="/music/js/remote.js")
+        script(src="/core/js/plugins/jquery/jquery.slimscroll.min.js")
         script.
             $(function(){
                 $('body').mcjs();
@@ -32,6 +33,12 @@ html(lang="en", ng-app="musicApp")
                 window.addEventListener('load', function() {
                     FastClick.attach(document.body);
                 }, false);
+                
+                $(function(){
+                    $('#inner-playlist').slimScroll({
+                        height: 'auto'
+                    });
+                });
             });
             
         title Music
@@ -40,26 +47,26 @@ html(lang="en", ng-app="musicApp")
                 a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
                 h1 #{lingua.music}
                 
-                .row
-                    input#search.pull-right(ng-model="query", type="text", placeholder="Search")
+                input#search.pull-right(ng-model="query", type="text", placeholder="Search")
                 
-            .container
+            .container-fluid
                     #playlist(ng-show="player.playlist.length > 0")
-                        h2 Playlist
-                        ul
-                            li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
-                                .list( ng-click="player.playlist.remove(album)")
-                                    img(ng-src="{{album.cover}}")
-                                    i.remove.circle.icon
-                                .album-info
-                                    span.album-title {{album.album}}
-                                    span.album-artist {{album.artist}}
-                                    span.album-year(ng-show="album.year !== 0") {{album.year}}
-                                ol.tracks
-                                    li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
-                                        i.play.icon
-                                        span.track-number {{track.track}}
-                                        span.track-title {{track.title}}
+                        #inner-playlist
+                            h2 Playlist
+                            ul
+                                li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
+                                    .list( ng-click="player.playlist.remove(album)")
+                                        img(ng-src="{{album.cover}}")
+                                        i.remove.circle.icon
+                                    .album-info
+                                        span.album-title {{album.album}}
+                                        span.album-artist {{album.artist}}
+                                        span.album-year(ng-show="album.year !== 0") {{album.year}}
+                                    ol.tracks
+                                        li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
+                                            i.play.icon
+                                            span.track-number {{track.track}}
+                                            span.track-title {{track.title}}
 
                     section#library(ng-class="{side: player.playlist.length > 0}")
                         .row

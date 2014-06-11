@@ -26,10 +26,9 @@ header h1 { padding-top: 9px;}
 
 /** Library **/
 
-.container{
-    padding:100px 10px;
-    position:relative;
-    width: 100vw;
+.container-fluid{
+    padding:90px 20px;
+
 }
 
 #library {
@@ -41,7 +40,7 @@ header h1 { padding-top: 9px;}
 }
 
 #library.side{
-    width: 80vw;
+    width: 70vw;
 }
 
 .side{

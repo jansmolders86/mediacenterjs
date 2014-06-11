@@ -69,29 +69,24 @@ block body
                         label.col-md-2(for="moviepath") #{lingua.setting_movielocation}
                         .col-md-10
                             input.form-control#moviepath.mcjs-rc-clickable.folder(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation,data-rule-path="true",data-rule-path="true" data-msg-path="Specify a valid path.")
-                            i.folder.icon
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="musicpath") #{lingua.setting_musiclocation}
                         .col-md-10
                             input.form-control#musicpath.mcjs-rc-clickable.folder(name="musicpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= musiclocation,  data-rule-path="true",  data-msg-path="Specify a valid path.")
-                            i.folder.icon
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="tvpath") #{lingua.setting_tvlocation}
                         .col-md-10
                             input.form-control#tvpath.mcjs-rc-clickable.folder(name="tvpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= tvlocation, data-rule-path="true",  data-msg-path="Specify a valid path.")
-                            i.folder.icon
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="language") #{lingua.setting_language}
                         .col-md-10
                             select.form-control#language.mcjs-rc-clickable(name="language")
                                 - for lang in availableLanguages
                                     option(value=lang, selected=lang == language) #{lang}
-                            i.flag.icon
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="location") #{lingua.setting_location}
                         .col-md-10
                             input.form-control#location.mcjs-rc-clickable(name="location",type="text",placeholder="#{lingua.settings_placeholder_location}", value= location,data-rule-required="true", data-msg-required="This field is required.")
-                            i.globe.icon
                     if spotifyUser !== ""
                         .form-group.mcjs-rc-controllable
                             label.col-md-2(for="spotifyUser") #{lingua.setting_spotify_user}
@@ -108,24 +103,20 @@ block body
                             select.form-control#screensaver.mcjs-rc-clickable(name="screensaver")
                                 - for saver in availableScreensavers
                                     option(value=saver, selected=saver == screensaver) #{saver}
-                            i.coffee.icon
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="theme") #{lingua.setting_theme}
                         .col-md-10
                             select.form-control#theme.mcjs-rc-clickable(name="theme")
                                 - for theme in themes
                                     option(selected=theme) #{theme}
-                            i.photo.icon
                     .form-group.mcjs-rc-controllable
                             label.col-md-2(for="schedule") When should data be gathered autmatically? 
                             .col-md-10
                                 input.form-control#port.mcjs-rc-clickable(name="schedule",type="text",placeholder="eg. 12:30", value= schedule,data-rule-required="true", data-msg-required="This field is required.")
-                                i.time.icon 
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="port") #{lingua.setting_port}
                         .col-md-10
                             input.form-control#port.mcjs-rc-clickable(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true", data-msg-required="This field is required.")
-                            i.exchange.icon
                     .form-group.mcjs-rc-controllable.submit-row
                         input.btn.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
                         input.oauth(name="oauth" type="hidden")

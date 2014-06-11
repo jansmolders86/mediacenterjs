@@ -24,11 +24,6 @@ header{height:60px; z-index:3; position:fixed!important; top:0; }
 header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
 .container-fluid{ padding-top:230px;z-index:1; }
 
-header #search{
-    margin-top: -6px;
-    margin-right: -100px;
-}
-
 #backdrop{
     box-shadow:none;
     padding: 10px 0 0 100px;
