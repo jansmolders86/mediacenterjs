@@ -43,12 +43,7 @@ exports.get = function(req, res){
 	var infoRequest = req.params.id,
 		optionalParam = req.params.optionalParam,
         platform = req.params.action,
-        serveToFrontEnd = null
-	
-    console.log('infoRequest',infoRequest)
-    console.log('optionalParam',optionalParam)
-    console.log('platform',platform)
-    
+        serveToFrontEnd = null;
     
 	if(infoRequest === 'filter') {
 		functions.filter(req, res, optionalParam);

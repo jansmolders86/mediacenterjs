@@ -29,7 +29,7 @@ var fs = require('fs.extra')
 
 exports.loadItems = function (req, res, serveToFrontEnd){
     var metaType = "movie";
-    
+    var getNewFiles = true;
     db.query("CREATE TABLE IF NOT EXISTS movies (original_name TEXT PRIMARY KEY, title TEXT, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number TEXT, adult TEXT)");
 
     
@@ -37,10 +37,10 @@ exports.loadItems = function (req, res, serveToFrontEnd){
         fetchMovieData(req, res, metaType, serveToFrontEnd);
     } else if(serveToFrontEnd === undefined || serveToFrontEnd === null){
         var serveToFrontEnd = true; 
-        getMovies(req, res, metaType, serveToFrontEnd);
+        getMovies(req, res, metaType, serveToFrontEnd,getNewFiles);
     } else{
         serveToFrontEnd = true; 
-        getMovies(req, res, metaType, serveToFrontEnd);
+        getMovies(req, res, metaType, serveToFrontEnd,getNewFiles);
     }
 };
 
@@ -125,16 +125,17 @@ exports.sendState = function (req, res){
 
 /** Private functions **/
 
-fetchMovieData = function(req, res, metaType, serveToFrontEnd) {
+fetchMovieData = function(req, res, metaType, serveToFrontEnd, getNewFiles) {
     console.log('Fetching movie data...');
     metafetcher.fetch(req, res, metaType, function(type){
         if(type === metaType){
+            getNewFiles = false;
             getMovies(req, res, metaType, serveToFrontEnd);
         }
     });             
 }
 
-getMovies = function(req, res, metaType, serveToFrontEnd){
+getMovies = function(req, res, metaType, serveToFrontEnd,getNewFiles){
     console.log('Loading movie data...', serveToFrontEnd);
     db.query('SELECT * FROM movies',{
         original_name  	: String,
@@ -155,14 +156,19 @@ getMovies = function(req, res, metaType, serveToFrontEnd){
             db.query("CREATE TABLE IF NOT EXISTS movies (original_name TEXT PRIMARY KEY, title TEXT, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number TEXT, adult TEXT)");
             console.log("DB error",err);
             serveToFrontEnd = true;
-            fetchMovieData(req, res, metaType, serveToFrontEnd);
+            if(getNewFiles === true){
+                fetchMovieData(req, res, metaType, serveToFrontEnd,getNewFiles);
+            }
         } else if (rows !== null && rows !== undefined && serveToFrontEnd !== false && rows.length > 0){
             console.log('Sending data to client...');
             res.json(rows);
         } else {
             console.log('Getting data...');
             serveToFrontEnd = true;
-            fetchMovieData(req, res, metaType, serveToFrontEnd);
+            
+            if(getNewFiles === true){
+                fetchMovieData(req, res, metaType, serveToFrontEnd,getNewFiles);
+            }
         }
     });
 }

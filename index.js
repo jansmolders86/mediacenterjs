@@ -34,6 +34,7 @@ var express = require('express')
     , http = require('http')
 	, os = require('os')
 	, jade = require('jade')
+    , open = require('open')
 	, configuration_handler = require('./lib/handlers/configuration-handler');
 
 var config = configuration_handler.initializeConfiguration();
@@ -320,16 +321,24 @@ scheduler.schedule();
 
 app.set('port', process.env.PORT || 3000);
 
+
+
 // Open App socket
 if (config.port == "" || config.port == undefined ){
 	var defaultPort = app.get('port');
 	console.log('First run, Setup running on localhost:' + defaultPort + "\n");
 	app.listen(parseInt(defaultPort));
+    var url = 'http://localhost:'+defaultPort;
+    open(url);
+    
 } else{
 	var message = "MediacenterJS listening on port:" + config.port + "\n";
 	console.log(message.green.bold);
 	app.listen(parseInt(config.port));
 }
+
+
+
 
 
 function unzip(req, res, output, dir){
