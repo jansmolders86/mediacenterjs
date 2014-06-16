@@ -78,6 +78,7 @@ Audio: MP3
 Known issues:
 ==================
 
+* Please note there are some issues with the gathering of file data. This is being looked at!
 * Mobile device streaming still in heavy development
 * Browser: Seeking beyond buffer not working yet.
 * Also be sure to check the open issues before filing a new one
