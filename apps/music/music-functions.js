@@ -52,10 +52,12 @@ fetchMusicData = function(req, res, metaType, serveToFrontEnd, getNewFiles) {
         metafetcher.fetch(req, res, metaType, function(type){
             if(type === metaType){
                 getNewFiles = false;
-                setTimeout(function(){
+                
                     console.log('Scraping done for',metaType);
-                    getCompleteCollection(req, res, metaType, serveToFrontEnd, getNewFiles);
-                },3000);
+
+                    setTimeout(function(){
+                        getCompleteCollection(req, res, metaType, serveToFrontEnd, getNewFiles);
+                    },2000);
             }
         }); 
     }
@@ -69,19 +71,19 @@ getCompleteCollection = function(req, res, metaType, serveToFrontEnd, getNewFile
         if(result !== 'none' && result !== null && count > 0) {
             console.log('Found ' + count + ' albums, continuing...');
             result.forEach(function (item, value) {
-
+               
                 if (item !== null && item !== undefined) {
-                    var album       = item.album
+                    var album   = item.album
                     , artist    = item.artist
                     , year      = item.year
                     , genre     = item.genre
                     , cover     = item.cover;
 
                     getTracks(album, artist, year, genre, cover, function (completeAlbum){
-                        if(completeAlbum !== 'err'){
+                        if(completeAlbum !== null){
                             count--;
                             albums.push(completeAlbum);
-                            if (count == 0) {
+                            if (count === 0) {
                                 if(serveToFrontEnd === true){
                                     console.log('Sending data to client...');
                                     return res.json(albums);
@@ -131,11 +133,12 @@ getTracks = function (album, artist, year, genre, cover, callback){
         filename    : String
     },
     function (err, rows) {
+        console.log('laaa'+rows.length)
         if(err){
             db.query("CREATE TABLE IF NOT EXISTS albums (album TEXT PRIMARY KEY, artist TEXT, year INTEGER, genre TEXT, cover VARCHAR)");
-            callback('err');
+            callback(null);
         }
-        if (typeof rows !== 'undefined' && rows.length > 0) {
+        if (typeof rows !== 'undefined' && rows !== null) {
             var completeAlbum = {
                 "album"     : album,
                 "artist"    : artist,
