@@ -40,7 +40,7 @@ function remote(socket, $scope){
                 pushDashboard(socket,$scope);
                 break;
         }
-    }).removeListener('controlling', function(){});
+    });
 
     socket.on('sending', function(data){
         $('#search').val(data);
