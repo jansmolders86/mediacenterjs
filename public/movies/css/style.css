@@ -23,6 +23,7 @@ header.scrolling{ opacity:0.9;}
 header{height:60px; z-index:3; position:fixed!important; top:0; }
 header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
 .container-fluid{ padding-top:230px;z-index:1; }
+.container-fluid .row > div { z-index:1; }
 
 #backdrop{
     box-shadow:none;
@@ -81,6 +82,29 @@ a.backlink { margin-top: 0px; z-index:4; }
     color:#fb8521;
 }
 
+.movieposter{
+    float:left;
+    list-style:none;
+    z-index:3;
+    position:relative;
+    padding: 0px;
+    margin: 0px 0px 20px 0;
+    border: 1px solid #e7e7e7;
+    border-radius:2px;
+    display:block;
+    min-width:219px;
+    min-height:329px;
+    background:#fff;
+    -webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    border-bottom: 0.2em solid rgba(0, 0, 0, 0.2);
+    -webkit-transition: -webkit-box-shadow 0.2s ease;
+    transition: box-shadow 0.2s ease;
+    cursor:pointer;
+    overflow:hidden;
+}
+
+
 .movieposter:hover img{
     opacity: 0.5;
     cursor: pointer;
@@ -129,35 +153,6 @@ a.backlink { margin-top: 0px; z-index:4; }
 
 span.title{visibility:hidden; width:0; height:0;}
 
-.movieposter{
-	float:left;
-	height:558px;
-	list-style:none;
-	z-index:3;
-	position:relative;
-	padding: 0px;
-	margin: 0px 10px 20px 0;
-    border: 1px solid #e7e7e7;
-    border-radius:2px;
-	display:block;
-	background:#fff;
-	-webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
-	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
-	border-bottom: 0.2em solid rgba(0, 0, 0, 0.2);
-	-webkit-transition: -webkit-box-shadow 0.2s ease;
-	transition: box-shadow 0.2s ease;
-}
-
-
-.movieposter{
-    position:relative;
-    cursor:pointer;
-    overflow:hidden;
-    margin:0;
-    padding:0;
-    background:none;
-    border:0;
-}
 
 .movieposter:hover .caption,
 .movieposter.current .caption{

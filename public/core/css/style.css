@@ -365,7 +365,7 @@ body > #screensaver{
 /* 						Please edit this in your own theme. 					*/
 
 #hiddenSetting{visibility:hidden; width:0; height:0; float:left;}
-#setup #oauth {width:300px;}
+.initialSetup #setup #oauth {width:300px;}
 
 input[type=text],
 input[type=password],
