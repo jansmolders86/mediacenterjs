@@ -133,7 +133,6 @@ getTracks = function (album, artist, year, genre, cover, callback){
         filename    : String
     },
     function (err, rows) {
-        console.log('laaa'+rows.length)
         if(err){
             db.query("CREATE TABLE IF NOT EXISTS albums (album TEXT PRIMARY KEY, artist TEXT, year INTEGER, genre TEXT, cover VARCHAR)");
             callback(null);
