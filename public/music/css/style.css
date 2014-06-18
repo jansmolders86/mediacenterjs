@@ -216,6 +216,7 @@ header h1 { padding-top: 9px;}
     float:left;
     font-size:32px;
     color:#f5f5f5;
+    cursor:pointer;
 }
 
 #player .nav{width: 250px;}
