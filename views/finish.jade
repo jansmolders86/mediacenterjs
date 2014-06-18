@@ -2,17 +2,19 @@ extends layout
 
 block body
     #header
-        h1 Setup MediacenterJS
-    #wrapper
-        #content
-            p Thank you for taking the time to check out MediacenterJS. 
-            p Simply press the button below if you kept the port the same (3000). Otherwise please alter the port in the address bar and start exploring what MediaCenterJS has to offer. For documentation please visit GitHub. (link available on mediacenterjs.com)
-            
-            p This version of MediacenterJS is a preview build which means functionality can still break due to the fact that MediacenterJS is still in heavy development. 
-            
-            p Hopefully this build will give you an idea of the finished product. Feel free to comment, suggest features or contribute to the project on the GitHub page.
-            
-            a.btn(href="/") Launch MediacenterJS
+        .container
+            h1 Setup MediacenterJS
+    .container
+        .row
+            .col-md-12
+                p Thank you for taking the time to check out MediacenterJS. 
+                p Simply press the button below if you kept the port the same (3000). Otherwise please alter the port in the address bar and start exploring what MediaCenterJS has to offer. <br/> For documentation please visit GitHub. (link available on mediacenterjs.com)
+
+                p This version of MediacenterJS is a preview build which means functionality can still break due to the fact that MediacenterJS is still in heavy development. 
+
+                p Hopefully this build will give you an idea of the finished product. Feel free to comment, suggest features or contribute to the project on the GitHub page.
+
+                a.btn(href="/") Launch MediacenterJS
             
     script.
         $(function(){

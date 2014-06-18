@@ -231,13 +231,14 @@ label,
 .btn-alternative{ background: #0074a2;}
 .btn-alternative:hover{ background: #1c8fbd; }
 .btn-alternative:active{ box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #074057, 0px 5px 3px #ddd; }
-.btn.btn-disabled,
-.btn.btn-disabled:hover,
-.btn.btn-disabled:active{
+
+.btn-btn-disabled,
+.btn-btn-disabled:hover,
+.btn-btn-disabled:active{
     background-color:#ddd;
     color:#fff;
     top:0;
-    box-shadow: inset 0px 1px 0px #2ab7ec, 0px 4px 0px 0px #979797, 0px 7px 5px #ddd;
+    box-shadow: inset 0px 1px 0px #ccc, 0px 4px 0px 0px #ccc, 0px 7px 5px #ddd;
 }
 
 em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red; font-style: normal; font-size: 13px;}

@@ -1,22 +1,24 @@
 extends /layout
 
 block declarations
-	- body_class = '404';
+    - body_class = '404';
 
 block additional_scripts
-	script.
-		$(function() {
-			setTimeout(function(){
-				window.location="/"
-			},5000);
-		});
+    script.
+        $(function() {
+            setTimeout(function(){
+                window.location="/"
+            },5000);
+        });
 
 block body
-	#backdrop
-		img.backdropimg(src="/core/css/img/backdrop.png")	
-	#header
-		img.logo(src="/core/css/img/logo.png")
-		h1 #{lingua.pagenotFound}
-	#wrapper 
-		h1 #{lingua.pagenotFound_header}
-		p #{lingua.pagenotFound_txt}
+    #backdrop
+        img.backdropimg(src="/core/css/img/backdrop.png")	
+    #header
+        img.logo(src="/core/css/img/logo.png")
+        h1 #{lingua.pagenotFound}
+    .container
+        .row
+            .col-md-12
+                h1 #{lingua.pagenotFound_header}
+                p #{lingua.pagenotFound_txt}

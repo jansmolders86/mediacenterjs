@@ -1,76 +1,83 @@
 extends layout
 
 block declarations
-	- include_validation = true;
+    - include_validation = true;
 
 block additional_css
-	link(rel='stylesheet', href='/setup/css/style.css')
-	link(rel='stylesheet', href='/settings/css/style.css')
+    link(rel='stylesheet', href='/setup/css/style.css')
+    link(rel='stylesheet', href='/settings/css/style.css')
 
 block additional_scripts
-	script(src='/core/js/plugins/oauth.min.js')
-	script(src="/settings/js/jquery.mcjs.settings.js")
-	script.
-		$(function() {
-			var userLang = navigator.language || navigator.userLanguage;
-			userLang = userLang.replace(/-.*/,'');
-			if(userLang.match(/nl|en|fr|da|de|pt|sv|tr|it|ru|ua|es/g)){
-				$('input#language').val(userLang);
-			} else{
-				$('input#language').val('en');
-			}
+    script(src='/core/js/plugins/oauth.min.js')
+    script(src="/settings/js/jquery.mcjs.settings.js")
+    script.
+        $(function() {
+            var userLang = navigator.language || navigator.userLanguage;
+            userLang = userLang.replace(/-.*/,'');
+            if(userLang.match(/nl|en|fr|da|de|pt|sv|tr|it|ru|ua|es/g)){
+                $('input#language').val(userLang);
+            } else{
+                $('input#language').val('en');
+            }
 
-			var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
-			if(isMac){
-				$('input#platform').val('OSX');
-			}
-		});
+            var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+            if(isMac){
+                $('input#platform').val('OSX');
+            }
+        });
 
 block body
-	#header
-		h1(style="width:100%") Hi, Please setup MediacenterJS
-	#wrapper
+    #header
+        .container
+            h1(style="width:100%") Hi, Please setup MediacenterJS
+    .container
+        input.oauthKeyHidden(name="oauthKey" type="hidden")
+        form#setup.validate-form.form-horizontal(action='/setuppost',method='post')
+            .form-group.mcjs-rc-controllable
+                span.info.col-md-5
+                    span.quote &ldquo;
+                    span Please provide the location of your media. You can always add or alter these settings from the settings panel. An app will become accessible once a valid path is given.
+                    span.quote &rdquo;
+            .form-group.mcjs-rc-controllable
+                label.col-md-2(for="moviepath") Specify movie location
+                .col-md-10
+                    input#moviepath.mcjs-rc-clickable.form-control(name="moviepath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-path="true",  data-msg-path="Specify a valid path.")
+            .form-group.mcjs-rc-controllable
+                label.col-md-2(for="musicpath") Specify music location
+                .col-md-10
+                    input#musicpath.mcjs-rc-clickable.form-control(name="musicpath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-path="true",  data-msg-path="Specify a valid path.")
+            .form-group.mcjs-rc-controllable
+                label.col-md-2(for="tvpath") Specify tvshow location
+                .col-md-10
+                    input#tvpath.mcjs-rc-clickable.form-control(name="tvpath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-path="true",  data-msg-path="Specify a valid path.")
+            .form-group.mcjs-rc-controllable
+                label.col-md-2(for="location") You current location (city) *
+                .col-md-10
+                    input#location.mcjs-rc-clickable.form-control(name="location",type="text", placeholder="ie london or amsterdam",data-rule-required="true", data-msg-required="This field is required.")
+            .form-group.mcjs-rc-controllable
+                label.col-md-2(for="port") Port *
+                .col-md-10
+                    input#port.mcjs-rc-clickable.form-control(name="port",type="text", placeholder="ie 3000 or 1337", data-rule-required="true", data-msg-required="This field is required.")
+            .form-group.mcjs-rc-controllable
+                span.info.col-md-5
+                    span.quote &ldquo;
+                    span Securely connect to your Google account using oAuth to use the YouTube app. Logging in will enable you to view your personal content. After logging in using oAuth, press 'submit' to save and continue. You can also log in later.
+                    span.quote &rdquo;
+                    input#oauthKey(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
+                    input.oauth(name="oauth" type="hidden")
+            .form-group.mcjs-rc-controllable
+                .col-md-10
+                    a.btn.btn-alternative#oauth(href="#", style="display:inline-block;") Connect to Google using oAuth
+                    input.btn.mcjs-rc-clickable(type="submit",value="Submit", style="display:inline-block; margin-left:150px;")
+                    label(for="oauthKey")
 
-		input.oauthKeyHidden(name="oauthKey" type="hidden")
-		form#setup.validate-form(action='/setuppost',method='post')
-			.row
-				span.info
-					span.quote &ldquo;
-					span Please provide the location of your media. You can always add or alter these settings from the settings panel. <br/> An app will become accessible once a valid path is given.
-					span.quote &rdquo;
-			.row.mcjs-rc-controllable
-				label(for="moviepath") Specify movie location
-				input#moviepath.mcjs-rc-clickable(name="moviepath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-path="true",  data-msg-path="Specify a valid path.")
-			.row.mcjs-rc-controllable
-				label(for="musicpath") Specify music location
-				input#musicpath.mcjs-rc-clickable(name="musicpath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-path="true",  data-msg-path="Specify a valid path.")
-			.row.mcjs-rc-controllable
-				label(for="tvpath") Specify tvshow location
-				input#tvpath.mcjs-rc-clickable(name="tvpath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-path="true",  data-msg-path="Specify a valid path.")
-			.row.mcjs-rc-controllable
-				label(for="location") You current location (city) *
-				input#location.mcjs-rc-clickable(name="location",type="text", placeholder="ie london or amsterdam",data-rule-required="true", data-msg-required="This field is required.")
-			.row.mcjs-rc-controllable
-				label(for="port") Port *
-				input#port.mcjs-rc-clickable(name="port",type="text", placeholder="ie 3000 or 1337", data-rule-required="true", data-msg-required="This field is required.")
-			.row.mcjs-rc-controllable
-				span.info
-					span.quote &ldquo;
-					span Securely connect to your Google account using oAuth to use the YouTube app.<br/> Logging in will enable you to view your personal content. <br/> After logging in using oAuth, press 'submit' to save and continue.<br/> You can also log in later.
-					span.quote &rdquo;
-				input#oauthKey(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
-				input.oauth(name="oauth" type="hidden")
-				a.btn.btn-alternative#oauth(href="#", style="display:inline-block;") Connect to Google using oAuth
-				input.btn.mcjs-rc-clickable(type="submit",value="Submit", style="display:inline-block; margin-left:150px;")
-				label(for="oauthKey")
-
-				input(name="screensaver",type="hidden",value="dim")
-				input#language(name="language",type="hidden",value="en")
-				input#platform(name="platform",type="hidden",value="")
-				input(name="theme",type="hidden",value="wigo")
-				input(name="spotifyUser",type="hidden",value="")
-				input(name="spotifyPass",type="hidden",value="")
-				input(name="localIP",type="hidden",value=localIP)
-				input(name="remotePort",type="hidden",value="3001")
-			.row
-				label * = required
+                    input(name="screensaver",type="hidden",value="dim")
+                    input#language(name="language",type="hidden",value="en")
+                    input#platform(name="platform",type="hidden",value="")
+                    input(name="theme",type="hidden",value="wigo")
+                    input(name="spotifyUser",type="hidden",value="")
+                    input(name="spotifyPass",type="hidden",value="")
+                    input(name="localIP",type="hidden",value=localIP)
+                    input(name="remotePort",type="hidden",value="3001")
+            .form-group.mcjs-rc-controllable
+                label * = required
