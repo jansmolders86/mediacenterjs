@@ -236,17 +236,22 @@ app.post('/getScraperData', function(req, res){
     , req // Dummy variable
     , res; // Dummy variable
 
-    console.log(scraperlink)
     if(scraperlink === 'movies'){
         moviesfunctions.loadItems(req, res, serveToFrontEnd);
     } else if (scraperlink === 'music'){
         musicfunctions.loadItems(req, res, serveToFrontEnd);
     } else if (scraperlink === 'tv'){
         tvfunctions.loadItems(req, res, serveToFrontEnd);
+    }  else if(scraperlink === 'all'){
+        moviesfunctions.loadItems(req, res, serveToFrontEnd);
+        setTimeout(function(){    
+            musicfunctions.loadItems(req, res, serveToFrontEnd);
+        },10000);
+        setTimeout(function(){    
+            tvfunctions.loadItems(req, res, serveToFrontEnd);
+        },20000); 
     }
-    
 });
-
 
 app.post('/clearCache', function(req, res){
 	var app_cache_handler = require('./lib/handlers/app-cache-handler');
@@ -336,9 +341,6 @@ if (config.port == "" || config.port == undefined ){
 	console.log(message.green.bold);
 	app.listen(parseInt(config.port));
 }
-
-
-
 
 
 function unzip(req, res, output, dir){
