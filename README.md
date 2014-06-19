@@ -81,7 +81,9 @@ Known issues:
 * Please note there are some issues with the gathering of file data. This is being looked at!
 * Mobile device streaming still in heavy development
 * Browser: Seeking beyond buffer not working yet.
-* Also be sure to check the open issues before filing a new one
+
+Be sure to check the open issues before filing a new one.
+Also check out what is currently being developed or fixed on Trello: https://trello.com/b/czjyYsFi/mediacenterjs
 
 Translations
 -------------
