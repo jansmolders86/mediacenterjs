@@ -56,8 +56,11 @@ header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
     display:block;
     position: relative;
     width:100vw;
-    filter: blur(8px); -webkit-filter: blur(8px); -moz-filter: blur(8px);
-    -o-filter: blur(8px); -ms-filter: blur(8px);
+    filter: blur(8px); 
+    -webkit-filter: blur(8px); 
+    -moz-filter: blur(8px);
+    -o-filter: blur(8px); 
+    -ms-filter: blur(8px);
     filter: url(blur.svg#blur);
     opacity:0.8;
 }
