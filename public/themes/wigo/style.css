@@ -182,6 +182,7 @@ a.backlink:hover{
 
 .homepage h1{text-transform: none; font-weight:300;}
 
+header{z-index:5;}
 header .logo{ float:left; height:45px; margin: 0px 10px 0 0px; }
 
 header h1{
