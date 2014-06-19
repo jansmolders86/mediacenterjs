@@ -18,7 +18,7 @@
 body{overflow: hidden;}
 
 .col-md-1 {
-width: 9.333333%;
+    width: 9.333333%;
 }
 
 header h1 { padding-top: 9px;}
@@ -159,7 +159,7 @@ header h1 { padding-top: 9px;}
 
 #playlist img{ margin-bottom:5px; cursor:pointer;}
 #playlist .album-title{font-size:14px;}
-#playlist .album{ margin-top:10px; padding:10px; }
+#playlist .album{ margin-top:10px; padding:10px;}
 
 #playlist .album li{
     padding:5px 0;
@@ -180,8 +180,8 @@ header h1 { padding-top: 9px;}
 #playlist .album ol{ padding-left:0;}
 #playlist .remove{
     position: absolute;
-    top: 70px;
-    left: 310px;
+    top: 0px;
+    left: 300px;
     color: #f5f5f5;
     font-size: 24px;
     z-index: 1;
@@ -193,6 +193,7 @@ header h1 { padding-top: 9px;}
 }
 
 #playlist .album img{ z-index: 2; }
+#playlist .list{  position: relative; }
 #playlist .list:hover img{ opacity:0.3 }
 
 /** Player **/
