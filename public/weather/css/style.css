@@ -86,6 +86,7 @@ body,html{overflow:hidden; position:relative; color:#333;}
 	height: 180px;
 	text-align: center;
 	display: inline-block;
+    font-size:18px;
 }
 
 .forecast li div.weekday { font-size: 20px; font-weight: bold; line-height: 40px; } 
