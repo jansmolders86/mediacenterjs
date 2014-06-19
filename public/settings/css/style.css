@@ -13,10 +13,10 @@ label[for="oauthKey"] {
 a.cachelink,
 a.scraperlink,
 #oauth{
-    margin: 5px auto;
+    margin: 5px 20px;
     display: block;
     float:none;
-    width: 100%;
+    text-align: left;
 }
 
 #settings h2 {

@@ -1,6 +1,6 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
-	
+    MediaCenterJS - A NodeJS based mediacenter solution
+
     Copyright (C) 2014 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -17,9 +17,7 @@
 */
 'use strict';
 
-var movieApp = angular.module('movieApp', [
-    'movieApp.scroll'
-]);
+var movieApp = angular.module('movieApp', []);
 
 movieApp.controller('movieCtrl', function($scope, $http) {
     $scope.focused = 0;
@@ -35,7 +33,7 @@ movieApp.controller('movieCtrl', function($scope, $http) {
             var elem = document.getElementById("backdropimg");
             elem.src = backdrop;
         }
-        
+
         var setupSocket = {
             async: function() {
                 var promise = $http.get('/configuration/').then(function (response) {
@@ -51,7 +49,7 @@ movieApp.controller('movieCtrl', function($scope, $http) {
                                 $scope.$apply(function () {
                                     callback.apply(socket, args);
                                 });
-                            });             
+                            });
 
                         },
                         emit: function (eventName, data, callback) {
@@ -70,7 +68,7 @@ movieApp.controller('movieCtrl', function($scope, $http) {
                 return promise;
             }
         };
-        
+
         setupSocket.async().then(function(data) {
             if (typeof data.on !== "undefined") {
                 $scope.remote       = remote(data, $scope);
@@ -83,7 +81,7 @@ movieApp.controller('movieCtrl', function($scope, $http) {
 
 function playMovie(data, $http){
     var orginalName = data;
-    
+
     var platform = 'desktop';
     if (navigator.userAgent.match(/Android/i)){
         platform = 'android';
@@ -92,17 +90,17 @@ function playMovie(data, $http){
             || navigator.userAgent.match(/iPad/i)
             || navigator.userAgent.match(/iPod/i))
     {
-        platform = 'ios';    
+        platform = 'ios';
     }
 
     $http.get('/movies/'+orginalName+'/play/'+platform).success(function(data) {
-        var fileName                =  orginalName   
+        var fileName                =  orginalName
             , outputFile            =   fileName.replace(/ /g, "-")
             , extentionlessFile     =   outputFile.replace(/\.[^/.]+$/, "")
             , videoUrl              =   "/data/movies/"+extentionlessFile+".mp4"
-            , subtitleUrl           =   "/data/movies/"+extentionlessFile+".srt"  
+            , subtitleUrl           =   "/data/movies/"+extentionlessFile+".srt"
             , playerID              =   'player'
             , homeURL               =   '/movies/';
         videoJSHandler(playerID, data, videoUrl, subtitleUrl, orginalName,homeURL, 5000);
-    });  
+    });
 }

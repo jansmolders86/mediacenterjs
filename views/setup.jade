@@ -42,23 +42,38 @@ block body
             .form-group.mcjs-rc-controllable
                 label.col-md-2(for="moviepath") Specify movie location
                 .col-md-10
-                    input#moviepath.mcjs-rc-clickable.form-control(name="moviepath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-path="true",  data-msg-path="Specify a valid path.")
+                    .input-group
+                        span.input-group-addon
+                            i.folder.icon
+                        input#moviepath.mcjs-rc-clickable.form-control(name="moviepath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/movies/", data-rule-path="true",  data-msg-path="Specify a valid path.")
             .form-group.mcjs-rc-controllable
                 label.col-md-2(for="musicpath") Specify music location
                 .col-md-10
-                    input#musicpath.mcjs-rc-clickable.form-control(name="musicpath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-path="true",  data-msg-path="Specify a valid path.")
+                    .input-group
+                        span.input-group-addon
+                            i.folder.icon
+                        input#musicpath.mcjs-rc-clickable.form-control(name="musicpath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-path="true",  data-msg-path="Specify a valid path.")
             .form-group.mcjs-rc-controllable
                 label.col-md-2(for="tvpath") Specify tvshow location
                 .col-md-10
-                    input#tvpath.mcjs-rc-clickable.form-control(name="tvpath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-path="true",  data-msg-path="Specify a valid path.")
+                    .input-group
+                        span.input-group-addon
+                            i.folder.icon
+                        input#tvpath.mcjs-rc-clickable.form-control(name="tvpath",type="text", placeholder="C:/temp/ or /mnt/media/hdd/music/", data-rule-path="true",  data-msg-path="Specify a valid path.")
             .form-group.mcjs-rc-controllable
                 label.col-md-2(for="location") You current location (city) *
                 .col-md-10
-                    input#location.mcjs-rc-clickable.form-control(name="location",type="text", placeholder="ie london or amsterdam",data-rule-required="true", data-msg-required="This field is required.")
+                    .input-group
+                        span.input-group-addon
+                            i.globe.icon
+                        input#location.mcjs-rc-clickable.form-control(name="location",type="text", placeholder="ie london or amsterdam",data-rule-required="true", data-msg-required="This field is required.")
             .form-group.mcjs-rc-controllable
                 label.col-md-2(for="port") Port *
                 .col-md-10
-                    input#port.mcjs-rc-clickable.form-control(name="port",type="text", placeholder="ie 3000 or 1337", data-rule-required="true", data-msg-required="This field is required.")
+                    .input-group
+                        span.input-group-addon
+                            i.exchange.icon
+                        input#port.mcjs-rc-clickable.form-control(name="port",type="text", placeholder="ie 3000 or 1337", data-rule-required="true", data-msg-required="This field is required.")
             .form-group.mcjs-rc-controllable
                 span.info.col-md-5
                     span.quote &ldquo;
