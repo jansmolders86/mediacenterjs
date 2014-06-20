@@ -51,7 +51,7 @@
                 if(cover  !== undefined || cover !== null){
                     $scope.edit.thumbnail = cover;
                 } else {
-                    $scope.edit.thumbnail = '';
+                    $scope.edit.thumbnail = '/music/css/img/nodata.jpg';
                 }
             }
 
