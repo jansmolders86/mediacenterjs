@@ -1,6 +1,6 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
-	
+    MediaCenterJS - A NodeJS based mediacenter solution
+
     Copyright (C) 2014 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -23,33 +23,33 @@ var express = require('express')
 , helper = require('../../lib/helpers.js')
 , config = require('../../lib/handlers/configuration-handler').getConfiguration()
 , functions = require('./music-functions');
- 
+
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
 
-exports.index = function(req, res, next){	
-	res.render('music',{
-		selectedTheme: config.theme
-	});
-            
+exports.index = function(req, res, next){
+    res.render('music',{
+        selectedTheme: config.theme
+    });
+
     var socket = require('../../lib/utils/setup-socket');
     var io = socket.io;
     io.emit('status', {msg: 'hoi'});
 };
 
-exports.get = function(req, res, next){	
-	var infoRequest = req.params.id
+exports.get = function(req, res, next){
+    var infoRequest = req.params.id
         , optionalParam = req.params.optionalParam
         , action = req.params.action
         , serveToFrontEnd = null;
-	
-	if (infoRequest == 'loadItems'){
+
+    if (infoRequest == 'loadItems'){
         serveToFrontEnd = true;
         functions.loadItems(req,res, serveToFrontEnd);
-	}
-	
-	if(action){
-		var album = infoRequest.replace(/\+/g, " ");
+    }
+
+    if(action){
+        var album = infoRequest.replace(/\+/g, " ");
         var track = optionalParam.replace(/\+/g, " ");
         switch(action) {
             case('play'):
@@ -62,5 +62,12 @@ exports.get = function(req, res, next){
                 functions.randomTrack(req, res, track, album);
             break;
         }
+    }
+}
+
+exports.post = function(req, res, next){
+    var data = req.body;
+    if(req.params.id === 'edit'){
+        functions.edit(req, res, data);
     }
 }

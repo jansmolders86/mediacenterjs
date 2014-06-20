@@ -1,6 +1,6 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
-	
+    MediaCenterJS - A NodeJS based mediacenter solution
+
     Copyright (C) 2014 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -97,7 +97,40 @@ header h1 { padding-top: 9px;}
 
 #library .thumbnail:hover img,
 #library .thumbnail.current img{
-	opacity:0.5;
+    opacity:0.5;
+}
+
+#library .edit.icon{display:none;}
+#library .thumbnail:hover .edit.icon{
+    display:block;
+    position:absolute;
+    bottom:5px;
+    right:5px;
+    z-index:9;
+}
+#library .thumbnail .edit-form.hidden{display:none;}
+#library .thumbnail .edit-form{
+    height:100%;
+    width:100%;
+    background:#fff;
+    padding:10px;
+    position:absolute;
+    top:0px;
+    right:0px;
+}
+
+#library .thumbnail .edit-form input[type=text]{
+    height: 15px!important;
+    line-height: 20px!important;
+    width: 100%;
+    font-size:12px;
+    margin-bottom:10px;
+}
+
+#library .thumbnail .edit-form label{ padding:0;}
+#library .thumbnail .edit-form input[type=submit]{
+    width:100%;
+    text-align: center;
 }
 
 .album-title,
@@ -111,10 +144,10 @@ header h1 { padding-top: 9px;}
 }
 
 .album-title{
-    height:20px; 
+    height:20px;
     font-size:14px;
     max-width:250px;
-    text-overflow: ellipsis; 
+    text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 }
@@ -149,11 +182,11 @@ header h1 { padding-top: 9px;}
 }
 
 #playlist h2 {
-	height: 50px;
-	padding: 10px;
-	background: #fb8521;
-	margin: 0;
-	color: #fff;
+    height: 50px;
+    padding: 10px;
+    background: #fb8521;
+    margin: 0;
+    color: #fff;
 }
 #playlist ul{padding-bottom: 150px;}
 
@@ -226,8 +259,8 @@ header h1 { padding-top: 9px;}
 #player .right{float:right;}
 
 .track-number{
-    color:#D1D1D1; 
-    display:inline-block; 
+    color:#D1D1D1;
+    display:inline-block;
     margin:0 5px;
     vertical-align: top;
 }
@@ -245,13 +278,13 @@ header h1 { padding-top: 9px;}
 }
 
 .bar {
-	display: inline-block;
-	height: 100%;
-	background-color: #fb8521;
-	webkit-transition: width 3s ease-in-out;
-	-moz-transition: width 3s ease-in-out;
-	-o-transition: width 3s ease-in-out;
-	transition: width 3s ease-in-out;
+    display: inline-block;
+    height: 100%;
+    background-color: #fb8521;
+    webkit-transition: width 3s ease-in-out;
+    -moz-transition: width 3s ease-in-out;
+    -o-transition: width 3s ease-in-out;
+    transition: width 3s ease-in-out;
 }
 
 

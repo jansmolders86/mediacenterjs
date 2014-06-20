@@ -1,6 +1,6 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
-	
+    MediaCenterJS - A NodeJS based mediacenter solution
+
     Copyright (C) 2014 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
 */
 var file_utils = require('../../lib/utils/file-utils')
     , metafetcher = require('../../lib/utils/metadata-fetcher')
-	, config = require('../../lib/handlers/configuration-handler').getConfiguration()
-	, music_playback_handler = require('./music-playback-handler'); 
+    , config = require('../../lib/handlers/configuration-handler').getConfiguration()
+    , music_playback_handler = require('./music-playback-handler');
 
     var database = require('../../lib/utils/database-connection');
     var db = database.db;
@@ -26,13 +26,13 @@ var file_utils = require('../../lib/utils/file-utils')
 exports.loadItems = function (req, res, serveToFrontEnd){
     db.query("CREATE TABLE IF NOT EXISTS albums (album TEXT PRIMARY KEY, artist TEXT, year INTEGER, genre TEXT, cover VARCHAR)");
     db.query("CREATE TABLE IF NOT EXISTS tracks (title TEXT PRIMARY KEY, track INTEGER, album TEXT, artist TEXT, year INTEGER, genre TEXT, filename TEXT, filepath TEXT)");
-    
+
     var metaType = "music";
     var getNewFiles = true;
     if(serveToFrontEnd === false){
         fetchMusicData(req, res, metaType, serveToFrontEnd, getNewFiles);
     } else if(serveToFrontEnd === undefined || serveToFrontEnd === null){
-        var serveToFrontEnd = true; 
+        var serveToFrontEnd = true;
         getCompleteCollection(req, res, metaType, serveToFrontEnd, getNewFiles);
     } else {
         console.log('lookup')
@@ -41,37 +41,53 @@ exports.loadItems = function (req, res, serveToFrontEnd){
 };
 
 exports.playTrack = function(req, res, track, album){
-	music_playback_handler.startTrackPlayback(res, track);
+    music_playback_handler.startTrackPlayback(res, track);
 };
+
+exports.edit = function(req, res, data){
+    db.query('UPDATE albums SET album=$newTitle,artist=$newArtist,cover=$newThumbnail WHERE album=$currentAlbum; ', {
+        newTitle : data.newTitle,
+        newArtist :data.newArtist,
+        newThumbnail : data.newThumbnail,
+        currentAlbum: data.currentAlbum
+    },
+     function (err, rows) {
+         if(err){
+            console.log('DB error', err);
+         } else {
+            res.json('done');
+         }
+     });
+}
 
 /** Private functions **/
 
 
 fetchMusicData = function(req, res, metaType, serveToFrontEnd, getNewFiles) {
-    if(getNewFiles !== false){       
+    if(getNewFiles !== false){
         metafetcher.fetch(req, res, metaType, function(type){
             if(type === metaType){
                 getNewFiles = false;
-                
+
                     console.log('Scraping done for',metaType);
 
                     setTimeout(function(){
                         getCompleteCollection(req, res, metaType, serveToFrontEnd, getNewFiles);
                     },2000);
             }
-        }); 
+        });
     }
 }
 
 
-getCompleteCollection = function(req, res, metaType, serveToFrontEnd, getNewFiles){    
+getCompleteCollection = function(req, res, metaType, serveToFrontEnd, getNewFiles){
     getAlbums(req, res, function(result){
         var count   = result.length;
         var albums  = [];
         if(result !== 'none' && result !== null && count > 0) {
             console.log('Found ' + count + ' albums, continuing...');
             result.forEach(function (item, value) {
-               
+
                 if (item !== null && item !== undefined) {
                     var album   = item.album
                     , artist    = item.artist
@@ -89,7 +105,7 @@ getCompleteCollection = function(req, res, metaType, serveToFrontEnd, getNewFile
                                     return res.json(albums);
                                     res.end();
                                 }
-                            } 
+                            }
                         } else {
                             console.log('Error retrieving tracks...');
                         }
@@ -99,7 +115,7 @@ getCompleteCollection = function(req, res, metaType, serveToFrontEnd, getNewFile
         } else if( getNewFiles === true){
             fetchMusicData(req, res, metaType, serveToFrontEnd, getNewFiles);
         }
-    }); 
+    });
 }
 
 getAlbums = function(req, res, callback){
@@ -150,4 +166,4 @@ getTracks = function (album, artist, year, genre, cover, callback){
         }
     });
 }
-             
+

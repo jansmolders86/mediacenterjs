@@ -1,6 +1,6 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
-	
+    MediaCenterJS - A NodeJS based mediacenter solution
+
     Copyright (C) 2014 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -26,9 +26,49 @@
         $scope.focused = 0;
         $http.get('/music/loadItems').success(function(data) {
             $scope.albums = data;
-
         });
-        
+
+        $scope.edit ={}
+        $scope.editItem = function(album,artist,cover){
+
+            if($scope.edit.artist === '' || $scope.edit.artist === null || $scope.edit.artist === undefined ){
+                if(artist  !== undefined || artist !== null){
+                    $scope.edit.artist = artist;
+                } else {
+                    $scope.edit.artist = '';
+                }
+            }
+
+            if($scope.edit.title === '' || $scope.edit.title === null || $scope.edit.title === undefined ){
+                if(album  !== undefined || album !== null){
+                    $scope.edit.title = album;
+                } else {
+                    $scope.edit.title = '';
+                }
+            }
+
+            if($scope.edit.thumbnail === '' || $scope.edit.thumbnail === null || $scope.edit.thumbnail === undefined ){
+                if(cover  !== undefined || cover !== null){
+                    $scope.edit.thumbnail = cover;
+                } else {
+                    $scope.edit.thumbnail = '';
+                }
+            }
+
+            $http({
+                    method: "post",
+                    data: {
+                        newArtist    : $scope.edit.artist,
+                        newTitle     : $scope.edit.title,
+                        newThumbnail : $scope.edit.thumbnail,
+                        currentAlbum : album
+                    },
+                    url: "/music/edit"
+                }).success(function(data, status, headers, config) {
+                    location.reload();
+                });
+        }
+
         var setupSocket = {
             async: function() {
                 var promise = $http.get('/configuration/').then(function (response) {
@@ -44,7 +84,7 @@
                                 $scope.$apply(function () {
                                     callback.apply(socket, args);
                                 });
-                            });             
+                            });
 
                         },
                         emit: function (eventName, data, callback) {
@@ -62,8 +102,8 @@
                 });
                 return promise;
             }
-        };            
-        
+        };
+
 
         setupSocket.async().then(function(data) {
             if (typeof data.on !== "undefined") {
@@ -71,7 +111,7 @@
                 $scope.keyevents    = keyevents(data, $scope, player, audio);
             }
         });
-        
+
         $scope.orderProp = 'genre';
     };
 
@@ -89,7 +129,7 @@
                 track: 0
             };
 
-	    player = {
+        player = {
             playlist: playlist,
             current: current,
             playing: false,
@@ -138,28 +178,28 @@
                 }
                     if (player.playing) player.play();
             }
-	    };
+        };
 
-	    playlist.add = function(album) {
-	        if (playlist.indexOf(album) != -1) return;
-	        playlist.push(album);
-	    };
+        playlist.add = function(album) {
+            if (playlist.indexOf(album) != -1) return;
+            playlist.push(album);
+        };
 
-	    playlist.remove = function(album) {
-	        var index = playlist.indexOf(album);
-	        if (index == current.album) player.reset();
-	        playlist.splice(index, 1);
-	    };
+        playlist.remove = function(album) {
+            var index = playlist.indexOf(album);
+            if (index == current.album) player.reset();
+            playlist.splice(index, 1);
+        };
 
-	    audio.addEventListener('ended', function() {
-	        $rootScope.$apply(player.next);
-	    }, false);
-        
+        audio.addEventListener('ended', function() {
+            $rootScope.$apply(player.next);
+        }, false);
+
         audio.addEventListener("timeupdate", function(){
             updateProgress(audio);
         }, false);
 
-	    return player;
+        return player;
     });
 
     function updateProgress(audio) {

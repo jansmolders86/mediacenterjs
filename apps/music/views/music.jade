@@ -29,26 +29,26 @@ html(lang="en", ng-app="musicApp")
         script.
             $(function(){
                 $('body').mcjs();
-                
+
                 window.addEventListener('load', function() {
                     FastClick.attach(document.body);
                 }, false);
-                
+
                 $(function(){
                     $('#inner-playlist').slimScroll({
                         height: 'auto'
                     });
                 });
             });
-            
+
         title Music
         body.appMusic(ng-controller="musicCtrl")
             header
                 a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
                 h1 #{lingua.music}
-                
+
                 input#search.pull-right(ng-model="query", type="text", placeholder="Search")
-                
+
             .container-fluid
                     #playlist(ng-show="player.playlist.length > 0")
                         #inner-playlist
@@ -71,16 +71,26 @@ html(lang="en", ng-app="musicApp")
                     section#library(ng-class="{side: player.playlist.length > 0}")
                         .row
                             .col-xs-8.col-sm-4.col-md-2.album-wrapper(ng-repeat="album in albums | filter:query | orderBy:orderProp")
-                                .thumbnail(ng-click="player.playlist.add(album)",ng-class="{current: focused == $index }")
-                                    img(ng-src="{{album.cover}}")
+                                .thumbnail(ng-class="{current: focused == $index }")
+                                    i.circular.inverted.edit.icon(ng-click="editing = ! editing")
+                                    img(ng-src="{{album.cover}}", ng-click="player.playlist.add(album)")
                                     .caption
                                         p
                                             span.album-title {{album.album}}
                                             span.album-artist {{album.artist}}
                                             span.album-year(ng-show="album.year !== 0") {{album.year}}
+                                    .edit-form(ng-class="{ 'hidden': ! editing }")
+                                        label Thumbnail url path
+                                        input(type="text",name="thumbnail",ng-model="edit.thumbnail",required,ng-value="album.cover")
+                                        label Artist
+                                        input(type="text",name="artist",ng-model="edit.artist",required,ng-value="album.artist")
+                                        label Album title
+                                        input(type="text",name="title",ng-model="edit.title",required,ng-value="album.title")
+                                        input.btn(type="submit",value="submit", ng-click="editItem(album.album, album.artist, album.cover)",required)
+
 
                     h2.loading(ng-show="!albums") #{lingua.loading}
-                
+
             #player(ng-show="player.playlist.length > 0")
                 #progressBar.ui.active.striped.progress
                     span#progress.bar
