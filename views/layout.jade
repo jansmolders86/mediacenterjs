@@ -1,17 +1,17 @@
 doctype 5
-
-html(lang="en")
+block declarations
+    - var additional_title      = undefined;
+    - var use_knockout          = false;
+    - var use_angular           = false;
+    - var include_validation    = false;
+    - var include_remote        = true;
+    - var body_id               = '';
+    - var body_class            = '';
+    - var angular_app           = undefined;
+    - var angular_body_ctrl     = undefined;
+    - var angular_body_class    = undefined;
+html(lang="en",ng-app=angular_app)
     head
-        block declarations
-            - var additional_title      = undefined;
-            - var use_knockout          = false;
-            - var use_angular           = false;
-            - var include_validation    = false;
-            - var include_remote        = true;
-            - var body_id               = '';
-            - var body_class            = '';
-            - var angular_app           = undefined;
-
         if !additional_title
             title MediacenterJS
         else
@@ -95,6 +95,6 @@ html(lang="en")
         block additional_scripts
 
 
-body(id=body_id, class=body_class)
+body(id=body_id, class=body_class,ng-controller=angular_ctrl,ng-class=angular_body_class)
     block body
 
