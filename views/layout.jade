@@ -1,17 +1,17 @@
 doctype 5
-
-html(lang="en")
+block declarations
+    - var additional_title      = undefined;
+    - var use_knockout          = false;
+    - var use_angular           = false;
+    - var include_validation    = false;
+    - var include_remote        = true;
+    - var body_id               = '';
+    - var body_class            = '';
+    - var angular_app           = undefined;
+    - var angular_body_ctrl     = undefined;
+    - var angular_body_class    = undefined;
+html(lang="en",ng-app=angular_app)
     head
-        block declarations
-            - var additional_title      = undefined;
-            - var use_knockout          = false;
-            - var use_angular           = false;
-            - var include_validation    = false;
-            - var include_remote        = true;
-            - var body_id               = '';
-            - var body_class            = '';
-            - var angular_app           = undefined;
-
         if !additional_title
             title MediacenterJS
         else
@@ -32,7 +32,7 @@ html(lang="en")
         link(rel='stylesheet', href='/core/css/style.css')
         link(rel='stylesheet', href='/core/css/icon.css')
         link(rel='stylesheet', href='/core/css/jquery-ui-1.10.3.custom.min.css')
-        
+
         script(src="/core/js/plugins/jquery/jquery-1.8.2.min.js")
         script(src="/core/js/plugins/jquery/jquery-ui-1.10.3.min.js")
 
@@ -65,10 +65,10 @@ html(lang="en")
             script(src="/core/js/plugins/validation/jquery.validate.min.js")
             script(src="/core/js/plugins/validation/jquery.validate.defaults.js")
             script(src="/core/js/plugins/validation/jquery.validate.rules.js")
-            
+
         if include_remote
             script(src="/core/js/jquery.remote.js")
-            
+
             script.
                 $(function(){
                     $('body').mcjsRemote();
@@ -86,7 +86,7 @@ html(lang="en")
                         return false;
                     });
                 }
-                
+
                 window.addEventListener('load', function() {
                     FastClick.attach(document.body);
                 }, false);
@@ -95,6 +95,6 @@ html(lang="en")
         block additional_scripts
 
 
-body(id=body_id, class=body_class)
+body(id=body_id, class=body_class,ng-controller=angular_body_ctrl,ng-class=angular_body_class)
     block body
 

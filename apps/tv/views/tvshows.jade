@@ -1,65 +1,45 @@
-doctype 5
-html(lang="en", ng-app="tvApp")
-    head
-        meta(name="mobile-web-app-capable" content="yes")
-        meta(name="apple-mobile-web-app-capable" content="yes")
-        meta(name="apple-mobile-web-app-status-bar-style" content="black")
-        meta(charset="utf-8")
-        meta(name="viewport" content="width=device-width, initial-scale=1.0")
-        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans:300,400,600,700,800')
-        link(rel='stylesheet', href='/core/css/bootstrap.min.css')
-        link(rel='stylesheet', href='/core/css/style.css')
-        link(rel='stylesheet', href='/core/css/icon.css')
-        link(rel='stylesheet', href='/tv/css/style.css')
-        link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
-        script(src="/core/js/plugins/jquery/jquery-1.8.2.min.js")
-        if selectedTheme
-            link(rel='stylesheet', href='/themes/' + selectedTheme +'/style.css')
-            script(src='/themes/' + selectedTheme +'/script.js')
-        script(src="http://vjs.zencdn.net/4.3/video.js")
-        script(src="/core/js/plugins/socket.io.min.js")
-        script(src="/core/js/plugins/fastclick.js")
-        script(src="/core/js/plugins/jquery/jquery.scrollintoview.min.js")
-        script(src="/core/js/plugins/jquery/jquery.idle-timer.js")
-        script(src="/core/js/plugins/jquery/jquery.i18n.properties.-1.0.9.js")
-        script(src="/core/js/jquery.mcjs.core.js")
-        script(src="/core/js/plugins/angular/angular.min.js")
-        script(src="/core/js/plugins/angular/angular-route.min.js")
-        script(src="/tv/js/app.js")
-        script(src="/core/js/video.js")
-        script(src="/tv/js/remote.js")
-        script.
-            $(function(){
-                $('body').mcjs();
-                
-                window.addEventListener('load', function() {
-                    FastClick.attach(document.body);
-                }, false);
-            });
-            
+extends /layout
 
-        title tvshows
-        body.appTv(ng-controller="tvCtrl",ng-class="{playing:playing}")
-            header
-                a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
-                h1 #{lingua.tvshows}
-                            
-                input#search.pull-right(ng-model="query", type="text", placeholder="Search")
-               
-            .container
-                #playlist(ng-show="player.playlist.length > 0")
-                    h2 Playlist
-                    ul
-                        li.currentshow(ng-repeat="tvshow in player.playlist", ng-class="{current: player.current.tvshow == $index}")
-                            .header( ng-click="player.playlist.remove(tvshow)")
-                                span.tvshow-title {{tvshow.title}}
-                                i.remove.circle.icon
-                            ol.episodes
-                                li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode.localName)") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
-                ul#tvshows(ng-class="{side: player.playlist.length > 0}")
-                    li.tvshow(ng-repeat="tvshow in tvshows | filter:query | orderBy:orderProp",ng-click="player.playlist.add(tvshow)", ng-class="{current: focused == $index}")
-                        img(ng-src="{{tvshow.banner}}")
-                        
-                h2.loading(ng-show="!tvshows") #{lingua.loading}
-                
-            video#player.video-js.vjs-default-skin(width="100%", height="100%", ng-show="playing", controls, preload="metadata")
+block declarations
+    - additional_title      = lingua.tvshows;
+    - body_class            = 'appTv';
+    - use_angular           = true;
+    - angular_app           = "tvApp";
+    - angular_body_ctrl     = "tvCtrl";
+    - angular_body_class    = "{playing:playing}";
+
+block additional_css
+    link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
+    link(rel='stylesheet', href='/tv/css/style.css')
+
+block additional_scripts
+    script(src="/core/js/plugins/jquery/jquery.slimscroll.min.js")
+    script(src="/core/js/plugins/video.js")
+    script(src="/tv/js/app.js")
+    script(src="/core/js/video.js")
+    script(src="/tv/js/remote.js")
+
+block body
+    header
+        a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
+        h1 #{lingua.tvshows}
+
+        input#search.pull-right(ng-model="query", type="text", placeholder="Search")
+
+    .container
+        #playlist(ng-show="player.playlist.length > 0")
+            h2 Playlist
+            ul
+                li.currentshow(ng-repeat="tvshow in player.playlist", ng-class="{current: player.current.tvshow == $index}")
+                    .header( ng-click="player.playlist.remove(tvshow)")
+                        span.tvshow-title {{tvshow.title}}
+                        i.remove.circle.icon
+                    ol.episodes
+                        li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode.localName)") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
+        ul#tvshows(ng-class="{side: player.playlist.length > 0}")
+            li.tvshow(ng-repeat="tvshow in tvshows | filter:query | orderBy:orderProp",ng-click="player.playlist.add(tvshow)", ng-class="{current: focused == $index}")
+                img(ng-src="{{tvshow.banner}}")
+
+        h2.loading(ng-show="!tvshows") #{lingua.loading}
+
+    video#player.video-js.vjs-default-skin(width="100%", height="100%", ng-show="playing", controls, preload="metadata")

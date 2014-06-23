@@ -1,70 +1,49 @@
-doctype 5
-html(lang="en", ng-app="movieApp")
-    head
-        meta(name="mobile-web-app-capable" content="yes")
-        meta(name="apple-mobile-web-app-capable" content="yes")
-        meta(name="apple-mobile-web-app-status-bar-style" content="black")
-        meta(charset="utf-8")
-        meta(name="viewport" content="width=device-width, initial-scale=1.0")
-        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans:300,400,600,700,800')
-        link(rel='stylesheet', href='/core/css/bootstrap.min.css')
-        link(rel='stylesheet', href='/core/css/style.css')
-        link(rel='stylesheet', href='/core/css/icon.css')
-        link(rel='stylesheet', href='/movies/css/style.css')
-        link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
-        script(src="/core/js/plugins/jquery/jquery-1.8.2.min.js")
-        if selectedTheme
-            link(rel='stylesheet', href='/themes/' + selectedTheme +'/style.css')
-            script(src='/themes/' + selectedTheme +'/script.js')
-        script(src="/core/js/plugins/video.js")
-        script(src="/core/js/plugins/socket.io.min.js")
-        script(src="/core/js/plugins/fastclick.js")
-        script(src="/core/js/plugins/jquery/jquery.scrollintoview.min.js")
-        script(src="/core/js/plugins/jquery/jquery.idle-timer.js")
-        script(src="/core/js/plugins/jquery/jquery.i18n.properties.-1.0.9.js")
-        script(src="/core/js/jquery.mcjs.core.js")
-        script(src="/core/js/plugins/angular/angular.min.js")
-        script(src="/core/js/plugins/angular/angular-route.min.js")
-        script(src="/movies/js/app.js")
-        script(src="/core/js/video.js")
-        script(src="/movies/js/remote.js")
-        script.
-            $(function(){
-                $('body').mcjs();
+extends /layout
 
-                window.addEventListener('load', function() {
-                    FastClick.attach(document.body);
-                }, false);
-            });
+block declarations
+    - additional_title      = lingua.movies;
+    - body_class            = 'appMovies';
+    - use_angular           = true;
+    - angular_app           = "movieApp";
+    - angular_body_ctrl     = "movieCtrl";
+    - angular_body_class    = "{playing:playing}";
 
+block additional_css
+    link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
+    link(rel='stylesheet', href='/movies/css/style.css')
 
-        title #{lingua.movies}
-        body.appMovies(ng-controller="movieCtrl",ng-class="{playing:playing}")
-            #backdrop
-                img#backdropimg.fullscreen(src="/movies/css/img/backdrop.png")
-            header
-                a.backlink(href="/") &#xe113;
-                h1 #{lingua.movies}
+block additional_scripts
+    script(src="/core/js/plugins/video.js")
+    script(src="/movies/js/app.js")
+    script(src="/core/js/video.js")
+    script(src="/movies/js/remote.js")
 
-                input#search.pull-right(ng-model="query", type="text", placeholder="Search")
-            .container-fluid
-                .row
-                    .col-xs-8.col-sm-6.col-md-4.col-lg-2(ng-repeat="movie in movies | filter:query | orderBy:orderProp")
-                        .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-focus="changeBackdrop(movie.backdrop_path)", ng-mouseover="changeBackdrop(movie.backdrop_path)", ng-class="{current: focused == $index }",ng-click="playMovie(movie.original_name)")
-                                img.movieposter(ng-src="{{movie.poster_path}}", onerror="this.src='/movies/css/img/nodata.jpg'")
-                                .caption
+block body
+    #backdrop
+        img#backdropimg.fullscreen(src="/movies/css/img/backdrop.png")
+    header
+        a.backlink(href="/") &#xe113;
+        h1 #{lingua.movies}
+
+        input#search.pull-right(ng-model="query", type="text", placeholder="Search")
+    .container-fluid
+        .row
+            .col-xs-8.col-sm-6.col-md-4.col-lg-2(ng-repeat="movie in movies | filter:query | orderBy:orderProp")
+                .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-focus="changeBackdrop(movie.backdrop_path)", ng-mouseover="changeBackdrop(movie.backdrop_path)", ng-class="{current: focused == $index }",ng-click="playMovie(movie.original_name)")
+                        img.movieposter(ng-src="{{movie.poster_path}}", onerror="this.src='/movies/css/img/nodata.jpg'")
+                        .caption
+                                p
+                                    h1.movie-title{{movie.title}}
+                                    .overview
+                                        .summary {{movie.overview}}
+                                    .specs
                                         p
-                                            h1.movie-title{{movie.title}}
-                                            .overview
-                                                .summary {{movie.overview}}
-                                            .specs
-                                                p
-                                                    strong {{movie.genre}}
-                                                p
-                                                    strong #{lingua.movies_Runtime}: {{movie.runtime}} min
-                                .cdNumber(ng-show="movie.cdNumber.length > 0")
-                                    span {{movie.cdNumber}}
+                                            strong {{movie.genre}}
+                                        p
+                                            strong #{lingua.movies_Runtime}: {{movie.runtime}} min
+                        .cdNumber(ng-show="movie.cdNumber.length > 0")
+                            span {{movie.cdNumber}}
 
-                h2.loading(ng-show="!movies") #{lingua.loading}
+        h2.loading(ng-show="!movies") #{lingua.loading}
 
-            video#player.video-js.vjs-default-skin(width="100%", height="100%", ng-show="playing", controls, preload="metadata")
+    video#player.video-js.vjs-default-skin(width="100%", height="100%", ng-show="playing", controls, preload="metadata")
