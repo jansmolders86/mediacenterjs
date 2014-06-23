@@ -5,18 +5,19 @@ block declarations
     - body_class            = 'appMovies';
     - use_angular           = true;
     - angular_app           = "movieApp";
-    - angular_body_ctrl          = "movieCtrl";
+    - angular_body_ctrl     = "movieCtrl";
     - angular_body_class    = "{playing:playing}";
 
 block additional_css
-    link(href="/core/css/video-js.css", rel="stylesheet")
+    link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
     link(rel='stylesheet', href='/movies/css/style.css')
 
 block additional_scripts
+    script(src="/core/js/plugins/video.js")
     script(src="/movies/js/app.js")
     script(src="/core/js/video.js")
     script(src="/movies/js/remote.js")
-    
+
 block body
     #backdrop
         img#backdropimg.fullscreen(src="/movies/css/img/backdrop.png")

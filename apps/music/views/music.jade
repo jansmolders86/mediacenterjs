@@ -1,105 +1,77 @@
-doctype 5
-html(lang="en", ng-app="musicApp")
-    head
-        meta(name="mobile-web-app-capable" content="yes")
-        meta(name="apple-mobile-web-app-capable" content="yes")
-        meta(name="apple-mobile-web-app-status-bar-style" content="black")
-        meta(charset="utf-8")
-        meta(name="viewport" content="width=device-width, initial-scale=1.0")
-        link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans:300,400,600,700,800')
-        link(rel='stylesheet', href='/core/css/bootstrap.min.css')
-        link(rel='stylesheet', href='/core/css/style.css')
-        link(rel='stylesheet', href='/core/css/icon.css')
-        link(rel='stylesheet', href='/music/css/style.css')
-        script(src="/core/js/plugins/jquery/jquery-1.8.2.min.js")
-        if selectedTheme
-            link(rel='stylesheet', href='/themes/' + selectedTheme +'/style.css')
-            script(src='/themes/' + selectedTheme +'/script.js')
-        script(src="/core/js/plugins/jquery/jquery.scrollintoview.min.js")
-        script(src="/core/js/plugins/fastclick.js")
-        script(src="/core/js/plugins/jquery/jquery.idle-timer.js")
-        script(src="/core/js/plugins/socket.io.min.js")
-        script(src="/core/js/plugins/jquery/jquery.i18n.properties.-1.0.9.js")
-        script(src="/core/js/jquery.mcjs.core.js")
-        script(src="/core/js/plugins/angular/angular.min.js")
-        script(src="/core/js/plugins/angular/angular-route.min.js")
-        script(src="/music/js/app.js")
-        script(src="/music/js/remote.js")
-        script(src="/core/js/plugins/jquery/jquery.slimscroll.min.js")
-        script.
-            $(function(){
-                $('body').mcjs();
+extends /layout
 
-                window.addEventListener('load', function() {
-                    FastClick.attach(document.body);
-                }, false);
+block declarations
+    - additional_title      = lingua.music;
+    - body_class            = 'appMusic';
+    - use_angular           = true;
+    - angular_app           = "musicApp";
+    - angular_body_ctrl     = "musicCtrl";
 
-                $(function(){
-                    $('#inner-playlist').slimScroll({
-                        height: 'auto'
-                    });
-                });
-            });
+block additional_css
+    link(rel='stylesheet', href='/music/css/style.css')
 
-        title Music
-        body.appMusic(ng-controller="musicCtrl")
-            header
-                a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
-                h1 #{lingua.music}
+block additional_scripts
+    script(src="/music/js/app.js")
+    script(src="/music/js/remote.js")
+    script(src="/core/js/plugins/jquery/jquery.slimscroll.min.js")
+block body
+    header
+        a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
+        h1 #{lingua.music}
 
-                input#search.pull-right(ng-model="query", type="text", placeholder="Search")
+        input#search.pull-right(ng-model="query", type="text", placeholder="Search")
 
-            .container-fluid
-                    #playlist(ng-show="player.playlist.length > 0")
-                        #inner-playlist
-                            h2 Playlist
-                            ul
-                                li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
-                                    .list( ng-click="player.playlist.remove(album)")
-                                        img(ng-src="{{album.cover}}")
-                                        i.remove.circle.icon
-                                    .album-info
-                                        span.album-title {{album.album}}
-                                        span.album-artist {{album.artist}}
-                                        span.album-year(ng-show="album.year !== 0") {{album.year}}
-                                    ol.tracks
-                                        li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
-                                            i.play.icon
-                                            span.track-number {{track.track}}
-                                            span.track-title {{track.title}}
+    .container-fluid
+            #playlist(ng-show="player.playlist.length > 0")
+                #inner-playlist
+                    h2 Playlist
+                    ul
+                        li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
+                            .list( ng-click="player.playlist.remove(album)")
+                                img(ng-src="{{album.cover}}")
+                                i.remove.circle.icon
+                            .album-info
+                                span.album-title {{album.album}}
+                                span.album-artist {{album.artist}}
+                                span.album-year(ng-show="album.year !== 0") {{album.year}}
+                            ol.tracks
+                                li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
+                                    i.play.icon
+                                    span.track-number {{track.track}}
+                                    span.track-title {{track.title}}
 
-                    section#library(ng-class="{side: player.playlist.length > 0}")
-                        .row
-                            .col-xs-8.col-sm-4.col-md-2.album-wrapper(ng-repeat="album in albums | filter:query | orderBy:orderProp")
-                                .thumbnail(ng-class="{current: focused == $index }")
-                                    i.circular.inverted.edit.icon(ng-click="editing = ! editing")
-                                    img(ng-src="{{album.cover}}", ng-click="player.playlist.add(album)")
-                                    .caption
-                                        p
-                                            span.album-title {{album.album}}
-                                            span.album-artist {{album.artist}}
-                                            span.album-year(ng-show="album.year !== 0") {{album.year}}
-                                    .edit-form(ng-class="{ 'hidden': ! editing }")
-                                        label Thumbnail url path
-                                        input(type="text",name="thumbnail",ng-model="edit.thumbnail",required,ng-value="album.cover")
-                                        label Artist
-                                        input(type="text",name="artist",ng-model="edit.artist",required,ng-value="album.artist")
-                                        label Album title
-                                        input(type="text",name="title",ng-model="edit.title",required,ng-value="album.title")
-                                        input.btn(type="submit",value="submit", ng-click="editItem(album.album, album.artist, album.cover)",required)
+            section#library(ng-class="{side: player.playlist.length > 0}")
+                .row
+                    .col-xs-8.col-sm-4.col-md-2.album-wrapper(ng-repeat="album in albums | filter:query | orderBy:orderProp")
+                        .thumbnail(ng-class="{current: focused == $index }")
+                            i.circular.inverted.edit.icon(ng-click="editing = ! editing")
+                            img(ng-src="{{album.cover}}", ng-click="player.playlist.add(album)")
+                            .caption
+                                p
+                                    span.album-title {{album.album}}
+                                    span.album-artist {{album.artist}}
+                                    span.album-year(ng-show="album.year !== 0") {{album.year}}
+                            .edit-form(ng-class="{ 'hidden': ! editing }")
+                                label Thumbnail url path
+                                input(type="text",name="thumbnail",ng-model="edit.thumbnail",required,ng-value="album.cover")
+                                label Artist
+                                input(type="text",name="artist",ng-model="edit.artist",required,ng-value="album.artist")
+                                label Album title
+                                input(type="text",name="title",ng-model="edit.title",required,ng-value="album.title")
+                                input.btn(type="submit",value="submit", ng-click="editItem(album.album, album.artist, album.cover)",required)
 
 
-                    h2.loading(ng-show="!albums") #{lingua.loading}
+            h2.loading(ng-show="!albums") #{lingua.loading}
 
-            #player(ng-show="player.playlist.length > 0")
-                #progressBar.ui.active.striped.progress
-                    span#progress.bar
-                ul.nav
-                    li.left
-                        i.control.backward.icon(ng-click="player.previous()")
-                    li.middle
-                        i.control.play.icon(ng-click="player.play()",ng-hide="player.playing")
-                    li.middle
-                        i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
-                    li.right
-                        i.control.forward.icon(ng-click="player.next()")
+    #player(ng-show="player.playlist.length > 0")
+        #progressBar.ui.active.striped.progress
+            span#progress.bar
+        ul.nav
+            li.left
+                i.control.backward.icon(ng-click="player.previous()")
+            li.middle
+                i.control.play.icon(ng-click="player.play()",ng-hide="player.playing")
+            li.middle
+                i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
+            li.right
+                i.control.forward.icon(ng-click="player.next()")
