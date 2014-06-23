@@ -11,6 +11,7 @@ block additional_css
     link(rel='stylesheet', href='/music/css/style.css')
 
 block additional_scripts
+    script(src="/core/js/plugins/angular/angular-ui/ui-bootstrap-tpls-0.11.0.js")
     script(src="/music/js/app.js")
     script(src="/music/js/remote.js")
     script(src="/core/js/plugins/jquery/jquery.slimscroll.min.js")
@@ -44,22 +45,13 @@ block body
                 .row
                     .col-xs-8.col-sm-4.col-md-2.album-wrapper(ng-repeat="album in albums | filter:query | orderBy:orderProp")
                         .thumbnail(ng-class="{current: focused == $index }")
-                            i.circular.inverted.edit.icon(ng-click="editing = ! editing")
+                            i.circular.inverted.edit.icon(ng-click="open(album)")
                             img(ng-src="{{album.cover}}", ng-click="player.playlist.add(album)")
                             .caption
                                 p
                                     span.album-title {{album.album}}
                                     span.album-artist {{album.artist}}
                                     span.album-year(ng-show="album.year !== 0") {{album.year}}
-                            .edit-form(ng-class="{ 'hidden': ! editing }")
-                                label Thumbnail url path
-                                input(type="text",name="thumbnail",ng-model="edit.thumbnail",required,ng-value="album.cover")
-                                label Artist
-                                input(type="text",name="artist",ng-model="edit.artist",required,ng-value="album.artist")
-                                label Album title
-                                input(type="text",name="title",ng-model="edit.title",required,ng-value="album.title")
-                                input.btn(type="submit",value="submit", ng-click="editItem(album.album, album.artist, album.cover)",required)
-
 
             h2.loading(ng-show="!albums") #{lingua.loading}
 
@@ -75,3 +67,17 @@ block body
                 i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
             li.right
                 i.control.forward.icon(ng-click="player.next()")
+
+    script(type="text/ng-template", id="editModal.html")
+        .modal-header
+            h1 Edit album
+        .modal-body
+            label Thumbnail url path
+            input(type="text",name="thumbnail",ng-model="edit.thumbnail",required,ng-value="current.cover")
+            label Artist
+            input(type="text",name="artist",ng-model="edit.artist",required,ng-value="current.artist")
+            label Album title
+            input(type="text",name="title",ng-model="edit.title",required,ng-value="current.album")
+        .modal-footer
+            input.btn(type="submit",value="submit", ng-click="editItem()",required)
+            button.btn(ng-click="cancel()") Cancel

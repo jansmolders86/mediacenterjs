@@ -104,33 +104,9 @@ header h1 { padding-top: 9px;}
 #library .thumbnail:hover .edit.icon{
     display:block;
     position:absolute;
-    bottom:5px;
+    top:5px;
     right:5px;
     z-index:9;
-}
-#library .thumbnail .edit-form.hidden{display:none;}
-#library .thumbnail .edit-form{
-    height:100%;
-    width:100%;
-    background:#fff;
-    padding:10px;
-    position:absolute;
-    top:0px;
-    right:0px;
-}
-
-#library .thumbnail .edit-form input[type=text]{
-    height: 15px!important;
-    line-height: 20px!important;
-    width: 100%;
-    font-size:12px;
-    margin-bottom:10px;
-}
-
-#library .thumbnail .edit-form label{ padding:0;}
-#library .thumbnail .edit-form input[type=submit]{
-    width:100%;
-    text-align: center;
 }
 
 .album-title,

@@ -19,55 +19,80 @@
 
 (function(window) {
 
-    var musicApp = angular.module('musicApp', []);
+    var musicApp = angular.module('musicApp', ['ui.bootstrap']);
 
-    window.musicCtrl = function($scope, $http, player,  audio) {
+    window.musicCtrl = function($scope, $http, player, $modal, audio) {
         $scope.player = player;
         $scope.focused = 0;
         $http.get('/music/loadItems').success(function(data) {
             $scope.albums = data;
         });
 
-        $scope.edit ={}
-        $scope.editItem = function(album,artist,cover){
 
-            if($scope.edit.artist === '' || $scope.edit.artist === null || $scope.edit.artist === undefined ){
-                if(artist  !== undefined || artist !== null){
-                    $scope.edit.artist = artist;
-                } else {
-                    $scope.edit.artist = '';
+
+        $scope.open = function (album) {
+            var modalInstance = $modal.open({
+                templateUrl: 'editModal.html',
+                controller: ModalInstanceCtrl,
+                size: 'sm',
+                resolve: {
+                    current: function () {
+                        return album;
+                    }
                 }
-            }
+            });
+        }
 
-            if($scope.edit.title === '' || $scope.edit.title === null || $scope.edit.title === undefined ){
-                if(album  !== undefined || album !== null){
-                    $scope.edit.title = album;
-                } else {
-                    $scope.edit.title = '';
+        var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
+            $scope.edit ={};
+            $scope.current = current;
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+
+            $scope.editItem = function(){
+
+                if($scope.edit.artist === '' || $scope.edit.artist === null || $scope.edit.artist === undefined ){
+                    if($scope.current.artist  !== undefined || $scope.current.artist !== null){
+                        $scope.edit.artist = $scope.current.artist;
+                    } else {
+                        $scope.edit.artist = '';
+                    }
                 }
-            }
 
-            if($scope.edit.thumbnail === '' || $scope.edit.thumbnail === null || $scope.edit.thumbnail === undefined ){
-                if(cover  !== undefined || cover !== null){
-                    $scope.edit.thumbnail = cover;
-                } else {
-                    $scope.edit.thumbnail = '/music/css/img/nodata.jpg';
+                if($scope.edit.title === '' || $scope.edit.title === null || $scope.edit.title === undefined ){
+                    if($scope.current.album  !== undefined || $scope.current.album !== null){
+                        $scope.edit.title = $scope.current.album;
+                    } else {
+                        $scope.edit.title = '';
+                    }
                 }
-            }
 
-            $http({
+                if($scope.edit.thumbnail === '' || $scope.edit.thumbnail === null || $scope.edit.thumbnail === undefined ){
+                    if($scope.current.cover  !== undefined || $scope.current.cover !== null){
+                        $scope.edit.thumbnail = $scope.current.cover;
+                    } else {
+                        $scope.edit.thumbnail = '/music/css/img/nodata.jpg';
+                    }
+                }
+
+                $http({
                     method: "post",
                     data: {
                         newArtist    : $scope.edit.artist,
                         newTitle     : $scope.edit.title,
                         newThumbnail : $scope.edit.thumbnail,
-                        currentAlbum : album
+                        currentAlbum : $scope.current.album
                     },
                     url: "/music/edit"
                 }).success(function(data, status, headers, config) {
                     location.reload();
                 });
-        }
+            }
+        };
+
+
 
         var setupSocket = {
             async: function() {
@@ -114,6 +139,7 @@
 
         $scope.orderProp = 'genre';
     };
+
 
     musicApp.factory('audio', function($document) {
         var audio = $document[0].createElement('audio');
