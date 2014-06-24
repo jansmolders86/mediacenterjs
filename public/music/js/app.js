@@ -34,7 +34,7 @@
             var modalInstance = $modal.open({
                 templateUrl: 'editModal.html',
                 controller: ModalInstanceCtrl,
-                size: 'sm',
+                size: 'md',
                 resolve: {
                     current: function () {
                         return album;

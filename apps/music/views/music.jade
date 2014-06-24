@@ -72,12 +72,19 @@ block body
         .modal-header
             h1 Edit album
         .modal-body
-            label Thumbnail url path
-            input(type="text",name="thumbnail",ng-model="edit.thumbnail",required,ng-value="current.cover")
-            label Artist
-            input(type="text",name="artist",ng-model="edit.artist",required,ng-value="current.artist")
-            label Album title
-            input(type="text",name="title",ng-model="edit.title",required,ng-value="current.album")
+            .form-horizontal
+                .row
+                    .form-group
+                        img.col-md-offset-1(ng-src="{{edit.thumbnail}}")
+                    .form-group
+                        label.col-md-3.col-md-offset-1 Thumbnail url path
+                        input.col-md-7(type="text",name="thumbnail",ng-model="edit.thumbnail",required,ng-value="current.cover")
+                    .form-group
+                        label.col-md-3.col-md-offset-1 Artist
+                        input.col-md-7(type="text",name="artist",ng-model="edit.artist",required,ng-value="current.artist")
+                    .form-group
+                        label.col-md-3.col-md-offset-1 Album title
+                        input.col-md-7(type="text",name="title",ng-model="edit.title",required,ng-value="current.album")
         .modal-footer
             input.btn(type="submit",value="submit", ng-click="editItem()",required)
             button.btn(ng-click="cancel()") Cancel
