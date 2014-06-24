@@ -100,14 +100,15 @@ header h1 { padding-top: 9px;}
     opacity:0.5;
 }
 
-#library .edit.icon{display:none;}
-#library .thumbnail:hover .edit.icon{
+.thumbnail .edit.icon{display:none;}
+.thumbnail:hover .edit.icon{
     display:block;
     position:absolute;
     top:5px;
     right:5px;
     z-index:9;
 }
+.modal-body img{max-width:300px; max-height:400px;}
 
 .album-title,
 .album-artist,

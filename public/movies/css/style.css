@@ -56,10 +56,10 @@ header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
     display:block;
     position: relative;
     width:100vw;
-    filter: blur(8px); 
-    -webkit-filter: blur(8px); 
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
     -moz-filter: blur(8px);
-    -o-filter: blur(8px); 
+    -o-filter: blur(8px);
     -ms-filter: blur(8px);
     filter: url(blur.svg#blur);
     opacity:0.8;
@@ -104,12 +104,22 @@ a.backlink { margin-top: 0px; z-index:4; }
     border-radius:2px;
     display:block;
     min-width:219px;
-    min-height:329px;
+    height: 500px;
     background:#fff;
     cursor:pointer;
     overflow:hidden;
     border:0;
 }
+
+.movieposter .edit.icon{display:none;}
+.movieposter:hover .edit.icon{
+    display:block;
+    position:absolute;
+    top:5px;
+    right:5px;
+    z-index:9;
+}
+.modal-body img{max-width:300px; max-height:400px;}
 
 
 .movieposter:hover img{

@@ -17,9 +17,9 @@
 */
 'use strict';
 
-var movieApp = angular.module('movieApp', []);
+var movieApp = angular.module('movieApp', ['ui.bootstrap']);
 
-movieApp.controller('movieCtrl', function($scope, $http) {
+movieApp.controller('movieCtrl', function($scope, $http, $modal) {
     $scope.focused = 0;
     $http.get('/movies/loadItems').success(function(data) {
         $scope.movies = data;
@@ -28,6 +28,68 @@ movieApp.controller('movieCtrl', function($scope, $http) {
             $scope.playing = true;
             playMovie(data, $http);
         }
+
+        $scope.open = function (movie) {
+            var modalInstance = $modal.open({
+                templateUrl: 'editModal.html',
+                controller: ModalInstanceCtrl,
+                size: 'md',
+                resolve: {
+                    current: function () {
+                        return movie;
+                    }
+                }
+            });
+        }
+
+        var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
+            $scope.edit ={};
+            $scope.current = current;
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+
+            $scope.editItem = function(){
+
+                if($scope.edit.title === '' || $scope.edit.title === null || $scope.edit.title === undefined ){
+                    if($scope.current.title  !== undefined || $scope.current.title !== null){
+                        $scope.edit.title = $scope.current.title;
+                    } else {
+                        $scope.edit.title = '';
+                    }
+                }
+
+                if($scope.edit.backdrop_path === '' || $scope.edit.backdrop_path === null || $scope.edit.backdrop_path === undefined ){
+                    if($scope.current.backdrop_path  !== undefined || $scope.current.backdrop_path !== null){
+                        $scope.edit.backdrop_path = $scope.current.backdrop_path;
+                    } else {
+                        $scope.edit.backdrop_path = '/movies/css/img/nodata.png';
+                    }
+                }
+
+                if($scope.edit.backdrop_path === '' || $scope.edit.backdrop_path === null || $scope.edit.backdrop_path === undefined ){
+                    if($scope.current.backdrop_path  !== undefined || $scope.current.backdrop_path !== null){
+                        $scope.edit.backdrop_path = $scope.current.backdrop_path;
+                    } else {
+                        $scope.edit.backdrop_path = '/movies/css/img/backdrop.png';
+                    }
+                }
+
+                $http({
+                    method: "post",
+                    data: {
+                        newTitle            : $scope.edit.title,
+                        newPosterPath       : $scope.edit.poster_path,
+                        newBackdropPath     : $scope.edit.backdrop_path,
+                        currentMovie        : $scope.current.original_name
+                    },
+                    url: "/movies/edit"
+                }).success(function(data, status, headers, config) {
+                    location.reload();
+                });
+            }
+        };
 
         $scope.changeBackdrop = function(backdrop){
             var elem = document.getElementById("backdropimg");
