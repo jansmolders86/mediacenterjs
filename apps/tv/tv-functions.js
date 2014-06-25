@@ -1,6 +1,6 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
-	
+    MediaCenterJS - A NodeJS based mediacenter solution
+
     Copyright (C) 2014 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -17,11 +17,11 @@
 */
 /* Global Imports */
 var fs = require('fs.extra')
-	, file_utils = require('../../lib/utils/file-utils')
-	, colors = require('colors')
+    , file_utils = require('../../lib/utils/file-utils')
+    , colors = require('colors')
     , path = require('path')
     , metafetcher = require('../../lib/utils/metadata-fetcher')
-	, config = require('../../lib/handlers/configuration-handler').getConfiguration();
+    , config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
     var database = require('../../lib/utils/database-connection');
     var db = database.db;
@@ -38,13 +38,27 @@ exports.loadItems = function (req, res, serveToFrontEnd){
     if(serveToFrontEnd == false){
         fetchTVData(req, res, metaType, serveToFrontEnd, getNewFiles);
     } else if(serveToFrontEnd === undefined || serveToFrontEnd === null){
-        var serveToFrontEnd = true; 
-        getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles); 
-    }  else{  
-        getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles); 
+        var serveToFrontEnd = true;
+        getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles);
+    }  else{
+        getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles);
     }
 };
 
+exports.edit = function(req, res, data){
+    db.query('UPDATE tvshows SET title=$newTitle,banner=$newBanner WHERE title=$currentTitle; ', {
+        newTitle      : data.newTitle,
+        newBanner     : data.newBanner,
+        currentTitle  : data.currentTitle
+    },
+    function (err, rows) {
+        if(err){
+            console.log('DB error', err);
+        } else {
+            res.json('done');
+        }
+    });
+}
 
 exports.playEpisode = function (req, res, tvShowRequest){
     file_utils.getLocalFile(config.tvpath, tvShowRequest, function(err, file) {
@@ -76,7 +90,7 @@ exports.sendState = function (req, res){
     , tvShowTitle = incommingData.tvShowTitle
     , progression = incommingData.currentTime
     , transcodingstatus = 'pending';
-    
+
     if(tvShowTitle !== undefined && progression !== undefined){
         var progressionData = [tvShowTitle, progression, transcodingstatus];
         db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)',progressionData );
@@ -87,7 +101,7 @@ exports.sendState = function (req, res){
 /** Private functions **/
 
 fetchTVData = function(req, res, metaType, serveToFrontEnd,getNewFiles) {
-    if(getNewFiles !== false){   
+    if(getNewFiles !== false){
         metafetcher.fetch(req, res, metaType, function(type){
             if(type === metaType){
                 getNewFiles = false;
@@ -106,10 +120,10 @@ function getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles){
 
     console.log('Getting tvshows', getNewFiles);
     db.query('SELECT * FROM tvshows',{
-        title 		    : String,
-        banner        	: String,
-        genre         	: String,
-        certification  	: String
+        title             : String,
+        banner            : String,
+        genre             : String,
+        certification      : String
     }, function(err, rows) {
         if(err){
             db.query("CREATE TABLE IF NOT EXISTS tvshows (title VARCHAR PRIMARY KEY,banner VARCHAR, genre VARCHAR, certification VARCHAR)");
@@ -137,7 +151,7 @@ function getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles){
                                 console.log('Done...');
                                 res.json(ShowList);
                             }
-                        } 
+                        }
                     } else {
                         console.log('Error retrieving episodes');
                     }
@@ -146,15 +160,15 @@ function getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles){
         } else if( getNewFiles === true){
             fetchMusicData(req, res, metaType, serveToFrontEnd, getNewFiles);
         }
-    }); 
+    });
 }
 
 function getEpisodes(showTitle, showBanner, showGenre, showCertification, callback){
     db.query('SELECT * FROM tvepisodes WHERE title = $title ORDER BY season asc', { title:showTitle }, {
             localName   : String,
-            title  	    : String,
-            season    	: Number,
-            episode  	: Number
+            title          : String,
+            season        : Number,
+            episode      : Number
         },
         function(err, rows) {
             if(err){

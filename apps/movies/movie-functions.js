@@ -46,19 +46,19 @@ exports.loadItems = function (req, res, serveToFrontEnd){
 
 
 exports.backdrops = function (req, res){
-    db.query('SELECT * FROM movies',{
-        original_name      : String,
-        title             : String,
-        poster_path      : String,
-        backdrop_path      : String,
-        imdb_id          : String,
-        rating          : String,
-        certification      : String,
-        genre              : String,
-        runtime          : String,
-        overview          : String,
-        cd_number          : String,
-        adult           : String
+    db.query('SELECT * FROM movies ORDER BY title asc',{
+        original_name       : String,
+        title               : String,
+        poster_path         : String,
+        backdrop_path       : String,
+        imdb_id             : String,
+        rating              : String,
+        certification       : String,
+        genre               : String,
+        runtime             : String,
+        overview            : String,
+        cd_number           : String,
+        adult               : String
     }, function(rows) {
         if (rows !== null && rows !== undefined){
             var backdropArray = [];
@@ -91,7 +91,9 @@ exports.edit = function(req, res, data){
 
 exports.playMovie = function (req, res, platform, movieTitle){
     file_utils.getLocalFile(config.moviepath, movieTitle, function(err, file) {
-        if (err) console.log(err .red);
+        if (err){
+            console.log('File not found',err .red);
+        }
         if (file) {
             var movieUrl = file.href
             , movie_playback_handler = require('./movie-playback-handler');
@@ -108,16 +110,6 @@ exports.playMovie = function (req, res, platform, movieTitle){
 
         } else {
             console.log("File " + movieTitle + " could not be found!" .red);
-        }
-    });
-};
-
-exports.getGenres = function (req, res){
-    db.query('SELECT genre FROM movies', function(rows) {
-        if (typeof rows !== 'undefined' && rows.length > 0){
-            var allGenres = rows[0][0].replace(/\r\n|\r|\n| /g,","),
-                genreArray = allGenres.split(',');
-            res.json(genreArray);
         }
     });
 };
@@ -153,19 +145,19 @@ fetchMovieData = function(req, res, metaType, serveToFrontEnd, getNewFiles) {
 
 getMovies = function(req, res, metaType, serveToFrontEnd,getNewFiles){
     console.log('Loading movie data...', serveToFrontEnd);
-    db.query('SELECT * FROM movies',{
-        original_name      : String,
-        title             : String,
-        poster_path      : String,
-        backdrop_path      : String,
-        imdb_id          : String,
-        rating          : String,
-        certification      : String,
-        genre              : String,
-        runtime          : String,
-        overview          : String,
-        cd_number          : String,
-        adult           : String
+    db.query('SELECT * FROM movies ORDER BY title asc',{
+        original_name       : String,
+        title               : String,
+        poster_path         : String,
+        backdrop_path       : String,
+        imdb_id             : String,
+        rating              : String,
+        certification       : String,
+        genre               : String,
+        runtime             : String,
+        overview            : String,
+        cd_number           : String,
+        adult               : String
     },
     function(err, rows) {
         if(err){

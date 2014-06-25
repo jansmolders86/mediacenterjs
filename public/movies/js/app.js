@@ -91,9 +91,16 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
             }
         };
 
-        $scope.changeBackdrop = function(backdrop){
+        $scope.changeBackdrop = function(movie){
             var elem = document.getElementById("backdropimg");
-            elem.src = backdrop;
+            elem.src = movie.backdrop;
+        }
+
+        $scope.changeSelected = function(movie){
+            var elem = document.getElementById("backdropimg");
+            elem.src = movie.backdrop;
+
+            $scope.focused = $scope.movies.indexOf(movie);
         }
 
         var setupSocket = {

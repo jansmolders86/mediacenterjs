@@ -1,6 +1,6 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
-	
+    MediaCenterJS - A NodeJS based mediacenter solution
+
     Copyright (C) 2014 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -17,23 +17,79 @@
 */
 'use strict';
 
-var tvApp = angular.module('tvApp', []);
+var tvApp = angular.module('tvApp', ['ui.bootstrap']);
 
-tvApp.controller('tvCtrl', function($scope, $http, player){
+tvApp.controller('tvCtrl', function($scope, $http, $modal,player){
     $scope.player = player;
     $scope.focused = 0;
     $http.get('/tv/loadItems').success(function(data) {
         $scope.tvshows = data;
     });
-    
+
     $scope.orderProp = 'genre';
-                  
+
     $scope.playEpisode = function(data){
         $scope.playing = true;
         playEpisode(data, $http);
     }
-    
-    
+
+    $scope.changeSelected = function(tvshow){
+        $scope.focused = $scope.tvshows.indexOf(tvshow);
+    }
+
+    $scope.open = function (tvshow) {
+        var modalInstance = $modal.open({
+            templateUrl: 'editModal.html',
+            controller: ModalInstanceCtrl,
+            size: 'md',
+            resolve: {
+                current: function () {
+                    return tvshow;
+                }
+            }
+        });
+    }
+
+    var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
+        $scope.edit ={};
+        $scope.current = current;
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+
+        $scope.editItem = function(){
+
+            if($scope.edit.title === '' || $scope.edit.title === null || $scope.edit.title === undefined ){
+                if($scope.current.title  !== undefined || $scope.current.title !== null){
+                    $scope.edit.title = $scope.current.title;
+                } else {
+                    $scope.edit.title = '';
+                }
+            }
+
+            if($scope.edit.banner === '' || $scope.edit.banner === null || $scope.edit.banner === undefined ){
+                if($scope.current.banner  !== undefined || $scope.current.banner !== null){
+                    $scope.edit.banner = $scope.current.banner;
+                } else {
+                    $scope.edit.banner = '/tv/css/img/nodata.jpg';
+                }
+            }
+
+            $http({
+                method: "post",
+                data: {
+                    newTitle        : $scope.edit.title,
+                    newBanner       : $scope.edit.banner,
+                    currentTitle    : $scope.current.title
+                },
+                url: "/tv/edit"
+            }).success(function(data, status, headers, config) {
+                location.reload();
+            });
+        }
+    };
+
     var setupSocket = {
         async: function() {
             var promise = $http.get('/configuration/').then(function (response) {
@@ -49,7 +105,7 @@ tvApp.controller('tvCtrl', function($scope, $http, player){
                             $scope.$apply(function () {
                                 callback.apply(socket, args);
                             });
-                        });             
+                        });
 
                     },
                     emit: function (eventName, data, callback) {
@@ -67,7 +123,7 @@ tvApp.controller('tvCtrl', function($scope, $http, player){
             });
             return promise;
         }
-    };            
+    };
 
 
     setupSocket.async().then(function(data) {
@@ -76,8 +132,8 @@ tvApp.controller('tvCtrl', function($scope, $http, player){
             $scope.keyevents    = keyevents(data, $scope, player);
         }
     });
-    
-    
+
+
 });
 
 
@@ -89,7 +145,7 @@ tvApp.factory('player', function( $rootScope) {
                 episode: 0
             };
 
-	    player = {
+        player = {
             playlist: playlist,
             current: current,
             play: function(episode, tvshow) {
@@ -120,23 +176,23 @@ tvApp.factory('player', function( $rootScope) {
                     current.episode = playlist[current.tvshow].tepisode.length - 1;
                 }
             }
-	    };
+        };
 
-	    playlist.add = function(tvshow) { 
+        playlist.add = function(tvshow) {
             if (playlist.length > 0){
                 playlist.splice(0, 1);
             }
-	        if (playlist.indexOf(tvshow) != -1) return;
-	        playlist.push(tvshow);
-	    };
+            if (playlist.indexOf(tvshow) != -1) return;
+            playlist.push(tvshow);
+        };
 
-	    playlist.remove = function(tvshow) {
-	        var index = playlist.indexOf(tvshow);
-	        if (index == current.tvshow) player.reset();
-	        playlist.splice(index, 1);
-	    };
+        playlist.remove = function(tvshow) {
+            var index = playlist.indexOf(tvshow);
+            if (index == current.tvshow) player.reset();
+            playlist.splice(index, 1);
+        };
 
-	    return player;
+        return player;
 });
 
 
@@ -145,11 +201,11 @@ function playEpisode(data, $http){
 
     $http.get('/tv/'+localName+'/play').success(function(data) {
 
-        var fileName                =  localName   
+        var fileName                =  localName
             , outputFile            =   fileName.replace(/ /g, "-")
             , extentionlessFile     =   outputFile.replace(/\.[^/.]+$/, "")
             , videoUrl              =   "/data/tv/"+extentionlessFile+".mp4"
-            , subtitleUrl           =   "/data/tv/"+extentionlessFile+".srt"  
+            , subtitleUrl           =   "/data/tv/"+extentionlessFile+".srt"
             , playerID              =   'player'
             , homeURL               =   '/tv/';
 

@@ -1,5 +1,5 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
+    MediaCenterJS - A NodeJS based mediacenter solution
 
     Copyright (C) 2013 - Jan Smolders
 
@@ -38,14 +38,14 @@ h2.loading{top:80px;}
 }
 
 #tvshows{
-	margin: 0 auto;
-	padding: 0;
-	list-style: none;
-	display: block;
-	position: relative;
-	width:100%;
-	min-height:500px;
-	overflow:hidden;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+    display: block;
+    position: relative;
+    width:100%;
+    min-height:500px;
+    overflow:hidden;
 }
 
 #tvshows.side,
@@ -54,68 +54,78 @@ h2.loading{top:80px;}
 }
 
 .tvshow img{
-	margin:0;
+    margin:0;
     display:block;
-	width:780px;
-	height:140px;
-	padding:0;
-	border:0;
+    width:780px;
+    height:140px;
+    padding:0;
+    border:0;
     opacity:1;
 }
 
 .tvshow span{
-	display:block;
-	float:left;
-	font-size: 14px;
-	color:#fff;
-	margin-top:10px;
-	text-transform:capitalize;
+    display:block;
+    float:left;
+    font-size: 14px;
+    color:#fff;
+    margin-top:10px;
+    text-transform:capitalize;
 }
 
 .tvshow{
-	float:left;
+    float:left;
     min-height:100px;
     width:780px;
-	list-style:none;
-	z-index:99;
-	position:relative;
-	padding: 0px;
-	margin: 20px;
+    list-style:none;
+    z-index:99;
+    position:relative;
+    padding: 0px;
+    margin: 20px;
     border: 1px solid #e7e7e7;
-	display:block;
-	background:#fff;
-	-webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
-	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
-	border-bottom: 0.2em solid rgba(0, 0, 0, 0.2);
-	border-radius: 0.33em;
-	-webkit-transition: -webkit-box-shadow 0.2s ease;
-	transition: box-shadow 0.2s ease;
+    display:block;
+    background:#fff;
+    -webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+    border-bottom: 0.2em solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.33em;
+    -webkit-transition: -webkit-box-shadow 0.2s ease;
+    transition: box-shadow 0.2s ease;
     cursor:pointer;
 }
 
+.tvshow .edit.icon{display:none;}
+.tvshow:hover .edit.icon{
+    display:block;
+    position:absolute;
+    top:5px;
+    right:5px;
+    z-index:9;
+}
+.modal-body img{max-width:300px; max-height:400px;}
+
 .tvshow:hover img,
 .tvshow.current img{
-    opacity:0.5;  
+    opacity:0.5;
 }
 
 .tvshow a{ float:left; }
 .tvshow .imageWrapper { height:140px; width:758px; overflow:hidden;}
 .tvshow .overview{
-	padding:10px; 
-	font-size:11px; 
-	line-height:17px; 
-	margin:0;
-	max-height:207px;
-	position:relative;
-	overflow:hidden;
+    padding:10px;
+    font-size:11px;
+    line-height:17px;
+    margin:0;
+    max-height:207px;
+    position:relative;
+    overflow:hidden;
 }
 
-.overview h1{ 
-	margin: 0px 0 10px 0;
-	font-size: 18px;
-	max-width: 230px;
-	text-transform: none;
-	font-family: 'Open Sans', sans-serif;
+.overview h1{
+    margin: 0px 0 10px 0;
+    font-size: 18px;
+    max-width: 230px;
+    text-transform: none;
+    font-family: 'Open Sans', sans-serif;
 }
 .specs p{font-size:12px; float:left; margin:10px 0 0 9px;}
 
@@ -160,11 +170,11 @@ h2.loading{top:80px;}
 
 
 #playlist h2 {
-	height: 70px;
-	padding: 10px;
-	background: #fb8521;
-	margin: 0;
-	color: #fff;
+    height: 70px;
+    padding: 10px;
+    background: #fb8521;
+    margin: 0;
+    color: #fff;
 }
 
 #playlist .header{
@@ -192,17 +202,17 @@ h2.loading{top:80px;}
 /*
 
 .certification{
-	border:2px solid #000;
-	background-color:#fff;
-	font-family:Palatino;
-	font-weight:bold;
-	font-size:24px;
-	color:#000;
-	display:inline-block;
-	float:right;
-	margin-top:10px;
-	text-align:center;
-	padding:3px 5px;
+    border:2px solid #000;
+    background-color:#fff;
+    font-family:Palatino;
+    font-weight:bold;
+    font-size:24px;
+    color:#000;
+    display:inline-block;
+    float:right;
+    margin-top:10px;
+    text-align:center;
+    padding:3px 5px;
 }
 */
 

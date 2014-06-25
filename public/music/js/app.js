@@ -28,6 +28,9 @@
             $scope.albums = data;
         });
 
+        $scope.changeSelected = function(album){
+            $scope.focused = $scope.albums.indexOf(album);
+        }
 
 
         $scope.open = function (album) {
