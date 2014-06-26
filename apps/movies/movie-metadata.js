@@ -234,7 +234,6 @@ getMovies = function(req, res){
 exports.loadData = function(req, res, serveToFrontEnd) {
     walk(dir,  function(err, results) {
         totalFiles = (results) ? results.length : 0;
-        console.log('totalFiles',totalFiles)
         setupParse(req, res, serveToFrontEnd, results);
     });
 }

@@ -85,15 +85,15 @@ var walk = function(dir, done) {
     });
 };
 
-var setupParse = function(results) {
-    if (!results) {
-        console.log('no results!');
-    }
+var setupParse = function(req, res, serveToFrontEnd, results) {
     if (results && results.length > 0) {
         var file = results.pop();
-        doParse(file, function() {
-            setupParse(results);
+        doParse(req, res, file, serveToFrontEnd, function() {
+            setupParse(req, res, serveToFrontEnd, results);
         });
+    }
+    if (!results) {
+        console.log('no results!');
     }
 };
 
@@ -163,32 +163,6 @@ var doParse = function(file, callback) {
     });
 };
 
-
-getTrackFromDB = function(title, callback){
-    db.query('SELECT * FROM tracks WHERE title =? ', [ title ], {
-            title             : String,
-            track             : Number,
-            album             : String,
-            artist          : String,
-            year            : Number,
-            genre           : String,
-            filename        : String,
-            filepath        : String
-        },
-        function(err,rows) {
-            if(err){
-                console.log('DB error', err);
-                db.query("CREATE TABLE IF NOT EXISTS tracks (title TEXT PRIMARY KEY, track INTEGER, album TEXT, artist TEXT, year INTEGER, genre TEXT, filename TEXT, filepath TEXT)");
-            }
-            if (typeof rows !== 'undefined' && rows.length > 0){
-                callback(rows);
-            } else {
-                callback(null);
-            }
-        }
-    );
-}
-
 storeTrackInDB = function(metadata, callback){
     db.query('INSERT OR REPLACE INTO tracks VALUES(?,?,?,?,?,?,?,?)', metadata);
     callback();
@@ -208,35 +182,12 @@ storeAlbumInDatabase = function(metadata, callback){
     }
 
     if(nrScanned === totalFiles){
-        var stop = new Date();
-        //console.log("Scan complete! Time taken:", UMS((stop - start) / 100, true));
-        process.exit();
+        if(serveToFrontEnd === true){
+            getMovies(req, res);
+        }
     }
 
 }
-
-getAlbumFromDB = function (album, callback){
-    db.query('SELECT * FROM albums WHERE album =? ', [ album ], {
-            album             : String,
-            artist          : String,
-            year            : Number,
-            genre           : String,
-            cover           : String
-        },
-        function(err,rows) {
-            if(err){
-                console.log('DB error', err);
-                db.query("CREATE TABLE IF NOT EXISTS albums (album TEXT PRIMARY KEY, artist TEXT, year INTEGER, genre TEXT, cover VARCHAR)");
-            }
-            if (typeof rows !== 'undefined' && rows.length > 0){
-                callback(rows);
-            } else {
-                callback(null);
-            }
-        }
-    );
-}
-
 
 getAdditionalDataFromLastFM = function(album, artist, callback) {
     // Currently only the cover is fetched. Could be expanded in the future
@@ -271,30 +222,9 @@ getAdditionalDataFromLastFM = function(album, artist, callback) {
 }
 
 
-walk(dir,  function(err, results) {
-    totalFiles = (results) ? results.length : 0;
-    setupParse(results);
-});
-
-var UMS = function(seconds, ignoreZero) {
-    var hours = parseInt(seconds / 3600), rest = parseInt(seconds % 3660), minutes = parseInt(rest / 60), seconds = parseInt(rest % 60);
-    if (hours < 10) {
-        hours = "0" + hours;
-    }
-    if (minutes < 10) {
-        minutes = "0" + minutes;
-    }
-    if (seconds < 10) {
-        seconds = "0" + seconds;
-    }
-    if (ignoreZero) {
-        if (hours == "00") {
-            hours = "";
-        } else {
-            hours = hours + ":";
-        }
-    } else {
-        hours = hours + ":";
-    }
-    return hours + minutes + ":" + seconds;
-};
+exports.loadData = function(req, res, serveToFrontEnd) {
+    walk(dir,  function(err, results) {
+        totalFiles = (results) ? results.length : 0;
+        setupParse(req, res, serveToFrontEnd, results);
+    });
+}
