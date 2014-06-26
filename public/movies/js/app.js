@@ -98,8 +98,7 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
 
         $scope.changeSelected = function(movie){
             var elem = document.getElementById("backdropimg");
-            elem.src = movie.backdrop;
-
+            elem.src = movie.backdrop_path;
             $scope.focused = $scope.movies.indexOf(movie);
         }
 
