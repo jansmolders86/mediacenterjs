@@ -15,6 +15,15 @@ block additional_scripts
     script(src="/music/js/app.js")
     script(src="/music/js/remote.js")
     script(src="/core/js/plugins/jquery/jquery.slimscroll.min.js")
+    script.
+        $(function(){
+            var isTouch = "ontouchstart" in document.documentElement;
+            if(!isTouch){
+                $('#inner-playlist').slimScroll({
+                    height: 'auto'
+                });
+            }
+        });
 block body
     header
         a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
@@ -55,9 +64,16 @@ block body
 
             h2.loading(ng-show="!albums") #{lingua.loading}
 
-    #player(ng-show="player.playlist.length > 0")
+    #player.col-xs-12.col-md-12.col-lg-12(ng-show="player.playlist.length > 0")
         #progressBar.ui.active.striped.progress
             span#progress.bar
+
+        #playing-info.col-xs-12.col-md-5
+            img.center-block.img-reponsive.hidden-xs(ng-src="{{player.currentAlbum.cover}}")
+            .info
+                span.album-artist {{player.currentAlbum.artist}}
+                span.album-track {{player.currentTrack.title}}
+
         ul.nav
             li.left
                 i.control.backward.icon(ng-click="player.previous()")

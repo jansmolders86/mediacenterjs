@@ -56,24 +56,28 @@ header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
     display:block;
     position: relative;
     width:100vw;
+    /*
     filter: blur(8px);
     -webkit-filter: blur(8px);
     -moz-filter: blur(8px);
     -o-filter: blur(8px);
     -ms-filter: blur(8px);
     filter: url(blur.svg#blur);
-    opacity:0.8;
+    */
+    opacity:0.5;
 }
 
 body.playing #backdropimg{
+    /*
     filter: none;
     -webkit-filter: blur(0px);
     -moz-filter: blur(0px);
     -ms-filter: blur(0px);
     filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='0');
+    */
 }
 
-a.backlink { margin-top: 0px; z-index:4; }
+a.backlink { margin-top: -5px; z-index:4; }
 
 /* Movie App styling */
 
@@ -122,6 +126,10 @@ a.backlink { margin-top: 0px; z-index:4; }
 .modal-body img{max-width:300px; max-height:400px;}
 
 
+.movieposter:hover {
+    -webkit-transform: scale(1.05);
+    z-index:3;
+}
 .movieposter:hover img{
     opacity: 0.5;
     cursor: pointer;

@@ -38,10 +38,10 @@ block additional_scripts
                     }
                 });
             });
-            
+
             var itemHeight = $('.configurable-options').height();
             $('.cache-management').height(itemHeight);
-            
+
             var secondItemHeight = $('.access-table').height()
             $("#oauthContainer").css("min-height",secondItemHeight+'px');
 
@@ -62,14 +62,14 @@ block body
             input.oauthKeyHidden(name="oauthKey" type="hidden")
             form.form-horizontal#setup.validate-form(action='/submit',method='post')
                 h2 #{lingua.settings_header}
-                
-                .configurable-options.col-sm-12.col-md-10  
-                    h2 Configurable Options 
+
+                .configurable-options.col-sm-12.col-md-12.col-lg-10
+                    h2 Configurable Options
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="moviepath") #{lingua.setting_movielocation}
                         .col-md-10
                             .input-group
-                                span.input-group-addon 
+                                span.input-group-addon
                                     i.folder.icon
                                 input.form-control#moviepath.mcjs-rc-clickable.folder(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation,data-rule-path="true",data-rule-path="true" data-msg-path="Specify a valid path.")
                     .form-group.mcjs-rc-controllable
@@ -84,7 +84,7 @@ block body
                         .col-md-10
                             .input-group
                                 span.input-group-addon
-                                    i.folder.icon   
+                                    i.folder.icon
                                 input.form-control#tvpath.mcjs-rc-clickable.folder(name="tvpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= tvlocation, data-rule-path="true",  data-msg-path="Specify a valid path.")
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="language") #{lingua.setting_language}
@@ -137,7 +137,7 @@ block body
                                     - for theme in themes
                                         option(selected=theme) #{theme}
                     .form-group.mcjs-rc-controllable
-                            label.col-md-2(for="schedule") When should data be gathered autmatically? 
+                            label.col-md-2(for="schedule") When should data be gathered autmatically?
                             .col-md-10
                                 .input-group
                                     span.input-group-addon
@@ -153,43 +153,43 @@ block body
                     .form-group.mcjs-rc-controllable.submit-row
                         input.btn.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
                         input.oauth(name="oauth" type="hidden")
-                    
-                .cache-management.col-sm-12.col-md-2     
-                    h2 Cache management 
+
+                .cache-management.col-sm-12.col-md-12.col-lg-2
+                    h2 Cache management
                     .form-group.mcjs-rc-controllable
-                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="movies") 
-                            i.trash.icon 
-                            | #{lingua.settings_clear_cache_movies}            
+                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="movies")
+                            i.trash.icon
+                            | #{lingua.settings_clear_cache_movies}
                     .form-group.mcjs-rc-controllable
-                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="albums,tracks") 
-                            i.trash.icon 
+                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="albums,tracks")
+                            i.trash.icon
                             | #{lingua.settings_clear_cache_music}
                     .form-group.mcjs-rc-controllable
-                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="tvepisodes,tvshows") 
-                            i.trash.icon 
+                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="tvepisodes,tvshows")
+                            i.trash.icon
                             | #{lingua.settings_clear_cache_tv}
                     .form-group.mcjs-rc-controllable
-                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="devices") 
-                            i.trash.icon 
+                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="devices")
+                            i.trash.icon
                             | #{lingua.settings_clear_cache_device}
                     h2 Scraper data
                     .form-group.mcjs-rc-controllable
-                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="movies") 
+                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="movies")
                             i.cloud.download.icon
                             | Get movie metadata
                     .form-group.mcjs-rc-controllable
-                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="music") 
+                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="music")
                             i.cloud.download.icon
                             | Get music metadata
                     .form-group.mcjs-rc-controllable
-                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="tv") 
+                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="tv")
                             i.cloud.download.icon
                             | Get tv Metadata
                     .form-group.mcjs-rc-controllable
-                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="all") 
+                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="all")
                             i.cloud.download.icon
                             | Get all metadata
-                .access-table.col-sm-12.col-md-10  
+                .access-table.col-sm-12.col-md-12.col-lg-10
                     h2 Access management
                     .form-group.mcjs-rc-controllable
                         br
@@ -213,9 +213,9 @@ block body
                                                     a.parentalControl.btn.mcjs-rc-clickable.lock #{lingua.settings_device_btn_lock}
                                                 -else
                                                     a.parentalControl.btn.mcjs-rc-clickable.unlock #{lingua.settings_device_btn_unlock}
-                                                    
-                
-                #oauthContainer.col-sm-12.col-md-2
+
+
+                #oauthContainer.col-sm-12.col-md-12.col-lg-2
                     h2 OAUTH Login
                     span.info
                         span.quote &ldquo;
@@ -225,4 +225,4 @@ block body
                     .mcjs-rc-controllable.row
                         a.btn.btn-alternative#oauth(href="#") #{lingua.setting_register_oauth}
                     label(for="oauthKey")
-                                                
+

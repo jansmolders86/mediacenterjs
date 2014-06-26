@@ -153,6 +153,8 @@
         var player,
             playlist = [],
             paused = false,
+            currentAlbum =  '',
+            currentTrack =  '',
             current = {
                 album: 0,
                 track: 0
@@ -161,14 +163,27 @@
         player = {
             playlist: playlist,
             current: current,
+            currentAlbum: '',
+            currentTrack: '',
             playing: false,
             play: function(track, album) {
-                if (!playlist.length) return;
+                if (!playlist.length){
+                    return;
+                }
 
-                if (angular.isDefined(track)) current.track = track;
-                if (angular.isDefined(album)) current.album = album;
+                if (angular.isDefined(track)){
+                    current.track = track;
+                }
+                if (angular.isDefined(album)){
+                    current.album = album;
+                }
 
-                if (!paused) audio.src = 'music/'+playlist[current.album].tracks[current.track].filename +'/play/';
+                if (!paused){
+                    player.currentAlbum = playlist[current.album];
+                    player.currentTrack = playlist[current.album].tracks[current.track];
+
+                    audio.src = 'music/'+playlist[current.album].tracks[current.track].filename +'/play/';
+                }
                 audio.play();
                 player.playing = true;
                 paused = false;
@@ -186,7 +201,9 @@
                 current.track = 0;
             },
             next: function() {
-                if (!playlist.length) return;
+                if (!playlist.length){
+                    return;
+                }
                 paused = false;
                 if (playlist[current.album].tracks.length > (current.track + 1)) {
                     current.track++;
@@ -197,7 +214,9 @@
                 if (player.playing) player.play();
             },
             previous: function() {
-                if (!playlist.length) return;
+                if (!playlist.length){
+                    return;
+                }
                 paused = false;
                 if (current.track > 0) {
                     current.track--;
@@ -210,13 +229,17 @@
         };
 
         playlist.add = function(album) {
-            if (playlist.indexOf(album) != -1) return;
+            if (playlist.indexOf(album) != -1){
+                return;
+            }
             playlist.push(album);
         };
 
         playlist.remove = function(album) {
             var index = playlist.indexOf(album);
-            if (index == current.album) player.reset();
+            if (index == current.album){
+                player.reset();
+            }
             playlist.splice(index, 1);
         };
 
