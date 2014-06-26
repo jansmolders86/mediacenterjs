@@ -21,11 +21,13 @@ var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3'),
     os = require('os'),
     path = require('path'),
     Trakt = require('trakt'),
-    app_cache_handler = require('../../handlers/app-cache-handler'),
-    configuration_handler = require('../../handlers/configuration-handler'),
+    app_cache_handler = require('../../lib/handlers/app-cache-handler'),
+    configuration_handler = require('../../lib/handlers/configuration-handler'),
     config = configuration_handler.initializeConfiguration(),
-    file_utils = require('../../utils/file-utils'),
-    movie_title_cleaner = require('../../utils/title-cleaner');
+    file_utils = require('../../lib/utils/file-utils'),
+    movie_title_cleaner = require('../../lib/utils/title-cleaner')
+    socket = require('../../lib/utils/setup-socket'),
+    io = socket.io;
 
 
 /* Constants */
@@ -37,7 +39,7 @@ var remaining;
 
 /* Variables */
 // Init Database
-var database = require('../database-connection');
+var database = require('../../lib/utils/database-connection');
 var db = database.db;
 
 /* Public Methods */
@@ -73,20 +75,20 @@ var walk = function(dir, done) {
     });
 };
 
-var setupParse = function(results) {
-    if (!results) {
-        console.log('no results!');
-    }
+var setupParse = function(req, res, serveToFrontEnd, results) {
     if (results && results.length > 0) {
         var file = results.pop();
-        doParse(file, function() {
-            setupParse(results);
+        doParse(req, res, file, serveToFrontEnd, function() {
+            setupParse(req, res, serveToFrontEnd, results);
         });
+    }
+    if (!results) {
+        console.log('no results!');
     }
 };
 
 
-var doParse = function(file, callback) {
+var doParse = function(req, res, file, serveToFrontEnd, callback) {
     var incommingTitle      = file.split('/').pop()
         , originalTitle     = incommingTitle
         , movieInfo         = movie_title_cleaner.cleanupTitle(incommingTitle)
@@ -141,22 +143,25 @@ var doParse = function(file, callback) {
             ];
         }
 
+
         storeMetadataInDatabase(metadata, function(){
             nrScanned++;
+
             var perc = parseInt((nrScanned / totalFiles) * 100);
             var increment = new Date(), difference = increment - start;
             if (perc > 0) {
                 var total = (difference / perc) * 100, eta = total - difference;
-                //console.log('Item '+nrScanned+' of '+totalFiles+', '+perc+'% done \r');
-                console.log(perc);
+                io.sockets.emit('progress',{msg:perc});
+                console.log(perc+'% done');
+            }
+            
+            if(nrScanned === totalFiles){
+                if(serveToFrontEnd === true){
+                    getMovies(req, res);
+                }
             }
             callback();
-            if(nrScanned === totalFiles){
-                var stop = new Date();
-                //console.log("Scan complete! Time taken:", UMS((stop - start) / 100, true));
-                db.close();
-                process.exit();
-            }
+
         });
     });
 };
@@ -199,35 +204,41 @@ getMetadataFromTrakt = function(movieTitle, callback) {
     });
 };
 
+getMovies = function(req, res){
+    console.log('Loading data');
+    db.query('SELECT * FROM movies ORDER BY title asc',{
+        original_name       : String,
+        title               : String,
+        poster_path         : String,
+        backdrop_path       : String,
+        imdb_id             : String,
+        rating              : String,
+        certification       : String,
+        genre               : String,
+        runtime             : String,
+        overview            : String,
+        cd_number           : String,
+        adult               : String
+    },
+     function(err, rows) {
+         if(err){
+             console.log("DB error",err);
+         } else if (rows !== null && rows.length > 0){
+             console.log('Sending data to client...');
+             res.json(rows);
+         } 
+     });
+}
 
 
-walk(dir,  function(err, results) {
-    totalFiles = (results) ? results.length : 0;
-    setupParse(results);
-});
+exports.loadData = function(req, res, serveToFrontEnd) {
+    walk(dir,  function(err, results) {
+        totalFiles = (results) ? results.length : 0;
+        console.log('totalFiles',totalFiles)
+        setupParse(req, res, serveToFrontEnd, results);
+    });
+}
 
-var UMS = function(seconds, ignoreZero) {
-    var hours = parseInt(seconds / 3600), rest = parseInt(seconds % 3660), minutes = parseInt(rest / 60), seconds = parseInt(rest % 60);
-    if (hours < 10) {
-        hours = "0" + hours;
-    }
-    if (minutes < 10) {
-        minutes = "0" + minutes;
-    }
-    if (seconds < 10) {
-        seconds = "0" + seconds;
-    }
-    if (ignoreZero) {
-        if (hours == "00") {
-            hours = "";
-        } else {
-            hours = hours + ":";
-        }
-    } else {
-        hours = hours + ":";
-    }
-    return hours + minutes + ":" + seconds;
-};
 
 
 

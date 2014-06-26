@@ -26,7 +26,7 @@ block body
         a.backlink(href="/") &#xe113;
         h1 #{lingua.movies}
 
-        input#search.pull-right(ng-model="query", type="text", placeholder="Search")
+        input#search.pull-right(ng-model="query", type="text", placeholder="Search",ng-show="movies")
     .container-fluid
         .row
             .col-xs-12.col-sm-6.col-md-2.col-lg-2(ng-repeat="movie in movies | filter:query ", ng-mouseover="changeSelected(movie)")
