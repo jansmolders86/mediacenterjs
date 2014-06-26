@@ -21,6 +21,7 @@ var movieApp = angular.module('movieApp', ['ui.bootstrap']);
 
 movieApp.controller('movieCtrl', function($scope, $http, $modal) {
     $scope.focused = 0;
+    $scope.serverMessage = 0;
     $http.get('/movies/loadItems').success(function(data) {
         $scope.movies = data;
         $scope.orderProp = 'genre';

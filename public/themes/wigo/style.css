@@ -209,22 +209,22 @@ label,
 
 
 .btn {
-  float:left;
-  display:block;
-  font-size:16px;
-  font-weight:300;
-  color:#fff;
-  text-decoration:none;
-  text-align:center;
-  padding:10px;
-  margin-left:auto;
-  margin-right:auto;
-  position:relative;
-  cursor:pointer;
-  border: none;
-  background: #fb8521;
-  border-radius:5px;
-  box-shadow: inset 0px 1px 0px #fb8521, 0px 4px 0px 0px #c96311, 0px 7px 5px #ddd;
+    float:left;
+    display:block;
+    font-size:16px;
+    font-weight:300;
+    color:#fff;
+    text-decoration:none;
+    text-align:center;
+    padding:10px;
+    margin-left:auto;
+    margin-right:auto;
+    position:relative;
+    cursor:pointer;
+    border: none;
+    background: #fb8521;
+    border-radius:5px;
+    box-shadow: inset 0px 1px 0px #fb8521, 0px 4px 0px 0px #c96311, 0px 7px 5px #ddd;
 }
 
 .btn:hover{ color:#fff; background: #f5994c; }

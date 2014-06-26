@@ -138,6 +138,7 @@ fetchMovieData = function(req, res, metaType, serveToFrontEnd, getNewFiles) {
     metafetcher.fetch(req, res, metaType, function(type){
         if(type === metaType){
             getNewFiles = false;
+            console.log('Scraping done');
             getMovies(req, res, metaType, serveToFrontEnd);
         }
     });

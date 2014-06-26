@@ -1,6 +1,6 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
-	
+    MediaCenterJS - A NodeJS based mediacenter solution
+
     Copyright (C) 2014 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -35,29 +35,29 @@ function remote(socket, $scope, player, audio){
                 pushBack(socket, $scope, player, audio);
                 break;
             case "mute" :
-                pushMute(socket, $scope, player, audio);   
+                pushMute(socket, $scope, player, audio);
                 break;
             case "dashboard" :
                 pushDashboard(socket, $scope, player, audio);
                 break;
         }
     });
-    
+
     socket.on('sending', function(data){
         $('#search').val(data);
         $scope.query = data;
     });
-    
-    socket.on('server ready', function(data){ 
-        console.log('server ready!');
-    }) ;
+
+    socket.on('progress', function (data) {
+        $scope.serverMessage = data.msg;
+    });
 }
 
 
 // Catch and set keyevents
 function keyevents(socket, $scope, player, audio){
-    document.onkeydown=onKeyDownHandler; 
-    
+    document.onkeydown=onKeyDownHandler;
+
     function onKeyDownHandler(e){
         if (typeof e == 'undefined' && window.event) { e = window.event; }
 
@@ -90,10 +90,10 @@ function goLeft(socket, $scope, player, audio){
         if (index <= 0 ){
             index = 0;
         }
-        
+
         //jQuery
         $('.current').scrollintoview({direction: "vertical"});
-        
+
         $scope.focused = index;
     } else {
         player.previous();
@@ -111,14 +111,14 @@ function goRight(socket, $scope, player, audio){
         if (index >= $scope.albums.length) {
             index = 0;
         }
-       
+
         //jQuery
         $('.current').scrollintoview({direction: "vertical"});
-       
+
         $scope.focused = index;
     }else {
         player.next();
-    } 
+    }
     $scope.$apply(function(){
         $scope.focused;
     });

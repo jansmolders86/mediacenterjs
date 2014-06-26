@@ -178,7 +178,7 @@ header #search {
 }
 #playlist ul{padding-bottom: 150px;}
 
-#playlist img{ margin-bottom:5px; cursor:pointer;}
+#playlist img{ margin-bottom:5px; cursor:pointer; max-width:300px; max-height:300px;}
 #playlist .album-title{font-size:14px;}
 #playlist .album{ margin-top:10px; padding:10px;}
 

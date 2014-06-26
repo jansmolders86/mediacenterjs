@@ -63,6 +63,12 @@ block body
                                     span.album-year(ng-show="album.year !== 0") {{album.year}}
 
             h2.loading(ng-show="!albums") #{lingua.loading}
+                .progress-pie-chart(data-percent="{{serverMessage}}", ng-class="{gt50: serverMessage > 50}", ng-show="serverMessage > 0")
+                    .ppc-progress
+                        .ppc-progress-fill(style="-webkit-transform:rotate({{360*serverMessage/100}}deg); transform:rotate({{360*serverMessage/100}}deg);")
+                    .ppc-percents
+                        .pcc-percents-wrapper
+                            span {{serverMessage}}%
 
     #player.col-xs-12.col-md-12.col-lg-12(ng-show="player.playlist.length > 0")
         #progressBar.ui.active.striped.progress

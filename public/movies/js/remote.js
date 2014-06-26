@@ -1,6 +1,6 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
-	
+    MediaCenterJS - A NodeJS based mediacenter solution
+
     Copyright (C) 2014 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ function remote(socket, $scope){
                 pushBack(socket,$scope);
                 break;
             case "mute" :
-                pushMute(socket,$scope);   
+                pushMute(socket,$scope);
                 break;
             case "dashboard" :
                 pushDashboard(socket,$scope);
@@ -46,15 +46,22 @@ function remote(socket, $scope){
         $('#search').val(data);
         $scope.query = data;
     });
+
+    socket.on('progress', function (data) {
+        $scope.serverMessage = data.msg;
+        $scope.$apply(function(){
+            $scope.serverMessage
+        });
+    });
 }
 
 
 // Catch and set keyevents
 function keyevents(socket, $scope){
-    document.onkeydown=onKeyDownHandler; 
-    
+    document.onkeydown=onKeyDownHandler;
+
     function onKeyDownHandler(e){
-        
+
         if (typeof e == 'undefined' && window.event) { e = window.event; }
 
         switch(e.keyCode) {
@@ -86,11 +93,11 @@ function goLeft(socket, $scope){
         index = 0;
     }
     $scope.focused = index;
-    
+
     //jQuery
     $('.current').scrollintoview({direction: "vertical"});
     $('.current').focus();
-    
+
     $scope.$apply(function(){
         $scope.focused;
     });
@@ -104,11 +111,11 @@ function goRight(socket, $scope){
         index = 0;
     }
     $scope.focused = index;
-    
+
     //jQuery
     $('.current').scrollintoview({direction: "vertical"});
     $('.current').focus();
-    
+
     $scope.$apply(function(){
         $scope.focused;
     });

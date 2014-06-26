@@ -24,7 +24,7 @@ body.playing > #player{display:block;}
 header.scrolling{ opacity:0.9;}
 header{height:60px; z-index:3; position:fixed!important; top:0; }
 header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
-.container-fluid{ padding-top:90px; z-index:2; }
+.container-fluid{ padding-top:90px; z-index:2;  display: flex; flex-direction: row; }
 .container-fluid .row > div { z-index:3; }
 
 #backdrop{
@@ -108,7 +108,7 @@ a.backlink { margin-top: -5px; z-index:4; }
     border-radius:2px;
     display:block;
     min-width:219px;
-    height: 500px;
+    max-height: 500px;
     background:#fff;
     cursor:pointer;
     overflow:hidden;

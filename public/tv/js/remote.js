@@ -1,6 +1,6 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
-	
+    MediaCenterJS - A NodeJS based mediacenter solution
+
     Copyright (C) 2014 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -35,27 +35,31 @@ function remote(socket, $scope, player){
                 pushBack(socket,$scope, player);
                 break;
             case "mute" :
-                pushMute(socket,$scope);   
+                pushMute(socket,$scope);
                 break;
             case "dashboard" :
                 pushDashboard(socket,$scope);
                 break;
         }
     });
-    
+
     socket.on('sending', function(data){
         $('#search').val(data);
         $scope.query = data;
+    });
+
+    socket.on('progress', function (data) {
+        $scope.serverMessage = data.msg;
     });
 }
 
 
 // Catch and set keyevents
 function keyevents(socket, $scope, player){
-    document.onkeydown=onKeyDownHandler; 
-    
+    document.onkeydown=onKeyDownHandler;
+
     function onKeyDownHandler(e){
-        
+
         if (typeof e == 'undefined' && window.event) { e = window.event; }
 
         switch(e.keyCode) {
@@ -87,10 +91,10 @@ function goLeft(socket, $scope, player){
         if (index <= 0 ){
             index = 0;
         }
-        
+
         //jQuery
         $('.current').scrollintoview({direction: "vertical"});
-        
+
         $scope.focused = index;
     } else {
         player.previous();
@@ -108,14 +112,14 @@ function goRight(socket, $scope, player){
         if (index >= $scope.tvshows.length) {
             index = 0;
         }
-       
+
         //jQuery
         $('.current').scrollintoview({direction: "vertical"});
 
         $scope.focused = index;
     }else {
         player.next();
-    } 
+    }
     $scope.$apply(function(){
         $scope.focused;
     });
@@ -129,7 +133,7 @@ function pushEnter(socket, $scope, player){
     } else {
         player.play();
     }
-    
+
     $scope.$apply(function(){
         $scope.focused;
     });

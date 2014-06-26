@@ -43,6 +43,12 @@ block body
                 img(ng-src="{{tvshow.banner}}", ng-click="player.playlist.add(tvshow)")
 
         h2.loading(ng-show="!tvshows") #{lingua.loading}
+            .progress-pie-chart(data-percent="{{serverMessage}}", ng-class="{gt50: serverMessage > 50}", ng-show="serverMessage > 0")
+                .ppc-progress
+                    .ppc-progress-fill(style="-webkit-transform:rotate({{360*serverMessage/100}}deg); transform:rotate({{360*serverMessage/100}}deg);")
+                .ppc-percents
+                    .pcc-percents-wrapper
+                        span {{serverMessage}}%
 
     video#player.video-js.vjs-default-skin(width="100%", height="100%", ng-show="playing", controls, preload="metadata")
 

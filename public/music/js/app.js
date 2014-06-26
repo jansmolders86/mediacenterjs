@@ -24,6 +24,7 @@
     window.musicCtrl = function($scope, $http, player, $modal, audio) {
         $scope.player = player;
         $scope.focused = 0;
+        $scope.serverMessage = 0;
         $http.get('/music/loadItems').success(function(data) {
             $scope.albums = data;
         });
@@ -101,7 +102,7 @@
             async: function() {
                 var promise = $http.get('/configuration/').then(function (response) {
                     var configData  = response.data;
-                    var socket      = io.connect(configData.localIP + ':'+configData.remotePort);
+                    var socket      = io.connect(configData.localIP + ':'+configData.remotePort, {'force new connection': true});
                     socket.on('connect', function(data){
                         socket.emit('screen');
                     });
