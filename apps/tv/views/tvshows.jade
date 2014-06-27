@@ -1,4 +1,4 @@
-extends /layout
+.extends /layout
 
 block declarations
     - additional_title      = lingua.tvshows;
@@ -39,7 +39,7 @@ block body
                         ol.episodes
                             li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode.localName)") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
             ul#tvshows(ng-class="{side: player.playlist.length > 0}")
-                li.tvshow(ng-repeat="tvshow in tvshows | filter:query | orderBy:orderProp", ng-class="{current: focused == $index}")
+                li.tvshow(ng-repeat="tvshow in tvshows | filter:query ", ng-class="{current: focused == $index}")
                     i.circular.inverted.edit.icon(ng-click="open(tvshow)")
                     img(ng-src="{{tvshow.banner}}", ng-click="player.playlist.add(tvshow)")
 
