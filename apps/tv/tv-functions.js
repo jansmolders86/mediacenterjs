@@ -144,7 +144,7 @@ function getTvshows(req, res, serveToFrontEnd){
                 });
             });
         } else {
-            fetchMusicData(req, res, serveToFrontEnd);
+            fetchTVData(req, res, serveToFrontEnd);
         }
     });
 }

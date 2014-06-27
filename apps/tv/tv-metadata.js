@@ -115,16 +115,17 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
     if (perc > 0) {
         var total = (difference / perc) * 100, eta = total - difference;
         io.sockets.emit('progress',{msg:perc});
-        console.log(perc+'% done');
+        console.log(perc+'% done.');
     }
-
-    callback();
 
     if(nrScanned === totalFiles){
         if(serveToFrontEnd === true){
+            console.log('Getting data for tv shows');
             getTvshows(req, res);
         }
     }
+
+    callback();
 
 };
 
@@ -216,9 +217,8 @@ getMetadataForShow = function(tvTitle, callback){
 
 
 
-storeShowMetadataInDatabase = function(metadata, serveToFrontEnd, callback) {
+storeShowMetadataInDatabase = function(metadata) {
     db.query('INSERT OR REPLACE INTO tvshows VALUES(?,?,?,?)', metadata);
-    callback();
 };
 
 storeEpisodeMetadataInDatabase = function(metadata, callback) {
@@ -266,11 +266,10 @@ downloadTvShowBanner = function(banner, tvShow, callback) {
 
 
 
-function getTvshows(req, res){
+getTvshows  = function(req, res){
     var itemsDone   = 0;
     var ShowList    = [];
 
-    console.log('Getting tvshows', getNewFiles);
     db.query('SELECT * FROM tvshows',{
         title             : String,
         banner            : String,
@@ -309,7 +308,7 @@ function getTvshows(req, res){
     });
 }
 
-function getEpisodes(showTitle, showBanner, showGenre, showCertification, callback){
+getEpisodes = function(showTitle, showBanner, showGenre, showCertification, callback){
     db.query('SELECT * FROM tvepisodes WHERE title = $title ORDER BY season asc', { title:showTitle }, {
         localName   : String,
         title       : String,
@@ -337,6 +336,7 @@ function getEpisodes(showTitle, showBanner, showGenre, showCertification, callba
 }
 
 exports.loadData = function(req, res, serveToFrontEnd) {
+    console.log('Getting tv data');
     walk(dir,  function(err, results) {
         totalFiles = (results) ? results.length : 0;
         setupParse(req, res, serveToFrontEnd, results);
