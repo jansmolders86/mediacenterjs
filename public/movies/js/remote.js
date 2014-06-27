@@ -48,10 +48,8 @@ function remote(socket, $scope){
     });
 
     socket.on('progress', function (data) {
+        console.log(data.msg)
         $scope.serverMessage = data.msg;
-        $scope.$apply(function(){
-            $scope.serverMessage
-        });
     });
 }
 

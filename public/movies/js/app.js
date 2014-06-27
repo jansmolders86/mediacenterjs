@@ -22,130 +22,131 @@ var movieApp = angular.module('movieApp', ['ui.bootstrap']);
 movieApp.controller('movieCtrl', function($scope, $http, $modal) {
     $scope.focused = 0;
     $scope.serverMessage = 0;
+
     $http.get('/movies/loadItems').success(function(data) {
         $scope.movies = data;
-        $scope.orderProp = 'genre';
-        $scope.playMovie = function(data){
-            $scope.playing = true;
-            playMovie(data, $http);
-        }
+    });
 
-        $scope.open = function (movie) {
-            var modalInstance = $modal.open({
-                templateUrl: 'editModal.html',
-                controller: ModalInstanceCtrl,
-                size: 'md',
-                resolve: {
-                    current: function () {
-                        return movie;
-                    }
+    $scope.playMovie = function(data){
+        $scope.playing = true;
+        playMovie(data, $http);
+    }
+
+    $scope.open = function (movie) {
+        var modalInstance = $modal.open({
+            templateUrl: 'editModal.html',
+            controller: ModalInstanceCtrl,
+            size: 'md',
+            resolve: {
+                current: function () {
+                    return movie;
                 }
-            });
-        }
-
-        var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
-            $scope.edit ={};
-            $scope.current = current;
-
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
-
-            $scope.editItem = function(){
-
-                if($scope.edit.title === '' || $scope.edit.title === null || $scope.edit.title === undefined ){
-                    if($scope.current.title  !== undefined || $scope.current.title !== null){
-                        $scope.edit.title = $scope.current.title;
-                    } else {
-                        $scope.edit.title = '';
-                    }
-                }
-
-                if($scope.edit.backdrop_path === '' || $scope.edit.backdrop_path === null || $scope.edit.backdrop_path === undefined ){
-                    if($scope.current.backdrop_path  !== undefined || $scope.current.backdrop_path !== null){
-                        $scope.edit.backdrop_path = $scope.current.backdrop_path;
-                    } else {
-                        $scope.edit.backdrop_path = '/movies/css/img/nodata.png';
-                    }
-                }
-
-                if($scope.edit.backdrop_path === '' || $scope.edit.backdrop_path === null || $scope.edit.backdrop_path === undefined ){
-                    if($scope.current.backdrop_path  !== undefined || $scope.current.backdrop_path !== null){
-                        $scope.edit.backdrop_path = $scope.current.backdrop_path;
-                    } else {
-                        $scope.edit.backdrop_path = '/movies/css/img/backdrop.png';
-                    }
-                }
-
-                $http({
-                    method: "post",
-                    data: {
-                        newTitle            : $scope.edit.title,
-                        newPosterPath       : $scope.edit.poster_path,
-                        newBackdropPath     : $scope.edit.backdrop_path,
-                        currentMovie        : $scope.current.original_name
-                    },
-                    url: "/movies/edit"
-                }).success(function(data, status, headers, config) {
-                    location.reload();
-                });
-            }
-        };
-
-        $scope.changeBackdrop = function(movie){
-            var elem = document.getElementById("backdropimg");
-            elem.src = movie.backdrop;
-        }
-
-        $scope.changeSelected = function(movie){
-            var elem = document.getElementById("backdropimg");
-            elem.src = movie.backdrop_path;
-            $scope.focused = $scope.movies.indexOf(movie);
-        }
-
-        var setupSocket = {
-            async: function() {
-                var promise = $http.get('/configuration/').then(function (response) {
-                    var configData  = response.data;
-                    var socket      = io.connect(configData.localIP + ':'+configData.remotePort);
-                    socket.on('connect', function(data){
-                        socket.emit('screen');
-                    });
-                    return {
-                        on: function (eventName, callback) {
-                            socket.on(eventName, function () {
-                                var args = arguments;
-                                $scope.$apply(function () {
-                                    callback.apply(socket, args);
-                                });
-                            });
-
-                        },
-                        emit: function (eventName, data, callback) {
-                            socket.emit(eventName, data, function () {
-                                var args = arguments;
-                                $scope.$apply(function () {
-                                    if (callback) {
-                                        callback.apply(socket, args);
-                                    }
-                                });
-                            });
-                        }
-                    };
-                    return data;
-                });
-                return promise;
-            }
-        };
-
-        setupSocket.async().then(function(data) {
-            if (typeof data.on !== "undefined") {
-                $scope.remote       = remote(data, $scope);
-                $scope.keyevents    = keyevents(data, $scope);
             }
         });
+    }
 
+    var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
+        $scope.edit ={};
+        $scope.current = current;
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+
+        $scope.editItem = function(){
+
+            if($scope.edit.title === '' || $scope.edit.title === null || $scope.edit.title === undefined ){
+                if($scope.current.title  !== undefined || $scope.current.title !== null){
+                    $scope.edit.title = $scope.current.title;
+                } else {
+                    $scope.edit.title = '';
+                }
+            }
+
+            if($scope.edit.backdrop_path === '' || $scope.edit.backdrop_path === null || $scope.edit.backdrop_path === undefined ){
+                if($scope.current.backdrop_path  !== undefined || $scope.current.backdrop_path !== null){
+                    $scope.edit.backdrop_path = $scope.current.backdrop_path;
+                } else {
+                    $scope.edit.backdrop_path = '/movies/css/img/nodata.png';
+                }
+            }
+
+            if($scope.edit.backdrop_path === '' || $scope.edit.backdrop_path === null || $scope.edit.backdrop_path === undefined ){
+                if($scope.current.backdrop_path  !== undefined || $scope.current.backdrop_path !== null){
+                    $scope.edit.backdrop_path = $scope.current.backdrop_path;
+                } else {
+                    $scope.edit.backdrop_path = '/movies/css/img/backdrop.png';
+                }
+            }
+
+            $http({
+                method: "post",
+                data: {
+                    newTitle            : $scope.edit.title,
+                    newPosterPath       : $scope.edit.poster_path,
+                    newBackdropPath     : $scope.edit.backdrop_path,
+                    currentMovie        : $scope.current.original_name
+                },
+                url: "/movies/edit"
+            }).success(function(data, status, headers, config) {
+                location.reload();
+            });
+        }
+    };
+
+    $scope.changeBackdrop = function(movie){
+        var elem = document.getElementById("backdropimg");
+        elem.src = movie.backdrop;
+    }
+
+    $scope.changeSelected = function(movie){
+        var elem = document.getElementById("backdropimg");
+        elem.src = movie.backdrop_path;
+        $scope.focused = $scope.movies.indexOf(movie);
+    }
+
+    var setupSocket = {
+        async: function() {
+            var promise = $http.get('/configuration/').then(function (response) {
+                var configData  = response.data;
+                var socket      = io.connect(configData.localIP + ':'+configData.remotePort);
+                socket.on('connect', function(data){
+                    socket.emit('screen');
+                });
+                return {
+                    on: function (eventName, callback) {
+                        socket.on(eventName, function () {
+                            var args = arguments;
+                            $scope.$apply(function () {
+                                callback.apply(socket, args);
+                            });
+                        });
+
+                    },
+                    emit: function (eventName, data, callback) {
+                        socket.emit(eventName, data, function () {
+                            var args = arguments;
+                            $scope.$apply(function () {
+                                if (callback) {
+                                    callback.apply(socket, args);
+                                }
+                            });
+                        });
+                    }
+                };
+                return data;
+            });
+            return promise;
+        }
+    };
+
+    setupSocket.async().then(function(data) {
+        if (typeof data.on !== "undefined") {
+            $scope.remote       = remote(data, $scope);
+            $scope.keyevents    = keyevents(data, $scope);
+        }
     });
+
 });
 
 function playMovie(data, $http){
