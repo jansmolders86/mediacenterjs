@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 var file_utils = require('../../lib/utils/file-utils')
-    , metafetcher = require('../../lib/utils/metadata-fetcher')
+    , metafetcher = require('../music/music-metadata')
     , config = require('../../lib/handlers/configuration-handler').getConfiguration()
     , music_playback_handler = require('./music-playback-handler');
 
@@ -64,19 +64,7 @@ exports.edit = function(req, res, data){
 
 
 fetchMusicData = function(req, res, metaType, serveToFrontEnd, getNewFiles) {
-    if(getNewFiles !== false){
-        metafetcher.fetch(req, res, metaType, function(type){
-            if(type === metaType){
-                getNewFiles = false;
-
-                    console.log('Scraping done for',metaType);
-
-                    setTimeout(function(){
-                        getCompleteCollection(req, res, metaType, serveToFrontEnd, getNewFiles);
-                    },2000);
-            }
-        });
-    }
+    metafetcher.loadData(req, res, serveToFrontEnd);
 }
 
 

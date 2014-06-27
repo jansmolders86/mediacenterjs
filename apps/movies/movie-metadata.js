@@ -25,7 +25,7 @@ var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3'),
     configuration_handler = require('../../lib/handlers/configuration-handler'),
     config = configuration_handler.initializeConfiguration(),
     file_utils = require('../../lib/utils/file-utils'),
-    movie_title_cleaner = require('../../lib/utils/title-cleaner')
+    movie_title_cleaner = require('../../lib/utils/title-cleaner'),
     socket = require('../../lib/utils/setup-socket'),
     io = socket.io;
 
@@ -154,7 +154,7 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
                 io.sockets.emit('progress',{msg:perc});
                 console.log(perc+'% done');
             }
-            
+
             if(nrScanned === totalFiles){
                 if(serveToFrontEnd === true){
                     getMovies(req, res);
@@ -226,7 +226,8 @@ getMovies = function(req, res){
          } else if (rows !== null && rows.length > 0){
              console.log('Sending data to client...');
              res.json(rows);
-         } 
+             db.close();
+         }
      });
 }
 

@@ -20,7 +20,7 @@ var fs = require('fs.extra')
     , file_utils = require('../../lib/utils/file-utils')
     , colors = require('colors')
     , path = require('path')
-    , metafetcher = require('../../lib/utils/metadata-fetcher')
+    , metafetcher = require('../tv/tv-metadata')
     , config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
     var database = require('../../lib/utils/database-connection');
@@ -33,15 +33,13 @@ db.query("CREATE TABLE IF NOT EXISTS tvshows (title VARCHAR PRIMARY KEY,banner V
 db.query("CREATE TABLE IF NOT EXISTS tvepisodes (localName TEXT PRIMARY KEY,title VARCHAR, season INTEGER, epsiode INTEGER)");
 
 exports.loadItems = function (req, res, serveToFrontEnd){
-    var metaType = "tv";
-    var getNewFiles = true;
     if(serveToFrontEnd == false){
-        fetchTVData(req, res, metaType, serveToFrontEnd, getNewFiles);
+        fetchTVData(req, res, serveToFrontEnd);
     } else if(serveToFrontEnd === undefined || serveToFrontEnd === null){
         var serveToFrontEnd = true;
-        getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles);
+        getTvshows(req, res, serveToFrontEnd);
     }  else{
-        getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles);
+        getTvshows(req, res, serveToFrontEnd);
     }
 };
 
@@ -100,25 +98,14 @@ exports.sendState = function (req, res){
 
 /** Private functions **/
 
-fetchTVData = function(req, res, metaType, serveToFrontEnd,getNewFiles) {
-    if(getNewFiles !== false){
-        metafetcher.fetch(req, res, metaType, function(type){
-            if(type === metaType){
-                getNewFiles = false;
-                setTimeout(function(){
-                    console.log('Scraping done for',metaType);
-                    getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles);
-                },3000);
-            }
-        });
-    }
+fetchTVData = function(req, res, serveToFrontEnd) {
+    metafetcher.loadData(req, res, serveToFrontEnd);
 }
 
-function getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles){
+function getTvshows(req, res, serveToFrontEnd){
     var itemsDone   = 0;
     var ShowList    = [];
 
-    console.log('Getting tvshows', getNewFiles);
     db.query('SELECT * FROM tvshows',{
         title             : String,
         banner            : String,
@@ -129,8 +116,7 @@ function getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles){
             db.query("CREATE TABLE IF NOT EXISTS tvshows (title VARCHAR PRIMARY KEY,banner VARCHAR, genre VARCHAR, certification VARCHAR)");
             console.log("DB error",err);
             serveToFrontEnd = true;
-            getNewFiles = true;
-            fetchTVData(req, res, metaType, serveToFrontEnd, getNewFiles);
+            fetchTVData(req, res, serveToFrontEnd);
         } else if (rows !== null && rows !== undefined && rows.length > 0) {
             var count = rows.length;
             console.log('Found '+count+' shows, getting additional data...');
@@ -157,8 +143,8 @@ function getTvshows(req, res, metaType, serveToFrontEnd, getNewFiles){
                     }
                 });
             });
-        } else if( getNewFiles === true){
-            fetchMusicData(req, res, metaType, serveToFrontEnd, getNewFiles);
+        } else {
+            fetchMusicData(req, res, serveToFrontEnd);
         }
     });
 }
