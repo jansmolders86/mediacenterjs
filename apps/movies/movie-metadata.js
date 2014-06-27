@@ -157,6 +157,7 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
 
             if(nrScanned === totalFiles){
                 if(serveToFrontEnd === true){
+                    io.sockets.emit('serverStatus',{msg:'Processing data...'});
                     getMovies(req, res);
                 }
             }
@@ -205,7 +206,6 @@ getMetadataFromTrakt = function(movieTitle, callback) {
 };
 
 getMovies = function(req, res){
-    console.log('Loading data');
     db.query('SELECT * FROM movies ORDER BY title asc',{
         original_name       : String,
         title               : String,

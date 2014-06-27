@@ -120,7 +120,7 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
 
     if(nrScanned === totalFiles){
         if(serveToFrontEnd === true){
-            console.log('Getting data for tv shows');
+            io.sockets.emit('serverStatus',{msg:'Processing data...'});
             getTvshows(req, res);
         }
     }
@@ -158,7 +158,7 @@ getDataForNewShow = function(originalTitle, episodeTitle){
     var episodeData = {
         "showTitle"         : showTitle.toLowerCase(),
         "episodeSeason"     : episodeSeason,
-        "episodeNumber"        : episodeNumber
+        "episodeNumber"     : episodeNumber
     }
 
     season          = episodeData.episodeSeason;

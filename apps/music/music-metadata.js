@@ -173,6 +173,7 @@ storeAlbumInDatabase = function(req, res, serveToFrontEnd, metadata, callback){
 
     if(nrScanned === totalFiles){
         if(serveToFrontEnd === true){
+            io.sockets.emit('serverStatus',{msg:'Processing data...'});
             getCompleteCollection(req, res);
         }
     }

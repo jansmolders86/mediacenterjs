@@ -25,6 +25,8 @@
         $scope.player = player;
         $scope.focused = 0;
         $scope.serverMessage = 0;
+        $scope.serverStatus= '';
+
         $http.get('/music/loadItems').success(function(data) {
             $scope.albums = data;
         });

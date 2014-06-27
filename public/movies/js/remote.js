@@ -51,6 +51,10 @@ function remote(socket, $scope){
         console.log(data.msg)
         $scope.serverMessage = data.msg;
     });
+    
+    socket.on('serverStatus', function (data) {
+        $scope.serverStatus = data.msg;
+    });
 }
 
 
