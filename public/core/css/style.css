@@ -606,6 +606,10 @@ table tr > th:first-child{ padding-left:0px;}
     position: relative;
 }
 .progress-pie-chart.gt50 {
+    -webkit-transition: all 0s ease;
+    -moz-transition: all 0s ease;
+    -o-transition: all 0s ease;
+    transition: all 0s ease;
     background-color: #fb8521;
 }
 
@@ -664,7 +668,7 @@ table tr > th:first-child{ padding-left:0px;}
 }
 
 .progress-pie-chart {
-    margin: 50px auto 0;
+    margin: 50px auto 50px;
 }
 
 

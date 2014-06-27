@@ -51,6 +51,10 @@ function remote(socket, $scope, player){
     socket.on('progress', function (data) {
         $scope.serverMessage = data.msg;
     });
+    
+    socket.on('serverStatus', function (data) {
+        $scope.serverStatus = data.msg;
+    });
 }
 
 

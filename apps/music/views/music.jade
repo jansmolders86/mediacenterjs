@@ -29,7 +29,7 @@ block body
         a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
         h1 #{lingua.music}
 
-        input#search.pull-right(ng-model="query", type="text", placeholder="Search")
+        input#search.pull-right(ng-model="query", type="text", placeholder="Search", ng-show="albums")
 
     .container-fluid
             #playlist(ng-show="player.playlist.length > 0")
@@ -69,6 +69,7 @@ block body
                     .ppc-percents
                         .pcc-percents-wrapper
                             span {{serverMessage}}%
+                {{serverStatus}}
 
     #player.col-xs-12.col-md-12.col-lg-12(ng-show="player.playlist.length > 0")
         #progressBar.ui.active.striped.progress

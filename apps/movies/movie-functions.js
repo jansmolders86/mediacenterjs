@@ -20,7 +20,7 @@ var fs = require('fs.extra')
     , file_utils = require('../../lib/utils/file-utils')
     , app_cache_handler = require('../../lib/handlers/app-cache-handler')
     , colors = require('colors')
-    , metafetcher = require('../../lib/utils/metadata-fetcher')
+    , metafetcher = require('../movies/movie-metadata.js')
     , config = require('../../lib/handlers/configuration-handler').getConfiguration();
 
     var database = require('../../lib/utils/database-connection');
@@ -134,14 +134,8 @@ exports.sendState = function (req, res){
 /** Private functions **/
 
 fetchMovieData = function(req, res, metaType, serveToFrontEnd, getNewFiles) {
-    console.log('Fetching movie data...');
-    metafetcher.fetch(req, res, metaType, function(type){
-        if(type === metaType){
-            getNewFiles = false;
-            console.log('Scraping done');
-            getMovies(req, res, metaType, serveToFrontEnd);
-        }
-    });
+    console.log('Fetching movie data...', serveToFrontEnd);
+    metafetcher.loadData(req, res, serveToFrontEnd);
 }
 
 getMovies = function(req, res, metaType, serveToFrontEnd,getNewFiles){
