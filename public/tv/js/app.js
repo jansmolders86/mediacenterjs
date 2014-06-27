@@ -29,8 +29,6 @@ tvApp.controller('tvCtrl', function($scope, $http, $modal,player){
         $scope.tvshows = data;
     });
 
-    $scope.orderProp = 'genre';
-
     $scope.playEpisode = function(data){
         $scope.playing = true;
         playEpisode(data, $http);
