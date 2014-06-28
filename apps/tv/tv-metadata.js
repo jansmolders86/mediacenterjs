@@ -271,7 +271,7 @@ getTvshows  = function(req, res){
     var itemsDone   = 0;
     var ShowList    = [];
 
-    db.query('SELECT * FROM tvshows',{
+    db.query('SELECT * FROM tvshows ORDER BY title asc',{
         title             : String,
         banner            : String,
         genre             : String,
