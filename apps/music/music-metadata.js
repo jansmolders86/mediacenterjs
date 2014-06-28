@@ -245,7 +245,7 @@ getCompleteCollection = function(req, res){
                                 console.log('Sending info to client');
                                 return res.json(albums);
                                 res.end();
-                                db.close();
+                               // db.close();
                             }
                         } else {
                             console.log('Error retrieving tracks...');

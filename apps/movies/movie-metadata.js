@@ -226,7 +226,7 @@ getMovies = function(req, res){
          } else if (rows !== null && rows.length > 0){
              console.log('Sending data to client...');
              res.json(rows);
-             db.close();
+            // db.close();
          }
      });
 }

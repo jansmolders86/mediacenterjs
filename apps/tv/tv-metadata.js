@@ -297,7 +297,7 @@ getTvshows  = function(req, res){
 
                             if (count === itemsDone) {
                                 res.json(ShowList);
-                                db.close();
+                                // db.close();
                             }
                         }
                     } else {
