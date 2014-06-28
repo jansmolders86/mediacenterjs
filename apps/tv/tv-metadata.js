@@ -106,27 +106,26 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
     , episodeStripped           = episodeReturnedTitle.replace(/.(avi|mkv|mpeg|mpg|mov|mp4|wmv)$/,"")
     , episodeTitle              = episodeStripped.trimRight();
 
-    getDataForNewShow(originalTitle, episodeTitle);
+    getDataForNewShow(originalTitle, episodeTitle, function(){
+        nrScanned++;
 
-    nrScanned++;
-
-    var perc = parseInt((nrScanned / totalFiles) * 100);
-    var increment = new Date(), difference = increment - start;
-    if (perc > 0) {
-        var total = (difference / perc) * 100, eta = total - difference;
-        io.sockets.emit('progress',{msg:perc});
-        console.log(perc+'% done.');
-    }
-
-    if(nrScanned === totalFiles){
-        if(serveToFrontEnd === true){
-            io.sockets.emit('serverStatus',{msg:'Processing data...'});
-            getTvshows(req, res);
+        var perc = parseInt((nrScanned / totalFiles) * 100);
+        var increment = new Date(), difference = increment - start;
+        if (perc > 0) {
+            var total = (difference / perc) * 100, eta = total - difference;
+            io.sockets.emit('progress',{msg:perc});
+            console.log(perc+'% done.');
         }
-    }
 
-    callback();
+        if(nrScanned === totalFiles){
+            if(serveToFrontEnd === true){
+                io.sockets.emit('serverStatus',{msg:'Processing data...'});
+                getTvshows(req, res);
+            }
+        }
 
+        callback();
+    });
 };
 
 
@@ -135,7 +134,7 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
  * @param originalTitle      Original episode filename
  * @param episodeTitle       Cleaned up name of episode
  */
-getDataForNewShow = function(originalTitle, episodeTitle){
+getDataForNewShow = function(originalTitle, episodeTitle,callback){
 
     var episodeSeason       = ''
         , season            = ''
@@ -176,6 +175,8 @@ getDataForNewShow = function(originalTitle, episodeTitle){
             var newTvshowTitle = newshowMetaData[0];
             // Store show data in db and do lookup again
             storeShowMetadataInDatabase(newshowMetaData);
+            
+            callback();
         });
 
     });
