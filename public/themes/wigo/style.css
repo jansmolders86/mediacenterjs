@@ -113,7 +113,6 @@ p a:hover{text-decoration:none;}
 
 /* Date and Time */
 
-#dateandtime{top: 3px;}
 #dateandtime .date,
 #dateandtime .time{    text-align:right; font-weight: 300; font-size:20px; font-family: 'Open Sans', sans-serif; color:#333;}
 

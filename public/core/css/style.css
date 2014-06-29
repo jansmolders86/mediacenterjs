@@ -159,7 +159,7 @@ header,
 }
 
 header .logo,
-#header .logo{ float:left; height:45px; margin:0px 10px 0 0px; }
+#header .logo{ float:left; max-height:45px; margin:0px 10px 0 0px; }
 
 header h1,
 #header h1{
@@ -364,7 +364,6 @@ body > #screensaver{
 
 /***** -----------------   DATE AND TIME  ---------------------- *****/
 
-#dateandtime { position:absolute; right:250px; top:0px; }
 #dateandtime .date,
 #dateandtime .time{    text-align:right; font-size:27px; font-family: 'Open Sans Condensed', sans-serif;}
 
@@ -670,39 +669,6 @@ table tr > th:first-child{ padding-left:0px;}
 .progress-pie-chart {
     margin: 50px auto 50px;
 }
-
-
-/***** -----------------   MEDIA QUERIES  ---------------------- *****/
-
-
-
-@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
-  /* For tablet portrait layouts only */
-
-}
-
-@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
-  /* For tablet landscape layouts only */
-
-}
-@media only screen and (min-width: 320px) and (max-width: 529px) {
-    /* For phone layouts only */
-
-    #dateandtime { position:absolute; right:20px; top:0px; }
-
-    input[type=text],
-    input[type=password],
-    select,
-    textarea{width:90%;}
-    .btn{display:block;width:90%;}
-
-    table{width:100%;}
-    table td{word-break: break-all;}
-    table .btn{font-size:11px;}
-
-}
-
-
 
 
 /***** -----------------   ANIMATIONS  ---------------------- *****/

@@ -327,24 +327,3 @@ h1.movie-title{
     100%{ top:0px; }
 }
 
-
-@media only screen and (min-width: 320px) and (max-width: 529px) {
-    /* For phone layouts only */
-    .movieposter{
-        width:200px;
-        margin:0;
-    }
-
-    #wrapper{ padding:230px 10px 10px 10px; }
-
-   .movieposter img{
-        margin:0 0 20px 0;
-        display:block;
-        width:200px;
-        height:auto;
-        padding:0;
-        border:0;
-    }
-}
-
-

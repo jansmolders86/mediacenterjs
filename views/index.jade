@@ -37,18 +37,22 @@ block additional_scripts
 
 block body
         header
-            img.logo(src="/core/css/img/logo.png")
-            h1 MediacenterJS
-            -if(allowed === 'no')
-                h4 Parental lock enabled
-            div.upgrade-right.boxed(style="display:none;")
-                a.btn.upgrade
-            #dateandtime
-                .time=time
-                .date=date
+            .container
+                .row
+                    .col-md-8.col-xs-12
+                        img.logo.hidden-xs(src="/core/css/img/logo.png")
+                        h1 MediacenterJS
+                        -if(allowed === 'no')
+                            h4 Parental lock enabled
+                        div.upgrade-right.boxed(style="display:none;")
+                            a.btn.upgrade
+                    .col-md-4.hidden-xs
+                        #dateandtime
+                            .time=time
+                            .date=date
         .container
             .row
-                ul#tiles
+                ul#tiles.col-xs-offset-2.col-xs-10
                     each item in apps
                         li.tile.boxed.mcjs-rc-controllable
                             a(href="/" + item.appLink + "/").mcjs-rc-clickable
