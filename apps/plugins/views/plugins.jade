@@ -20,11 +20,13 @@ block additional_scripts
 
 block body
     header
-        div.pull-left
-            a.backlink &#xe113;
-            h1 #{lingua.plugin_header}
-        div.pull-right(data-bind="visible:upgradeAll().length > 0")
-            a.btn.upgrade.upgrade-all(data-bind="{click: upgradeAllPlugins.bind($data, upgradeAll() )}") Upgrade All
+        .container
+            .row
+                div.pull-left
+                    a.backlink &#xe113;
+                    h1 #{lingua.plugin_header}
+                div.pull-right(data-bind="visible:upgradeAll().length > 0")
+                    a.btn.upgrade.upgrade-all(data-bind="{click: upgradeAllPlugins.bind($data, upgradeAll() )}") Upgrade All
     #wrapper
         div.loading.pull-left
             h2 #{lingua.plugin_loading} 
