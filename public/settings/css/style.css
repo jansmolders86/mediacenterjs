@@ -16,6 +16,7 @@ a.scraperlink,
     margin: 5px 20px;
     display: block;
     float:none;
+    text-overflow: ellipsis;
     text-align: left;
 }
 
