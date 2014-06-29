@@ -22,10 +22,13 @@ block additional_scripts
 
 block body
     header
-        a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
-        h1 #{lingua.tvshows}
+        .container 
+            .row
+                .col-md-12
+                    a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
+                    h1.hidden-xs #{lingua.tvshows}
 
-        input#search.pull-right(ng-model="query", type="text", placeholder="Search",ng-show="tvshows")
+                    input#search.pull-right(ng-model="query", type="text", placeholder="Search",ng-show="tvshows")
 
     .container
         .row

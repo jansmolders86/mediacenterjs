@@ -364,6 +364,12 @@ body > #screensaver{
 
 /***** -----------------   DATE AND TIME  ---------------------- *****/
 
+#dateandtime{
+    top: 0;
+    position: absolute;
+    right: 0;
+}
+
 #dateandtime .date,
 #dateandtime .time{    text-align:right; font-size:27px; font-family: 'Open Sans Condensed', sans-serif;}
 

@@ -40,7 +40,7 @@ block body
             .container
                 .row
                     .col-md-8.col-xs-12
-                        img.logo.hidden-xs(src="/core/css/img/logo.png")
+                        img.logo(src="/core/css/img/logo.png")
                         h1 MediacenterJS
                         -if(allowed === 'no')
                             h4 Parental lock enabled
@@ -52,9 +52,9 @@ block body
                             .date=date
         .container
             .row
-                ul#tiles.col-xs-offset-2.col-xs-10
+                ul#tiles
                     each item in apps
-                        li.tile.boxed.mcjs-rc-controllable
+                        li.tile.boxed.mcjs-rc-controllable.col-md-2.col-xs-1
                             a(href="/" + item.appLink + "/").mcjs-rc-clickable
                                 img(src="/" + item.tileLink + "/tile.png")
                                 span=item.tileLink

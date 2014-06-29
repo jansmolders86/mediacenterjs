@@ -56,10 +56,10 @@ p a:hover{text-decoration:none;}
 
 
 .tile{
-    width: 155px;
+    width: 160px;
     height: 165px;
     float: left;
-    margin: 2px 15px 10px 2px;
+    margin: 5px;
     list-style:none;
     display:none;
 }
@@ -137,7 +137,7 @@ header{
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    padding:5px 100px 10px 100px;
+    padding:5px 10px;
     position:relative;
     float:left;
     background:#3B3F40;
@@ -395,7 +395,14 @@ label,
 }
 
 
+@media only screen and (min-width: 320px) and (max-width: 529px) {
+    #tiles,
+    .tile{margin:0;}
+}
 
-
-
-
+@media only screen 
+    and (min-width: 360px)
+    and (orientation: portrait)
+    and (-webkit-min-device-pixel-ratio: 3.0) {
+        .tile{width:180px; height:175px; }
+    }
