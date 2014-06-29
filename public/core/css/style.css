@@ -171,7 +171,7 @@ header h1,
 header h4,
 #header h4{
     position: absolute;
-    bottom: -10px;
+    top: 0px;
     left: 157px;
     text-transform: none;
     font-size: 12px;
