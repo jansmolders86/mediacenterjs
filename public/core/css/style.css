@@ -603,6 +603,12 @@ table tr > th:first-child{ padding-left:0px;}
 .vjs-fullscreen.vjs-user-inactive { cursor: none!important; }
 
 
+.progress-pie-chart *{
+    -webkit-transition: all 0s ease;
+    -moz-transition: all 0s ease;
+    -o-transition: all 0s ease;
+    transition: all 0s ease;   
+}
 .progress-pie-chart {
     width: 200px;
     height: 200px;
@@ -611,10 +617,6 @@ table tr > th:first-child{ padding-left:0px;}
     position: relative;
 }
 .progress-pie-chart.gt50 {
-    -webkit-transition: all 0s ease;
-    -moz-transition: all 0s ease;
-    -o-transition: all 0s ease;
-    transition: all 0s ease;
     background-color: #fb8521;
 }
 
