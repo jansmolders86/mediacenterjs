@@ -30,7 +30,7 @@ block body
 
                     input#search.pull-right(ng-model="query", type="text", placeholder="Search",ng-show="tvshows")
 
-    .container
+    .container-fluid
         .row
             #playlist(ng-show="player.playlist.length > 0")
                 h2 Playlist
@@ -42,7 +42,7 @@ block body
                         ol.episodes
                             li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode.localName)") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
             ul#tvshows(ng-class="{side: player.playlist.length > 0}")
-                li.tvshow(ng-repeat="tvshow in tvshows | filter:query ", ng-class="{current: focused == $index}")
+                li.tvshow(ng-repeat="tvshow in tvshows | filter:query ", ng-class="{current: focused == $index}").col-md-6.col-xs-12
                     i.circular.inverted.edit.icon(ng-click="open(tvshow)")
                     img(ng-src="{{tvshow.banner}}", ng-click="player.playlist.add(tvshow)")
 

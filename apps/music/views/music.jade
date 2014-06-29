@@ -55,7 +55,7 @@ block body
 
             section#library(ng-class="{side: player.playlist.length > 0}")
                 .row
-                    .col-xs-8.col-sm-4.col-md-2.album-wrapper(ng-repeat="album in albums | filter:query", ng-mouseover="changeSelected(album)")
+                    .col-xs-6.col-sm-4.col-md-2.album-wrapper(ng-repeat="album in albums | filter:query", ng-mouseover="changeSelected(album)")
                         .thumbnail(ng-class="{current: focused == $index }")
                             i.circular.inverted.edit.icon(ng-click="open(album)")
                             img(ng-src="{{album.cover}}", ng-click="player.playlist.add(album)")
@@ -65,7 +65,7 @@ block body
                                     span.album-artist {{album.artist}}
                                     span.album-year(ng-show="album.year !== 0") {{album.year}}
 
-            h2.loading(ng-show="!albums") #{lingua.loading}
+            h2.loading.col-xs-12(ng-show="!albums") #{lingua.loading}
                 .progress-pie-chart(data-percent="{{serverMessage}}", ng-class="{gt50: serverMessage > 50}", ng-show="serverMessage > 0")
                     .ppc-progress
                         .ppc-progress-fill(style="-webkit-transform:rotate({{360*serverMessage/100}}deg); transform:rotate({{360*serverMessage/100}}deg);")

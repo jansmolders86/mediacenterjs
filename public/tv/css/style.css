@@ -23,6 +23,9 @@ body.playing > #player{display:block;}
 body,html{ overflow-y:auto; overflow-x:hidden;}
 #header{height:60px; z-index:3; position:fixed; top:0; }
 #header h1{z-index:4; margin-top:0px;}
+header #search {
+    height: 65px!important;
+}
 a.backlink { margin-top: 0px; z-index:4; }
 
 h2.loading{top:80px;}
@@ -56,8 +59,7 @@ h2.loading{top:80px;}
 .tvshow img{
     margin:0;
     display:block;
-    width:780px;
-    height:140px;
+    width:100%;
     padding:0;
     border:0;
     opacity:1;
@@ -74,22 +76,14 @@ h2.loading{top:80px;}
 
 .tvshow{
     float:left;
-    min-height:100px;
-    width:780px;
     list-style:none;
     z-index:99;
     position:relative;
     padding: 0px;
-    margin: 20px;
-    border: 1px solid #e7e7e7;
+    margin: 0px;
+    border: 0;
     display:block;
     background:#fff;
-    -webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
-    border-bottom: 0.2em solid rgba(0, 0, 0, 0.2);
-    border-radius: 0.33em;
-    -webkit-transition: -webkit-box-shadow 0.2s ease;
-    transition: box-shadow 0.2s ease;
     cursor:pointer;
 }
 

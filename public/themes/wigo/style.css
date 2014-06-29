@@ -137,7 +137,7 @@ header{
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    padding:5px 10px;
+    padding:0;
     position:relative;
     float:left;
     background:#3B3F40;
@@ -185,7 +185,7 @@ header{z-index:5;}
 header .logo{ float:left; height:45px; margin: 0px 10px 0 0px; }
 
 header h1{
-    width: 50%;
+    max-width: 85%;
     padding: 0;
     margin: 7px 0 0 0;
     display: inline-block;
@@ -398,6 +398,8 @@ label,
 @media only screen and (min-width: 320px) and (max-width: 529px) {
     #tiles,
     .tile{margin:0;}
+    
+    .loading{left: 20px;}
 }
 
 @media only screen 
@@ -405,4 +407,5 @@ label,
     and (orientation: portrait)
     and (-webkit-min-device-pixel-ratio: 3.0) {
         .tile{width:180px; height:175px; }
+        .loading{left: 20px;}
     }

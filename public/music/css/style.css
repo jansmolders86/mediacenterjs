@@ -38,7 +38,7 @@ header #search {
     height: 80vh;
     overflow-x: hidden;
     overflow-y: auto;
-    width: 100vw;
+    width:95vw;
 }
 
 #library.side{
