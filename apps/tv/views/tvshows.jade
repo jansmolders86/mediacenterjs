@@ -19,6 +19,15 @@ block additional_scripts
     script(src="/tv/js/app.js")
     script(src="/core/js/video.js")
     script(src="/tv/js/remote.js")
+    script.
+        $(function(){
+            var isTouch = "ontouchstart" in document.documentElement;
+            if(!isTouch){
+                $('#inner-playlist').slimScroll({
+                    height: 'auto'
+                });
+            }
+        });
 
 block body
     header
@@ -33,14 +42,15 @@ block body
     .container-fluid
         .row
             #playlist(ng-show="player.playlist.length > 0")
-                h2 Playlist
-                ul
-                    li.currentshow(ng-repeat="tvshow in player.playlist", ng-mouseover="changeSelected(tvshow)", ng-class="{current: player.current.tvshow == $index}")
-                        .header( ng-click="player.playlist.remove(tvshow)")
-                            span.tvshow-title {{tvshow.title}}
-                            i.remove.circle.icon
-                        ol.episodes
-                            li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode.localName)") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
+                #inner-playlist
+                    h2 Playlist
+                    ul
+                        li.currentshow(ng-repeat="tvshow in player.playlist", ng-mouseover="changeSelected(tvshow)", ng-class="{current: player.current.tvshow == $index}")
+                            .header( ng-click="player.playlist.remove(tvshow)")
+                                span.tvshow-title {{tvshow.title}}
+                                i.remove.circle.icon
+                            ol.episodes
+                                li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode.localName)") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
             ul#tvshows(ng-class="{side: player.playlist.length > 0}")
                 li.tvshow(ng-repeat="tvshow in tvshows | filter:query ", ng-class="{current: focused == $index}").col-md-6.col-xs-12
                     i.circular.inverted.edit.icon(ng-click="open(tvshow)")

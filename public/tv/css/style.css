@@ -46,15 +46,15 @@ h2.loading{top:80px;}
     list-style: none;
     display: block;
     position: relative;
-    width:100%;
     min-height:500px;
     overflow:hidden;
 }
 
 #tvshows.side,
 .side{
-    margin-left:300px;
+    margin-left: 357px;
 }
+
 
 .tvshow img{
     margin:0;
