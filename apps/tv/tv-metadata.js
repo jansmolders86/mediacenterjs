@@ -290,18 +290,16 @@ getTvshows  = function(req, res){
                 , showCertification = item.certification;
 
                 getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
-                    if(availableEpisodes !== 'none'){
-                        if(availableEpisodes !== null) {
-                            ShowList.push(availableEpisodes);
-                            itemsDone++;
+                    if(availableEpisodes !== 'none' && availableEpisodes !== null){
+                        ShowList.push(availableEpisodes);
+                        itemsDone++;
 
-                            if (count === itemsDone) {
-                                res.json(ShowList);
-                                // db.close();
-                            }
+                        if (count === itemsDone) {
+                            res.json(ShowList);
+                            // db.close();
                         }
                     } else {
-                        console.log('Error retrieving episodes');
+                        console.log('Error retrieving episodes. Available episodes:', availableEpisodes);
                     }
                 });
             });
@@ -318,6 +316,7 @@ getEpisodes = function(showTitle, showBanner, showGenre, showCertification, call
     },
     function(err, rows) {
         if(err){
+            console.log('DB error getting episodes', err);
             callback('none');
         }
         if (typeof rows !== 'undefined' && rows.length > 0){
