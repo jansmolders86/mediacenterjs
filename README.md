@@ -6,7 +6,6 @@
 __A NodeJS based media center__ 
 
 Website: http://www.mediacenterjs.com 
-(Now hosted on Github for more stability!)
 
 Status: 
 =======
@@ -78,9 +77,8 @@ Audio: MP3
 Known issues:
 ==================
 
-* Please note there are some issues with the gathering of file data. This is being looked at!
-* Mobile device streaming still in heavy development
-* Browser: Seeking beyond buffer not working yet.
+* Device streaming still in heavy development
+* Seeking beyond buffer not working yet.
 
 Be sure to check the open issues before filing a new one.
 Also check out what is currently being developed or fixed on Trello: https://trello.com/b/czjyYsFi/mediacenterjs
