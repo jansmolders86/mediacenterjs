@@ -105,7 +105,7 @@
 			if (data.message){
 				o.viewModel.message(data.message);
 			}else{
-					
+                $('.backlink').show();	
 				var pluginList = [];
 				$.each(data.plugins, function() {
 					var plugin = new pluginModel(this, o);
@@ -137,6 +137,7 @@
 		this.isUpgradable	= ko.observable(json.isUpgradable);
 
 		this.install = function () {
+            $('.backlink').hide();
 			jqxhr = $.ajax({
 				url: '/plugins/'+json.name+'/install', 
 				type: 'get',
@@ -153,6 +154,8 @@
 		};
 
 		this.upgrade = function () {
+            
+            $('.backlink').hide();
 			jqxhr = $.ajax({
 				url: '/plugins/'+json.name+'/upgrade', 
 				type: 'get',
@@ -169,6 +172,7 @@
 		};
 		
 		this.remove = function () {
+            $('.backlink').hide();
 			jqxhr = $.ajax({
 				url: '/plugins/'+json.name+'/uninstall', 
 				type: 'get',
