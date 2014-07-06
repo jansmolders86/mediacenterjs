@@ -152,9 +152,10 @@ block body
                                 span.input-group-addon
                                     i.exchange.icon
                                 input.form-control#port.mcjs-rc-clickable(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true", data-msg-required="This field is required.")
-                    .form-group.mcjs-rc-controllable.submit-row
-                        input.btn.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
-                        input.oauth(name="oauth" type="hidden")
+                    .form-group.mcjs-rc-controllable
+                        .col-md-offset-2.col-md-10
+                            input.btn.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
+                            input.oauth(name="oauth" type="hidden")
 
                 .cache-management.col-sm-12.col-md-12.col-lg-2
                     h2 Cache management
