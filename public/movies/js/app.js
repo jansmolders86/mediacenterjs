@@ -164,7 +164,7 @@ function playMovie(data, $http){
     $http.get('/movies/'+orginalName+'/play/'+platform).success(function(data) {
         var fileName                =  orginalName
             , outputFile            =   fileName.replace(/ /g, "-")
-            , extentionlessFile     =   outputFile.replace(/\.[^/.]+$/, "")
+            , extentionlessFile     =   outputFile.replace(/\.[^\.]+$/, "")
             , videoUrl              =   "/data/movies/"+extentionlessFile+".mp4"
             , subtitleUrl           =   "/data/movies/"+extentionlessFile+".srt"
             , playerID              =   'player'
