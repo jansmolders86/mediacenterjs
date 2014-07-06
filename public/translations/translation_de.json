@@ -53,5 +53,6 @@
 "settings_device_btn_unlock" :"Dieses Gerät entsperren",
 "pagenotFound" : "Seite nicht gefunden!",
 "pagenotFound_header" : "Die angeforderte Seite konnte nicht gefunden werden. Vielleicht ein falscher Link?",
-"pagenotFound_txt" : "Sie werden in 5 Sekunden zur Hauptseite weitergeleitet..."
+"pagenotFound_txt" : "Sie werden in 5 Sekunden zur Hauptseite weitergeleitet...",
+"photos": "Fotos"
 }

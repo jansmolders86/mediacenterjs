@@ -10,6 +10,7 @@ block declarations
     - var angular_app           = undefined;
     - var angular_body_ctrl     = undefined;
     - var angular_body_class    = undefined;
+    - var angular_keypress_func = undefined;
 html(lang="en",ng-app=angular_app)
     head
         if !additional_title
@@ -95,6 +96,6 @@ html(lang="en",ng-app=angular_app)
         block additional_scripts
 
 
-body(id=body_id, class=body_class,ng-controller=angular_body_ctrl,ng-class=angular_body_class)
+body(id=body_id, class=body_class,ng-controller=angular_body_ctrl,ng-class=angular_body_class,ng-keydown=angular_keypress_func)
     block body
 

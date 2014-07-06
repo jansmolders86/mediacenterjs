@@ -1,0 +1,45 @@
+extends /layout
+
+block declarations
+    - additional_title      = lingua.photos;
+    - body_class            = 'appPhotos';
+    - use_angular           = true;
+    - angular_app           = "photosApp";
+    - angular_body_ctrl     = "photosCtrl";
+    - angular_keypress_func = "galleryNavigationPress($event)";
+
+block additional_css
+    link(rel='stylesheet', href='/photos/css/style.css')
+
+block additional_scripts
+    script(src="/core/js/plugins/angular/angular-ui/ui-bootstrap-tpls-0.11.0.js")
+    script(src="/photos/js/app.js")
+    script(src="/photos/js/remote.js")
+block body
+    div#imageView(ng-show="imageToView")
+        a.imagePreviewClose(ng-click="closeImageView()") X
+        img(ng-src="{{imageToView.src}}")
+
+    div(ng-hide="imageToView")
+        header
+            .container
+                .row
+                    .col-md-12
+                        a.backlink(href="/") &#xe113;
+                        h1.hidden-xs #{lingua.photos}
+
+                        input#search.pull-right(ng-model="query", type="text", placeholder="Search", ng-show="photos")
+
+        .container-fluid
+            .row
+                .col-md-12(ng-show="isInAlbum", style="height: 60px; padding-top: 5px;")
+                    a.backlink(ng-click="back()") &#xe113;
+                    h2.backlink-description(ng-click="back()") Go Back {{ getLastAlbum() }}
+            .row
+                .col-md-12.item-list
+                    a.item(ng-click="itemClick(photo)", style="cursor: pointer;", ng-repeat="photo in photos | filter:query", ng-class="{ album: photo.isAlbum }")
+                        img(ng-src="{{photo.src}}", ng-hide="photo.isAlbum")
+                        div(ng-show="photo.isAlbum")
+                            h2 {{ photo.filename }}
+                            img.thumbnail(ng-src="{{thumbnail}}", width="128", height="128", ng-repeat="thumbnail in photo.thumbnails", style="display: inline-block; margin-right: 20px;")
+

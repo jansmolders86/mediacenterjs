@@ -53,5 +53,6 @@
 "settings_device_btn_unlock" :"UnLock this device",
 "pagenotFound" : "Page not found!",
 "pagenotFound_header" : "Requested page not found. Maybe a bad link?",
-"pagenotFound_txt" : "Redirecting to the homepage in 5 seconds"
+"pagenotFound_txt" : "Redirecting to the homepage in 5 seconds",
+"photos": "Photos"
 }

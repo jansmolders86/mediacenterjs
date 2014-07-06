@@ -1,80 +1,83 @@
 {
-    "name": "mediacenterjs",
-    "version": "0.0.70",
-    "description": "A NodeJS based mediacenter for your browser",
-    "homepage": "http://www.mediacenterjs.com",
-    "author": {
-        "name": "Jan Smolders",
-        "email": "jansmolders86@gmail.com"
+  "name": "mediacenterjs",
+  "version": "0.0.70",
+  "description": "A NodeJS based mediacenter for your browser",
+  "homepage": "http://www.mediacenterjs.com",
+  "author": {
+    "name": "Jan Smolders",
+    "email": "jansmolders86@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Adam Schodde",
+      "email": "sparky1010+github@gmail.com"
     },
-    "contributors": [
-        {
-            "name": "Adam Schodde",
-            "email": "sparky1010+github@gmail.com"
-        },
-        {
-            "name": "Claire Sarsam",
-            "email": "csarsam+github@gmail.com"
-        },
-        {
-            "name": "Terry Moore II",
-            "email": "terry.moore.ii@gmail.com"
-        },
-        {
-            "name": "Stefan Hoffman",
-            "email": "stefhoff@go4more.de"
-        },
-        {
-            "name": "Ionică Bizău",
-            "email": "bizauionica@gmail.com"
-        }
-    ],
-    "licenses": [{
-        "type": "GPLv3",
-        "url": "http://www.gnu.org/licenses"
-    }],
-    "repository" :{
-        "type"  : "git",
-        "url"   : "http://github.com/jansmolders86/mediacenterjs.git"
+    {
+      "name": "Claire Sarsam",
+      "email": "csarsam+github@gmail.com"
     },
-    "scripts" :{
-        "start" : "node server.js"
+    {
+      "name": "Terry Moore II",
+      "email": "terry.moore.ii@gmail.com"
     },
-    "readmeFilename": "README.md",
-    "dependencies": {
-        "express"           : "3.x",
-        "fs.extra"          : "1.2.1",
-        "fs-extra"          : "0.8.1",
-        "dateformat"        : "1.0.4-1.2.3",
-        "downloader"        : "0.1.2",
-        "jade"              : "0.35.0",
-        "lingua"            : "0.3.6",
-        "node-ffprobe"      : "1.2.2",
-        "fluent-ffmpeg"     : ">=1.7.2",
-        "node-html-encoder" : "0.0.2",
-        "npm"               : "1.3.15",
-        "redis"             : "0.8.3",
-        "request"           : "2.16.6",
-        "require"           : "0.5.0",
-        "rimraf"            : "2.1.4",
-        "feedparser"        : "0.15.4",
-        "trakt"             : "0.0.5-2",
-        "colors"            : "0.6.0-1",
-        "ini"               : "1.1.0",
-        "semver"            : ">=2.0.0",
-        "async"             : "0.2.9",
-        "open"              : "0.0.3",
-        "musicmetadata"     : "0.2.5",
-        "dblite"            : ">=0.5.0",
-        "walk"              : ">=1.2.2",
-        "underscore"        : "~1.5.2",
-        "moviedb"           : "~0.1.0",
-        "adm-zip"           : "0.4.3",
-        "wget"              : ">=0.0.1",
-        "socket.io"         : "~0.9.16",
-        "youtube-api"       : "~0.2.2",
-        "node-schedule"     : "~0.1.13",
-        "lastfmapi"         : "~0.0.5",
-		"graceful-fs"		: "~2.0.3"
+    {
+      "name": "Stefan Hoffman",
+      "email": "stefhoff@go4more.de"
+    },
+    {
+      "name": "Ionică Bizău",
+      "email": "bizauionica@gmail.com"
     }
+  ],
+  "licenses": [
+    {
+      "type": "GPLv3",
+      "url": "http://www.gnu.org/licenses"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/jansmolders86/mediacenterjs.git"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "adm-zip": "0.4.3",
+    "async": "0.2.9",
+    "colors": "0.6.0-1",
+    "dateformat": "1.0.4-1.2.3",
+    "dblite": ">=0.5.0",
+    "downloader": "0.1.2",
+    "express": "3.x",
+    "feedparser": "0.15.4",
+    "fluent-ffmpeg": ">=1.7.2",
+    "fs-extra": "0.8.1",
+    "fs.extra": "1.2.1",
+    "glob": "^4.0.3",
+    "graceful-fs": "~2.0.3",
+    "ini": "1.1.0",
+    "jade": "0.35.0",
+    "lastfmapi": "~0.0.5",
+    "lingua": "0.3.6",
+    "moviedb": "~0.1.0",
+    "musicmetadata": "0.2.5",
+    "node-ffprobe": "1.2.2",
+    "node-html-encoder": "0.0.2",
+    "node-schedule": "~0.1.13",
+    "npm": "1.3.15",
+    "open": "0.0.3",
+    "redis": "0.8.3",
+    "request": "2.16.6",
+    "require": "0.5.0",
+    "rimraf": "2.1.4",
+    "semver": ">=2.0.0",
+    "socket.io": "~0.9.16",
+    "trakt": "0.0.5-2",
+    "underscore": "~1.5.2",
+    "walk": ">=1.2.2",
+    "wget": ">=0.0.1",
+    "youtube-api": "~0.2.2"
+  }
 }
