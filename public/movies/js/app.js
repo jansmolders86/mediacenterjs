@@ -47,7 +47,7 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
     }
 
     var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
-        $scope.edit ={};
+        $scope.edit = {};
         $scope.current = current;
 
         $scope.cancel = function () {
@@ -55,25 +55,20 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
         };
 
         $scope.editItem = function(){
+            if (!$scope.edit.title || $scope.edit.title === '') {
+                $scope.edit.title = $scope.current.title || '';
+            }
 
-            if($scope.edit.title === '' || $scope.edit.title === null || $scope.edit.title === undefined ){
-                if($scope.current.title  !== undefined || $scope.current.title !== null){
-                    $scope.edit.title = $scope.current.title;
+            if (!$scope.edit.poster_path || $scope.edit.poster_path === '') {
+                if ($scope.current.poster_path) {
+                    $scope.edit.poster_path = $scope.current.poster_path;
                 } else {
-                    $scope.edit.title = '';
+                    $scope.edit.poster_path = '/movies/css/img/nodata.png';
                 }
             }
 
-            if($scope.edit.backdrop_path === '' || $scope.edit.backdrop_path === null || $scope.edit.backdrop_path === undefined ){
-                if($scope.current.backdrop_path  !== undefined || $scope.current.backdrop_path !== null){
-                    $scope.edit.backdrop_path = $scope.current.backdrop_path;
-                } else {
-                    $scope.edit.backdrop_path = '/movies/css/img/nodata.png';
-                }
-            }
-
-            if($scope.edit.backdrop_path === '' || $scope.edit.backdrop_path === null || $scope.edit.backdrop_path === undefined ){
-                if($scope.current.backdrop_path  !== undefined || $scope.current.backdrop_path !== null){
+            if (!$scope.edit.backdrop_path || $scope.edit.backdrop_path === '') {
+                if ($scope.current.backdrop_path) {
                     $scope.edit.backdrop_path = $scope.current.backdrop_path;
                 } else {
                     $scope.edit.backdrop_path = '/movies/css/img/backdrop.png';
@@ -95,20 +90,20 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
         }
     };
 
-    $scope.changeBackdrop = function(movie){
-        var elem = document.getElementById("backdropimg");
-        elem.src = movie.backdrop;
-    }
-
     $scope.changeSelected = function(movie){
-        var elem = document.getElementById("backdropimg");
-        elem.src = movie.backdrop_path;
-        $scope.focused = $scope.movies.indexOf(movie);
+        var selectedMovie = $scope.movies.indexOf(movie);
+
+        if ($scope.focused !== selectedMovie) {
+            var elem = document.getElementById("backdropimg");
+            elem.src = movie.backdrop_path;
+            $scope.focused = selectedMovie;
+        }
     }
 
     $scope.resetSelected = function () {
-        var elem = document.getElementById("backdropimg");
         $scope.focused = 0;
+
+        var elem = document.getElementById("backdropimg");
         elem.src = '/movies/css/img/backdrop.png';
     }
 
@@ -160,13 +155,9 @@ function playMovie(data, $http){
     var orginalName = data;
 
     var platform = 'desktop';
-    if (navigator.userAgent.match(/Android/i)){
+    if (navigator.userAgent.match(/Android/i)) {
         platform = 'android';
-    } else if(navigator.userAgent.match(/iPhone/i)
-            || navigator.userAgent.match(/iPhone/i)
-            || navigator.userAgent.match(/iPad/i)
-            || navigator.userAgent.match(/iPod/i))
-    {
+    } else if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
         platform = 'ios';
     }
 

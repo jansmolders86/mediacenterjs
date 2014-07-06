@@ -32,7 +32,7 @@ block body
     .container-fluid
         .row
             .col-xs-12.col-sm-6.col-md-2.col-lg-4(ng-repeat="movie in movies | filter:query ")
-                .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-focus="changeBackdrop(movie)", ng-class="{current: focused == $index }", ng-mouseover="changeSelected(movie)",ng-hide="movie.title === ''", ng-mouseleave="resetSelected()")
+                .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-focus="chnageSelected(movie)", ng-class="{current: focused == $index }", ng-mouseover="changeSelected(movie)",ng-hide="movie.title === ''", ng-mouseleave="resetSelected()")
                     i.circular.inverted.edit.icon(ng-click="open(movie)")
                     img.movieposter(ng-src="{{movie.poster_path}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie.original_name)")
                     .caption

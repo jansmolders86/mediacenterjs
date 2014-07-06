@@ -72,7 +72,7 @@ exports.backdrops = function (req, res){
 };
 
 exports.edit = function(req, res, data){
-    db.query('UPDATE movies SET title=$newTitle,poster_path=$newPosterPath,backdrop_path=$newBackdropPath WHERE original_name=$currentMovie; ', {
+    db.query('UPDATE movies SET title=$newTitle,poster_path=$newPosterPath,backdrop_path=$newBackdropPath WHERE original_name=$currentMovie', {
         newTitle            : data.newTitle,
         newPosterPath       : data.newPosterPath,
         newBackdropPath     : data.newBackdropPath,

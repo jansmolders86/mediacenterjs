@@ -1,6 +1,6 @@
 /*
 	MediaCenterJS - A NodeJS based mediacenter solution
-	
+
     Copyright (C) 2013 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -74,8 +74,8 @@ app.configure(function(){
 		storageKey: 'lang',
 		path: __dirname+'/public/translations/',
 		cookieOptions: {
-            httpOnly: false,        
-            expires: new Date(Date.now(-1)),  
+            httpOnly: false,
+            expires: new Date(Date.now(-1)),
             secure: false
         }
 	}));
@@ -93,21 +93,20 @@ app.all('*', function(req, res, next) {
   next();
 });
 
-app.configure('development', function(){   
+app.configure('development', function(){
 	app.enable('verbose errors');
-	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));  
+	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
 	app.disable('verbose errors');
-	app.use(express.errorHandler()); 
-});   
+	app.use(express.errorHandler());
+});
 
 mcjsRouting.loadRoutes(app,{ verbose: !module.parent });
 
 app.use(function(req, res) {
     res.status(404).render('404',{ selectedTheme: config.theme});
-    res.status(500).render('404',{ selectedTheme: config.theme});
 });
 
 app.get("/", function(req, res, next) {
@@ -118,19 +117,19 @@ app.get("/", function(req, res, next) {
 
 		var localIP = getIPAddresses()
 		, sendLocalIP = '';
-		
+
 		if(getIPAddresses() !== undefined && getIPAddresses() !== null) {
-			localIP = getIPAddresses();	
+			localIP = getIPAddresses();
 		}
-		
+
 		if(localIP[0] !== undefined && localIP[0] !==  null){
 			sendLocalIP = localIP[0];
 		}
 
 		res.render('setup',{
 			localIP:sendLocalIP
-		});	
-		
+		});
+
 	} else {
 
 		var apps = [];
@@ -140,7 +139,7 @@ app.get("/", function(req, res, next) {
 
 			if(fs.existsSync(__dirname + '/public/'+name+'/tile.png')){
 				var obj = {
-					appLink: name, 
+					appLink: name,
 					tileLink: name
 				}
                 if(name === 'movies' && config.moviepath === ""){
@@ -170,7 +169,7 @@ app.get("/", function(req, res, next) {
 			var pluginPath = nodeModules + '/' + name;
 			if(fs.existsSync( pluginPath + '/public/tile.png')){
 				var obj = {
-					appLink: name, 
+					appLink: name,
 					tileLink: name + '/public'
 				}
 				apps.push(obj);
@@ -217,7 +216,7 @@ app.post('/removeModule', function(req, res){
         , publicdir = './public/'+module+'/';
 
 	rimraf(appDir, function (e){if(e)console.log('Error removing module', e .red)});
-	rimraf(publicdir, function (e) { 
+	rimraf(publicdir, function (e) {
 		if(e) {
 			console.log('Error removing module', e .red);
 		} else {
@@ -244,12 +243,12 @@ app.post('/getScraperData', function(req, res){
         tvfunctions.loadItems(req, res, serveToFrontEnd);
     }  else if(scraperlink === 'all'){
         moviesfunctions.loadItems(req, res, serveToFrontEnd);
-        setTimeout(function(){    
+        setTimeout(function(){
             musicfunctions.loadItems(req, res, serveToFrontEnd);
         },10000);
-        setTimeout(function(){    
+        setTimeout(function(){
             tvfunctions.loadItems(req, res, serveToFrontEnd);
-        },20000); 
+        },20000);
     }
 });
 
@@ -305,7 +304,7 @@ app.post('/setuppost', function(req, res){
 app.get('/configuration', function(req, res){
 	res.send(config);
 });
-	
+
 app.post('/submit', function(req, res){
 	configuration_handler.saveSettings(req.body, function() {
 		res.redirect('/');
@@ -335,7 +334,7 @@ if (config.port == "" || config.port == undefined ){
 	app.listen(parseInt(defaultPort));
     var url = 'http://localhost:'+defaultPort;
     open(url);
-    
+
 } else{
 	var message = "MediacenterJS listening on port:" + config.port + "\n";
 	console.log(message.green.bold);
@@ -352,7 +351,7 @@ function unzip(req, res, output, dir){
     if(fs.existsSync(dir) === false){
         fs.mkdirSync(dir);
     } else {
-        rimraf(dir, function (err) { 
+        rimraf(dir, function (err) {
             if(err) {
                 console.log('Error removing temp folder', err .red);
             } else {
