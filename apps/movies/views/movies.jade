@@ -23,7 +23,7 @@ block body
     #backdrop
         img#backdropimg.fullscreen(src="/movies/css/img/backdrop.png")
     header
-        .container 
+        .container
             .row
                 .col-md-12
                 a.backlink(href="/") &#xe113;
@@ -31,8 +31,8 @@ block body
                 input#search.pull-right(ng-model="query", type="text", placeholder="Search",ng-show="movies")
     .container-fluid
         .row
-            .col-xs-12.col-sm-6.col-md-2.col-lg-4(ng-repeat="movie in movies | filter:query ", ng-mouseover="changeSelected(movie)",ng-hide="movie.title === ''")
-                .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-focus="changeBackdrop(movie)", ng-class="{current: focused == $index }")
+            .col-xs-12.col-sm-6.col-md-2.col-lg-4(ng-repeat="movie in movies | filter:query ")
+                .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-focus="changeBackdrop(movie)", ng-class="{current: focused == $index }", ng-mouseover="changeSelected(movie)",ng-hide="movie.title === ''", ng-mouseleave="resetSelected()")
                     i.circular.inverted.edit.icon(ng-click="open(movie)")
                     img.movieposter(ng-src="{{movie.poster_path}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie.original_name)")
                     .caption

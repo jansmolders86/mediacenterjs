@@ -106,6 +106,12 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
         $scope.focused = $scope.movies.indexOf(movie);
     }
 
+    $scope.resetSelected = function () {
+        var elem = document.getElementById("backdropimg");
+        $scope.focused = 0;
+        elem.src = '/movies/css/img/backdrop.png';
+    }
+
     var setupSocket = {
         async: function() {
             var promise = $http.get('/configuration/').then(function (response) {
