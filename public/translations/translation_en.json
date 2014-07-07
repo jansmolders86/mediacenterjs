@@ -24,6 +24,7 @@
 "setting_movielocation" : "Specify movielocation",
 "setting_tvlocation" : "Specify tv show location",
 "setting_musiclocation" : "Specify musiclocation",
+"setting_photoslocation": "Specify photoslocation",
 "setting_highres" : "Use high res images",
 "setting_screensaver" : "Dim screen on inactivity",
 "setting_keyboard" : "Use onscreen keyboard",

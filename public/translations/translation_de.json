@@ -24,6 +24,7 @@
 "setting_movielocation" : "Geben Sie den Pfad zu Ihren Filmen an",
 "setting_tvlocation" : "Geben Sie den Pfad zu Ihren TV-Shows an",
 "setting_musiclocation" : "Geben Sie den Pfad zu Ihrer Musik an",
+"setting_photoslocation": "Geben Sie den Pfad zu Ihren Fotos an",
 "setting_highres" : "Verwende hohe Auflösung",
 "setting_screensaver" : "Bildschirm bei Inaktivität abdunkeln",
 "setting_keyboard" : "Verwende Bildschirmtastatur",
