@@ -38,7 +38,7 @@ block body
             .row
                 .col-md-12.item-list
                     a.item(ng-click="itemClick(photo)", style="cursor: pointer;", ng-repeat="photo in photos | filter:query", ng-class="{ album: photo.isAlbum }")
-                        img(ng-src="{{photo.src}}", ng-hide="photo.isAlbum")
+                        img(ng-src="{{photo.src}}", ng-hide="photo.isAlbum", width="310")
                         div(ng-show="photo.isAlbum")
                             h2 {{ photo.filename }}
                             img.thumbnail(ng-src="{{thumbnail}}", width="128", height="128", ng-repeat="thumbnail in photo.thumbnails", style="display: inline-block; margin-right: 20px;")
