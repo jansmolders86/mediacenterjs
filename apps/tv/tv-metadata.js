@@ -174,9 +174,10 @@ getDataForNewShow = function(originalTitle, episodeTitle,callback){
         getMetadataForShow(trimmedTitle, function(newshowMetaData){
             var newTvshowTitle = newshowMetaData[0];
             // Store show data in db and do lookup again
-            storeShowMetadataInDatabase(newshowMetaData);
+            storeShowMetadataInDatabase(newshowMetaData, function(){
+                callback();
+            });
 
-            callback();
         });
 
     });
@@ -218,8 +219,10 @@ getMetadataForShow = function(tvTitle, callback){
 
 
 
-storeShowMetadataInDatabase = function(metadata) {
+storeShowMetadataInDatabase = function(metadata, callback) {
+    console.log(metadata)
     db.query('INSERT OR REPLACE INTO tvshows VALUES(?,?,?,?)', metadata);
+    callback();
 };
 
 storeEpisodeMetadataInDatabase = function(metadata, callback) {
@@ -275,7 +278,7 @@ getTvshows  = function(req, res){
         title             : String,
         banner            : String,
         genre             : String,
-        certification      : String
+        certification     : String
     }, function(err, rows) {
         if(err){
             console.log("DB error",err);
