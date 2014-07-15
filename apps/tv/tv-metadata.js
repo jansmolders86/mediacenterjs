@@ -175,7 +175,7 @@ getDataForNewShow = function(originalTitle, episodeTitle,callback){
             var newTvshowTitle = newshowMetaData[0];
             // Store show data in db and do lookup again
             storeShowMetadataInDatabase(newshowMetaData);
-            
+
             callback();
         });
 
@@ -290,7 +290,7 @@ getTvshows  = function(req, res){
                 , showCertification = item.certification;
 
                 getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
-                    
+
                     itemsDone++;
                     if(availableEpisodes !== 'none' && availableEpisodes !== null){
                         ShowList.push(availableEpisodes);
@@ -336,7 +336,7 @@ getEpisodes = function(showTitle, showBanner, showGenre, showCertification, call
 }
 
 exports.loadData = function(req, res, serveToFrontEnd) {
-    console.log('Getting tv data');
+    nrScanned = 0;
     walk(dir,  function(err, results) {
         totalFiles = (results) ? results.length : 0;
         setupParse(req, res, serveToFrontEnd, results);

@@ -233,6 +233,7 @@ getMovies = function(req, res){
 
 
 exports.loadData = function(req, res, serveToFrontEnd) {
+    nrScanned = 0;
     walk(dir,  function(err, results) {
         totalFiles = (results) ? results.length : 0;
         setupParse(req, res, serveToFrontEnd, results);

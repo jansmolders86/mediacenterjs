@@ -28,21 +28,24 @@ header #search {
 
 /** Library **/
 
+body,
+.container-fluid,
+#library .row,
+#library{overflow-x: hidden;}
+
 .container-fluid{
     padding:90px 20px;
-
 }
 
 #library {
     float: left;
     height: 80vh;
-    overflow-x: hidden;
     overflow-y: auto;
-    width:95vw;
+    width:90vw;
 }
 
 #library.side{
-    width: 70vw;
+    width: 100%;
 }
 
 .side{
@@ -158,7 +161,7 @@ header #search {
 
 #playlist {
     float: left;
-    width: 358px;
+    width: 360px;
     background: #FEFEFE;
     overflow-y: auto;
     overflow-x: hidden;

@@ -16,6 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function remote(socket, $scope){
+
+
     socket.on('controlling', function(data){
         switch(data.action) {
             case "goLeft" :
@@ -48,10 +50,9 @@ function remote(socket, $scope){
     });
 
     socket.on('progress', function (data) {
-        console.log(data.msg)
         $scope.serverMessage = data.msg;
     });
-    
+
     socket.on('serverStatus', function (data) {
         $scope.serverStatus = data.msg;
     });
