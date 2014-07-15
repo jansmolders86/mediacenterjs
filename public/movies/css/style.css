@@ -27,6 +27,11 @@ header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
 .container-fluid{ padding-top:90px; z-index:2;  display: flex; flex-direction: row; }
 .container-fluid .row > div { z-index:3; }
 
+/* Bootstrap override */
+.col-lg-2 {
+    width: 16%!important;
+}
+
 #backdrop{
     box-shadow:none;
     padding: 10px 0 0 100px;
@@ -107,12 +112,12 @@ a.backlink { margin-top: -5px; z-index:4; }
     margin: 0px 0px 20px 0;
     border-radius:2px;
     display:block;
-    min-width:219px;
     max-height: 500px;
     background:#fff;
     cursor:pointer;
     overflow:hidden;
     border:0;
+
 }
 
 .movieposter .edit.icon{display:none;}

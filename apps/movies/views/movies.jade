@@ -28,10 +28,10 @@ block body
                 .col-md-12
                 a.backlink(href="/") &#xe113;
                 h1.hidden-xs #{lingua.movies}
-                input#search.pull-right(ng-model="query", type="text", placeholder="Search",ng-show="movies")
+                input#search.pull-right(ng-model="query", type="text", placeholder="Search", ng-show="movies")
     .container-fluid
         .row
-            .col-xs-12.col-sm-6.col-md-2.col-lg-4(ng-repeat="movie in movies | filter:query ")
+            .col-xs-12.col-sm-6.col-md-2.col-lg-2(ng-repeat="movie in movies | filter:query", ng-cloak)
                 .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-focus="chnageSelected(movie)", ng-class="{current: focused == $index }", ng-mouseover="changeSelected(movie)",ng-hide="movie.title === ''", ng-mouseleave="resetSelected()")
                     i.circular.inverted.edit.icon(ng-click="open(movie)")
                     img.movieposter(ng-src="{{movie.poster_path}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie.original_name)")
