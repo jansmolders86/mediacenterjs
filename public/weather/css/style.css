@@ -4,112 +4,113 @@ body,html{overflow:hidden; position:relative; color:#333;}
 
 /* Weather app */
 #header{
-	background:#323A45;
-	-moz-box-shadow:none;
-	-webkit-box-shadow:none;
-	box-shadow:none;
+    background:#323A45;
+    -moz-box-shadow:none;
+    -webkit-box-shadow:none;
+    box-shadow:none;
+    padding: 0 50px;
 }
 #header h1{margin-top:5px;}
 #header *{color:#F1F5FE;}
 
 .degrees{ font-size:48px; margin-top: 7px;}
-.degrees.getsucces{	
-	-webkit-animation: glide-in 0.8s; 
-	-moz-animation: glide-in 0.8s; 
-    -o-animation: glide-in 0.8s; 
-    animation: glide-in 0.8s; 
+.degrees.getsucces{
+    -webkit-animation: glide-in 0.8s;
+    -moz-animation: glide-in 0.8s;
+    -o-animation: glide-in 0.8s;
+    animation: glide-in 0.8s;
 }
 
 .degrees sup{ font-size:24px; }
 
-.current { 
-	float: right;
-	width: 350px;
+.current {
+    float: right;
+    width: 350px;
 }
 
 .current h2 {
-	font-size: 21px;
-	margin-left: -10px;
-	margin-bottom: -5px;
+    font-size: 21px;
+    margin-left: -10px;
+    margin-bottom: -5px;
 }
 
 .location {
-	font-size:48px; 
-	float:left; 
-	min-width:600px; 
-	height:50px;
+    font-size:48px;
+    float:left;
+    min-width:600px;
+    height:50px;
 }
 
 .weathertype {
-	margin-top: 5px;
+    margin-top: 5px;
 }
 
 .weathertype .text {
-	font-size: 26px;
-	padding-left: 65px;
-	line-height: 56px;
-	height: 56px;
+    font-size: 26px;
+    padding-left: 65px;
+    line-height: 56px;
+    height: 56px;
 }
 
 .weathertype .icon {
-	float: left;
-	width: 60px;
-	height: 60px;
+    float: left;
+    width: 60px;
+    height: 60px;
 }
 
 .feelslike {font-size:16px; padding:2px 0;}
 
 .infoPanel {
-	position: absolute;
-	background:#ecf0f1;
-	opacity: 0.8;
-	width: 100%;
-	bottom: 0;
-	height: 200px;
-	padding-top: 5px;
+    position: absolute;
+    background:#ecf0f1;
+    opacity: 0.8;
+    width: 100%;
+    bottom: 0;
+    height: 200px;
+    padding-top: 5px;
 }
 
-.forecast { 
-	list-style: none;
-	float: left;
-	padding-top: 15px;
+.forecast {
+    list-style: none;
+    float: left;
+    padding-top: 15px;
 }
 
-.forecast * {  
-	color:#454545;
+.forecast * {
+    color:#454545;
 }
 
-.forecast li { 
-	line-height:25px;
-	margin-left: 15px;
-	width: 150px;
-	height: 180px;
-	text-align: center;
-	display: inline-block;
+.forecast li {
+    line-height:25px;
+    margin-left: 15px;
+    width: 150px;
+    height: 180px;
+    text-align: center;
+    display: inline-block;
     font-size:18px;
 }
 
-.forecast li div.weekday { font-size: 20px; font-weight: bold; line-height: 40px; } 
+.forecast li div.weekday { font-size: 20px; font-weight: bold; line-height: 40px; }
 .forecast li div.conditions {width: 55px; height: 60px; margin: 0px auto;}
 
 @media only screen and (min-device-width: 320px) and (max-device-width: 1024px) and (orientation:portrait) {
   /* For portrait layouts only */
-	.forecast { 
-		font-size:12px;
-	}
-	
-	.forecast li { 
-		margin-left: -5px !important;
-	}
+    .forecast {
+        font-size:12px;
+    }
+
+    .forecast li {
+        margin-left: -5px !important;
+    }
 }
 
 @media only screen and (min-device-width: 320px) and (max-device-width: 1024px) and (orientation:landscape) {
   /* For landscape layouts only */
-	.forecast { 
-		font-size:12px;
-	}
-	
-	.forecast li { 
-		margin-left: -5px !important;
-	}
+    .forecast {
+        font-size:12px;
+    }
+
+    .forecast li {
+        margin-left: -5px !important;
+    }
 }
