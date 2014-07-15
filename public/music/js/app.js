@@ -26,6 +26,7 @@
         $scope.focused = 0;
         $scope.serverMessage = 0;
         $scope.serverStatus= '';
+        $scope.className = "normal";
 
         $http.get('/music/loadItems').success(function(data) {
             $scope.albums = data;
@@ -35,6 +36,13 @@
             $scope.focused = $scope.albums.indexOf(album);
         }
 
+        $scope.fullscreen = function() {
+            if ($scope.className === "normal"){
+                $scope.className = "fullscreen";
+            } else {
+                $scope.className = "normal";
+            };
+        }
 
         $scope.open = function (album) {
             var modalInstance = $modal.open({

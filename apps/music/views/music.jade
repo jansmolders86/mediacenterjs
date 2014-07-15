@@ -26,7 +26,7 @@ block additional_scripts
         });
 block body
     header
-        .container 
+        .container
             .row
                 .col-md-12
                     a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
@@ -74,7 +74,7 @@ block body
                             span {{serverMessage}}%
                 {{serverStatus}}
 
-    #player.col-xs-12.col-md-12.col-lg-12(ng-show="player.playlist.length > 0")
+    #player.col-xs-12.col-md-12.col-lg-12(ng-show="player.playlist.length > 0",ng-class="className")
         #progressBar.ui.active.striped.progress
             span#progress.bar
 
@@ -91,8 +91,11 @@ block body
                 i.control.play.icon(ng-click="player.play()",ng-hide="player.playing")
             li.middle
                 i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
+            li.outer-right
+                i.control.fullscreen.icon(ng-click="fullscreen()")
             li.right
                 i.control.forward.icon(ng-click="player.next()")
+
 
     script(type="text/ng-template", id="editModal.html")
         .modal-header

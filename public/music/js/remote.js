@@ -34,6 +34,9 @@ function remote(socket, $scope, player, audio){
             case "back" :
                 pushBack(socket, $scope, player, audio);
                 break;
+            case "fullscreen" :
+                fullscreen($scope);
+                break;
             case "mute" :
                 pushMute(socket, $scope, player, audio);
                 break;
@@ -51,7 +54,7 @@ function remote(socket, $scope, player, audio){
     socket.on('progress', function (data) {
         $scope.serverMessage = data.msg;
     });
-    
+
     socket.on('serverStatus', function (data) {
         $scope.serverStatus = data.msg;
     });
@@ -172,4 +175,14 @@ function pushMute(socket, $scope, player, audio){
 
 function pushDashboard(socket, $scope, player, audio){
     window.location = "/";
+}
+
+function fullscreen($scope){
+    $scope.fullscreen = function() {
+        if ($scope.className === "normal"){
+            $scope.className = "fullscreen";
+        } else {
+            $scope.className = "normal";
+        };
+    }
 }
