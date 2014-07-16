@@ -149,9 +149,13 @@ getDataForNewShow = function(originalTitle, episodeTitle,callback){
 
     if( episodeSeasonMatch){
         episodeSeason = episodeSeasonMatch[0].replace(/[sS]/,"")
+    } else {
+        episodeSeason = '0';
     }
     if(episodeNumberMatch ){
         episodeNumber = episodeNumberMatch[0].replace(/[eE]/,"")
+    } else {
+        episodeNumber = '0';
     }
 
     var episodeData = {
@@ -170,58 +174,45 @@ getDataForNewShow = function(originalTitle, episodeTitle,callback){
     // Store episode data in db and do lookup again
     storeEpisodeMetadataInDatabase(episodeMetadata, function() {
         var newEpisodeTitle = episodeMetadata[0];
+        var genre           = "No data"
+        , certification     = "No data"
+        , showTitle         = 'unknown show'
+        , bannerImage       = '/tv/css/img/nodata.jpg'
 
-        getMetadataForShow(trimmedTitle, function(newshowMetaData){
-            var newTvshowTitle = newshowMetaData[0];
-            // Store show data in db and do lookup again
-            storeShowMetadataInDatabase(newshowMetaData, function(){
-                callback();
-            });
+        getMetadataFromTrakt(trimmedTitle, function(err, result){
+            if (err) {
+                console.error('Error returning Trakt data', err);
+            } else {
+                var traktResult = result;
+                bannerImage     = traktResult.images.banner;
+                showTitle       = traktResult.title;
 
-        });
-
-    });
-}
-
-getMetadataForShow = function(tvTitle, callback){
-    var genre           = "No data"
-        , certification   = "No data"
-        , showTitle       = 'unknown show'
-        , bannerImage     = '/tv/css/img/nodata.jpg'
-
-    getMetadataFromTrakt(tvTitle, function(err, result){
-        if (err) {
-            console.error('Error returning Trakt data', err);
-        } else {
-            var traktResult = result;
-            bannerImage    = traktResult.images.banner;
-            showTitle = traktResult.title;
-
-            if(traktResult !== null){
-                if(traktResult.genres !== undefined){
-                    genre = traktResult.genres;
+                if(traktResult !== null){
+                    if(traktResult.genres !== undefined){
+                        genre = traktResult.genres;
+                    }
+                    if (traktResult.certification !== undefined) {
+                        certification = traktResult.certification;
+                    }
+                    if(traktResult.title !== undefined){
+                        var showTitleResult = traktResult.title;
+                    }
                 }
-                if (traktResult.certification !== undefined) {
-                    certification = traktResult.certification;
-                }
-                if(traktResult.title !== undefined){
-                    var showTitleResult = traktResult.title;
-                }
+
+                showTitle = showTitleResult.toLowerCase();
+                var showMetaData = [showTitle, bannerImage, genre, certification];
+                storeShowMetadataInDatabase(showMetaData, function(){
+                    callback();
+                });
+
             }
-
-            showTitle = showTitleResult.toLowerCase();
-            var showMetaData = [showTitle, bannerImage, genre, certification];
-            callback(showMetaData);
-
-        }
+        });
     });
 }
-
-
 
 storeShowMetadataInDatabase = function(metadata, callback) {
-    console.log(metadata)
     db.query('INSERT OR REPLACE INTO tvshows VALUES(?,?,?,?)', metadata);
+    console.log('Show stored', metadata[0]);
     callback();
 };
 
@@ -248,27 +239,8 @@ getMetadataFromTrakt = function(tvShow, callback) {
     });
 };
 
-downloadTvShowBanner = function(banner, tvShow, callback) {
-    if(banner) {
-        try {
-            app_cache_handler.downloadDataToCache('tv', tvShow, banner, function(err) {
-                if (err) {
-                    callback('Error downloading to cache ');
-                    callback(err);
-                } else {
-                    callback(null);
-                }
-            });
-        } catch (exception) {
-            console.log('Error downloading to cache ');
-            callback(exception);
-        }
-    } else {
-        callback('No banner specified!');
-    }
-};
 
-
+/* lookup */
 
 getTvshows  = function(req, res){
     var itemsDone   = 0;
