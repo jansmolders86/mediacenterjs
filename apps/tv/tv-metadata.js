@@ -240,7 +240,7 @@ getMetadataFromTrakt = function(tvShow, callback) {
 };
 
 
-/* lookup */
+/* Lookup */
 
 getTvshows  = function(req, res){
     var itemsDone   = 0;
@@ -265,7 +265,6 @@ getTvshows  = function(req, res){
                 , showCertification = item.certification;
 
                 getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
-
                     itemsDone++;
                     if(availableEpisodes !== 'none' && availableEpisodes !== null){
                         ShowList.push(availableEpisodes);
@@ -274,7 +273,6 @@ getTvshows  = function(req, res){
                     }
                     if (count === itemsDone) {
                         res.json(ShowList);
-                        // db.close();
                     }
                 });
             });
