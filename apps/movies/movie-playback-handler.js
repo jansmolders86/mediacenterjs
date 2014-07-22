@@ -261,7 +261,7 @@ browserTranscoding = function(response, movieUrl, platform,movieFile, outputPath
             '-bufsize 10000000',
             '-acodec aac',
             '-ar 48000',
-            '-ab 320k'
+            '-ab 320k',
             '-strict experimental',
             '-frag_duration 1000',
             '-movflags +frag_keyframe+empty_moov'
@@ -286,7 +286,7 @@ browserTranscoding = function(response, movieUrl, platform,movieFile, outputPath
             '-bufsize 10000000',
             '-acodec aac',
             '-ar 48000',
-            '-ab 192k'
+            '-ab 192k',
             '-strict experimental',
             '-frag_duration 1000',
             '-movflags +frag_keyframe+empty_moov'
@@ -311,7 +311,7 @@ browserTranscoding = function(response, movieUrl, platform,movieFile, outputPath
             '-bufsize 10000000',
             '-acodec aac',
             '-ar 48000',
-            '-ab 128k'
+            '-ab 128k',
             '-strict experimental',
             '-frag_duration 1000',
             '-movflags +frag_keyframe+empty_moov'
