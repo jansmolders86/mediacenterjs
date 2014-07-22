@@ -130,6 +130,15 @@ block body
                                     - for saver in availableScreensavers
                                         option(value=saver, selected=saver == screensaver) #{saver}
                     .form-group.mcjs-rc-controllable
+                        label.col-md-2(for="quality") Transcoding quality
+                        .col-md-10
+                            .input-group
+                                span.input-group-addon
+                                    i.signal.icon
+                                select.form-control#quality.mcjs-rc-clickable(name="quality")
+                                    - for quality in availableQuality
+                                        option(value=quality, selected=quality == currentQuality) #{quality}
+                    .form-group.mcjs-rc-controllable
                         label.col-md-2(for="theme") #{lingua.setting_theme}
                         .col-md-10
                             .input-group

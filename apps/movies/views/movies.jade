@@ -35,7 +35,7 @@ block body
                 .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-focus="chnageSelected(movie)", ng-class="{current: focused == $index }", ng-mouseover="changeSelected(movie)",ng-hide="movie.title === ''", ng-mouseleave="resetSelected()")
                     i.circular.inverted.edit.icon(ng-click="open(movie)")
                     img.movieposter(ng-src="{{movie.poster_path}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie.original_name)")
-                    .caption
+                    .caption(ng-click="playMovie(movie.original_name)")
                             p
                                 h1.movie-title{{movie.title}}
                                 .overview
