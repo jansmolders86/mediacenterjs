@@ -82,7 +82,7 @@ exports.playEpisode = function (req, res, tvShowRequest){
 };
 
 exports.sendState = function (req, res){
-    db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression TEXT, transcodingstatus TEXT)");
+    db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression INTEGER, transcodingstatus TEXT)");
 
     var incommingData = req.body
     , tvShowTitle = incommingData.tvShowTitle
