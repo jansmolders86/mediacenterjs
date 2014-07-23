@@ -1,6 +1,6 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
-	
+    MediaCenterJS - A NodeJS based mediacenter solution
+
     Copyright (C) 2014 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -21,26 +21,26 @@
     Generic plain javascript VideoJS handler with events specifically for the way MCJS handles video playback and saving playback state.
 
     @param playerID     ID of video element in DOM
-    @param data         Callback from ajaxcall to get video specifications (eg. a JSON with movietitle, duration and subtitle)
+    @param data         Callback from ajaxcall to get video specifications (eg. a JSON with title, duration and subtitle)
     @param videoUrl     URL of transcoded file
     @param subtitleUrl  URL of copied subtitle
     @param title        Filename of video
-    @param homeURL		Redirect url 
-    @param timeout		Timeout before starting playback
-    
+    @param homeURL      Redirect url
+    @param timeout      Timeout before starting playback
+
  **/
 
-function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, timeout){
+function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, timeout, type){
     var player          = videojs(playerID);
     var actualDuration  = data.duration;
     player.ready(function() {
 
         setTimeout(function(){
             player.src({
-                type    : "video/mp4", 
-                src     : videoUrl 
+                type    : "video/mp4",
+                src     : videoUrl
             });
-            
+
             if(data.subtitle === true){
                 var track   = document.createElement("track");
                 track.src   = subtitleUrl
@@ -52,8 +52,8 @@ function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, t
             player.currentTime(setProgression);
             player.play();
 
-            _setDurationOfMovie(player, data);
-            _pageVisibility(playerID); 
+            _setDuration(player, data);
+            _pageVisibility(playerID);
         },timeout);
 
     });
@@ -64,28 +64,28 @@ function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, t
     });
 
     player.on('timeupdate', function(e){
-        _setDurationOfMovie(player, data);
+        _setDuration(player, data);
     });
 
     player.on('progress', function(e){
-        _setDurationOfMovie(player, data);
+        _setDuration(player, data);
     });
 
     player.on('pause', function(e){
         currentTime = player.currentTime();
 
         if(title !== undefined && currentTime !== undefined ){
-           var movieData = {
-                'movieTitle'    : title,
-                'currentTime'   : currentTime
+           var progressionData = {
+                'title'         : title,
+                'progression'   : currentTime
             }
-            postAjaxCall('/movies/sendState', movieData);
+            postAjaxCall(type+'/progress', progressionData);
         }
- 
+
     });
 
     player.on('loadeddata', function(e){
-        _setDurationOfMovie(player, data);
+        _setDuration(player, data);
         if(currentTime > 0){
             player.currentTime(currentTime);
         }
@@ -106,12 +106,12 @@ function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, t
             player.dispose();
             window.location.replace(homeURL);
         }
-    });    
+    });
 }
 
-function _setDurationOfMovie(player, data){
+function _setDuration(player, data){
     var videoDuration = player.duration(data.duration);
-    player.bufferedPercent(0); 
+    player.bufferedPercent(0);
 }
 
 function _pageVisibility(playerID){

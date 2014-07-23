@@ -22,19 +22,20 @@ var express = require('express')
 , fs = require('fs.extra')
 , helper = require('../../lib/helpers.js')
 , config = require('../../lib/handlers/configuration-handler').getConfiguration()
+, deviceInfo = require('../../lib/utils/device-utils')
 , functions = require('./music-functions');
 
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
 
 exports.index = function(req, res, next){
-    res.render('music',{
-        selectedTheme: config.theme
+    deviceInfo.isDeviceAllowed(req, function(allowed){
+        res.render('music', {
+            title: 'music',
+            selectedTheme: config.theme,
+            allowed: allowed
+        });
     });
-
-    var socket = require('../../lib/utils/setup-socket');
-    var io = socket.io;
-    io.emit('status', {msg: 'hoi'});
 };
 
 exports.get = function(req, res, next){
@@ -43,7 +44,7 @@ exports.get = function(req, res, next){
         , action = req.params.action
         , serveToFrontEnd = null;
 
-    if (infoRequest == 'loadItems'){
+    if (infoRequest == 'load'){
         serveToFrontEnd = true;
         functions.loadItems(req,res, serveToFrontEnd);
     }

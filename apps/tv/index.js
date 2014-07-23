@@ -24,11 +24,11 @@ var express = require('express')
 , fs = require('fs.extra')
 , helper = require('../../lib/helpers.js')
 , config = require('../../lib/handlers/configuration-handler').getConfiguration()
-, DeviceInfo = require('../../lib/utils/device-utils')
+, deviceInfo = require('../../lib/utils/device-utils')
 , functions = require('./tv-functions');
 
 exports.index = function(req, res){
-    DeviceInfo.isDeviceAllowed(req, function(allowed){
+    deviceInfo.isDeviceAllowed(req, function(allowed){
         res.render('tvshows', {
             title: 'tvshows',
             selectedTheme: config.theme,
@@ -44,23 +44,33 @@ exports.get = function(req, res){
         serveToFrontEnd = null
 
     if (!optionalParam) {
-        if(infoRequest === 'loadItems') {
+        if(infoRequest === 'load') {
             serveToFrontEnd = true;
             functions.loadItems(req, res, serveToFrontEnd);
         }
     }
 
-    if(optionalParam === 'play'){
-        var episode = infoRequest.replace(/\+/g, " ");
-        functions.playEpisode(req, res,episode);
+    if(platform !== undefined && optionalParam === 'play'){
+        var title = infoRequest.replace(/\+/g, " ");
+        switch(platform) {
+            case('desktop'):
+                functions.playFile(req, res, platform, title);
+                break;
+            case('ios'):
+                functions.playFile(req, res, platform, title);
+                break;
+            case('android'):
+                functions.playFile(req, res, platform, title);
+                break;
+        }
     }
 
 };
 
 exports.post = function(req, res){
     var data = req.body;
-    if(req.params.id === 'sendState'){
-        functions.sendState(req, res);
+    if(req.params.id === 'progress'){
+        functions.progress(req, res);
     }
     else if(req.params.id === 'edit'){
         functions.edit(req, res, data);

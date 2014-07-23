@@ -28,7 +28,7 @@
         $scope.serverStatus= '';
         $scope.className = "normal";
 
-        $http.get('/music/loadItems').success(function(data) {
+        $http.get('/music/load').success(function(data) {
             $scope.albums = data;
         });
 

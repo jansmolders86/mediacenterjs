@@ -21,7 +21,8 @@ var fs = require('fs.extra')
     , colors = require('colors')
     , path = require('path')
     , metafetcher = require('../tv/tv-metadata')
-    , config = require('../../lib/handlers/configuration-handler').getConfiguration();
+    , config = require('../../lib/handlers/configuration-handler').getConfiguration()
+    , playback_handler = require('../../lib/handlers/playback');
 
     var database = require('../../lib/utils/database-connection');
     var db = database.db;
@@ -58,12 +59,13 @@ exports.edit = function(req, res, data){
     });
 }
 
-exports.playEpisode = function (req, res, tvShowRequest){
+exports.playFile = function (req, res, platform, tvShowRequest){
     file_utils.getLocalFile(config.tvpath, tvShowRequest, function(err, file) {
-        if (err) console.log(err .red);
+        if (err){
+            console.log(err .red);
+        }
         if (file) {
-            var tvShowUrl = file.href
-            , tvShow_playback_handler = require('./tv-playback-handler');
+            var tvShowUrl = file.href;
 
             var subtitleUrl = tvShowUrl;
             subtitleUrl     = subtitleUrl.split(".");
@@ -73,7 +75,8 @@ exports.playEpisode = function (req, res, tvShowRequest){
             subtitleTitle       = subtitleTitle.split(".");
             subtitleTitle       = subtitleTitle[0]+".srt";
 
-            tvShow_playback_handler.startPlayback(res, tvShowUrl, tvShowRequest, subtitleUrl, subtitleTitle);
+            var type = "tv";
+            playback_handler.startPlayback(res, platform, tvShowUrl, tvShowRequest, subtitleUrl, subtitleTitle, type);
 
         } else {
             console.log("File " + tvShowRequest + " could not be found!" .red);
@@ -81,12 +84,12 @@ exports.playEpisode = function (req, res, tvShowRequest){
     });
 };
 
-exports.sendState = function (req, res){
+exports.progress = function (req, res){
     db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression INTEGER, transcodingstatus TEXT)");
 
-    var incommingData = req.body
-    , tvShowTitle = incommingData.tvShowTitle
-    , progression = incommingData.currentTime
+    var incommingData   = req.body
+    , tvShowTitle       = incommingData.title
+    , progression       = incommingData.progression
     , transcodingstatus = 'pending';
 
     if(tvShowTitle !== undefined && progression !== undefined){

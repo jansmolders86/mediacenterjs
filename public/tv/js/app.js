@@ -24,8 +24,8 @@ tvApp.controller('tvCtrl', function($scope, $http, $modal,player){
     $scope.focused = 0;
     $scope.serverMessage = 0;
     $scope.serverStatus= '';
-    
-    $http.get('/tv/loadItems').success(function(data) {
+
+    $http.get('/tv/load').success(function(data) {
         $scope.tvshows = data;
     });
 
@@ -200,7 +200,15 @@ tvApp.factory('player', function( $rootScope) {
 function playEpisode(data, $http){
     var localName = data;
 
-    $http.get('/tv/'+localName+'/play').success(function(data) {
+    var platform = 'desktop';
+    if (navigator.userAgent.match(/Android/i)) {
+        platform = 'android';
+    } else if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+        platform = 'ios';
+    }
+
+
+    $http.get('/tv/'+localName+'/play/'+platform).success(function(data) {
 
         var fileName                =  localName
             , outputFile            =   fileName.replace(/ /g, "-")
@@ -208,9 +216,10 @@ function playEpisode(data, $http){
             , videoUrl              =   "/data/tv/"+extentionlessFile+".mp4"
             , subtitleUrl           =   "/data/tv/"+extentionlessFile+".srt"
             , playerID              =   'player'
-            , homeURL               =   '/tv/';
+            , homeURL               =   '/tv/'
+            , type                  =   'tv';
 
-        videoJSHandler(playerID, data, videoUrl, subtitleUrl, localName,homeURL, 5000);
+        videoJSHandler(playerID, data, videoUrl, subtitleUrl, localName,homeURL, 5000, type);
 
     });
 }

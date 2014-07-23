@@ -21,7 +21,8 @@ var fs = require('fs.extra')
     , app_cache_handler = require('../../lib/handlers/app-cache-handler')
     , colors = require('colors')
     , metafetcher = require('../movies/movie-metadata.js')
-    , config = require('../../lib/handlers/configuration-handler').getConfiguration();
+    , config = require('../../lib/handlers/configuration-handler').getConfiguration()
+    , playback_handler = require('../../lib/handlers/playback');
 
     var database = require('../../lib/utils/database-connection');
     var db = database.db;
@@ -89,14 +90,13 @@ exports.edit = function(req, res, data){
 
 
 
-exports.playMovie = function (req, res, platform, movieTitle){
+exports.playFile = function (req, res, platform, movieTitle){
     file_utils.getLocalFile(config.moviepath, movieTitle, function(err, file) {
         if (err){
             console.log('File not found',err .red);
         }
         if (file) {
-            var movieUrl = file.href
-            , movie_playback_handler = require('./movie-playback-handler');
+            var movieUrl = file.href;
 
             var subtitleUrl = movieUrl;
             subtitleUrl = subtitleUrl.split(".");
@@ -106,7 +106,9 @@ exports.playMovie = function (req, res, platform, movieTitle){
             subtitleTitle = subtitleTitle.split(".");
             subtitleTitle = subtitleTitle[0]+".srt";
 
-            movie_playback_handler.startPlayback(res, platform, movieUrl, movieTitle, subtitleUrl, subtitleTitle);
+            var type = 'movies';
+
+            playback_handler.startPlayback(res, platform, movieUrl, movieTitle, subtitleUrl, subtitleTitle, type);
 
         } else {
             console.log("File " + movieTitle + " could not be found!" .red);
@@ -115,12 +117,12 @@ exports.playMovie = function (req, res, platform, movieTitle){
 };
 
 
-exports.sendState = function (req, res){
-    db.query("CREATE TABLE IF NOT EXISTS progressionmarker (movietitle TEXT PRIMARY KEY, progression INTEGER, transcodingstatus TEXT)");
+exports.progress = function (req, res){
+    db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression INTEGER, transcodingstatus TEXT)");
 
     var incommingData   = req.body
-    , movieTitle        = incommingData.movieTitle
-    , progression       = incommingData.currentTime
+    , movieTitle        = incommingData.title
+    , progression       = incommingData.progression
     , transcodingstatus = 'pending';
 
     if(movieTitle !== undefined && progression !== undefined){

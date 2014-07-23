@@ -24,7 +24,7 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
     $scope.serverMessage = 0;
     $scope.serverStatus= '';
 
-    $http.get('/movies/loadItems').success(function(data) {
+    $http.get('/movies/load').success(function(data) {
         $scope.movies = data;
     });
 
@@ -162,13 +162,14 @@ function playMovie(data, $http){
     }
 
     $http.get('/movies/'+orginalName+'/play/'+platform).success(function(data) {
-        var fileName                =  orginalName
+        var fileName                =   orginalName
             , outputFile            =   fileName.replace(/ /g, "-")
             , extentionlessFile     =   outputFile.replace(/\.[^\.]+$/, "")
             , videoUrl              =   "/data/movies/"+extentionlessFile+".mp4"
             , subtitleUrl           =   "/data/movies/"+extentionlessFile+".srt"
             , playerID              =   'player'
-            , homeURL               =   '/movies/';
-        videoJSHandler(playerID, data, videoUrl, subtitleUrl, orginalName,homeURL, 5000);
+            , homeURL               =   '/movies/'
+            , type                  =   'movies';
+        videoJSHandler(playerID, data, videoUrl, subtitleUrl, orginalName,homeURL, 5000, type);
     });
 }

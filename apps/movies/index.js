@@ -24,19 +24,17 @@ var express = require('express')
 , fs = require('fs.extra')
 , helper = require('../../lib/helpers.js')
 , config = require('../../lib/handlers/configuration-handler').getConfiguration()
-, DeviceInfo = require('../../lib/utils/device-utils')
+, deviceInfo = require('../../lib/utils/device-utils')
 , functions = require('./movie-functions');
 
 exports.index = function(req, res){
-
-    DeviceInfo.isDeviceAllowed(req, function(allowed){
+    deviceInfo.isDeviceAllowed(req, function(allowed){
         res.render('movies', {
             title: 'Movies',
             selectedTheme: config.theme,
             allowed: allowed
         });
     });
-
 };
 
 exports.get = function(req, res){
@@ -50,10 +48,7 @@ exports.get = function(req, res){
     }
     else if (!optionalParam) {
         switch(infoRequest) {
-            case('getGenres'):
-                functions.getGenres(req, res);
-                break;
-            case('loadItems'):
+            case('load'):
                 serveToFrontEnd = true;
                 functions.loadItems(req, res, serveToFrontEnd);
                 break;
@@ -64,16 +59,16 @@ exports.get = function(req, res){
     }
 
     if(platform !== undefined && optionalParam === 'play'){
-        var movieTitle = infoRequest.replace(/\+/g, " ");
+        var title = infoRequest.replace(/\+/g, " ");
         switch(platform) {
             case('desktop'):
-                functions.playMovie(req, res, platform, movieTitle);
+                functions.playFile(req, res, platform, title);
                 break;
             case('ios'):
-                functions.playMovie(req, res, platform, movieTitle);
+                functions.playFile(req, res, platform, title);
                 break;
             case('android'):
-                functions.playMovie(req, res, platform, movieTitle);
+                functions.playFile(req, res, platform, title);
                 break;
         }
     }
@@ -82,8 +77,8 @@ exports.get = function(req, res){
 
 exports.post = function(req, res){
     var data = req.body;
-    if(req.params.id === 'sendState'){
-        functions.sendState(req, res);
+    if(req.params.id === 'progress'){
+        functions.progress(req, res);
     }
     else if(req.params.id === 'edit'){
         functions.edit(req, res, data);
