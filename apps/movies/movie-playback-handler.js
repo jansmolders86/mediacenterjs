@@ -56,40 +56,23 @@ exports.startPlayback = function(response,platform, movieUrl, movieFile, subtitl
         }
 
         checkProgression(movieFile, function(data){
+            var movieProgression = data.progression;
 
-            if(data.progression !== 0){
-                var movieProgression = data.progression;
-                if(!fs.existsSync(outputPath) || data.transcodingstatus === 'pending'){
-                    // Start transcode if file was deleted.
-                    fs.exists(outputPath, function(exists){
-                        if(exists){
-                            fs.unlinkSync(outputPath);
-                        }
+            if(data.transcodingstatus === 'pending' || data.transcodingstatus === undefined){
+                console.log('Previously transcoding of this movie was not completed');
+                fs.exists(outputPath, function(exists){
+                    if(exists){
+                        fs.unlinkSync(outputPath);
+                    }
 
-                        if(fs.existsSync(movieUrl)){
-                            startTranscoding(response,movieUrl,platform, movieFile, outputPath, ExecConfig);
-                        } else{
-                            console.log('Movie file '+ movieUrl + 'not found, did you move or delete it?');
-                        }
-                    });
-                };
+                    if(fs.existsSync(movieUrl)){
+                        startTranscoding(response,movieUrl,platform, movieFile, outputPath, ExecConfig);
+                    } else{
+                        console.log('Movie file '+ movieUrl + 'not found, did you move or delete it?');
+                    }
+                });
             } else {
-                var movieProgression = 0;
-                if( data.transcodingstatus === 'pending'){
-                    fs.exists(outputPath, function(exists){
-                        if(exists){
-                            fs.unlinkSync(outputPath);
-                        }
-
-
-                        if(fs.existsSync(movieUrl)){
-                            startTranscoding(response,movieUrl,platform, movieFile, outputPath, ExecConfig);
-                        } else{
-                            console.log('Movie file '+ movieUrl + 'not found, did you move or delete it?');
-                        }
-                    });
-
-                }
+                console.log('Movie '+movieFile+' already trancoded with quality level: '+config.quality +'. Continuing with playback.');
             }
 
             var movieInfo = {
@@ -166,23 +149,27 @@ getDurationFromDatabase = function(movieFile, callback) {
 }
 
 checkProgression = function(movieFile, callback) {
-    console.log('Checking if file as already been played once before.')
+
+    var data = {
+        'progression'       : 0,
+        'transcodingstatus' : 'pending'
+    }
+
     db.query('SELECT * FROM progressionmarker WHERE movietitle =? ', [ movieFile ], {
-            movietitle      : String,
-            progression     : String
+            movietitle          : String,
+            progression         : String,
+            transcodingstatus   : String
         },
         function(rows) {
             if (typeof rows !== 'undefined' && rows.length > 0){
-                var data = {
-                       'progression':rows[0].progression,
-                       'transcodingstatus':rows[0].transcodingstatus
+                console.log('Movie '+rows[0].movietitle+' has already been played once before to marker:'+ rows[0].progression + ' status is: ' + rows[0].transcodingstatus);
+                data = {
+                   'progression'        : rows[0].progression,
+                   'transcodingstatus'  : rows[0].transcodingstatus
                 };
                 callback(data);
             } else {
-                var data = {
-                    'progression':0,
-                    'transcodingstatus':'pending'
-                }
+                console.log('New playback, continuing...');
                 callback(data);
             }
         }
@@ -319,7 +306,8 @@ browserTranscoding = function(response, movieUrl, platform,movieFile, outputPath
 
     }
 
-    var ffmpeg = 'ffmpeg -i "'+movieUrl+'" ' + TRANSCODING_OPTS.join()(/,/g , ""); + ' "'+outputPath+'"';
+    var transcodingOpts = TRANSCODING_OPTS.join().replace(/,/g, " ");
+    var ffmpeg = 'ffmpeg -i "'+movieUrl+'" ' + transcodingOpts + ' "'+outputPath+'"';
 
     console.log('Starting transcoding for', platform);
 
@@ -329,7 +317,6 @@ browserTranscoding = function(response, movieUrl, platform,movieFile, outputPath
             console.log('FFMPEG error: ',err) ;
         } else{
             console.log('Transcoding complete');
-
             db.query('UPDATE progressionmarker SET transcodingstatus = "done" WHERE movietitle =? ', [ movieFile ]);
         }
     });
@@ -339,7 +326,10 @@ browserTranscoding = function(response, movieUrl, platform,movieFile, outputPath
     child.stderr.on('data', function(data) {
         console.log(data.toString());
     });
-    child.on('exit', function() {  console.error('Child process exited'); });
+    child.on('exit', function() {
+        console.error('Child process exited');
+    });
+
 }
 
 
