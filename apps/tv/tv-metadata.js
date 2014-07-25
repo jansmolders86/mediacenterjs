@@ -38,6 +38,9 @@ var SUPPORTED_FILETYPES = new RegExp("(avi|mkv|mpeg|mov|mp4|wmv)$","g");  //Pipe
 var start = new Date();
 var nrScanned = 0;
 var totalFiles = 0;
+var noResult = {
+    "result":"none"
+};
 
 // Init Database
 var database = require('../../lib/utils/database-connection');
@@ -95,6 +98,7 @@ var setupParse = function(req, res, serveToFrontEnd, results) {
     }
     if (!results) {
         console.log('no results!');
+        res.json(noResult);
     }
 };
 
@@ -270,6 +274,7 @@ getTvshows  = function(req, res){
                         ShowList.push(availableEpisodes);
                     } else {
                         console.log('Error retrieving episodes. Available episodes:', availableEpisodes);
+                        res.json(noResult);
                     }
                     if (count === itemsDone) {
                         res.json(ShowList);

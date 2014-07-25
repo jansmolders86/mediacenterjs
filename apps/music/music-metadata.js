@@ -38,6 +38,9 @@ var SUPPORTED_FILETYPES = "mp3";
 var start = new Date();
 var nrScanned = 0;
 var totalFiles = 0;
+var noResult = {
+    "result":"none"
+};
 
 // Init Database
 var database = require('../../lib/utils/database-connection');
@@ -96,6 +99,7 @@ var setupParse = function(req, res, serveToFrontEnd, results) {
     }
     if (!results) {
         console.log('no results!');
+        res.json(noResult);
     }
 };
 
@@ -249,6 +253,7 @@ getCompleteCollection = function(req, res){
                             }
                         } else {
                             console.log('Error retrieving tracks...');
+                            res.json(noResult);
                         }
                     });
                 }

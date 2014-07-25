@@ -31,7 +31,7 @@ block additional_scripts
 
 block body
     header
-        .container 
+        .container
             .row
                 .col-md-12
                     a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
@@ -64,6 +64,7 @@ block body
                     .pcc-percents-wrapper
                         span {{serverMessage}}%
             {{serverStatus}}
+        h2.loading(ng-show="tvshows.result === 'none'") No data found, please check the tvshow filepath
 
     video#player.video-js.vjs-default-skin(width="100%", height="100%", ng-show="playing", controls, preload="metadata")
 

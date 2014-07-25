@@ -36,6 +36,9 @@ var start = new Date();
 var nrScanned = 0;
 var totalFiles = 0;
 var remaining;
+var noResult = {
+    "result":"none"
+};
 
 /* Variables */
 // Init Database
@@ -84,6 +87,7 @@ var setupParse = function(req, res, serveToFrontEnd, results) {
     }
     if (!results) {
         console.log('no results!');
+        res.json(noResult);
     }
 };
 
@@ -223,10 +227,13 @@ getMovies = function(req, res){
      function(err, rows) {
          if(err){
              console.log("DB error",err);
+             res.json(noResult);
          } else if (rows !== null && rows.length > 0){
              console.log('Sending data to client...');
              res.json(rows);
             // db.close();
+         } else{
+             res.json(noResult);
          }
      });
 }
