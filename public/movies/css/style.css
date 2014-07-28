@@ -173,6 +173,7 @@ a.backlink { margin-top: -5px; z-index:4; }
     display:block;
     width:100%;
     height:auto;
+    max-height:440px;
     padding:0;
     border:0;
 }
