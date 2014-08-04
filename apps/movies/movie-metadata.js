@@ -130,23 +130,21 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
             }
             var adultRating = result.adult;
             adult = adultRating.toString();
-
-            var metadata = [
-                original_name,
-                movieTitle,
-                poster_url,
-                backdrop_url,
-                imdb_id,
-                rating,
-                certification,
-                genre,
-                runtime,
-                overview,
-                movieInfo.cd,
-                adult
-            ];
         }
-
+        var metadata = [
+            original_name,
+            movieTitle,
+            poster_url,
+            backdrop_url,
+            imdb_id,
+            rating,
+            certification,
+            genre,
+            runtime,
+            overview,
+            movieInfo.cd,
+            adult
+        ];
 
         storeMetadataInDatabase(metadata, function(){
             nrScanned++;
