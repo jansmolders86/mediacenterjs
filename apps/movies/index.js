@@ -91,10 +91,9 @@ exports.post = function(req, res, next){
     }
     else if(req.params.id === 'edit'){
         functions.edit(req, res, data);
+    } else if(req.params.id === 'update'){
+        functions.update(req, res, data);
     } else {
         next();
-    }
-    else if(req.params.id === 'update'){
-        functions.update(req, res, data);
     }
 }
