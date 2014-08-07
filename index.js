@@ -35,7 +35,8 @@ var express = require('express')
 	, os = require('os')
 	, jade = require('jade')
     , open = require('open')
-	, configuration_handler = require('./lib/handlers/configuration-handler');
+	, configuration_handler = require('./lib/handlers/configuration-handler')
+    , airplay = require('./lib/utils/airplay-server');
 
 var config = configuration_handler.initializeConfiguration();
 var ruleSchedule = null;
@@ -317,6 +318,25 @@ app.post('/submitRemote', function(req, res){
 	});
 });
 
+//Airplay
+
+function incrementMACAddress(macAddress) {
+    return (parseInt(macAddress.replace(/:/g,""), 16) + 1).toString(16).match(/.{2}/g).join(":")
+}
+
+airplay.callbacks.video = function (port, url, position) {
+    console.log("video play");
+};
+
+require('getmac').getMac(function(err,macAddress){
+    if (err) throw err;
+
+
+    airplay.server(7000, macAddress, {name: "Ben"});
+
+
+    airplay.server(7001, "b9:e8:56:30:b9:84", {name: "Bob"});
+});
 //Socket.io Server
 remoteControl.remoteControl();
 
@@ -328,18 +348,37 @@ app.set('port', process.env.PORT || 3000);
 
 
 // Open App socket
+
+var server = http.createServer(app);
+
+
+
+//sockets
+var io = require('socket.io').listen(server);
+io.set('log level', 1);
+io.sockets.on('connection', function (socket) {
+    console.log('user connected');
+    socket.on('disconnect', function() {
+        console.log('user disconnected');
+    });
+});
+
+
+//end sockets
+
 if (config.port == "" || config.port == undefined ){
 	var defaultPort = app.get('port');
 	console.log('First run, Setup running on localhost:' + defaultPort + "\n");
-	app.listen(parseInt(defaultPort));
+	server.listen(parseInt(defaultPort));
     var url = 'http://localhost:'+defaultPort;
     open(url);
 
 } else{
 	var message = "MediacenterJS listening on port:" + config.port + "\n";
 	console.log(message.green.bold);
-	app.listen(parseInt(config.port));
+	server.listen(parseInt(config.port));
 }
+
 
 
 function unzip(req, res, output, dir){

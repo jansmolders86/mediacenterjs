@@ -91,7 +91,12 @@ html(lang="en",ng-app=angular_app)
                     FastClick.attach(document.body);
                 }, false);
             });
-
+        //starts a websocket connection
+        script.
+            $(function() {
+                var socket = io.connect();
+            });
+        
         block additional_scripts
 
 
