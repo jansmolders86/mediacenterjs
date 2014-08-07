@@ -78,5 +78,6 @@ block body
                         label.col-md-3.col-md-offset-1 Title
                         input.col-md-7(type="text",name="title",ng-model="edit.title",required,ng-value="current.title")
         .modal-footer
-            input.btn(type="submit",value="submit", ng-click="editItem()",required)
+            input.btn(type="submit",value="Submit", ng-click="editItem()",required)
+            button.btn(ng-click="updateItem()") Update
             button.btn(ng-click="cancel()") Cancel

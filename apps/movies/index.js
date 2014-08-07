@@ -94,4 +94,7 @@ exports.post = function(req, res, next){
     } else {
         next();
     }
+    else if(req.params.id === 'update'){
+        functions.update(req, res, data);
+    }
 }

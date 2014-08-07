@@ -88,7 +88,16 @@ exports.edit = function(req, res, data){
     });
 }
 
-
+exports.update = function(req, res, data) {
+    console.log("Updating");
+    metafetcher.updateMetadataOfMovie(data.currentMovie, data.newTitle, function (err) {
+        if (err) {
+            res.status(404).send();
+        } else {
+            res.status(200).send();
+        }
+    });
+}
 
 exports.playFile = function (req, res, platform, movieTitle){
     file_utils.getLocalFile(config.moviepath, movieTitle, function(err, file) {
