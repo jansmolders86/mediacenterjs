@@ -44,9 +44,11 @@ exports.get = function(req, res, next){
         , action = req.params.action
         , serveToFrontEnd = null;
 
+    var handled = false;
     if (infoRequest == 'load'){
         serveToFrontEnd = true;
         functions.loadItems(req,res, serveToFrontEnd);
+        handled = true;
     }
 
     if(action){
@@ -62,7 +64,13 @@ exports.get = function(req, res, next){
             case('random'):
                 functions.randomTrack(req, res, track, album);
             break;
+            default:
+                handled = true;
+            break;
         }
+    }
+    if (!handled) {
+        next();
     }
 }
 
@@ -70,5 +78,7 @@ exports.post = function(req, res, next){
     var data = req.body;
     if(req.params.id === 'edit'){
         functions.edit(req, res, data);
+    } else {
+        next();
     }
 }

@@ -37,50 +37,61 @@ exports.index = function(req, res){
     });
 };
 
-exports.get = function(req, res){
+exports.get = function(req, res, next){
     var infoRequest = req.params.id,
         optionalParam = req.params.optionalParam,
         platform = req.params.action,
         serveToFrontEnd = null;
 
+    var handled = false;
     if(infoRequest === 'filter') {
         functions.filter(req, res, optionalParam);
-    }
-    else if (!optionalParam) {
+        handled = true;
+    } else if (!optionalParam) {
         switch(infoRequest) {
             case('load'):
                 serveToFrontEnd = true;
                 functions.loadItems(req, res, serveToFrontEnd);
+                handled = true;
                 break;
             case('backdrops'):
                 functions.backdrops(req, res);
+                handled = true;
                 break;
         }
     }
 
-    if(platform !== undefined && optionalParam === 'play'){
+    if(platform !== undefined && optionalParam === 'play') {
         var title = infoRequest.replace(/\+/g, " ");
         switch(platform) {
             case('desktop'):
                 functions.playFile(req, res, platform, title);
+                handled = true;
                 break;
             case('ios'):
                 functions.playFile(req, res, platform, title);
+                handled = true;
                 break;
             case('android'):
                 functions.playFile(req, res, platform, title);
+                handled = true;
                 break;
         }
+    }
+    if (!handled) {
+        next();
     }
 };
 
 
-exports.post = function(req, res){
+exports.post = function(req, res, next){
     var data = req.body;
     if(req.params.id === 'progress'){
         functions.progress(req, res);
     }
     else if(req.params.id === 'edit'){
         functions.edit(req, res, data);
+    } else {
+        next();
     }
 }

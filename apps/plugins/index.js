@@ -48,7 +48,7 @@ exports.get = function(req, res, next){
 				functions.reloadServer(req,res);
 			break;
 			default:
-				return;
+				return next();
 			break;		
 		}	
 	}
@@ -64,7 +64,11 @@ exports.get = function(req, res, next){
 			break;
 			case('upgrade'):
 				functions.pluginManager(req,res, infoRequest, 'install');  //for some reason update isnt working
-			break;		
+			break;	
+			default:
+				next();
+			break;
 		}
 	}	
+
 };
