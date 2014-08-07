@@ -52,6 +52,9 @@ exports.post = function(req, res, next) {
 				}
 			});
 		break;
+		default:
+			next();
+			break;
 	}
 };
 exports.get = function(req, res, next) {
@@ -95,6 +98,9 @@ exports.get = function(req, res, next) {
 				res.json(500, {error: 'Oauth key missing in config file, please update!'});
 			}
 		break;
+		default:
+			next();
+			break;
 	}
 };
 

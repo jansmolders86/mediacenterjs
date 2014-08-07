@@ -37,7 +37,7 @@ exports.index = function(req, res){
     });
 };
 
-exports.get = function(req, res){
+exports.get = function(req, res, next){
     var infoRequest = req.params.id,
         optionalParam = req.params.optionalParam,
         platform = req.params.action,
@@ -47,6 +47,8 @@ exports.get = function(req, res){
         if(infoRequest === 'load') {
             serveToFrontEnd = true;
             functions.loadItems(req, res, serveToFrontEnd);
+        } else {
+            next();
         }
     }
 
@@ -62,17 +64,21 @@ exports.get = function(req, res){
             case('android'):
                 functions.playFile(req, res, platform, title);
                 break;
+            default:
+                next();
         }
     }
 
 };
 
-exports.post = function(req, res){
+exports.post = function(req, res, next){
     var data = req.body;
     if(req.params.id === 'progress'){
         functions.progress(req, res);
     }
     else if(req.params.id === 'edit'){
         functions.edit(req, res, data);
+    } else {
+        next();
     }
 }
