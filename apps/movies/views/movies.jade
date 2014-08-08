@@ -45,8 +45,8 @@ block body
                                         strong {{movie.genre}}
                                     p
                                         strong #{lingua.movies_Runtime}: {{movie.runtime}} min
-                    .cdNumber(ng-show="movie.cdNumber.length > 0")
-                        span {{movie.cdNumber}}
+                    .cdNumber(ng-show="movie.cd_number.length > 0")
+                        span {{movie.cd_number}}
 
         h2.loading(ng-show="!movies") #{lingua.loading}
             .progress-pie-chart(data-percent="{{serverMessage}}", ng-class="{gt50: serverMessage > 50}", ng-show="serverMessage > 0")
