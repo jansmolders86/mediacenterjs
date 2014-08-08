@@ -135,6 +135,10 @@ a.backlink { margin-top: -5px; z-index:4; }
 }
 .modal-body img{max-width:300px; max-height:400px;}
 
+.modal-dialog {
+    width: 70%;
+    min-width: 600px;
+}
 
 .movieposter:hover {
     -webkit-transform: scale(1.05);

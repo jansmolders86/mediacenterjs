@@ -87,8 +87,24 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
             }).success(function(data, status, headers, config) {
                 location.reload();
             });
-        }
+        };
+        $scope.updateItem = function(){
+            var title = $scope.edit.title || $scope.current.title;
+            $http({
+                method: "post",
+                data: {
+                    newTitle            : title,
+                    currentMovie        : $scope.current.original_name
+                },
+                url: "/movies/update"
+            }).success(function(data, status, headers, config) {
+                location.reload();
+            }).error(function(data, status, headers, config) {
+                alert("Couldn't find data for movie called " + title + " on TMDB");
+            });
+        };
     };
+
 
     $scope.changeSelected = function(movie){
         var selectedMovie = $scope.movies.indexOf(movie);
