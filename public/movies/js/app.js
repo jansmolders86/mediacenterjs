@@ -120,7 +120,12 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
         $scope.focused = 0;
 
         var elem = document.getElementById("backdropimg");
-        elem.src = '/movies/css/img/backdrop.png';
+        var oldImg = elem.src;
+        setTimeout(function() {
+            if (oldImg === elem.src) {
+                elem.src = '/movies/css/img/backdrop.png';
+            }
+        }, 700);
     }
 
     var setupSocket = {
