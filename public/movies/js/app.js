@@ -106,26 +106,27 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
     };
 
 
+    function changeBackdrop(newsrc) {
+        var elem = document.getElementById("backdropimg");
+        elem.src = newsrc;
+    }
+
     $scope.changeSelected = function(movie){
         var selectedMovie = $scope.movies.indexOf(movie);
 
         if ($scope.focused !== selectedMovie) {
-            var elem = document.getElementById("backdropimg");
-            elem.src = movie.backdrop_path;
+            changeBackdrop(movie.backdrop_path);
             $scope.focused = selectedMovie;
         }
     }
 
     $scope.resetSelected = function () {
         $scope.focused = 0;
-
-        var elem = document.getElementById("backdropimg");
-        var oldImg = elem.src;
         setTimeout(function() {
-            if (oldImg === elem.src) {
-                elem.src = '/movies/css/img/backdrop.png';
+            if ($scope.focused === 0) {
+                changeBackdrop('/movies/css/img/backdrop.png');
             }
-        }, 700);
+        }, 450);
     }
 
     var setupSocket = {
