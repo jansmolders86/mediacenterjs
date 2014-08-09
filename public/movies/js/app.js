@@ -81,6 +81,7 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
                     newTitle            : $scope.edit.title,
                     newPosterPath       : $scope.edit.poster_path,
                     newBackdropPath     : $scope.edit.backdrop_path,
+                    hidden              : $scope.edit.hidden.toString(),
                     currentMovie        : $scope.current.original_name
                 },
                 url: "/movies/edit"
