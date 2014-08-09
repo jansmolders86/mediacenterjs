@@ -90,6 +90,7 @@ Feel free to contribute by translating.
 
 ###Special thanks to these contributors:###
 
+* Jonathan Bailey https://github.com/Jon889 for his code contributions/fixes
 * Sylvain https://github.com/flyinva for his French translation
 * Alberto Jerez https://github.com/ajerez  for his Spanish translation
 * Domenico Luciani https://github.com/dlion for his Italian translation
