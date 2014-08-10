@@ -56,5 +56,5 @@ block body
                     each item in apps
                         li.tile.boxed.mcjs-rc-controllable.col-md-2.col-xs-1
                             a(href="/" + item.appLink + "/").mcjs-rc-clickable
-                                img(src="/" + item.tileLink + "/tile.svg", style="background-image:url('/" + item.tileLink + "/tile.png');", onerror="this.src=''", onload="this.style.backgroundImage=''")
+                                img(src="/" + item.tileLink + "/tile.svg", onerror="this.src='/" + item.tileLink + "/tile.png'")
                                 span=item.tileLink
