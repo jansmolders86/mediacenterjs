@@ -38,17 +38,17 @@ exports.get = function(req, res, next){
 	, optionalParam = req.params.optionalParam
 	, action = req.params.action;
 	
+	var handled = false;
+
 	if (optionalParam === undefined){
 		switch(infoRequest) {
 			case('loadItems'):
 				functions.getAvailablePlugins(req,res);
+				handled = true;
 			break;
 			case('reloadServer'):
-				console.log('asd')
 				functions.reloadServer(req,res);
-			break;
-			default:
-				return next();
+				handled = true;
 			break;		
 		}	
 	}
@@ -58,17 +58,20 @@ exports.get = function(req, res, next){
 		switch(optionalParam) {
 			case('uninstall'):
 				functions.pluginManager(req, res, infoRequest, 'remove');
+				handled = true;
 			break;	
 			case('install'):
 				functions.pluginManager(req,res, infoRequest, 'install');
+				handled = true;
 			break;
 			case('upgrade'):
 				functions.pluginManager(req,res, infoRequest, 'install');  //for some reason update isnt working
+				handled = true;
 			break;	
-			default:
-				next();
-			break;
 		}
 	}	
+	if (!handled) {
+		next();
+	}
 
 };

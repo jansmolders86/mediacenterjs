@@ -43,12 +43,13 @@ exports.get = function(req, res, next){
         platform = req.params.action,
         serveToFrontEnd = null
 
+    var handled = false;
+
     if (!optionalParam) {
         if(infoRequest === 'load') {
             serveToFrontEnd = true;
             functions.loadItems(req, res, serveToFrontEnd);
-        } else {
-            next();
+            handled = true;
         }
     }
 
@@ -57,16 +58,20 @@ exports.get = function(req, res, next){
         switch(platform) {
             case('desktop'):
                 functions.playFile(req, res, platform, title);
+                handled = true;
                 break;
             case('ios'):
                 functions.playFile(req, res, platform, title);
+                handled = true;
                 break;
             case('android'):
                 functions.playFile(req, res, platform, title);
+                handled = true;
                 break;
-            default:
-                next();
         }
+    }
+    if (!handled) {
+        next();
     }
 
 };
