@@ -72,7 +72,7 @@
         "adm-zip"           : "0.4.3",
         "wget"              : ">=0.0.1",
         "socket.io"         : "~0.9.16",
-        "youtube-api"       : "~0.2.2",
+        "youtube-api"       : "~0.3.0",
         "node-schedule"     : "~0.1.13",
         "lastfmapi"         : "~0.0.5",
         "graceful-fs"        : "~2.0.3"
