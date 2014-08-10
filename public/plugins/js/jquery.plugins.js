@@ -20,6 +20,8 @@
 	var ns = 'mcjsp';
 	var methods = {};
 
+	var pluginsChanged = false;
+
 	function _init(options) {
 		var opts = $.extend(true, {}, $.fn.mcjsp.defaults, options);
 		return this.each(function() {
@@ -34,20 +36,31 @@
 			
 			// use extend(), so no o is used by value, not by reference
 			$.data(this, ns, $.extend(true, {}, o));
-			_loadItems(o);
+			_loadItems(o, true);
 			
 			$('.backlink').on('click',function(e) {
-				e.preventDefault();	
-				$.ajax({
-					url: '/plugins/reloadServer', 
-					type: 'get',
-					dataType: 'json'
-				}).done(function(data){
-					$('.backlink').find('img').attr('src', '/core/css/img/ajax-loader.gif')
-					setTimeout(function(){
-						document.location = '/';
-					},4000);
-				});
+				if (!pluginsChanged) {
+					document.location = '/';
+				} else {
+					e.preventDefault();	
+					var dialog = $("<div>Restarting Server<br>Please wait<br><img src='/core/css/img/ajax-loader.gif'/></div>").dialog({
+						resizable : false,
+						modal: true,
+						closeOnEscape: false,
+						draggable: false,
+						dialogClass: "restart-dialog"
+					});
+					dialog.dialog("open");
+					$.ajax({
+						url: '/plugins/reloadServer', 
+						type: 'get',
+						dataType: 'json'
+					}).done(function(data){
+						setTimeout(function(){
+							document.location = '/';
+						},4000);
+					});
+				}
 			});
 			
 		});
@@ -55,8 +68,10 @@
 	
 	/**** Start of custom functions ***/
 	
-	function _loadItems(o){
-		$('.loading').show();
+	function _loadItems(o, showloading, callback){
+		if (showloading) {
+			$('.loading').show();
+		}
 
 		if (!o.viewModel) {
 			// create initial viewmodel
@@ -70,7 +85,7 @@
 				var requests = [];
 				console.log(data)
 				for(var i=0; i<data.length; i++){
-					
+					pluginsChanged = true;
 					requests.push($.ajax({
 						url: '/plugins/'+data[i]+'/upgrade', 
 						type: 'get',
@@ -87,7 +102,7 @@
 				}
 				$.when.apply($, requests).then(function(){
 					o.viewModel.message('All plugins upgraded successfully');
-					_loadItems(o);
+					_loadItems(o, showloading, callback);
 				});
 			}
 
@@ -116,6 +131,7 @@
 				o.viewModel.plugin.sort();
 				//o.viewModel.message('')
 				o.viewModel.upgradeAll(data.upgradablePlugins);	
+				callback();
 							
 			}
 
@@ -123,8 +139,7 @@
 	}
 	
 	var pluginModel = function (json, o) {
-		
-		var timeout 		= 5000;
+	
 
 		var that 			= this;	
 		var jqxhr;
@@ -137,6 +152,7 @@
 		this.isUpgradable	= ko.observable(json.isUpgradable);
 
 		this.install = function () {
+			pluginsChanged = true;
             $('.backlink').hide();
 			jqxhr = $.ajax({
 				url: '/plugins/'+json.name+'/install', 
@@ -146,15 +162,14 @@
 					o.viewModel.message('Installing ' + json.name + '...')
 				}
 			}).done(function(data){
-				setTimeout(function(){
+				_loadItems(o, false, function() {
 					o.viewModel.message(data.message);
-					_loadItems(o);
-				}, timeout);	//This is just to give it the feel that something is happening 
+				});
 			});
 		};
 
 		this.upgrade = function () {
-            
+            pluginsChanged = true;
             $('.backlink').hide();
 			jqxhr = $.ajax({
 				url: '/plugins/'+json.name+'/upgrade', 
@@ -164,14 +179,14 @@
 					o.viewModel.message('Upgrading ' + json.name + '...')
 				}
 			}).done(function(data){
-				setTimeout(function(){
+				_loadItems(o, false, function() {
 					o.viewModel.message(data.message);
-					_loadItems(o);
-				}, timeout);	 
+				});	 
 			});
 		};
 		
 		this.remove = function () {
+			pluginsChanged = true;
             $('.backlink').hide();
 			jqxhr = $.ajax({
 				url: '/plugins/'+json.name+'/uninstall', 
@@ -181,10 +196,9 @@
 					o.viewModel.message('Uninstalling ' + json.name + '...')
 				}
 			}).done(function(data){
-				setTimeout(function(){
+				_loadItems(o, false, function() {
 					o.viewModel.message(data.message);
-					_loadItems(o);
-				}, timeout);	 
+				});	 
 			});
 		};
 	}
