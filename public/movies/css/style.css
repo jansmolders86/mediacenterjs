@@ -24,9 +24,6 @@ body.playing > #player{display:block;}
 header.scrolling{ opacity:0.9;}
 header{height:60px; z-index:5; position:fixed!important; top:0; }
 header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
-.container-fluid{ padding-top:90px; z-index:2;  display: flex; flex-direction: row; }
-.container-fluid .row > div { z-index:3; }
-
 /* Bootstrap override */
 
 @media only screen and (min-width: 768px) {
@@ -109,7 +106,6 @@ a.backlink { margin-top: -5px; z-index:4; }
 }
 
 .movieposter{
-    float:left;
     list-style:none;
     z-index:3;
     position:relative;
@@ -117,12 +113,11 @@ a.backlink { margin-top: -5px; z-index:4; }
     margin: 0px 0px 20px 0;
     border-radius:2px;
     display:block;
-    max-height: 500px;
+    max-height: 350px;
     background:#fff;
     cursor:pointer;
     overflow:hidden;
     border:0;
-
 }
 
 .movieposter .edit.icon{display:none;}
@@ -177,7 +172,7 @@ a.backlink { margin-top: -5px; z-index:4; }
     display:block;
     width:100%;
     height:auto;
-    max-height:440px;
+    max-height:400px;
     padding:0;
     border:0;
 }
