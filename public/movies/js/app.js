@@ -81,6 +81,7 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
                     newTitle            : $scope.edit.title,
                     newPosterPath       : $scope.edit.poster_path,
                     newBackdropPath     : $scope.edit.backdrop_path,
+                    hidden              : $scope.edit.hidden.toString(),
                     currentMovie        : $scope.current.original_name
                 },
                 url: "/movies/edit"
@@ -106,21 +107,27 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
     };
 
 
+    function changeBackdrop(newsrc) {
+        var elem = document.getElementById("backdropimg");
+        elem.src = newsrc;
+    }
+
     $scope.changeSelected = function(movie){
         var selectedMovie = $scope.movies.indexOf(movie);
 
         if ($scope.focused !== selectedMovie) {
-            var elem = document.getElementById("backdropimg");
-            elem.src = movie.backdrop_path;
+            changeBackdrop(movie.backdrop_path);
             $scope.focused = selectedMovie;
         }
     }
 
     $scope.resetSelected = function () {
         $scope.focused = 0;
-
-        var elem = document.getElementById("backdropimg");
-        elem.src = '/movies/css/img/backdrop.png';
+        setTimeout(function() {
+            if ($scope.focused === 0) {
+                changeBackdrop('/movies/css/img/backdrop.png');
+            }
+        }, 450);
     }
 
     var setupSocket = {

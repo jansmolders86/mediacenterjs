@@ -73,18 +73,22 @@ exports.backdrops = function (req, res){
 };
 
 exports.edit = function(req, res, data){
-    db.query('UPDATE movies SET title=$newTitle,poster_path=$newPosterPath,backdrop_path=$newBackdropPath WHERE original_name=$currentMovie', {
-        newTitle            : data.newTitle,
-        newPosterPath       : data.newPosterPath,
-        newBackdropPath     : data.newBackdropPath,
-        currentMovie        : data.currentMovie
-    },
-    function (err, rows) {
-        if(err){
-            console.log('DB error', err);
-        } else {
-            res.json('done');
-        }
+    //need to do something better than this every. single. time.
+    db.query('ALTER TABLE movies ADD COLUMN hidden string DEFAULT "false"', function () {
+        db.query('UPDATE movies SET title=$newTitle,poster_path=$newPosterPath,backdrop_path=$newBackdropPath,hidden=$hidden WHERE original_name=$currentMovie', {
+            newTitle            : data.newTitle,
+            newPosterPath       : data.newPosterPath,
+            newBackdropPath     : data.newBackdropPath,
+            hidden              : data.hidden,
+            currentMovie        : data.currentMovie
+        },
+        function (err, rows) {
+            if(err){
+                console.log('DB error', err);
+            } else {
+                res.json('done');
+            }
+        });
     });
 }
 
@@ -163,7 +167,8 @@ getMovies = function(req, res, metaType, serveToFrontEnd,getNewFiles){
         runtime             : String,
         overview            : String,
         cd_number           : String,
-        adult               : String
+        adult               : String,
+        hidden              : String
     },
     function(err, rows) {
         if(err){

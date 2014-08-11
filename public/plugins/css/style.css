@@ -94,6 +94,18 @@ li.boxed.focused .btn,
 .upgrade-all {margin:5px 0;}
 
 
+.restart-dialog {
+    text-align: center;
+}
+.restart-dialog .ui-dialog-content {
+    padding-top: 21px;
+}
+.restart-dialog .ui-dialog-titlebar {
+    display: none;
+}
+.restart-dialog img {
+    display: inline-block;
+}
 @media only screen and (min-width: 320px) and (max-width: 529px) {
     .plugins .btn{display:inline-block;}
 

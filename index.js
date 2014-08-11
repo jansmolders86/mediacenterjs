@@ -137,7 +137,8 @@ app.get("/", function(req, res, next) {
 		//Search core app folder for apps and check if tile icon is present
 		fs.readdirSync(__dirname + '/apps').forEach(function(name){
 
-			if(fs.existsSync(__dirname + '/public/'+name+'/tile.png')){
+			if (fs.existsSync(__dirname + '/public/'+name+'/tile.png')
+                ||fs.existsSync(__dirname + '/public/'+name+'/tile.svg')){
 				var obj = {
 					appLink: name,
 					tileLink: name

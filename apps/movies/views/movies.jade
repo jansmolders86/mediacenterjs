@@ -28,7 +28,9 @@ block body
                 .col-md-12
                 a.backlink(href="/") &#xe113;
                 h1.hidden-xs #{lingua.movies}
-                input#search.pull-right(ng-model="query", type="text", placeholder="Search", ng-show="movies")
+                input#search.pull-right(ng-model="query.$", type="text", placeholder="Search", ng-show="movies")
+                label.pull-right(for="showhidden") Show Hidden:
+                    input#showhidden.pull-right(ng-model="query.hidden", type="checkbox", ng-show="movies", ng-true-value="", ng-false-value="false")
     .container-fluid
         .row
             .col-xs-12.col-sm-6.col-md-2.col-lg-2(ng-repeat="movie in movies | filter:query", ng-cloak)
@@ -77,7 +79,11 @@ block body
                     .form-group
                         label.col-md-3.col-md-offset-1 Title
                         input.col-md-7(type="text",name="title",ng-model="edit.title",required,ng-value="current.title")
+                    .form-group
+                        label.col-md-3.col-md-offset-1 Hidden
+                        input.col-md-7(type="checkbox",name="hidden",ng-model="edit.hidden",required,ng-checked="current.hidden == 'true'")
         .modal-footer
-            input.btn(type="submit",value="Submit", ng-click="editItem()",required)
-            button.btn(ng-click="updateItem()") Update
-            button.btn(ng-click="cancel()") Cancel
+            button.btn(ng-click="updateItem()") Fetch Metadata
+            button.btn.pull-right(ng-click="cancel()") Cancel
+            input.btn.pull-right(type="submit",value="Submit", ng-click="editItem()",required)
+

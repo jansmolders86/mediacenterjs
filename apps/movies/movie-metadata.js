@@ -252,7 +252,8 @@ getMovies = function(req, res){
         runtime             : String,
         overview            : String,
         cd_number           : String,
-        adult               : String
+        adult               : String,
+        hidden              : String
     },
      function(err, rows) {
          if(err){
