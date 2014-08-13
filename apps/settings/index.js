@@ -82,6 +82,7 @@ exports.index = function(req, res, next){
                 selectedBinaryType : config.binaries,
                 remotePort : config.remotePort,
                 language: config.language,
+                country: config.country,
                 availableLanguages: availableLanguages,
                 availableQuality: availableQuality,
                 currentQuality: config.quality,
