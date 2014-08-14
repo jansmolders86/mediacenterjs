@@ -53,7 +53,7 @@ function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, t
             player.play();
 
             _setDuration(player, data);
-            _pageVisibility(playerID);
+            _pageVisibility(player);
         },timeout);
 
     });
@@ -79,7 +79,7 @@ function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, t
                 'title'         : title,
                 'progression'   : currentTime
             }
-            postAjaxCall(type+'/progress', progressionData);
+            postAjaxCall('/'+type+'/progress', progressionData);
         }
 
     });
@@ -114,7 +114,7 @@ function _setDuration(player, data){
     player.bufferedPercent(0);
 }
 
-function _pageVisibility(playerID){
+function _pageVisibility(player){
     var hidden, visibilityChange;
     if (typeof document.hidden !== "undefined") {
         hidden              = "hidden";
@@ -130,11 +130,11 @@ function _pageVisibility(playerID){
         visibilityChange    = "webkitvisibilitychange";
     }
 
-    function handleVisibilityChange(playerID) {
+    function handleVisibilityChange(event) {
         if (document[hidden]) {
-            videojs(playerID).pause();
+            player.pause();
         } else if (sessionStorage.isPaused !== "true") {
-            videojs(playerID).play();
+            player.play();
         }
     }
 

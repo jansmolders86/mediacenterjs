@@ -26,6 +26,37 @@ header #search {
     height: 65px!important;
 }
 
+header.side {
+    padding-left:370px;
+    padding-right: 370px;
+}
+header, header * {
+    transition: none !important;
+-webkit-transition: none !important;
+}
+@media (max-width:1138px){header.side .container {
+        width: 100%;
+    }
+    header.side {
+        padding-right: 0;
+    }
+}
+
+@media (min-width:1138px){header.side .container {
+        width: 750px
+    }
+}
+
+@media (min-width:1362px){header.side .container {
+        width: 970px
+    }
+}
+
+@media (min-width:1570px){header.side .container {
+        width: 1170px
+    }
+}
+
 /** Library **/
 
 body,
@@ -34,23 +65,28 @@ body,
 #library{overflow-x: hidden;}
 
 .container-fluid{
-    padding:90px 20px;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.container-fluid.bottom {
+    margin-bottom: 90px;
 }
 
 #library {
     float: left;
-    height: 80vh;
     overflow-y: auto;
-    width:90vw;
+    width:100%;
+    padding-top: 15px;
 }
 
 #library.side{
     width: 100%;
+    padding-left:370px;
 }
 
-.side{
-    margin-left:370px;
-}
 
 #library .thumbnail{
     position:relative;
@@ -118,7 +154,7 @@ body,
 .thumbnail:hover .edit.icon{
     display:block;
     position:absolute;
-    top:5px;
+    top:15px;
     right:5px;
     z-index:9;
 }
@@ -165,11 +201,16 @@ body,
     background: #FEFEFE;
     overflow-y: auto;
     overflow-x: hidden;
-    height: 100vh;
     position: absolute;
     top:0px;
     left:0px;
+    bottom: 90px;
     z-index:9;
+}
+
+#playlist.ng-hide {
+    display: block!important;
+    -webkit-transform: translateX(-100%);
 }
 
 #playlist h2 {
@@ -179,7 +220,7 @@ body,
     margin: 0;
     color: #fff;
 }
-#playlist ul{padding-bottom: 150px;}
+#playlist ul{padding-bottom: 50px;}
 
 #playlist img{ margin-bottom:5px; cursor:pointer; max-width:300px; max-height:300px;}
 #playlist .album-title{font-size:14px;}
@@ -234,6 +275,11 @@ body,
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     padding:0;
+}
+
+#player.ng-hide {
+    display: block!important;
+    -webkit-transform: translateY(100%);
 }
 
 

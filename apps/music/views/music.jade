@@ -16,49 +16,48 @@ block additional_scripts
     script(src="/music/js/remote.js")
     script(src="/core/js/plugins/jquery/jquery.slimscroll.min.js")
     script.
-        $(function(){
-            var isTouch = "ontouchstart" in document.documentElement;
-            if(!isTouch){
-                $('#inner-playlist').slimScroll({
-                    height: 'auto'
-                });
-            }
-        });
+        // $(function(){
+        //     var isTouch = "ontouchstart" in document.documentElement;
+        //     if(!isTouch){
+        //         $('#inner-playlist').slimScroll({
+        //             height: '100%'
+        //         });
+        //     }
+        // });
 block body
-    header
+    header(ng-class="{side: player.playlist.length > 0}")
         .container
             .row
                 .col-md-12
-                    a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
+                    a.backlink(href="/") &#xe113;
                     h1.hidden-xs #{lingua.music}
 
                     input#search.pull-right(ng-model="query", type="text", placeholder="Search", ng-show="albums")
+    #playlist(ng-show="player.playlist.length > 0", ng-cloak)
+        #inner-playlist
+            h2 Playlist
+            ul
+                li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
+                    .list( ng-click="player.playlist.remove(album)")
+                        img(ng-src="{{album.cover}}")
+                        i.remove.circle.icon
+                    .album-info
+                        span.album-title {{album.album}}
+                        span.album-artist {{album.artist}}
+                        span.album-year(ng-show="album.year !== 0") {{album.year}}
+                    ol.tracks
+                        li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
+                            i.play.icon
+                            span.track-number {{track.track}}
+                            span.track-title {{track.title}}
 
-    .container-fluid
-            #playlist(ng-show="player.playlist.length > 0")
-                #inner-playlist
-                    h2 Playlist
-                    ul
-                        li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
-                            .list( ng-click="player.playlist.remove(album)")
-                                img(ng-src="{{album.cover}}")
-                                i.remove.circle.icon
-                            .album-info
-                                span.album-title {{album.album}}
-                                span.album-artist {{album.artist}}
-                                span.album-year(ng-show="album.year !== 0") {{album.year}}
-                            ol.tracks
-                                li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
-                                    i.play.icon
-                                    span.track-number {{track.track}}
-                                    span.track-title {{track.title}}
-
+    .container-fluid(ng-class="{bottom: player.playlist.length > 0}")
             section#library(ng-class="{side: player.playlist.length > 0}")
                 .row
                     .col-xs-6.col-sm-4.col-md-2.album-wrapper(ng-repeat="album in albums | filter:query", ng-mouseover="changeSelected(album)")
-                        .thumbnail(ng-class="{current: focused == $index }")
-                            i.circular.inverted.edit.icon(ng-click="open(album)")
-                            img(ng-src="{{album.cover}}", ng-click="player.playlist.add(album)")
+                        .thumbnail(ng-class="{current: focused == $index }", ng-click="player.playlist.add(album)")
+                            i.circular.inverted.edit.icon(ng-click="open(album); $event.stopPropagation();")
+                            img(ng-src="{{album.cover}}")
                             .caption
                                 p
                                     span.album-title {{album.album}}
@@ -75,7 +74,7 @@ block body
                 {{serverStatus}}
             h2.loading(ng-show="albums.result === 'none'") No data found, please check the music filepath
 
-    #player.col-xs-12.col-md-12.col-lg-12(ng-show="player.playlist.length > 0",ng-class="className")
+    #player.col-xs-12.col-md-12.col-lg-12(ng-show="player.playlist.length > 0",ng-class="className", ng-cloak)
         #progressBar.ui.active.striped.progress
             span#progress.bar
 

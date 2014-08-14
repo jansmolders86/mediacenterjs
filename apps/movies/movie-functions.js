@@ -141,6 +141,9 @@ exports.progress = function (req, res){
     if(movieTitle !== undefined && progression !== undefined){
         var progressionData = [movieTitle, progression, transcodingstatus];
         db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)', progressionData);
+        res.status(200).send();
+    } else {
+        res.status(500).send();
     }
 
 }
