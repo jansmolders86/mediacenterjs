@@ -42,11 +42,11 @@ block body
                                 h1.movie-title{{movie.title}}
                                 .overview
                                     .summary {{movie.overview}}
-                                .specs
-                                    p
-                                        strong {{movie.genre}}
-                                    p
-                                        strong #{lingua.movies_Runtime}: {{movie.runtime}} min
+                    .specs
+                        p
+                            strong {{movie.genre}}
+                        p
+                            strong #{lingua.movies_Runtime}: {{movie.runtime}} min
                     .cdNumber(ng-show="movie.cd_number.length > 0")
                         span {{movie.cd_number}}
 

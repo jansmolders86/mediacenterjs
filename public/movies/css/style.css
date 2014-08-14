@@ -34,7 +34,6 @@ header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
     }
 }
 
-
 #backdrop{
     box-shadow:none;
     padding: 10px 0 0 100px;
@@ -192,16 +191,17 @@ span.title{visibility:hidden; width:0; height:0;}
 
 .movieposter:hover .caption,
 .movieposter.current .caption{
-    height:300px;
-    -webkit-transition: height 0.5s ease-in-out;
-    -moz-transition: height 0.5s ease-in-out;
-    -o-transition: height 0.5s ease-in-out;
-    transition: height 0.5s ease-in-out;
+
+    transform: translateY(0%);
+    -webkit-transform: translateY(0%);
 }
 
 
 .movieposter .caption{
-    height:0;
+    height:300px;
+    max-height: 100%;
+    transform: translateY(100%);
+    -webkit-transform: translateY(100%);
     padding:0;
     width:100%;
     background:#fff;
@@ -209,6 +209,10 @@ span.title{visibility:hidden; width:0; height:0;}
     bottom:0;
     left:0;
     z-index: 5;
+        -webkit-transition: -webkit-transform 0.5s ease-in-out;
+    -moz-transition: transform 0.5s ease-in-out;
+    -o-transition: transform 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out;
 }
 
 .movieposter .caption p{
@@ -239,6 +243,7 @@ span.title{visibility:hidden; width:0; height:0;}
     left:0;
     color:#9F9384;
     border-top: 1px solid #e7e7e7;
+    z-index:6;
 }
 
 h1.movie-title{
