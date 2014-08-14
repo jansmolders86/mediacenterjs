@@ -66,22 +66,23 @@ block body
         .modal-header
             h1 Edit movie
         .modal-body
+            div(class="alert alert-danger" role="alert", ng-show="errorMessage") {{errorMessage}}
             .form-horizontal
                 .row
                     .form-group
-                        img.col-md-offset-1(ng-src="{{edit.poster_path}}")
+                        img.col-md-offset-1(ng-src="{{current.poster_path}}", ng-show="current.poster_path !== original.poster_path")
                     .form-group
                         label.col-md-3.col-md-offset-1 Poster url path
-                        input.col-md-7(type="text",name="poster_path",ng-model="edit.poster_path",required,ng-value="current.poster_path")
+                        input.col-md-7(type="text",name="poster_path",ng-model="current.poster_path",required)
                     .form-group
                         label.col-md-3.col-md-offset-1 Backdrop url path
-                        input.col-md-7(type="text",name="backdrop_path",ng-model="edit.backdrop_path",required,ng-value="current.backdrop_path")
+                        input.col-md-7(type="text",name="backdrop_path",ng-model="current.backdrop_path",required)
                     .form-group
                         label.col-md-3.col-md-offset-1 Title
-                        input.col-md-7(type="text",name="title",ng-model="edit.title",required,ng-value="current.title")
+                        input.col-md-7(type="text",name="title",ng-model="current.title",required)
                     .form-group
                         label.col-md-3.col-md-offset-1 Hidden
-                        input.col-md-7(type="checkbox",name="hidden",ng-model="edit.hidden",required,ng-checked="current.hidden == 'true'")
+                        input.col-md-7(type="checkbox",name="hidden",ng-model="current.hidden",required,ng-checked="current.hidden == 'true'")
         .modal-footer
             button.btn(ng-click="updateItem()") Fetch Metadata
             button.btn.pull-right(ng-click="cancel()") Cancel
