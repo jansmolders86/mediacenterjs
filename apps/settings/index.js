@@ -83,6 +83,7 @@ exports.index = function(req, res, next){
                 remotePort : config.remotePort,
                 language: config.language,
                 country: config.country,
+                countries: require('../../lib/utils/countries').countries,
                 availableLanguages: availableLanguages,
                 availableQuality: availableQuality,
                 currentQuality: config.quality,

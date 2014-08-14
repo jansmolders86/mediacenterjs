@@ -127,7 +127,8 @@ app.get("/", function(req, res, next) {
 		}
 
 		res.render('setup',{
-			localIP:sendLocalIP
+			localIP:sendLocalIP,
+            countries:require('./lib/utils/countries').countries
 		});
 
 	} else {
