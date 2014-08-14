@@ -24,6 +24,7 @@ body.playing > #player{display:block;}
 header.scrolling{ opacity:0.9;}
 header{height:60px; z-index:5; position:fixed!important; top:0; }
 header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
+.container-fluid{ padding-top:90px;}
 /* Bootstrap override */
 
 @media only screen and (min-width: 768px) {
@@ -309,8 +310,8 @@ h1.movie-title{
 */
 
 .slide{
-   //-webkit-animation: backdrop-slide 10s linear infinite;
-   //animation: backdrop-slide 10s linear infinite;
+   /*-webkit-animation: backdrop-slide 10s linear infinite;*/
+   /*animation: backdrop-slide 10s linear infinite;*/
 }
 
 @-webkit-keyframes backdrop-slide {
