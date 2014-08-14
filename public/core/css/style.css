@@ -59,14 +59,19 @@ body{
     background:none;
 }
 
-img{border:0; display:block;}
+img{border:0; display:block; pointer-events: none;}
 *:focus { color:#fb8521;}
+
 
 body *{
     -webkit-transition: all 0.2s ease;
     -moz-transition: all 0.2s ease;
     -o-transition: all 0.2s ease;
     transition: all 0.2s ease;
+    -webkit-user-select: none;
+}
+input[type=text], textarea {
+    -webkit-user-select: text;
 }
 
 body.screensaver{overflow:hidden!important;}
