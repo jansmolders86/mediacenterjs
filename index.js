@@ -31,6 +31,7 @@ var express = require('express')
     , scheduler = require('./lib/utils/scheduler')
 	, DeviceInfo = require('./lib/utils/device-utils')
     , fileHandler = require('./lib/utils/file-utils')
+    , dbSchema = require('./lib/utils/database-schema')
     , http = require('http')
 	, os = require('os')
 	, jade = require('jade')
@@ -57,6 +58,7 @@ if(fs.existsSync('./lib/database/mcjs.sqlite') === false){
     fs.openSync('./lib/database/mcjs.sqlite', 'w');
     fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
 }
+
 
 process.env.NODE_ENV = 'development';
 
@@ -268,9 +270,14 @@ app.post('/clearCache', function(req, res){
                 return res.send('Error clearing cache', e);
             }
 
-            var database = require('./lib/utils/database-connection');
-            var db = database.db;
-            db.query('DROP TABLE IF EXISTS ' + name);
+            if (name === "movies") {
+                var Movie = require('./lib/utils/database-schema').Movie;
+                Movie.destroyAll();
+            } else {
+                var database = require('./lib/utils/database-connection');
+                var db = database.db;
+                db.query('DROP TABLE IF EXISTS ' + name);
+            }
 
 
         });

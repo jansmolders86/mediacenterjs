@@ -58,13 +58,7 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
         $scope.editItem = function(){
             $http({
                 method: "post",
-                data: {
-                    newTitle            : $scope.current.title,
-                    newPosterPath       : $scope.current.poster_path,
-                    newBackdropPath     : $scope.current.backdrop_path,
-                    hidden              : $scope.current.hidden.toString(),
-                    currentMovie        : $scope.current.original_name
-                },
+                data: $scope.current,
                 url: "/movies/edit"
             }).success(function(data, status, headers, config) {
                 $modalInstance.dismiss();
@@ -76,10 +70,7 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
             var title = $scope.current.title;
             $http({
                 method: "post",
-                data: {
-                    newTitle            : title,
-                    currentMovie        : $scope.current.original_name
-                },
+                data: $scope.current,
                 url: "/movies/update"
             }).success(function(data, status, headers, config) {
                 location.reload();
@@ -90,26 +81,12 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
     };
 
 
-    function changeBackdrop(newsrc) {
-        var elem = document.getElementById("backdropimg");
-        elem.src = newsrc;
-    }
-
     $scope.changeSelected = function(movie){
-        var selectedMovie = $scope.filteredMovies.indexOf(movie);
-        if ($scope.focused !== selectedMovie) {
-            changeBackdrop(movie.backdrop_path);
-            $scope.focused = selectedMovie;
-        }
+        $scope.focused = $scope.filteredMovies.indexOf(movie);
     }
 
     $scope.resetSelected = function () {
         $scope.focused = 0;
-        setTimeout(function() {
-            if ($scope.focused === 0) {
-                changeBackdrop('/movies/css/img/backdrop.png');
-            }
-        }, 450);
     }
 
     var setupSocket = {

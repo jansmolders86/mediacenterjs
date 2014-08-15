@@ -42,8 +42,10 @@ var noResult = {
 
 /* Variables */
 // Init Database
-var database = require('../../lib/utils/database-connection');
-var db = database.db;
+ var database = require('../../lib/utils/database-connection');
+ var db = database.db;
+
+var Movie = require('../../lib/utils/database-schema').Movie;
 
 /* Public Methods */
 
@@ -92,7 +94,7 @@ var setupParse = function(req, res, serveToFrontEnd, results) {
 };
 
 
-var updateMetadataOfMovie = exports.updateMetadataOfMovie = function(originalTitle, movieTitle, callback) {
+var updateMetadataOfMovie = exports.updateMetadataOfMovie = function(movie, callback) {
     var movieInfo = movie_title_cleaner.cleanupTitle(originalTitle);
     getMetadataFromTheMovieDB(movieTitle, movieInfo.year, function (result) {
         if (result !== null) {
@@ -163,20 +165,20 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
             var adultRating = result.adult;
             adult = adultRating.toString();
         }
-        var metadata = [
-            original_name,
-            movieTitle,
-            poster_url,
-            backdrop_url,
-            imdb_id,
-            rating,
-            certification,
-            genre,
-            runtime,
-            overview,
-            movieInfo.cd,
-            adult
-        ];
+        var metadata = {
+            originalName: original_name,
+            title: movieTitle,
+            posterURL: poster_url,
+            backgroundURL: backdrop_url,
+            imdbID: imdb_id,
+            "rating": rating,
+            "certification":certification,
+            "genre":genre,
+            "runtime":runtime,
+            "overview":overview,
+            cdNumber: movieInfo.cd,
+            "adult": adult
+        };
 
         storeMetadataInDatabase(metadata, function(){
             nrScanned++;
@@ -206,8 +208,9 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
 
 
 storeMetadataInDatabase = function(metadata, callback) {
-    db.query('INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', metadata);
-    callback();
+    //db.query('INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', metadata);
+    Movie.create(metadata, callback);
+    //callback();
 };
 
 getMetadataFromTheMovieDB = function(movieTitle, year, callback) {
