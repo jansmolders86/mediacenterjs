@@ -57,6 +57,12 @@ header, header * {
     }
 }
 
+
+.btn.view-select {
+    padding: 5px;
+    margin: 10px;
+}
+
 /** Library **/
 
 body,
@@ -66,13 +72,13 @@ body,
 
 .container-fluid{
     position: absolute;
-    top: 70px;
+    top: 125px;
     left: 0;
     right: 0;
     bottom: 0;
 }
 .container-fluid.bottom {
-    margin-bottom: 90px;
+    margin-bottom: 160px;
 }
 
 #library {
@@ -84,6 +90,8 @@ body,
 
 #library.side{
     width: 100%;
+}
+.side {
     padding-left:370px;
 }
 
@@ -131,8 +139,8 @@ body,
     margin:0;
 }
 
-#library .album-wrapper{max-width:270px;}
-
+#library .album-wrapper{width:270px;}
+.rowtracks { width: 100% !important; float: left;}
 #library.side .thumbnail img,
 #library.side .thumbnail span{
     position:relative;
@@ -204,7 +212,7 @@ body,
     position: absolute;
     top:0px;
     left:0px;
-    bottom: 90px;
+    bottom: 160px;
     z-index:9;
 }
 
@@ -226,7 +234,7 @@ body,
 #playlist .album-title{font-size:14px;}
 #playlist .album{ margin-top:10px; padding:10px;}
 
-#playlist .album li{
+li.track{
     padding:5px 0;
     border-bottom: 1px solid #e4e4e4;
     min-height: 25px;
@@ -234,8 +242,14 @@ body,
     cursor:pointer;
     list-style: none;
 }
-
-#playlist .album li:hover{ background:#fff; }
+#library li.track {
+    margin-left: 240px;
+    font-size: 1.1em;
+}
+#library li.track:last-child {
+    margin-bottom: 50px;
+}
+li.track:hover{ background:#fff; }
 #playlist ol li{list-style:decimal;}
 #playlist ol li .play{
     visibility:hidden;
@@ -257,7 +271,15 @@ body,
     height: 44px;
     width: 48px;
 }
-
+#playlist .remove.lonely {
+    height: 100%;
+    padding: 5px;
+    color: #e1e2e2;
+    background: none; 
+}
+#playlist .remove.lonely:hover {
+    color:#cfd0d0;
+}
 #playlist .album img{ z-index: 2; }
 #playlist .list{  position: relative; }
 #playlist .list:hover img{ opacity:0.3 }
@@ -266,7 +288,7 @@ body,
 
 #player{
     width:100%;
-    min-height:90px;
+    min-height:160px;
     background:#333;
     z-index:99;
     bottom:0;
@@ -347,7 +369,6 @@ body,
 }
 .track-title {
     display: inline-block;
-    width: 250px;
 }
 
 .ui.progress {
