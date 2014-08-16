@@ -90,12 +90,12 @@ function keyevents(socket, $scope){
 
 
 function goLeft(socket, $scope){
-    var index = $scope.focused;
+    var index = $scope.movies.indexOf($scope.focused);
     index--;
     if (index <= 0 ){
         index = 0;
     }
-    $scope.focused = index;
+    $scope.focused = $scope.movies[index];
 
     //jQuery
     $('.current').scrollintoview({direction: "vertical"});
@@ -108,12 +108,12 @@ function goLeft(socket, $scope){
 
 
 function goRight(socket, $scope){
-    var index = $scope.focused;
+    var index = $scope.movies.indexOf($scope.focused);
     index++;
     if (index >= $scope.movies.length) {
         index = 0;
     }
-    $scope.focused = index;
+    $scope.focused = $scope.movies[index];
 
     //jQuery
     $('.current').scrollintoview({direction: "vertical"});
