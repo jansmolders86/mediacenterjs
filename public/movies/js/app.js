@@ -20,7 +20,7 @@
 var movieApp = angular.module('movieApp', ['ui.bootstrap']);
 
 movieApp.controller('movieCtrl', function($scope, $http, $modal) {
-    $scope.focused = 0;
+    $scope.focused = null;
     $scope.serverMessage = 0;
     $scope.serverStatus= '';
 
@@ -47,13 +47,8 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
     }
 
     var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
-        $scope.original = angular.copy(current);
-        $scope.current = current;
-
-        $scope.cancel = function () {
-            angular.copy($scope.original, $scope.current);
-            $modalInstance.dismiss('cancel');
-        };
+        $scope.original = current;
+        $scope.current = angular.copy(current);
 
         $scope.editItem = function(){
             $http({
@@ -61,6 +56,7 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
                 data: $scope.current,
                 url: "/movies/edit"
             }).success(function(data, status, headers, config) {
+                angular.copy($scope.current, $scope.original);
                 $modalInstance.dismiss();
             }).error(function() {
                 $scope.errorMessage = "Unable to save changes. Check server is running and try again.";
@@ -73,21 +69,13 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
                 data: $scope.current,
                 url: "/movies/update"
             }).success(function(data, status, headers, config) {
-                location.reload();
+                angular.copy(data, $scope.original);
+                $modalInstance.dismiss();
             }).error(function(data, status, headers, config) {
                 $scope.errorMessage = "Couldn't find metadata for movie called " + title + " on TMDB";
             });
         };
     };
-
-
-    $scope.changeSelected = function(movie){
-        $scope.focused = $scope.filteredMovies.indexOf(movie);
-    }
-
-    $scope.resetSelected = function () {
-        $scope.focused = 0;
-    }
 
     var setupSocket = {
         async: function() {

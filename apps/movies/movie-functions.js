@@ -54,15 +54,20 @@ exports.backdrops = function (req, res){
 
 exports.edit = function(req, res, data){
     console.log("edit", data);
-    Movie.upsert(data, function(err) {
+    var movie = new Movie(data);
+    movie.save(function(err) {
         res.status(err ? 500 : 200).send();
     });
 }
 
 exports.update = function(req, res, data) {
-    console.log("Updating");
-    metafetcher.updateMetadataOfMovie(data, function (err) {
-        res.status(err ? 404 : 200).send();
+    var movie = new Movie(data);
+    metafetcher.updateMetadataOfMovie(movie, function (err, updMovie) {
+        if (err) {
+            res.status(404).send();
+        } else {
+            res.status(200).json(updMovie);
+        }
     });
 }
 
@@ -122,7 +127,6 @@ fetchMovieData = function(req, res, metaType, serveToFrontEnd, getNewFiles) {
 getMovies = function(req, res, metaType, serveToFrontEnd,getNewFiles){
     console.log('Loading movie data...', serveToFrontEnd);
     Movie.all(function(err, movies) {
-        console.log(movies);
         if(err){
             serveToFrontEnd = true;
             if(getNewFiles === true){

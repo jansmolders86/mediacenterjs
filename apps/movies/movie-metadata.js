@@ -42,9 +42,6 @@ var noResult = {
 
 /* Variables */
 // Init Database
- var database = require('../../lib/utils/database-connection');
- var db = database.db;
-
 var Movie = require('../../lib/utils/database-schema').Movie;
 
 /* Public Methods */
@@ -95,30 +92,26 @@ var setupParse = function(req, res, serveToFrontEnd, results) {
 
 
 var updateMetadataOfMovie = exports.updateMetadataOfMovie = function(movie, callback) {
-    var movieInfo = movie_title_cleaner.cleanupTitle(originalTitle);
-    getMetadataFromTheMovieDB(movieTitle, movieInfo.year, function (result) {
+    getMetadataFromTheMovieDB(movie.title, null, function (result) {
         if (result !== null) {
             var baseUrl         = 'http://image.tmdb.org',
                 poster_size     = "/t/p/w342",
                 backdrop_size   = "/t/p/w1920";
-            var updateObj = {
-                    posterPath : baseUrl+poster_size+result.poster_path,
-                    backdropPath : baseUrl+backdrop_size+result.backdrop_path,
-                    imdbID : result.imdb_id,
-                    rating : result.vote_average.toString(),
-                    genre : 'Unknown',
-                    title : result.title,
-                    runtime : result.runtime,
-                    overview : result.overview,
-                    adult : result.adult.toString(),
-                    originalName : originalTitle
-                };
+                movie.posterURL = baseUrl+poster_size+result.poster_path;
+                movie.backgroundURL = baseUrl+backdrop_size+result.backdrop_path;
+                movie.imdbID = result.imdb_id;
+                movie.rating = result.vote_average.toString();
+                movie.genre = 'Unknown';
+                movie.title = result.title;
+                movie.runtime = result.runtime;
+                movie.overview = result.overview;
+                movie.adult = result.adult.toString();
             if (result.genres.length) {
-                updateObj.genre = result.genres[0].name;
+                movie.genre = result.genres[0].name;
             }
-            db.query('UPDATE movies SET poster_path=$posterPath, backdrop_path=$backdropPath, imdb_id=$imdbID, rating=$rating, genre=$genre, title=$title, runtime=$runtime, overview=$overview, adult=$adult WHERE original_name=$originalName',
-            updateObj, function (err, rows) {
-                callback(err);
+            //must be full movie object...
+            movie.save(function (err, updMovie) {
+                callback(err, updMovie);
             });
         } else {
             callback("not found in tmbd");
@@ -208,9 +201,7 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
 
 
 storeMetadataInDatabase = function(metadata, callback) {
-    //db.query('INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', metadata);
     Movie.create(metadata, callback);
-    //callback();
 };
 
 getMetadataFromTheMovieDB = function(movieTitle, year, callback) {
@@ -243,28 +234,13 @@ getMetadataFromTrakt = function(movieTitle, callback) {
 };
 
 getMovies = function(req, res){
-    db.query('SELECT * FROM movies ORDER BY title asc',{
-        original_name       : String,
-        title               : String,
-        poster_path         : String,
-        backdrop_path       : String,
-        imdb_id             : String,
-        rating              : String,
-        certification       : String,
-        genre               : String,
-        runtime             : String,
-        overview            : String,
-        cd_number           : String,
-        adult               : String,
-        hidden              : String
-    },
-     function(err, rows) {
+    Movie.all(function(err, movies) {
          if(err){
              console.log("DB error",err);
              res.json(noResult);
-         } else if (rows !== null && rows.length > 0){
+         } else if (movies !== null && movies.length > 0){
              console.log('Sending data to client...');
-             res.json(rows);
+             res.json(movies);
             // db.close();
          } else{
              res.json(noResult);
