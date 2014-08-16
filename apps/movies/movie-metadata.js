@@ -175,7 +175,8 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
             runtime,
             overview,
             movieInfo.cd,
-            adult
+            adult,
+            "false"
         ];
 
         storeMetadataInDatabase(metadata, function(){
@@ -206,7 +207,7 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
 
 
 storeMetadataInDatabase = function(metadata, callback) {
-    db.query('INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', metadata);
+    db.query('INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)', metadata);
     callback();
 };
 
