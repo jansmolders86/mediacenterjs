@@ -42,7 +42,7 @@
     },
     "readmeFilename": "README.md",
     "dependencies": {
-        "express"           : "3.x",
+        "express"           : "3.15.0",
         "fs.extra"          : "1.2.1",
         "fs-extra"          : "0.8.1",
         "dateformat"        : "1.0.4-1.2.3",
