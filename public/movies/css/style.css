@@ -88,6 +88,29 @@ a.backlink { margin-top: -5px; z-index:4; }
 
 /* Movie App styling */
 
+#view-select {
+    position: absolute;
+    top: 0;
+    right: 300px;
+}
+
+.view-select {
+    padding: 17px 20px;
+    display: inline-block;
+    background: #4B4C51;
+    cursor:pointer;
+    color:#fff;
+    font-weight:500;
+    width: auto;
+}
+
+.view-select:hover{
+    background: #fb8521;
+}
+
+.view-select input[type=checkbox] {
+   margin: 4px 10px 0;
+}
 
 .movie-loading{
     position:absolute;
