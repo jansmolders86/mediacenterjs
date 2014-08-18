@@ -34,33 +34,24 @@ header, header * {
     transition: none !important;
 -webkit-transition: none !important;
 }
-@media (max-width:1138px){header.side .container {
-        width: 100%;
-    }
-    header.side {
-        padding-right: 0;
-    }
+
+#view-select {
+    position: absolute;
+    top: 0;
+    right: 300px;
 }
 
-@media (min-width:1138px){header.side .container {
-        width: 750px
-    }
+.view-select {
+    padding: 23px 25px;
+    display: inline-block;
+    background: #4B4C51;
+    cursor:pointer;
+    color:#fff;
+    font-weight:500;
 }
 
-@media (min-width:1362px){header.side .container {
-        width: 970px
-    }
-}
-
-@media (min-width:1570px){header.side .container {
-        width: 1170px
-    }
-}
-
-
-.btn.view-select {
-    padding: 5px;
-    margin: 10px;
+.view-select:hover{
+    background: #fb8521;
 }
 
 /** Library **/
@@ -275,7 +266,7 @@ li.track:hover{ background:#fff; }
     height: 100%;
     padding: 5px;
     color: #e1e2e2;
-    background: none; 
+    background: none;
 }
 #playlist .remove.lonely:hover {
     color:#cfd0d0;
@@ -390,6 +381,32 @@ li.track:hover{ background:#fff; }
     transition: width 3s ease-in-out;
 }
 
+@media (max-width:1138px){
+    header.side .container {
+        width: 100%;
+    }
+    header.side {
+        padding-right: 0;
+    }
+}
+
+@media (min-width:1138px){
+    header.side .container {
+        width: 750px
+    }
+}
+
+@media (min-width:1362px){
+    header.side .container {
+        width: 970px
+    }
+}
+
+@media (min-width:1570px){
+    header.side .container {
+        width: 1170px
+    }
+}
 
 @media only screen and (min-width: 320px) and (max-width: 529px) {
     /* For phone layouts only */

@@ -16,14 +16,14 @@ block additional_scripts
     script(src="/music/js/remote.js")
     script(src="/core/js/plugins/jquery/jquery.slimscroll.min.js")
     script.
-        // $(function(){
-        //     var isTouch = "ontouchstart" in document.documentElement;
-        //     if(!isTouch){
-        //         $('#inner-playlist').slimScroll({
-        //             height: '100%'
-        //         });
-        //     }
-        // });
+         $(function(){
+             var isTouch = "ontouchstart" in document.documentElement;
+             if(!isTouch){
+                 $('#inner-playlist').slimScroll({
+                     height: '100%'
+                 });
+             }
+         });
 block body
     header(ng-class="{side: player.playlist.length > 0}")
         .container
@@ -31,7 +31,9 @@ block body
                 .col-md-12
                     a.backlink(href="/") &#xe113;
                     h1.hidden-xs #{lingua.music}
-
+                    div#view-select(ng-class="{side: player.playlist.length > 0}")
+                        .view-select(ng-click="view = 'albums'", ng-init="view = 'albums'", ng-hide="view === 'albums'") Show albums
+                        .view-select(ng-click="view = 'tracks'", ng-hide="view === 'tracks'") Show Tracks
                     input#search.pull-right(ng-model="query", type="text", placeholder="Search", ng-show="albums")
     #playlist(ng-show="player.playlist.length > 0", ng-cloak)
         #inner-playlist
@@ -58,9 +60,6 @@ block body
                                 i.play.icon
                                 span.track-number {{track.track}}
                                 span.track-title {{track.title}}
-    div(ng-class="{side: player.playlist.length > 0}")
-        .btn.view-select(ng-click="view = 'albums'", ng-init="view = 'tracks'") Album
-        .btn.view-select(ng-click="view = 'tracks'") Tracks
 
     .container-fluid(ng-class="{bottom: player.playlist.length > 0}")
             section#library(ng-class="{side: player.playlist.length > 0}")
