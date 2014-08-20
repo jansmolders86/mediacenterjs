@@ -88,29 +88,33 @@ Translations
 For now, all the translation files are stored in the /public/translations folder.
 Feel free to contribute by translating.
 
+### Main contributors: ###
+
+* [Terry MooreII](https://github.com/TerryMooreII) For the Javascript Jabber app and building the Plugin manager
+* [Stefan Hoffman](https://github.com/hoffi) for his hudge contribution to the backend and German translation 
+* [Jonathan Bailey](https://github.com/Jon889) for his code contributions/fixes
+* [Matthew Marino](https://github.com/Karnith) for his FFMPEG expertise
+
 ###Special thanks to these contributors:###
 
-* Jonathan Bailey https://github.com/Jon889 for his code contributions/fixes
-* Sylvain https://github.com/flyinva for his French translation
-* Alberto Jerez https://github.com/ajerez  for his Spanish translation
-* Domenico Luciani https://github.com/dlion for his Italian translation
-* Alexey Bobyrev https://github.com/sfate for his Russian and Ukrainian translation
-* Doğan Aydın https://github.com/doganaydin for his Turkish translation
-* Adam https://github.com/brutalhonesty for his YouTube App
-* Ionică Bizău https://github.com/IonicaBizau for the [Youtube API NPM module](https://github.com/IonicaBizau/youtube-api)
-* Luis Eduardo Brito https://github.com/luiseduardobrito for his Portuguese translation
-* Kasper Isager https://github.com/kasperisager for his Danish translation
-* Robin Larsson	https://github.com/TankMasterRL for his Swedish translation
-* Jussi Vatjus https://github.com/jupe for his code support
-* Terry MooreII https://github.com/TerryMooreII For the Javascript Jabber app and building the Plugin manager
-* Stefan Hoffman https://github.com/hoffi for his hudge contribution to the backend and German translation 
-* Matthew Szatmary https://github.com/szatmary for his FFMPEG expertise
-* Matthew Marino https://github.com/Karnith for his FFMPEG expertise
-* Richard Bernards https://github.com/RichardBernards for his architectural knowledge/support
-* Lucien Immink https://github.com/lucienimmink for his javascript knowledge/support
-* Jérémie Parker https://github.com/p-j for his bugfixes
-* Gary Katsevman https://github.com/gkatsev for his bugfixes
-* Chinmaya Kumar Padhi https://github.com/chinmayapadhi for updating installation instructions OSX
+
+* [Sylvain](https://github.com/flyinva) for his French translation
+* [Alberto Jerez](https://github.com/ajerez)  for his Spanish translation
+* [Domenico Luciani](https://github.com/dlion) for his Italian translation
+* [Alexey Bobyrev](https://github.com/sfate) for his Russian and Ukrainian translation
+* [Doğan Aydın](https://github.com/doganaydin) for his Turkish translation
+* [Adam](https://github.com/brutalhonesty) for his YouTube App
+* [Ionică Bizău](https://github.com/IonicaBizau for the [Youtube API NPM module](https://github.com/IonicaBizau/youtube-api)
+* [Luis Eduardo Brito](https://github.com/luiseduardobrito) for his Portuguese translation
+* [Kasper Isager](https://github.com/kasperisager) for his Danish translation
+* [Robin Larsson](https://github.com/TankMasterRL) for his Swedish translation
+* [Jussi Vatjus](https://github.com/jupe) for his code support
+* [Matthew Szatmary](https://github.com/szatmary) for his FFMPEG expertise
+* [Richard Bernards](https://github.com/RichardBernards) for his architectural knowledge/support
+* [Lucien Immink](https://github.com/lucienimmink) for his javascript knowledge/support
+* [Jérémie Parker](https://github.com/p-j) for his bugfixes
+* [Gary Katsevman](https://github.com/gkatsev) for his bugfixes
+* [Chinmaya Kumar](Padhi https://github.com/chinmayapadhi) for updating installation instructions OSX
 * P.J. Onori for his icons
 
 I'm building MCJS in my free time so if you want to encourage me to continue this enormous project, feel free to do so.
