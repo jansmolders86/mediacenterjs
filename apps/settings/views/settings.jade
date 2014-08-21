@@ -89,6 +89,15 @@ block body
                                     i.folder.icon
                                 input.form-control#tvpath.mcjs-rc-clickable.folder(name="tvpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= tvlocation, data-rule-path="true",  data-msg-path="Specify a valid path.")
                     .form-group.mcjs-rc-controllable
+                        label.col-md-2(for="tvFormat") Tv formatting style
+                        .col-md-10
+                            .input-group
+                                span.input-group-addon
+                                    i.edit.icon
+                                select.form-control#tvFormat.mcjs-rc-clickable(name="tvFormat")
+                                    - for tvFormatType in tvFormatTypes
+                                        option(value=tvFormatType, selected=tvFormatType == tvFormat) #{tvFormatType}
+                    .form-group.mcjs-rc-controllable
                         label.col-md-2(for="language") #{lingua.setting_language}
                         .col-md-10
                             .input-group

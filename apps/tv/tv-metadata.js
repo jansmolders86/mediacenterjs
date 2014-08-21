@@ -147,9 +147,17 @@ getDataForNewShow = function(originalTitle, episodeTitle,callback){
         , trimmedTitle      = ''
         , episodeNumber     = '';
 
-    var showTitle            = episodeTitle.replace(/[sS]([0-9]{2})[eE]([0-9]{2})/, '')
-    , episodeSeasonMatch     = episodeTitle.match(/[sS]([0-9]{2})/)
-    , episodeNumberMatch     = episodeTitle.match(/[eE]([0-9]{2})/)
+        if(config.tvFormat === 's00e00'){
+            var showTitle            = episodeTitle.replace(/[sS]([0-9]{1,2})[eE]([0-9]{1,2})/, '')
+            , episodeSeasonMatch     = episodeTitle.match(/[sS]([0-9]{1,2})/)
+            , episodeNumberMatch     = episodeTitle.match(/[eE]([0-9]{1,2})/);
+        } else if(config.tvFormat === '0x00'){
+            var showTitle            = episodeTitle.replace(/([0-9]{1,2})+?(x)+?([0-9]{1,2})/, '')
+            , episodeSeasonMatch     = episodeTitle.match(/(\d{1,2})+?(?=x)/)
+            , episodeNumber          = episodeTitle.match(/(x)+?([0-9]{1,2})/)
+            , episodeNumberMatch     = episodeNumber.replace("x","");
+        }
+
 
     if( episodeSeasonMatch){
         episodeSeason = episodeSeasonMatch[0].replace(/[sS]/,"")
