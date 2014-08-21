@@ -147,7 +147,7 @@ getDataForNewShow = function(originalTitle, episodeTitle,callback){
         , trimmedTitle      = ''
         , episodeNumber     = '';
 
-        if(config.tvFormat === 's00e00'){
+    if(config.tvFormat === 's00e00' || config.tvFormat === undefined){
             var showTitle            = episodeTitle.replace(/[sS]([0-9]{1,2})[eE]([0-9]{1,2})/, '')
             , episodeSeasonMatch     = episodeTitle.match(/[sS]([0-9]{1,2})/)
             , episodeNumberMatch     = episodeTitle.match(/[eE]([0-9]{1,2})/);
