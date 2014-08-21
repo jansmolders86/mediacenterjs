@@ -57,14 +57,14 @@ exports.get = function(req, res, next){
         switch(action) {
             case('play'):
                 functions.playTrack(req, res, track, album);
+                handled = true;
             break;
             case('next'):
                 functions.nextTrack(req, res, track, album);
+                handled = true;
             break;
             case('random'):
                 functions.randomTrack(req, res, track, album);
-            break;
-            default:
                 handled = true;
             break;
         }

@@ -47,64 +47,69 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
     }
 
     var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
-        $scope.edit = {};
+        $scope.original = angular.copy(current);
         $scope.current = current;
 
         $scope.cancel = function () {
+            angular.copy($scope.original, $scope.current);
             $modalInstance.dismiss('cancel');
         };
 
         $scope.editItem = function(){
-            if (!$scope.edit.title || $scope.edit.title === '') {
-                $scope.edit.title = $scope.current.title || '';
-            }
-
-            if (!$scope.edit.poster_path || $scope.edit.poster_path === '') {
-                if ($scope.current.poster_path) {
-                    $scope.edit.poster_path = $scope.current.poster_path;
-                } else {
-                    $scope.edit.poster_path = '/movies/css/img/nodata.png';
-                }
-            }
-
-            if (!$scope.edit.backdrop_path || $scope.edit.backdrop_path === '') {
-                if ($scope.current.backdrop_path) {
-                    $scope.edit.backdrop_path = $scope.current.backdrop_path;
-                } else {
-                    $scope.edit.backdrop_path = '/movies/css/img/backdrop.png';
-                }
-            }
-
             $http({
                 method: "post",
                 data: {
-                    newTitle            : $scope.edit.title,
-                    newPosterPath       : $scope.edit.poster_path,
-                    newBackdropPath     : $scope.edit.backdrop_path,
+                    newTitle            : $scope.current.title,
+                    newPosterPath       : $scope.current.poster_path,
+                    newBackdropPath     : $scope.current.backdrop_path,
+                    hidden              : $scope.current.hidden.toString(),
                     currentMovie        : $scope.current.original_name
                 },
                 url: "/movies/edit"
             }).success(function(data, status, headers, config) {
+                $modalInstance.dismiss();
+            }).error(function() {
+                $scope.errorMessage = "Unable to save changes. Check server is running and try again.";
+            })
+        };
+        $scope.updateItem = function(){
+            var title = $scope.current.title;
+            $http({
+                method: "post",
+                data: {
+                    newTitle            : title,
+                    currentMovie        : $scope.current.original_name
+                },
+                url: "/movies/update"
+            }).success(function(data, status, headers, config) {
                 location.reload();
+            }).error(function(data, status, headers, config) {
+                $scope.errorMessage = "Couldn't find metadata for movie called " + title + " on TMDB";
             });
-        }
+        };
     };
 
-    $scope.changeSelected = function(movie){
-        var selectedMovie = $scope.movies.indexOf(movie);
 
+    function changeBackdrop(newsrc) {
+        var elem = document.getElementById("backdropimg");
+        elem.src = newsrc;
+    }
+
+    $scope.changeSelected = function(movie){
+        var selectedMovie = $scope.filteredMovies.indexOf(movie);
         if ($scope.focused !== selectedMovie) {
-            var elem = document.getElementById("backdropimg");
-            elem.src = movie.backdrop_path;
+            changeBackdrop(movie.backdrop_path);
             $scope.focused = selectedMovie;
         }
     }
 
     $scope.resetSelected = function () {
         $scope.focused = 0;
-
-        var elem = document.getElementById("backdropimg");
-        elem.src = '/movies/css/img/backdrop.png';
+        setTimeout(function() {
+            if ($scope.focused === 0) {
+                changeBackdrop('/movies/css/img/backdrop.png');
+            }
+        }, 450);
     }
 
     var setupSocket = {

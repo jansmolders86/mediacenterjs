@@ -24,9 +24,7 @@ body.playing > #player{display:block;}
 header.scrolling{ opacity:0.9;}
 header{height:60px; z-index:5; position:fixed!important; top:0; }
 header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
-.container-fluid{ padding-top:90px; z-index:2;  display: flex; flex-direction: row; }
-.container-fluid .row > div { z-index:3; }
-
+.container-fluid{ padding-top:90px;}
 /* Bootstrap override */
 
 @media only screen and (min-width: 768px) {
@@ -35,7 +33,6 @@ header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
         width: 16%!important;
     }
 }
-
 
 #backdrop{
     box-shadow:none;
@@ -91,6 +88,29 @@ a.backlink { margin-top: -5px; z-index:4; }
 
 /* Movie App styling */
 
+#view-select {
+    position: absolute;
+    top: 0;
+    right: 300px;
+}
+
+.view-select {
+    padding: 17px 20px;
+    display: inline-block;
+    background: #4B4C51;
+    cursor:pointer;
+    color:#fff;
+    font-weight:500;
+    width: auto;
+}
+
+.view-select:hover{
+    background: #fb8521;
+}
+
+.view-select input[type=checkbox] {
+   margin: 4px 10px 0;
+}
 
 .movie-loading{
     position:absolute;
@@ -109,7 +129,6 @@ a.backlink { margin-top: -5px; z-index:4; }
 }
 
 .movieposter{
-    float:left;
     list-style:none;
     z-index:3;
     position:relative;
@@ -117,12 +136,11 @@ a.backlink { margin-top: -5px; z-index:4; }
     margin: 0px 0px 20px 0;
     border-radius:2px;
     display:block;
-    max-height: 500px;
+    max-height: 350px;
     background:#fff;
     cursor:pointer;
     overflow:hidden;
     border:0;
-
 }
 
 .movieposter .edit.icon{display:none;}
@@ -135,6 +153,10 @@ a.backlink { margin-top: -5px; z-index:4; }
 }
 .modal-body img{max-width:300px; max-height:400px;}
 
+.modal-dialog {
+    width: 70%;
+    min-width: 600px;
+}
 
 .movieposter:hover {
     -webkit-transform: scale(1.05);
@@ -173,7 +195,7 @@ a.backlink { margin-top: -5px; z-index:4; }
     display:block;
     width:100%;
     height:auto;
-    max-height:440px;
+    max-height:400px;
     padding:0;
     border:0;
 }
@@ -192,16 +214,17 @@ span.title{visibility:hidden; width:0; height:0;}
 
 .movieposter:hover .caption,
 .movieposter.current .caption{
-    height:300px;
-    -webkit-transition: height 0.5s ease-in-out;
-    -moz-transition: height 0.5s ease-in-out;
-    -o-transition: height 0.5s ease-in-out;
-    transition: height 0.5s ease-in-out;
+
+    transform: translateY(0%);
+    -webkit-transform: translateY(0%);
 }
 
 
 .movieposter .caption{
-    height:0;
+    height:300px;
+    max-height: 100%;
+    transform: translateY(100%);
+    -webkit-transform: translateY(100%);
     padding:0;
     width:100%;
     background:#fff;
@@ -209,6 +232,10 @@ span.title{visibility:hidden; width:0; height:0;}
     bottom:0;
     left:0;
     z-index: 5;
+        -webkit-transition: -webkit-transform 0.5s ease-in-out;
+    -moz-transition: transform 0.5s ease-in-out;
+    -o-transition: transform 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out;
 }
 
 .movieposter .caption p{
@@ -239,6 +266,7 @@ span.title{visibility:hidden; width:0; height:0;}
     left:0;
     color:#9F9384;
     border-top: 1px solid #e7e7e7;
+    z-index:6;
 }
 
 h1.movie-title{
@@ -310,8 +338,8 @@ h1.movie-title{
 */
 
 .slide{
-   //-webkit-animation: backdrop-slide 10s linear infinite;
-   //animation: backdrop-slide 10s linear infinite;
+   /*-webkit-animation: backdrop-slide 10s linear infinite;*/
+   /*animation: backdrop-slide 10s linear infinite;*/
 }
 
 @-webkit-keyframes backdrop-slide {

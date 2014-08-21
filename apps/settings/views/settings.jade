@@ -98,6 +98,15 @@ block body
                                     - for lang in availableLanguages
                                         option(value=lang, selected=lang == language) #{lang}
                     .form-group.mcjs-rc-controllable
+                        label.col-md-2(for="country") Country
+                        .col-md-10
+                            .input-group
+                                span.input-group-addon
+                                    i.flag.icon
+                                select.form-control#country.mcjs-rc-clickable(name="country")
+                                    - for cntry, cntryCode in countries
+                                        option(value=cntryCode, selected=cntryCode === country) #{cntry}
+                    .form-group.mcjs-rc-controllable
                         label.col-md-2(for="location") #{lingua.setting_location}
                         .col-md-10
                             .input-group

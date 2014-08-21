@@ -92,6 +92,38 @@ var setupParse = function(req, res, serveToFrontEnd, results) {
 };
 
 
+var updateMetadataOfMovie = exports.updateMetadataOfMovie = function(originalTitle, movieTitle, callback) {
+    var movieInfo = movie_title_cleaner.cleanupTitle(originalTitle);
+    getMetadataFromTheMovieDB(movieTitle, movieInfo.year, function (result) {
+        if (result !== null) {
+            var baseUrl         = 'http://image.tmdb.org',
+                poster_size     = "/t/p/w342",
+                backdrop_size   = "/t/p/w1920";
+            var updateObj = {
+                    posterPath : baseUrl+poster_size+result.poster_path,
+                    backdropPath : baseUrl+backdrop_size+result.backdrop_path,
+                    imdbID : result.imdb_id,
+                    rating : result.vote_average.toString(),
+                    genre : 'Unknown',
+                    title : result.title,
+                    runtime : result.runtime,
+                    overview : result.overview,
+                    adult : result.adult.toString(),
+                    originalName : originalTitle
+                };
+            if (result.genres.length) {
+                updateObj.genre = result.genres[0].name;
+            }
+            db.query('UPDATE movies SET poster_path=$posterPath, backdrop_path=$backdropPath, imdb_id=$imdbID, rating=$rating, genre=$genre, title=$title, runtime=$runtime, overview=$overview, adult=$adult WHERE original_name=$originalName',
+            updateObj, function (err, rows) {
+                callback(err);
+            });
+        } else {
+            callback("not found in tmbd");
+        }
+    });
+}
+
 var doParse = function(req, res, file, serveToFrontEnd, callback) {
     var incommingTitle      = file.split('/').pop()
         , originalTitle     = incommingTitle
@@ -143,7 +175,8 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
             runtime,
             overview,
             movieInfo.cd,
-            adult
+            adult,
+            "false"
         ];
 
         storeMetadataInDatabase(metadata, function(){
@@ -174,7 +207,7 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
 
 
 storeMetadataInDatabase = function(metadata, callback) {
-    db.query('INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', metadata);
+    db.query('INSERT OR REPLACE INTO movies VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)', metadata);
     callback();
 };
 
@@ -220,7 +253,8 @@ getMovies = function(req, res){
         runtime             : String,
         overview            : String,
         cd_number           : String,
-        adult               : String
+        adult               : String,
+        hidden              : String
     },
      function(err, rows) {
          if(err){

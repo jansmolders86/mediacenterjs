@@ -26,6 +26,34 @@ header #search {
     height: 65px!important;
 }
 
+header.side {
+    padding-left:370px;
+    padding-right: 370px;
+}
+header, header * {
+    transition: none !important;
+-webkit-transition: none !important;
+}
+
+#view-select {
+    position: absolute;
+    top: 0;
+    right: 300px;
+}
+
+.view-select {
+    padding: 23px 25px;
+    display: inline-block;
+    background: #4B4C51;
+    cursor:pointer;
+    color:#fff;
+    font-weight:500;
+}
+
+.view-select:hover{
+    background: #fb8521;
+}
+
 /** Library **/
 
 body,
@@ -34,23 +62,30 @@ body,
 #library{overflow-x: hidden;}
 
 .container-fluid{
-    padding:90px 20px;
+    position: absolute;
+    top: 125px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.container-fluid.bottom {
+    margin-bottom: 160px;
 }
 
 #library {
     float: left;
-    height: 80vh;
     overflow-y: auto;
-    width:90vw;
+    width:100%;
+    padding-top: 15px;
 }
 
 #library.side{
     width: 100%;
 }
-
-.side{
-    margin-left:370px;
+.side {
+    padding-left:370px;
 }
+
 
 #library .thumbnail{
     position:relative;
@@ -95,8 +130,8 @@ body,
     margin:0;
 }
 
-#library .album-wrapper{max-width:270px;}
-
+#library .album-wrapper{width:270px;}
+.rowtracks { width: 100% !important; float: left;}
 #library.side .thumbnail img,
 #library.side .thumbnail span{
     position:relative;
@@ -118,7 +153,7 @@ body,
 .thumbnail:hover .edit.icon{
     display:block;
     position:absolute;
-    top:5px;
+    top:15px;
     right:5px;
     z-index:9;
 }
@@ -165,11 +200,16 @@ body,
     background: #FEFEFE;
     overflow-y: auto;
     overflow-x: hidden;
-    height: 100vh;
     position: absolute;
     top:0px;
     left:0px;
+    bottom: 160px;
     z-index:9;
+}
+
+#playlist.ng-hide {
+    display: block!important;
+    -webkit-transform: translateX(-100%);
 }
 
 #playlist h2 {
@@ -179,13 +219,13 @@ body,
     margin: 0;
     color: #fff;
 }
-#playlist ul{padding-bottom: 150px;}
+#playlist ul{padding-bottom: 50px;}
 
 #playlist img{ margin-bottom:5px; cursor:pointer; max-width:300px; max-height:300px;}
 #playlist .album-title{font-size:14px;}
 #playlist .album{ margin-top:10px; padding:10px;}
 
-#playlist .album li{
+li.track{
     padding:5px 0;
     border-bottom: 1px solid #e4e4e4;
     min-height: 25px;
@@ -193,8 +233,14 @@ body,
     cursor:pointer;
     list-style: none;
 }
-
-#playlist .album li:hover{ background:#fff; }
+#library li.track {
+    margin-left: 240px;
+    font-size: 1.1em;
+}
+#library li.track:last-child {
+    margin-bottom: 50px;
+}
+li.track:hover{ background:#fff; }
 #playlist ol li{list-style:decimal;}
 #playlist ol li .play{
     visibility:hidden;
@@ -216,7 +262,15 @@ body,
     height: 44px;
     width: 48px;
 }
-
+#playlist .remove.lonely {
+    height: 100%;
+    padding: 5px;
+    color: #e1e2e2;
+    background: none;
+}
+#playlist .remove.lonely:hover {
+    color:#cfd0d0;
+}
 #playlist .album img{ z-index: 2; }
 #playlist .list{  position: relative; }
 #playlist .list:hover img{ opacity:0.3 }
@@ -225,7 +279,7 @@ body,
 
 #player{
     width:100%;
-    min-height:90px;
+    min-height:160px;
     background:#333;
     z-index:99;
     bottom:0;
@@ -234,6 +288,11 @@ body,
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     padding:0;
+}
+
+#player.ng-hide {
+    display: block!important;
+    -webkit-transform: translateY(100%);
 }
 
 
@@ -301,7 +360,6 @@ body,
 }
 .track-title {
     display: inline-block;
-    width: 250px;
 }
 
 .ui.progress {
@@ -323,6 +381,32 @@ body,
     transition: width 3s ease-in-out;
 }
 
+@media (max-width:1138px){
+    header.side .container {
+        width: 100%;
+    }
+    header.side {
+        padding-right: 0;
+    }
+}
+
+@media (min-width:1138px){
+    header.side .container {
+        width: 750px
+    }
+}
+
+@media (min-width:1362px){
+    header.side .container {
+        width: 970px
+    }
+}
+
+@media (min-width:1570px){
+    header.side .container {
+        width: 1170px
+    }
+}
 
 @media only screen and (min-width: 320px) and (max-width: 529px) {
     /* For phone layouts only */

@@ -31,7 +31,7 @@ var fs = require('fs.extra')
 exports.loadItems = function (req, res, serveToFrontEnd){
     var metaType = "movie";
     var getNewFiles = true;
-    db.query("CREATE TABLE IF NOT EXISTS movies (original_name TEXT PRIMARY KEY, title TEXT, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number TEXT, adult TEXT)");
+    db.query("CREATE TABLE IF NOT EXISTS movies (original_name TEXT PRIMARY KEY, title TEXT, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number TEXT, adult TEXT, hidden TEXT)");
 
 
     if(serveToFrontEnd === false){
@@ -73,22 +73,35 @@ exports.backdrops = function (req, res){
 };
 
 exports.edit = function(req, res, data){
-    db.query('UPDATE movies SET title=$newTitle,poster_path=$newPosterPath,backdrop_path=$newBackdropPath WHERE original_name=$currentMovie', {
-        newTitle            : data.newTitle,
-        newPosterPath       : data.newPosterPath,
-        newBackdropPath     : data.newBackdropPath,
-        currentMovie        : data.currentMovie
-    },
-    function (err, rows) {
-        if(err){
-            console.log('DB error', err);
-        } else {
-            res.json('done');
-        }
+    //need to do something better than this every. single. time.
+    db.query('ALTER TABLE movies ADD COLUMN hidden string DEFAULT "false"', function () {
+        db.query('UPDATE movies SET title=$newTitle,poster_path=$newPosterPath,backdrop_path=$newBackdropPath,hidden=$hidden WHERE original_name=$currentMovie', {
+            newTitle            : data.newTitle,
+            newPosterPath       : data.newPosterPath,
+            newBackdropPath     : data.newBackdropPath,
+            hidden              : data.hidden,
+            currentMovie        : data.currentMovie
+        },
+        function (err, rows) {
+            if(err){
+                console.log('DB error', err);
+            } else {
+                res.json('done');
+            }
+        });
     });
 }
 
-
+exports.update = function(req, res, data) {
+    console.log("Updating");
+    metafetcher.updateMetadataOfMovie(data.currentMovie, data.newTitle, function (err) {
+        if (err) {
+            res.status(404).send();
+        } else {
+            res.status(200).send();
+        }
+    });
+}
 
 exports.playFile = function (req, res, platform, movieTitle){
     file_utils.getLocalFile(config.moviepath, movieTitle, function(err, file) {
@@ -128,6 +141,9 @@ exports.progress = function (req, res){
     if(movieTitle !== undefined && progression !== undefined){
         var progressionData = [movieTitle, progression, transcodingstatus];
         db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)', progressionData);
+        res.status(200).send();
+    } else {
+        res.status(500).send();
     }
 
 }
@@ -154,11 +170,12 @@ getMovies = function(req, res, metaType, serveToFrontEnd,getNewFiles){
         runtime             : String,
         overview            : String,
         cd_number           : String,
-        adult               : String
+        adult               : String,
+        hidden              : String
     },
     function(err, rows) {
         if(err){
-            db.query("CREATE TABLE IF NOT EXISTS movies (original_name TEXT PRIMARY KEY, title TEXT, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number TEXT, adult TEXT)");
+            db.query("CREATE TABLE IF NOT EXISTS movies (original_name TEXT PRIMARY KEY, title TEXT, poster_path VARCHAR, backdrop_path VARCHAR, imdb_id INTEGER, rating VARCHAR, certification VARCHAR, genre VARCHAR, runtime VARCHAR, overview TEXT, cd_number TEXT, adult TEXT, hidden TEXT)");
             console.log("DB error",err);
             serveToFrontEnd = true;
             if(getNewFiles === true){
