@@ -112,6 +112,16 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
         }, 450);
     }
 
+    var sck = io.connect();
+
+    sck.on('playMovie', function (data) {
+        $scope.$apply(function() {
+            $scope.playing = true;
+        });
+        videoJSHandler("player", data, data.url, null, "AirPlay","/movies", 5000, "movie");
+        sck.emit('moviePlaying');
+    });
+
     var setupSocket = {
         async: function() {
             var promise = $http.get('/configuration/').then(function (response) {

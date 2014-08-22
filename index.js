@@ -325,20 +325,25 @@ app.post('/submitRemote', function(req, res){
 function incrementMACAddress(macAddress) {
     return (parseInt(macAddress.replace(/:/g,""), 16) + 1).toString(16).match(/.{2}/g).join(":")
 }
+    
 
-airplay.callbacks.video = function (port, url, position) {
-    console.log("video play");
-};
+function Device(socket) {
+    this.socket = socket;
+}
+Device.prototype.playMovie = function(url, data, callback) {
+    data.url = url;
+    this.socket.emit('playMovie', data);
+    // this.socket.on('moviePlaying', function() {
+        // console.log("PLaying MOVIe");
+        callback();
+    // });
+}
 
-require('getmac').getMac(function(err,macAddress){
-    if (err) throw err;
+var devices = [];
+
+devices.push(new Device());
 
 
-    airplay.server(7000, macAddress, {name: "Ben"});
-
-
-    airplay.server(7001, "b9:e8:56:30:b9:84", {name: "Bob"});
-});
 //Socket.io Server
 remoteControl.remoteControl();
 
@@ -355,16 +360,31 @@ var server = http.createServer(app);
 
 
 
+
+var nextAirPlayPort = 7000;
+var nextMACAddress = null;
 //sockets
 var io = require('socket.io').listen(server);
 io.set('log level', 1);
 io.sockets.on('connection', function (socket) {
     console.log('user connected');
+    var newDevice = new Device(socket);
+    var airPlayServer;
+    function setUpAirPlay(err, macAddress) {
+        airPlayServer = airplay.server(nextAirPlayPort++, macAddress, {}, newDevice);
+        nextMACAddress = incrementMACAddress(macAddress);
+    }
+    if (nextMACAddress === null) {
+        require('getmac').getMac(setUpAirPlay);
+    } else {
+        setUpAirPlay(null, nextMACAddress);
+    }
     socket.on('disconnect', function() {
+        airPlayServer.stop();
+        devices.splice(devices.indexOf(newDevice), 1);
         console.log('user disconnected');
     });
 });
-
 
 //end sockets
 
