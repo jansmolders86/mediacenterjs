@@ -54,6 +54,19 @@ header, header * {
     background: #fb8521;
 }
 
+#show-playlist {
+    background: #fb8521;
+    margin: 0;
+    height: 100%;
+    margin-right: 10px;
+}
+#show-playlist i {
+    height: 100%;
+    line-height: 50px;
+    margin: 0 5px;
+    opacity: 1;
+}
+
 /** Library **/
 
 body,
@@ -63,7 +76,7 @@ body,
 
 .container-fluid{
     position: absolute;
-    top: 125px;
+    top: 60px;
     left: 0;
     right: 0;
     bottom: 0;
