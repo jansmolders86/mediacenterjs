@@ -26,9 +26,24 @@ header #search {
     height: 65px!important;
 }
 
+/*500 + 360px+music width*/
+@media (max-width:930px) {
+    header.side #search {
+        width: 50px;
+        padding: 15px;
+    }
+    header.side #search:focus {
+        width: 100%;
+        padding: 21px;
+    }
+    header.side #view-select {
+        right: 50px;
+    }
+}
+
 header.side {
-    padding-left:370px;
-    padding-right: 370px;
+    padding-left:360px;
+    padding-right: 360px;
 }
 header, header * {
     transition: none !important;
@@ -38,7 +53,7 @@ header, header * {
 #view-select {
     position: absolute;
     top: 0;
-    right: 300px;
+    right: 264px;
 }
 
 .view-select {
@@ -220,6 +235,12 @@ body,
     z-index:9;
 }
 
+@media (max-width: 600px) {
+    #playlist {
+        width: 100%;
+    }
+}
+
 #playlist.ng-hide {
     display: block!important;
     -webkit-transform: translateX(-100%);
@@ -262,26 +283,42 @@ li.track:hover{ background:#fff; }
 }
 #playlist .album.current ol li.current .play{ visibility:visible;}
 #playlist .album ol{ padding-left:0;}
-#playlist .remove{
+#playlist .remove {
     position: absolute;
     top: 0px;
-    left: 300px;
     color: #f5f5f5;
     font-size: 24px;
     z-index: 1;
     cursor: pointer;
     background: #3B3F40;
     padding: 10px 5px;
-    height: 44px;
-    width: 48px;
+    height: 48px;
+    width: 44px;
 }
-#playlist .remove.lonely {
+#playlist .list {
+    min-width: 344px;
+}
+#playlist .list img {
+    display: inline;
+}
+#playlist .list .remove {
+    position: relative;
+    top: 0;
+    left: 0;
+    vertical-align: top;
+    margin: 0;
+}
+#playlist .list .remove::before {
+    vertical-align: top;
+}
+#playlist .tracks .remove {
     height: 100%;
     padding: 5px;
     color: #e1e2e2;
+    right:0 !important;
     background: none;
 }
-#playlist .remove.lonely:hover {
+#playlist .tracks .remove:hover {
     color:#cfd0d0;
 }
 #playlist .album img{ z-index: 2; }
@@ -358,13 +395,10 @@ li.track:hover{ background:#fff; }
     cursor:pointer;
 }
 
-#player .nav{width: 400px; margin-left:20px; float:left; margin-top:20px;}
-
-#player .left{float:left;}
-#player .middle{float: left; margin-left:90px;}
-#player .right{float:right;}
-#player .outer-right{float:right; margin-left:90px; }
-
+#player .nav{ margin-left:20px; float:left; margin-top:20px; text-align: justify;}
+#player .nav i {
+    margin: 10px;
+}
 .track-number{
     color:#D1D1D1;
     display:inline-block;

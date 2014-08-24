@@ -33,7 +33,7 @@ block body
                 .col-md-12
                     a.backlink(href="/") &#xe113;
                     h1.hidden-xs #{lingua.music}
-                    div#view-select(ng-class="{side: player.playlist.length > 0  && playlist.Visible}")
+                    div#view-select
                         .view-select(ng-click="view = 'albums'", ng-init="view = 'albums'", ng-hide="view === 'albums'") Show albums
                         .view-select(ng-click="view = 'tracks'", ng-hide="view === 'tracks'") Show Tracks
                     input#search.pull-right(ng-model="query", type="text", placeholder="Search", ng-show="albums")
@@ -103,17 +103,12 @@ block body
                 span.album-artist {{player.currentTrack.album.artist}}
                 span.album-track {{player.currentTrack.title}}
 
-        ul.nav
-            li.left
+        div.nav
                 i.control.backward.icon(ng-click="player.previous()")
-            li.middle
                 i.control.play.icon(ng-click="player.play()",ng-hide="player.playing")
-            li.middle
                 i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
-            li.outer-right
-                i.control.fullscreen.icon(ng-click="fullscreen()")
-            li.right
                 i.control.forward.icon(ng-click="player.next()")
+                i.control.fullscreen.icon(ng-click="fullscreen()")
 
 
     script(type="text/ng-template", id="editModal.html")

@@ -187,6 +187,21 @@ header #search {
     right:0;
     top:0;
     height: 76px!important;
+    -webkit-transition: 0.5s all ease-in-out !important;
+}
+
+@media (max-width: 500px) {
+    header #search {
+        width: 50px;
+        padding: 15px;
+    }
+    header #search:focus {
+        width: 100%;
+        padding: 21px;
+    }
+    header #view-select {
+        right: 50px;
+    }
 }
 header  #filter{
     position: absolute;
