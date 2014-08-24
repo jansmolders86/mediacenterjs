@@ -337,6 +337,26 @@ Device.prototype.playMovie = function(url, data, callback) {
         // console.log("PLaying MOVIe");
         callback();
     // });
+    var socket = this.socket;
+    return {
+        stop: function() {
+            socket.emit('stopMovie');
+        },
+        pause: function() {
+            socket.emit('pauseMovie');
+        },
+        resume: function() {
+            socket.emit('resumeMovie');
+        },
+        scrub: function(pos) {
+            socket.emit('srubMovie', {position: pos});
+        },
+        getCurrentPosition: function(callback) {
+            socket.on('currentPosition', function (data) {
+                callback(data.position);
+            });
+        }
+    }
 }
 
 var devices = [];
@@ -357,9 +377,6 @@ app.set('port', process.env.PORT || 3000);
 // Open App socket
 
 var server = http.createServer(app);
-
-
-
 
 var nextAirPlayPort = 7000;
 var nextMACAddress = null;
