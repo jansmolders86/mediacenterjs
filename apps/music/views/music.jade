@@ -43,18 +43,20 @@ block body
                 i.left.double.angle.icon.pull-right(ng-click="playlist.Visible = false")
 
             ul
-                li.album(ng-repeat="album in player.playlist", ng-switch="album._type" ,ng-class="{current: player.current.itemIdx == $index}")
+                li.album(draggable="true", ng-on-drag-over="$event.preventDefault()", ng-on-drop="onDrop($index)", ng-on-drag-begin="startDrag($index)" ng-repeat="album in player.playlist", ng-switch="album._type" ,ng-class="{current: player.current.itemIdx == $index}")
                     div(ng-switch-when="track")
                         ol.tracks
                             li.track(ng-class="{current: player.current.itemIdx == $index}", ng-click="player.play(0, $index)", style="position: relative;")
                                 i.play.icon
                                 span.track-number {{album.track}}
                                 span.track-title {{album.title}}
-                                i.remove.circle.icon.lonely(ng-click="player.playlist.remove(album)")
+                                i.remove.circle.icon(ng-click="player.playlist.remove(album)")
                     div(ng-switch-when="album")
-                        .list(ng-click="player.playlist.remove(album)")
+                        .list
                             img(ng-src="{{album.cover}}")
-                            i.remove.circle.icon
+                            div.controls
+                                i.remove.circle.icon
+                                i.reorder.icon(ng-show="player.playlist.length > 1")
                         .album-info
                             span.album-title {{album.album}}
                             span.album-artist {{album.artist}}

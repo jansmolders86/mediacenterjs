@@ -111,7 +111,7 @@ body,
     width: 100%;
 }
 .side {
-    padding-left:370px;
+    padding-left:360px;
 }
 
 
@@ -235,6 +235,13 @@ body,
     z-index:9;
 }
 
+@media (max-width: 620px) {
+    .container-fluid {
+        padding-left: 5px;
+        padding-right: 0;
+    }
+}
+
 @media (max-width: 600px) {
     #playlist {
         width: 100%;
@@ -283,7 +290,13 @@ li.track:hover{ background:#fff; }
 }
 #playlist .album.current ol li.current .play{ visibility:visible;}
 #playlist .album ol{ padding-left:0;}
-#playlist .remove {
+#playlist .controls {
+    display: inline-block;
+    width: 44px;
+    vertical-align: top;
+    margin-left: -4px;
+}
+#playlist .list .icon {
     position: absolute;
     top: 0px;
     color: #f5f5f5;
@@ -295,20 +308,21 @@ li.track:hover{ background:#fff; }
     height: 48px;
     width: 44px;
 }
-#playlist .list {
-    min-width: 344px;
-}
 #playlist .list img {
     display: inline;
+    width: calc(100% - 44px);
 }
-#playlist .list .remove {
+#playlist .list .controls .reorder {
+    background: rgba(58,62,63,0.82);
+}
+#playlist .list .controls .icon {
     position: relative;
     top: 0;
     left: 0;
     vertical-align: top;
     margin: 0;
 }
-#playlist .list .remove::before {
+#playlist .list .controls .icon::before {
     vertical-align: top;
 }
 #playlist .tracks .remove {

@@ -21,6 +21,22 @@
 
     var musicApp = angular.module('musicApp', ['ui.bootstrap']);
 
+    function createDropDirective(ngevent, jsevent) {
+        musicApp.directive(ngevent, function ($parse) {
+            return function ($scope, element, attrs) {
+                var expressionHandler = $parse(attrs[ngevent]);
+                element.on(jsevent, function(ev) {
+                    $scope.$apply(function() {
+                        expressionHandler($scope, {$event:ev});
+                    });
+                });
+        }
+        });
+    }
+    createDropDirective('ngOnDragBegin', 'dragstart');
+    createDropDirective('ngOnDrop', 'drop');
+    createDropDirective('ngOnDragOver', 'dragover');
+
     window.musicCtrl = function($scope, $http, player, $modal, audio) {
         $scope.player = player;
         $scope.focused = 0;
@@ -38,7 +54,17 @@
                 });
             });
         });
-
+        $scope.draggedIndex = null;
+        $scope.startDrag = function(index) {
+            $scope.draggedIndex = index;
+        };
+        $scope.onDrop = function(index) {
+            if ($scope.draggedIndex != null) {
+                var temp = $scope.player.playlist[index];
+                $scope.player.playlist[index] = $scope.player.playlist[$scope.draggedIndex];
+                $scope.player.playlist[$scope.draggedIndex] = temp;
+            }
+        }
         $scope.changeSelected = function(album){
             $scope.focused = $scope.albums.indexOf(album);
         }
