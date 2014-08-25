@@ -142,10 +142,6 @@ header{
     float:left;
     background:#3B3F40;
     overflow:hidden;
-    -webkit-animation: glide-in 0.5s;
-    -moz-animation: glide-in 0.5s;
-    -o-animation: glide-in 0.5s;
-    animation: glide-in 0.5s;
     border-bottom: 5px solid #fb8521;
 }
 .homepage{overflow:hidden;}

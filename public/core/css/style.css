@@ -151,10 +151,6 @@ header,
     float:left;
     background:#fff;
     overflow:hidden;
-    -webkit-animation: glide-in 0.5s;
-    -moz-animation: glide-in 0.5s;
-    -o-animation: glide-in 0.5s;
-    animation: glide-in 0.5s;
     background:#fff;
     -moz-box-shadow: 0px 0px 0px 1px;
     box-shadow: 0px 0px 0px 1px;
