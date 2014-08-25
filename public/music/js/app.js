@@ -43,6 +43,31 @@
         $scope.serverMessage = 0;
         $scope.serverStatus= '';
         $scope.className = "normal";
+        $scope.itemStyle = {};
+        //TODO: in a more angular way
+        function layout() {
+            var width = $("#library").width();
+            //{lg: 270, md: 260, sm: 240, xs: 200}
+            var targetWidth = 200;
+            if (width >= 768) {
+                targetWidth = 240;
+            }
+            if (width >= 992) {
+                targetWidth = 260;
+            }
+            if (width >= 1200) {
+                targetWidth = 270;
+            }
+            var itemsCanFit = width/targetWidth>>0;//Math.floor but quicker
+            var itemWidth = 100/(itemsCanFit + 1);
+            return itemWidth + "%";
+            
+            
+        }
+        $scope.itemStyle.width = layout();
+        $(window).on('resize', function() {
+            $(".row-tracks").css("width", layout());
+        });
 
         $http.get('/music/load').success(function(data) {
             $scope.albums = data;
@@ -53,6 +78,7 @@
                      track._type = 'track';
                 });
             });
+
         });
         $scope.draggedIndex = null;
         $scope.startDrag = function(index) {

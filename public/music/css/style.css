@@ -114,7 +114,10 @@ body,
     padding-left:360px;
 }
 
-
+.album-wrapper {
+    max-width: 270px;
+    float: left;
+}
 #library .thumbnail{
     position:relative;
     cursor:pointer;
@@ -153,12 +156,18 @@ body,
     left:0;
 }
 
+.row-tracks {
+    padding-left: 5px;
+    padding-right: 5px;
+    -webkit-transition: none;
+    transition: none;
+}
+
 #library .thumbnail .caption p{
     padding:9px;
     margin:0;
 }
 
-#library .album-wrapper{width:270px;}
 .rowtracks { width: 100% !important; float: left;}
 #library.side .thumbnail img,
 #library.side .thumbnail span{
@@ -233,13 +242,6 @@ body,
     left:0px;
     bottom: 160px;
     z-index:9;
-}
-
-@media (max-width: 620px) {
-    .container-fluid {
-        padding-left: 5px;
-        padding-right: 0;
-    }
 }
 
 @media (max-width: 600px) {
