@@ -170,7 +170,8 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
             "runtime":runtime,
             "overview":overview,
             cdNumber: movieInfo.cd,
-            "adult": adult
+            "adult": adult,
+            hidden: "false"
         };
 
         storeMetadataInDatabase(metadata, function(){

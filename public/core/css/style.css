@@ -151,10 +151,6 @@ header,
     float:left;
     background:#fff;
     overflow:hidden;
-    -webkit-animation: glide-in 0.5s;
-    -moz-animation: glide-in 0.5s;
-    -o-animation: glide-in 0.5s;
-    animation: glide-in 0.5s;
     background:#fff;
     -moz-box-shadow: 0px 0px 0px 1px;
     box-shadow: 0px 0px 0px 1px;
@@ -187,6 +183,21 @@ header #search {
     right:0;
     top:0;
     height: 76px!important;
+    -webkit-transition: 0.5s all ease-in-out !important;
+}
+
+@media (max-width: 500px) {
+    header #search {
+        width: 50px;
+        padding: 15px;
+    }
+    header #search:focus {
+        width: 100%;
+        padding: 21px;
+    }
+    header #view-select {
+        right: 50px;
+    }
 }
 header  #filter{
     position: absolute;
@@ -282,6 +293,85 @@ a.backlink:hover{
     border-radius: 0.325em 0.325em 0.325em 0.325em;
     padding:20px;
 }
+.modal-dialog {
+    min-width: 768px !important;
+    width: 70%;
+}  
+    
+@media (max-width: 620px) {
+    .modal-dialog {
+        margin: 0;
+        width: 100% !important;
+        min-width: 0px !important;
+        max-height: 100%;
+    }
+    .modal-content {
+        border-radius: 0px;
+        border: none;
+    }
+    
+    .modal-dialog .modal-footer {
+        padding: 20px 5px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-dialog {
+        width: auto !important;
+        min-width: 0px !important;
+    }
+    .modal-header {
+        padding: 10px;
+    }
+    .modal-body {
+        padding: 0 20px !important;
+    }
+    .modal-header h1 {
+        margin: 0;
+    }
+    .modal-content {
+        position: relative;
+    }
+
+}
+/*at 860 the modal dialog gets bigger than 600
+    (really I am trying to target a modal dialog 600px wide)
+*/
+@media (max-width: 860px) {
+    .modal-dialog .form-horizontal .form-group {
+        margin: 0 !important;
+    }
+    .modal-content .form-horizontal .form-group input[type=text] {
+        width: 100%;
+    }
+    .modal-body {
+        padding: 0 40px;
+    }
+    .modal-content .form-horizontal .form-group input[type=checkbox] {
+        float: right;
+        margin-right: 20px;
+    }
+    .modal-dialog  .form-horizontal .form-group label {
+        width: auto;
+    }
+    .modal-dialog  .form-horizontal .form-group label + input[type=text] {
+        width: 100%;
+    }
+}
+
+@media (min-width: 860px) {
+    .modal-dialog .col-md-offset-1 {
+        margin-left: 4.3333%;
+    }
+    .modal-dialog .col-md-3 {
+        width: 25%;
+    }
+    .modal-dialog .col-md-7 {
+        width: 64.3333%;
+    }
+}
+
 
 
 /* Screen saver */
@@ -501,11 +591,21 @@ em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red;
 
 /* Checkboxes */
 
-.type-checkbox.pretty{background: url(img/checkbox.png) no-repeat;}
-.type-checkbox.pretty{background-position: 0 -5px;}
-.type-checkbox.pretty.has-focus{background-position: 0 -36px;}
-.type-checkbox.pretty.checked{background-position: 0 -99px;}
-.type-checkbox.pretty.checked.has-focus{background-position: 0 -66px;}
+input[type=checkbox].icon:checked::before {
+    content: '\f046';
+}
+input[type=checkbox].icon::before {
+    content: '\f096';
+    font-family: Icons;
+    visibility: visible;
+    font-size: 2em;
+    font-size: 2.3em;
+    margin-top: 10px;
+    display: block;
+}
+input[type=checkbox].icon {
+    visibility: hidden;
+}
 
 /**** Radio buttons ****/
 

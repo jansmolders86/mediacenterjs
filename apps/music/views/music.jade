@@ -16,46 +16,62 @@ block additional_scripts
     script(src="/music/js/remote.js")
     script(src="/core/js/plugins/jquery/jquery.slimscroll.min.js")
     script.
-        // $(function(){
-        //     var isTouch = "ontouchstart" in document.documentElement;
-        //     if(!isTouch){
-        //         $('#inner-playlist').slimScroll({
-        //             height: '100%'
-        //         });
-        //     }
-        // });
+         $(function(){
+             var isTouch = "ontouchstart" in document.documentElement;
+             if(!isTouch){
+                 $('#inner-playlist').slimScroll({
+                     height: '100%'
+                 });
+             }
+         });
 block body
-    header(ng-class="{side: player.playlist.length > 0}")
+    header(ng-init="playlist.Visible = true", ng-class="{side: player.playlist.length > 0 && playlist.Visible}")
+        h1.pull-left#show-playlist(ng-hide="playlist.Visible")
+            i.right.double.angle.icon.pull-left(ng-click="playlist.Visible = true")
         .container
             .row
                 .col-md-12
                     a.backlink(href="/") &#xe113;
                     h1.hidden-xs #{lingua.music}
-
+                    div#view-select
+                        .view-select(ng-click="view = 'albums'", ng-init="view = 'albums'", ng-hide="view === 'albums'") Show albums
+                        .view-select(ng-click="view = 'tracks'", ng-hide="view === 'tracks'") Show Tracks
                     input#search.pull-right(ng-model="query", type="text", placeholder="Search", ng-show="albums")
-    #playlist(ng-show="player.playlist.length > 0", ng-cloak)
+    #playlist(ng-show="player.playlist.length > 0 && playlist.Visible", ng-cloak)
         #inner-playlist
             h2 Playlist
+                i.left.double.angle.icon.pull-right(ng-click="playlist.Visible = false")
+
             ul
-                li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
-                    .list( ng-click="player.playlist.remove(album)")
-                        img(ng-src="{{album.posterURL}}")
-                        i.remove.circle.icon
-                    .album-info
-                        span.album-title {{album.title}}
-                        span.album-artist {{album.artist.name}}
-                        span.album-year(ng-show="album.year !== 0") {{album.year}}
-                    ol.tracks
-                        li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
-                            i.play.icon
-                            span.track-number {{track.track}}
-                            span.track-title {{track.title}}
+                li.album(draggable="true", ng-on-drag-over="$event.preventDefault()", ng-on-drop="onDrop($index)", ng-on-drag-begin="startDrag($index)" ng-repeat="album in player.playlist", ng-switch="album._type" ,ng-class="{current: player.current.itemIdx == $index}")
+                    div(ng-switch-when="track")
+                        ol.tracks
+                            li.track(ng-class="{current: player.current.itemIdx == $index}", ng-click="player.play(0, $index)", style="position: relative;")
+                                i.play.icon
+                                span.track-number {{album.track}}
+                                span.track-title {{album.title}}
+                                i.remove.circle.icon(ng-click="player.playlist.remove(album)")
+                    div(ng-switch-when="album")
+                        .list
+                            img(ng-src="{{album.posterURL}}")
+                            div.controls
+                                i.remove.circle.icon
+                                i.reorder.icon(ng-show="player.playlist.length > 1")
+                        .album-info
+                            span.album-title {{album.title}}
+                            span.album-artist {{album.artist.name}}
+                            span.album-year(ng-show="album.year !== 0") {{album.year}}
+                        ol.tracks
+                            li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.subItemIdx == $index}", ng-click="player.play($index, $parent.$index)")
+                                i.play.icon
+                                span.track-number {{track.track}}
+                                span.track-title {{track.title}}
 
     .container-fluid(ng-class="{bottom: player.playlist.length > 0}")
-            section#library(ng-class="{side: player.playlist.length > 0}")
-                .row
-                    .col-xs-6.col-sm-4.col-md-2.album-wrapper(ng-repeat="album in albums | filter:query", ng-mouseover="changeSelected(album)")
-                        .thumbnail(ng-class="{current: focused == $index }", ng-click="player.playlist.add(album)")
+            section#library(ng-class="{side: player.playlist.length > 0  && playlist.Visible}")
+                div.pull-left.row-tracks(ng-repeat="album in albums | filter:query", ng-class="{rowtracks: view == 'tracks'}", ng-style="itemStyle")
+                    .album-wrapper(ng-mouseover="changeSelected(album)")
+                        .thumbnail(ng-class="{current: focused == $index }", ng-click="player.playlist.add(album); playlist.Visible = true")
                             i.circular.inverted.edit.icon(ng-click="open(album); $event.stopPropagation();")
                             img(ng-src="{{album.posterURL}}")
                             .caption
@@ -63,6 +79,10 @@ block body
                                     span.album-title {{album.title}}
                                     span.album-artist {{album.artist.name}}
                                     span.album-year(ng-show="album.year !== 0") {{album.year}}
+                    ol.tracks(ng-show="view == 'tracks'")
+                        li.track(ng-repeat="track in album.tracks", ng-click="player.playlist.add(track); playlist.Visible = true")
+                            span.track-number {{track.track}}
+                            span.track-title {{track.title}}
 
             h2.loading.col-xs-12(ng-show="!albums") #{lingua.loading}
                 .progress-pie-chart(data-percent="{{serverMessage}}", ng-class="{gt50: serverMessage > 50}", ng-show="serverMessage > 0")
@@ -79,22 +99,17 @@ block body
             span#progress.bar
 
         #playing-info.col-xs-12.col-md-5
-            img.center-block.img-reponsive.hidden-xs(ng-src="{{player.currentAlbum.cover}}")
+            img.center-block.img-reponsive.hidden-xs(ng-src="{{player.currentTrack.album.cover}}")
             .info
-                span.album-artist {{player.currentAlbum.artist}}
+                span.album-artist {{player.currentTrack.album.artist}}
                 span.album-track {{player.currentTrack.title}}
 
-        ul.nav
-            li.left
+        div.nav
                 i.control.backward.icon(ng-click="player.previous()")
-            li.middle
                 i.control.play.icon(ng-click="player.play()",ng-hide="player.playing")
-            li.middle
                 i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
-            li.outer-right
-                i.control.fullscreen.icon(ng-click="fullscreen()")
-            li.right
                 i.control.forward.icon(ng-click="player.next()")
+                i.control.fullscreen.icon(ng-click="fullscreen()")
 
 
     script(type="text/ng-template", id="editModal.html")
@@ -104,16 +119,11 @@ block body
             .form-horizontal
                 .row
                     .form-group
-                        img.col-md-offset-1(ng-src="{{edit.thumbnail}}")
-                    .form-group
                         label.col-md-3.col-md-offset-1 Thumbnail url path
-                        input.col-md-7(type="text",name="thumbnail",ng-model="edit.posterURL",required,ng-value="current.cover")
-                    .form-group
-                        label.col-md-3.col-md-offset-1 Artist
-                        input.col-md-7(type="text",name="artist",ng-model="edit.artist.name",required,ng-value="current.artist")
+                        input.col-md-7(type="text",name="thumbnail",ng-model="current.posterURL",required)
                     .form-group
                         label.col-md-3.col-md-offset-1 Album title
-                        input.col-md-7(type="text",name="title",ng-model="edit.title",required,ng-value="current.album")
+                        input.col-md-7(type="text",name="title",ng-model="current.title",required)
         .modal-footer
-            input.btn(type="submit",value="submit", ng-click="editItem()",required)
-            button.btn(ng-click="cancel()") Cancel
+            input.btn(type="submit",value="Submit", ng-click="editItem()",required)
+            button.btn(ng-click="$dismiss()") Cancel

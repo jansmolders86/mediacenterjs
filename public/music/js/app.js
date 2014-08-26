@@ -21,17 +21,76 @@
 
     var musicApp = angular.module('musicApp', ['ui.bootstrap']);
 
+    function createDropDirective(ngevent, jsevent) {
+        musicApp.directive(ngevent, function ($parse) {
+            return function ($scope, element, attrs) {
+                var expressionHandler = $parse(attrs[ngevent]);
+                element.on(jsevent, function(ev) {
+                    $scope.$apply(function() {
+                        expressionHandler($scope, {$event:ev});
+                    });
+                });
+        }
+        });
+    }
+    createDropDirective('ngOnDragBegin', 'dragstart');
+    createDropDirective('ngOnDrop', 'drop');
+    createDropDirective('ngOnDragOver', 'dragover');
+
     window.musicCtrl = function($scope, $http, player, $modal, audio) {
         $scope.player = player;
         $scope.focused = 0;
         $scope.serverMessage = 0;
         $scope.serverStatus= '';
         $scope.className = "normal";
+        $scope.itemStyle = {};
+        //TODO: in a more angular way
+        function layout() {
+            var width = $("#library").width();
+            //{lg: 270, md: 260, sm: 240, xs: 200}
+            var targetWidth = 200;
+            if (width >= 768) {
+                targetWidth = 240;
+            }
+            if (width >= 992) {
+                targetWidth = 260;
+            }
+            if (width >= 1200) {
+                targetWidth = 270;
+            }
+            var itemsCanFit = width/targetWidth>>0;//Math.floor but quicker
+            var itemWidth = 100/(itemsCanFit + 1);
+            return itemWidth + "%";
+            
+            
+        }
+        $scope.itemStyle.width = layout();
+        $(window).on('resize', function() {
+            $(".row-tracks").css("width", layout());
+        });
 
         $http.get('/music/load').success(function(data) {
             $scope.albums = data;
-        });
+            angular.forEach($scope.albums, function(album) {
+                album._type = 'album';
+                angular.forEach(album.tracks, function(track) {
+                     track.album = album;
+                     track._type = 'track';
+                });
+            });
 
+        });
+        $scope.draggedIndex = null;
+        $scope.startDrag = function(index) {
+            $scope.draggedIndex = index;
+        };
+        $scope.onDrop = function(index) {
+            if ($scope.draggedIndex != null) {
+                var temp = $scope.player.playlist[index];
+                $scope.player.playlist[index] = $scope.player.playlist[$scope.draggedIndex];
+                $scope.player.playlist[$scope.draggedIndex] = temp;
+            }
+        }
         $scope.changeSelected = function(album){
             $scope.focused = $scope.albums.indexOf(album);
         }
@@ -57,6 +116,14 @@
             });
         }
 
+        function copyOmit(obj, omitkeys) {
+            var copy = angular.copy(obj);
+            for (var i in omitkeys) {
+                delete copy[omitkeys[i]];
+            }
+            return copy;
+        }
+
         var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
             $scope.original = current;
             $scope.current = angular.copy(current);
@@ -64,7 +131,7 @@
             $scope.editItem = function(){
                 $http({
                     method: "post",
-                    data: $scope.current,
+                    data: copyOmit($scope.current, ['artist', 'tracks']),
                     url: "/music/edit"
                 }).success(function(data, status, headers, config) {
                     angular.copy($scope.current, $scope.original);
@@ -133,36 +200,37 @@
         var player,
             playlist = [],
             paused = false,
-            currentAlbum =  '',
-            currentTrack =  '',
+            currentTrack = null,
             current = {
-                album: 0,
-                track: 0
+                itemIdx: -1,
+                subItemIdx: -1
             };
 
         player = {
             playlist: playlist,
             current: current,
-            currentAlbum: '',
-            currentTrack: '',
+            currentTrack: currentTrack,
             playing: false,
-            play: function(track, album) {
+            play: function(subItemIdx, itemIdx) {
                 if (!playlist.length){
                     return;
                 }
-
-                if (angular.isDefined(track)){
-                    current.track = track;
+                if (angular.isDefined(itemIdx)) {
+                   current.itemIdx = itemIdx;
                 }
-                if (angular.isDefined(album)){
-                    current.album = album;
+                if (angular.isDefined(subItemIdx)) {
+                    current.subItemIdx = subItemIdx;
                 }
 
                 if (!paused){
-                    player.currentAlbum = playlist[current.album];
-                    player.currentTrack = playlist[current.album].tracks[current.track];
+                    var currentItem = playlist[current.itemIdx];
+                    if (currentItem._type === 'track') {
+                        player.currentTrack = currentItem;
+                    } else if (currentItem._type === 'album') {
+                        player.currentTrack = currentItem.tracks[current.subItemIdx];
+                    }
 
-                    audio.src = 'music/'+playlist[current.album].tracks[current.track].filename +'/play/';
+                    audio.src = 'music/'+player.currentTrack.filename +'/play/';
                 }
                 audio.play();
                 player.playing = true;
@@ -177,20 +245,27 @@
             },
             reset: function() {
                 player.pause();
-                current.album = 0;
-                current.track = 0;
+                current.itemIdx = -1;
+                current.subItemIdx = -1;
             },
             next: function() {
                 if (!playlist.length){
                     return;
                 }
                 paused = false;
-                if (playlist[current.album].tracks.length > (current.track + 1)) {
-                    current.track++;
-                } else {
-                    current.track = 0;
-                    current.album = (current.album + 1) % playlist.length;
+
+                var currentItem = playlist[current.itemIdx];
+                if (currentItem._type ==='track') {
+                    current.itemIdx++;
+                } else if (currentItem._type === 'album') {
+                    if (current.subItemIdx + 1 >= currentItem.tracks.length) {
+                        current.itemIdx++;
+                        current.subItemIdx = 0;
+                    } else {
+                        current.subItemIdx++;
+                    }
                 }
+                
                 if (player.playing) player.play();
             },
             previous: function() {
@@ -198,13 +273,19 @@
                     return;
                 }
                 paused = false;
-                if (current.track > 0) {
-                    current.track--;
+                var currentItem = playlist[current.itemIdx];
+                if (current.subItemIdx > 0) {
+                    current.subItemIdx--;
                 } else {
-                    current.album = (current.album - 1 + playlist.length) % playlist.length;
-                    current.track = playlist[current.album].tracks.length - 1;
+                    current.itemIdx--;
+                    var newItem = playlist[current.itemIdx];
+                    if (newItem._type === 'track') {
+                        current.subItemIdx = 0;
+                    } else if (newItem._type === 'album') {
+                        current.subItemIdx = newItem.tracks.length - 1;
+                    }
                 }
-                    if (player.playing) player.play();
+                if (player.playing) player.play();
             }
         };
 
@@ -217,7 +298,7 @@
 
         playlist.remove = function(album) {
             var index = playlist.indexOf(album);
-            if (index == current.album){
+            if (index == current.itemIdx){
                 player.reset();
             }
             playlist.splice(index, 1);

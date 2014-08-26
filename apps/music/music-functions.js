@@ -31,6 +31,7 @@ exports.loadItems = function (req, res, serveToFrontEnd) {
             metafetcher.loadData(req, res, true);
         } else {
             async.map(albums, function (album, callback) {
+                console.log(album.toObject(false, true));
                 var newAlbum = album.toJSON();
                 async.parallel([
                     function(pcallback) {
@@ -73,14 +74,15 @@ exports.playTrack = function(req, res, track, album){
 };
 
 exports.edit = function(req, res, data){
-    // var album = new Album(data);
-    //  function (err, updated) {
-    //      if(err){
-    //         console.log('DB error', err);
-    //      } else {
-    //         res.status(200).json(updated);
-    //      }
-    //  });
+    var album = new Album(data);
+     album.save(function (err, updated) {
+         if(err){
+            console.log('DB error', err);
+         } else {
+            console.log("updted");
+            res.status(200).json(updated);
+         }
+     });
 }
 
 /** Private functions **/

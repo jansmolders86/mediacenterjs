@@ -29,7 +29,6 @@ var fs = require('fs.extra')
 exports.loadItems = function (req, res, serveToFrontEnd){
     var metaType = "movie";
     var getNewFiles = true;
-
     if(serveToFrontEnd === false){
         fetchMovieData(req, res, metaType, serveToFrontEnd);
     } else {
