@@ -39,11 +39,11 @@ block body
             ul
                 li.album(ng-repeat="album in player.playlist", ng-class="{current: player.current.album == $index}")
                     .list( ng-click="player.playlist.remove(album)")
-                        img(ng-src="{{album.cover}}")
+                        img(ng-src="{{album.posterURL}}")
                         i.remove.circle.icon
                     .album-info
-                        span.album-title {{album.album}}
-                        span.album-artist {{album.artist}}
+                        span.album-title {{album.title}}
+                        span.album-artist {{album.artist.name}}
                         span.album-year(ng-show="album.year !== 0") {{album.year}}
                     ol.tracks
                         li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.track == $index}", ng-click="player.play($index, $parent.$index)")
@@ -57,11 +57,11 @@ block body
                     .col-xs-6.col-sm-4.col-md-2.album-wrapper(ng-repeat="album in albums | filter:query", ng-mouseover="changeSelected(album)")
                         .thumbnail(ng-class="{current: focused == $index }", ng-click="player.playlist.add(album)")
                             i.circular.inverted.edit.icon(ng-click="open(album); $event.stopPropagation();")
-                            img(ng-src="{{album.cover}}")
+                            img(ng-src="{{album.posterURL}}")
                             .caption
                                 p
-                                    span.album-title {{album.album}}
-                                    span.album-artist {{album.artist}}
+                                    span.album-title {{album.title}}
+                                    span.album-artist {{album.artist.name}}
                                     span.album-year(ng-show="album.year !== 0") {{album.year}}
 
             h2.loading.col-xs-12(ng-show="!albums") #{lingua.loading}
@@ -107,10 +107,10 @@ block body
                         img.col-md-offset-1(ng-src="{{edit.thumbnail}}")
                     .form-group
                         label.col-md-3.col-md-offset-1 Thumbnail url path
-                        input.col-md-7(type="text",name="thumbnail",ng-model="edit.thumbnail",required,ng-value="current.cover")
+                        input.col-md-7(type="text",name="thumbnail",ng-model="edit.posterURL",required,ng-value="current.cover")
                     .form-group
                         label.col-md-3.col-md-offset-1 Artist
-                        input.col-md-7(type="text",name="artist",ng-model="edit.artist",required,ng-value="current.artist")
+                        input.col-md-7(type="text",name="artist",ng-model="edit.artist.name",required,ng-value="current.artist")
                     .form-group
                         label.col-md-3.col-md-offset-1 Album title
                         input.col-md-7(type="text",name="title",ng-model="edit.title",required,ng-value="current.album")

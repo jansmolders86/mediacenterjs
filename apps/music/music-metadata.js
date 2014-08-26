@@ -28,13 +28,17 @@ var dblite = require('dblite'),
     mm = require('musicmetadata'),
     album_title_cleaner = require('../../lib/utils/title-cleaner'),
     socket = require('../../lib/utils/setup-socket'),
-    io = socket.io;
+    io = socket.io,
+    dbschema = require('../../lib/utils/database-schema'),
+    Album = dbschema.Album,
+    Artist = dbschema.Artist,
+    Track = dbschema.Track;
 
 var config = configuration_handler.initializeConfiguration();
 
 /* Constants */
 
-var SUPPORTED_FILETYPES = "mp3";
+var SUPPORTED_FILETYPES = "m4a";
 var start = new Date();
 var nrScanned = 0;
 var totalFiles = 0;
@@ -46,8 +50,6 @@ var noResult = {
 var database = require('../../lib/utils/database-connection');
 var db = database.db;
 
-db.query("CREATE TABLE IF NOT EXISTS albums (album TEXT PRIMARY KEY, artist TEXT, year INTEGER, genre TEXT, cover VARCHAR)");
-db.query("CREATE TABLE IF NOT EXISTS tracks (title TEXT PRIMARY KEY, track INTEGER, album TEXT, artist TEXT, year INTEGER, genre TEXT, filename TEXT, filepath TEXT)");
 
 /* Public Methods */
 
@@ -109,11 +111,11 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
 
     parser.on('metadata', function(result) {
         if(result){
-            var title       = (result.title)        ? result.title.replace(/\\/g, '') : ''
-                , track     = (result.track.no)     ? result.track.no : ''
-                , album     = (result.album)        ? result.album.replace(/\\/g, '') : ''
+            var trackName       = (result.title)        ? result.title.replace(/\\/g, '') : ''
+                , trackNo = (result.track.no)     ? result.track.no : ''
+                , albumName = (result.album)        ? result.album.replace(/\\/g, '') : ''
                 , genre     = 'Unknown'
-                , artist    = (result.artist[0])    ? result.artist[0].replace(/\\/g, '') : ''
+                , artistName= (result.artist[0])    ? result.artist[0].replace(/\\/g, '') : ''
                 , year      = (result.year)         ? result.year : 0;
 
 
@@ -125,26 +127,42 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
             }
 
 
-            var filename = path.basename(file);
-            // If new track, store in database
-            var trackMetadata =  [title,track, album, artist, year, genre, filename, file];
-            storeTrackInDB(trackMetadata, function(result){
 
-                // Get cover from LastFM
-                getAdditionalDataFromLastFM(album, artist, function(cover){
+            // Get cover from LastFM
+            getAdditionalDataFromLastFM(albumName, artistName, function(cover) {
+                if (cover === '' || cover === null) {
+                    cover = '/music/css/img/nodata.jpg';
+                }
+                var albumData = {
+                        'title' : albumName,
+                        'posterURL' : cover,
+                        'year'  : year
+                    };
+                var artistData = {
+                    'name' : artistName
+                }
+                Artist.findOrCreate({
+                    where: artistData
+                }, artistData, function (err, artist) {
+                    albumData.artistId = artist.id;
+                    Album.findOrCreate({
+                        where: {'title' : albumName,
+                                'artistId' :  artist.id}
+                    }, albumData, function(err, album) {
+                        album.tracks.create({
+                            'title' : trackName,
+                            'order' : trackNo,
+                            'filePath' : file
+                        }, function(err, track) {
 
-                    if(cover === '' || cover === null){
-                        cover = '/music/css/img/nodata.jpg';
-                    }
-
-                    var albumMetadata = [album,artist,year,genre,cover];
-
-                    //Store Album in DB
-                    storeAlbumInDatabase(req, res, serveToFrontEnd,albumMetadata);
-                })
+                            console.log("Added:");
+                            console.log(album);
+                            console.log(artist);
+                            console.log(track); 
+                        });
+                    });
+                });
             });
-
-
         }
     });
     parser.on('done', function(err) {
@@ -157,8 +175,11 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
     });
 };
 
+
+
 storeTrackInDB = function(metadata, callback){
     db.query('INSERT OR REPLACE INTO tracks VALUES(?,?,?,?,?,?,?,?)', metadata);
+
     callback();
 }
 

@@ -60,7 +60,7 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
                 $modalInstance.dismiss();
             }).error(function() {
                 $scope.errorMessage = "Unable to save changes. Check server is running and try again.";
-            })
+            });
         };
         $scope.updateItem = function(){
             var title = $scope.current.title;

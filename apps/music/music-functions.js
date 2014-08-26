@@ -18,26 +18,54 @@
 var file_utils = require('../../lib/utils/file-utils')
     , metafetcher = require('../music/music-metadata')
     , config = require('../../lib/handlers/configuration-handler').getConfiguration()
-    , music_playback_handler = require('./music-playback-handler');
+    , music_playback_handler = require('./music-playback-handler')
+    , async = require('async');
 
     var database = require('../../lib/utils/database-connection');
     var db = database.db;
 
-exports.loadItems = function (req, res, serveToFrontEnd){
-    db.query("CREATE TABLE IF NOT EXISTS albums (album TEXT PRIMARY KEY, artist TEXT, year INTEGER, genre TEXT, cover VARCHAR)");
-    db.query("CREATE TABLE IF NOT EXISTS tracks (title TEXT PRIMARY KEY, track INTEGER, album TEXT, artist TEXT, year INTEGER, genre TEXT, filename TEXT, filepath TEXT)");
 
-    var metaType = "music";
-    var getNewFiles = true;
-    if(serveToFrontEnd === false){
-        fetchMusicData(req, res, metaType, serveToFrontEnd, getNewFiles);
-    } else if(serveToFrontEnd === undefined || serveToFrontEnd === null){
-        var serveToFrontEnd = true;
-        getCompleteCollection(req, res, metaType, serveToFrontEnd, getNewFiles);
-    } else {
-        console.log('lookup')
-        getCompleteCollection(req, res, metaType, serveToFrontEnd, getNewFiles);
-    }
+exports.loadItems = function (req, res, serveToFrontEnd) {
+    Album.all(function (err, albums) {
+       if (albums === null || albums.length === 0) {
+            metafetcher.loadData(req, res, true);
+        } else {
+            async.map(albums, function (album, callback) {
+                var newAlbum = album.toJSON();
+                async.parallel([
+                    function(pcallback) {
+                        album.tracks(function(err, tracks) {
+                            newAlbum.tracks = tracks;
+                            pcallback();
+                        });
+                    },
+                    function(pcallback) {
+                        album.artist(function(err, artist) {
+                            newAlbum.artist = artist;
+                            pcallback();
+                        });
+                    }
+                ], function () {
+                    callback(null, newAlbum)
+                });
+                
+            }, function(err, newAlbums) {
+                res.json(newAlbums);
+            });
+        }
+    });
+
+    // var metaType = "music";
+    // var getNewFiles = true;
+    // if(serveToFrontEnd === false){
+    //     fetchMusicData(req, res, metaType, serveToFrontEnd, getNewFiles);
+    // } else if(serveToFrontEnd === undefined || serveToFrontEnd === null){
+    //     var serveToFrontEnd = true;
+    //     getCompleteCollection(req, res, metaType, serveToFrontEnd, getNewFiles);
+    // } else {
+    //     console.log('lookup')
+    //     getCompleteCollection(req, res, metaType, serveToFrontEnd, getNewFiles);
+    // }
 };
 
 exports.playTrack = function(req, res, track, album){
@@ -45,19 +73,14 @@ exports.playTrack = function(req, res, track, album){
 };
 
 exports.edit = function(req, res, data){
-    db.query('UPDATE albums SET album=$newTitle,artist=$newArtist,cover=$newThumbnail WHERE album=$currentAlbum; ', {
-        newTitle : data.newTitle,
-        newArtist :data.newArtist,
-        newThumbnail : data.newThumbnail,
-        currentAlbum: data.currentAlbum
-    },
-     function (err, rows) {
-         if(err){
-            console.log('DB error', err);
-         } else {
-            res.json('done');
-         }
-     });
+    // var album = new Album(data);
+    //  function (err, updated) {
+    //      if(err){
+    //         console.log('DB error', err);
+    //      } else {
+    //         res.status(200).json(updated);
+    //      }
+    //  });
 }
 
 /** Private functions **/
@@ -69,12 +92,12 @@ fetchMusicData = function(req, res, metaType, serveToFrontEnd, getNewFiles) {
 
 
 getCompleteCollection = function(req, res, metaType, serveToFrontEnd, getNewFiles){
-    getAlbums(req, res, function(result){
+    getAlbums(req, res, function(result) {
         var count   = result.length;
         var albums  = [];
         if(result !== 'none' && result !== null && count > 0) {
             console.log('Found ' + count + ' albums, continuing...');
-            result.forEach(function (item, value) {
+            result.forEach(function (item) {
 
                 if (item !== null && item !== undefined) {
                     var album   = item.album
@@ -107,51 +130,44 @@ getCompleteCollection = function(req, res, metaType, serveToFrontEnd, getNewFile
 }
 
 getAlbums = function(req, res, callback){
-    db.query('SELECT * FROM albums ORDER BY album asc', {
-        album   : String,
-        artist  : String,
-        year    : Number,
-        genre   : String,
-        cover   : String
-    },
-    function(err, rows) {
-        if(err){
-            db.query("CREATE TABLE IF NOT EXISTS albums (album TEXT PRIMARY KEY, artist TEXT, year INTEGER, genre TEXT, cover VARCHAR)");
-            callback('none');
-        } else if (rows !== undefined && rows !== null ){
-            callback(rows);
-        } else {
-            callback('none');
-        }
-    });
-}
+//     Album.all(function(err, albums) {
+
+//         } else if (albums !== undefined && albums !== null ){
+//             callback(albums);
+//         } else {
+//             callback('none');
+//         }
+//     });
+ }
 
 getTracks = function (album, artist, year, genre, cover, callback){
-    db.query('SELECT * FROM tracks WHERE album = $album ORDER BY track asc ', { album: album }, {
-        title       : String,
-        track       : Number,
-        album       : String,
-        artist      : String,
-        year        : Number,
-        genre       : String,
-        filename    : String
-    },
-    function (err, rows) {
-        if(err){
-            db.query("CREATE TABLE IF NOT EXISTS albums (album TEXT PRIMARY KEY, artist TEXT, year INTEGER, genre TEXT, cover VARCHAR)");
-            callback(null);
-        }
-        if (typeof rows !== 'undefined' && rows !== null) {
-            var completeAlbum = {
-                "album"     : album,
-                "artist"    : artist,
-                "year"      : year,
-                "genre"     : genre,
-                "cover"     : cover,
-                "tracks"    : rows
-            }
-            callback(completeAlbum);
-        }
-    });
+    // db.query('SELECT * FROM tracks WHERE album = $album ORDER BY track asc ', { album: album }, {
+    //     title       : String,
+    //     track       : Number,
+    //     album       : String,
+    //     artist      : String,
+    //     year        : Number,
+    //     genre       : String,
+    //     filename    : String
+    // },
+    // function (err, rows) {
+    //     if(err){
+    //         db.query("CREATE TABLE IF NOT EXISTS albums (album TEXT PRIMARY KEY, artist TEXT, year INTEGER, genre TEXT, cover VARCHAR)");
+    //         callback(null);
+    //     }
+    //     if (typeof rows !== 'undefined' && rows !== null) {
+    //         var completeAlbum = {
+    //             "album"     : album,
+    //             "artist"    : artist,
+    //             "year"      : year,
+    //             "genre"     : genre,
+    //             "cover"     : cover,
+    //             "tracks"    : rows
+    //         }
+    //         callback(completeAlbum);
+    //     }
+    // });
 }
+
+
 

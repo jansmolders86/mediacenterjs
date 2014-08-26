@@ -271,8 +271,11 @@ app.post('/clearCache', function(req, res){
             }
 
             if (name === "movies") {
-                var Movie = require('./lib/utils/database-schema').Movie;
-                Movie.destroyAll();
+                var schema = require('./lib/utils/database-schema');
+                schema.Movie.destroyAll();
+                schema.Album.destroyAll();
+                schema.Artist.destroyAll();
+                schema.Track.destroyAll();
             } else {
                 var database = require('./lib/utils/database-connection');
                 var db = database.db;

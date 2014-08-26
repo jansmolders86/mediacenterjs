@@ -58,50 +58,19 @@
         }
 
         var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
-            $scope.edit ={};
-            $scope.current = current;
-
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
+            $scope.original = current;
+            $scope.current = angular.copy(current);
 
             $scope.editItem = function(){
-
-                if($scope.edit.artist === '' || $scope.edit.artist === null || $scope.edit.artist === undefined ){
-                    if($scope.current.artist  !== undefined || $scope.current.artist !== null){
-                        $scope.edit.artist = $scope.current.artist;
-                    } else {
-                        $scope.edit.artist = '';
-                    }
-                }
-
-                if($scope.edit.title === '' || $scope.edit.title === null || $scope.edit.title === undefined ){
-                    if($scope.current.album  !== undefined || $scope.current.album !== null){
-                        $scope.edit.title = $scope.current.album;
-                    } else {
-                        $scope.edit.title = '';
-                    }
-                }
-
-                if($scope.edit.thumbnail === '' || $scope.edit.thumbnail === null || $scope.edit.thumbnail === undefined ){
-                    if($scope.current.cover  !== undefined || $scope.current.cover !== null){
-                        $scope.edit.thumbnail = $scope.current.cover;
-                    } else {
-                        $scope.edit.thumbnail = '/music/css/img/nodata.jpg';
-                    }
-                }
-
                 $http({
                     method: "post",
-                    data: {
-                        newArtist    : $scope.edit.artist,
-                        newTitle     : $scope.edit.title,
-                        newThumbnail : $scope.edit.thumbnail,
-                        currentAlbum : $scope.current.album
-                    },
+                    data: $scope.current,
                     url: "/music/edit"
                 }).success(function(data, status, headers, config) {
-                    location.reload();
+                    angular.copy($scope.current, $scope.original);
+                    $modalInstance.dismiss();
+                }).error(function() {
+                    $scope.errorMessage = "Unable to save changes. Check server is running and try again.";
                 });
             }
         };
