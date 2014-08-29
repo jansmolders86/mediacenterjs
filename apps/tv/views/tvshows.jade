@@ -30,7 +30,9 @@ block additional_scripts
         });
 
 block body
-    header
+    header(ng-init="playlist.Visible = true", ng-class="{side: player.playlist.length > 0 && playlist.Visible}")
+        h1.pull-left#show-playlist(ng-hide="playlist.Visible")
+            i.right.double.angle.icon.pull-left(ng-click="playlist.Visible = true")
         .container
             .row
                 .col-md-12
@@ -41,20 +43,22 @@ block body
 
     .container-fluid
         .row
-            #playlist(ng-show="player.playlist.length > 0")
+            #playlist(ng-show="player.playlist.length > 0 && playlist.Visible", ng-cloak)
                 #inner-playlist
                     h2 Playlist
+                        i.left.double.angle.icon.pull-right(ng-click="playlist.Visible = false")
                     ul
                         li.currentshow(ng-repeat="tvshow in player.playlist", ng-mouseover="changeSelected(tvshow)", ng-class="{current: player.current.tvshow == $index}")
-                            .header( ng-click="player.playlist.remove(tvshow)")
+                            .header( ng-click="player.playlist.remove(tvshow); playlist.Visible = false")
                                 span.tvshow-title {{tvshow.title}}
                                 i.remove.circle.icon
                             ol.episodes
-                                li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode.localName)") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
-            ul#tvshows(ng-class="{side: player.playlist.length > 0}")
-                li.tvshow(ng-repeat="tvshow in tvshows | filter:query ", ng-class="{current: focused == $index}").col-md-6.col-xs-12
+                                li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode.localName); playlist.Visible = true") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
+
+           ul#tvshows(ng-class="{side: player.playlist.length  > 0  && playlist.Visible}")
+                li.tvshow(ng-repeat="tvshow in tvshows | filter:query ", ng-class="{current: focused == $index}", ng-click="player.playlist.add(tvshow);playlist.Visible = true").col-md-6.col-xs-12
                     i.circular.inverted.edit.icon(ng-click="open(tvshow)")
-                    img(ng-src="{{tvshow.banner}}", ng-click="player.playlist.add(tvshow)")
+                    img(ng-src="{{tvshow.banner}}")
 
         h2.loading(ng-show="!tvshows") #{lingua.loading}
             .progress-pie-chart(data-percent="{{serverMessage}}", ng-class="{gt50: serverMessage > 50}", ng-show="serverMessage > 0")
