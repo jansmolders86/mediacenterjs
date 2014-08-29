@@ -46,7 +46,7 @@ block additional_scripts
                     url: '/configuration/', 
                     type: 'get'
                 }).done(function(data){
-                    var socket = io.connect(data.localIP+':'+data.remotePort);
+                    var socket = io.connect();
                     
                     socket.on('connect', function(data){
                         socket.emit('remote');
@@ -120,12 +120,6 @@ block body
                 select#language(name="language")
                     - for lang in availableLanguages
                         option(value=lang, selected=lang == language) #{lang}
-            .form-group
-                label Local IP (for Remote)
-                input#localIP(name="localIP",type="text",placeholder="localhost", value= localIP,data-rule-required="true")	
-            .form-group
-                label Remote port (specific port for Remote)
-                input(name="remotePort",type="text",placeholder="3001", value= remotePort,data-rule-required="true")	
             .form-group
                 label #{lingua.setting_location}
                 input(name="location",type="text",placeholder="#{lingua.settings_placeholder_location}", value= location,data-rule-required="true")

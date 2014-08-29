@@ -116,7 +116,7 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
         async: function() {
             var promise = $http.get('/configuration/').then(function (response) {
                 var configData  = response.data;
-                var socket      = io.connect(configData.localIP + ':'+configData.remotePort);
+                var socket      = io.connect();
                 socket.on('connect', function(data){
                     socket.emit('screen');
                 });

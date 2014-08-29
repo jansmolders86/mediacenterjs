@@ -95,7 +95,7 @@ tvApp.controller('tvCtrl', function($scope, $http, $modal,player){
         async: function() {
             var promise = $http.get('/configuration/').then(function (response) {
                 var configData  = response.data;
-                var socket      = io.connect(configData.localIP + ':'+configData.remotePort);
+                var socket      = io.connect();
                 socket.on('connect', function(data){
                     socket.emit('screen');
                 });
