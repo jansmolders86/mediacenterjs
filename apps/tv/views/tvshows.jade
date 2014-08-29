@@ -51,10 +51,11 @@ block body
                                 i.remove.circle.icon
                             ol.episodes
                                 li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode.localName)") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
-            ul#tvshows(ng-class="{side: player.playlist.length > 0}")
-                li.tvshow(ng-repeat="tvshow in tvshows | filter:query ", ng-class="{current: focused == $index}").col-md-6.col-xs-12
+
+           ul#tvshows(ng-class="{side: player.playlist.length > 0}")
+                li.tvshow(ng-repeat="tvshow in tvshows | filter:query ", ng-class="{current: focused == $index}", ng-click="player.playlist.add(tvshow)").col-md-6.col-xs-12
                     i.circular.inverted.edit.icon(ng-click="open(tvshow)")
-                    img(ng-src="{{tvshow.banner}}", ng-click="player.playlist.add(tvshow)")
+                    img(ng-src="{{tvshow.banner}}")
 
         h2.loading(ng-show="!tvshows") #{lingua.loading}
             .progress-pie-chart(data-percent="{{serverMessage}}", ng-class="{gt50: serverMessage > 50}", ng-show="serverMessage > 0")
