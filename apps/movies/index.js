@@ -54,10 +54,6 @@ exports.get = function(req, res, next){
                 functions.loadItems(req, res, serveToFrontEnd);
                 handled = true;
                 break;
-            case('backdrops'):
-                functions.backdrops(req, res);
-                handled = true;
-                break;
         }
     }
 

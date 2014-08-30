@@ -202,7 +202,7 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
 
 
 storeMetadataInDatabase = function(metadata, callback) {
-    Movie.create(metadata, callback);
+    Movie.create(metadata).complete(callback);
 };
 
 getMetadataFromTheMovieDB = function(movieTitle, year, callback) {

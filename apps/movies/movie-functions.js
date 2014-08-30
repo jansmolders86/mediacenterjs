@@ -37,37 +37,26 @@ exports.loadItems = function (req, res, serveToFrontEnd){
     }
 };
 
-
-exports.backdrops = function (req, res){
-    Movie.all(function(err, movies) {
-        if (err === null && movies !== null && movies !== undefined){
-            var backdropArray = [];
-            movies.forEach(function(item){
-               var backdrop = item.backdropURL;
-               backdropArray.push(backdrop)
-            });
-            res.json(backdropArray);
-        }
-    });
-};
-
-exports.edit = function(req, res, data){
-    console.log("edit", data);
-    var movie = new Movie(data);
-    movie.save(function(err) {
-        res.status(err ? 500 : 200).send();
-    });
+exports.edit = function(req, res, data) {
+    Movie.find(data.id).success(function(movie) {
+        movie.updateAttributes(data)
+        .success(function() {res.status(200).send();})
+        .error(function(err) {res.status(500).send();});
+    })
+    .error(function(err) {res.status(404).send();});
 }
 
 exports.update = function(req, res, data) {
-    var movie = new Movie(data);
-    metafetcher.updateMetadataOfMovie(movie, function (err, updMovie) {
-        if (err) {
-            res.status(404).send();
-        } else {
-            res.status(200).json(updMovie);
-        }
-    });
+    Movie.find(data.id).success(function(movie) {
+        metafetcher.updateMetadataOfMovie(movie, function(err, updMovie) {
+            if (err) {
+                res.status(500).send();
+            } else {
+                res.status(200).json(updMovie);
+            }
+        });
+    })
+    .error(function(err) {res.status(404).send();});
 }
 
 exports.playFile = function (req, res, platform, movieTitle){
@@ -125,7 +114,7 @@ fetchMovieData = function(req, res, metaType, serveToFrontEnd, getNewFiles) {
 
 getMovies = function(req, res, metaType, serveToFrontEnd,getNewFiles){
     console.log('Loading movie data...', serveToFrontEnd);
-    Movie.all(function(err, movies) {
+    Movie.findAll().complete(function(err, movies) {
         if(err){
             serveToFrontEnd = true;
             if(getNewFiles === true){
