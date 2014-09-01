@@ -65,7 +65,7 @@ block body
             form.form-horizontal#setup.validate-form(action='/submit',method='post')
                 h2 #{lingua.settings_header}
 
-                .configurable-options.col-sm-12.col-md-12.col-lg-10
+                .configurable-options.col-sm-12.col-md-12.col-lg-9
                     h2 Configurable Options
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="moviepath") #{lingua.setting_movielocation}
@@ -184,7 +184,7 @@ block body
                             input.btn.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
                             input.oauth(name="oauth" type="hidden")
 
-                .cache-management.col-sm-12.col-md-12.col-lg-2
+                .cache-management.col-sm-12.col-md-12.col-lg-3
                     h2 Cache management
                     .form-group.mcjs-rc-controllable
                         a.btn.cachelink.mcjs-rc-clickable(data-cachelink="movies")
@@ -219,7 +219,7 @@ block body
                         a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="all")
                             i.cloud.download.icon
                             | Get all metadata
-                .access-table.col-sm-12.col-md-12.col-lg-10
+                .access-table.col-sm-12.col-md-12.col-lg-9
                     h2 Access management
                     .form-group.mcjs-rc-controllable
                         br
@@ -245,7 +245,7 @@ block body
                                                     a.parentalControl.btn.mcjs-rc-clickable.unlock #{lingua.settings_device_btn_unlock}
 
 
-                #oauthContainer.col-sm-12.col-md-12.col-lg-2
+                #oauthContainer.col-sm-12.col-md-12.col-lg-3
                     h2 OAUTH Login
                     span.info
                         span.quote &ldquo;

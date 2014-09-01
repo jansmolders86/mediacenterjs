@@ -74,6 +74,16 @@ header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
     opacity:0.5;
 }
 
+.fixed-ratio {
+    height: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.fixed-ratio-cover {
+    padding-bottom:150%;
+}
+
 body.playing #backdropimg{
     /*
     filter: none;
@@ -128,6 +138,13 @@ a.backlink { margin-top: -5px; z-index:4; }
     color:#fb8521;
 }
 
+.row > div[class*='col-'] {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    flex:1 0 auto;
+}
+
 .movieposter{
     list-style:none;
     z-index:3;
@@ -135,8 +152,6 @@ a.backlink { margin-top: -5px; z-index:4; }
     padding: 0px;
     margin: 0px 0px 20px 0;
     border-radius:2px;
-    display:block;
-    max-height: 350px;
     background:#fff;
     cursor:pointer;
     overflow:hidden;
@@ -194,8 +209,8 @@ a.backlink { margin-top: -5px; z-index:4; }
     margin:0 0 20px 0;
     display:block;
     width:100%;
-    height:auto;
-    max-height:400px;
+    height:100%;
+    min-height:300px;
     padding:0;
     border:0;
 }
