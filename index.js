@@ -36,7 +36,10 @@ var express = require('express')
 	, os = require('os')
 	, jade = require('jade')
     , open = require('open')
-	, configuration_handler = require('./lib/handlers/configuration-handler');
+	, configuration_handler = require('./lib/handlers/configuration-handler')
+    , server = http.createServer(app)
+    , io = require('./lib/utils/setup-socket')(server);
+
 
 var config = configuration_handler.initializeConfiguration();
 var ruleSchedule = null;
@@ -117,19 +120,7 @@ app.get("/", function(req, res, next) {
 
 	if(config.language === '' || config.location === '' || config.moviepath === undefined){
 
-		var localIP = getIPAddresses()
-		, sendLocalIP = '';
-
-		if(getIPAddresses() !== undefined && getIPAddresses() !== null) {
-			localIP = getIPAddresses();
-		}
-
-		if(localIP[0] !== undefined && localIP[0] !==  null){
-			sendLocalIP = localIP[0];
-		}
-
 		res.render('setup',{
-			localIP:sendLocalIP,
             countries:require('./lib/utils/countries').countries
 		});
 
@@ -343,14 +334,14 @@ app.set('port', process.env.PORT || 3000);
 if (config.port == "" || config.port == undefined ){
 	var defaultPort = app.get('port');
 	console.log('First run, Setup running on localhost:' + defaultPort + "\n");
-	app.listen(parseInt(defaultPort));
+	server.listen(parseInt(defaultPort));
     var url = 'http://localhost:'+defaultPort;
     open(url);
 
 } else{
 	var message = "MediacenterJS listening on port:" + config.port + "\n";
 	console.log(message.green.bold);
-	app.listen(parseInt(config.port));
+	server.listen(parseInt(config.port));
 }
 
 

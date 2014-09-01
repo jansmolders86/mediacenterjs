@@ -255,8 +255,6 @@ exports.reloadServer = function(req, res){
 			musicpath: config.musicpath,
 			tvpath: config.tvpath,
 			language: config.language,
-			localIP: config.localIP,
-			remotePort: config.remotePort,
 			location: config.location,
 			spotifyUser: config.spotifyUser,
 			spotifyPass: config.spotifyPass,

@@ -35,10 +35,11 @@ block body
                         | Show Hidden
     .container-fluid
         .row
-            .col-xs-12.col-md-2(ng-repeat="movie in movies | filter:query", ng-cloak)
+        .col-xs-12.col-sm-6.col-md-2(ng-repeat="movie in movies | filter:query", ng-cloak)
                 .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-class="{current: movies.focused.id == movie.id }", ng-mouseenter="movies.focused = movie",ng-hide="movie.title === ''", ng-mouseleave="movies.focused = null")
                     i.circular.inverted.edit.icon(ng-click="open(movie)")
-                    img.movieposter(ng-src="{{movie.posterURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie.originalName)")
+                    .fixed-ratio-cover.fixed-ratio
+                        img.movieposter(ng-src="{{movie.posterURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie.originalName)")
                     .caption(ng-click="playMovie(movie.originalName)")
                             p
                                 h1.movie-title{{movie.title}}
