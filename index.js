@@ -260,20 +260,8 @@ app.post('/clearCache', function(req, res){
                 console.log('Error removing module', e .red);
                 return res.send('Error clearing cache', e);
             }
-
-            if (name === "movies") {
-                var schema = require('./lib/utils/database-schema');
-                schema.Movie.destroyAll();
-                schema.Album.destroyAll();
-                schema.Artist.destroyAll();
-                schema.Track.destroyAll();
-            } else {
-                var database = require('./lib/utils/database-connection');
-                var db = database.db;
-                db.query('DROP TABLE IF EXISTS ' + name);
-            }
-
-
+            var schema = require('./lib/utils/database-schema');
+            schema[name].destroy();
         });
     });
 
