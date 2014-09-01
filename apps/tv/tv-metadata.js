@@ -139,7 +139,7 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
  * @param episodeTitle       Cleaned up name of episode
  */
 getDataForNewShow = function(originalTitle, episodeTitle,callback){
-    console.log(episodeTitle)
+
     var episodeSeason       = '0'
         , season            = ''
         , number            = ''
@@ -160,8 +160,9 @@ getDataForNewShow = function(originalTitle, episodeTitle,callback){
         }
     } else if(config.tvFormat === '0x00'){
         var showTitle            = episodeTitle.replace(/([0-9]{1,2})+?(x)+?([0-9]{1,2})/, '')
-        , episodeSeason          = episodeTitle.match(/(\d{1,2})+?(?=x)/)
         , episodeNumberMatch     = episodeTitle.match(/(x)+?([0-9]{1,2})/)
+
+        episodeSeason          = episodeTitle.match(/(\d{1,2})+?(?=x)/)
 
         if(episodeNumberMatch){
             episodeNumber    = episodeNumberMatch[0].replace("x","");
