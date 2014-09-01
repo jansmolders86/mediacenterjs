@@ -62,6 +62,11 @@ exports.index = function(req, res, next){
         'low'
     ];
 
+    var tvFormatTypes = [
+        's00e00',
+        '0x00'
+    ]
+
     db.query('SELECT * FROM devices', {
         device_id: String,
         last_seen: String,
@@ -74,29 +79,29 @@ exports.index = function(req, res, next){
 
         DeviceInfo.isDeviceAllowed(req, function(allowed){
             res.render('settings',{
-                movielocation: config.moviepath,
-                selectedTheme: config.theme,
-                musiclocation : config.musicpath,
-                tvlocation : config.tvpath,
-                selectedBinaryType : config.binaries,
-                language: config.language,
-                country: config.country,
-                countries: require('../../lib/utils/countries').countries,
-                availableLanguages: availableLanguages,
-                availableQuality: availableQuality,
-                currentQuality: config.quality,
-                availableScreensavers: availableScreensavers,
-                location: config.location,
-                screensaver: config.screensaver,
-                spotifyUser: config.spotifyUser,
-                spotifyPass: config.spotifyPass,
-                themes:allThemes,
-                schedule:config.schedule,
-                devices:devices,
-                allowed: allowed,
-                port: config.port,
-                oauth: config.oauth,
-                oauthKey: config.oauthKey
+                movielocation           : config.moviepath,
+                selectedTheme           : config.theme,
+                musiclocation           : config.musicpath,
+                tvlocation              : config.tvpath,
+                selectedBinaryType      : config.binaries,
+                language                : config.language,
+                country                 : config.country,
+                countries               : require('../../lib/utils/countries').countries,
+                availableLanguages      : availableLanguages,
+                availableQuality        : availableQuality,
+                currentQuality          : config.quality,
+                availableScreensavers   : availableScreensavers,
+                location                : config.location,
+                screensaver             : config.screensaver,
+                spotifyUser             : config.spotifyUser,
+                spotifyPass             : config.spotifyPass,
+                themes                  : allThemes,
+                schedule                : config.schedule,
+                devices                 : devices,
+                allowed                 : allowed,
+                port                    : config.port,
+                oauth                   : config.oauth,
+                oauthKey                : config.oauthKey
             });
         });
 

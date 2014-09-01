@@ -74,6 +74,16 @@ header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
     opacity:0.5;
 }
 
+.fixed-ratio {
+    height: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.fixed-ratio-cover {
+    padding-bottom:150%;
+}
+
 body.playing #backdropimg{
     /*
     filter: none;

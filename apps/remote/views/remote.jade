@@ -25,6 +25,7 @@ block additional_scripts
             
             $('.keyboard.link').on('click', function(e){
                 $('#keyboard-wrapper').toggle();
+                $("#sendValueInput").focus();
             });
             
             $('#main').on('click', function(){
@@ -89,11 +90,9 @@ block additional_scripts
                             socket.emit('control',{action:"shuffle"}); 
                         });	
                         
-                        $("#sendValue").on('click',function(){
-                            if($('#sendValueInput').val() !== ''){
-                                var keyValue = $('#sendValueInput').val();
-                                socket.emit('message',keyValue); 
-                            }
+                        $("#sendValueInput").keyup(function(){
+                            var keyValue = $('#sendValueInput').val();
+                            socket.emit('message',keyValue);
                         });									
 
                         socket.on("loading", function(data){
@@ -158,16 +157,17 @@ block body
                 span remote
             .push
             #remote-wrapper
-                .back.link
-                    i.reply.mail.icon
-                .left.link
-                    i.left.arrow.icon
-                .enter.link
-                    i.play.sign.icon
-                .right.link
-                    i.right.arrow.icon
-                .pause.link
-                    i.pause.icon
+                .inner-wrapper 
+                    .back.link.vert-top.horiz-middle
+                        i.reply.mail.icon
+                    .left.link.vert-middle.horiz-left
+                        i.left.arrow.icon
+                    .enter.link.vert-middle.horiz-middle
+                        i.play.sign.icon
+                    .right.link.vert-middle.horiz-right
+                        i.right.arrow.icon
+                    .pause.link.vert-bottom.horiz-middle
+                        i.pause.icon
         #plain-wrapper
             .fullscreen.link
                 i.fullscreen.icon
@@ -181,6 +181,5 @@ block body
                 i.shuffle.icon
         
         .status
-    #keyboard-wrapper
-        input#sendValueInput(name="sendValue",type="text",value="")
-        input#sendValue.btn(type="submit",value="#{lingua.setting_submit}")
+        #keyboard-wrapper
+            input#sendValueInput(name="sendValue",type="text",value="")
