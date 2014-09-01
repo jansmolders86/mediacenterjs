@@ -171,7 +171,7 @@
             async: function() {
                 var promise = $http.get('/configuration/').then(function (response) {
                     var configData  = response.data;
-                    var socket      = io.connect(configData.localIP + ':'+configData.remotePort, {'force new connection': true});
+                    var socket      = io.connect();
                     socket.on('connect', function(data){
                         socket.emit('screen');
                     });

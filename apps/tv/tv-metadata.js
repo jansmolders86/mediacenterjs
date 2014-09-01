@@ -27,8 +27,7 @@ var dblite = require('dblite'),
     configuration_handler = require('../../lib/handlers/configuration-handler'),
     Trakt = require('trakt'),
     tv_title_cleaner = require('../../lib/utils/title-cleaner'),
-    socket = require('../../lib/utils/setup-socket'),
-    io = socket.io;
+    io = require('../../lib/utils/setup-socket').io;
 
 var config = configuration_handler.initializeConfiguration();
 

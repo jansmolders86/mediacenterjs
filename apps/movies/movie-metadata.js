@@ -26,8 +26,7 @@ var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3'),
     config = configuration_handler.initializeConfiguration(),
     file_utils = require('../../lib/utils/file-utils'),
     movie_title_cleaner = require('../../lib/utils/title-cleaner'),
-    socket = require('../../lib/utils/setup-socket'),
-    io = socket.io;
+    io = require('../../lib/utils/setup-socket').io;
 
 
 /* Constants */
