@@ -26,47 +26,18 @@ var file_utils = require('../../lib/utils/file-utils')
 
 
 exports.loadItems = function (req, res, serveToFrontEnd) {
-    Album.all(function (err, albums) {
-       if (albums === null || albums.length === 0) {
+    Album.findAll()
+    .success(function (albums) {
+        //if (albums === null || albums.length === 0) {
             metafetcher.loadData(req, res, true);
-        } else {
-            async.map(albums, function (album, callback) {
-                console.log(album.toObject(false, true));
-                var newAlbum = album.toJSON();
-                async.parallel([
-                    function(pcallback) {
-                        album.tracks(function(err, tracks) {
-                            newAlbum.tracks = tracks;
-                            pcallback();
-                        });
-                    },
-                    function(pcallback) {
-                        album.artist(function(err, artist) {
-                            newAlbum.artist = artist;
-                            pcallback();
-                        });
-                    }
-                ], function () {
-                    callback(null, newAlbum)
-                });
-                
-            }, function(err, newAlbums) {
-                res.json(newAlbums);
-            });
-        }
+        //} else {
+            res.json(albums);
+        // }
+    })
+    .error(function (err) {
+        console.log(err);
+        res.status(500).send();
     });
-
-    // var metaType = "music";
-    // var getNewFiles = true;
-    // if(serveToFrontEnd === false){
-    //     fetchMusicData(req, res, metaType, serveToFrontEnd, getNewFiles);
-    // } else if(serveToFrontEnd === undefined || serveToFrontEnd === null){
-    //     var serveToFrontEnd = true;
-    //     getCompleteCollection(req, res, metaType, serveToFrontEnd, getNewFiles);
-    // } else {
-    //     console.log('lookup')
-    //     getCompleteCollection(req, res, metaType, serveToFrontEnd, getNewFiles);
-    // }
 };
 
 exports.playTrack = function(req, res, track, album){

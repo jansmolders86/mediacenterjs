@@ -32,7 +32,8 @@ var dblite = require('dblite'),
     dbschema = require('../../lib/utils/database-schema'),
     Album = dbschema.Album,
     Artist = dbschema.Artist,
-    Track = dbschema.Track;
+    Track = dbschema.Track,
+    async = require('async');
 
 var config = configuration_handler.initializeConfiguration();
 
@@ -94,9 +95,18 @@ var walk = function(dir, done) {
 
 var setupParse = function(req, res, serveToFrontEnd, results) {
     if (results && results.length > 0) {
-        var file = results.pop();
-        doParse(req, res, file, serveToFrontEnd, function() {
-            setupParse(req, res, serveToFrontEnd, results);
+        var i = 0;
+        async.each(results, function(file, callback) {
+             doParse(req, res, file, serveToFrontEnd, function() {
+                console.log("I: ", ++i, "L:", results.length);
+                callback();
+             });
+        }, function (err) {
+            console.log("DOOOOOONNNNNEEEEEE");
+            Album.findAll()
+            .success(function(albums) {
+                // res.json(albums);
+            });
         });
     }
     if (!results) {
@@ -109,25 +119,36 @@ var setupParse = function(req, res, serveToFrontEnd, results) {
 var doParse = function(req, res, file, serveToFrontEnd, callback) {
     var parser = new mm(fs.createReadStream(file));
 
-    parser.on('metadata', function(result) {
-        if(result){
-            var trackName       = (result.title)        ? result.title.replace(/\\/g, '') : ''
-                , trackNo = (result.track.no)     ? result.track.no : ''
-                , albumName = (result.album)        ? result.album.replace(/\\/g, '') : ''
-                , genre     = 'Unknown'
-                , artistName= (result.artist[0])    ? result.artist[0].replace(/\\/g, '') : ''
-                , year      = (result.year)         ? result.year : 0;
+    var result = null;
+    parser.on('metadata', function(md) {
+        result = md;
+    });
+    parser.on('done', function(err) {
+        if (err){
+            console.log("err", err);
+        } else {
+            var trackName = "Unknown Title"
+            ,   trackNo = ""
+            ,   albumName = "Unknown Album"
+            ,   genre = "Unknown"
+            ,   artistName = "Unknown Artist"
+            ,   year = "";
 
+            if (result) {
+                trackName = (result.title)        ? result.title.replace(/\\/g, '') : '';
+                trackNo   = (result.track.no)     ? result.track.no : '';
+                albumName = (result.album)        ? result.album.replace(/\\/g, '') : '';
+                artistName= (result.artist[0])    ? result.artist[0].replace(/\\/g, '') : '';
+                year      = (result.year)         ? result.year : 0;
 
-            if(result.genre !== undefined ){
-                var genrelist = result.genre;
-                if(genrelist.length > 0 && genrelist !== ""){
-                    genre = genrelist[0];
+                if(result.genre !== undefined ){
+                    var genrelist = result.genre;
+                    if(genrelist.length > 0 && genrelist !== ""){
+                        genre = genrelist[0];
+                    }
                 }
             }
-
-
-
+            albumName = "PRE" + albumName;
             // Get cover from LastFM
             getAdditionalDataFromLastFM(albumName, artistName, function(cover) {
                 if (cover === '' || cover === null) {
@@ -141,69 +162,51 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
                 var artistData = {
                     'name' : artistName
                 }
-                Artist.findOrCreate({
-                    where: artistData
-                }, artistData, function (err, artist) {
-                    albumData.artistId = artist.id;
-                    Album.findOrCreate({
-                        where: {'title' : albumName,
-                                'artistId' :  artist.id}
-                    }, albumData, function(err, album) {
-                        album.tracks.create({
-                            'title' : trackName,
-                            'order' : trackNo,
-                            'filePath' : file
-                        }, function(err, track) {
-
-                            console.log("Added:");
-                            console.log(album);
-                            console.log(artist);
-                            console.log(track); 
+                Artist.findOrCreate(artistData, artistData)
+                .complete(function (err, artist) {
+                    Album.findOrCreate({'title' : albumName,
+                                'ArtistId' :  artist.id}, albumData)
+                    .complete(function(err, album) {
+                        album.setArtist(artist).complete(function(err) {
+                            album.createTrack({
+                                'title' : trackName,
+                                'order' : trackNo,
+                                'filePath' : file
+                            })
+                            .complete(function(err) {
+                                callback();
+                            });
                         });
                     });
                 });
             });
         }
     });
-    parser.on('done', function(err) {
-        if (err){
-            console.log("err", err);
-        }
-        if (callback) {
-            callback();
-        }
-    });
 };
 
 
 
-storeTrackInDB = function(metadata, callback){
-    db.query('INSERT OR REPLACE INTO tracks VALUES(?,?,?,?,?,?,?,?)', metadata);
+// storeAlbumInDatabase = function(req, res, serveToFrontEnd, metadata, callback){
+//     db.query('INSERT OR REPLACE INTO albums VALUES(?,?,?,?,?)', metadata);
 
-    callback();
-}
+//     nrScanned++;
 
-storeAlbumInDatabase = function(req, res, serveToFrontEnd, metadata, callback){
-    db.query('INSERT OR REPLACE INTO albums VALUES(?,?,?,?,?)', metadata);
+//     var perc = parseInt((nrScanned / totalFiles) * 100);
+//     var increment = new Date(), difference = increment - start;
+//     if (perc > 0) {
+//         var total = (difference / perc) * 100, eta = total - difference;
+//         io.sockets.emit('progress',{msg:perc});
+//         console.log(perc+'% done');
+//     }
 
-    nrScanned++;
+//     if(nrScanned === totalFiles){
+//         if(serveToFrontEnd === true){
+//             io.sockets.emit('serverStatus',{msg:'Processing data...'});
+//             getCompleteCollection(req, res);
+//         }
+//     }
 
-    var perc = parseInt((nrScanned / totalFiles) * 100);
-    var increment = new Date(), difference = increment - start;
-    if (perc > 0) {
-        var total = (difference / perc) * 100, eta = total - difference;
-        io.sockets.emit('progress',{msg:perc});
-        console.log(perc+'% done');
-    }
-
-    if(nrScanned === totalFiles){
-        if(serveToFrontEnd === true){
-            io.sockets.emit('serverStatus',{msg:'Processing data...'});
-            getCompleteCollection(req, res);
-        }
-    }
-
-}
+// }
 
 getAdditionalDataFromLastFM = function(album, artist, callback) {
     // Currently only the cover is fetched. Could be expanded in the future
