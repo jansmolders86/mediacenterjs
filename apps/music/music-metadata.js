@@ -98,14 +98,13 @@ var setupParse = function(req, res, serveToFrontEnd, results) {
         var i = 0;
         async.each(results, function(file, callback) {
              doParse(req, res, file, serveToFrontEnd, function() {
-                console.log("I: ", ++i, "L:", results.length);
                 callback();
              });
+             io.sockets.emit('progress',{msg:(i++)/results.length});
         }, function (err) {
-            console.log("DOOOOOONNNNNEEEEEE");
             Album.findAll()
             .success(function(albums) {
-                // res.json(albums);
+                 res.json(albums);
             });
         });
     }
@@ -114,7 +113,6 @@ var setupParse = function(req, res, serveToFrontEnd, results) {
         res.json(noResult);
     }
 };
-
 
 var doParse = function(req, res, file, serveToFrontEnd, callback) {
     var parser = new mm(fs.createReadStream(file));
@@ -148,7 +146,6 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
                     }
                 }
             }
-            albumName = "PRE" + albumName;
             // Get cover from LastFM
             getAdditionalDataFromLastFM(albumName, artistName, function(cover) {
                 if (cover === '' || cover === null) {
@@ -164,8 +161,7 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
                 }
                 Artist.findOrCreate(artistData, artistData)
                 .complete(function (err, artist) {
-                    Album.findOrCreate({'title' : albumName,
-                                'ArtistId' :  artist.id}, albumData)
+                    Album.findOrCreate({'title' : albumName}, albumData)
                     .complete(function(err, album) {
                         album.setArtist(artist).complete(function(err) {
                             album.createTrack({

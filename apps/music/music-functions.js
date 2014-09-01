@@ -26,12 +26,12 @@ var file_utils = require('../../lib/utils/file-utils')
 
 
 exports.loadItems = function (req, res, serveToFrontEnd) {
-    Album.findAll()
+    Album.findAll({include: [Track]})
     .success(function (albums) {
         //if (albums === null || albums.length === 0) {
             metafetcher.loadData(req, res, true);
-        //} else {
-            res.json(albums);
+        // } else {
+            // res.json(albums);
         // }
     })
     .error(function (err) {
