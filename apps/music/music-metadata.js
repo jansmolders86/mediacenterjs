@@ -16,17 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /* Global Imports */
-var dblite = require('dblite'),
-    fs = require('graceful-fs'),
+var fs = require('graceful-fs'),
     path = require('path'),
-    os = require('os'),
-    file_utils = require('../../lib/utils/file-utils'),
-    ajax_utils = require('../../lib/utils/ajax-utils'),
-    app_cache_handler = require('../../lib/handlers/app-cache-handler'),
     configuration_handler = require('../../lib/handlers/configuration-handler'),
     LastfmAPI = require('lastfmapi'),
     mm = require('musicmetadata'),
-    album_title_cleaner = require('../../lib/utils/title-cleaner'),
     io = require('../../lib/utils/setup-socket').io;
     dbschema = require('../../lib/utils/database-schema'),
     Album = dbschema.Album,
@@ -39,16 +33,6 @@ var config = configuration_handler.initializeConfiguration();
 /* Constants */
 
 var SUPPORTED_FILETYPES = "m4a";
-var start = new Date();
-var nrScanned = 0;
-var totalFiles = 0;
-var noResult = {
-    "result":"none"
-};
-
-// Init Database
-var database = require('../../lib/utils/database-connection');
-var db = database.db;
 
 
 /* Public Methods */
@@ -97,11 +81,12 @@ var setupParse = function(req, res, serveToFrontEnd, results) {
         var i = 0;
         async.each(results, function(file, callback) {
              doParse(req, res, file, serveToFrontEnd, function() {
+                var perc = (i++)/results.length * 100 >> 0;//Faster math.floor
+                io.sockets.emit('progress',{msg:perc});
                 callback();
              });
-             io.sockets.emit('progress',{msg:(i++)/results.length});
         }, function (err) {
-            Album.findAll()
+            Album.findAll({include: [Track, Artist]})
             .success(function(albums) {
                  res.json(albums);
             });
@@ -109,7 +94,7 @@ var setupParse = function(req, res, serveToFrontEnd, results) {
     }
     if (!results) {
         console.log('no results!');
-        res.json(noResult);
+        res.json({"result":"none"});
     }
 };
 
@@ -136,7 +121,7 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
                 trackNo   = (result.track.no)     ? result.track.no : '';
                 albumName = (result.album)        ? result.album.replace(/\\/g, '') : '';
                 artistName= (result.artist[0])    ? result.artist[0].replace(/\\/g, '') : '';
-                year      = (result.year)         ? result.year : 0;
+                year      = (result.year)         ? new Date(result.year).getFullYear() : 0;
 
                 if(result.genre !== undefined ){
                     var genrelist = result.genre;
@@ -179,30 +164,6 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
     });
 };
 
-
-
-// storeAlbumInDatabase = function(req, res, serveToFrontEnd, metadata, callback){
-//     db.query('INSERT OR REPLACE INTO albums VALUES(?,?,?,?,?)', metadata);
-
-//     nrScanned++;
-
-//     var perc = parseInt((nrScanned / totalFiles) * 100);
-//     var increment = new Date(), difference = increment - start;
-//     if (perc > 0) {
-//         var total = (difference / perc) * 100, eta = total - difference;
-//         io.sockets.emit('progress',{msg:perc});
-//         console.log(perc+'% done');
-//     }
-
-//     if(nrScanned === totalFiles){
-//         if(serveToFrontEnd === true){
-//             io.sockets.emit('serverStatus',{msg:'Processing data...'});
-//             getCompleteCollection(req, res);
-//         }
-//     }
-
-// }
-
 getAdditionalDataFromLastFM = function(album, artist, callback) {
     // Currently only the cover is fetched. Could be expanded in the future
     // Due to the proper caching backend provided by LastFM there is no need to locally store the covers.
@@ -235,87 +196,8 @@ getAdditionalDataFromLastFM = function(album, artist, callback) {
     });
 }
 
-getCompleteCollection = function(req, res){
-    db.query('SELECT * FROM albums ORDER BY album asc', {
-        album   : String,
-        artist  : String,
-        year    : Number,
-        genre   : String,
-        cover   : String
-    },
-    function(err, rows) {
-        if(err){
-            console.log('DB error', err);
-        } else if (rows !== undefined && rows !== null ){
-            var count   = rows.length;
-            var albums  = [];
-            console.log('Found ' + count + ' albums, continuing...');
-            rows.forEach(function (item, value) {
-                console.log('Loading data for',item.album);
-
-                if (item !== null && item !== undefined) {
-                    var album   = item.album
-                    , artist    = item.artist
-                    , year      = item.year
-                    , genre     = item.genre
-                    , cover     = item.cover;
-
-                    getTracks(album, artist, year, genre, cover, function (completeAlbum){
-                        if(completeAlbum !== null){
-                            count--;
-                            albums.push(completeAlbum);
-                            if (count === 0) {
-                                console.log('Sending info to client');
-                                return res.json(albums);
-                                res.end();
-                               // db.close();
-                            }
-                        } else {
-                            console.log('Error retrieving tracks...');
-                            res.json(noResult);
-                        }
-                    });
-                }
-            });
-        }
-    });
-}
-
-getTracks = function (album, artist, year, genre, cover, callback){
-    console.log('looking for tracks');
-    db.query('SELECT * FROM tracks WHERE album = $album ORDER BY track asc ', { album: album }, {
-        title       : String,
-        track       : Number,
-        album       : String,
-        artist      : String,
-        year        : Number,
-        genre       : String,
-        filename    : String
-    },
-    function (err, rows) {
-        if(err){
-            callback(null);
-        }
-        if (typeof rows !== 'undefined' && rows !== null) {
-            var completeAlbum = {
-                "album"     : album,
-                "artist"    : artist,
-                "year"      : year,
-                "genre"     : genre,
-                "cover"     : cover,
-                "tracks"    : rows
-            }
-            callback(completeAlbum);
-        }
-    });
-}
-
-
-
 exports.loadData = function(req, res, serveToFrontEnd) {
-    nrScanned = 0;
     walk(dir,  function(err, results) {
-        totalFiles = (results) ? results.length : 0;
         setupParse(req, res, serveToFrontEnd, results);
     });
 }
