@@ -83,6 +83,8 @@ exports.index = function(req, res, next){
                 selectedTheme           : config.theme,
                 musiclocation           : config.musicpath,
                 tvlocation              : config.tvpath,
+                tvFormatTypes           : tvFormatTypes,
+                tvFormat                : config.tvFormat,
                 selectedBinaryType      : config.binaries,
                 language                : config.language,
                 country                 : config.country,
