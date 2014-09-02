@@ -67,16 +67,8 @@ exports.index = function(req, res, next){
         '0x00'
     ]
 
-    db.query('SELECT * FROM devices', {
-        device_id: String,
-        last_seen: String,
-        is_active: String
-    }, function(rows) {
-        var devices;
-        if (typeof rows !== 'undefined' && rows.length > 0) {
-            devices = rows;
-        }
-
+    Device.findAll()
+    .success(function (devices) {
         DeviceInfo.isDeviceAllowed(req, function(allowed){
             res.render('settings',{
                 movielocation           : config.moviepath,

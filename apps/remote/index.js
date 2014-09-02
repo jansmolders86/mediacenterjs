@@ -28,14 +28,6 @@ var express = require('express')
 , DeviceInfo = require('../../lib/utils/device-utils')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
-var dblite = require('dblite')
-if(os.platform() === 'win32'){
-    dblite.bin = "./bin/sqlite3/sqlite3";
-}
-var db = dblite('./lib/database/mcjs.sqlite');
-db.on('info', function (text) { console.log(text) });
-db.on('error', function (err) { console.error('Database error: ' + err) });
-
 exports.index = function(req, res, next){	
 
     DeviceInfo.storeDeviceInfo(req);
@@ -58,16 +50,8 @@ exports.index = function(req, res, next){
 
     var availableScreensavers = ['dim','backdrop','off'];
 
-    db.query('SELECT * FROM devices', { 
-        device_id: String,
-        last_seen: String,
-        is_active: String
-    }, function(rows) {
-        var devices;
-        if (typeof rows !== 'undefined' && rows.length > 0) {
-            devices = rows; 
-         }
-
+    Device.findAll()
+    .complete(function(devices) {
         DeviceInfo.isDeviceAllowed(req, function(allowed){
             res.render('remote',{
                 movielocation: config.moviepath,

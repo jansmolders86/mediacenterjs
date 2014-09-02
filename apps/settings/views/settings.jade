@@ -235,11 +235,11 @@ block body
                                 tbody
                                     - each device in devices
                                         tr.mcjs-rc-controllable
-                                            td.device= device.device_id
-                                            td.seen= device.last_seen
-                                            td.active= device.is_active
+                                            td.device= device.deviceID
+                                            td.seen= device.lastSeen
+                                            td.active= device.isAllowed
                                             td
-                                                -if (device.is_active !== undefined && device.is_active === 'yes')
+                                                -if (device.isAllowed !== undefined && device.isAllowed === 'yes')
                                                     a.parentalControl.btn.mcjs-rc-clickable.lock #{lingua.settings_device_btn_lock}
                                                 -else
                                                     a.parentalControl.btn.mcjs-rc-clickable.unlock #{lingua.settings_device_btn_unlock}
