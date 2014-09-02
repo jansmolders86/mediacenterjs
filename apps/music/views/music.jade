@@ -33,7 +33,7 @@ block body
                 .col-md-12
                     a.backlink(href="/") &#xe113;
                     h1.hidden-xs #{lingua.music}
-                    div#view-select
+                    div#view-select(ng-hide="!albums")
                         .view-select(ng-click="view = 'albums'", ng-init="view = 'albums'", ng-hide="view === 'albums'") Show albums
                         .view-select(ng-click="view = 'tracks'", ng-hide="view === 'tracks'") Show Tracks
                     input#search.pull-right(ng-model="query", type="text", placeholder="Search", ng-show="albums")
@@ -95,7 +95,7 @@ block body
             h2.loading(ng-show="albums.result === 'none'") No data found, please check the music filepath
 
     #player.col-xs-12.col-md-12.col-lg-12(ng-show="player.playlist.length > 0",ng-class="className", ng-cloak)
-        #progressBar.ui.active.striped.progress
+        #progressBar.ui.active.striped.progress(ng-click="player.seek()")
             span#progress.bar
 
         #playing-info.col-xs-12.col-md-5
@@ -110,6 +110,7 @@ block body
                 i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
                 i.control.forward.icon(ng-click="player.next()")
                 i.control.fullscreen.icon(ng-click="fullscreen()")
+                i.control.shuffle.icon(ng-click="player.shuffle()", ng-class="{active: player.random === true}")
 
 
     script(type="text/ng-template", id="editModal.html")

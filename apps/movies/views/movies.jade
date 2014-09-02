@@ -29,7 +29,7 @@ block body
                 a.backlink(href="/") &#xe113;
                 h1.hidden-xs #{lingua.movies}
                 input#search.pull-right(ng-model="query.$", type="text", placeholder="Search", ng-show="movies")
-                #view-select
+                #view-select(ng-hide="!movies")
                     label.view-select(for="showhidden")
                         input#showhidden(ng-init="query.hidden='false'", ng-model="query.hidden", type="checkbox", ng-show="movies", ng-true-value="", ng-false-value="false")
                         | Show Hidden

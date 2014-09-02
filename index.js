@@ -1,5 +1,5 @@
 /*
-	MediaCenterJS - A NodeJS based mediacenter solution
+    MediaCenterJS - A NodeJS based mediacenter solution
 
     Copyright (C) 2013 - Jan Smolders
 
@@ -18,36 +18,36 @@
 
 
 var express = require('express')
-	, app = express()
-	, fs = require ('fs')
-	, util = require('util')
-	, dateFormat = require('dateformat')
-	, lingua = require('lingua')
-	, colors = require('colors')
-	, rimraf = require('rimraf')
-	, mcjsRouting = require('./lib/routing/routing')
-	, remoteControl = require('./lib/utils/remote-control')
-	, versionChecker = require('./lib/utils/version-checker')
+    , app = express()
+    , fs = require ('fs')
+    , util = require('util')
+    , dateFormat = require('dateformat')
+    , lingua = require('lingua')
+    , colors = require('colors')
+    , rimraf = require('rimraf')
+    , mcjsRouting = require('./lib/routing/routing')
+    , remoteControl = require('./lib/utils/remote-control')
+    , versionChecker = require('./lib/utils/version-checker')
     , scheduler = require('./lib/utils/scheduler')
-	, DeviceInfo = require('./lib/utils/device-utils')
+    , DeviceInfo = require('./lib/utils/device-utils')
     , fileHandler = require('./lib/utils/file-utils')
     , dbSchema = require('./lib/utils/database-schema')
     , http = require('http')
-	, os = require('os')
-	, jade = require('jade')
+    , os = require('os')
+    , jade = require('jade')
     , open = require('open')
-	, configuration_handler = require('./lib/handlers/configuration-handler')
+    , configuration_handler = require('./lib/handlers/configuration-handler')
     , server = http.createServer(app)
-    , io = require('./lib/utils/setup-socket')(server);
-
+    , io = require('./lib/utils/setup-socket')(server)
+    , methodOverride = require('method-override');
 
 var config = configuration_handler.initializeConfiguration();
 var ruleSchedule = null;
 var language = null;
 if(config.language === ""){
-	language = 'en';
+    language = 'en';
 } else {
-	language = config.language;
+    language = config.language;
 }
 
 /*Create database*/
@@ -62,32 +62,31 @@ if(fs.existsSync('./lib/database/mcjs.sqlite') === false){
     fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
 }
 
-
-process.env.NODE_ENV = 'development';
-
-app.configure(function(){
-	app.set('view engine', 'jade');
-	app.set('views', __dirname + '/views');
-	app.setMaxListeners(100);
+var env = process.env.NODE_ENV || 'development';
+if ('development' == env) {
+    app.set('view engine', 'jade');
+    app.set('views', __dirname + '/views');
+    app.setMaxListeners(100);
     app.use(express.json());
     app.use(express.urlencoded());
-	app.use(express.methodOverride());
-	app.use(express.static(__dirname + '/public'));
-	app.use(express.favicon(__dirname + '/public/core/favicon.ico'));
-	app.use(lingua(app, {
-		defaultLocale: 'translation_' + language,
-		storageKey: 'lang',
-		path: __dirname+'/public/translations/',
-		cookieOptions: {
+    app.use(methodOverride('_method'));
+    app.use(express.static(__dirname + '/public'));
+    app.use(express.favicon(__dirname + '/public/core/favicon.ico'));
+    app.use(lingua(app, {
+        defaultLocale: 'translation_' + language,
+        storageKey: 'lang',
+        path: __dirname+'/public/translations/',
+        cookieOptions: {
             httpOnly: false,
             expires: new Date(Date.now(-1)),
             secure: false
         }
-	}));
-	app.use(app.router);
-	app.locals.pretty = true;
-	app.locals.basedir = __dirname + '/views';
-});
+    }));
+    app.use(app.router);
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+    app.locals.pretty = true;
+    app.locals.basedir = __dirname + '/views';
+};
 
 
 
@@ -96,16 +95,6 @@ app.all('*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
-});
-
-app.configure('development', function(){
-	app.enable('verbose errors');
-	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
-
-app.configure('production', function(){
-	app.disable('verbose errors');
-	app.use(express.errorHandler());
 });
 
 mcjsRouting.loadRoutes(app,{ verbose: !module.parent });
@@ -118,25 +107,25 @@ app.get("/", function(req, res, next) {
 
     DeviceInfo.storeDeviceInfo(req);
 
-	if(config.language === '' || config.location === '' || config.moviepath === undefined){
+    if(config.language === '' || config.location === '' || config.moviepath === undefined){
 
-		res.render('setup',{
+        res.render('setup',{
             countries:require('./lib/utils/countries').countries
-		});
+        });
 
-	} else {
+    } else {
 
-		var apps = [];
+        var apps = [];
 
-		//Search core app folder for apps and check if tile icon is present
-		fs.readdirSync(__dirname + '/apps').forEach(function(name){
+        //Search core app folder for apps and check if tile icon is present
+        fs.readdirSync(__dirname + '/apps').forEach(function(name){
 
-			if (fs.existsSync(__dirname + '/public/'+name+'/tile.png')
+            if (fs.existsSync(__dirname + '/public/'+name+'/tile.png')
                 ||fs.existsSync(__dirname + '/public/'+name+'/tile.svg')){
-				var obj = {
-					appLink: name,
-					tileLink: name
-				}
+                var obj = {
+                    appLink: name,
+                    tileLink: name
+                }
                 if(name === 'movies' && config.moviepath === ""){
                     return;
                 } else if(name === 'music' && config.musicpath === "" ){
@@ -146,36 +135,36 @@ app.get("/", function(req, res, next) {
                 } else {
                     apps.push(obj);
                 }
-			}
+            }
 
-		});
+        });
 
-		//search node_modules for plugins
-		var nodeModules = __dirname + '/node_modules';
-		var pluginPrefix = config.pluginPrefix;
+        //search node_modules for plugins
+        var nodeModules = __dirname + '/node_modules';
+        var pluginPrefix = config.pluginPrefix;
 
-		fs.readdirSync(nodeModules).forEach(function(name){
+        fs.readdirSync(nodeModules).forEach(function(name){
 
-			//Check if the folder in the node_modules starts with the prefix
-			if(name.substr(0, pluginPrefix.length) !== pluginPrefix){
+            //Check if the folder in the node_modules starts with the prefix
+            if(name.substr(0, pluginPrefix.length) !== pluginPrefix){
                 return;
             }
 
-			var pluginPath = nodeModules + '/' + name;
-			if(fs.existsSync( pluginPath + '/public/tile.png')){
-				var obj = {
-					appLink: name,
-					tileLink: name + '/public'
-				}
-				apps.push(obj);
-			}
+            var pluginPath = nodeModules + '/' + name;
+            if(fs.existsSync( pluginPath + '/public/tile.png')){
+                var obj = {
+                    appLink: name,
+                    tileLink: name + '/public'
+                }
+                apps.push(obj);
+            }
 
-		});
+        });
 
-		var now = new Date();
-		var time = dateFormat(now, "HH:MM");
-		var date = dateFormat(now, "dd-mm-yyyy");
-		req.setMaxListeners(0);
+        var now = new Date();
+        var time = dateFormat(now, "HH:MM");
+        var date = dateFormat(now, "dd-mm-yyyy");
+        req.setMaxListeners(0);
 
         DeviceInfo.isDeviceAllowed(req, function(allowed){
             res.render('index', {
@@ -187,7 +176,7 @@ app.get("/", function(req, res, next) {
                 apps: apps
             });
         });
-	}
+    }
 });
 
 app.post('/lockClient', function(req, res){
@@ -205,19 +194,19 @@ app.post('/unlockClient', function(req, res){
 });
 
 app.post('/removeModule', function(req, res){
-	var incommingModule = req.body
+    var incommingModule = req.body
         , module = incommingModule.module
         , appDir = './apps/'+module+'/'
         , publicdir = './public/'+module+'/';
 
-	rimraf(appDir, function (e){if(e)console.log('Error removing module', e .red)});
-	rimraf(publicdir, function (e) {
-		if(e) {
-			console.log('Error removing module', e .red);
-		} else {
-			res.redirect('/');
-		}
-	});
+    rimraf(appDir, function (e){if(e)console.log('Error removing module', e .red)});
+    rimraf(publicdir, function (e) {
+        if(e) {
+            console.log('Error removing module', e .red);
+        } else {
+            res.redirect('/');
+        }
+    });
 });
 
 app.post('/getScraperData', function(req, res){
@@ -248,8 +237,8 @@ app.post('/getScraperData', function(req, res){
 });
 
 app.post('/clearCache', function(req, res){
-	var app_cache_handler = require('./lib/handlers/app-cache-handler');
-	var incommingCache = req.body
+    var app_cache_handler = require('./lib/handlers/app-cache-handler');
+    var incommingCache = req.body
         , cache = incommingCache.cache
         , tableName = cache.split(',');
 
@@ -269,7 +258,7 @@ app.post('/clearCache', function(req, res){
 });
 
 app.get('/checkForUpdate', function(req, res){
-	versionChecker.checkVersion(req, res);
+    versionChecker.checkVersion(req, res);
 });
 
 app.get('/doUpdate', function(req, res){
@@ -286,26 +275,26 @@ app.get('/doUpdate', function(req, res){
 });
 
 app.post('/setuppost', function(req, res){
-	configuration_handler.saveSettings(req.body, function() {
-		res.render('finish');
-	});
+    configuration_handler.saveSettings(req.body, function() {
+        res.render('finish');
+    });
 });
 // Form  handlers
 
 app.get('/configuration', function(req, res){
-	res.send(config);
+    res.send(config);
 });
 
 app.post('/submit', function(req, res){
-	configuration_handler.saveSettings(req.body, function() {
-		res.redirect('/');
-	});
+    configuration_handler.saveSettings(req.body, function() {
+        res.redirect('/');
+    });
 });
 
 app.post('/submitRemote', function(req, res){
-	configuration_handler.saveSettings(req.body, function() {
-		res.redirect('/remote/');
-	});
+    configuration_handler.saveSettings(req.body, function() {
+        res.redirect('/remote/');
+    });
 });
 
 //Socket.io Server
@@ -320,16 +309,16 @@ app.set('port', process.env.PORT || 3000);
 
 // Open App socket
 if (config.port == "" || config.port == undefined ){
-	var defaultPort = app.get('port');
-	console.log('First run, Setup running on localhost:' + defaultPort + "\n");
-	server.listen(parseInt(defaultPort));
+    var defaultPort = app.get('port');
+    console.log('First run, Setup running on localhost:' + defaultPort + "\n");
+    server.listen(parseInt(defaultPort));
     var url = 'http://localhost:'+defaultPort;
     open(url);
 
 } else{
-	var message = "MediacenterJS listening on port:" + config.port + "\n";
-	console.log(message.green.bold);
-	server.listen(parseInt(config.port));
+    var message = "MediacenterJS listening on port:" + config.port + "\n";
+    console.log(message.green.bold);
+    server.listen(parseInt(config.port));
 }
 
 
