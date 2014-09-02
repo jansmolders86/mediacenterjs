@@ -33,7 +33,7 @@ block body
                 .col-md-12
                     a.backlink(href="/") &#xe113;
                     h1.hidden-xs #{lingua.music}
-                    div#view-select
+                    div#view-select(ng-hide="!albums")
                         .view-select(ng-click="view = 'albums'", ng-init="view = 'albums'", ng-hide="view === 'albums'") Show albums
                         .view-select(ng-click="view = 'tracks'", ng-hide="view === 'tracks'") Show Tracks
                     input#search.pull-right(ng-model="query", type="text", placeholder="Search", ng-show="albums")
