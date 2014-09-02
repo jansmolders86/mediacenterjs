@@ -61,8 +61,8 @@
             var itemsCanFit = width/targetWidth>>0;//Math.floor but quicker
             var itemWidth = 100/(itemsCanFit + 1);
             return itemWidth + "%";
-            
-            
+
+
         }
         $scope.itemStyle.width = layout();
         $(window).on('resize', function() {
@@ -223,6 +223,7 @@
         var player,
             playlist = [],
             paused = false,
+            shuffle = false,
             currentTrack = null,
             current = {
                 itemIdx: -1,
@@ -271,6 +272,17 @@
                 current.itemIdx = -1;
                 current.subItemIdx = -1;
             },
+            shuffle: function() {
+                var currentItem = playlist[current.itemIdx];
+                if(player.shuffle === true){
+                    var currentAlbumTracks  = currentItem.tracks.length;
+                    var randomIndex = Math.floor(Math.random() * currentAlbumTracks);
+                    current.subItemIdx = randomIndex;
+                    if (player.playing){
+                        player.play();
+                    }
+                }
+            },
             next: function() {
                 if (!playlist.length){
                     return;
@@ -288,7 +300,7 @@
                         current.subItemIdx++;
                     }
                 }
-                
+
                 if (player.playing) player.play();
             },
             previous: function() {

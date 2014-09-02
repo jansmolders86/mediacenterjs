@@ -110,6 +110,7 @@ block body
                 i.control.pause.icon(ng-click="player.pause()",ng-show="player.playing")
                 i.control.forward.icon(ng-click="player.next()")
                 i.control.fullscreen.icon(ng-click="fullscreen()")
+                i.control.shuffle.icon(ng-click="player.shuffle()", ng-class="{active: player.shuffle === true}")
 
 
     script(type="text/ng-template", id="editModal.html")
