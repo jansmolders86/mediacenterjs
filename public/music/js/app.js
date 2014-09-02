@@ -223,7 +223,7 @@
         var player,
             playlist = [],
             paused = false,
-            shuffle = false,
+            random = false,
             currentTrack = null,
             current = {
                 itemIdx: -1,
@@ -272,16 +272,21 @@
                 current.itemIdx = -1;
                 current.subItemIdx = -1;
             },
-            shuffle: function() {
-                var currentItem = playlist[current.itemIdx];
-                if(player.shuffle === true){
-                    var currentAlbumTracks  = currentItem.tracks.length;
-                    var randomIndex = Math.floor(Math.random() * currentAlbumTracks);
-                    current.subItemIdx = randomIndex;
-                    if (player.playing){
-                        player.play();
-                    }
+            shuffle: function(){
+                if(player.random === true){
+                    player.random = false;
+                } else {
+                    player.random = true;
                 }
+                randomTrack(player, playlist,current);
+            },
+            seek: function($event) {
+                // var clientX = $event.clientX
+                //    , left = clientX - $($event.target).parent().offset().left
+                //    , perc = (left / $($event.target).parent().width())
+                //    , time = perc * $scope.len;
+
+                //    audio.currentTime = parseInt(time);
             },
             next: function() {
                 if (!playlist.length){
@@ -289,38 +294,53 @@
                 }
                 paused = false;
 
-                var currentItem = playlist[current.itemIdx];
-                if (currentItem._type ==='track') {
-                    current.itemIdx++;
-                } else if (currentItem._type === 'album') {
-                    if (current.subItemIdx + 1 >= currentItem.tracks.length) {
-                        current.itemIdx++;
-                        current.subItemIdx = 0;
-                    } else {
-                        current.subItemIdx++;
-                    }
-                }
+                if(player.random === true){
+                    randomTrack(player, playlist,current);
+                } else {
 
-                if (player.playing) player.play();
+                    var currentItem = playlist[current.itemIdx];
+                    if (currentItem._type ==='track') {
+                        current.itemIdx++;
+                    } else if (currentItem._type === 'album') {
+                        if (current.subItemIdx + 1 >= currentItem.tracks.length) {
+                            current.itemIdx++;
+                            current.subItemIdx = 0;
+                        } else {
+                            current.subItemIdx++;
+                        }
+                    }
+
+                    if (player.playing){
+                        player.play();
+                    }
+
+                }
             },
             previous: function() {
                 if (!playlist.length){
                     return;
                 }
                 paused = false;
-                var currentItem = playlist[current.itemIdx];
-                if (current.subItemIdx > 0) {
-                    current.subItemIdx--;
+
+                if(player.random === true){
+                    randomTrack(player, playlist,current);
                 } else {
-                    current.itemIdx--;
-                    var newItem = playlist[current.itemIdx];
-                    if (newItem._type === 'track') {
-                        current.subItemIdx = 0;
-                    } else if (newItem._type === 'album') {
-                        current.subItemIdx = newItem.tracks.length - 1;
+                    var currentItem = playlist[current.itemIdx];
+                    if (current.subItemIdx > 0) {
+                        current.subItemIdx--;
+                    } else {
+                        current.itemIdx--;
+                        var newItem = playlist[current.itemIdx];
+                        if (newItem._type === 'track') {
+                            current.subItemIdx = 0;
+                        } else if (newItem._type === 'album') {
+                            current.subItemIdx = newItem.tracks.length - 1;
+                        }
+                    }
+                    if (player.playing){
+                        player.play();
                     }
                 }
-                if (player.playing) player.play();
             }
         };
 
@@ -357,6 +377,18 @@
           value = Math.floor((100 / audio.duration) * audio.currentTime);
        }
        progress.style.width = value + "%";
+    }
+
+    function randomTrack(player, playlist,current){
+        var currentItem = playlist[current.itemIdx];
+        if(player.random === true){
+            var currentAlbumTracks  = currentItem.tracks.length;
+            var randomIndex = Math.floor(Math.random() * currentAlbumTracks);
+            current.subItemIdx = randomIndex;
+            if (player.playing){
+                player.play();
+            }
+        }
     }
 
 })(window);
