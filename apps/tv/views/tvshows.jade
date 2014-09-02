@@ -50,15 +50,15 @@ block body
                     ul
                         li.currentshow(ng-repeat="tvshow in player.playlist", ng-mouseover="changeSelected(tvshow)", ng-class="{current: player.current.tvshow == $index}")
                             .header( ng-click="player.playlist.remove(tvshow); playlist.Visible = false")
-                                span.tvshow-title {{tvshow.title}}
+                                span.tvshow-title {{tvshow.name}}
                                 i.remove.circle.icon
                             ol.episodes
-                                li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode.localName); playlist.Visible = true") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
+                                li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode.filePath); playlist.Visible = true") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
 
            ul#tvshows(ng-class="{side: player.playlist.length  > 0  && playlist.Visible}")
                 li.tvshow(ng-repeat="tvshow in tvshows | filter:query ", ng-class="{current: focused == $index}", ng-click="player.playlist.add(tvshow);playlist.Visible = true").col-md-6.col-xs-12
                     i.circular.inverted.edit.icon(ng-click="open(tvshow)")
-                    img(ng-src="{{tvshow.banner}}")
+                    img(ng-src="{{tvshow.posterURL}}")
 
         h2.loading(ng-show="!tvshows") #{lingua.loading}
             .progress-pie-chart(data-percent="{{serverMessage}}", ng-class="{gt50: serverMessage > 50}", ng-show="serverMessage > 0")
@@ -82,10 +82,10 @@ block body
                         img.col-md-offset-1(ng-src="{{edit.banner}}")
                     .form-group
                         label.col-md-3.col-md-offset-1 Banner url
-                        input.col-md-7(type="text",name="poster_path",ng-model="edit.banner",required,ng-value="current.banner")
+                        input.col-md-7(type="text",name="posterURL",ng-model="edit.posterURL",required,ng-value="current.posterURL")
                     .form-group
                         label.col-md-3.col-md-offset-1 Title
-                        input.col-md-7(type="text",name="title",ng-model="edit.title",required,ng-value="current.title")
+                        input.col-md-7(type="text",name="name",ng-model="edit.name",required,ng-value="current.name")
         .modal-footer
             input.btn(type="submit",value="submit", ng-click="editItem()",required)
             button.btn(ng-click="cancel()") Cancel

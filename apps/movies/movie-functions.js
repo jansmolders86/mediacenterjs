@@ -38,7 +38,8 @@ exports.loadItems = function (req, res, serveToFrontEnd){
 };
 
 exports.edit = function(req, res, data) {
-    Movie.find(data.id).success(function(movie) {
+    Movie.find(data.id)
+    .success(function(movie) {
         movie.updateAttributes(data)
         .success(function() {res.status(200).send();})
         .error(function(err) {res.status(500).send();});

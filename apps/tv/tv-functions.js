@@ -29,34 +29,29 @@ var fs = require('fs.extra')
 
 var getNewFiles = false;
 
-//Create tables
-db.query("CREATE TABLE IF NOT EXISTS tvshows (title VARCHAR PRIMARY KEY,banner VARCHAR, genre VARCHAR, certification VARCHAR)");
-db.query("CREATE TABLE IF NOT EXISTS tvepisodes (localName TEXT PRIMARY KEY,title VARCHAR, season INTEGER, epsiode INTEGER)");
 
 exports.loadItems = function (req, res, serveToFrontEnd){
-    if(serveToFrontEnd == false){
-        fetchTVData(req, res, serveToFrontEnd);
-    } else if(serveToFrontEnd === undefined || serveToFrontEnd === null){
-        var serveToFrontEnd = true;
-        getTvshows(req, res, serveToFrontEnd);
-    }  else{
-        getTvshows(req, res, serveToFrontEnd);
-    }
+    Show.findAll({include:[Episode]})
+    .success(function (shows) {
+        if (shows === null || shows.length === 0) {
+            metafetcher.loadData(req, res, true);
+        } else {
+            res.json(shows);
+        }
+    })
+    .error(function (err) {
+        res.status(500).send();
+    });
 };
 
 exports.edit = function(req, res, data){
-    db.query('UPDATE tvshows SET title=$newTitle,banner=$newBanner WHERE title=$currentTitle; ', {
-        newTitle      : data.newTitle,
-        newBanner     : data.newBanner,
-        currentTitle  : data.currentTitle
-    },
-    function (err, rows) {
-        if(err){
-            console.log('DB error', err);
-        } else {
-            res.json('done');
-        }
-    });
+    Show.find(data.id)
+    .success(function(movie) {
+        movie.updateAttributes(data)
+        .success(function() {res.status(200).send();})
+        .error(function(err) {res.status(500).send();});
+    })
+    .error(function(err) {res.status(404).send();});
 }
 
 exports.playFile = function (req, res, platform, tvShowRequest){
@@ -85,17 +80,18 @@ exports.playFile = function (req, res, platform, tvShowRequest){
 };
 
 exports.progress = function (req, res){
-    db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression INTEGER, transcodingstatus TEXT)");
+    // db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression INTEGER, transcodingstatus TEXT)");
 
-    var incommingData   = req.body
-    , tvShowTitle       = incommingData.title
-    , progression       = incommingData.progression
-    , transcodingstatus = 'pending';
+    // var incommingData   = req.body
+    // , tvShowTitle       = incommingData.title
+    // , progression       = incommingData.progression
+    // , transcodingstatus = 'pending';
 
-    if(tvShowTitle !== undefined && progression !== undefined){
-        var progressionData = [tvShowTitle, progression, transcodingstatus];
-        db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)',progressionData );
-    }
+    // if(tvShowTitle !== undefined && progression !== undefined){
+    //     var progressionData = [tvShowTitle, progression, transcodingstatus];
+    //     db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)',progressionData );
+    // }
+    res.status(500).send();
 };
 
 
@@ -105,73 +101,4 @@ fetchTVData = function(req, res, serveToFrontEnd) {
     metafetcher.loadData(req, res, serveToFrontEnd);
 }
 
-getTvshows  = function(req, res, serveToFrontEnd){
-    var itemsDone   = 0;
-    var ShowList    = [];
 
-    db.query('SELECT * FROM tvshows ORDER BY title asc',{
-        title             : String,
-        banner            : String,
-        genre             : String,
-        certification     : String
-    }, function(err, rows) {
-        if(err){
-            db.query("CREATE TABLE IF NOT EXISTS tvshows (title VARCHAR PRIMARY KEY,banner VARCHAR, genre VARCHAR, certification VARCHAR)");
-            console.log("DB error",err);
-            serveToFrontEnd = true;
-            fetchTVData(req, res, serveToFrontEnd);
-        } else if (rows !== null && rows !== undefined && rows.length > 0) {
-            var count = rows.length;
-            console.log('Found '+count+' shows, getting additional data...');
-
-            rows.forEach(function(item, value){
-                var showTitle       = item.title
-                , showBanner        = item.banner
-                , showGenre         = item.genre
-                , showCertification = item.certification;
-
-                getEpisodes(showTitle, showBanner, showGenre, showCertification, function(availableEpisodes){
-                    itemsDone++;
-                    if(availableEpisodes !== 'none' && availableEpisodes !== null){
-                        ShowList.push(availableEpisodes);
-                    } else {
-                        console.log('Error retrieving episodes. Available episodes:', availableEpisodes);
-                    }
-                    if (count === itemsDone) {
-                        res.json(ShowList);
-                    }
-                });
-            });
-        } else {
-            fetchTVData(req, res, serveToFrontEnd);
-        }
-    });
-}
-
-getEpisodes = function(showTitle, showBanner, showGenre, showCertification, callback){
-    db.query('SELECT * FROM tvepisodes WHERE title = $title ORDER BY season asc', { title:showTitle }, {
-        localName   : String,
-        title       : String,
-        season      : Number,
-        episode     : Number
-    },
-    function(err, rows) {
-        if(err){
-            console.log('DB error getting episodes', err);
-            callback('none');
-        }
-        if (typeof rows !== 'undefined' && rows.length > 0){
-        var episodes = rows;
-        var availableEpisodes = {
-            "title"         : showTitle,
-            "banner"        : showBanner,
-            "genre"         : showGenre,
-            "certification" : showCertification,
-            "episodes"      : episodes
-        }
-        callback(availableEpisodes);
-        } else {
-            callback('none');
-        }
-    });
-}
