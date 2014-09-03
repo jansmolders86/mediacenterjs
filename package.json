@@ -80,6 +80,6 @@
         "node-schedule"     : "~0.1.13",
         "lastfmapi"         : "~0.0.5",
         "graceful-fs"       : "~2.0.3",
-        "sequelize"         : "^1.7.9",
+        "sequelize"         : "^1.7.9"
     }
 }
