@@ -214,7 +214,7 @@ getDataForNewShow = function(originalTitle, episodeTitle,callback){
                 }
 
                 showTitle = showTitleResult.toLowerCase();
-                Show.create({
+                Show.findOrCreate({name: showTitle}, {
                     name: showTitle,
                     posterURL: bannerImage,
                     genre: genre.join(','),
