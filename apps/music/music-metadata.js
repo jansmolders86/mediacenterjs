@@ -33,7 +33,7 @@ var config = configuration_handler.initializeConfiguration();
 
 /* Constants */
 
-var SUPPORTED_FILETYPES = "mp3";
+var SUPPORTED_FILETYPES = new RegExp("(m4a|mp3)$","g");
 var start = new Date();
 var nrScanned = 0;
 var totalFiles = 0;
@@ -78,7 +78,7 @@ var walk = function(dir, done) {
                 } else {
                     var ext = file.split(".");
                     ext = ext[ext.length - 1];
-                    if (ext === SUPPORTED_FILETYPES) {
+                    if (ext.match(SUPPORTED_FILETYPES)) {
                         results.push(file);
                         // doParse(file);
                     }
