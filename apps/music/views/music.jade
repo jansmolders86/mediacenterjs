@@ -55,7 +55,7 @@ block body
                         .list
                             img(ng-src="{{album.posterURL}}")
                             div.controls
-                                i.remove.circle.icon
+                                i.remove.circle.icon(ng-click="player.playlist.remove(album)")
                                 i.reorder.icon(ng-show="player.playlist.length > 1")
                         .album-info
                             span.album-title {{album.title}}
