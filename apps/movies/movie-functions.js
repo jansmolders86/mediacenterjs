@@ -23,7 +23,9 @@ var fs = require('fs.extra')
     , metafetcher = require('../movies/movie-metadata.js')
     , config = require('../../lib/handlers/configuration-handler').getConfiguration()
     , playback_handler = require('../../lib/handlers/playback')
-    , Movie = require('../../lib/utils/database-schema').Movie;
+    , dbSchema = require('../../lib/utils/database-schema')
+    , Movie = dbSchema.Movie
+    , ProgressionMarker = dbSchema.ProgressionMarker;
 
 
 exports.loadItems = function (req, res, serveToFrontEnd){
@@ -60,49 +62,55 @@ exports.update = function(req, res, data) {
     .error(function(err) {res.status(404).send();});
 }
 
-exports.playFile = function (req, res, platform, movieTitle){
-    file_utils.getLocalFile(config.moviepath, movieTitle, function(err, file) {
-        if (err){
-            console.log('File not found',err .red);
-        }
-        if (file) {
-            var movieUrl = file.href;
+exports.playFile = function (req, res, platform, id){
+    Movie.find(id)
+    .success(function(movie) {
+        file_utils.getLocalFile(config.moviepath, movie.originalName, function(err, file) {
+            if (err){
+                console.log('File not found',err .red);
+            }
+            if (file) {
+                var movieUrl = file.href;
 
-            var subtitleUrl = movieUrl;
-            subtitleUrl = subtitleUrl.split(".");
-            subtitleUrl = subtitleUrl[0]+".srt";
+                var subtitleUrl = movieUrl;
+                subtitleUrl = subtitleUrl.split(".");
+                subtitleUrl = subtitleUrl[0]+".srt";
 
-            var subtitleTitle = movieTitle;
-            subtitleTitle = subtitleTitle.split(".");
-            subtitleTitle = subtitleTitle[0]+".srt";
+                var subtitleTitle = movie.originalName;
+                subtitleTitle = subtitleTitle.split(".");
+                subtitleTitle = subtitleTitle[0]+".srt";
 
-            var type = 'movies';
+                var type = 'movies';
 
-            playback_handler.startPlayback(res, platform, movieUrl, movieTitle, subtitleUrl, subtitleTitle, type);
+                playback_handler.startPlayback(res, platform, movie.id, movieUrl, movie.originalName, subtitleUrl, subtitleTitle, type);
 
-        } else {
-            console.log("File " + movieTitle + " could not be found!" .red);
-        }
+            } else {
+                console.log("File " + movieTitle + " could not be found!" .red);
+            }
+        });
     });
 };
 
 
 exports.progress = function (req, res){
-    // db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression INTEGER, transcodingstatus TEXT)");
-
-    // var incommingData   = req.body
-    // , movieTitle        = incommingData.title
-    // , progression       = incommingData.progression
-    // , transcodingstatus = 'pending';
-
-    // if(movieTitle !== undefined && progression !== undefined){
-    //     var progressionData = [movieTitle, progression, transcodingstatus];
-    //     db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)', progressionData);
-    //     res.status(200).send();
-    // } else {
+    var data = req.body;
+    ProgressionMarker.findOrCreate({MovieId : data.id},
+        {MovieId: data.id})
+    .success(function (progressionmarker) {
+        progressionmarker.updateAttributes({
+            progression         : data.progression,
+            transcodingStatus   : 'pending'
+        })
+        .success(function() {
+            res.status(200).send();
+        })
+        .error(function(err) {
+            res.status(500).send();
+        });
+    })
+    .error(function(err) {
         res.status(500).send();
-    // }
-
+    });
 }
 
 

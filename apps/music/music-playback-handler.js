@@ -22,31 +22,22 @@ var colors = require('colors'),
 	Encoder = require('node-html-encoder').Encoder,
 	encoder = new Encoder('entity'),
 	config = require('../../lib/handlers/configuration-handler').getConfiguration(),
-	file_utils = require('../../lib/utils/file-utils');
+	file_utils = require('../../lib/utils/file-utils'),
+    Track = require('../../lib/utils/database-schema').Track;
 
 /* Public Methods */
-
-// Init Database
-var dblite = require('dblite')
-if(os.platform() === 'win32'){
-    dblite.bin = "./bin/sqlite3/sqlite3";
-}
-var db = dblite('./lib/database/mcjs.sqlite');
-db.on('info', function (text) { console.log(text) });
-db.on('error', function (err) { console.error('Database error: ' + err) });
-
 /**
  * Starts the playback of the provided track.
  * @param response              The HTTP-Response
  * @param albumTitle            The album title
  * @param trackName             The name of the track
  */
-exports.startTrackPlayback = function(response, track) {
-    getFilePathOfTrackInAlbum(track, function(fileUrl) {
+exports.startTrackPlayback = function(response, trackid) {
+    getFilePathOfTrackInAlbum(trackid, function(fileUrl) {
         if (fileUrl) {
             startTrackStreaming(response, fileUrl);
         } else {
-            console.error('Could not find file ' + track);
+            console.error('Could not find file ' + fileUrl);
         }
     });
 };
@@ -71,24 +62,12 @@ startTrackStreaming = function(response, playbackPath) {
 	stream.pipe(response);
 };
 
-getFilePathOfTrackInAlbum = function(track, callback) {
-
-    db.query('SELECT * FROM tracks WHERE filename =? ', [ track ], {
-            title         	: String,
-            track         	: String,
-            album  		: String,
-            artist  	    	: String,
-            year            	: String,
-            genre		: String,
-            filename        	: String,
-            filepath        	: String
-        },
-        function(rows) {
-            if (typeof rows !== 'undefined' && rows.length > 0){
-                callback(rows[0].filepath);
-            } else {
-                callback(null);
-            }
-        }
-    );
+getFilePathOfTrackInAlbum = function(trackid, callback) {
+    Track.find(trackid)
+    .success(function (track) {
+        callback(track.filePath);
+    })
+    .error(function (err) {
+        callback(null);
+    });
 };

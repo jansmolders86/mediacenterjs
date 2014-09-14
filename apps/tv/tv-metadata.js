@@ -17,8 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /* Global Imports */
-var dblite = require('dblite'),
-    fs = require('graceful-fs'),
+var fs = require('graceful-fs'),
     path = require('path'),
     os = require('os'),
     file_utils = require('../../lib/utils/file-utils'),

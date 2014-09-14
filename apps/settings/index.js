@@ -26,9 +26,6 @@ var express = require('express')
 , DeviceInfo = require('../../lib/utils/device-utils')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
-var database = require('../../lib/utils/database-connection');
-var db = database.db;
-
 exports.index = function(req, res, next){
 
     DeviceInfo.storeDeviceInfo(req);

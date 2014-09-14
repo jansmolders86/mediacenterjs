@@ -231,7 +231,7 @@
                         player.currentTrack = currentItem.tracks[current.subItemIdx];
                     }
 
-                    audio.src = 'music/'+player.currentTrack.filename +'/play/';
+                    audio.src = 'music/'+player.currentTrack.id +'/play/';
                 }
                 audio.play();
                 player.playing = true;

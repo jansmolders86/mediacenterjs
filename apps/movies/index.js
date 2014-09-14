@@ -58,21 +58,9 @@ exports.get = function(req, res, next){
     }
 
     if(platform !== undefined && optionalParam === 'play') {
-        var title = infoRequest.replace(/\+/g, " ");
-        switch(platform) {
-            case('desktop'):
-                functions.playFile(req, res, platform, title);
-                handled = true;
-                break;
-            case('ios'):
-                functions.playFile(req, res, platform, title);
-                handled = true;
-                break;
-            case('android'):
-                functions.playFile(req, res, platform, title);
-                handled = true;
-                break;
-        }
+        var id = infoRequest;
+        functions.playFile(req, res, platform, id);
+        handled = true;
     }
     if (!handled) {
         next();

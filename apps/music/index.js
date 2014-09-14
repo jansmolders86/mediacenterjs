@@ -52,19 +52,18 @@ exports.get = function(req, res, next){
     }
 
     if(action){
-        var album = infoRequest.replace(/\+/g, " ");
-        var track = optionalParam.replace(/\+/g, " ");
+        var trackid = optionalParam.replace(/\+/g, " ");
         switch(action) {
             case('play'):
-                functions.playTrack(req, res, track, album);
+                functions.playTrack(req, res, trackid);
                 handled = true;
             break;
             case('next'):
-                functions.nextTrack(req, res, track, album);
+                functions.nextTrack(req, res, trackid);
                 handled = true;
             break;
             case('random'):
-                functions.randomTrack(req, res, track, album);
+                functions.randomTrack(req, res, trackid);
                 handled = true;
             break;
         }

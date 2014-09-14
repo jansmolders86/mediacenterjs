@@ -24,12 +24,6 @@ var fs = require('fs.extra')
     , config = require('../../lib/handlers/configuration-handler').getConfiguration()
     , playback_handler = require('../../lib/handlers/playback');
 
-    var database = require('../../lib/utils/database-connection');
-    var db = database.db;
-
-var getNewFiles = false;
-
-
 exports.loadItems = function (req, res, serveToFrontEnd){
     Show.findAll({include:[Episode]})
     .success(function (shows) {
@@ -54,44 +48,54 @@ exports.edit = function(req, res, data){
     .error(function(err) {res.status(404).send();});
 }
 
-exports.playFile = function (req, res, platform, tvShowRequest){
-    file_utils.getLocalFile(config.tvpath, tvShowRequest, function(err, file) {
-        if (err){
-            console.log(err .red);
-        }
-        if (file) {
-            var tvShowUrl = file.href;
+exports.playFile = function (req, res, platform, episodeId){
+    Episode.find(episodeId)
+    .success(function (episode) {
+        file_utils.getLocalFile(config.tvpath, episode.fileName, function(err, file) {
+            if (err){
+                console.log(err .red);
+            }
+            if (file) {
+                var tvShowUrl = file.href;
 
-            var subtitleUrl = tvShowUrl;
-            subtitleUrl     = subtitleUrl.split(".");
-            subtitleUrl     = subtitleUrl[0]+".srt";
+                var subtitleUrl = tvShowUrl;
+                subtitleUrl     = subtitleUrl.split(".");
+                subtitleUrl     = subtitleUrl[0]+".srt";
 
-            var subtitleTitle   = tvShowRequest;
-            subtitleTitle       = subtitleTitle.split(".");
-            subtitleTitle       = subtitleTitle[0]+".srt";
+                var subtitleTitle   = episode.fileName;
+                subtitleTitle       = subtitleTitle.split(".");
+                subtitleTitle       = subtitleTitle[0]+".srt";
 
-            var type = "tv";
-            playback_handler.startPlayback(res, platform, tvShowUrl, tvShowRequest, subtitleUrl, subtitleTitle, type);
+                var type = "tv";
+                playback_handler.startPlayback(res, platform, episode.id, tvShowUrl, episode.fileName, subtitleUrl, subtitleTitle, type);
 
-        } else {
-            console.log("File " + tvShowRequest + " could not be found!" .red);
-        }
+            } else {
+                console.log("File " + episode.fileName + " could not be found!" .red);
+            }
+        });
     });
 };
 
 exports.progress = function (req, res){
-    // db.query("CREATE TABLE IF NOT EXISTS progressionmarker (title TEXT PRIMARY KEY, progression INTEGER, transcodingstatus TEXT)");
 
-    // var incommingData   = req.body
-    // , tvShowTitle       = incommingData.title
-    // , progression       = incommingData.progression
-    // , transcodingstatus = 'pending';
-
-    // if(tvShowTitle !== undefined && progression !== undefined){
-    //     var progressionData = [tvShowTitle, progression, transcodingstatus];
-    //     db.query('INSERT OR REPLACE INTO progressionmarker VALUES(?,?,?)',progressionData );
-    // }
-    res.status(500).send();
+    var data = req.body;
+    ProgressionMarker.findOrCreate({EpisodeId : data.id},
+        {EpisodeId: data.id})
+    .success(function (progressionmarker) {
+        progressionmarker.updateAttributes({
+            progression         : data.progression,
+            transcodingStatus   : 'pending'
+        })
+        .success(function() {
+            res.status(200).send();
+        })
+        .error(function(err) {
+            res.status(500).send();
+        });
+    })
+    .error(function(err) {
+        res.status(500).send();
+    });
 };
 
 

@@ -35,8 +35,8 @@ exports.loadItems = function (req, res, serveToFrontEnd) {
     });
 };
 
-exports.playTrack = function(req, res, track, album){
-    music_playback_handler.startTrackPlayback(res, track);
+exports.playTrack = function(req, res, trackid){
+    music_playback_handler.startTrackPlayback(res, trackid);
 };
 
 exports.edit = function(req, res, data){

@@ -28,9 +28,9 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
         $scope.movies = data;
     });
 
-    $scope.playMovie = function(data){
+    $scope.playMovie = function(movie){
         $scope.playing = true;
-        playMovie(data, $http);
+        playMovie(movie, $http);
     }
 
     $scope.open = function (movie) {
@@ -121,8 +121,7 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
 
 });
 
-function playMovie(data, $http){
-    var orginalName = data;
+function playMovie(movie, $http){
 
     var platform = 'desktop';
     if (navigator.userAgent.match(/Android/i)) {
@@ -131,8 +130,8 @@ function playMovie(data, $http){
         platform = 'ios';
     }
 
-    $http.get('/movies/'+orginalName+'/play/'+platform).success(function(data) {
-        var fileName                =   orginalName
+    $http.get('/movies/'+movie.id+'/play/'+platform).success(function(data) {
+        var fileName                =   movie.originalName
             , outputFile            =   fileName.replace(/ /g, "-")
             , extentionlessFile     =   outputFile.replace(/\.[^\.]+$/, "")
             , videoUrl              =   "/data/movies/"+extentionlessFile+".mp4"
@@ -140,6 +139,6 @@ function playMovie(data, $http){
             , playerID              =   'player'
             , homeURL               =   '/movies/'
             , type                  =   'movies';
-        videoJSHandler(playerID, data, videoUrl, subtitleUrl, orginalName,homeURL, 5000, type);
+        videoJSHandler(playerID, data, movie.id, videoUrl, subtitleUrl, movie.originalName,homeURL, 5000, type);
     });
 }
