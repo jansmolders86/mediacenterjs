@@ -40,6 +40,7 @@ block body
                     i.circular.inverted.edit.icon(ng-click="open(movie)")
                     .fixed-ratio-cover.fixed-ratio
                         img.movieposter(ng-src="{{movie.posterURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie)")
+                    .service(ng-if="movie.service != 'local'", class="{{movie.service}}")
                     .caption(ng-click="playMovie(movie)")
                             p
                                 h1.movie-title{{movie.title}}

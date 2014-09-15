@@ -25,18 +25,37 @@ var fs = require('fs.extra')
     , playback_handler = require('../../lib/handlers/playback')
     , dbSchema = require('../../lib/utils/database-schema')
     , Movie = dbSchema.Movie
-    , ProgressionMarker = dbSchema.ProgressionMarker;
+    , ProgressionMarker = dbSchema.ProgressionMarker
+    , io = require('../../lib/utils/setup-socket').io;
 
 
-exports.loadItems = function (req, res, serveToFrontEnd){
-    var metaType = "movie";
-    var getNewFiles = true;
-    if(serveToFrontEnd === false){
-        fetchMovieData(req, res, metaType, serveToFrontEnd);
-    } else {
-        serveToFrontEnd = true;
-        getMovies(req, res, metaType, serveToFrontEnd,getNewFiles);
-    }
+exports.loadItems = function (req, res){
+
+    getMovies(function (movies) {
+        if (!movies) {
+            getNetlfixMyList(function() {
+                metafetcher.loadData(function (percent) {
+                     io.sockets.emit('progress',{msg:percent});
+                },
+                function (err) {
+                    if (err) {
+                        res.status(404).send();
+                    } else {
+                        io.sockets.emit('serverStatus',{msg:'Processing data...'});
+                        getMovies(function (movies) {
+                            if (!movies) {
+                                res.status(500).send();
+                            } else {
+                                res.json(movies);
+                            }
+                        });
+                    }
+                });
+            });
+        } else {
+            res.json(movies);
+        }
+    });
 };
 
 exports.edit = function(req, res, data) {
@@ -115,29 +134,86 @@ exports.progress = function (req, res){
 
 
 /** Private functions **/
-
-fetchMovieData = function(req, res, metaType, serveToFrontEnd, getNewFiles) {
-    console.log('Fetching movie data...', serveToFrontEnd);
-    metafetcher.loadData(req, res, serveToFrontEnd);
-}
-
-getMovies = function(req, res, metaType, serveToFrontEnd,getNewFiles){
-    console.log('Loading movie data...', serveToFrontEnd);
+getMovies = function(callback){
     Movie.findAll().complete(function(err, movies) {
         if(err){
-            serveToFrontEnd = true;
-            if(getNewFiles === true){
-                fetchMovieData(req, res, metaType, serveToFrontEnd,getNewFiles);
-            }
-        } else if (movies !== null && movies !== undefined && serveToFrontEnd !== false && movies.length > 0){
-            console.log('Sending data to client...');
-            res.json(movies);
+            callback(null);
+        } else if (movies !== null && movies !== undefined && movies.length > 0){
+            callback(movies);
         } else {
-            console.log('Getting data...');
-            serveToFrontEnd = true;
-            if(getNewFiles === true){
-                fetchMovieData(req, res, metaType, serveToFrontEnd,getNewFiles);
-            }
+            callback(null);
         }
     });
 }
+
+
+
+/** Netflix **/
+//rather than a seperate web app
+//(which would just be the netflix website anyway)
+//add the my list into the movies list
+//this wants to be plugin like, but this is just a PoC
+//Also no way to seperate TV from Movies without 
+//making more requests to netflix or metadata service
+var request = require('request'),
+    cheerio = require("cheerio");
+
+request.defaults({
+        maxRedirects:20,
+        jar: request.jar()
+    }),
+
+getNetlfixMyList = exports.getNetlfixMyList = function(callback) {
+    //from https://gist.github.com/wilson428/8312213#file-scrape-js-L52
+    request("https://signup.netflix.com/Login", function(err, resp, body) {
+        // cheerio parses the raw HTML of the response into a jQuery-like object for easy parsing
+        var $ = cheerio.load(body);
+ 
+        // we're specifically looking for an ID on the page we need to log in, which looks like this: 
+        // <input type="hidden" name="authURL" value="1388775312720.+vRSN6us+IhZ1qOSlo8CyAS/ZJ4=">
+        var data = {
+            email: "EMAIL",
+            password: "PASSWORD"
+        }
+        data.authURL = $("input[name='authURL']").attr("value");
+ 
+        request.post("https://signup.netflix.com/Login", { form: data }, function(err, resp, body) {
+            if (err) { throw err; }
+            console.log("Successfully logged in.");
+            //can only use the default profile :/ 
+            //switching profile seems to rely on the netflix api
+            //we have to request twice to get around profiles
+            request("https://www2.netflix.com/MyList", function (err, resp, body) {
+            request("http://www2.netflix.com/MyList", function(err, resp, body) {
+                console.log("received mylist");
+                var $ = cheerio.load(body);
+                var mylistmovies = $(".list-items > .agMovie");
+                var movieData = [];
+                mylistmovies.each(function(i, mylistmovie) {
+                    var a = cheerio(mylistmovie).find("span > a");
+                    var img = cheerio(mylistmovie).find("span > img");
+                    var data = {
+                        videoURL : a.attr("href"),
+                        title : img.attr("alt"),
+                        serviceId : a.attr("data-uitrack").split(",")[0],
+                        service: "netflix",
+                        posterURL : img.attr("src")
+                    };
+                    movieData.push(data);
+                });
+                Movie.bulkCreate(movieData)
+                .success(function() {
+                    callback();    
+                });
+            });
+            });
+        });
+    });
+}
+
+
+
+
+
+
+

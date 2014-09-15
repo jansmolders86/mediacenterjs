@@ -25,8 +25,7 @@ var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3'),
     configuration_handler = require('../../lib/handlers/configuration-handler'),
     config = configuration_handler.initializeConfiguration(),
     file_utils = require('../../lib/utils/file-utils'),
-    movie_title_cleaner = require('../../lib/utils/title-cleaner'),
-    io = require('../../lib/utils/setup-socket').io;
+    movie_title_cleaner = require('../../lib/utils/title-cleaner');
 
 
 /* Constants */
@@ -76,16 +75,16 @@ var walk = function(dir, done) {
     });
 };
 
-var setupParse = function(req, res, serveToFrontEnd, results) {
+
+var setupParse = function(progressCallback, completionCallback, results) {
     if (results && results.length > 0) {
         var file = results.pop();
-        doParse(req, res, file, serveToFrontEnd, function() {
-            setupParse(req, res, serveToFrontEnd, results);
+        doParse(progressCallback, completionCallback, file, function() {
+            setupParse(progressCallback, completionCallback, results);
         });
     }
     if (!results) {
-        console.log('no results!');
-        res.json(noResult);
+        completionCallback("No files found");
     }
 };
 
@@ -118,7 +117,7 @@ var updateMetadataOfMovie = exports.updateMetadataOfMovie = function(movie, call
     });
 }
 
-var doParse = function(req, res, file, serveToFrontEnd, callback) {
+var doParse = function(progressCallback, completionCallback, file, callback) {
     var incommingTitle      = file.split('/').pop()
         , originalTitle     = incommingTitle
         , movieInfo         = movie_title_cleaner.cleanupTitle(incommingTitle)
@@ -177,17 +176,14 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
             nrScanned++;
 
             var perc = parseInt((nrScanned / totalFiles) * 100);
-            var increment = new Date(), difference = increment - start;
             if (perc > 0) {
-                var total = (difference / perc) * 100, eta = total - difference;
-                io.sockets.emit('progress',{msg:perc});
+                progressCallback(perc);
                 console.log(perc+'% done');
             }
 
             if(nrScanned === totalFiles){
-                if(serveToFrontEnd === true){
-                    io.sockets.emit('serverStatus',{msg:'Processing data...'});
-                    getMovies(req, res);
+                if (progressCallback) {
+                    completionCallback(null);
                 }
             }
             callback();
@@ -233,27 +229,11 @@ getMetadataFromTrakt = function(movieTitle, callback) {
     });
 };
 
-getMovies = function(req, res){
-    Movie.all(function(err, movies) {
-         if(err){
-             console.log("DB error",err);
-             res.json(noResult);
-         } else if (movies !== null && movies.length > 0){
-             console.log('Sending data to client...');
-             res.json(movies);
-            // db.close();
-         } else{
-             res.json(noResult);
-         }
-     });
-}
-
-
-exports.loadData = function(req, res, serveToFrontEnd) {
+exports.loadData = function(progressCallback, completionCallback) {
     nrScanned = 0;
     walk(dir,  function(err, results) {
         totalFiles = (results) ? results.length : 0;
-        setupParse(req, res, serveToFrontEnd, results);
+        setupParse(progressCallback, completionCallback, results);
     });
 }
 

@@ -54,6 +54,10 @@ exports.get = function(req, res, next){
                 functions.loadItems(req, res, serveToFrontEnd);
                 handled = true;
                 break;
+            case('loadNF'):
+                functions.getNetlfixMyList();
+                handled = true;
+                break;
         }
     }
 
