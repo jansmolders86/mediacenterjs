@@ -22,8 +22,13 @@ body.playing .container-fluid{display:none;}
 body.playing > #player{display:block;}
 
 header.scrolling{ opacity:0.9;}
-header{height:60px; z-index:5; position:fixed!important; top:0; }
-header h1{z-index:4; margin-top:0px; text-transform: uppercase;}
+header{
+    height:60px;
+    z-index:5;
+    position:fixed!important;
+    top:0;
+}
+header h1{z-index:4; margin-top:7px; text-transform: uppercase;}
 .container-fluid{ padding-top:90px;}
 /* Bootstrap override */
 
@@ -94,7 +99,7 @@ body.playing #backdropimg{
     */
 }
 
-a.backlink { margin-top: -5px; z-index:4; }
+a.backlink { margin-top: 2px; z-index:4; }
 
 /* Movie App styling */
 
@@ -105,7 +110,7 @@ a.backlink { margin-top: -5px; z-index:4; }
 }
 
 .view-select {
-    padding: 17px 20px;
+    padding: 19px 20px;
     display: inline-block;
     background: #4B4C51;
     cursor:pointer;
@@ -151,7 +156,7 @@ a.backlink { margin-top: -5px; z-index:4; }
     position:relative;
     padding: 0px;
     margin: 0px 0px 20px 0;
-    border-radius:2px;
+    border-radius:0px;
     background:#fff;
     cursor:pointer;
     overflow:hidden;
@@ -380,4 +385,13 @@ h1.movie-title{
     98%{ top:-180px; }
     100%{ top:0px; }
 }
+
+
+
+@media (max-width: 600px) {
+    .container-fluid{
+        padding:0;
+    }
+}
+
 

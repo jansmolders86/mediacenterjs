@@ -202,6 +202,8 @@
             paused = false,
             random = false,
             currentTrack = null,
+            currentAlbum = null,
+            currentCover = null,
             current = {
                 itemIdx: -1,
                 subItemIdx: -1
@@ -211,6 +213,8 @@
             playlist: playlist,
             current: current,
             currentTrack: currentTrack,
+            currentAlbum: currentAlbum,
+            currentCover: currentCover,
             playing: false,
             play: function(subItemIdx, itemIdx) {
                 if (!playlist.length){
@@ -229,6 +233,8 @@
                         player.currentTrack = currentItem;
                     } else if (currentItem._type === 'album') {
                         player.currentTrack = currentItem.tracks[current.subItemIdx];
+                        player.currentAlbum = currentItem.title;
+                        player.currentCover = currentItem.posterURL;
                     }
 
                     audio.src = 'music/'+player.currentTrack.id +'/play/';
@@ -322,6 +328,9 @@
         };
 
         playlist.add = function(album) {
+            if (playlist.length > 0){
+                playlist.splice(0, 1);
+            }
             if (playlist.indexOf(album) != -1){
                 return;
             }

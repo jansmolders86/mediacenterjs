@@ -20,7 +20,9 @@ block additional_scripts
              var isTouch = "ontouchstart" in document.documentElement;
              if(!isTouch){
                  $('#inner-playlist').slimScroll({
-                     height: '100%'
+                     height: '100%',
+                     wheelStep: 30,
+                     scrollBy : '80px'
                  });
              }
          });
@@ -52,20 +54,21 @@ block body
                                 span.track-title {{album.title}}
                                 i.remove.circle.icon(ng-click="player.playlist.remove(album)")
                     div(ng-switch-when="album")
-                        .list
-                            img(ng-src="{{album.posterURL}}")
-                            div.controls
-                                i.remove.circle.icon(ng-click="player.playlist.remove(album)")
-                                i.reorder.icon(ng-show="player.playlist.length > 1")
-                        .album-info
-                            span.album-title {{album.title}}
-                            span.album-artist {{album.artist.name}}
-                            span.album-year(ng-show="album.year !== 0") {{album.year}}
-                        ol.tracks
-                            li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.subItemIdx == $index}", ng-click="player.play($index, $parent.$index)")
-                                i.play.icon
-                                span.track-number {{track.track}}
-                                span.track-title {{track.title}}
+                        .img-wrapper
+                            img(ng-src="{{album.posterURL}}", width="100%")
+                        .album-wrapper
+                            .album-info
+                                span.album-title {{album.title}}
+                                div.controls
+                                    i.remove.circle.icon(ng-click="player.playlist.remove(album)")
+                                    i.reorder.icon(ng-show="player.playlist.length > 1")
+                                span.album-artist {{album.artist.name}}
+                                span.album-year(ng-show="album.year !== 0") {{album.year}}
+                            ol.tracks
+                                li.track(ng-repeat="track in album.tracks | orderBy:track.order:reverse", ng-class="{current: player.current.subItemIdx == $index}", ng-click="player.play($index, $parent.$index)")
+                                    i.play.icon
+                                    span.track-number {{track.order}}
+                                    span.track-title {{track.title}}
 
     .container-fluid(ng-class="{bottom: player.playlist.length > 0}")
             section#library(ng-class="{side: player.playlist.length > 0  && playlist.Visible}")
@@ -94,14 +97,14 @@ block body
                 {{serverStatus}}
             h2.loading(ng-show="albums.result === 'none'") No data found, please check the music filepath
 
-    #player.col-xs-12.col-md-12.col-lg-12(ng-show="player.playlist.length > 0",ng-class="className", ng-cloak)
+    #player.col-xs-12.col-md-12.col-lg-12(ng-show="player.playlist.length > 0", ng-class="className", ng-cloak)
         #progressBar.ui.active.striped.progress(ng-click="player.seek()")
             span#progress.bar
 
         #playing-info.col-xs-12.col-md-5
-            img.center-block.img-reponsive.hidden-xs(ng-src="{{player.currentTrack.album.cover}}")
+            img.center-block.img-reponsive.hidden-xs(ng-src="{{player.currentCover}}")
             .info
-                span.album-artist {{player.currentTrack.album.artist}}
+                span.album-artist {{player.currentAlbum}}
                 span.album-track {{player.currentTrack.title}}
 
         div.nav

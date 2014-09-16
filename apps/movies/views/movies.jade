@@ -21,7 +21,7 @@ block additional_scripts
 
 block body
     #backdrop
-        img#backdropimg.fullscreen(ng-src="{{movies.focused.backgroundURL}}")
+        img#backdropimg.fullscreen
     header
         .container
             .row
@@ -35,7 +35,7 @@ block body
                         | Show Hidden
     .container-fluid
         .row
-        .col-xs-12.col-sm-6.col-md-2(ng-repeat="movie in movies | filter:query", ng-cloak)
+        .col-xs-6.col-sm-6.col-md-2(ng-repeat="movie in movies | filter:query", ng-cloak)
                 .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-class="{current: movies.focused.id == movie.id }", ng-mouseenter="movies.focused = movie",ng-hide="movie.title === ''", ng-mouseleave="movies.focused = null")
                     i.circular.inverted.edit.icon(ng-click="open(movie)")
                     .fixed-ratio-cover.fixed-ratio
@@ -51,7 +51,7 @@ block body
                         p
                             strong #{lingua.movies_Runtime}: {{movie.runtime}} min
                     .cdNumber(ng-show="movie.cdNumber.length > 0")
-                        span {{movie.cd_number}}
+                        span {{movie.cdNumber}}
 
         h2.loading(ng-show="!movies") #{lingua.loading}
             .progress-pie-chart(data-percent="{{serverMessage}}", ng-class="{gt50: serverMessage > 50}", ng-show="serverMessage > 0")
