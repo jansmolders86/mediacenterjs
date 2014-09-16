@@ -78,7 +78,7 @@ var walk = function(dir, done) {
 var setupParse = function(req, res, serveToFrontEnd, results) {
     if (results && results.length > 0) {
         var i = 0;
-        async.each(results, function(file, callback) {
+        async.eachSeries(results, function(file, callback) {
              doParse(req, res, file, serveToFrontEnd, function() {
                 var perc = (i++)/results.length * 100 >> 0;//Faster math.floor
                 io.sockets.emit('progress',{msg:perc});
