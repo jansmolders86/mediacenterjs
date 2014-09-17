@@ -268,9 +268,11 @@ span.title{visibility:hidden; width:0; height:0;}
 .movieposter a{ float:left; }
 .movieposter .imageWrapper {width:250px;  height:278px; overflow:hidden;}
 .movieposter .overview{
-    padding:10px 10px 20px 10px;
+    padding:10px 10px 0 10px;
     margin:0;
-    height:150px;
+    height:210px;
+    -webkit-mask-box-image:
+-webkit-linear-gradient(transparent, transparent 1%, black 10%, black 90%, transparent 99%,  transparent);
     position:relative;
     overflow:hidden;
 }
