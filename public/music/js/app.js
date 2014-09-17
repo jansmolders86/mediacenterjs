@@ -203,7 +203,6 @@
             random = false,
             currentTrack = null,
             currentAlbum = null,
-            currentCover = null,
             current = {
                 itemIdx: -1,
                 subItemIdx: -1
@@ -214,7 +213,6 @@
             current: current,
             currentTrack: currentTrack,
             currentAlbum: currentAlbum,
-            currentCover: currentCover,
             playing: false,
             play: function(subItemIdx, itemIdx) {
                 if (!playlist.length){
@@ -233,8 +231,7 @@
                         player.currentTrack = currentItem;
                     } else if (currentItem._type === 'album') {
                         player.currentTrack = currentItem.tracks[current.subItemIdx];
-                        player.currentAlbum = currentItem.title;
-                        player.currentCover = currentItem.posterURL;
+                        player.currentAlbum = currentItem
                     }
 
                     audio.src = 'music/'+player.currentTrack.id +'/play/';

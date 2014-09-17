@@ -102,9 +102,9 @@ block body
             span#progress.bar
 
         #playing-info.col-xs-12.col-md-5
-            img.center-block.img-reponsive.hidden-xs(ng-src="{{player.currentCover}}")
+            img.center-block.img-reponsive.hidden-xs(ng-src="{{player.currentAlbum.posterURL}}")
             .info
-                span.album-artist {{player.currentAlbum}}
+                span.album-artist {{player.currentAlbum.title}}
                 span.album-track {{player.currentTrack.title}}
 
         div.nav
