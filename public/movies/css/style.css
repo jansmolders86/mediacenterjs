@@ -247,12 +247,13 @@ span.title{visibility:hidden; width:0; height:0;}
     -webkit-transform: translateY(100%);
     padding:0;
     width:100%;
-    background:#fff;
+    background:rgba(0,0,0,0.8);
+    color: #fff;
     position:absolute;
     bottom:0;
     left:0;
     z-index: 5;
-        -webkit-transition: -webkit-transform 0.5s ease-in-out;
+    -webkit-transition: -webkit-transform 0.5s ease-in-out;
     -moz-transition: transform 0.5s ease-in-out;
     -o-transition: transform 0.5s ease-in-out;
     transition: transform 0.5s ease-in-out;
@@ -276,16 +277,15 @@ span.title{visibility:hidden; width:0; height:0;}
 
 .movieposter .specs{
     float: left;
-    color: #666;
+    color: #fff;
     line-height: 19px;
     width: 100%;
-    background:#f5f5f5;
+    background:#363636;
     height:35px;
     position:absolute;
     bottom:0;
     left:0;
-    color:#9F9384;
-    border-top: 1px solid #e7e7e7;
+    border-top: 1px solid #333;
     z-index:6;
 }
 
