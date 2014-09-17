@@ -123,11 +123,7 @@ a.backlink { margin-top: 2px; z-index:4; }
     background: #fb8521;
 }
 
-.view-select input[type=checkbox] {
-   margin: 4px 10px 0;
-}
-
-.movie-loading{
+.movie-loading {
     position:absolute;
     left:50%;
     top:50%;
