@@ -261,7 +261,7 @@ body,
     color: #fff;
     position: fixed;
 }
-#playlist ul{padding-bottom: 50px;}
+#playlist ul{padding-bottom:50px;}
 
 #playlist img{
     margin-bottom:5px;
@@ -272,6 +272,12 @@ body,
 }
 #playlist .album-title{font-size:14px;}
 #playlist .album{ padding:0px;}
+
+#tracklist li{height:auto!important;}
+
+.album:first-child .trackview{
+    padding-top:100px;
+}
 
 li.track{
     padding:5px 0;
@@ -288,6 +294,9 @@ li.track{
 #library li.track:nth-child(odd),
 #playlist ol li:nth-child(odd){
     background: #33363a;
+}
+#playlist ol li:nth-child(even) {
+    background: #3d4045;
 }
 #library li.track:last-child {
     margin-bottom: 50px;

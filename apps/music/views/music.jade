@@ -25,6 +25,8 @@ block additional_scripts
                      scrollBy : '80px'
                  });
              }
+
+             $('.trackview:first').css('paddingTop', '100px');
          });
 block body
     header(ng-init="playlist.Visible = true", ng-class="{side: player.playlist.length > 0 && playlist.Visible}")
@@ -46,14 +48,14 @@ block body
 
             ul
                 li.album(draggable="true", ng-on-drag-over="$event.preventDefault()", ng-on-drop="onDrop($index)", ng-on-drag-begin="startDrag($index)" ng-repeat="album in player.playlist", ng-switch="album._type" ,ng-class="{current: player.current.itemIdx == $index}")
-                    div(ng-switch-when="track")
+                    div.trackview(ng-switch-when="track")
                         ol.tracks
                             li.track(ng-class="{current: player.current.itemIdx == $index}", ng-click="player.play(0, $index)", style="position: relative;")
                                 i.play.icon
                                 span.track-number {{album.track}}
                                 span.track-title {{album.title}}
                                 i.remove.circle.icon(ng-click="player.playlist.remove(album)")
-                    div(ng-switch-when="album")
+                    div.albumview(ng-switch-when="album")
                         .img-wrapper
                             img(ng-src="{{album.posterURL}}", width="100%")
                         .album-wrapper

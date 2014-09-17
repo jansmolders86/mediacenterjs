@@ -325,8 +325,11 @@
         };
 
         playlist.add = function(album) {
-            if (playlist.length > 0){
-                playlist.splice(0, 1);
+
+            if (album._type === 'album') {
+                if (playlist.length > 0){
+                    playlist.splice(0, 1);
+                }
             }
             if (playlist.indexOf(album) != -1){
                 return;
