@@ -17,8 +17,11 @@
 */
 var metafetcher = require('../music/music-metadata')
   , music_playback_handler = require('./music-playback-handler')
-  , async = require('async');
-
+  , async = require('async')
+  , dbschema = require('../../lib/utils/database-schema')
+  , Album = dbschema.Album
+  , Artist = dbschema.Artist
+  , Track = dbschema.Track;
 
 exports.loadItems = function (req, res, serveToFrontEnd) {
     Album.findAll({include: [Track]})
@@ -40,13 +43,10 @@ exports.playTrack = function(req, res, trackid){
 };
 
 exports.edit = function(req, res, data){
-    var album = new Album(data);
-     album.save(function (err, updated) {
-         if(err){
-            console.log('DB error', err);
-         } else {
-            console.log("updted");
-            res.status(200).json(updated);
-         }
-     });
+    Album.find(data.id)
+    .success(function(album) {
+        album.updateAttributes(data)
+        .success(function () {res.status(200).send();})
+        .error(function(err) {res.status(500).send();});
+    });
 }
