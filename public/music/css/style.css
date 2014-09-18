@@ -193,6 +193,10 @@ body,
     display:block;
 }
 
+.album-year{
+    font-weight:300;
+}
+
 .album-title{
     height:20px;
     font-size:14px;
@@ -221,13 +225,13 @@ body,
 #playlist {
     float: left;
     width: 360px;
-    background: #3d4045;
+    background: #313234;
     overflow-y: auto;
     overflow-x: hidden;
     position: absolute;
     top:0px;
     left:0px;
-    bottom: 160px;
+    bottom: 100px;
     z-index:9;
 }
 
@@ -239,28 +243,37 @@ body,
 #playlist .album-wrapper,
 #playlist .album-info,
 #playlist ol{
-    background: #3d4045;
+    background: #313234;
     z-index: 5;
     position: relative;
+}
+
+#playlist ol{
+    background: #1f2022;
 }
 
 #playlist .album-wrapper{
     margin-top:360px;
     width:100%;
     max-width:100%;
+    padding:20px 0 0 0;
 }
 
 #playlist h2 {
     z-index: 7;
-    height: 50px;
+    height: 70px;
     padding: 10px;
     width:100%;
     max-width:360px;
+    line-height: 70px;
     background: #fb8521;
     margin: 0;
     color: #fff;
     position: fixed;
 }
+
+#playlist h2 i{margin-top:21px;}
+
 #playlist ul{padding-bottom:50px;}
 
 #playlist img{
@@ -280,27 +293,23 @@ body,
 }
 
 li.track{
-    padding:5px 0;
+    padding:15px;
     border:0;
     min-height: 25px;
     line-height: 25px;
     cursor:pointer;
     list-style: none;
+    border-bottom:1px solid #313234;
 }
 #library li.track {
     margin-left: 240px;
     font-size: 1.1em;
 }
-#library li.track:nth-child(odd),
-#playlist ol li:nth-child(odd){
-    background: #33363a;
-}
-#playlist ol li:nth-child(even) {
-    background: #3d4045;
-}
+
 #library li.track:last-child {
     margin-bottom: 50px;
 }
+
 li.track:hover{ background:#444; }
 #playlist ol li{list-style:none;}
 #playlist ol li .play{
@@ -318,6 +327,7 @@ li.track:hover{ background:#444; }
 }
 #playlist .controls i{
     cursor: pointer;
+    font-size:24px;
 }
 #playlist .album-info .controls {
     position: absolute;
@@ -372,7 +382,7 @@ li.track:hover{ background:#444; }
 
 #player{
     width:100%;
-    min-height:160px;
+    min-height:100px;
     background:#333;
     z-index:99;
     bottom:0;
@@ -417,7 +427,7 @@ li.track:hover{ background:#444; }
 #player.fullscreen  #playing-info img{ max-width:500px; max-height:500px;}
 
 #player #playing-info { position:relative; overflow: hidden; float:left; padding-left: 0;}
-#player #playing-info img{max-width:150px; max-height:150px; float:left; margin:0 20px 0px 0; }
+#player #playing-info img{max-width:100px; max-height:100px; float:left; margin:0 20px 0px 0; }
 #player #playing-info .info{float:left; color:#fff; font-size:16px; padding-top: 20px;}
 #player #playing-info .info{float:left; color:#fff; font-size:16px; padding-top: 20px;}
 #player #playing-info .info .album-artist {
@@ -428,7 +438,7 @@ li.track:hover{ background:#444; }
     display:block;
     padding:5px;
     float:left;
-    font-size:32px;
+    font-size:24px;
     color:#f5f5f5;
     cursor:pointer;
 }
