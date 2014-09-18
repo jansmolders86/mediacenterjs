@@ -331,7 +331,7 @@ li.track:hover{ background:#444; }
 }
 #playlist .album-info .controls {
     position: absolute;
-    right:44px;
+    right:10px;
     top:12px;
 }
 
