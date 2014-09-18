@@ -200,6 +200,7 @@
         var player,
             playlist = [],
             paused = false,
+            single = false,
             random = false,
             currentTrack = null,
             currentAlbum = null,
@@ -213,11 +214,9 @@
             current: current,
             currentTrack: currentTrack,
             currentAlbum: currentAlbum,
+            single: false,
             playing: false,
             play: function(subItemIdx, itemIdx) {
-                if (!playlist.length){
-                    return;
-                }
                 if (angular.isDefined(itemIdx)) {
                    current.itemIdx = itemIdx;
                 }
@@ -225,17 +224,16 @@
                     current.subItemIdx = subItemIdx;
                 }
 
-                if (!paused){
+                if (itemIdx !== null) {
                     var currentItem = playlist[current.itemIdx];
-                    if (currentItem._type === 'track') {
-                        player.currentTrack = currentItem;
-                    } else if (currentItem._type === 'album') {
-                        player.currentTrack = currentItem.tracks[current.subItemIdx];
-                        player.currentAlbum = currentItem
-                    }
-
-                    audio.src = 'music/'+player.currentTrack.id +'/play/';
+                    player.currentTrack = currentItem.tracks[current.subItemIdx];
+                    player.currentAlbum = currentItem;
+                } else {
+                    player.currentTrack = subItemIdx;
+                    player.single = true;
                 }
+
+                audio.src = 'music/'+player.currentTrack.id +'/play/';
                 audio.play();
                 player.playing = true;
                 paused = false;

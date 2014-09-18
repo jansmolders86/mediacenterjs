@@ -21,9 +21,13 @@ body{overflow: hidden;}
     width: 9.333333%;
 }
 
-header h1 { padding-top: 5px;}
+a.backlink{margin-top:9px;}
+
+header h1 {
+    padding-top: 15px;
+}
 header #search {
-    height: 65px!important;
+    height: 72px!important;
 }
 
 
@@ -43,7 +47,7 @@ header, header * {
 }
 
 .view-select {
-    padding: 25px;
+    padding: 26px;
     display: inline-block;
     background: #4B4C51;
     cursor:pointer;
@@ -56,16 +60,17 @@ header, header * {
 }
 
 #show-playlist {
-    background: #fb8521;
+    background: #313234;
     margin: 0;
     height: 100%;
     margin-right: 10px;
 }
 #show-playlist i {
     height: 100%;
-    line-height: 50px;
+    line-height: 42px;
     margin: 0 5px;
     opacity: 1;
+    cursor:pointer;
 }
 
 /** Library **/
@@ -265,14 +270,14 @@ body,
     padding: 10px;
     width:100%;
     max-width:360px;
-    line-height: 70px;
-    background: #fb8521;
+    line-height: 50px;
+    background: #313234;
     margin: 0;
     color: #fff;
     position: fixed;
 }
 
-#playlist h2 i{margin-top:21px;}
+#playlist h2 i{margin-top:11px; cursor:pointer;}
 
 #playlist ul{padding-bottom:50px;}
 
