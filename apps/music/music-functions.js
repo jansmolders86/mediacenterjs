@@ -29,7 +29,9 @@ exports.loadItems = function (req, res, serveToFrontEnd) {
         if (albums === null || albums.length === 0) {
             metafetcher.loadData(req, res, true);
         } else {
-            res.json(albums);
+            if(serveToFrontEnd === true){
+                res.json(albums);
+            }
         }
     })
     .error(function (err) {
