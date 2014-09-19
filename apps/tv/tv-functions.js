@@ -30,7 +30,9 @@ exports.loadItems = function (req, res, serveToFrontEnd){
         if (shows === null || shows.length === 0) {
             metafetcher.loadData(req, res, true);
         } else {
-            res.json(shows);
+            if(serveToFrontEnd === true){
+                res.json(shows);
+            }
         }
     })
     .error(function (err) {
