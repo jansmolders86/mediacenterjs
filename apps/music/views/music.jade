@@ -59,7 +59,7 @@ block body
                                 span.album-artist {{album.artist.name}}
                                 span.album-year(ng-show="album.year !== 0") {{album.year}}
                             ol.tracks
-                                li.track(ng-repeat="track in album.tracks | orderBy:'order'", ng-class="{current: player.current.subItemIdx == $index}", ng-click="player.play($index, $parent.$index)")
+                                li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.subItemIdx == $index}", ng-click="player.play($index, $parent.$index)")
                                     i.play.icon
                                     span.track-number {{track.order}}
                                     span.track-title {{track.title}}
@@ -77,7 +77,7 @@ block body
                                     span.album-artist {{album.artist.name}}
                                     span.album-year(ng-show="album.year !== 0") {{album.year}}
                     ol.tracks(ng-show="view == 'tracks'")
-                        li.track(ng-repeat="track in album.tracks | orderBy:'order'", ng-class="{current: player.current.itemIdx == $index}", ng-click="player.play(track, null)", style="position: relative;")
+                        li.track(ng-repeat="track in album.tracks", ng-class="{current: player.current.itemIdx == $index}", ng-click="player.play(track, null)", style="position: relative;")
                             span.track-number {{track.order}}
                             span.track-title {{track.title}}
 

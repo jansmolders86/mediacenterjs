@@ -37,7 +37,7 @@
     createDropDirective('ngOnDrop', 'drop');
     createDropDirective('ngOnDragOver', 'dragover');
 
-    window.musicCtrl = function($scope, $http, player, $modal, audio) {
+    window.musicCtrl = function($scope, $http, player, $modal, $filter, audio) {
         $scope.player = player;
         $scope.focused = 0;
         $scope.serverMessage = 0;
@@ -73,6 +73,7 @@
             $scope.albums = data;
             angular.forEach($scope.albums, function(album) {
                 album._type = 'album';
+                album.tracks = $filter('orderBy')(album.tracks, 'order');
                 angular.forEach(album.tracks, function(track) {
                      track.album = album;
                      track._type = 'track';
