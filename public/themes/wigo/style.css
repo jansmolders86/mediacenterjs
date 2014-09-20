@@ -144,7 +144,6 @@ p a:hover{text-decoration:none;}
 }
 
 header{
-    height:70px;
     width:100%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -158,13 +157,6 @@ header{
     box-shadow:none;
 }
 .homepage{overflow:hidden;}
-.homepage header{
-    background:#383B41;
-    height:75px;
-    padding-top:10px;
-    border-bottom:0;
-}
-.homepage header h1{color:#f1f1f1;}
 
 header #search {
     position:absolute;
@@ -197,7 +189,7 @@ a.backlink:hover{
 .homepage h1{text-transform: none; font-weight:300;}
 
 header{z-index:5;}
-header .logo{ float:left; height:45px; margin: 0px 10px 0 0px; }
+header .logo{ float:left; height:50px; margin: 5px 10px 0 0px; }
 
 header h1{
     max-width: 85%;

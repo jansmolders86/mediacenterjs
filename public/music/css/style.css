@@ -21,15 +21,6 @@ body{overflow: hidden;}
     width: 9.333333%;
 }
 
-a.backlink{margin-top:9px;}
-
-header h1 {
-    padding-top: 15px;
-}
-header #search {
-    height: 72px!important;
-}
-
 
 header.side {
     padding-left:360px;
@@ -47,12 +38,14 @@ header, header * {
 }
 
 .view-select {
-    padding: 26px;
+    padding: 20px;
     display: inline-block;
     background: #4B4C51;
     cursor:pointer;
     color:#fff;
     font-weight:500;
+    width: auto;
+    font-size: 16px;
 }
 
 .view-select:hover{

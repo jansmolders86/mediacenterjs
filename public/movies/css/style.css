@@ -21,14 +21,6 @@ body.playing .container-fluid{display:none;}
 
 body.playing > #player{display:block;}
 
-header.scrolling{ opacity:0.9;}
-header{
-    height:60px;
-    z-index:5;
-    position:fixed!important;
-    top:0;
-}
-header h1{z-index:4; margin-top:7px; text-transform: uppercase;}
 .container-fluid{ padding-top:90px;}
 /* Bootstrap override */
 
@@ -99,14 +91,12 @@ body.playing #backdropimg{
     */
 }
 
-a.backlink { margin-top: 2px; z-index:4; }
-
 /* Movie App styling */
 
 #view-select {
     position: absolute;
     top: 0;
-    right: 300px;
+    right: 264px;
 }
 
 .view-select {
@@ -324,11 +314,6 @@ h1.movie-title{
     left:0;
 }
 
-#header h4 {
-    bottom: -9px;
-    left: 310px;
-}
-
 /*
 .imdbrating{
     color:#ddd;
@@ -354,11 +339,6 @@ h1.movie-title{
     padding:3px 5px;
 }
 */
-
-.slide{
-   /*-webkit-animation: backdrop-slide 10s linear infinite;*/
-   /*animation: backdrop-slide 10s linear infinite;*/
-}
 
 @-webkit-keyframes backdrop-slide {
     0%{ top:-180px; }
