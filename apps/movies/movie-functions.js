@@ -68,6 +68,7 @@ exports.playFile = function (req, res, platform, id){
         file_utils.getLocalFile(config.moviepath, movie.originalName, function(err, file) {
             if (err){
                 console.log('File not found',err .red);
+                res.status(404).send();
             }
             if (file) {
                 var movieUrl = file.href;
@@ -85,7 +86,8 @@ exports.playFile = function (req, res, platform, id){
                 playback_handler.startPlayback(res, platform, movie.id, movieUrl, movie.originalName, subtitleUrl, subtitleTitle, type);
 
             } else {
-                console.log("File " + movieTitle + " could not be found!" .red);
+                console.log("File " + movie.title + " could not be found!" .red);
+                res.status(404).send();
             }
         });
     });

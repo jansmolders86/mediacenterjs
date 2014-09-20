@@ -24,7 +24,7 @@ var metafetcher = require('../music/music-metadata')
   , Track = dbschema.Track;
 
 exports.loadItems = function (req, res, serveToFrontEnd) {
-    Album.findAll({include: [Track]})
+    Album.findAll({include: [Track, Artist]})
     .success(function (albums) {
         if (albums === null || albums.length === 0) {
             metafetcher.loadData(req, res, true);
