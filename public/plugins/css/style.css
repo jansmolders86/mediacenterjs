@@ -102,4 +102,6 @@ li.boxed.focused .btn,
     .plugins .btn{display:inline-block;}
 
     .desc{width:80%; }
+    .btn{Width:100%; margin:0;}
+    li.boxed{width:100%;}
 }
