@@ -384,21 +384,92 @@ h1.movie-title{
 
 /* netflix */
 
+
+#source-list li {
+    width: 100%;
+    min-height: 40px;
+    color:white;
+    line-height: 40px;
+    padding-left: 40px;
+}
+#source-list li .expander {
+    height: 100%;
+    line-height: 40px;
+    margin-right: 10px;
+    color: white;
+    font-size: 1.4em;
+    -webkit-transition: all 0.7s ease;
+}
+#source-list li .expand {
+    overflow: hidden;
+    max-height: 300px;
+    padding-bottom: 30px;
+}
+#source-list li .expand.ng-hide {
+    display: block !important;
+    max-height: 0;
+    padding-bottom: 0;  
+}
+
+#source-list li .expander.expanded {
+    -webkit-transform: rotate(180deg);
+}
+#source-list li span {
+    font-size: 1.3em;
+}
+#source-list li input[type=checkbox] {
+    position: relative;
+    top: -20px;
+    left: -30px;
+    font-size: 1em;
+}
+
+
+
+
+#source-list li input[type=submit] {
+    width: 264px;
+    margin-top: 10px;
+    background: #f5f5f5;
+    border: none;
+    color: black;
+    font-size: 18px;
+}
+
+
+.sidebar {
+    float: left;
+    width: 360px;
+    background: #FEFEFE;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: fixed;
+    top:0px;
+    left:0px;
+    bottom: 0px;
+    z-index:9;
+}
+
+
+.sidebar.ng-hide {
+    display: block!important;
+    -webkit-transform: translateX(-100%);
+}
+
+.sidebar h2 {
+    height: 50px;
+    padding: 10px;
+    background: #fb8521;
+    margin: 0;
+    color: #fff;
+}
+
+
 .service {
     position: absolute;
     top:0;
-    right:-5px;
-    z-index: 4;
-    padding: 0px 7px 0px 2px;
-    background: rgba(255,255,255,1);
-/*     box-shadow: 0px 0px 11px 8px rgba(255,255,255,0.7); */
-    border-radius: 5px;
+    right:0;
+    z-index: 99;
+    padding: 5px;
 }
-.service::after {
-    background: url(http://contestpatti.com/wp-content/uploads/2014/07/Netflix-logo.png);
-    font-weight: 700;
-    color:red;
-    letter-spacing: -1px;
-}
-
 

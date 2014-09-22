@@ -47,6 +47,10 @@ exports.get = function(req, res, next){
     if(infoRequest === 'filter') {
         functions.filter(req, res, optionalParam);
         handled = true;
+    } else if(infoRequest === 'sources'
+              && optionalParam === 'style.css') {
+        functions.sources.style(req,res);
+        handled = true;
     } else if (!optionalParam) {
         switch(infoRequest) {
             case('load'):
@@ -54,8 +58,8 @@ exports.get = function(req, res, next){
                 functions.loadItems(req, res, serveToFrontEnd);
                 handled = true;
                 break;
-            case('loadNF'):
-                functions.getNetlfixMyList();
+            case('sources'):
+                functions.sources.load(req, res);
                 handled = true;
                 break;
         }
@@ -81,6 +85,10 @@ exports.post = function(req, res, next){
         functions.edit(req, res, data);
     } else if(req.params.id === 'update'){
         functions.update(req, res, data);
+    } else if(req.params.id === 'sources') {
+        console.log(req.url);
+        var service = req.params.optionalParam;
+        functions.sources.settings(req, res, service);
     } else {
         next();
     }

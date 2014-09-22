@@ -27,6 +27,20 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
     $http.get('/movies/load').success(function(data) {
         $scope.movies = data;
     });
+    $http.get('/movies/sources').success(function(data) {
+        $scope.sources = data;
+    });
+    $scope.saveSourceSettings = function (service) {
+        $http({
+            method: "post",
+            data: service.settings,
+            url: "/movies/sources/" + service.serviceName
+        }).success(function(data, status, headers, config) {
+
+        }).error(function(err) {
+            alert("Unable to save changes: " + err);
+        });
+    }
 
     $scope.playMovie = function(movie){
         $scope.playing = true;

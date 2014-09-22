@@ -1,0 +1,12 @@
+#source-list li.local {
+    background: gray;
+}
+#source-list li.local input[type=submit] {
+    color: gray;
+}
+.service.local::after {
+    content: 'Local';
+    font-weight: 500;
+    color:gray;
+    letter-spacing: -1px;
+}

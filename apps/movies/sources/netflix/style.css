@@ -1,0 +1,12 @@
+#source-list li.netflix {
+    background: red;
+}
+#source-list li.netflix input[type=submit] {
+    color: red;
+}
+.service.netflix::after {
+    content: 'NETFLIX';
+    font-weight: 700;
+    color:red;
+    letter-spacing: -1px;
+}

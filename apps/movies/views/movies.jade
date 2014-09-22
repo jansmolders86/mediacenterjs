@@ -11,6 +11,7 @@ block declarations
 block additional_css
     link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
     link(rel='stylesheet', href='/movies/css/style.css')
+    link(rel='stylesheet', href='/movies/sources/style.css')
 
 block additional_scripts
     script(src="/core/js/plugins/angular/angular-ui/ui-bootstrap-tpls-0.11.0.js")
@@ -26,6 +27,7 @@ block body
         .container
             .row
                 .col-md-12
+                i.settings.icon.pull-left(ng-click="sourcessidebar.visible = true", style="font-size: 2.5em; line-height: 60px; color: white;")
                 a.backlink(href="/") &#xe113;
                 h1.hidden-xs #{lingua.movies}
                 input#search.pull-right(ng-model="query.$", type="text", placeholder="Search", ng-show="movies")
@@ -33,6 +35,20 @@ block body
                     label.view-select(for="showhidden")
                         input#showhidden(ng-init="query.hidden='false'", ng-model="query.hidden", type="checkbox", ng-show="movies", ng-true-value="", ng-false-value="false")
                         | Show Hidden
+
+    #sources.sidebar(ng-init="sourcessidebar.visible = true", ng-show="sourcessidebar.visible", ng-cloak)
+        h2 Sources
+            i.left.double.angle.icon.pull-right(ng-click="sourcessidebar.visible = false")
+        ul#source-list
+            li(ng-repeat="source in sources", class="{{source.serviceName}}")
+                div(ng-click="expanded = !expanded", ng-init="expanded = false")
+                    //- input.icon(type="checkbox", ng-click="$event.stopPropagation()")
+                    span {{source.serviceName}} 
+                    i.icon.arrow.down.pull-right.expander(ng-class="{expanded : expanded}")
+                .expand(ng-show="expanded")
+                    input(ng-repeat="setting in source.requiredSettings", ng-model="source.settings[setting.name]", type="text" placeholder="{{setting.name}}", name="{{setting.name}}")
+                    input(type="submit", value="Submit", ng-click="saveSourceSettings(source)")
+
     .container-fluid
         .row
         .col-xs-12.col-sm-6.col-md-2(ng-repeat="movie in movies | filter:query", ng-cloak)
@@ -40,12 +56,12 @@ block body
                     i.circular.inverted.edit.icon(ng-click="open(movie)")
                     .fixed-ratio-cover.fixed-ratio
                         img.movieposter(ng-src="{{movie.posterURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie)")
-                    .service(ng-if="movie.service != 'local'", class="{{movie.service}}")
                     .caption(ng-click="playMovie(movie)")
-                            p
-                                h1.movie-title{{movie.title}}
-                                .overview
-                                    .summary {{movie.overview}}
+                        .service(class="{{movie.service}}")
+                        p
+                            h1.movie-title{{movie.title}}
+                            .overview
+                                .summary {{movie.overview}}
                     .specs
                         p
                             strong {{movie.genre}}

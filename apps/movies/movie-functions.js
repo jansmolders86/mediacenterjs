@@ -26,14 +26,60 @@ var fs = require('fs.extra')
     , dbSchema = require('../../lib/utils/database-schema')
     , Movie = dbSchema.Movie
     , ProgressionMarker = dbSchema.ProgressionMarker
-    , io = require('../../lib/utils/setup-socket').io;
+    , io = require('../../lib/utils/setup-socket').io
+    , async = require('async');
+
+
+
+function iterateSources(iterateFn) {
+    fs.readdirSync(__dirname + "/sources").forEach(function(file) {
+           try {
+            var source = require("./sources/" + file);
+            var settings;
+            try {
+                settings = JSON.parse(fs.readFileSync(__dirname + "/sources/" + file + "/settings.json"));
+                console.log(settings);
+            } catch (err) {
+                settings = {};
+            }
+            source.settings = settings;
+            iterateFn(source);
+        } catch (err) {}
+    });
+}
+
 
 
 exports.loadItems = function (req, res){
 
     getMovies(function (movies) {
         if (!movies) {
-            getNetlfixMyList(function() {
+            var parallelFunctions = [];
+            iterateSources(function (source) {
+                if (source.retrieveMovies) {
+                    parallelFunctions.push(function (callback) {
+                        console.log("Getting movies for ", source.serviceName);
+                        source.retrieveMovies(function (movies) {
+                            if (!movies || movies.length == 0) {
+                                console.log("No movies for", source.serviceName);
+                                callback();
+                            } else {
+                                Movie.bulkCreate(movies)
+                                .complete(function() {
+                                    console.log("Done");
+                                    callback();
+                                });
+                            }
+                        }, source.settings);
+                    });
+                }
+            });
+
+
+
+
+            async.parallel(parallelFunctions,
+            function() {
                 metafetcher.loadData(function (percent) {
                      io.sockets.emit('progress',{msg:percent});
                 },
@@ -57,6 +103,51 @@ exports.loadItems = function (req, res){
         }
     });
 };
+exports.sources = {};
+exports.sources.style = function (req, res) {
+    var allcss = "";
+    var buffers = [];
+    fs.readdirSync(__dirname + "/sources").forEach(function(file) {
+        var cssPath = __dirname + "/sources/" + file + "/style.css";
+        var css = null;
+        try {
+            css = fs.readFileSync(cssPath);
+        } catch (err) {}
+        if (css) {
+            buffers.push(css);
+            buffers.push(new Buffer("\n"));
+        }
+    });
+    var finalBuffer = Buffer.concat(buffers);
+    res.status(200).type('text/css').send(finalBuffer);
+}
+exports.sources.load = function (req, res) {
+    var sources = [];
+    iterateSources(function (source) {
+        if (source.retrieveMovies) {
+            var sourceData = {
+                serviceName : source.serviceName,
+                requiredSettings : source.requiredSettings,
+                settings : source.settings
+            };
+            sources.push(sourceData);
+        }
+    });
+    res.json(sources);
+}
+exports.sources.settings = function (req, res, service) {
+    console.log("BODY:", req.body);
+fs.writeFile(__dirname  + '/sources/' + service + '/settings.json', JSON.stringify(req.body), function(err) {
+    if(err) {
+      console.log(err);
+      res.status(500).send();
+    } else {
+      console.log("Service settings saved");
+      res.status(200).send();
+    }
+});
+}
+
 
 exports.edit = function(req, res, data) {
     Movie.find(data.id)
@@ -145,75 +236,6 @@ getMovies = function(callback){
         }
     });
 }
-
-
-
-/** Netflix **/
-//rather than a seperate web app
-//(which would just be the netflix website anyway)
-//add the my list into the movies list
-//this wants to be plugin like, but this is just a PoC
-//Also no way to seperate TV from Movies without 
-//making more requests to netflix or metadata service
-var request = require('request'),
-    cheerio = require("cheerio");
-
-request.defaults({
-        maxRedirects:20,
-        jar: request.jar()
-    }),
-
-getNetlfixMyList = exports.getNetlfixMyList = function(callback) {
-    //from https://gist.github.com/wilson428/8312213#file-scrape-js-L52
-    request("https://signup.netflix.com/Login", function(err, resp, body) {
-        // cheerio parses the raw HTML of the response into a jQuery-like object for easy parsing
-        var $ = cheerio.load(body);
- 
-        // we're specifically looking for an ID on the page we need to log in, which looks like this: 
-        // <input type="hidden" name="authURL" value="1388775312720.+vRSN6us+IhZ1qOSlo8CyAS/ZJ4=">
-        var data = {
-            email: "EMAIL",
-            password: "PASSWORD"
-        }
-        data.authURL = $("input[name='authURL']").attr("value");
- 
-        request.post("https://signup.netflix.com/Login", { form: data }, function(err, resp, body) {
-            if (err) { throw err; }
-            console.log("Successfully logged in.");
-            //can only use the default profile :/ 
-            //switching profile seems to rely on the netflix api
-            //we have to request twice to get around profiles
-            request("https://www2.netflix.com/MyList", function (err, resp, body) {
-            request("http://www2.netflix.com/MyList", function(err, resp, body) {
-                console.log("received mylist");
-                var $ = cheerio.load(body);
-                var mylistmovies = $(".list-items > .agMovie");
-                var movieData = [];
-                mylistmovies.each(function(i, mylistmovie) {
-                    var a = cheerio(mylistmovie).find("span > a");
-                    var img = cheerio(mylistmovie).find("span > img");
-                    var data = {
-                        videoURL : a.attr("href"),
-                        title : img.attr("alt"),
-                        serviceId : a.attr("data-uitrack").split(",")[0],
-                        service: "netflix",
-                        posterURL : img.attr("src")
-                    };
-                    movieData.push(data);
-                });
-                Movie.bulkCreate(movieData)
-                .success(function() {
-                    callback();    
-                });
-            });
-            });
-        });
-    });
-}
-
-
-
-
 
 
 
