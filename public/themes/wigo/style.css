@@ -3,10 +3,10 @@
 
 /* Typography */
 
-html{ background-color:#eeeeee; }
+html{ background-color:#484C52; }
 body{
     font-family: 'Open Sans', sans-serif;
-    color: #747474;
+    color: #f1f1f1;
     font-weight: 300;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
@@ -14,7 +14,7 @@ body{
     background:none;
 }
 body.homepage{
-    background:url("/core/css/img/backdrop.png") no-repeat;
+    background-color:#484C52;
 }
 
 a{ color:#444;}
@@ -52,8 +52,16 @@ p{ font-size:20px; margin:40px 0;}
 p a{color:#444; text-decoration:none; font-size:20px;}
 p a:hover{text-decoration:none;}
 
-/* Homepage Tiles */
 
+/* bootstrap overrides */
+
+
+.input-group-addon{border-radius:0;}
+.table>tbody>tr>td{ border:0; padding:10px; }
+.table>tbody>tr>td.active{ background:transparent; }
+.table>thead>tr>th{border:0;}
+
+/* Homepage Tiles */
 
 .tile{
     width: 160px;
@@ -62,6 +70,8 @@ p a:hover{text-decoration:none;}
     margin: 5px;
     list-style:none;
     display:none;
+    padding:0;
+    position:relative;
 }
 
 .tile { background:transparent; }
@@ -114,13 +124,15 @@ p a:hover{text-decoration:none;}
 /* Date and Time */
 
 #dateandtime .date,
-#dateandtime .time{    text-align:right; font-weight: 300; font-size:20px; font-family: 'Open Sans', sans-serif; color:#333;}
+#dateandtime .time{    text-align:right; font-weight: 300; font-size:20px; font-family: 'Open Sans', sans-serif; color:#f1f1f1;}
 
 /* Content */
 
 .boxed{
-    background:#fff;
+    background:#333;
     padding:0;
+    color:#fff;
+    border-radius: 0;
     position:relative;
 }
 
@@ -132,7 +144,6 @@ p a:hover{text-decoration:none;}
 }
 
 header{
-    height:70px;
     width:100%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -140,13 +151,12 @@ header{
     padding:0;
     position:relative;
     float:left;
-    background:#3B3F40;
+    background:#383B41;
     overflow:hidden;
-    border-bottom: 5px solid #fb8521;
+    border-bottom:0;
+    box-shadow:none;
 }
 .homepage{overflow:hidden;}
-.homepage header{background:#fff; height:75px; padding-top:10px;}
-.homepage header h1{color:#333;}
 
 header #search {
     position:absolute;
@@ -179,7 +189,7 @@ a.backlink:hover{
 .homepage h1{text-transform: none; font-weight:300;}
 
 header{z-index:5;}
-header .logo{ float:left; height:45px; margin: 0px 10px 0 0px; }
+header .logo{ float:left; height:50px; margin: 5px 10px 0 0px; }
 
 header h1{
     max-width: 85%;
@@ -201,7 +211,7 @@ header h1{
 /* Form elements */
 
 label,
-.label{ font-size:16px; font-family: 'Open Sans', sans-serif; }
+.label{ font-size:16px; font-family: 'Open Sans', sans-serif; color:#ccc;}
 
 
 .btn {
@@ -219,15 +229,15 @@ label,
     cursor:pointer;
     border: none;
     background: #fb8521;
-    border-radius:5px;
-    box-shadow: inset 0px 1px 0px #fb8521, 0px 4px 0px 0px #c96311, 0px 7px 5px #ddd;
+    border-radius:0px;
 }
 
 .btn:hover{ color:#fff; background: #f5994c; }
-.btn:active{ top:3px; box-shadow: inset 0px 1px 0px #fb8521, 0px 2px 0px 0px #c96311, 0px 5px 3px #ddd; }
+.btn:active{ top:2px;}
+
 .btn-alternative{ background: #0074a2;}
-.btn-alternative:hover{ background: #1c8fbd; }
-.btn-alternative:active{ box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #074057, 0px 5px 3px #ddd; }
+.btn-alternative:hover,
+.btn-alternative:active{ background: #1c8fbd; }
 
 .btn-btn-disabled,
 .btn-btn-disabled:hover,
@@ -235,7 +245,6 @@ label,
     background-color:#ddd;
     color:#fff;
     top:0;
-    box-shadow: inset 0px 1px 0px #ccc, 0px 4px 0px 0px #ccc, 0px 7px 5px #ddd;
 }
 
 em.error{ display: block !important; float:left; margin:5px 0 0 5px; color: red; font-style: normal; font-size: 13px;}
@@ -255,7 +264,7 @@ textarea{
     -webkit-transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
     transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
     box-shadow: 0em 0em 0em 0em rgba(0, 0, 0, 0.3) inset;
-    background: #f5f5f5;
+    background: #FEFEFE;
     height: 60px;
     line-height: 60px;
 }
@@ -282,6 +291,14 @@ label,
     left:0;
 }
 
+/* settings override */
+
+.access-table { background:#383B41!important; padding:20px;}
+.cache-management,
+#oauthContainer{background:#43464F!important;}
+
+.configurable-options{background:#383B41!important; }
+#oauthContainer{background:#43464F!important;}
 
 /***** -----------------   ANIMATIONS  ---------------------- *****/
 
@@ -395,11 +412,11 @@ label,
 @media only screen and (min-width: 320px) and (max-width: 529px) {
     #tiles,
     .tile{margin:0;}
-    
+
     .loading{left: 20px;}
 }
 
-@media only screen 
+@media only screen
     and (min-width: 360px)
     and (orientation: portrait)
     and (-webkit-min-device-pixel-ratio: 3.0) {

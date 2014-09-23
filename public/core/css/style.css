@@ -56,7 +56,7 @@ body{
     position:relative;
     font-family: 'Open Sans', sans-serif;
     color: #747474;
-    background:none;
+    background:#484C52;
 }
 
 img{border:0; display:block; pointer-events: none;}
@@ -141,7 +141,7 @@ p a:hover{text-decoration:none;}
 
 header,
 #header{
-    height:75px;
+    height:60px;
     width:100%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -158,9 +158,6 @@ header,
     box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
     z-index:5;
 }
-
-header .logo,
-#header .logo{ float:left; max-height:45px; margin:0px 10px 0 0px; }
 
 header h1,
 #header h1{
@@ -296,8 +293,8 @@ a.backlink:hover{
 .modal-dialog {
     min-width: 768px !important;
     width: 70%;
-}  
-    
+}
+
 @media (max-width: 620px) {
     .modal-dialog {
         margin: 0;
@@ -309,7 +306,7 @@ a.backlink:hover{
         border-radius: 0px;
         border: none;
     }
-    
+
     .modal-dialog .modal-footer {
         padding: 20px 5px;
         width: 100%;
@@ -549,35 +546,36 @@ label,
 .label{ font-size:16px; font-family: 'Open Sans', sans-serif; display:block; width:320px; float:left;  }
 
 .btn {
-  display:block;
-  font-size:16px;
-  font-weight:300;
-  color:#fff;
-  text-decoration:none;
-  text-align:center;
-  padding:10px;
-  margin-left:auto;
-  margin-right:auto;
-  position:relative;
-  cursor:pointer;
-  border: none;
-  background: #fb8521;
-  border-radius:5px;
-  box-shadow: inset 0px 1px 0px #c96311, 0px 4px 0px 0px #c96311, 0px 7px 5px #ddd;
+    float:left;
+    display:block;
+    font-size:16px;
+    font-weight:300;
+    color:#fff;
+    text-decoration:none;
+    text-align:center;
+    padding:10px;
+    margin-left:auto;
+    margin-right:auto;
+    position:relative;
+    cursor:pointer;
+    border: none;
+    background: #fb8521;
+    border-radius:0px;
 }
 
 .btn:hover{ color:#fff; background: #f5994c; }
-.btn:active{ top:3px; box-shadow: inset 0px 1px 0px #fb8521, 0px 2px 0px 0px #c96311, 0px 5px 3px #ddd; }
-.btn.btn-alternative{ background: #0074a2; box-shadow: inset 0px 1px 0px #2ab7ec, 0px 4px 0px 0px #074057, 0px 7px 5px #ddd;}
-.btn.btn-alternative:hover{ background: #1c8fbd; }
-.btn.btn-alternative:active{ box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #074057, 0px 5px 3px #ddd; }
+.btn:active{ top:2px;}
 
-.btn-disabled,
-.btn-disabled:hover,
-.btn-alternative:active{
+.btn-alternative{ background: #0074a2;}
+.btn-alternative:hover,
+.btn-alternative:active{ background: #1c8fbd; }
+
+.btn-btn-disabled,
+.btn-btn-disabled:hover,
+.btn-btn-disabled:active{
     background-color:#ddd;
     color:#fff;
-    box-shadow: inset 0px 1px 0px #ccc, 0px 4px 0px 0px #ccc, 0px 7px 5px #ddd;
+    top:0;
 }
 
 .floatright{ float:right; }
@@ -712,7 +710,7 @@ table tr > th:first-child{ padding-left:0px;}
     -webkit-transition: all 0s ease;
     -moz-transition: all 0s ease;
     -o-transition: all 0s ease;
-    transition: all 0s ease;   
+    transition: all 0s ease;
 }
 .progress-pie-chart {
     width: 200px;

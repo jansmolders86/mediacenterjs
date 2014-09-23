@@ -26,9 +26,6 @@ var express = require('express')
 , DeviceInfo = require('../../lib/utils/device-utils')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
-var database = require('../../lib/utils/database-connection');
-var db = database.db;
-
 exports.index = function(req, res, next){
 
     DeviceInfo.storeDeviceInfo(req);
@@ -67,16 +64,8 @@ exports.index = function(req, res, next){
         '0x00'
     ]
 
-    db.query('SELECT * FROM devices', {
-        device_id: String,
-        last_seen: String,
-        is_active: String
-    }, function(rows) {
-        var devices;
-        if (typeof rows !== 'undefined' && rows.length > 0) {
-            devices = rows;
-        }
-
+    Device.findAll()
+    .success(function (devices) {
         DeviceInfo.isDeviceAllowed(req, function(allowed){
             res.render('settings',{
                 movielocation           : config.moviepath,

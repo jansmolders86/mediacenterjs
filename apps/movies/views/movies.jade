@@ -21,26 +21,25 @@ block additional_scripts
 
 block body
     #backdrop
-        img#backdropimg.fullscreen(src="/movies/css/img/backdrop.png")
+        img#backdropimg.fullscreen
     header
         .container
             .row
                 .col-md-12
-                a.backlink(href="/") &#xe113;
-                h1.hidden-xs #{lingua.movies}
-                input#search.pull-right(ng-model="query.$", type="text", placeholder="Search", ng-show="movies")
-                #view-select(ng-hide="!movies")
-                    label.view-select(for="showhidden")
-                        input#showhidden(ng-init="query.hidden='false'", ng-model="query.hidden", type="checkbox", ng-show="movies", ng-true-value="", ng-false-value="false")
-                        | Show Hidden
+                    a.backlink(href="/") &#xe113;
+                    h1.hidden-xs #{lingua.movies}
+                    input#search.pull-right(ng-model="query.$", type="text", placeholder="Search", ng-show="movies")
+                    #view-select(ng-hide="!movies")
+                        label.view-select(for="showhidden", ng-init="query.hidden='false'", ng-click="query.hidden = query.hidden == 'false' ? '' : 'false'")
+                            | {{query.hidden ? "Show" : "Hide"}} Hidden
     .container-fluid
         .row
-        .col-xs-12.col-sm-6.col-md-2(ng-repeat="movie in (filteredMovies = (movies | filter:query))", ng-cloak)
-                .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-focus="chnageSelected(movie)", ng-class="{current: focused == $index }", ng-mouseover="changeSelected(movie)",ng-hide="movie.title === ''", ng-mouseleave="resetSelected()")
+        .col-xs-6.col-sm-4.col-md-2(ng-repeat="movie in movies | filter:query", ng-cloak)
+                .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-class="{current: movies.focused.id == movie.id }", ng-mouseenter="movies.focused = movie",ng-hide="movie.title === ''", ng-mouseleave="movies.focused = null")
                     i.circular.inverted.edit.icon(ng-click="open(movie)")
                     .fixed-ratio-cover.fixed-ratio
-                        img.movieposter(ng-src="{{movie.poster_path}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie.original_name)")
-                    .caption(ng-click="playMovie(movie.original_name)")
+                        img.movieposter(ng-src="{{movie.posterURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie)")
+                    .caption(ng-click="playMovie(movie)")
                             p
                                 h1.movie-title{{movie.title}}
                                 .overview
@@ -50,8 +49,8 @@ block body
                             strong {{movie.genre}}
                         p
                             strong #{lingua.movies_Runtime}: {{movie.runtime}} min
-                    .cdNumber(ng-show="movie.cd_number.length > 0")
-                        span {{movie.cd_number}}
+                    .cdNumber(ng-show="movie.cdNumber.length > 0")
+                        span {{movie.cdNumber}}
 
         h2.loading(ng-show="!movies") #{lingua.loading}
             .progress-pie-chart(data-percent="{{serverMessage}}", ng-class="{gt50: serverMessage > 50}", ng-show="serverMessage > 0")
@@ -73,13 +72,13 @@ block body
             .form-horizontal
                 .row
                     .form-group
-                        img.col-md-offset-1(ng-src="{{current.poster_path}}", ng-show="current.poster_path !== original.poster_path")
+                        img.col-md-offset-1(ng-src="{{current.posterPath}}", ng-show="current.posterPath !== original.posterPath")
                     .form-group
                         label.col-md-3.col-md-offset-1 Poster url path
-                        input.col-md-7(type="text",name="poster_path",ng-model="current.poster_path",required)
+                        input.col-md-7(type="text",name="poster_path",ng-model="current.posterURL",required)
                     .form-group
                         label.col-md-3.col-md-offset-1 Backdrop url path
-                        input.col-md-7(type="text",name="backdrop_path",ng-model="current.backdrop_path",required)
+                        input.col-md-7(type="text",name="backdrop_path",ng-model="current.backgroundURL",required)
                     .form-group
                         label.col-md-3.col-md-offset-1 Title
                         input.col-md-7(type="text",name="title",ng-model="current.title",required)
@@ -88,6 +87,6 @@ block body
                         input.col-md-7.icon(type="checkbox",name="hidden",ng-model="current.hidden",required,ng-checked="current.hidden == 'true'")
         .modal-footer
             button.btn(ng-click="updateItem()") Fetch Metadata
-            button.btn.pull-right(ng-click="cancel()") Cancel
+            button.btn.pull-right(ng-click="$dismiss()") Cancel
             input.btn.pull-right(type="submit",value="Submit", ng-click="editItem()",required)
 

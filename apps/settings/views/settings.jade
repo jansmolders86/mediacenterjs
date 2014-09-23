@@ -187,19 +187,19 @@ block body
                 .cache-management.col-sm-12.col-md-12.col-lg-3
                     h2 Cache management
                     .form-group.mcjs-rc-controllable
-                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="movies")
+                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="Movie")
                             i.trash.icon
                             | #{lingua.settings_clear_cache_movies}
                     .form-group.mcjs-rc-controllable
-                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="albums,tracks")
+                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="Album,Track,Artist")
                             i.trash.icon
                             | #{lingua.settings_clear_cache_music}
                     .form-group.mcjs-rc-controllable
-                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="tvepisodes,tvshows")
+                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="Episode,Show")
                             i.trash.icon
                             | #{lingua.settings_clear_cache_tv}
                     .form-group.mcjs-rc-controllable
-                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="devices")
+                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="Device")
                             i.trash.icon
                             | #{lingua.settings_clear_cache_device}
                     h2 Scraper data
@@ -235,11 +235,11 @@ block body
                                 tbody
                                     - each device in devices
                                         tr.mcjs-rc-controllable
-                                            td.device= device.device_id
-                                            td.seen= device.last_seen
-                                            td.active= device.is_active
+                                            td.device= device.deviceID
+                                            td.seen= device.lastSeen
+                                            td.active= device.isAllowed
                                             td
-                                                -if (device.is_active !== undefined && device.is_active === 'yes')
+                                                -if (device.isAllowed !== undefined && device.isAllowed === 'yes')
                                                     a.parentalControl.btn.mcjs-rc-clickable.lock #{lingua.settings_device_btn_lock}
                                                 -else
                                                     a.parentalControl.btn.mcjs-rc-clickable.unlock #{lingua.settings_device_btn_unlock}

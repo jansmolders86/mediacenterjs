@@ -31,6 +31,7 @@ var express = require('express')
     , scheduler = require('./lib/utils/scheduler')
     , DeviceInfo = require('./lib/utils/device-utils')
     , fileHandler = require('./lib/utils/file-utils')
+    , dbSchema = require('./lib/utils/database-schema')
     , http = require('http')
     , os = require('os')
     , jade = require('jade')
@@ -248,12 +249,8 @@ app.post('/clearCache', function(req, res){
                 console.log('Error removing module', e .red);
                 return res.send('Error clearing cache', e);
             }
-
-            var database = require('./lib/utils/database-connection');
-            var db = database.db;
-            db.query('DROP TABLE IF EXISTS ' + name);
-
-
+            var schema = require('./lib/utils/database-schema');
+            schema[name].destroy();
         });
     });
 

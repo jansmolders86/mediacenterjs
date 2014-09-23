@@ -146,8 +146,10 @@ function pushEnter(socket, $scope, player, audio){
 
 function pushPause(socket, $scope, player, audio){
     if(player.playing === true) {
+        player.playing = false;
         player.pause();
     } else {
+        player.playing = true;
         player.play();
     }
 }

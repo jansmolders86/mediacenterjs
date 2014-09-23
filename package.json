@@ -69,7 +69,6 @@
         "async"             : "0.2.9",
         "open"              : "0.0.3",
         "musicmetadata"     : "0.2.5",
-        "dblite"            : ">=0.5.0",
         "walk"              : ">=1.2.2",
         "underscore"        : "~1.5.2",
         "moviedb"           : "~0.1.0",
@@ -79,6 +78,8 @@
         "youtube-api"       : "~0.3.0",
         "node-schedule"     : "~0.1.13",
         "lastfmapi"         : "~0.0.5",
-        "graceful-fs"        : "~2.0.3"
+        "graceful-fs"       : "~2.0.3",
+        "sequelize"         : "^1.7.9",
+        "sqlite3"           : "^2.2.7"
     }
 }

@@ -37,7 +37,7 @@
     createDropDirective('ngOnDrop', 'drop');
     createDropDirective('ngOnDragOver', 'dragover');
 
-    window.musicCtrl = function($scope, $http, player, $modal, audio) {
+    window.musicCtrl = function($scope, $http, player, $modal, $filter, audio) {
         $scope.player = player;
         $scope.focused = 0;
         $scope.serverMessage = 0;
@@ -73,6 +73,7 @@
             $scope.albums = data;
             angular.forEach($scope.albums, function(album) {
                 album._type = 'album';
+                album.tracks = $filter('orderBy')(album.tracks, 'order');
                 angular.forEach(album.tracks, function(track) {
                      track.album = album;
                      track._type = 'track';
@@ -116,51 +117,28 @@
             });
         }
 
-        var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
-            $scope.edit ={};
-            $scope.current = current;
+        function copyOmit(obj, omitkeys) {
+            var copy = angular.copy(obj);
+            for (var i in omitkeys) {
+                delete copy[omitkeys[i]];
+            }
+            return copy;
+        }
 
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
+        var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
+            $scope.original = current;
+            $scope.current = angular.copy(current);
 
             $scope.editItem = function(){
-
-                if($scope.edit.artist === '' || $scope.edit.artist === null || $scope.edit.artist === undefined ){
-                    if($scope.current.artist  !== undefined || $scope.current.artist !== null){
-                        $scope.edit.artist = $scope.current.artist;
-                    } else {
-                        $scope.edit.artist = '';
-                    }
-                }
-
-                if($scope.edit.title === '' || $scope.edit.title === null || $scope.edit.title === undefined ){
-                    if($scope.current.album  !== undefined || $scope.current.album !== null){
-                        $scope.edit.title = $scope.current.album;
-                    } else {
-                        $scope.edit.title = '';
-                    }
-                }
-
-                if($scope.edit.thumbnail === '' || $scope.edit.thumbnail === null || $scope.edit.thumbnail === undefined ){
-                    if($scope.current.cover  !== undefined || $scope.current.cover !== null){
-                        $scope.edit.thumbnail = $scope.current.cover;
-                    } else {
-                        $scope.edit.thumbnail = '/music/css/img/nodata.jpg';
-                    }
-                }
-
                 $http({
                     method: "post",
-                    data: {
-                        newArtist    : $scope.edit.artist,
-                        newTitle     : $scope.edit.title,
-                        newThumbnail : $scope.edit.thumbnail,
-                        currentAlbum : $scope.current.album
-                    },
+                    data: copyOmit($scope.current, ['artist', 'tracks']),
                     url: "/music/edit"
                 }).success(function(data, status, headers, config) {
-                    location.reload();
+                    angular.copy($scope.current, $scope.original);
+                    $modalInstance.dismiss();
+                }).error(function() {
+                    $scope.errorMessage = "Unable to save changes. Check server is running and try again.";
                 });
             }
         };
@@ -223,8 +201,10 @@
         var player,
             playlist = [],
             paused = false,
+            single = false,
             random = false,
             currentTrack = null,
+            currentAlbum = null,
             current = {
                 itemIdx: -1,
                 subItemIdx: -1
@@ -234,11 +214,10 @@
             playlist: playlist,
             current: current,
             currentTrack: currentTrack,
+            currentAlbum: currentAlbum,
+            single: false,
             playing: false,
             play: function(subItemIdx, itemIdx) {
-                if (!playlist.length){
-                    return;
-                }
                 if (angular.isDefined(itemIdx)) {
                    current.itemIdx = itemIdx;
                 }
@@ -246,16 +225,16 @@
                     current.subItemIdx = subItemIdx;
                 }
 
-                if (!paused){
+                if (itemIdx !== null) {
                     var currentItem = playlist[current.itemIdx];
-                    if (currentItem._type === 'track') {
-                        player.currentTrack = currentItem;
-                    } else if (currentItem._type === 'album') {
-                        player.currentTrack = currentItem.tracks[current.subItemIdx];
-                    }
-
-                    audio.src = 'music/'+player.currentTrack.filename +'/play/';
+                    player.currentTrack = currentItem.tracks[current.subItemIdx];
+                    player.currentAlbum = currentItem;
+                } else {
+                    player.currentTrack = subItemIdx;
+                    player.single = true;
                 }
+
+                audio.src = 'music/'+player.currentTrack.id +'/play/';
                 audio.play();
                 player.playing = true;
                 paused = false;
@@ -345,6 +324,12 @@
         };
 
         playlist.add = function(album) {
+
+            if (album._type === 'album') {
+                if (playlist.length > 0){
+                    playlist.splice(0, 1);
+                }
+            }
             if (playlist.indexOf(album) != -1){
                 return;
             }

@@ -30,7 +30,7 @@
 
  **/
 
-function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, timeout, type){
+function videoJSHandler(playerID, data, mediaID, videoUrl, subtitleUrl, title, homeURL, timeout, type){
     var player          = videojs(playerID);
     var actualDuration  = data.duration;
     player.ready(function() {
@@ -76,7 +76,7 @@ function videoJSHandler(playerID, data, videoUrl, subtitleUrl, title, homeURL, t
 
         if(title !== undefined && currentTime !== undefined ){
            var progressionData = {
-                'title'         : title,
+                id         : mediaID,
                 'progression'   : currentTime
             }
             postAjaxCall('/'+type+'/progress', progressionData);

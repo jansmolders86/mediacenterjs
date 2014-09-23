@@ -29,9 +29,9 @@ tvApp.controller('tvCtrl', function($scope, $http, $modal,player){
         $scope.tvshows = data;
     });
 
-    $scope.playEpisode = function(data){
+    $scope.playEpisode = function(episode){
         $scope.playing = true;
-        playEpisode(data, $http);
+        playEpisode(episode, $http);
     }
 
     $scope.changeSelected = function(tvshow){
@@ -197,8 +197,8 @@ tvApp.factory('player', function( $rootScope) {
 });
 
 
-function playEpisode(data, $http){
-    var localName = data;
+function playEpisode(episode, $http){
+
 
     var platform = 'desktop';
     if (navigator.userAgent.match(/Android/i)) {
@@ -208,9 +208,9 @@ function playEpisode(data, $http){
     }
 
 
-    $http.get('/tv/'+localName+'/play/'+platform).success(function(data) {
+    $http.get('/tv/'+episode.id+'/play/'+platform).success(function(data) {
 
-        var fileName                =  localName
+        var fileName                =  episode.fileName
             , outputFile            =   fileName.replace(/ /g, "-")
             , extentionlessFile     =   outputFile.replace(/\.[^/.]+$/, "")
             , videoUrl              =   "/data/tv/"+extentionlessFile+".mp4"
@@ -219,7 +219,7 @@ function playEpisode(data, $http){
             , homeURL               =   '/tv/'
             , type                  =   'tv';
 
-        videoJSHandler(playerID, data, videoUrl, subtitleUrl, localName,homeURL, 5000, type);
+        videoJSHandler(playerID, data, episode.id, videoUrl, subtitleUrl, episode.fileName, homeURL, 5000, type);
 
     });
 }
