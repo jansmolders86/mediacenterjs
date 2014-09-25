@@ -55,7 +55,7 @@ body{
     border:0;
     position:relative;
     font-family: 'Open Sans', sans-serif;
-    color: #747474;
+    color: #fff;
     background:#484C52;
 }
 
@@ -149,9 +149,8 @@ header,
     padding:10px 200px 15px 100px;
     position:relative;
     float:left;
-    background:#fff;
     overflow:hidden;
-    background:#fff;
+    background:#383B41;
     -moz-box-shadow: 0px 0px 0px 1px;
     box-shadow: 0px 0px 0px 1px;
     -webkit-box-shadow: 0px 0px 0px 1px;
