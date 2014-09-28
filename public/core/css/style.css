@@ -715,7 +715,7 @@ table tr > th:first-child{ padding-left:0px;}
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    background-color: #E5E5E5;
+    background-color: #383B41;
     position: relative;
 }
 .progress-pie-chart.gt50 {
@@ -749,7 +749,7 @@ table tr > th:first-child{ padding-left:0px;}
 }
 .gt50 .ppc-progress .ppc-progress-fill {
     clip: rect(0, 200px, 200px, 100px);
-    background: #E5E5E5;
+    background: #383B41;
 }
 
 .ppc-percents {
@@ -760,7 +760,7 @@ table tr > th:first-child{ padding-left:0px;}
     top: calc(50% - 173.91304px/2);
     width: 173.91304px;
     height: 173.91304px;
-    background: #fff;
+    background: #484C52;
     text-align: center;
     display: table;
 }
