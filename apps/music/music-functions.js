@@ -24,21 +24,29 @@ var metafetcher = require('../music/music-metadata')
   , Track = dbschema.Track;
 
 exports.loadItems = function (req, res, serveToFrontEnd) {
-    Album.findAll({include: [Track, Artist]})
-    .success(function (albums) {
-        if (albums === null || albums.length === 0) {
-            metafetcher.loadData(req, res, true);
-        } else {
-            if(serveToFrontEnd === true){
-                res.json(albums);
+    function getAlbums(noalbumsCallback) {
+        Album.findAll({include: [Track, Artist]})
+        .error(function (err) {
+            res.status(500).send();
+        })
+        .success(function (albums) {
+            if (albums === null || albums.length === 0) {
+                noalbumsCallback();
+            } else {
+                if (serveToFrontEnd) {
+                    res.json(albums);
+                }
             }
-        }
-    })
-    .error(function (err) {
-        console.log(err);
-        res.status(500).send();
+        })
+    }
+    getAlbums(function () {
+        metafetcher.loadData(function () {
+            getAlbums(function () {
+                res.status(500).send();
+            });
+        });
     });
-};
+}
 
 exports.playTrack = function(req, res, trackid){
     music_playback_handler.startTrackPlayback(res, trackid);

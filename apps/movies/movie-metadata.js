@@ -1,4 +1,4 @@
-/*
+ /*
     MediaCenterJS - A NodeJS based mediacenter solution
 
     Copyright (C) 2014 - Jan Smolders
@@ -76,16 +76,18 @@ var walk = function(dir, done) {
     });
 };
 
-var setupParse = function(req, res, serveToFrontEnd, results) {
+var setupParse = function(callback, results) {
+    if (results.length == 0) {
+        callback();
+    }
     if (results && results.length > 0) {
         var file = results.pop();
-        doParse(req, res, file, serveToFrontEnd, function() {
-            setupParse(req, res, serveToFrontEnd, results);
+        doParse(file, function() {
+            setupParse(callback, results);
         });
     }
     if (!results) {
-        console.log('no results!');
-        res.json(noResult);
+        callback('no results');
     }
 };
 
@@ -118,7 +120,7 @@ var updateMetadataOfMovie = exports.updateMetadataOfMovie = function(movie, call
     });
 }
 
-var doParse = function(req, res, file, serveToFrontEnd, callback) {
+var doParse = function(file, callback) {
     var incommingTitle      = file.split('/').pop()
         , originalTitle     = incommingTitle
         , movieInfo         = movie_title_cleaner.cleanupTitle(incommingTitle)
@@ -177,21 +179,11 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
             nrScanned++;
 
             var perc = parseInt((nrScanned / totalFiles) * 100);
-            var increment = new Date(), difference = increment - start;
             if (perc > 0) {
-                var total = (difference / perc) * 100, eta = total - difference;
                 io.sockets.emit('progress',{msg:perc});
                 console.log(perc+'% done');
             }
-
-            if(nrScanned === totalFiles){
-                if(serveToFrontEnd === true){
-                    io.sockets.emit('serverStatus',{msg:'Processing data...'});
-                    getMovies(req, res);
-                }
-            }
             callback();
-
         });
     });
 };
@@ -233,82 +225,11 @@ getMetadataFromTrakt = function(movieTitle, callback) {
     });
 };
 
-getMovies = function(req, res){
-    Movie.all(function(err, movies) {
-         if(err){
-             console.log("DB error",err);
-             res.json(noResult);
-         } else if (movies !== null && movies.length > 0){
-             console.log('Sending data to client...');
-             res.json(movies);
-            // db.close();
-         } else{
-             res.json(noResult);
-         }
-     });
-}
 
-
-exports.loadData = function(req, res, serveToFrontEnd) {
+exports.loadData = function(callback) {
     nrScanned = 0;
     walk(dir,  function(err, results) {
         totalFiles = (results) ? results.length : 0;
-        setupParse(req, res, serveToFrontEnd, results);
+        setupParse(callback, results);
     });
 }
-
-
-
-
-
-
-/*
-    **
-    ** Get Data from Trakt instead of TheMovieDB
-    ** Currently, not used. but probably will be in the near future
-    **
-    getMetadataFromTrakt(movieTitle,function(result) {
-        var rating = 'Unknown',
-            original_name = originalTitle,
-            imdb_id = '',
-            runtime = 'Unknown',
-            overview = '',
-            poster_url = '/movies/css/img/nodata.jpg',
-            backdrop_url = '/movies/css/img/backdrop.png',
-            certification ='',
-            adult = false,
-            genre = 'Unknown';
-
-        if(result !== null){
-            poster_url      = result.images.poster
-            backdrop_url    = result.images.fanart;
-            rating          = result.ratings.percentage;
-            rating             = result.vote_average.toString();
-            movieTitle      = result.title
-            original_name   = originalTitle;
-            imdb_id         = result.imdb_id;
-            runtime         = result.runtime;
-            certification   = result.certification;
-            overview        = result.overview;
-            if(result.genres.length){
-                genre       = result.genres[0];
-            }
-            var adultRating = result.adult;
-            adult = adultRating.toString();
-
-            var metadata = [
-                original_name,
-                movieTitle,
-                poster_url,
-                backdrop_url,
-                imdb_id,
-                rating,
-                certification,
-                genre,
-                runtime,
-                overview,
-                movieInfo.cd,
-                adult
-            ];
-        }
-*/

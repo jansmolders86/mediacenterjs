@@ -24,19 +24,28 @@ var fs = require('fs.extra')
     , config = require('../../lib/handlers/configuration-handler').getConfiguration()
     , playback_handler = require('../../lib/handlers/playback');
 
-exports.loadItems = function (req, res, serveToFrontEnd){
-    Show.findAll({include:[Episode]})
-    .success(function (shows) {
-        if (shows === null || shows.length === 0) {
-            metafetcher.loadData(req, res, true);
-        } else {
-            if(serveToFrontEnd === true){
-                res.json(shows);
+exports.loadItems = function (req, res, serveToFrontEnd) {
+    function getTVShows(notvshowsCallback) {
+        Show.findAll({include:[Episode]})
+        .error(function (err) {
+            res.status(500).send();
+        })
+        .success(function (shows) {
+            if (shows === null || shows.length === 0) {
+                notvshowsCallback();
+            } else {
+                if (serveToFrontEnd === true) {
+                    res.json(shows);
+                }
             }
-        }
-    })
-    .error(function (err) {
-        res.status(500).send();
+        });
+    }
+    getTVShows(function () {
+        metafetcher.loadData(function() {
+            getTVShows(function () {
+                res.status(500).send();
+            });
+        });
     });
 };
 
@@ -100,11 +109,5 @@ exports.progress = function (req, res){
     });
 };
 
-
-/** Private functions **/
-
-fetchTVData = function(req, res, serveToFrontEnd) {
-    metafetcher.loadData(req, res, serveToFrontEnd);
-}
 
 

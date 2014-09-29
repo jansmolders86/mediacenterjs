@@ -82,21 +82,23 @@ var walk = function(dir, done) {
     });
 };
 
-var setupParse = function(req, res, serveToFrontEnd, results) {
+var setupParse = function(callback, results) {
+    if (results.length == 0) {
+        callback();
+    }
     if (results && results.length > 0) {
         var file = results.pop();
-        doParse(req, res, file, serveToFrontEnd, function() {
-            setupParse(req, res, serveToFrontEnd, results);
+        doParse(file, function() {
+            setupParse(callback, results);
         });
     }
     if (!results) {
-        console.log('no results!');
-        res.json(noResult);
+        callback('no results');
     }
 };
 
 
-var doParse = function(req, res, file, serveToFrontEnd, callback) {
+var doParse = function(file, callback) {
     var originalTitle           = file.split('/').pop()
     , episodeInfo               = tv_title_cleaner.cleanupTitle(originalTitle)
     , episodeReturnedTitle      = episodeInfo.title
@@ -107,26 +109,10 @@ var doParse = function(req, res, file, serveToFrontEnd, callback) {
         nrScanned++;
 
         var perc = parseInt((nrScanned / totalFiles) * 100);
-        var increment = new Date(), difference = increment - start;
         if (perc > 0) {
-            var total = (difference / perc) * 100, eta = total - difference;
             io.sockets.emit('progress',{msg:perc});
             console.log(perc+'% done.');
         }
-
-        if(nrScanned === totalFiles){
-            if(serveToFrontEnd === true){
-                io.sockets.emit('serverStatus',{msg:'Processing data...'});
-                Show.findAll({include:[Episode]})
-                .success(function (shows) {
-                    res.json(shows);
-                })
-                .error(function (err) {
-                    res.status(500).send();
-                });
-            }
-        }
-
         callback();
     });
 };
@@ -251,10 +237,10 @@ getMetadataFromTrakt = function(tvShow, callback) {
 
 
 /* Lookup */
-exports.loadData = function(req, res, serveToFrontEnd) {
+exports.loadData = function(callback) {
     nrScanned = 0;
     walk(dir,  function(err, results) {
         totalFiles = (results) ? results.length : 0;
-        setupParse(req, res, serveToFrontEnd, results);
+        setupParse(callback, results);
     });
 }

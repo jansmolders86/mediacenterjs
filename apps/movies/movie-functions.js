@@ -28,15 +28,29 @@ var fs = require('fs.extra')
     , ProgressionMarker = dbSchema.ProgressionMarker;
 
 
-exports.loadItems = function (req, res, serveToFrontEnd){
-    var metaType = "movie";
-    var getNewFiles = true;
-    if(serveToFrontEnd === false){
-        fetchMovieData(req, res, metaType, serveToFrontEnd);
-    } else {
-        serveToFrontEnd = true;
-        getMovies(req, res, metaType, serveToFrontEnd,getNewFiles);
-    }
+exports.loadItems = function (req, res, serveToFrontEnd) {
+	function getMovies(nomoviesCallback) {
+		Movie.findAll()
+		.error(function (err) {
+			res.status(500).send();
+		})
+		.success(function (movies) {
+			if (movies === null || movies.length === 0) {
+				nomoviesCallback();
+			} else {
+				if (serveToFrontEnd) {
+					res.json(movies);
+				}
+			}
+		});
+	}
+	getMovies(function () {
+		metafetcher.loadData(function () {
+			getMovies(function () {
+				res.status(500).send();
+			});
+		});
+	});
 };
 
 exports.edit = function(req, res, data) {
@@ -112,34 +126,5 @@ exports.progress = function (req, res){
     })
     .error(function(err) {
         res.status(500).send();
-    });
-}
-
-
-/** Private functions **/
-
-fetchMovieData = function(req, res, metaType, serveToFrontEnd, getNewFiles) {
-    console.log('Fetching movie data...', serveToFrontEnd);
-    metafetcher.loadData(req, res, serveToFrontEnd);
-}
-
-getMovies = function(req, res, metaType, serveToFrontEnd,getNewFiles){
-    console.log('Loading movie data...', serveToFrontEnd);
-    Movie.findAll().complete(function(err, movies) {
-        if(err){
-            serveToFrontEnd = true;
-            if(getNewFiles === true){
-                fetchMovieData(req, res, metaType, serveToFrontEnd,getNewFiles);
-            }
-        } else if (movies !== null && movies !== undefined && serveToFrontEnd !== false && movies.length > 0){
-            console.log('Sending data to client...');
-            res.json(movies);
-        } else {
-            console.log('Getting data...');
-            serveToFrontEnd = true;
-            if(getNewFiles === true){
-                fetchMovieData(req, res, metaType, serveToFrontEnd,getNewFiles);
-            }
-        }
     });
 }

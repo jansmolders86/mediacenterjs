@@ -75,29 +75,25 @@ var walk = function(dir, done) {
     });
 };
 
-var setupParse = function(req, res, serveToFrontEnd, results) {
+var setupParse = function(callback, results) {
     if (results && results.length > 0) {
         var i = 0;
         async.eachSeries(results, function(file, callback) {
-             doParse(req, res, file, serveToFrontEnd, function() {
+             doParse(file, function() {
                 var perc = (i++)/results.length * 100 >> 0;//Faster math.floor
                 io.sockets.emit('progress',{msg:perc});
                 callback();
              });
         }, function (err) {
-            Album.findAll({include: [Track, Artist]})
-            .success(function(albums) {
-                 res.json(albums);
-            });
+            callback(err);
         });
     }
     if (!results) {
-        console.log('no results!');
-        res.json({"result":"none"});
+        callback('no results');
     }
 };
 
-var doParse = function(req, res, file, serveToFrontEnd, callback) {
+var doParse = function(file, callback) {
     var parser = new mm(fs.createReadStream(file));
 
     var result = null;
@@ -195,8 +191,8 @@ getAdditionalDataFromLastFM = function(album, artist, callback) {
     });
 }
 
-exports.loadData = function(req, res, serveToFrontEnd) {
+exports.loadData = function(callback) {
     walk(dir,  function(err, results) {
-        setupParse(req, res, serveToFrontEnd, results);
+        setupParse(callback, results);
     });
 }
