@@ -92,26 +92,28 @@ var setupParse = function(callback, results) {
 };
 
 
+function fillMovieFromTMDBResult(movie, result) {
+    var baseUrl         = 'http://image.tmdb.org',
+    poster_size     = "/t/p/w342",
+    backdrop_size   = "/t/p/w1920";
+    movie.posterURL      = baseUrl+poster_size+result.poster_path
+    movie.backgroundURL  = baseUrl+backdrop_size+result.backdrop_path
+    movie.rating         = result.vote_average.toString();
+    movie.title          = result.title
+    movie.imdbID         = result.imdb_id;
+    movie.runtime        = result.runtime;
+    movie.overview       = result.overview;
+    if (result.genres.length) movie.genre = result.genres[0].name;
+    movie.adult          = result.adult.toString();
+}
+
 var updateMetadataOfMovie = exports.updateMetadataOfMovie = function(movie, callback) {
     getMetadataFromTheMovieDB(movie.title, null, function (result) {
         if (result !== null) {
-            var baseUrl         = 'http://image.tmdb.org',
-                poster_size     = "/t/p/w342",
-                backdrop_size   = "/t/p/w1920";
-                movie.posterURL = baseUrl+poster_size+result.poster_path;
-                movie.backgroundURL = baseUrl+backdrop_size+result.backdrop_path;
-                movie.imdbID = result.imdb_id;
-                movie.rating = result.vote_average.toString();
-                movie.genre = 'Unknown';
-                movie.title = result.title;
-                movie.runtime = result.runtime;
-                movie.overview = result.overview;
-                movie.adult = result.adult.toString();
-            if (result.genres.length) {
-                movie.genre = result.genres[0].name;
-            }
+            fillMovieFromTMDBResult(movie, result);
             //must be full movie object...
-            movie.save(function (err, updMovie) {
+            movie.save()
+            .complete(function (err, updMovie) {
                 callback(err, updMovie);
             });
         } else {
@@ -130,52 +132,27 @@ var doParse = function(file, callback) {
 
 
     getMetadataFromTheMovieDB(movieTitle, movieInfo.year, function(result) {
-        var rating          = 'Unknown',
-            original_name   = originalTitle,
-            imdb_id         = '',
-            runtime         = 'Unknown',
-            overview        = '',
-            poster_url      = '/movies/css/img/nodata.jpg',
-            backdrop_url    = '/movies/css/img/backdrop.png',
-            certification   ='',
-            adult           = false,
-            genre           = 'Unknown',
-            baseUrl         = 'http://image.tmdb.org',
-            poster_size     = "/t/p/w342",
-            backdrop_size   = "/t/p/w1920";;
-
-        if(result !== null){
-            poster_url      = baseUrl+poster_size+result.poster_path
-            backdrop_url    = baseUrl+backdrop_size+result.backdrop_path
-            rating          = result.vote_average.toString();
-            movieTitle      = result.title
-            original_name   = originalTitle;
-            imdb_id         = result.imdb_id;
-            runtime         = result.runtime;
-            overview        = result.overview;
-            if(result.genres.length){
-                genre = result.genres[0].name;
-            }
-            var adultRating = result.adult;
-            adult = adultRating.toString();
-        }
         var metadata = {
-            originalName: original_name,
-            title: movieTitle,
-            posterURL: poster_url,
-            backgroundURL: backdrop_url,
-            imdbID: imdb_id,
-            "rating": rating,
-            "certification":certification,
-            "genre":genre,
-            "runtime":runtime,
-            "overview":overview,
-            cdNumber: movieInfo.cd,
-            "adult": adult,
-            hidden: "false"
+            originalName    : originalTitle,
+            title           : movieTitle,
+            posterURL       : '/movies/css/img/nodata.jpg',
+            backgroundURL   : '/movies/css/img/backdrop.png',
+            imdbID          : null,
+            rating          : 'Unknown',
+            certification   : null,
+            genre           : 'Unknown',
+            runtime         : 'Unknown',
+            overview        : null,
+            cdNumber        : null,
+            adult           : false,
+            hidden          : "false"
         };
 
-        storeMetadataInDatabase(metadata, function(){
+        if (result !== null) {
+            fillMovieFromTMDBResult(metadata, result);
+        }
+
+        Movie.create(metadata).complete(function() {
             nrScanned++;
 
             var perc = parseInt((nrScanned / totalFiles) * 100);
@@ -190,11 +167,6 @@ var doParse = function(file, callback) {
 
 
 /* Private Methods */
-
-
-storeMetadataInDatabase = function(metadata, callback) {
-    Movie.create(metadata).complete(callback);
-};
 
 getMetadataFromTheMovieDB = function(movieTitle, year, callback) {
     moviedb.searchMovie({ query: movieTitle, language: config.language, year: year }, function(err, result) {

@@ -64,7 +64,9 @@ exports.edit = function(req, res, data) {
 }
 
 exports.update = function(req, res, data) {
-    Movie.find(data.id).success(function(movie) {
+    Movie.find(data.id)
+    .success(function(movie) {
+        movie.set(data);
         metafetcher.updateMetadataOfMovie(movie, function(err, updMovie) {
             if (err) {
                 res.status(500).send();
