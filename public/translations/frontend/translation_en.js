@@ -1,4 +1,4 @@
-succesMessage = Succesfully executed.
+succesMessage = Successfully executed.
 weather_current = Current conditions
 weather_underground_languagecode = EN
 feelsLike = Feels like
