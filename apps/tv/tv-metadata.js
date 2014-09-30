@@ -33,14 +33,8 @@ var config = configuration_handler.initializeConfiguration();
 /* Constants */
 
 var SUPPORTED_FILETYPES = new RegExp("(avi|mkv|mpeg|mov|mp4|wmv)$","g");  //Pipe seperated
-var start = new Date();
 var nrScanned = 0;
 var totalFiles = 0;
-var noResult = {
-    "result":"none"
-};
-
-// Init Database
 
 /* Public Methods */
 
@@ -123,88 +117,68 @@ var doParse = function(file, callback) {
  * @param originalTitle      Original episode filename
  * @param episodeTitle       Cleaned up name of episode
  */
-getDataForNewShow = function(originalTitle, episodeTitle,callback){
-
+getDataForNewShow = function(originalTitle, episodeTitle,callback) {
     var episodeSeason       = '0'
-        , season            = ''
-        , number            = ''
-        , title             = ''
-        , trimmedTitle      = ''
         , episodeNumber     = '0';
 
-    if(config.tvFormat === 's00e00' || config.tvFormat === undefined){
-        var showTitle               = episodeTitle.replace(/[sS]([0-9]{1,2})[eE]([0-9]{1,2})/, '')
-        , episodeSeasonMatch        = episodeTitle.match(/[sS]([0-9]{1,2})/)
-        , episodeNumberMatch        = episodeTitle.match(/[eE]([0-9]{1,2})/);
+    if (config.tvFormat === 's00e00' || config.tvFormat === undefined) {
+        var showTitle        = episodeTitle.replace(/[sS]([0-9]{1,2})[eE]([0-9]{1,2})/, '')
+        , episodeSeasonMatch = episodeTitle.match(/[sS]([0-9]{1,2})/)
+        , episodeNumberMatch = episodeTitle.match(/[eE]([0-9]{1,2})/);
 
-        if(episodeSeasonMatch){
-            episodeSeason       = episodeSeasonMatch[0].replace(/[sS]/,"");
+        if (episodeSeasonMatch) {
+            episodeSeason    = episodeSeasonMatch[0].replace(/[sS]/,"");
         }
-        if(episodeNumberMatch){
-            episodeNumber       = episodeNumberMatch[0].replace(/[eE]/,"");
+        if (episodeNumberMatch) {
+            episodeNumber    = episodeNumberMatch[0].replace(/[eE]/,"");
         }
-    } else if(config.tvFormat === '0x00'){
-        var showTitle            = episodeTitle.replace(/([0-9]{1,2})+?(x)+?([0-9]{1,2})/, '')
-        , episodeNumberMatch     = episodeTitle.match(/(x)+?([0-9]{1,2})/)
+    } else if (config.tvFormat === '0x00') {
+        var showTitle        = episodeTitle.replace(/([0-9]{1,2})+?(x)+?([0-9]{1,2})/, '')
+        , episodeNumberMatch = episodeTitle.match(/(x)+?([0-9]{1,2})/)
 
-        episodeSeason          = episodeTitle.match(/(\d{1,2})+?(?=x)/)
+        episodeSeason        = episodeTitle.match(/(\d{1,2})+?(?=x)/)
 
-        if(episodeNumberMatch){
+        if (episodeNumberMatch) {
             episodeNumber    = episodeNumberMatch[0].replace("x","");
         }
     }
 
-    var episodeData = {
-        "showTitle"         : showTitle.toLowerCase(),
-        "episodeSeason"     : episodeSeason,
-        "episodeNumber"     : episodeNumber
-    }
-
-    season          = episodeData.episodeSeason;
-    number          = episodeData.episodeNumber;
-    title           = episodeData.showTitle;
-    trimmedTitle    = title.trim();
+    var trimmedTitle = showTitle.toLowerCase().trim();
 
     // Store episode data in db and do lookup again
     Episode.create({
         fileName: originalTitle,
         name: trimmedTitle,
-        season: season,
-        episode: number
+        season: episodeSeason,
+        episode: episodeNumber
     })
     .success(function(episode) {
-        var genre           = "No data"
-        , certification     = "No data"
-        , showTitle         = 'unknown show'
-        , bannerImage       = '/tv/css/img/nodata.jpg'
-
-        getMetadataFromTrakt(trimmedTitle, function(err, result){
+        var showData = {
+            name            : trimmedTitle,
+            posterURL       : '/tv/css/img/nodata.jpg',
+            genre           : 'Unknown',
+            certification   : 'Unknown'
+        };
+        getMetadataFromTrakt(trimmedTitle, function(err, traktResult){
             if (err) {
                 console.error('Error returning Trakt data', err);
             } else {
-                var traktResult = result;
-                bannerImage     = traktResult.images.banner;
-                showTitle       = traktResult.title;
-
-                if(traktResult !== null){
-                    if(traktResult.genres !== undefined){
-                        genre = traktResult.genres;
+                if (traktResult !== null) {
+                    if (traktResult.images !== undefined
+                        && traktResult.images.banner !== undefined) {
+                        showData.posterURL = traktResult.images.banner;
+                    }
+                    if (traktResult.genres !== undefined) {
+                        showData.genre = traktResult.genres.join(",");
                     }
                     if (traktResult.certification !== undefined) {
-                        certification = traktResult.certification;
+                        showData.certification = traktResult.certification;
                     }
-                    if(traktResult.title !== undefined){
-                        var showTitleResult = traktResult.title;
+                    if (traktResult.title !== undefined) {
+                        showData.name = traktResult.title.toLowerCase();
                     }
                 }
-
-                showTitle = showTitleResult.toLowerCase();
-                Show.findOrCreate({name: showTitle}, {
-                    name: showTitle,
-                    posterURL: bannerImage,
-                    genre: genre.join(','),
-                    certification: certification
-                })
+                Show.findOrCreate({name: showData.name}, showData)
                 .success(function (show) {
                     show.addEpisode(episode)
                     .success(function() {
@@ -218,10 +192,9 @@ getDataForNewShow = function(originalTitle, episodeTitle,callback){
 
 
 getMetadataFromTrakt = function(tvShow, callback) {
-    var options = { query: tvShow }
-    , trakt = new Trakt({username: 'mediacenterjs', password: 'mediacenterjs'});
+    var trakt = new Trakt({username: 'mediacenterjs', password: 'mediacenterjs'});
 
-    trakt.request('search', 'shows', options, function(err, result) {
+    trakt.request('search', 'shows', { query: tvShow }, function(err, result) {
         if (err) {
             console.log('error retrieving tvshow info', err .red);
             callback(err, null);
@@ -230,6 +203,8 @@ getMetadataFromTrakt = function(tvShow, callback) {
 
             if (tvSearchResult !== undefined && tvSearchResult !== '' && tvSearchResult !== null) {
                 callback(err, tvSearchResult);
+            } else {
+                callback(err, null);
             }
         }
     });

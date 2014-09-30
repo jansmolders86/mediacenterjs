@@ -66,7 +66,6 @@ var walk = function(dir, done) {
                     ext = ext[ext.length - 1];
                     if (ext.match(SUPPORTED_FILETYPES)) {
                         results.push(file);
-                        // doParse(file);
                     }
                     next();
                 }
@@ -131,22 +130,22 @@ var doParse = function(file, callback) {
                     cover = '/music/css/img/nodata.jpg';
                 }
                 var albumData = {
-                        'title' : albumName,
-                        'posterURL' : cover,
-                        'year'  : year
+                        title : albumName,
+                        posterURL : cover,
+                        year  : year
                     };
                 var artistData = {
-                    'name' : artistName
+                    name : artistName
                 }
                 Artist.findOrCreate(artistData, artistData)
                 .complete(function (err, artist) {
-                    Album.findOrCreate({'title' : albumName}, albumData)
+                    Album.findOrCreate({title : albumName}, albumData)
                     .complete(function(err, album) {
                         album.setArtist(artist).complete(function(err) {
                             album.createTrack({
-                                'title' : trackName,
-                                'order' : trackNo,
-                                'filePath' : file
+                                title : trackName,
+                                order : trackNo,
+                                filePath : file
                             })
                             .complete(function(err) {
                                 callback();
@@ -171,8 +170,8 @@ getAdditionalDataFromLastFM = function(album, artist, callback) {
     var cover = '/music/css/img/nodata.jpg';
 
     lastfm.album.getInfo({
-        'artist'    : artist,
-        'album'     : album
+        artist    : artist,
+        album     : album
     }, function(err, album){
         if(err){
             callback(cover);
@@ -180,12 +179,7 @@ getAdditionalDataFromLastFM = function(album, artist, callback) {
 
         if(album !== undefined && album.image[0] !== undefined && album.image[0] !== null){
             cover = album.image[3]["#text"];
-
-            if(cover !== ''){
-                callback(cover);
-            } else {
-                callback(cover);
-            }
+            callback(cover);
         }
 
     });
