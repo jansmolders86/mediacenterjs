@@ -21,7 +21,24 @@ body.playing .container-fluid{display:none;}
 
 body.playing > #player{display:block;}
 
-.container-fluid{ padding-top:90px;}
+.container-fluid {
+    overflow-x: hidden;
+    padding-top: 15px;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+header .container, header .row, header .col-md-12 { height: 100%;}
+ 
+html, body {
+    overflow: hidden;
+    height: 100%;
+}
+
 /* Bootstrap override */
 
 @media only screen and (min-width: 768px) {
@@ -368,7 +385,8 @@ h1.movie-title{
 
 @media (max-width: 600px) {
     .container-fluid{
-        padding:0;
+        padding-left: 0;
+        padding-right: 0;
     }
 }
 
