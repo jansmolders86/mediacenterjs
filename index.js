@@ -53,15 +53,7 @@ if(config.language === ""){
 /*Create database*/
 if(fs.existsSync('./lib/database/') === false){
     fs.mkdirSync('./lib/database/');
-    fs.openSync('./lib/database/mcjs.sqlite', 'w');
-    fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
 }
-
-if(fs.existsSync('./lib/database/mcjs.sqlite') === false){
-    fs.openSync('./lib/database/mcjs.sqlite', 'w');
-    fs.chmodSync('./lib/database/mcjs.sqlite', 0755);
-}
-
 var env = process.env.NODE_ENV || 'development';
 if ('development' == env) {
     app.set('view engine', 'jade');
