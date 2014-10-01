@@ -44,7 +44,7 @@ var SUPPORTED_FILETYPES = new RegExp("(m4a|mp3)$","g");
 
 /* walk over a directory recursivly */
 var dir = path.resolve(config.musicpath);
-var walk = function(dir, done) {
+var walk = function(dir, done, filecallback) {
     var results = [];
     fs.readdir(dir, function(err, list) {
         if (err)
@@ -60,36 +60,19 @@ var walk = function(dir, done) {
                     walk(file, function(err, res) {
                         results = results.concat(res);
                         next();
-                    });
+                    }, filecallback);
                 } else {
                     var ext = file.split(".");
                     ext = ext[ext.length - 1];
                     if (ext.match(SUPPORTED_FILETYPES)) {
                         results.push(file);
+                        filecallback(file);
                     }
                     next();
                 }
             });
         })();
     });
-};
-
-var setupParse = function(callback, results) {
-    if (results && results.length > 0) {
-        var i = 0;
-        async.eachSeries(results, function(file, callback) {
-             doParse(file, function() {
-                var perc = (i++)/results.length * 100 >> 0;//Faster math.floor
-                io.sockets.emit('progress',{msg:perc});
-                callback();
-             });
-        }, function (err) {
-            callback(err);
-        });
-    }
-    if (!results) {
-        callback('no results');
-    }
 };
 
 var doParse = function(file, callback) {
@@ -137,27 +120,17 @@ var doParse = function(file, callback) {
                 var artistData = {
                     name : artistName
                 }
-                Artist.findOrCreate(artistData, artistData)
-                .complete(function (err, artist) {
-                    Album.findOrCreate({title : albumName}, albumData)
-                    .complete(function(err, album) {
-                        album.setArtist(artist).complete(function(err) {
-                            album.createTrack({
-                                title : trackName,
-                                order : trackNo,
-                                filePath : file
-                            })
-                            .complete(function(err) {
-                                callback();
-                            });
-                        });
-                    });
-                });
+                var trackData = {
+                        title : trackName,
+                        order : trackNo,
+                        filePath : file
+                    };
+                callback({ albumData : albumData, artistData: artistData, trackData:trackData});
             });
         }
     });
 };
-
+var calledTimes = 0;
 getAdditionalDataFromLastFM = function(album, artist, callback) {
     // Currently only the cover is fetched. Could be expanded in the future
     // Due to the proper caching backend provided by LastFM there is no need to locally store the covers.
@@ -168,11 +141,10 @@ getAdditionalDataFromLastFM = function(album, artist, callback) {
     });
 
     var cover = '/music/css/img/nodata.jpg';
-
     lastfm.album.getInfo({
         artist    : artist,
         album     : album
-    }, function(err, album){
+    }, function(err, album) {
         if(err){
             callback(cover);
         }
@@ -185,8 +157,42 @@ getAdditionalDataFromLastFM = function(album, artist, callback) {
     });
 }
 
-exports.loadData = function(callback) {
-    walk(dir,  function(err, results) {
-        setupParse(callback, results);
+exports.loadData = function(donecallback) {
+    var numberOfFiles = null;
+    var tasksComplete = 0;
+
+    var q = async.queue(function (data, callback) {
+        var artistData = data.artistData;
+        var albumData = data.albumData;
+        var trackData = data.trackData;
+        Artist.findOrCreate(artistData, artistData)
+        .then(function (artist) {
+            albumData.ArtistId = artist.id;
+            return Album.findOrCreate({title : albumData.title}, albumData);
+        })
+        .then(function(album) {
+            return album.createTrack(trackData);
+        })
+        .then(function(track) {
+            tasksComplete++;
+            callback();
+        });
+    }, 1);
+    q.drain = function() {
+        if (tasksComplete === numberOfFiles) {
+            donecallback();
+        }
+    }
+    walk(dir, function(err, results) {
+        numberOfFiles = results.length;
+    }, function (file) {
+        doParse(file, function(data) {
+            q.push(data, function () {
+                var perc = tasksComplete/numberOfFiles * 100 >> 0;//Faster math.floor
+                io.sockets.emit('progress',{msg:perc});
+            });
+        });
+        
     });
+
 }
