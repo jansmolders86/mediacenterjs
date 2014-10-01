@@ -51,12 +51,14 @@ exports.loadItems = function (req, res, serveToFrontEnd) {
 
 exports.edit = function(req, res, data){
     Show.find(data.id)
-    .success(function(movie) {
-        movie.updateAttributes(data)
-        .success(function() {res.status(200).send();})
-        .error(function(err) {res.status(500).send();});
+    .then(function(movie) {
+        if (movie == null) {
+            throw {message:"not found", code: 404};
+        }
+        return movie.updateAttributes(data);
     })
-    .error(function(err) {res.status(404).send();});
+    .then(function() {res.status(200).send();})
+    .catch(function(err) {res.status(err.code || 500).send();});
 }
 
 exports.playFile = function (req, res, platform, episodeId){
@@ -92,19 +94,16 @@ exports.progress = function (req, res){
     var data = req.body;
     ProgressionMarker.findOrCreate({EpisodeId : data.id},
         {EpisodeId: data.id})
-    .success(function (progressionmarker) {
-        progressionmarker.updateAttributes({
-            progression         : data.progression,
-            transcodingStatus   : 'pending'
-        })
-        .success(function() {
-            res.status(200).send();
-        })
-        .error(function(err) {
-            res.status(500).send();
-        });
+    .then(function (progressionmarker) {
+        return progressionmarker.updateAttributes({
+                progression         : data.progression,
+                transcodingStatus   : 'pending'
+            });
     })
-    .error(function(err) {
+    .then(function() {
+        res.status(200).send();
+    })
+    .catch(function(err) {
         res.status(500).send();
     });
 };

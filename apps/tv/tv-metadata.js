@@ -179,11 +179,11 @@ getDataForNewShow = function(originalTitle, episodeTitle,callback) {
                     }
                 }
                 Show.findOrCreate({name: showData.name}, showData)
-                .success(function (show) {
-                    show.addEpisode(episode)
-                    .success(function() {
-                        callback();
-                    });
+                .then(function (show) {
+                    return show.addEpisode(episode);
+                })
+                .then(function() {
+                    callback();
                 });
             }
         });
