@@ -20,8 +20,6 @@ block additional_scripts
     script(src="/movies/js/remote.js")
 
 block body
-    #backdrop
-        img#backdropimg.fullscreen
     header
         .container
             .row
@@ -40,6 +38,7 @@ block body
                     .fixed-ratio-cover.fixed-ratio
                         img.movieposter(ng-src="{{movie.posterURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie)")
                     .caption(ng-click="playMovie(movie)")
+                            img.backdrop(ng-src="{{movie.backgroundURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'", ng-click="playMovie(movie)")
                             p
                                 h1.movie-title{{movie.title}}
                                 .overview

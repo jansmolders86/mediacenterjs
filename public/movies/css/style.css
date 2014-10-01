@@ -33,7 +33,7 @@ body.playing > #player{display:block;}
 }
 
 header .container, header .row, header .col-md-12 { height: 100%;}
- 
+
 html, body {
     overflow: hidden;
     height: 100%;
@@ -222,6 +222,16 @@ body.playing #backdropimg{
     padding:0;
     border:0;
 }
+.movieposter .caption > img{display:none;}
+
+.movieposter:hover .caption > img{
+    display:block;
+    width: 100%;
+    max-height: 150px;
+    min-height: 100px;
+    opacity: 1;
+    margin:0;
+}
 
 .movieposter span{
     display:block;
@@ -244,7 +254,7 @@ span.title{visibility:hidden; width:0; height:0;}
 
 
 .movieposter .caption{
-    height:300px;
+    height:100%;
     max-height: 100%;
     transform: translateY(100%);
     -webkit-transform: translateY(100%);
