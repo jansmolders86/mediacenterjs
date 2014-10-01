@@ -46,7 +46,7 @@ var Movie = require('../../lib/utils/database-schema').Movie;
 /* Public Methods */
 
 var dir = path.resolve(config.moviepath);
-var walk = function(dir, done) {
+var walk = function(dir, done, filecallback) {
     var results = [];
     fs.readdir(dir, function(err, list) {
         if (err)
@@ -62,33 +62,19 @@ var walk = function(dir, done) {
                     walk(file, function(err, res) {
                         results = results.concat(res);
                         next();
-                    });
+                    }, filecallback);
                 } else {
                     var ext = file.split(".");
                     ext = ext[ext.length - 1];
                     if (ext.match(SUPPORTED_FILETYPES)) {
                         results.push(file);
+                        filecallback(file);
                     }
                     next();
                 }
             });
         })();
     });
-};
-
-var setupParse = function(callback, results) {
-    if (results.length == 0) {
-        callback();
-    }
-    if (results && results.length > 0) {
-        var file = results.pop();
-        doParse(file, function() {
-            setupParse(callback, results);
-        });
-    }
-    if (!results) {
-        callback('no results');
-    }
 };
 
 
@@ -200,8 +186,15 @@ getMetadataFromTrakt = function(movieTitle, callback) {
 
 exports.loadData = function(callback) {
     nrScanned = 0;
+    var complete = 0;
     walk(dir,  function(err, results) {
         totalFiles = (results) ? results.length : 0;
-        setupParse(callback, results);
+    }, function (file) {
+        doParse(file, function () {
+            complete++;
+            if (complete === totalFiles) {
+                callback();
+            }
+        });
     });
 }
