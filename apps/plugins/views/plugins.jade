@@ -3,51 +3,42 @@ extends /layout
 block declarations
     - additional_title      = lingua.plugin_header;
     - body_class            = 'appPlugins';
-    - use_knockout          = true;
-    - include_remote        = true;
+    - use_angular           = true;
+    - angular_app           = "pluginsApp";
+    - angular_body_ctrl     = "pluginsCtrl";
+
 
 block additional_css
     link(rel='stylesheet', href='/plugins/css/style.css')
 
 block additional_scripts
-    script(src="/plugins/js/jquery.plugins.js")
-    
-    script.
-        $(function() {
-            $('body').mcjs();
-            $('body').mcjsp();
-        });
+    script(src="/core/js/plugins/angular/angular-ui/ui-bootstrap-tpls-0.11.0.js")
+    script(src="/plugins/js/app.js")
 
 block body
     header
         .container
             .row
                 div.pull-left
-                    a.backlink &#xe113;
+                    a.backlink(ng-click="pluginsChanged ? restartServer($event) : null", href="/") &#xe113;
                     h1 #{lingua.plugin_header}
-                div.pull-right(data-bind="visible:upgradeAll().length > 0")
-                    a.btn.upgrade.upgrade-all(data-bind="{click: upgradeAllPlugins.bind($data, upgradeAll() )}") Upgrade All
+                div.pull-right(ng-show="upgrades.length > 0")
+                    a.btn.upgrade.upgrade-all(ng-click="upgradeAll()") Upgrade All
     #wrapper
         div.loading.pull-left
             h2 #{lingua.plugin_loading} 
-        div.message.boxed(data-bind="visible:message() != ''")
-            span(data-bind="html:message")
+        div.message.boxed(ng-show="message != null")
+            span {{message}}
 
-        ul.plugins(data-bind="foreach: plugin")
-            li.boxed.mcjs-rc-controllable
+        ul.plugins
+            li.boxed.mcjs-rc-controllable(ng-repeat="plugin in plugins")
                 .info
-                    h2.name(data-bind="text:name")
-                    div.desc(data-bind="text:desc")
-                    div.version(data-bind="text:version")
-                // ko if: isInstalled() === false 
-                a.btn.install.mcjs-rc-clickable(data-bind="{click: install}")	#{lingua.plugin_install}
-                // /ko	
-                // ko if: isInstalled() === true 
-                a.btn.remove.mcjs-rc-clickable(data-bind="{click: remove}") #{lingua.plugin_remove}
-                // /ko	
-                // ko if: isUpgradable() === true 
-                a.btn.upgrade.mcjs-rc-clickable(data-bind="{click: upgrade}")  #{lingua.plugin_upgrade}
-                // /ko
+                    h2.name {{plugin.name}}
+                    div.desc {{plugin.desc}}
+                    div.version {{plugin.version}}
+                a.btn.install.mcjs-rc-clickable(ng-click="install(plugin)", ng-if="!plugin.isInstalled") #{lingua.plugin_install}
+                a.btn.remove.mcjs-rc-clickable(ng-click="remove(plugin)", ng-if="plugin.isInstalled") #{lingua.plugin_remove}
+                a.btn.upgrade.mcjs-rc-clickable(ng-click="upgrade(plugin)", ng-if="plugin.isUpgradable")  #{lingua.plugin_upgrade}
                 .additional-info
-                    div.author(data-bind="text:'#{lingua.plugin_by}: '+ author()")
-                    div.date(data-bind="text:'#{lingua.plugin_added}: '+date()")
+                    div.author #{lingua.plugin_by} {{plugin.author}}
+                    div.date #{lingua.plugin_added} {{plugin.date}}

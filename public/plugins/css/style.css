@@ -85,15 +85,17 @@ li.boxed.focused .btn,
 .pull-right {float:right;}
 .upgrade-all {margin:5px 0;}
 
-
+.modal-dialog {
+    min-width: 0 !important;
+    width: 400px;
+}
 .restart-dialog {
     text-align: center;
+    font-size: 1.4em;
+    font-weight: bold;
 }
-.restart-dialog .ui-dialog-content {
-    padding-top: 21px;
-}
-.restart-dialog .ui-dialog-titlebar {
-    display: none;
+.restart-dialog div {
+    padding: 21px;
 }
 .restart-dialog img {
     display: inline-block;
