@@ -23,7 +23,7 @@ pluginsApp.controller('pluginsCtrl', function ($scope, $http, $modal, $timeout, 
 
     $http.get('/plugins/loadItems')
     .success(function(data) {
-        $scope.plugins = data.plugins;
+        $scope.plugins = data;
         $scope.upgrades = $scope.plugins.filter(
             function (plugin) {
                 return plugin.isUpgradable;

@@ -25,7 +25,7 @@ block body
                 div.pull-right(ng-show="upgrades.length > 0")
                     a.btn.upgrade.upgrade-all(ng-click="upgradeAll()") Upgrade All
     #wrapper
-        div.loading.pull-left
+        div.loading.pull-left(ng-hide="plugins.length > 0")
             h2 #{lingua.plugin_loading} 
         div.message.boxed(ng-show="message != null")
             span {{message}}

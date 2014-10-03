@@ -31,16 +31,12 @@ var express = require('express')
 	, install = npm + ' install '
 	, upgrade = npm + ' upgrade '
 	, remove = npm + ' remove '
-	, plugins = []
-	, installedPlugins = []
-	, upgradablePluginList = []
 	, blackList = require('../../configuration/plugin-blacklist.js').blackList
 	, configuration_handler = require('../../lib/handlers/configuration-handler');
 
 var getInstalledPlugins = function(){
 	var nodeModules = __dirname + '/../../node_modules';
-	installedPlugins = [];
-	upgradablePluginList = [];
+	var installedPlugins = [];
 
 	fs.readdirSync(nodeModules).forEach(function(name){
 		//Check if the folder in the node_modules starts with the prefix
@@ -51,13 +47,11 @@ var getInstalledPlugins = function(){
 		var info = {};
 		var data = fs.readFileSync(nodeModules + '/' + name + '/package.json' , 'utf8');
         
-        try{
+        try {
         	info = JSON.parse(data);
-        }catch(e){
-        	console.log('JSON Parse Error')
-        	info = {
-        		version: "0.0.0"
-        	}
+        } catch(e) {
+        	console.log('JSON Parse Error');
+        	info.version = "0.0.0";
         }
 		
 		var plugin = {
@@ -67,114 +61,78 @@ var getInstalledPlugins = function(){
 				
 		installedPlugins.push(plugin);
 	});
+	return installedPlugins;
 };
 
 exports.getAvailablePlugins = function(req, res){
 	console.log('Looking for available plugins..(pluginsList.' .green);
-	var plugins = [];
 	
-	getInstalledPlugins();
+	var installedPlugins = getInstalledPlugins();
 	
-	async.waterfall([
-		function(callback){
-			npmSearch(["mediacenterjs-"], function(pluginList){
-				if (pluginList){
-					callback(null, pluginList);
-				}else{
-					callback("NPM Search Error");
-				}
-			});
-		},
-		function(pluginList, callback){
-			for (var key in pluginList) {
-				var obj = pluginList[key];
-		   	  	var compareInfo = isPluginCurrentlyInstalled(installedPlugins, obj.name, obj.version);          
-
-                var d = new Date(obj.time);
-                var curr_date = d.getDate();
-                var curr_month = d.getMonth() + 1; //Months are zero based
-                var curr_year = d.getFullYear();
-                var showDate = curr_date + "-" + curr_month + "-" + curr_year;
-                
-		   		plugins.push({
-					name: obj.name.replace(pluginPrefix, ''), //Remove the Mediacenterjs-
-					desc: obj.description,
-					author: obj.maintainers[0].replace('=',''),
-                    date: showDate,
-					version: obj.version,
-					keywords: obj.keywords,
-					isInstalled: compareInfo.isInstalled,
-					isUpgradable: compareInfo.isUpgradable
-				});
-		   }
-		   callback(null, plugins);
-		},
-		function(pluginList, callback){
-			
-			for (var i = 0; i < blackList.length; i++){
-				for (var j = 0; j < pluginList.length; j++){
-					if (pluginPrefix + pluginList[j].name === blackList[i]){
-						pluginList.splice(j, 1);
+	var npmSearch = function(search, callback){
+		npm.load([], function (err, npm) {
+			if (err) {
+				callback(err);
+			} else {
+			  	npm.commands.search(search, function(err, res){
+					if (err) {
+						console.log('NPM Search Error ' + err);
+						callback(err);
+					} else {
+						callback(null, res);
 					}
-				}			
+				});
 			}
-			callback(null, pluginList);
+		});
+	}
 
-		}, 
-		function(plugins, callback){
-			res.json({
-                plugins:plugins,
-                upgradablePlugins: upgradablePluginList
-        	});	
-		}],
-
-	function(err){
-		if (err){
+	npmSearch(["mediacenterjs-"], function(err, pluginList){
+		if (!pluginList || err) {
 			console.log('Error: Searching for plugins: ' + err);
 			res.json({
 				error: 1,
 				message: 'Error: Unable to get a list of the available plugins.'
 			});
+		} else {
+			var plugins = Object.keys(pluginList)
+			.filter(function (pluginName) {
+				return blackList.indexOf(pluginName) === -1;
+			})
+			.map(function(pluginName) {
+				var pluginObj = pluginList[pluginName];
+				var compareInfo = isPluginCurrentlyInstalled(installedPlugins, pluginObj.name, pluginObj.version);          
+	            var d = new Date(pluginObj.time);
+
+	            return {
+					name: pluginObj.name.replace(pluginPrefix, ''), //Remove the Mediacenterjs-
+					desc: pluginObj.description,
+					author: pluginObj.maintainers[0].replace('=',''),
+	                date: d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear(),
+					version: pluginObj.version,
+					keywords: pluginObj.keywords,
+					isInstalled: compareInfo.isInstalled,
+					isUpgradable: compareInfo.isUpgradable
+				};
+			});
+			res.json(plugins);
 		}
 	});
 
-	var npmSearch = function(search, callback){
-		npm.load([], function (err, npm) {
-		  	npm.commands.search(search, function(err, res){
-				if (err){
-					console.log('NPM Search Error ' + err);
-					return;
-				}
-				callback(res);
-			});
-		});
-	}
-
 	var isPluginCurrentlyInstalled = function(array, name, version){
-		
 		var info = {
 			isInstalled: false,
 			isUpgradable: false
 		};
-
-		array.forEach(function(val){
+		for (i in array) {
+			var val = array[i];
 			if (val.name === name) {
-				var isUpgradable = false;
-				if (semver.gt(version, val.info.version)){
-					isUpgradable = true;
+				if (semver.gt(version, val.info.version)) {
+					info.isUpgradable = true;
 				}
-
 				info.isInstalled = true;
-				info.isUpgradable = isUpgradable;
-
-				if (isUpgradable){
-					upgradablePluginList.push(val.name.substr(pluginPrefix.length));
-				}
-
-				return false; //break loop;
+				break;
 			}
-		});
-		
+		}
 		return info;
 	};
 };	
@@ -193,16 +151,14 @@ exports.pluginManager = function(req, res, pluginName, action){
 	
 		
 	npm.load([], function (err, npm) {
-	  	var plugin = [];
-	  	plugin.push(name)
-	  	console.log(plugin)
+	  	var plugin = [name];
+	  	console.log(plugin);
 		switch(action){
 			case "install":
 			  	npm.commands.install(plugin, cb);
 			break;
 			case "upgrade":
 				npm.commands.upgrade(plugin, cb);
-
 			break;
 			case "remove":
 			  	npm.commands.remove(plugin, cb);
@@ -211,56 +167,37 @@ exports.pluginManager = function(req, res, pluginName, action){
 	});
 
 	var cb = function(err, result){
-		if (err){
+		if (err) {
 			console.log('Error: Unable to ' + action + ' plugin: ' + name + '\n' + err);
-			showError();
-		}else{
+			res.json({
+				error: 1,
+				message: 'Unable to ' + action + ' ' + pluginName+ '.'
+			});
+		} else {
 			console.log('Plugins.pluginManager: ' + action + 'ed.');
-			showSuccess();
+			var msg = '';
+			switch(action){
+				case "install":
+				  	msg = "installed";
+				break;
+				case "upgrade":
+					msg = "upgraded";
+				break;
+				case "remove":
+				  	msg = "upgraded";
+				break;
+			}
+			res.json({
+				error: 0,
+				message: pluginName +  ' ' + msg + ' successfully.'  
+			});	
 		}
 	}
-
-	var showError = function(){
-		res.json({
-			error: 1,
-			message: 'Unable to ' + action + ' ' + pluginName+ '.'
-		});
-
-	};
-
-	var showSuccess = function(){
-		var msg = '';
-		switch(action){
-			case "install":
-			  	msg = "installed";
-			break;
-			case "upgrade":
-				msg = "upgraded";
-			break;
-			case "remove":
-			  	msg = "upgraded";
-			break;
-		}
-		res.json({
-			error: 0,
-			message: pluginName +  ' ' + msg + ' successfully.'  
-		});	
-	};
 };
 
 exports.reloadServer = function(req, res){
 	console.log('Please wait, restarting server');
-	var currentSettings = {
-			moviepath: config.moviepath,
-			musicpath: config.musicpath,
-			tvpath: config.tvpath,
-			language: config.language,
-			location: config.location,
-			spotifyUser: config.spotifyUser,
-			spotifyPass: config.spotifyPass,
-			theme: config.theme,
-			port:  config.port }
-	configuration_handler.saveSettings(currentSettings, function(){
+	configuration_handler.saveSettings(config, function(){
 		console.log('done');
 		res.json('');
 	});
