@@ -29,28 +29,28 @@ var fs = require('fs.extra')
 
 
 exports.loadItems = function (req, res, serveToFrontEnd) {
-	function getMovies(nomoviesCallback) {
-		Movie.findAll()
-		.error(function (err) {
-			res.status(500).send();
-		})
-		.success(function (movies) {
-			if (movies === null || movies.length === 0) {
-				nomoviesCallback();
-			} else {
-				if (serveToFrontEnd) {
-					res.json(movies);
-				}
-			}
-		});
-	}
-	getMovies(function () {
-		metafetcher.loadData(function () {
-			getMovies(function () {
-				res.status(500).send();
-			});
-		});
-	});
+    function getMovies(nomoviesCallback) {
+        Movie.findAll()
+        .error(function (err) {
+            res.status(500).send();
+        })
+        .success(function (movies) {
+            if (movies === null || movies.length === 0) {
+                nomoviesCallback();
+            } else {
+                if (serveToFrontEnd === true) {
+                    res.json(movies);
+                }
+            }
+        });
+    }
+    getMovies(function () {
+        metafetcher.loadData(function () {
+            getMovies(function () {
+                res.status(500).send();
+            });
+        });
+    });
 };
 
 exports.edit = function(req, res, data) {

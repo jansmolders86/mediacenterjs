@@ -33,7 +33,7 @@ exports.loadItems = function (req, res, serveToFrontEnd) {
             if (albums === null || albums.length === 0) {
                 noalbumsCallback();
             } else {
-                if (serveToFrontEnd) {
+                if (serveToFrontEnd === true) {
                     res.json(albums);
                 }
             }
