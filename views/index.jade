@@ -54,7 +54,7 @@ block body
             .row
                 ul#tiles
                     each item in apps
-                        li.tile.mcjs-rc-controllable.col-md-2.col-xs-1
+                        li.tile.mcjs-rc-controllable.col-md-2.col-xs-1(class="#{ item.tileLink }")
                             a(href="/" + item.appLink + "/").mcjs-rc-clickable
                                 img(src="/" + item.tileLink + "/tile.svg", onerror="this.src='/" + item.tileLink + "/tile.png'")
                                 span=item.tileLink
