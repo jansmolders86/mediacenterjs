@@ -63,6 +63,9 @@ p a:hover{text-decoration:none;}
 
 /* Homepage Tiles */
 
+@media (max-width:770px) {
+    #tiles{left: 5%;}
+}
 .tile{
     width: 185px;
     height: 185px;
@@ -96,7 +99,15 @@ p a:hover{text-decoration:none;}
     padding:0;
 }
 
-.tile > a > span{ display:none }
+.tile > a > span {
+    display: block;
+    float: left;
+    color: #fff;
+    bottom: 0;
+    position: relative;
+    font-size: 40px;
+    padding-top: 170px;
+}
 
 .tile .info{
     font-size:14px;
@@ -473,20 +484,19 @@ label,
 @media only screen and (min-width:771px){
 
     .tile img {
-        width: auto;
+        width: 30%;
         height: 100%;
-        text-align: center;
-        margin: 0 auto;
+        float: left;
     }
 
     .tile{
-        width:24%;
+        width: 18.5%;;
         height: 18em;
         background:#484c52;
     }
 
     .tile.movies{
-        width:49%;
+        width:30%;
         background:#32afc5;
     }
 

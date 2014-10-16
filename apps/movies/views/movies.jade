@@ -36,7 +36,7 @@ block body
                 .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-class="{current: movies.focused.id == movie.id }", ng-mouseenter="movies.focused = movie",ng-hide="movie.title === ''", ng-mouseleave="movies.focused = null")
                     i.circular.inverted.edit.icon(ng-click="open(movie)")
                     .fixed-ratio-cover.fixed-ratio
-                        img.movieposter(ng-src="{{movie.posterURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie)")
+                        img.movieposter(src="{{movie.posterURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie)")
                     .caption(ng-click="playMovie(movie)")
                             img.backdrop(ng-src="{{movie.backgroundURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'", ng-click="playMovie(movie)")
                             p
