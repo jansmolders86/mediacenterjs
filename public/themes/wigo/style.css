@@ -63,9 +63,11 @@ p a:hover{text-decoration:none;}
 
 /* Homepage Tiles */
 
-@media (max-width:770px) {
+@media (min-width:770px) {
     #tiles{left: 5%;}
 }
+
+
 .tile{
     width: 185px;
     height: 185px;
@@ -83,12 +85,6 @@ p a:hover{text-decoration:none;}
     }
 }
 
-@media (max-width:991px) {
-    .tile {
-        width: 177px;
-        height: 177px;
-    }
-}
 
 .tile { background:transparent; }
 
@@ -434,6 +430,15 @@ label,
 
 
 @media only screen and (min-width: 320px) and (max-width: 767px) {
+    .tile {
+        width: 177px;
+        height: 177px;
+    }
+
+    .tile  > a > span{
+        display:none!important;
+    }
+
     #tiles,
     .tile{margin:0; -webkit-transition: none; transition: none;}
     .loading{left: 20px;}
