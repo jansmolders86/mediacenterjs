@@ -10,7 +10,7 @@
 "weather" : "Weer",
 "settings" : "Instellingen",
 "Remote" : "Afstandsbediening",
-"plugin_header" : "Extenties",
+"plugin_header" : "Extensies",
 "plugin_loading" :"Modules laden...",
 "plugin_install" :"Installeer plugin",
 "plugin_remove" :"Verwijder plugin",
@@ -36,7 +36,7 @@
 "setting_spotify_user" : "Spotify gebruikersnaam",
 "setting_spotify_password" : "Spotify wachtwoord",
 "setting_register_oauth" : "Registeer OAuth",
-"setting_oauth_explanation" : "Verbind veilig met uw google account doormiddel van OAuth om gebruik te maken van de YouTube app.",
+"setting_oauth_explanation" : "Verbind veilig met uw Google account doormiddel van OAuth om gebruik te maken van de YouTube app.",
 "settings_clear_cache_movies" : "Wis speelfilm database",
 "settings_clear_cache_music" : "Wis muziek database",
 "settings_clear_cache_tv" : "Wis tv database",
@@ -53,5 +53,5 @@
 "settings_device_btn_unlock" :"ontgrendel dit apparaat",
 "pagenotFound" : "Pagina niet gevonden!",
 "pagenotFound_header" : "Aangevraagde pagina niet gevonden. Wellicht een kapotte link?",
-"pagenotFound_txt" : "U wordt terugverwezen naar de homepage in 5 seconde"
+"pagenotFound_txt" : "U wordt terugverwezen naar de startpagina in 5 seconden"
 }
