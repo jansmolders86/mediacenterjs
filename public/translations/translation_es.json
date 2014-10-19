@@ -18,6 +18,7 @@
 "plugin_by" :"Por",
 "plugin_added" :"Añadido",
 "settings_header" : "MediacenterJS configuración general",
+"settings_configurable_options" : "Configurable Options",
 "setting_details" : "Mostrar detalles",
 "setting_yes" : "Sí",
 "setting_no" : "No",
