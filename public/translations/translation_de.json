@@ -17,6 +17,7 @@
 "plugin_by" :"Von",
 "plugin_added" :"Hinzugefügt",
 "settings_header" : "MediacenterJS - Allgemeine Einstellungen",
+"settings_configurable_options" : "Configurable Options",
 "settings" : "Einstellungen",
 "setting_details" : "Zeige Filminfos",
 "setting_yes" : "Ja",
