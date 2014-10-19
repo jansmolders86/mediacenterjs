@@ -18,6 +18,7 @@
 "plugin_by" :"Por",
 "plugin_added" :"Adicionado",
 "settings_header" : "Configurações Gerais do MediacenterJS",
+"settings_configurable_options" : "Configurable Options",
 "setting_details" : "Mostar detalhes do filme",
 "setting_yes" : "Sim",
 "setting_no" : "Não",
