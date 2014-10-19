@@ -43,6 +43,7 @@ tvApp.controller('tvCtrl', function($scope, $http, $modal,player){
             templateUrl: 'editModal.html',
             controller: ModalInstanceCtrl,
             size: 'md',
+            windowClass: "flexible",
             resolve: {
                 current: function () {
                     return tvshow;

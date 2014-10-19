@@ -109,6 +109,7 @@
                 templateUrl: 'editModal.html',
                 controller: ModalInstanceCtrl,
                 size: 'md',
+                windowClass: "flexible",
                 resolve: {
                     current: function () {
                         return album;

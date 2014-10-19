@@ -38,6 +38,7 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal) {
             templateUrl: 'editModal.html',
             controller: ModalInstanceCtrl,
             size: 'md',
+            windowClass: "flexible",
             resolve: {
                 current: function () {
                     return movie;

@@ -289,44 +289,44 @@ a.backlink:hover{
     border-radius: 0.325em 0.325em 0.325em 0.325em;
     padding:20px;
 }
-.modal-dialog {
+.flexible .modal-dialog {
     min-width: 768px !important;
     width: 70%;
 }
 
 @media (max-width: 620px) {
-    .modal-dialog {
+    .flexible .modal-dialog {
         margin: 0;
         width: 100% !important;
         min-width: 0px !important;
         max-height: 100%;
     }
-    .modal-content {
+    .flexible .modal-dialog .modal-content {
         border-radius: 0px;
         border: none;
     }
 
-    .modal-dialog .modal-footer {
+    .flexible .modal-dialog .modal-footer {
         padding: 20px 5px;
         width: 100%;
     }
 }
 
 @media (max-width: 768px) {
-    .modal-dialog {
+    .flexible .modal-dialog {
         width: auto !important;
         min-width: 0px !important;
     }
-    .modal-header {
+    .flexible .modal-dialog .modal-header {
         padding: 10px;
     }
-    .modal-body {
+    .flexible .modal-dialog .modal-body {
         padding: 0 20px !important;
     }
-    .modal-header h1 {
+    .flexible .modal-dialog .modal-header h1 {
         margin: 0;
     }
-    .modal-content {
+    .flexible .modal-dialog .modal-content {
         position: relative;
     }
 
@@ -335,35 +335,35 @@ a.backlink:hover{
     (really I am trying to target a modal dialog 600px wide)
 */
 @media (max-width: 860px) {
-    .modal-dialog .form-horizontal .form-group {
+    .flexible .modal-dialog .form-horizontal .form-group {
         margin: 0 !important;
     }
-    .modal-content .form-horizontal .form-group input[type=text] {
+    .flexible .modal-dialog .modal-content .form-horizontal .form-group input[type=text] {
         width: 100%;
     }
-    .modal-body {
+    .flexible .modal-dialog .modal-body {
         padding: 0 40px;
     }
-    .modal-content .form-horizontal .form-group input[type=checkbox] {
+    .flexible .modal-dialog .modal-content .form-horizontal .form-group input[type=checkbox] {
         float: right;
         margin-right: 20px;
     }
-    .modal-dialog  .form-horizontal .form-group label {
+    .flexible .modal-dialog .form-horizontal .form-group label {
         width: auto;
     }
-    .modal-dialog  .form-horizontal .form-group label + input[type=text] {
+    .flexible .modal-dialog .form-horizontal .form-group label + input[type=text] {
         width: 100%;
     }
 }
 
 @media (min-width: 860px) {
-    .modal-dialog .col-md-offset-1 {
+    .flexible .modal-dialog .col-md-offset-1 {
         margin-left: 4.3333%;
     }
-    .modal-dialog .col-md-3 {
+    .flexible .modal-dialog .col-md-3 {
         width: 25%;
     }
-    .modal-dialog .col-md-7 {
+    .flexible .modal-dialog .col-md-7 {
         width: 64.3333%;
     }
 }
