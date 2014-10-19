@@ -18,6 +18,7 @@
   "plugin_by" :"Автор",
   "plugin_added" :"Додано",
   "settings_header" : "Основні налаштування MediacenterJS",
+  "settings_configurable_options" : "Configurable Options",
   "setting_details" : "Показати подробиці фильму",
   "setting_yes" : "Так",
   "setting_no" : "Ні",
