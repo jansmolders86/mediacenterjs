@@ -65,25 +65,8 @@
 			_screensaver(o, $(this));		// Init screensaver
 
             
-            //TODO: place these in settings js
-			$('a.cachelink').click(function(e){
-				e.preventDefault();
-				var cacheLink = $(this).attr('data-cachelink')
-				, data = {cache : cacheLink}
-				, url = '/clearCache'
-				, type = 'post';
-				_modalDialog(o, url, type,data);
-			});
-            
-            $('a.scraperlink').click(function(e){
-                e.preventDefault();
-                var scraperlink = $(this).attr('data-scraperlink')
-                , data = {scraperlink : scraperlink}
-                , url = '/getScraperData'
-                , type = 'post';
-                _modalDialog(o, url, type,data);
-            });
-		
+            //TODO: place these in settings js 
+            //Is this actually used though?
 			$('.remove').click(function(e){
 				e.preventDefault();
 				var moduleLink = $(this).find('a').attr('href')

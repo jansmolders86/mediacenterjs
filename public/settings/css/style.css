@@ -14,10 +14,10 @@ label {
     font-weight: 500;
 }
 
-a.cachelink,
+.cache-management a.btn,
 a.scraperlink,
 #oauth{
-    margin: 5px 20px;
+    margin: 5px 30px;
     display: block;
     float:none;
     text-overflow: ellipsis;

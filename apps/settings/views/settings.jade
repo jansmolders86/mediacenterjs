@@ -3,6 +3,9 @@ extends /layout
 block declarations
     - additional_title      = lingua.settings;
     - body_class            = 'appSettings';
+    - use_angular           = true;
+    - angular_app           = "settingsApp";
+    - angular_body_ctrl     = "settingsCtrl";
     - include_validation    = true;
     - include_remote        = true;
 
@@ -10,45 +13,9 @@ block additional_css
     link(rel='stylesheet', href='/settings/css/style.css')
 
 block additional_scripts
+    script(src="/core/js/plugins/angular/angular-ui/ui-bootstrap-tpls-0.11.0.js")
+    script(src="/settings/js/app.js")
     script(src='/core/js/plugins/oauth.min.js')
-    script.
-        $(function() {
-            $('body').mcjs();
-
-            $('.parentalControl').on('click', function(e){
-                e.preventDefault();
-                var that = $(this);
-                var clientIDField =  that.parent().parent().find('.device').text();
-
-                if(that.hasClass('lock')){
-                    var url  = '/lockClient';
-                } else if(that.hasClass('unlock')){
-                    var url  = '/unlockClient';
-                }
-
-                $.ajax({
-                    url: url,
-                    type: 'post',
-                    data: clientIDField
-                }).done(function(data){
-                    if(data === 'done'){
-                        setTimeout(function(){
-                            location.reload();
-                        },2000);
-                    }
-                });
-            });
-
-            var itemHeight = $('.configurable-options').height();
-            $('.cache-management').height(itemHeight);
-
-            var secondItemHeight = $('.access-table').height()
-            $("#oauthContainer").css("min-height",secondItemHeight+'px');
-
-
-        });
-
-    script(src="/settings/js/jquery.mcjs.settings.js")
 
 block body
     header.settings
@@ -57,192 +24,117 @@ block body
                 a.backlink(href="/") &#xe113;
                 h1  #{lingua.settings}
     .container-fluid
-        .ui-widget
+        .ui-widget(ng-if="message")
             .message
-                .message
+                .message {{message}}
         #settings
             input.oauthKeyHidden(name="oauthKey" type="hidden")
             form.form-horizontal#setup.validate-form(action='/submit',method='post')
-                h2 #{lingua.settings_header}
-
                 .configurable-options.col-sm-12.col-md-12.col-lg-9
                     h2 Configurable Options
-                    .form-group.mcjs-rc-controllable
-                        label.col-md-2(for="moviepath") #{lingua.setting_movielocation}
-                        .col-md-10
-                            .input-group
-                                span.input-group-addon
-                                    i.folder.icon
-                                input.form-control#moviepath.mcjs-rc-clickable.folder(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation,data-rule-path="true",data-rule-path="true" data-msg-path="Specify a valid path.")
-                    .form-group.mcjs-rc-controllable
+                    setting(icon="folder")
+                        label(for="moviepath") #{lingua.setting_movielocation}
+                        input#moviepath(name="moviepath", ng-model="config.moviepath", type="text",placeholder="#{lingua.settings_placeholder_path}")
+                    setting(icon="folder")
                         label.col-md-2(for="musicpath") #{lingua.setting_musiclocation}
-                        .col-md-10
-                            .input-group
-                                span.input-group-addon
-                                    i.folder.icon
-                                input.form-control#musicpath.mcjs-rc-clickable.folder(name="musicpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= musiclocation,  data-rule-path="true",  data-msg-path="Specify a valid path.")
-                    .form-group.mcjs-rc-controllable
-                        label.col-md-2(for="tvpath") #{lingua.setting_tvlocation}
-                        .col-md-10
-                            .input-group
-                                span.input-group-addon
-                                    i.folder.icon
-                                input.form-control#tvpath.mcjs-rc-clickable.folder(name="tvpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= tvlocation, data-rule-path="true",  data-msg-path="Specify a valid path.")
-                    .form-group.mcjs-rc-controllable
-                        label.col-md-2(for="tvFormat") Episode formatting
-                        .col-md-10
-                            .input-group
-                                span.input-group-addon
-                                    i.edit.icon
-                                select.form-control#tvFormat.mcjs-rc-clickable(name="tvFormat")
-                                    - for tvFormatType in tvFormatTypes
-                                        option(value=tvFormatType, selected=tvFormatType == tvFormat) #{tvFormatType}
-                    .form-group.mcjs-rc-controllable
-                        label.col-md-2(for="language") #{lingua.setting_language}
-                        .col-md-10
-                            .input-group
-                                span.input-group-addon
-                                    i.flag.icon
-                                select.form-control#language.mcjs-rc-clickable(name="language")
-                                    - for lang in availableLanguages
-                                        option(value=lang, selected=lang == language) #{lang}
-                    .form-group.mcjs-rc-controllable
-                        label.col-md-2(for="country") Country
-                        .col-md-10
-                            .input-group
-                                span.input-group-addon
-                                    i.flag.icon
-                                select.form-control#country.mcjs-rc-clickable(name="country")
-                                    - for cntry, cntryCode in countries
-                                        option(value=cntryCode, selected=cntryCode === country) #{cntry}
-                    .form-group.mcjs-rc-controllable
-                        label.col-md-2(for="location") #{lingua.setting_location}
-                        .col-md-10
-                            .input-group
-                                span.input-group-addon
-                                    i.globe.icon
-                                input.form-control#location.mcjs-rc-clickable(name="location",type="text",placeholder="#{lingua.settings_placeholder_location}", value= location,data-rule-required="true", data-msg-required="This field is required.")
-                    if spotifyUser !== ""
-                        .form-group.mcjs-rc-controllable
-                            label.col-md-2(for="spotifyUser") #{lingua.setting_spotify_user}
-                            .col-md-10
-                                .input-group
-                                    span.input-group-addon
-                                        i.user.icon
-                                    input#spotifyUser.mcjs-rc-clickable(name="spotifyUser",type="text", value=spotifyUser)
-                    if spotifyPass !== ""
-                        .form-group.mcjs-rc-controllable
-                            label.col-md-2(for="spotifyPass") #{lingua.setting_spotify_password}
-                            .col-md-10
-                                .input-group
-                                    span.input-group-addon
-                                        i.lock.icon
-                                    input.form-control#spotifyPass.mcjs-rc-clickable(name="spotifyPass",type="password", value=spotifyPass)
-                    .form-group.mcjs-rc-controllable
-                        label.col-md-2(for="screensaver") Screensaver
-                        .col-md-10
-                            .input-group
-                                span.input-group-addon
-                                    i.coffee.icon
-                                select.form-control#screensaver.mcjs-rc-clickable(name="screensaver")
-                                    - for saver in availableScreensavers
-                                        option(value=saver, selected=saver == screensaver) #{saver}
-                    .form-group.mcjs-rc-controllable
+                        input#musicpath(name="musicpath", ng-model="config.musicpath", type="text",placeholder="#{lingua.settings_placeholder_path}")
+                    setting(icon="folder")
+                        label(for="tvpath") #{lingua.setting_tvlocation}
+                        input#tvpath(name="tvpath", ng-model="config.tvpath", type="text", placeholder="#{lingua.settings_placeholder_path}")
+                    setting(icon="edit")
+                        label(for="tvFormat") Episode formatting
+                        select#tvFormat(name="tvFormat", ng-options="tvformat for tvformat in tvFormatTypes track by tvformat", ng-model="config.tvFormat")
+                    setting(icon="flag")
+                        label(for="language") #{lingua.setting_language}
+                        select#language(name="language", ng-options="isoLangs[lang].nativeName for lang in availableLanguages track by lang", ng-model="config.language")
+                    setting(icon="flag")
+                        label(for="country") Country
+                        select#country(name="country", ng-options="code as name for (code, name) in countries", ng-model="config.country")
+                    setting(icon="globe")
+                        label(for="location") #{lingua.setting_location}
+                        input#location(name="location", ng-model="config.location", type="text", placeholder="#{lingua.settings_placeholder_location}")
+                    setting(icon="user", ng-show="spotifyUser !== ''")
+                        label(for="spotifyUser") #{lingua.setting_spotify_user}
+                        input#spotifyUser(name="spotifyUser", ng-model="config.spotifyUser", type="text")
+                    setting(icon="lock", ng-show="spotifyPass !== ''")
+                        label(for="spotifyPass") #{lingua.setting_spotify_password}
+                        input#spotifyPass(name="spotifyPass", ng-model="config.spotifyPass", type="password")
+                    setting(icon="coffee")
+                        label(for="screensaver") Screensaver
+                        select#screensaver(name="screensaver", ng-options="saver for saver in availableScreensavers track by saver", ng-model="config.screensaver")
+                    setting(icon="signal")
                         label.col-md-2(for="quality") Transcoding quality
-                        .col-md-10
-                            .input-group
-                                span.input-group-addon
-                                    i.signal.icon
-                                select.form-control#quality.mcjs-rc-clickable(name="quality")
-                                    - for quality in availableQuality
-                                        option(value=quality, selected=quality == currentQuality) #{quality}
-                    .form-group.mcjs-rc-controllable
-                        label.col-md-2(for="theme") #{lingua.setting_theme}
-                        .col-md-10
-                            .input-group
-                                span.input-group-addon
-                                    i.photo.icon
-                                select.form-control#theme.mcjs-rc-clickable(name="theme")
-                                    - for theme in themes
-                                        option(selected=theme) #{theme}
-                    .form-group.mcjs-rc-controllable
-                            label.col-md-2(for="schedule") When should data be gathered autmatically?
-                            .col-md-10
-                                .input-group
-                                    span.input-group-addon
-                                        i.time.icon
-                                    input.form-control#schedule.mcjs-rc-clickable(name="schedule",type="text",placeholder="eg. 12:30", value= schedule,data-rule-required="true", data-msg-required="This field is required.")
-                    .form-group.mcjs-rc-controllable
-                        label.col-md-2(for="port") #{lingua.setting_port}
-                        .col-md-10
-                            .input-group
-                                span.input-group-addon
-                                    i.exchange.icon
-                                input.form-control#port.mcjs-rc-clickable(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true", data-msg-required="This field is required.")
+                        select#quality(name="quality", ng-options="quality for quality in availableQuality track by quality", ng-model="config.quality")
+                    setting(icon="photo")
+                        label(for="theme") #{lingua.setting_theme}
+                        select#theme(name="theme", ng-options="theme for theme in themes track by theme", ng-model="config.theme")
+                    setting(icon="time")
+                        label(for="schedule") When should data be gathered autmatically?
+                        input#schedule(name="schedule", ng-model="config.schedule", type="text", placeholder="eg. 12:30")
+                    setting(icon="exchange")
+                        label(for="port") #{lingua.setting_port}
+                        input#port(name="port", ng-model="config.port", type="text", placeholder="#{lingua.settings_placeholder_port}")
                     .form-group.mcjs-rc-controllable
                         .col-md-offset-2.col-md-10
                             input.btn.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
                             input.oauth(name="oauth" type="hidden")
 
                 .cache-management.col-sm-12.col-md-12.col-lg-3
-                    h2 Cache management
-                    .form-group.mcjs-rc-controllable
-                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="Movie")
-                            i.trash.icon
-                            | #{lingua.settings_clear_cache_movies}
-                    .form-group.mcjs-rc-controllable
-                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="Album,Track,Artist")
-                            i.trash.icon
-                            | #{lingua.settings_clear_cache_music}
-                    .form-group.mcjs-rc-controllable
-                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="Episode,Show")
-                            i.trash.icon
-                            | #{lingua.settings_clear_cache_tv}
-                    .form-group.mcjs-rc-controllable
-                        a.btn.cachelink.mcjs-rc-clickable(data-cachelink="Device")
-                            i.trash.icon
-                            | #{lingua.settings_clear_cache_device}
-                    h2 Scraper data
-                    .form-group.mcjs-rc-controllable
-                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="movies")
-                            i.cloud.download.icon
-                            | Get movie metadata
-                    .form-group.mcjs-rc-controllable
-                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="music")
-                            i.cloud.download.icon
-                            | Get music metadata
-                    .form-group.mcjs-rc-controllable
-                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="tv")
-                            i.cloud.download.icon
-                            | Get tv Metadata
-                    .form-group.mcjs-rc-controllable
-                        a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="all")
-                            i.cloud.download.icon
-                            | Get all metadata
+                    .col-xs-12.col-sm-6.col-md-6.col-lg-12
+                        h2 Cache management
+                        .form-group.mcjs-rc-controllable
+                            a.btn.mcjs-rc-clickable(ng-click="clearCache('Movie')")
+                                i.trash.icon
+                                | #{lingua.settings_clear_cache_movies}
+                        .form-group.mcjs-rc-controllable
+                            a.btn.mcjs-rc-clickable(ng-click="clearCache('Album,Track,Artist')")
+                                i.trash.icon
+                                | #{lingua.settings_clear_cache_music}
+                        .form-group.mcjs-rc-controllable
+                            a.btn.mcjs-rc-clickable(ng-click="clearCache('Episode,Show')")
+                                i.trash.icon
+                                | #{lingua.settings_clear_cache_tv}
+                        .form-group.mcjs-rc-controllable
+                            a.btn.mcjs-rc-clickable(ng-click="clearCache('Device')")
+                                i.trash.icon
+                                | #{lingua.settings_clear_cache_device}
+                    .col-xs-12.col-sm-6.col-md-6.col-lg-12
+                        h2 Scraper data
+                        .form-group.mcjs-rc-controllable
+                            a.btn.scraperlink.mcjs-rc-clickable(ng-click="getScraperData('movies')")
+                                i.cloud.download.icon
+                                | Get movie metadata
+                        .form-group.mcjs-rc-controllable
+                            a.btn.scraperlink.mcjs-rc-clickable(ng-click="getScraperData('music')")
+                                i.cloud.download.icon
+                                | Get music metadata
+                        .form-group.mcjs-rc-controllable
+                            a.btn.scraperlink.mcjs-rc-clickable(ng-click="getScraperData('tv')")
+                                i.cloud.download.icon
+                                | Get tv Metadata
+                        .form-group.mcjs-rc-controllable
+                            a.btn.scraperlink.mcjs-rc-clickable(ng-click="getScraperData('all')")
+                                i.cloud.download.icon
+                                | Get all metadata
                 .access-table.col-sm-12.col-md-12.col-lg-9
                     h2 Access management
                     .form-group.mcjs-rc-controllable
-                        br
-                        -if(allowed === 'yes' && devices !== undefined)
-                            strong #{lingua.settings_device_connected}:
-                            table.table
-                                thead
-                                    tr
-                                        th #{lingua.settings_device_id}:
-                                        th #{lingua.settings_device_seen}:
-                                        th #{lingua.settings_device_allowed}:
-                                        th #{lingua.settings_device_parental}:
-                                tbody
-                                    - each device in devices
-                                        tr.mcjs-rc-controllable
-                                            td.device= device.deviceID
-                                            td.seen= device.lastSeen
-                                            td.active= device.isAllowed
-                                            td
-                                                -if (device.isAllowed !== undefined && device.isAllowed === 'yes')
-                                                    a.parentalControl.btn.mcjs-rc-clickable.lock #{lingua.settings_device_btn_lock}
-                                                -else
-                                                    a.parentalControl.btn.mcjs-rc-clickable.unlock #{lingua.settings_device_btn_unlock}
+                        strong #{lingua.settings_device_connected}:
+                        table.table
+                            thead
+                                tr
+                                    th #{lingua.settings_device_id}:
+                                    th #{lingua.settings_device_seen}:
+                                    th #{lingua.settings_device_allowed}:
+                                    th #{lingua.settings_device_parental}:
+                            tbody
+                                tr.mcjs-rc-controllable(ng-repeat="device in devices")
+                                    td.device {{device.deviceID}}
+                                    td.seen {{device.lastSeen}}
+                                    td.active {{device.isAllowed}}
+                                    td
+                                        a.parentalControl.btn.mcjs-rc-clickable.lock(ng-if="device.isAllowed === 'yes'", ng-click="setLocked(device, true)") #{lingua.settings_device_btn_lock}
+                                        a.parentalControl.btn.mcjs-rc-clickable.unlock(ng-if="device.isAllowed === 'no'", ng-click="setLocked(device, false)") #{lingua.settings_device_btn_unlock}
 
 
                 #oauthContainer.col-sm-12.col-md-12.col-lg-3
@@ -251,8 +143,11 @@ block body
                         span.quote &ldquo;
                         span !{lingua.setting_oauth_explanation}
                         span.quote &rdquo;
-                    input#oauthKey.mcjs-rc-clickable(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
                     .mcjs-rc-controllable.row
-                        a.btn.btn-alternative#oauth(href="#") #{lingua.setting_register_oauth}
+                        a.btn.btn-alternative#oauth(ng-click="oauth($event)") #{lingua.setting_register_oauth}
                     label(for="oauthKey")
-
+    script(type="text/ng-template", id="clearCacheModal.html")
+        .modal-body #{lingua.settings_confirm_message}
+        .modal-footer
+            button.btn.btn-primary(ng-click="$close('ok click')") #{lingua.ok}
+            button.btn.btn-warning(ng-click="$dismiss('cancel click')") #{lingua.cancel}

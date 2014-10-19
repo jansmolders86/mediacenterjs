@@ -225,10 +225,12 @@ app.post('/getScraperData', function(req, res){
         setTimeout(function(){
             tvfunctions.loadItems(req, res, serveToFrontEnd);
         },20000);
+    } else {
+        res.status(404).send();
     }
 });
 
-app.post('/clearCache', function(req, res){
+app.post('/clearCache', function(req, res) {
     var app_cache_handler = require('./lib/handlers/app-cache-handler');
     var incommingCache = req.body
         , cache = incommingCache.cache
