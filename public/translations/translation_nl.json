@@ -18,6 +18,7 @@
 "plugin_by" :"Door",
 "plugin_added" :"Toegevoegd",
 "settings_header" : "MediacenterJS algemene instellingen",
+"settings_configurable_options" : "Configureerbare opties",
 "setting_details" : "Toon filmdetails",
 "setting_yes" : "Ja",
 "setting_no" : "Nee",
