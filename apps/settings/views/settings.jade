@@ -66,28 +66,28 @@ block body
                 h2 #{lingua.settings_header}
 
                 .configurable-options.col-sm-12.col-md-12.col-lg-9
-                    h2 Configurable Options
+                    h2 #{settings_configurable_options}
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="moviepath") #{lingua.setting_movielocation}
                         .col-md-10
                             .input-group
                                 span.input-group-addon
                                     i.folder.icon
-                                input.form-control#moviepath.mcjs-rc-clickable.folder(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation,data-rule-path="true",data-rule-path="true" data-msg-path="Specify a valid path.")
+                                input.form-control#moviepath.mcjs-rc-clickable.folder(name="moviepath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= movielocation,data-rule-path="true",data-rule-path="true" data-msg-path="#{lingua.settings_msg_validpath}")
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="musicpath") #{lingua.setting_musiclocation}
                         .col-md-10
                             .input-group
                                 span.input-group-addon
                                     i.folder.icon
-                                input.form-control#musicpath.mcjs-rc-clickable.folder(name="musicpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= musiclocation,  data-rule-path="true",  data-msg-path="Specify a valid path.")
+                                input.form-control#musicpath.mcjs-rc-clickable.folder(name="musicpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= musiclocation,  data-rule-path="true",  data-msg-path="#{lingua.settings_msg_validpath}")
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="tvpath") #{lingua.setting_tvlocation}
                         .col-md-10
                             .input-group
                                 span.input-group-addon
                                     i.folder.icon
-                                input.form-control#tvpath.mcjs-rc-clickable.folder(name="tvpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= tvlocation, data-rule-path="true",  data-msg-path="Specify a valid path.")
+                                input.form-control#tvpath.mcjs-rc-clickable.folder(name="tvpath",type="text",placeholder="#{lingua.settings_placeholder_path}", value= tvlocation, data-rule-path="true",  data-msg-path="#{lingua.settings_msg_validpath}")
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="tvFormat") #{lingua.setting_episodeformatting}
                         .col-md-10
@@ -107,7 +107,7 @@ block body
                                     - for lang in availableLanguages
                                         option(value=lang, selected=lang == language) #{lang}
                     .form-group.mcjs-rc-controllable
-                        label.col-md-2(for="country") Country
+                        label.col-md-2(for="country") #{lingua.setting_country}
                         .col-md-10
                             .input-group
                                 span.input-group-addon
@@ -121,7 +121,7 @@ block body
                             .input-group
                                 span.input-group-addon
                                     i.globe.icon
-                                input.form-control#location.mcjs-rc-clickable(name="location",type="text",placeholder="#{lingua.settings_placeholder_location}", value= location,data-rule-required="true", data-msg-required="This field is required.")
+                                input.form-control#location.mcjs-rc-clickable(name="location",type="text",placeholder="#{lingua.settings_placeholder_location}", value= location,data-rule-required="true", data-msg-required="#{lingua.settings_msg_required}")
                     if spotifyUser !== ""
                         .form-group.mcjs-rc-controllable
                             label.col-md-2(for="spotifyUser") #{lingua.setting_spotify_user}
@@ -139,7 +139,7 @@ block body
                                         i.lock.icon
                                     input.form-control#spotifyPass.mcjs-rc-clickable(name="spotifyPass",type="password", value=spotifyPass)
                     .form-group.mcjs-rc-controllable
-                        label.col-md-2(for="screensaver") Screensaver
+                        label.col-md-2(for="screensaver") #{lingua.setting_screensaver}
                         .col-md-10
                             .input-group
                                 span.input-group-addon
@@ -148,7 +148,7 @@ block body
                                     - for saver in availableScreensavers
                                         option(value=saver, selected=saver == screensaver) #{saver}
                     .form-group.mcjs-rc-controllable
-                        label.col-md-2(for="quality") Transcoding quality
+                        label.col-md-2(for="quality") #{lingua.setting_transcoding_quality}
                         .col-md-10
                             .input-group
                                 span.input-group-addon
@@ -166,26 +166,26 @@ block body
                                     - for theme in themes
                                         option(selected=theme) #{theme}
                     .form-group.mcjs-rc-controllable
-                            label.col-md-2(for="schedule") When should data be gathered autmatically?
+                            label.col-md-2(for="schedule") #{lingua.setting_data_gathering}
                             .col-md-10
                                 .input-group
                                     span.input-group-addon
                                         i.time.icon
-                                    input.form-control#schedule.mcjs-rc-clickable(name="schedule",type="text",placeholder="eg. 12:30", value= schedule,data-rule-required="true", data-msg-required="This field is required.")
+                                    input.form-control#schedule.mcjs-rc-clickable(name="schedule",type="text",placeholder="#{lingua.settings_placeholder_time_data_gathering}", value= schedule,data-rule-required="true", data-msg-required="#{lingua.settings_msg_required}")
                     .form-group.mcjs-rc-controllable
                         label.col-md-2(for="port") #{lingua.setting_port}
                         .col-md-10
                             .input-group
                                 span.input-group-addon
                                     i.exchange.icon
-                                input.form-control#port.mcjs-rc-clickable(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true", data-msg-required="This field is required.")
+                                input.form-control#port.mcjs-rc-clickable(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true", data-msg-required="#{lingua.settings_msg_required}")
                     .form-group.mcjs-rc-controllable
                         .col-md-offset-2.col-md-10
                             input.btn.mcjs-rc-clickable(type="submit",value="#{lingua.setting_submit}")
                             input.oauth(name="oauth" type="hidden")
 
                 .cache-management.col-sm-12.col-md-12.col-lg-3
-                    h2 Cache management
+                    h2 #{lingua.settings_cache_management}
                     .form-group.mcjs-rc-controllable
                         a.btn.cachelink.mcjs-rc-clickable(data-cachelink="Movie")
                             i.trash.icon
@@ -202,25 +202,25 @@ block body
                         a.btn.cachelink.mcjs-rc-clickable(data-cachelink="Device")
                             i.trash.icon
                             | #{lingua.settings_clear_cache_device}
-                    h2 Scraper data
+                    h2 #{lingua.settings_scraper_data}
                     .form-group.mcjs-rc-controllable
                         a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="movies")
                             i.cloud.download.icon
-                            | Get movie metadata
+                            | #{lingua.settings_get_movie_metadata}
                     .form-group.mcjs-rc-controllable
                         a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="music")
                             i.cloud.download.icon
-                            | Get music metadata
+                            | #{lingua.settings_get_music_metadata}
                     .form-group.mcjs-rc-controllable
                         a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="tv")
                             i.cloud.download.icon
-                            | Get tv Metadata
+                            | #{lingua.settings_get_tv_metadata}
                     .form-group.mcjs-rc-controllable
                         a.btn.scraperlink.mcjs-rc-clickable(data-scraperlink="all")
                             i.cloud.download.icon
-                            | Get all metadata
+                            | #{lingua.settings_get_all_metadata}
                 .access-table.col-sm-12.col-md-12.col-lg-9
-                    h2 Access management
+                    h2 #{lingua.settings_access_management}
                     .form-group.mcjs-rc-controllable
                         br
                         -if(allowed === 'yes' && devices !== undefined)
@@ -246,12 +246,12 @@ block body
 
 
                 #oauthContainer.col-sm-12.col-md-12.col-lg-3
-                    h2 OAUTH Login
+                    h2 #{lingua.settings_oauth_login}
                     span.info
                         span.quote &ldquo;
                         span !{lingua.setting_oauth_explanation}
                         span.quote &rdquo;
-                    input#oauthKey.mcjs-rc-clickable(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
+                    input#oauthKey.mcjs-rc-clickable(name="oauthKey" type="hidden", placeholder="#{lingua.settings_placeholder_oauth_key }", value="")
                     .mcjs-rc-controllable.row
                         a.btn.btn-alternative#oauth(href="#") #{lingua.setting_register_oauth}
                     label(for="oauthKey")
