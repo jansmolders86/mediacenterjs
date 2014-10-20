@@ -68,7 +68,15 @@
   "settings_placeholder_time_data_gathering": "eg. 12:30",
   "settings_scraper_data": "Scraper data",
   "tvshows": "Séries de TV",
+  "tvshows_edit": "Edit TV show",
+  "tvshows_edit_banner": "Banner url",
+  "tvshows_edit_cancel": "Cancel",
+  "tvshows_edit_submit": "Submit",
+  "tvshows_edit_title": "Title",
   "tvshows_episode": "Episódio",
+  "tvshows_no_data_found": "No data found, please check the tvshow filepath",
+  "tvshows_placeholder_search": "Search",
+  "tvshows_playlist": "Playlist",
   "tvshows_season": "Temporada",
   "weather": "Clima"
 }
