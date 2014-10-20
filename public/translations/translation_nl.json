@@ -61,7 +61,7 @@
   "settings_msg_required": "Dit veld is verplicht.",
   "settings_msg_validpath": "Specificeer een geldig pad.",
   "settings_oauth_login": "OAUTH Login",
-  "settings_placeholder_location": "bv. London of Amsterdam",
+  "settings_placeholder_location": "bv. Londen of Amsterdam",
   "settings_placeholder_oauth_key": "OAuth.io Key",
   "settings_placeholder_path": "C:/temp/ of /mnt/media/hdd/movies/",
   "settings_placeholder_port": "bv. 3000 or 1337",
