@@ -39,13 +39,13 @@ block body
                     a.backlink(href="/",ng-class="{side: player.playlist.length > 0}") &#xe113;
                     h1.hidden-xs #{lingua.tvshows}
 
-                    input#search.pull-right(ng-model="query", type="text", placeholder="Search",ng-show="tvshows")
+                    input#search.pull-right(ng-model="query", type="text", placeholder="#{lingua.tvshows_placeholder_search}",ng-show="tvshows")
 
     .container-fluid
         .row
             #playlist(ng-show="player.playlist.length > 0 && playlist.Visible", ng-cloak)
                 #inner-playlist
-                    h2 Playlist
+                    h2 #{lingua.tvshows_playlist}
                         i.left.double.angle.icon.pull-right(ng-click="playlist.Visible = false")
                     ul
                         li.currentshow(ng-repeat="tvshow in player.playlist", ng-mouseover="changeSelected(tvshow)", ng-class="{current: player.current.tvshow == $index}")
@@ -68,24 +68,24 @@ block body
                     .pcc-percents-wrapper
                         span {{serverMessage}}%
             {{serverStatus}}
-        h2.loading(ng-show="tvshows.result === 'none'") No data found, please check the tvshow filepath
+        h2.loading(ng-show="tvshows.result === 'none'") #{lingua.tvshows_no_data_found}
 
     video#player.video-js.vjs-default-skin(width="100%", height="100%", ng-show="playing", controls, preload="metadata")
 
     script(type="text/ng-template", id="editModal.html")
         .modal-header
-            h1 Edit TV show
+            h1 #{lingua.tvshows_edit}
         .modal-body
             .form-horizontal
                 .row
                     .form-group
                         img.col-md-offset-1(ng-src="{{edit.banner}}")
                     .form-group
-                        label.col-md-3.col-md-offset-1 Banner url
+                        label.col-md-3.col-md-offset-1 #{lingua.tvshows_edit_banner}
                         input.col-md-7(type="text",name="posterURL",ng-model="edit.posterURL",required,ng-value="current.posterURL")
                     .form-group
-                        label.col-md-3.col-md-offset-1 Title
+                        label.col-md-3.col-md-offset-1 #{lingua.tvshows_edit_title}
                         input.col-md-7(type="text",name="name",ng-model="edit.name",required,ng-value="current.name")
         .modal-footer
-            input.btn(type="submit",value="submit", ng-click="editItem()",required)
-            button.btn(ng-click="cancel()") Cancel
+            input.btn(type="submit",value="#{lingua.tvshows_edit_submit}", ng-click="editItem()",required)
+            button.btn(ng-click="cancel()") #{lingua.tvshows_edit_cancel}
