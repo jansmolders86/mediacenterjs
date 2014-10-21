@@ -51,6 +51,9 @@
 "settings_device_parental" :"Ouderlijk toezicht",
 "settings_device_btn_lock" :"vergrendel dit apparaat",
 "settings_device_btn_unlock" :"ontgrendel dit apparaat",
+"settings_confirm_message" :"Weet u zeker dat u dit wilt doen? Dit kan niet ongedaan worden gemaakt.",
+"cancel" :"Cancel",
+"ok" :"OK",
 "pagenotFound" : "Pagina niet gevonden!",
 "pagenotFound_header" : "Aangevraagde pagina niet gevonden. Wellicht een kapotte link?",
 "pagenotFound_txt" : "U wordt terugverwezen naar de startpagina in 5 seconden"

@@ -51,6 +51,9 @@
 "settings_device_parental" :"Parental lock",
 "settings_device_btn_lock" :"Lock this device",
 "settings_device_btn_unlock" :"UnLock this device",
+"settings_confirm_message" :"Er du sikker på, at du vil gøre dette? Denne handling kan ikke fortrydes.",
+"cancel" :"Cancel",
+"ok" :"OK",
 "pagenotFound" : "Siden blev ikke fundet!",
 "pagenotFound_header" : "Den forespurgte side blev ikke fundet. Måske var det et dårligt link?",
 "pagenotFound_txt" : "Videresendes til forsiden om 5 sekunder"

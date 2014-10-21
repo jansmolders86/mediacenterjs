@@ -51,6 +51,9 @@
 "settings_device_parental" :"Aile kilidi",
 "settings_device_btn_lock" :"Cihazı kilitle",
 "settings_device_btn_unlock" :"Cihaz kilidini aç",
+"settings_confirm_message" :"Bunu yapmak istediğinize emin misiniz? Bu işlem geri döndürülemez.",
+"cancel" :"Cancel",
+"ok" :"OK",
 "pagenotFound" : "Sayfa Bulunamadı!",
 "pagenotFound_header" : "İstenilen sayfa bulunamadı. Belki yanlış bağlantıdır?",
 "pagenotFound_txt" : "5 saniye içinde ana sayfaya yönlendiriliyorsunuz"

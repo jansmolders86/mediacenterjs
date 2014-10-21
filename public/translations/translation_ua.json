@@ -51,6 +51,9 @@
   "settings_device_parental" :"Батьківскький контроль",
   "settings_device_btn_lock" :"Включити для цього пристрою",
   "settings_device_btn_unlock" :"Виключити для цього пристрою",
+  "settings_confirm_message" :"Ви впевнені? Ця дія буде безповоротною.",
+  "cancel" :"Cancel",
+  "ok" :"OK",
   "pagenotFound" : "Сторінка не знайдена!",
   "pagenotFound_header" : "Запитувана сторінка не знайдена. Перевірте коректність посилання.",
   "pagenotFound_txt" : "Перенаправлення на домашню сторінку через 5 секунд..."

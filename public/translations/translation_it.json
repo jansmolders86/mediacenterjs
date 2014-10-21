@@ -51,6 +51,9 @@
 "settings_device_parental" :"Blocco Familiare",
 "settings_device_btn_lock" :"Blocca questo dispisitivo",
 "settings_device_btn_unlock" :"Sblocca questo dispositivo",
+"settings_confirm_message" :"Sei sicuro di ciò che fai? Questa azione non potrà essere annullata.",
+"cancel" :"Cancel",
+"ok" :"OK",
 "pagenotFound" : "Pagina non trovata!",
 "pagenotFound_header" : "Pagina richiesta non trovata. Forse un cattivo link?",
 "pagenotFound_txt" : "Redirezione alla pagina principale in 5 secondi"

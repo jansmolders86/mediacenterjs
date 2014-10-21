@@ -51,6 +51,9 @@
 "settings_device_parental" : "Föräldrarlås",
 "settings_device_btn_lock" : "Lås denna enhet",
 "settings_device_btn_unlock" : "Lås upp denna enhet",
+"settings_confirm_message" :"Är du säker på att du vill göra detta? Denna handling kan inte göras om.",
+"cancel" :"Cancel",
+"ok" :"OK",
 "pagenotFound" : "Sidan kunde inte hittas!",
 "pagenotFound_header" : "Den begärda sidan kunde inte hittas. Kanske en dålig länk?",
 "pagenotFound_txt" : "Förflyttar till hemsidan om 5 sekunder"

@@ -51,6 +51,9 @@
 "settings_device_parental" :"Bloqueo parental",
 "settings_device_btn_lock" :"Bloquear este dispositivo",
 "settings_device_btn_unlock" :"Desbloquear este dispositivo",
+"settings_confirm_message" :"¿Estás seguro de que quieres hacer ésto? Esta acción no se puede deshacer.",
+"cancel" :"Cancel",
+"ok" :"OK",
 "pagenotFound" : "¡Página no encontrada!",
 "pagenotFound_header" : "Página no encontrada. ¿Enlace erróneo?",
 "pagenotFound_txt" : "Redireccionando al inicio en 5 segundos"

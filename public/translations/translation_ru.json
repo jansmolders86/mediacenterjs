@@ -51,6 +51,9 @@
   "settings_device_parental" :"Родительский контроль",
   "settings_device_btn_lock" :"Включить для этого устройства",
   "settings_device_btn_unlock" :"Отключить для этого устройства",
+  "settings_confirm_message" :"Вы уверены? Это действие будет необратимым.",
+  "cancel" :"Cancel",
+  "ok" :"OK",
   "pagenotFound" : "Страница не найдена!",
   "pagenotFound_header" : "Запрашиваемая страница не найдена. Проверьте корректность ссылки.",
   "pagenotFound_txt" : "Перенаправление на домашнюю страницу через 5 секунд..."

@@ -51,6 +51,9 @@
 "settings_device_parental" :"Parental lock",
 "settings_device_btn_lock" :"Lock this device",
 "settings_device_btn_unlock" :"UnLock this device",
+"settings_confirm_message" :"Êtes-vous sûr de faire cela ? Cette action ne peut pas être annulée.",
+"cancel" :"Cancel",
+"ok" :"OK",
 "pagenotFound" : "Page introuvable !",
 "pagenotFound_header" : "La page demandée est introuvable. Un lien erroné peut-être ?",
 "pagenotFound_txt" : "Redirection vers la page d'accueil dans 5 secondes"

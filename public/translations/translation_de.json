@@ -51,6 +51,9 @@
 "settings_device_parental" :"Jugendschutz",
 "settings_device_btn_lock" :"Dieses Gerät sperren",
 "settings_device_btn_unlock" :"Dieses Gerät entsperren",
+"settings_confirm_message" :"Sind Sie sicher, dass die das tun möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+"cancel" :"Cancel",
+"ok" :"OK",
 "pagenotFound" : "Seite nicht gefunden!",
 "pagenotFound_header" : "Die angeforderte Seite konnte nicht gefunden werden. Vielleicht ein falscher Link?",
 "pagenotFound_txt" : "Sie werden in 5 Sekunden zur Hauptseite weitergeleitet..."
