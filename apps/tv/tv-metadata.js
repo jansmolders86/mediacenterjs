@@ -27,7 +27,7 @@ var fs = require('graceful-fs'),
     Trakt = require('trakt'),
     tv_title_cleaner = require('../../lib/utils/title-cleaner'),
     io = require('../../lib/utils/setup-socket').io,
-    episoder = require("episoder");
+    episoder = require("../../lib/utils/episoder");
 
 var config = configuration_handler.initializeConfiguration();
 
