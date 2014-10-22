@@ -26,7 +26,8 @@ var fs = require('graceful-fs'),
     configuration_handler = require('../../lib/handlers/configuration-handler'),
     Trakt = require('trakt'),
     tv_title_cleaner = require('../../lib/utils/title-cleaner'),
-    io = require('../../lib/utils/setup-socket').io;
+    io = require('../../lib/utils/setup-socket').io,
+    episoder = require("episoder");
 
 var config = configuration_handler.initializeConfiguration();
 
@@ -118,39 +119,22 @@ var doParse = function(file, callback) {
  * @param episodeTitle       Cleaned up name of episode
  */
 getDataForNewShow = function(originalTitle, episodeTitle,callback) {
-    var episodeSeason       = '0'
-        , episodeNumber     = '0';
 
-    if (config.tvFormat === 's00e00' || config.tvFormat === undefined) {
-        var showTitle        = episodeTitle.replace(/[sS]([0-9]{1,2})[eE]([0-9]{1,2})/, '')
-        , episodeSeasonMatch = episodeTitle.match(/[sS]([0-9]{1,2})/)
-        , episodeNumberMatch = episodeTitle.match(/[eE]([0-9]{1,2})/);
+    var episodeDetails = episoder.parseFilename(originalTitle);
 
-        if (episodeSeasonMatch) {
-            episodeSeason    = episodeSeasonMatch[0].replace(/[sS]/,"");
-        }
-        if (episodeNumberMatch) {
-            episodeNumber    = episodeNumberMatch[0].replace(/[eE]/,"");
-        }
-    } else if (config.tvFormat === '0x00') {
-        var showTitle        = episodeTitle.replace(/([0-9]{1,2})+?(x)+?([0-9]{1,2})/, '')
-        , episodeNumberMatch = episodeTitle.match(/(x)+?([0-9]{1,2})/)
-
-        episodeSeason        = episodeTitle.match(/(\d{1,2})+?(?=x)/)
-
-        if (episodeNumberMatch) {
-            episodeNumber    = episodeNumberMatch[0].replace("x","");
-        }
+    var trimmedTitle = episodeDetails.show;
+    if (trimmedTitle !== undefined) {
+        trimmedTitle = trimmedTitle.toLowerCase().trim();
+    } else {
+        trimmedTitle = "Unknown show";
     }
-
-    var trimmedTitle = showTitle.toLowerCase().trim();
 
     // Store episode data in db and do lookup again
     Episode.create({
         fileName: originalTitle,
         name: trimmedTitle,
-        season: episodeSeason,
-        episode: episodeNumber
+        season: episodeDetails.season || 0,
+        episode: episodeDetails.episode || 0
     })
     .success(function(episode) {
         var showData = {
