@@ -89,12 +89,13 @@ function fillMovieFromTMDBResult(movie, result) {
     movie.imdbID         = result.imdb_id;
     movie.runtime        = result.runtime;
     movie.overview       = result.overview;
+    movie.year           = new Date(result.release_date).getFullYear();
     if (result.genres.length) movie.genre = result.genres[0].name;
     movie.adult          = result.adult.toString();
 }
 
 var updateMetadataOfMovie = exports.updateMetadataOfMovie = function(movie, callback) {
-    getMetadataFromTheMovieDB(movie.title, null, function (result) {
+    getMetadataFromTheMovieDB(movie.title, movie.year, function (result) {
         if (result !== null) {
             fillMovieFromTMDBResult(movie, result);
             //must be full movie object...
@@ -131,7 +132,8 @@ var doParse = function(file, callback) {
             overview        : null,
             cdNumber        : null,
             adult           : false,
-            hidden          : "false"
+            hidden          : "false",
+            year            : movieInfo.year
         };
 
         if (result !== null) {

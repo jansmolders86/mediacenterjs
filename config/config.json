@@ -1,0 +1,14 @@
+{
+  "development": {
+    "dialect": "mysql",
+    "storage": "./lib/database/mcjsseq.sqlite"
+  },
+  "test": {
+    "dialect": "mysql",
+    "storage": "./lib/database/mcjsseq.sqlite"
+  },
+  "production": {
+    "dialect": "mysql",
+    "storage": "./lib/database/mcjsseq.sqlite"
+  }
+}

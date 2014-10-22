@@ -82,6 +82,9 @@ block body
                         label.col-md-3.col-md-offset-1 Title
                         input.col-md-7(type="text",name="title",ng-model="current.title",required)
                     .form-group
+                        label.col-md-3.col-md-offset-1 Year
+                        input.col-md-7(type="text",name="year",ng-model="current.year",required)
+                    .form-group
                         label.col-md-3.col-md-offset-1 Hidden
                         input.col-md-7.icon(type="checkbox",name="hidden",ng-model="current.hidden",required,ng-checked="current.hidden == 'true'")
         .modal-footer

@@ -47,7 +47,7 @@ exports.loadItems = function (req, res, serveToFrontEnd) {
     getMovies(function () {
         metafetcher.loadData(function () {
             getMovies(function () {
-                res.status(500).send();
+                res.status(500).send("no movies");
             });
         });
     });
