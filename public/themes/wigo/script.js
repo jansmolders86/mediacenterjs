@@ -1,7 +1,10 @@
 $(function() {
-    
-    
+
+
     if($('body').hasClass('homepage')){
+
+        $('.tile[class*=mediacenterjs-]').addClass('plugin')
+
         var index = 0;
         var length = $("ul").children().length;
         var delays = [
