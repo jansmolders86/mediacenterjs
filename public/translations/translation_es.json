@@ -1,4 +1,6 @@
 {
+    "ok","OK",
+    "cancel":"Cancel",
   "Remote": "Mando a distancia",
   "loading": "loading, Please wait...",
   "movies": "Películas",
@@ -46,6 +48,7 @@
   "settings_clear_cache_music": "Borrar caché de música",
   "settings_clear_cache_tv": "Borrar caché de tv",
   "settings_configurable_options": "Configurable Options",
+  "settings_confirm_message":"Are you sure? This can not be undone",
   "settings_device_allowed": "Permitido",
   "settings_device_btn_lock": "Bloquear este dispositivo",
   "settings_device_btn_unlock": "Desbloquear este dispositivo",

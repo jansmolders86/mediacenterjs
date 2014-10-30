@@ -1,4 +1,6 @@
 {
+    "ok","OK",
+    "cancel":"Cancel",
   "Remote": "Remote",
   "loading": "Lade, bitte warte...",
   "movies": "Filme",
@@ -46,6 +48,7 @@
   "settings_clear_cache_music": "Musik-Cache leeren",
   "settings_clear_cache_tv": "TV-Show-Cache leeren",
   "settings_configurable_options": "Configurable Options",
+  "settings_confirm_message":"Are you sure? This can not be undone",
   "settings_device_allowed": "Erlaubt",
   "settings_device_btn_lock": "Dieses Gerät sperren",
   "settings_device_btn_unlock": "Dieses Gerät entsperren",

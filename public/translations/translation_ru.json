@@ -1,4 +1,6 @@
 {
+    "ok","OK",
+    "cancel":"Cancel",
   "Remote": "Пульт",
   "loading": "загрузка...",
   "movies": "Фильмы",
@@ -46,6 +48,7 @@
   "settings_clear_cache_music": "Очистить кеш музыки",
   "settings_clear_cache_tv": "Очистить кеш сериалов",
   "settings_configurable_options": "Configurable Options",
+  "settings_confirm_message":"Are you sure? This can not be undone",
   "settings_device_allowed": "Разрешено",
   "settings_device_btn_lock": "Включить для этого устройства",
   "settings_device_btn_unlock": "Отключить для этого устройства",

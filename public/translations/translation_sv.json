@@ -1,4 +1,6 @@
 {
+    "ok","OK",
+    "cancel":"Cancel",
   "Remote": "Fjärrkontroll",
   "loading": "Laddar, vänligen vänta...",
   "movies": "Filmer",
@@ -46,6 +48,7 @@
   "settings_clear_cache_music": "Rensa temporär lagring för musik",
   "settings_clear_cache_tv": "Rensa temporär lagring för tv-serier",
   "settings_configurable_options": "Configurable Options",
+  "settings_confirm_message":"Are you sure? This can not be undone",
   "settings_device_allowed": "Är tillåten",
   "settings_device_btn_lock": "Lås denna enhet",
   "settings_device_btn_unlock": "Lås upp denna enhet",

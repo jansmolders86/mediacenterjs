@@ -1,4 +1,6 @@
 {
+    "ok","OK",
+    "cancel":"Annuleer",
   "Remote": "Afstandsbediening",
   "loading": "Laden, een moment geduld aub...",
   "movies": "Speelfilms",
@@ -46,6 +48,7 @@
   "settings_clear_cache_music": "Wis muziek database",
   "settings_clear_cache_tv": "Wis tv database",
   "settings_configurable_options": "Configureerbare opties",
+  "settings_confirm_message":"Weet je het zeker? Dit kan niet ongedaan gemaakt worden",
   "settings_device_allowed": "Is toegestaan",
   "settings_device_btn_lock": "Vergrendel dit apparaat",
   "settings_device_btn_unlock": "Ontgrendel dit apparaat",

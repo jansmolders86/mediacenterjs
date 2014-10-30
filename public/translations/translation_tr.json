@@ -1,4 +1,6 @@
 {
+    "ok","OK",
+    "cancel":"Cancel",
   "Remote": "Uzaktan",
   "loading": "yükleniyor, Lütfen bekleyin...",
   "movies": "Filmler",
@@ -46,6 +48,7 @@
   "settings_clear_cache_music": "Müzik önbelleğini temizle",
   "settings_clear_cache_tv": "TV önbelleğini temizle",
   "settings_configurable_options": "Configurable Options",
+  "settings_confirm_message":"Are you sure? This can not be undone",
   "settings_device_allowed": "İzin verildi mi",
   "settings_device_btn_lock": "Cihazı kilitle",
   "settings_device_btn_unlock": "Cihaz kilidini aç",
