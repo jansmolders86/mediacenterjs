@@ -21,7 +21,7 @@ block additional_scripts
 
             $('.upgrade-right > .btn').on('click',function(e){
                 e.preventDefault();
-                $('#wrapper').prepend('<div class="message">Downloading and installing update. <br/> Please wait for the installation to finish...</div>');
+                $('.row').prepend('<div class="message">Downloading and installing update. <br/> Please wait for the installation to finish...</div>');
                 $('#tiles').hide();
                 $('.upgrade-right').hide();
                 $.ajax({
