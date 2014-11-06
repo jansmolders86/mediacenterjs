@@ -32,24 +32,24 @@ block body
                             | {{query.hidden ? "Show" : "Hide"}} Hidden
     .container-fluid
         .row
-        .col-xs-6.col-sm-4.col-md-2(ng-repeat="movie in movies | filter:query  | orderBy: 'title' ", ng-cloak)
-                .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-class="{current: movies.focused.id == movie.id }", ng-mouseenter="movies.focused = movie",ng-hide="movie.title === ''", ng-mouseleave="movies.focused = null")
-                    i.circular.inverted.edit.icon(ng-click="open(movie)")
-                    .fixed-ratio-cover.fixed-ratio
-                        img.movieposter(ng-src="{{movie.posterURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie)")
-                    .caption(ng-click="playMovie(movie)")
-                            img.backdrop(ng-src="{{movie.backgroundURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'", ng-click="playMovie(movie)")
+            .col-xs-6.col-sm-4.col-md-2(ng-repeat="movie in movies | filter:query  | orderBy: 'title' ", ng-cloak)
+                    .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-class="{current: movies.focused.id == movie.id }", ng-mouseenter="movies.focused = movie",ng-hide="movie.title === ''", ng-mouseleave="movies.focused = null")
+                        i.circular.inverted.edit.icon(ng-click="open(movie)")
+                        .fixed-ratio-cover.fixed-ratio
+                            img.movieposter(ng-src="{{movie.posterURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie)")
+                        .caption(ng-click="playMovie(movie)")
+                                img.backdrop(ng-src="{{movie.backgroundURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'", ng-click="playMovie(movie)")
+                                p
+                                    h1.movie-title{{movie.title}}
+                                    .overview
+                                        .summary {{movie.overview}}
+                        .specs
                             p
-                                h1.movie-title{{movie.title}}
-                                .overview
-                                    .summary {{movie.overview}}
-                    .specs
-                        p
-                            strong {{movie.genre}}
-                        p
-                            strong #{lingua.movies_Runtime}: {{movie.runtime}} min
-                    .cdNumber(ng-show="movie.cdNumber.length > 0")
-                        span {{movie.cdNumber}}
+                                strong {{movie.genre}}
+                            p
+                                strong #{lingua.movies_Runtime}: {{movie.runtime}} min
+                        .cdNumber(ng-show="movie.cdNumber.length > 0")
+                            span {{movie.cdNumber}}
 
         h2.loading(ng-show="!movies") #{lingua.loading}
             .progress-pie-chart(data-percent="{{serverMessage}}", ng-class="{gt50: serverMessage > 50}", ng-show="serverMessage > 0")

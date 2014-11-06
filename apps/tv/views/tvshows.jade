@@ -53,12 +53,12 @@ block body
                                 span.tvshow-title {{tvshow.name}}
                                 i.remove.circle.icon
                             ol.episodes
-                                li.episode(ng-repeat="episode in tvshow.episodes", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode); playlist.Visible = true") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
+                                li.episode(ng-repeat="episode in tvshow.episodes  | orderBy: ['season','episode']", ng-class="{current: player.current.episode == $index}", ng-click="playEpisode(episode); playlist.Visible = true") #{lingua.tvshows_season} {{episode.season }} - #{lingua.tvshows_episode} {{episode.episode }}
 
            ul#tvshows(ng-class="{side: player.playlist.length  > 0  && playlist.Visible}")
-           li.tvshow(ng-repeat="tvshow in tvshows | filter:query  | orderBy: 'name'", ng-class="{current: focused == $index}", ng-click="player.playlist.add(tvshow);playlist.Visible = true").col-md-6.col-xs-12
-                    i.circular.inverted.edit.icon(ng-click="open(tvshow)")
-                    img(ng-src="{{tvshow.posterURL}}")
+               li.tvshow(ng-repeat="tvshow in tvshows | filter:query  | orderBy: 'name'", ng-class="{current: focused == $index}", ng-click="player.playlist.add(tvshow);playlist.Visible = true").col-md-6.col-xs-12
+                        i.circular.inverted.edit.icon(ng-click="open(tvshow)")
+                        img(ng-src="{{tvshow.posterURL}}")
 
         h2.loading(ng-show="!tvshows") #{lingua.loading}
             .progress-pie-chart(data-percent="{{serverMessage}}", ng-class="{gt50: serverMessage > 50}", ng-show="serverMessage > 0")
