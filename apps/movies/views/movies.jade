@@ -32,7 +32,7 @@ block body
                             | {{query.hidden ? "Show" : "Hide"}} Hidden
     .container-fluid
         .row
-        .col-xs-6.col-sm-4.col-md-2(ng-repeat="movie in movies | filter:query", ng-cloak)
+        .col-xs-6.col-sm-4.col-md-2(ng-repeat="movie in movies | filter:query  | orderBy: 'title' ", ng-cloak)
                 .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-class="{current: movies.focused.id == movie.id }", ng-mouseenter="movies.focused = movie",ng-hide="movie.title === ''", ng-mouseleave="movies.focused = null")
                     i.circular.inverted.edit.icon(ng-click="open(movie)")
                     .fixed-ratio-cover.fixed-ratio
