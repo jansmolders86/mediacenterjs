@@ -50,6 +50,12 @@ block body
                     setting(icon="globe")
                         label(for="location") #{lingua.setting_location}
                         input#location(name="location", ng-model="config.location", type="text", placeholder="#{lingua.settings_placeholder_location}")
+                    setting(icon="user", ng-show="googleUser !== ''")
+                        label(for="googleUser") #{lingua.setting_spotify_user}
+                        input#googleUser(name="googleUser", ng-model="config.googleUser", type="text")
+                    setting(icon="lock", ng-show="googlePass !== ''")
+                        label(for="googlePass") #{lingua.setting_spotify_password}
+                        input#googlePass(name="googlePass", ng-model="config.googlePass", type="password")
                     setting(icon="user", ng-show="spotifyUser !== ''")
                         label(for="spotifyUser") #{lingua.setting_spotify_user}
                         input#spotifyUser(name="spotifyUser", ng-model="config.spotifyUser", type="text")
