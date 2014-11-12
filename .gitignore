@@ -6,7 +6,7 @@ lib-cov
 *.out
 *.pid
 *.gz
-#*.sqlite
+*.sqlite
 *.bat
 *.exe
 
@@ -37,8 +37,8 @@ public/data/*
 public/music/data/*
 public/movies/data/*
 public/tv/data/*
-#lib/database/mcjs.sqlite
-#lib/database/*
+lib/database/mcjs.sqlite
+lib/database/*
 .idea
 .idea/*
 bin/
