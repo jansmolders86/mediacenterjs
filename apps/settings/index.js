@@ -64,10 +64,8 @@ getData = function (req, res) {
         'low'
     ];
 
-    var tvFormatTypes = [
-        's00e00',
-        '0x00'
-    ];
+
+
     res.json({
         availableLanguages : availableLanguages,
         availableQuality : availableQuality,
@@ -80,6 +78,28 @@ getData = function (req, res) {
 }
 
 exports.index = function(req, res, next){
+    var path = require('path');
+    var appDir = path.dirname(require.main.filename);
+    //search node_modules for plugins
+    var nodeModules = appDir + '/node_modules';
+    var pluginPrefix = config.pluginPrefix;
+
+    var plugSettings = new Array();
+    fs.readdirSync(nodeModules).forEach(function(name){
+        //Check if the folder in the node_modules starts with the prefix
+        if(name.substr(0, pluginPrefix.length) !== pluginPrefix){
+            return;
+        } else {
+            var pluginPath = nodeModules + '/' + name;
+            var pluginSettingsJSON = pluginPath + '/settings.json'
+            if(fs.existsSync( pluginSettingsJSON)){
+                var parsedJSON = require(pluginSettingsJSON)
+                plugSettings.push(parsedJSON);
+            };
+        }
+    });
+
+    console.log(plugSettings);
 
     DeviceInfo.storeDeviceInfo(req);
 
