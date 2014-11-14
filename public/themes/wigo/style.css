@@ -128,6 +128,23 @@ p a:hover{text-decoration:none;}
 .tile img{ width:100%; height:100%;}
 .tile:hover{ cursor:pointer; }
 
+
+
+.tile.grow,
+.tile.plugin.grow{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%!important;
+    height: 100%!important;
+    z-index:9;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    -webkit-user-select: none;
+}
+
 .upgrade-right {float:right; margin-right: 200px;}
 .upgrade{
     margin:0px;
@@ -321,9 +338,6 @@ label,
 #oauthContainer{background:#43464F!important;}
 
 /***** -----------------   ANIMATIONS  ---------------------- *****/
-
-
-
 
 .glinein{
     -webkit-animation: glide-in 0.5s;
