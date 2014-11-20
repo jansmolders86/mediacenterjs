@@ -147,3 +147,20 @@ settingsApp.directive('setting', function(){
         }
     }
 });
+
+
+settingsApp.directive('createControl', function($timeout){
+    return function(scope, element, attrs){
+        attrs.$observe('createControl',function(){
+            var elementData = attrs.createControl.split(',')
+            console.log(elementData)
+
+            var elementType = elementData[0]
+            , elementName = elementData[1]
+            , elementPlaceholder = elementData[2]
+            , elementModel = 'config.'+elementData[1];
+
+            element.html('<input class="form-control mcjs-rc-clickable" name="'+elementName+'" ng-model="'+elementModel+'" type="'+elementType+'" placeholder="'+elementPlaceholder+'" id="'+elementName+'" />');
+        });
+    }
+});

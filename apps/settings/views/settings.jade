@@ -72,12 +72,8 @@ block body
                                 .col-md-10.input-group
                                     span.input-group-addon
                                         i.icon.puzzle.piece
-                                    div(ng-show="field.type === 'text'")
-                                        input.form-control.mcjs-rc-clickable(name="{{field.name}}", ng-value="config[field.name]", type="text", placeholder="{{field.placeholder}}", id="{{field.name}}")
-                                    div(ng-show="field.type === 'password'")
-                                        input.form-control.mcjs-rc-clickable(name="{{field.name}}", ng-value="config[field.name]", type="password", placeholder="{{field.placeholder}}", id="{{field.name}}")
-                                    div(ng-show="field.type === 'select'")
-                                        select(name="{{field.name}}", ng-options="option in options", ng-value="config[field.name]", id="{{field.name}}")
+                                    div(create-control="{{field.type}},{{field.name}},{{field.placeholder}}")
+
 
                     .form-group.mcjs-rc-controllable
                         .col-md-offset-2.col-md-10
