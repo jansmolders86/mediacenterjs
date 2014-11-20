@@ -64,42 +64,20 @@ getData = function (req, res) {
         'low'
     ];
 
-
-
-    res.json({
-        availableLanguages : availableLanguages,
-        availableQuality : availableQuality,
-        availableScreensavers : availableScreensavers,
-        tvFormatTypes : tvFormatTypes,
-        themes : availablethemes,
-        config : config,
-        countries : require('../../lib/utils/countries').countries
+    loadCustomSettings(function(pluginSettings){
+        res.json({
+            availableLanguages : availableLanguages,
+            availableQuality : availableQuality,
+            availableScreensavers : availableScreensavers,
+            themes : availablethemes,
+            config : config,
+            pluginSettings  : pluginSettings,
+            countries : require('../../lib/utils/countries').countries
+        });
     });
 }
 
 exports.index = function(req, res, next){
-    var path = require('path');
-    var appDir = path.dirname(require.main.filename);
-    //search node_modules for plugins
-    var nodeModules = appDir + '/node_modules';
-    var pluginPrefix = config.pluginPrefix;
-
-    var plugSettings = new Array();
-    fs.readdirSync(nodeModules).forEach(function(name){
-        //Check if the folder in the node_modules starts with the prefix
-        if(name.substr(0, pluginPrefix.length) !== pluginPrefix){
-            return;
-        } else {
-            var pluginPath = nodeModules + '/' + name;
-            var pluginSettingsJSON = pluginPath + '/settings.json'
-            if(fs.existsSync( pluginSettingsJSON)){
-                var parsedJSON = require(pluginSettingsJSON)
-                plugSettings.push(parsedJSON);
-            };
-        }
-    });
-
-    console.log(plugSettings);
 
     DeviceInfo.storeDeviceInfo(req);
 
@@ -139,4 +117,29 @@ exports.get = function(req, res, next) {
             next();
     }
 };
+
+
+function loadCustomSettings(callback){
+    var path = require('path');
+    var appDir = path.dirname(require.main.filename);
+    //search node_modules for plugins
+    var nodeModules = appDir + '/node_modules';
+    var pluginPrefix = config.pluginPrefix;
+
+    var plugSettings = new Array();
+    fs.readdirSync(nodeModules).forEach(function(name){
+        //Check if the folder in the node_modules starts with the prefix
+        if(name.substr(0, pluginPrefix.length) !== pluginPrefix){
+            return;
+        } else {
+            var pluginPath = nodeModules + '/' + name;
+            var pluginSettingsJSON = pluginPath + '/settings.json'
+            if(fs.existsSync( pluginSettingsJSON)){
+                var parsedJSON = require(pluginSettingsJSON)
+                plugSettings.push(parsedJSON);
+            };
+        }
+    });
+    callback(plugSettings);
+}
 

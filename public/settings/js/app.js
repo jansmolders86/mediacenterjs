@@ -32,6 +32,7 @@ settingsApp.controller('settingsCtrl', function ($scope, $http, $modal, $timeout
         $scope.tvFormatTypes = data.tvFormatTypes;
         $scope.themes = data.themes;
         $scope.config = data.config;
+        $scope.pluginSettings = data.pluginSettings;
         $scope.countries = data.countries;
     });
     $http.get('/settings/devices').success(function (data) {
