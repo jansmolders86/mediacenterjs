@@ -102,7 +102,7 @@ Feel free to contribute by translating.
 * [Alberto Jerez](https://github.com/ajerez)  for his Spanish translation
 * [Domenico Luciani](https://github.com/dlion) for his Italian translation
 * [Alexey Bobyrev](https://github.com/sfate) for his Russian and Ukrainian translation
-* [Doğan Aydın](https://github.com/doganaydin) for his Turkish translation
+* [Doğan Aydın](https://github.com/doganaydin) And [William Belle](https://github.com/williambelle) for their Turkish translation
 * [Adam](https://github.com/brutalhonesty) for his YouTube App
 * [Ionică Bizău](https://github.com/IonicaBizau) for the [Youtube API NPM module](https://github.com/IonicaBizau/youtube-api)
 * [Luis Eduardo Brito](https://github.com/luiseduardobrito) and [Welkson Ramos](https://github.com/welksonramos) for their Portuguese translation
