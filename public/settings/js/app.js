@@ -142,6 +142,7 @@ settingsApp.directive('setting', function(){
                     }
                     replaceSub("label");
                     replaceSub("input, select");
+                    //TODO: Add more elements like checkbox, radio button etc.
                 });
             }
         }
@@ -152,15 +153,20 @@ settingsApp.directive('setting', function(){
 settingsApp.directive('createControl', function($timeout){
     return function(scope, element, attrs){
         attrs.$observe('createControl',function(){
-            var elementData = attrs.createControl.split(',')
-            console.log(elementData)
 
-            var elementType = elementData[0]
-            , elementName = elementData[1]
-            , elementPlaceholder = elementData[2]
-            , elementModel = 'config.'+elementData[1];
+            var elementData         = attrs.createControl.split(',')
+            , elementType           = elementData[0].toString()
+            , elementName           = elementData[1].toString()
+            , elementPlaceholder    = elementData[2].toString()
+            , elementModel          = ''
+            , configEntry           = scope.config[elementName];
 
-            element.html('<input class="form-control mcjs-rc-clickable" name="'+elementName+'" ng-model="'+elementModel+'" type="'+elementType+'" placeholder="'+elementPlaceholder+'" id="'+elementName+'" />');
+            if( configEntry !== null && configEntry !== undefined){
+                elementModel = configEntry;
+            }
+
+            //TODO: Add more elements like checkbox, radio button, selectbox etc.
+            element.html('<input class="form-control mcjs-rc-clickable" name="'+elementName+'" value="'+elementModel+'" type="'+elementType+'" placeholder="'+elementPlaceholder+'" id="'+elementName+'" />');
         });
     }
 });
