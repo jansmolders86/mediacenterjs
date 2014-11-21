@@ -32,6 +32,7 @@ settingsApp.controller('settingsCtrl', function ($scope, $http, $modal, $timeout
         $scope.tvFormatTypes = data.tvFormatTypes;
         $scope.themes = data.themes;
         $scope.config = data.config;
+        $scope.pluginSettings = data.pluginSettings;
         $scope.countries = data.countries;
     });
     $http.get('/settings/devices').success(function (data) {
@@ -141,8 +142,31 @@ settingsApp.directive('setting', function(){
                     }
                     replaceSub("label");
                     replaceSub("input, select");
+                    //TODO: Add more elements like checkbox, radio button etc.
                 });
             }
         }
+    }
+});
+
+
+settingsApp.directive('createControl', function($timeout){
+    return function(scope, element, attrs){
+        attrs.$observe('createControl',function(){
+
+            var elementData         = attrs.createControl.split(',')
+            , elementType           = elementData[0].toString()
+            , elementName           = elementData[1].toString()
+            , elementPlaceholder    = elementData[2].toString()
+            , elementModel          = ''
+            , configEntry           = scope.config[elementName];
+
+            if( configEntry !== null && configEntry !== undefined){
+                elementModel = configEntry;
+            }
+
+            //TODO: Add more elements like checkbox, radio button, selectbox etc.
+            element.html('<input class="form-control mcjs-rc-clickable" name="'+elementName+'" value="'+elementModel+'" type="'+elementType+'" placeholder="'+elementPlaceholder+'" id="'+elementName+'" />');
+        });
     }
 });
