@@ -72,7 +72,7 @@ Supported file formats:
 ==================
 Video: AVI/MOV/WMV/MP4/MKV/MPEG
 
-Audio: MP3 
+Audio: MP3/M4a 
 
 Known issues:
 ==================
