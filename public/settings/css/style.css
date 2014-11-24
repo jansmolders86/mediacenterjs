@@ -76,7 +76,7 @@ a.scraperlink,
 #setup input[type=text],
 #setup input[type=password],
 #setup select,
-#setup textarea { background:#dedede;}
+#setup textarea { background:#dedede; max-width: 80%;}
 
 
 .table>tbody>tr:nth-child(odd){

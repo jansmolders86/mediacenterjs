@@ -3,7 +3,10 @@ extends layout
 block declarations
     - body_class = 'homepage';
     - include_remote = true;
-
+block additional_css
+    each item in apps
+        if(item.tileCSS !== '')
+            link(rel='stylesheet', href='#{item.tileCSS}')
 block additional_scripts
     script.
         $(function() {
@@ -54,7 +57,7 @@ block body
             .row
                 ul#tiles
                     each item in apps
-                        li.tile.mcjs-rc-controllable.col-md-2.col-xs-1(class="#{ item.tileLink }")
+                        li.tile.mcjs-rc-controllable.col-md-2.col-xs-1(class="#{ item.appName }")
                             a(href="/" + item.appLink + "/").mcjs-rc-clickable
-                                img(src="/" + item.tileLink + "/tile.svg", onerror="this.src='/" + item.tileLink + "/tile.png'")
-                                span #{item.tileLink}
+                                img(src="#{item.tileLink}")
+                                span #{item.appName}

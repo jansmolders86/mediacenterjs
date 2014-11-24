@@ -112,21 +112,31 @@ app.get("/", function(req, res, next) {
         //Search core app folder for apps and check if tile icon is present
         fs.readdirSync(__dirname + '/apps').forEach(function(name){
 
-            if (fs.existsSync(__dirname + '/public/'+name+'/tile.png')
-                ||fs.existsSync(__dirname + '/public/'+name+'/tile.svg')){
-                var obj = {
-                    appLink: name,
-                    tileLink: name
-                }
-                if(name === 'movies' && config.moviepath === ""){
-                    return;
-                } else if(name === 'music' && config.musicpath === "" ){
-                    return;
-                } else if(name === 'tv' && config.tvpath === "" ){
-                    return;
-                } else {
-                    apps.push(obj);
-                }
+            // Search for a SVG or PNG tile
+            var tileImg = '';
+            if (fs.existsSync(__dirname + '/public/'+name+'/tile.svg')){
+                tileImg = '/'+name+'/tile.svg';
+            } else if(fs.existsSync(__dirname + '/public/'+name+'/tile.png')){
+                tileImg = '/'+name+'/tile.png';
+            }
+        
+            var obj = {
+                appLink     : name,
+                appName     : name,
+                tileLink    : tileImg,
+                tileCSS     : ''
+            }
+            
+            if(name === 'movies' && config.moviepath === ""){
+                return;
+            } else if(name === 'music' && config.musicpath === "" ){
+                return;
+            } else if(name === 'tv' && config.tvpath === "" ){
+                return;
+            } else if (tileImg === ''){
+                return;
+            } else {
+                apps.push(obj);
             }
 
         });
@@ -143,13 +153,35 @@ app.get("/", function(req, res, next) {
             }
 
             var pluginPath = nodeModules + '/' + name;
-            if(fs.existsSync( pluginPath + '/public/tile.png')){
-                var obj = {
-                    appLink: name,
-                    tileLink: name + '/public'
-                }
-                apps.push(obj);
+            
+            // Search for a SVG or PNG tile
+            var tileImg = '';
+            if (fs.existsSync(pluginPath+'/public/tile.svg')){
+                tileImg = '/'+name+'/public/tile.svg';
+            } else if(fs.existsSync(pluginPath+'/public/tile.png')){
+                tileImg = '/'+name+'/public/tile.png';
             }
+            
+            // Search for custom tile css
+            var tileCSS = '';
+            if(fs.existsSync( pluginPath + '/public/tile.css')){
+                tileCSS = '/'+name+'/public/tile.css';
+            }
+            
+            var appName = name.replace('mediacenterjs-','');
+            
+            var obj = {
+                appLink     : name,
+                appName     : appName,
+                tileLink    : tileImg,
+                tileCSS     : tileCSS
+            }
+            
+             if (tileImg === ''){
+                 return;
+             } else{
+                apps.push(obj);
+             }
 
         });
 
@@ -315,6 +347,7 @@ if (config.port == "" || config.port == undefined ){
     server.listen(parseInt(config.port));
 }
 
+/** Private functions **/
 
 function unzip(req, res, output, dir){
     var src = 'https://codeload.github.com/jansmolders86/mediacenterjs/zip/master';
@@ -366,7 +399,3 @@ function getIPAddresses() {
 
     return ipAddresses;
 }
-
-
-
-

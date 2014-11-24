@@ -504,9 +504,13 @@ label,
 @media only screen and (min-width:771px){
     .tile img {
         width: 30%;
-        height: 100%;
+        padding-top: 40px;
+        padding-left: 10px;
+        height: auto;
         float: left;
     }
+    
+    .tile.grow img{height:100%;}
 
     .tile.plugin{
         width:14.1%!important;
