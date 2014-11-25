@@ -543,6 +543,7 @@ label,
     .tile.music{  background:#afcc12; }
     .tile.settings{  background:#e9b11c; }
     .tile.youtube{  background:#ffffff; }
+    .tile.youtube span{  color:#333; }
     .tile.weather{  background:#f86049; }
 
 }
