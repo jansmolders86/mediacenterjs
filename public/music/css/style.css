@@ -87,6 +87,7 @@ body,
 #library {
     float: left;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     width:100%;
     padding-top: 15px;
     height:100%;
@@ -231,6 +232,7 @@ body,
     left:0px;
     bottom: 100px;
     z-index:9;
+    -webkit-overflow-scrolling: touch;
 }
 
 #playlist.ng-hide {
