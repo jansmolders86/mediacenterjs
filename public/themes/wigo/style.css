@@ -61,6 +61,18 @@ p a:hover{text-decoration:none;}
 .table>tbody>tr>td.active{ background:transparent; }
 .table>thead>tr>th{border:0;}
 
+.modal-content {
+    background-color: #3C3C3C;
+    border-radius: 0;
+}
+.modal-header, .modal-footer {
+    border-color: #595959;
+}
+.modal-content input[type=text] {
+    background: #595959;
+    color: white;
+}
+
 /* Homepage Tiles */
 
 @media (min-width:770px) {
@@ -256,7 +268,7 @@ label,
     float:left;
     display:block;
     font-size:16px;
-    font-weight:300;
+    font-weight:400;
     color:#fff;
     text-decoration:none;
     text-align:center;
@@ -320,7 +332,26 @@ label,
 #filter:-ms-input-placeholder::before  { font-family: Icons; content:'\f0c9  '; color: #ddd }
 #filter:-moz-placeholder::before  { font-family: Icons; content:'\f0c9  '; color: #ddd }
 
+/* SweetAlert override */
 
+.sweet-alert {
+    background: #3C3C3C;
+    border-radius: 0;
+}
+.sweet-alert p {
+    color: #c6c6c6;
+    font-weight: bold;
+}
+.sweet-alert button {
+    background-color: #fb8521 !important;
+    border-radius: 0;
+}
+.sweet-alert .icon.error {
+    border-color: #ef5654;
+}
+.sweet-alert .icon.error .line {
+    background-color: #ef5654;
+}
 /* Player */
 
 #player{

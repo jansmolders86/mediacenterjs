@@ -143,7 +143,10 @@ function playMovie(movie, $http, scope){
         videoJSHandler(playerID, data, movie.id, videoUrl, subtitleUrl, movie.originalName,homeURL, 5000, type);
     })
     .error(function (msg, code) {
-        alert("The movie " +  movie.title + " could not be found");
+        sweetAlert({title : "",
+                    text : "The movie " +  movie.title + " could not be found",
+                    type : "error",
+                    allowOutsideClick : true});
         scope.playing = false;
     });
 }
