@@ -28,6 +28,11 @@ var fs = require('fs.extra')
     , ProgressionMarker = dbSchema.ProgressionMarker;
 
 
+exports.stopTranscoding = function(req,res) {
+    playback_handler.stopTranscoding();
+    res.status(200).send();
+}
+
 exports.loadItems = function (req, res, serveToFrontEnd) {
     function getMovies(nomoviesCallback) {
         Movie.findAll()

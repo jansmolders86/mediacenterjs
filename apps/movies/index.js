@@ -62,6 +62,10 @@ exports.get = function(req, res, next){
         functions.playFile(req, res, platform, id);
         handled = true;
     }
+    if (infoRequest === 'transcodings' && optionalParam === 'stop') {
+        functions.stopTranscoding(req,res);
+        handled = true;
+    }
     if (!handled) {
         next();
     }
