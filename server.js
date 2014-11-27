@@ -26,50 +26,47 @@
 var child_process = require('child_process')
     , fs = require("fs")
     , sys = require("sys")
-    , colors = require('colors');
+    , logger = require('winston');
 
 function installUpdate(output, dir){
-    console.log('Installing update...');
+    logger.info('Installing update...');
     var fsExtra = require("fs-extra");
     fsExtra.copy('./install/mediacenterjs-master', './', function (err) {
         if (err) {
-            console.error('Error', err);
+            logger.error('Error', err);
         } else {
-            console.log("success!");
             cleanUp(output, dir);
         }
     });
 }
 
 function cleanUp(output, dir) {
-    console.log('Cleanup...');
+    logger.info('Cleanup...');
     var rimraf = require('rimraf');
     rimraf(dir, function (e) {
         if(e) {
-            console.log('Error cleaning temp update folder', e .red);
+            logger.error('Error cleaning temp update folder', e);
         }
     });
 
-    console.log('Install dependencies...');
+    logger.info('Install dependencies...');
     var exec = require('child_process').exec
         , child = exec('npm install', { maxBuffer: 9000*1024 }, function(err, stdout, stderror) {
             if (err) {
-                console.log('Metadata fetcher error: ',err) ;
+                logger.error('Metadata fetcher error: ',err) ;
             }
         });
 
     child.stdout.on('data', function(data) {
-        console.log(data.toString());
+        logger.info(data.toString());
     });
     child.stderr.on('data', function(data) {
-        console.log(data.toString());
+        logger.info(data.toString());
     });
 
     child.on('exit', function() {
-        console.log('Done installing dependencies...');
         if(fs.existsSync(output) === true){
             fs.unlinkSync(output);
-            console.log('Update complete, restarting server...')
             server.update = false;
             server.start();
         }
@@ -84,11 +81,10 @@ server = {
 
     "restart": function() {
         this.restarting = true;
-        console.log('Stopping server for restart' .yellow.bold);
+        logger.info('Stopping server for restart');
         this.process.kill();
     },
     "start": function() {
-        console.log('start')
         var that = this;
         if(that.update === true){
             var output = './master.zip';
@@ -98,7 +94,7 @@ server = {
                 installUpdate(output, dir);
             },2000);
         } else {
-            console.log('Starting server' .green.bold);
+            logger.info('Starting server' .green.bold);
             that.watchFile();
 
             this.process = child_process.spawn(process.argv[0], ['index.js']);
@@ -112,7 +108,6 @@ server = {
             });
 
             this.process.addListener('exit', function (code) {
-                console.log('Child process exited' .yellow.bold);
                 this.process = null;
                 if (that.restarting) {
                     that.restarting === true;
@@ -125,8 +120,8 @@ server = {
         var that = this;
         fs.watchFile('./configuration/config.ini', {interval : 500}, function(curr, prev) {
             if (curr.mtime.valueOf() != prev.mtime.valueOf() || curr.ctime.valueOf() != prev.ctime.valueOf()) {
-                console.log('Restarting because of changed file' .yellow.bold);
-                // give browser time to load finsh page
+                logger.info('Restarting because of changed file');
+                // give browser time to load finish page
                 setTimeout(function(){
                     server.restart();
                 },2000);
@@ -134,7 +129,7 @@ server = {
         });
         fs.watchFile('./configuration/update.js', {interval : 500}, function(curr, prev) {
             if (curr.mtime.valueOf() != prev.mtime.valueOf() || curr.ctime.valueOf() != prev.ctime.valueOf()) {
-                console.log('Restarting because an update is available' .yellow.bold);
+                logger.info('Restarting because an update is available' );
                 that.update = true;
                 server.restart();
             }
