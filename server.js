@@ -27,6 +27,16 @@ var child_process = require('child_process')
     , fs = require("fs")
     , sys = require("sys")
     , logger = require('winston');
+	
+	if(fs.existsSync(__dirname + "/log/") === false){
+		fs.mkdirSync(__dirname + "/log/");
+		fs.openSync(__dirname + "/log/server.log", 'w');
+		fs.chmodSync(__dirname + "/log/server.log", 0755);
+	}
+
+	logger.remove(logger.transports.Console);
+	logger.add(logger.transports.File, { filename: __dirname + "/log/server.log" });
+	logger.add(logger.transports.Console, { level: 'debug', colorize:true });
 
 function installUpdate(output, dir){
     logger.info('Installing update...');
