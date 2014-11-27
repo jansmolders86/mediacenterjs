@@ -21,12 +21,13 @@ var fs = require('graceful-fs'),
     configuration_handler = require('../../lib/handlers/configuration-handler'),
     LastfmAPI = require('lastfmapi'),
     mm = require('musicmetadata'),
-    io = require('../../lib/utils/setup-socket').io;
+    io = require('../../lib/utils/setup-socket').io,
     dbschema = require('../../lib/utils/database-schema'),
     Album = dbschema.Album,
     Artist = dbschema.Artist,
     Track = dbschema.Track,
-    async = require('async');
+    async = require('async'),
+    logger = require('winston');
 
 var config = configuration_handler.initializeConfiguration();
 
@@ -84,7 +85,7 @@ var doParse = function(file, callback) {
     });
     parser.on('done', function(err) {
         if (err){
-            console.log("err", err);
+            logger.error("Music parse error",{ error: err});
         } else {
             var trackName = "Unknown Title"
             ,   trackNo = ""
@@ -192,7 +193,7 @@ exports.loadData = function(donecallback) {
                 io.sockets.emit('progress',{msg:perc});
             });
         });
-        
+
     });
 
 }

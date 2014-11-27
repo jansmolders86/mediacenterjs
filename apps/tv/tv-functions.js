@@ -18,11 +18,11 @@
 /* Global Imports */
 var fs = require('fs.extra')
     , file_utils = require('../../lib/utils/file-utils')
-    , colors = require('colors')
     , path = require('path')
     , metafetcher = require('../tv/tv-metadata')
     , config = require('../../lib/handlers/configuration-handler').getConfiguration()
-    , playback_handler = require('../../lib/handlers/playback');
+    , playback_handler = require('../../lib/handlers/playback')
+    , logger = require('winston');
 
 exports.loadItems = function (req, res, serveToFrontEnd) {
     function getTVShows(notvshowsCallback) {
@@ -66,7 +66,7 @@ exports.playFile = function (req, res, platform, episodeId){
     .success(function (episode) {
         file_utils.getLocalFile(config.tvpath, episode.fileName, function(err, file) {
             if (err){
-                console.log(err .red);
+                logger.error(err);
             }
             if (file) {
                 var tvShowUrl = file.href;
@@ -83,7 +83,7 @@ exports.playFile = function (req, res, platform, episodeId){
                 playback_handler.startPlayback(res, platform, episode.id, tvShowUrl, episode.fileName, subtitleUrl, subtitleTitle, type);
 
             } else {
-                console.log("File " + episode.fileName + " could not be found!" .red);
+                logger.error("File " + episode.fileName + " could not be found!");
             }
         });
     });

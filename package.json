@@ -83,6 +83,7 @@
     "underscore": "~1.5.2",
     "walk": ">=1.2.2",
     "wget": ">=0.0.1",
-    "youtube-api": "~0.3.0"
+    "youtube-api": "~0.3.0",
+    "winston":">=0.8.3"
   }
 }

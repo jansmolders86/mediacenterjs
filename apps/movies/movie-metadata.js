@@ -26,7 +26,8 @@ var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3'),
     config = configuration_handler.initializeConfiguration(),
     file_utils = require('../../lib/utils/file-utils'),
     movie_title_cleaner = require('../../lib/utils/title-cleaner'),
-    io = require('../../lib/utils/setup-socket').io;
+    io = require('../../lib/utils/setup-socket').io,
+    logger = require('winston');
 
 
 /* Constants */
@@ -146,7 +147,7 @@ var doParse = function(file, callback) {
             var perc = parseInt((nrScanned / totalFiles) * 100);
             if (perc > 0) {
                 io.sockets.emit('progress',{msg:perc});
-                console.log(perc+'% done');
+                logger.info(perc+'% done');
             }
             callback();
         });
@@ -159,7 +160,7 @@ var doParse = function(file, callback) {
 getMetadataFromTheMovieDB = function(movieTitle, year, callback) {
     moviedb.searchMovie({ query: movieTitle, language: config.language, year: year }, function(err, result) {
         if (err || (result && result.results.length < 1)) {
-            console.log('Error retrieving data',err);
+            logger.error('Error retrieving data',err);
             callback(null);
         }else {
             moviedb.movieInfo({ id: result.results[0].id }, function(err, response) {
@@ -174,7 +175,7 @@ getMetadataFromTrakt = function(movieTitle, callback) {
     , trakt = new Trakt({username: 'mediacenterjs', password: 'mediacenterjs'});
     trakt.request('search', 'movies', options, function(err, result) {
         if (err) {
-            console.log('error retrieving tvshow info', err .red);
+            logger.error('error retrieving tvshow info', err .red);
             callback(null);
         } else {
             var movieData = result[0];

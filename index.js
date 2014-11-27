@@ -39,7 +39,9 @@ var express = require('express')
     , configuration_handler = require('./lib/handlers/configuration-handler')
     , server = http.createServer(app)
     , io = require('./lib/utils/setup-socket')(server)
-    , methodOverride = require('method-override');
+    , methodOverride = require('method-override')
+    , logger = require('./lib/utils/logging');
+
 
 var config = configuration_handler.initializeConfiguration();
 var ruleSchedule = null;
@@ -119,14 +121,14 @@ app.get("/", function(req, res, next) {
             } else if(fs.existsSync(__dirname + '/public/'+name+'/tile.png')){
                 tileImg = '/'+name+'/tile.png';
             }
-        
+
             var obj = {
                 appLink     : name,
                 appName     : name,
                 tileLink    : tileImg,
                 tileCSS     : ''
             }
-            
+
             if(name === 'movies' && config.moviepath === ""){
                 return;
             } else if(name === 'music' && config.musicpath === "" ){
@@ -153,7 +155,7 @@ app.get("/", function(req, res, next) {
             }
 
             var pluginPath = nodeModules + '/' + name;
-            
+
             // Search for a SVG or PNG tile
             var tileImg = '';
             if (fs.existsSync(pluginPath+'/public/tile.svg')){
@@ -161,22 +163,22 @@ app.get("/", function(req, res, next) {
             } else if(fs.existsSync(pluginPath+'/public/tile.png')){
                 tileImg = '/'+name+'/public/tile.png';
             }
-            
+
             // Search for custom tile css
             var tileCSS = '';
             if(fs.existsSync( pluginPath + '/public/tile.css')){
                 tileCSS = '/'+name+'/public/tile.css';
             }
-            
+
             var appName = name.replace('mediacenterjs-','');
-            
+
             var obj = {
                 appLink     : name,
                 appName     : appName,
                 tileLink    : tileImg,
                 tileCSS     : tileCSS
             }
-            
+
              if (tileImg === ''){
                  return;
              } else{
@@ -223,10 +225,14 @@ app.post('/removeModule', function(req, res){
         , appDir = './apps/'+module+'/'
         , publicdir = './public/'+module+'/';
 
-    rimraf(appDir, function (e){if(e)console.log('Error removing module', e .red)});
+    rimraf(appDir, function (e){
+        if(e){
+            logger.error('Error removing module',{error: e})
+        }
+    });
     rimraf(publicdir, function (e) {
         if(e) {
-            console.log('Error removing module', e .red);
+            logger.error('Error removing module',{error:e})
         } else {
             res.redirect('/');
         }
@@ -269,10 +275,10 @@ app.post('/clearCache', function(req, res) {
         , tableName = cache.split(',');
 
     tableName.forEach(function(name) {
-        console.log('clearing ' + name + ' cache');
+        logger.info('clearing cache',{name : name})
         app_cache_handler.clearCache(name, function(err) {
             if (err) {
-                console.log('Error removing module', e .red);
+                logger.error('Error removing module',{error:e})
                 return res.send('Error clearing cache', e);
             }
             var schema = require('./lib/utils/database-schema');
@@ -288,14 +294,14 @@ app.get('/checkForUpdate', function(req, res){
 });
 
 app.get('/doUpdate', function(req, res){
-    console.log('First, download the latest version From Github.');
+    logger.info('First, download the latest version From Github.');
     var src = 'https://codeload.github.com/jansmolders86/mediacenterjs/zip/master';
     var output = './master.zip';
     var dir = './install'
     var options = {};
 
     fileHandler.downloadFile (src, output, options, function(output){
-        console.log('Done', output);
+        logger.info('Done', {Output: output});
         unzip(req, res, output, dir);
     });
 });
@@ -336,14 +342,14 @@ app.set('port', process.env.PORT || 3000);
 // Open App socket
 if (config.port == "" || config.port == undefined ){
     var defaultPort = app.get('port');
-    console.log('First run, Setup running on localhost:' + defaultPort + "\n");
+    logger.warn('First run, Setup running on localhost:',{port: defaultPort});
     server.listen(parseInt(defaultPort));
     var url = 'http://localhost:'+defaultPort;
     open(url);
 
 } else{
     var message = "MediacenterJS listening on port:" + config.port + "\n";
-    console.log(message.green.bold);
+    logger.info(message);
     server.listen(parseInt(config.port));
 }
 
@@ -360,7 +366,7 @@ function unzip(req, res, output, dir){
     } else {
         rimraf(dir, function (err) {
             if(err) {
-                console.log('Error removing temp folder', err .red);
+                logger.error('Error removing temp folder',{error: err });
             } else {
 
                 fileHandler.downloadFile(src, outputFile, options, function(output){
@@ -372,7 +378,7 @@ function unzip(req, res, output, dir){
             }
         });
     }
-    console.log("Unzipping New Version...");
+    logger.info("Unzipping New Version...");
     var AdmZip = require("adm-zip");
     var zip = new AdmZip(output);
     zip.extractAllTo(ExtractDir, true);

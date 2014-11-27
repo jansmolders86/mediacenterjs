@@ -25,7 +25,8 @@ var fs = require('fs.extra')
     , playback_handler = require('../../lib/handlers/playback')
     , dbSchema = require('../../lib/utils/database-schema')
     , Movie = dbSchema.Movie
-    , ProgressionMarker = dbSchema.ProgressionMarker;
+    , ProgressionMarker = dbSchema.ProgressionMarker
+    , logger = require('winston');
 
 
 exports.stopTranscoding = function(req,res) {
@@ -70,7 +71,7 @@ exports.edit = function(req, res, data) {
         res.status(200).send();
     })
     .catch(function (err) {
-        console.log(err);
+        logger.error("Movie edit error",{ error: err});
         res.status(err.code || 500).send();
     });
 }
@@ -95,7 +96,7 @@ exports.playFile = function (req, res, platform, id){
     .success(function(movie) {
         file_utils.getLocalFile(config.moviepath, movie.originalName, function(err, file) {
             if (err){
-                console.log('File not found',err .red);
+                logger.error("File not found",{ error: err});
                 res.status(404).send();
             }
             if (file) {
@@ -114,7 +115,7 @@ exports.playFile = function (req, res, platform, id){
                 playback_handler.startPlayback(res, platform, movie.id, movieUrl, movie.originalName, subtitleUrl, subtitleTitle, type);
 
             } else {
-                console.log("File " + movie.title + " could not be found!" .red);
+                logger.error("File not found",{ title: movie.title});
                 res.status(404).send();
             }
         });

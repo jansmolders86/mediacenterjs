@@ -27,7 +27,8 @@ var fs = require('graceful-fs'),
     Trakt = require('trakt'),
     tv_title_cleaner = require('../../lib/utils/title-cleaner'),
     io = require('../../lib/utils/setup-socket').io,
-    episoder = require("../../lib/utils/episoder");
+    episoder = require("../../lib/utils/episoder"),
+    logger = require('winston');
 
 var config = configuration_handler.initializeConfiguration();
 
@@ -106,7 +107,6 @@ var doParse = function(file, callback) {
         var perc = parseInt((nrScanned / totalFiles) * 100);
         if (perc > 0) {
             io.sockets.emit('progress',{msg:perc});
-            console.log(perc+'% done.');
         }
         callback();
     });
@@ -145,7 +145,7 @@ getDataForNewShow = function(originalTitle, episodeTitle,callback) {
         };
         getMetadataFromTrakt(trimmedTitle, function(err, traktResult){
             if (err) {
-                console.error('Error returning Trakt data', err);
+                logger.error('Error returning Trakt data', err);
             } else {
                 if (traktResult !== null) {
                     if (traktResult.images !== undefined
@@ -180,7 +180,7 @@ getMetadataFromTrakt = function(tvShow, callback) {
 
     trakt.request('search', 'shows', { query: tvShow }, function(err, result) {
         if (err) {
-            console.log('error retrieving tvshow info', err .red);
+            logger.error('error retrieving tvshow info', err );
             callback(err, null);
         } else {
             var tvSearchResult = result[0];
