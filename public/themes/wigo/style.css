@@ -540,25 +540,16 @@ label,
         height: auto;
         float: left;
     }
-    
-    .tile.grow img{height:100%;}
 
-    .tile.plugin{
-        width:14.1%!important;
-    }
-    .tile.plugin img {
-        width: 100%;
-    }
-    .tile.plugin a > span {
-       display:none;
-    }
-
+    .tile.grow img{height:58%;opacity:1;}
 
     .tile{
         width: 18.5%;;
         height: 18em;
         background:#484c52;
     }
+
+    .tile span{ text-transform: capitalize;}
 
     .tile.movies{
         width:30%;
