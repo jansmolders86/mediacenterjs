@@ -81,7 +81,7 @@ body,
     bottom: 0;
 }
 .container-fluid.bottom {
-    margin-bottom: 160px;
+    margin-bottom: 100px;
 }
 
 #library {
@@ -240,7 +240,6 @@ body,
     -webkit-transform: translateX(-100%);
 }
 
-#playlist .album-wrapper,
 #playlist .album-info,
 #playlist ol{
     background: #313234;
@@ -261,20 +260,29 @@ body,
 
 #playlist h2 {
     z-index: 7;
-    height: 70px;
-    padding: 10px;
+    height: 60px;
+    padding-left: 10px;
     width:100%;
-    max-width:360px;
-    line-height: 50px;
-    background: #313234;
+    line-height: 60px;
+    background: #262728;
     margin: 0;
     color: #fff;
     position: fixed;
 }
 
-#playlist h2 i{margin-top:11px; cursor:pointer;}
+#playlist h2 i{
+    cursor: pointer;
+    height: 100%;
+    margin:0;
+    width: 40px;
+    line-height: inherit;
+}
+#playlist h2 i:hover {
+    background: #fb8521;
+    opacity: 0.99;/*deliberately not 1*/
+}
 
-#playlist ul{padding-bottom:50px;}
+#playlist ul{padding-bottom:50px; padding-top: 60px;}
 
 #playlist img{
     margin-bottom:5px;
@@ -284,7 +292,7 @@ body,
     position: fixed;
 }
 #playlist .album-title{font-size:14px;}
-#playlist .album{ padding:0px; margin-top:70px;}
+#playlist .album{ padding:0px;}
 
 #tracklist li{height:auto!important;}
 
@@ -553,3 +561,58 @@ li.track:hover{ background:#444; }
     #player .nav{margin-bottom:20px;}
 }
 
+
+@media (max-height: 900px) {
+    #playlist .img-wrapper img {
+        max-height: 200px;
+        max-width: 200px;
+    }
+    #playlist .album-wrapper {
+        margin-top: 200px;
+    }
+}
+@media (max-height: 700px) {
+    #playlist .img-wrapper img {
+        max-height: 100px;
+        max-width: 100px;
+        position: static;
+        margin-bottom: 0;
+    }
+    #playlist .album-wrapper {
+        margin-top: 0;
+        position: relative;
+        top: -100px;
+    }
+    #playlist .album-wrapper .album-info {
+        left:100px;
+    }
+}
+@media (max-width: 600px) {
+    #library .rowtracks .thumbnail .caption {
+        left: 70px;
+        height: 70px;
+        color: rgb(241, 241, 241);
+        background: #3c3d41;
+    }
+    #library .rowtracks .thumbnail img {
+        max-width: 70px;
+        margin-left: 0;
+    }
+    #library .rowtracks .album-wrapper {
+        max-width: 100%;
+        width: 100%;
+    }
+    #library .rowtracks .thumbnail:hover {
+        -webkit-transform: none;
+    }
+    #library .rowtracks {
+        padding: 0;
+    }
+    #library .rowtracks ol {
+        margin-top: 70px;
+        padding-left: 0;
+    }
+    #library .rowtracks li.track {
+        margin-left: 0;
+    }
+}
