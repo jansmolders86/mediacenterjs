@@ -81,7 +81,9 @@ Known issues:
 * Seeking beyond buffer not working yet.
 
 Be sure to check the open issues before filing a new one.
-Also check out what is currently being developed or fixed on Trello: https://trello.com/b/czjyYsFi/mediacenterjs
+If you filing a new issue, be sure to metion your NodeJS version and the platform (eg Windows or Ubuntu, Debian etc).
+
+Also check out what is currently being developed and/or fixed on MCJS Trello page: https://trello.com/b/czjyYsFi/mediacenterjs
 
 Translations
 -------------
@@ -92,7 +94,7 @@ Feel free to contribute by translating.
 
 * [Terry MooreII](https://github.com/TerryMooreII) For the Javascript Jabber app and building the Plugin manager
 * [Stefan Hoffman](https://github.com/hoffi) for his hudge contribution to the backend and German translation 
-* [Jonathan Bailey](https://github.com/Jon889) for his code contributions/fixes
+* [Jonathan Bailey](https://github.com/Jon889) for his hudge code contributions and database abstraction layer
 * [Matthew Marino](https://github.com/Karnith) for his FFMPEG expertise
 
 ###Special thanks to these contributors:###
