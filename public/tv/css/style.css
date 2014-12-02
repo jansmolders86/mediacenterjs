@@ -179,6 +179,7 @@ h2.loading{top:80px;}
     height: 70px;
     padding: 10px;
     background: #fb8521;
+	max-width:360px;
     margin: 0;
     color: #fff;
 }

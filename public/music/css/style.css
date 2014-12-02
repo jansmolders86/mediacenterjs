@@ -263,6 +263,7 @@ body,
     height: 60px;
     padding-left: 10px;
     width:100%;
+	max-width:360px;
     line-height: 60px;
     background: #262728;
     margin: 0;
