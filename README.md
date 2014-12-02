@@ -81,7 +81,7 @@ Known issues:
 * Seeking beyond buffer not working yet.
 
 Be sure to check the open issues before filing a new one.
-If you filing a new issue, be sure to metion your NodeJS version and the platform (eg Windows or Ubuntu, Debian etc).
+If you filing a new issue, be sure to metion your NodeJS version and the platform (eg Windows or Ubuntu, Debian etc) you are running the MCJS server on.
 
 Also check out what is currently being developed and/or fixed on MCJS Trello page: https://trello.com/b/czjyYsFi/mediacenterjs
 
