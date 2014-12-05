@@ -117,6 +117,7 @@ Feel free to contribute by translating.
 * [Jérémie Parker](https://github.com/p-j) for his bugfixes
 * [Gary Katsevman](https://github.com/gkatsev) for his bugfixes
 * [Chinmaya Kumar Padhi](https://github.com/chinmayapadhi) for updating installation instructions OSX
+* [Valerij Primachenko](https://github.com/vprimachenko) for compiling the executable for Windows
 * P.J. Onori for his icons
 
 I'm building MCJS in my free time so if you want to encourage me to continue this enormous project, feel free to do so.
