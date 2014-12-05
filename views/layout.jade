@@ -17,13 +17,15 @@ html(lang="en",ng-app=angular_app)
         else
             title MediacenterJS - #{additional_title}
 
+        meta(name="theme-color" content="#484C52")
         meta(name="mobile-web-app-capable" content="yes")
         meta(name="apple-mobile-web-app-capable" content="yes")
         meta(name="apple-mobile-web-app-status-bar-style" content="black")
         meta(charset="utf-8")
         meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no")
         link(rel="apple-touch-icon", href="/core/css/img/logo.png")
-        
+        link(rel="icon", href="/core/css/img/logo.png", sizes="192x192")
+
         block additional_metadata
 
         // Core inclusion
