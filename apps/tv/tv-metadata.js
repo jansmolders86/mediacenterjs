@@ -34,7 +34,7 @@ var config = configuration_handler.initializeConfiguration();
 
 /* Constants */
 
-var SUPPORTED_FILETYPES = new RegExp("(avi|mkv|mpeg|mov|mp4|wmv)$","g");  //Pipe seperated
+var SUPPORTED_FILETYPES = new RegExp("(avi|mkv|mpeg|mov|mp4|m4v|wmv)$","g");  //Pipe seperated
 var nrScanned = 0;
 var totalFiles = 0;
 

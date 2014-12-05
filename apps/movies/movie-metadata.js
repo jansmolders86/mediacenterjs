@@ -31,7 +31,7 @@ var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3'),
 
 
 /* Constants */
-var SUPPORTED_FILETYPES = new RegExp("(avi|mkv|mpeg|mov|mp4|wmv)$","g");  //Pipe seperated
+var SUPPORTED_FILETYPES = new RegExp("(avi|mkv|mpeg|mov|mp4|m4v|wmv)$","g");  //Pipe seperated
 var start = new Date();
 var nrScanned = 0;
 var totalFiles = 0;

@@ -96,7 +96,7 @@ exports.playFile = function (req, res, platform, id){
     .success(function(movie) {
         file_utils.getLocalFile(config.moviepath, movie.originalName, function(err, file) {
             if (err){
-                logger.error("File not found",{ error: err});
+                logger.error("File not found", err);
                 res.status(404).send();
             }
             if (file) {
@@ -115,7 +115,7 @@ exports.playFile = function (req, res, platform, id){
                 playback_handler.startPlayback(res, platform, movie.id, movieUrl, movie.originalName, subtitleUrl, subtitleTitle, type);
 
             } else {
-                logger.error("File not found",{ title: movie.title});
+                logger.error("File not found", movie.title);
                 res.status(404).send();
             }
         });

@@ -132,10 +132,16 @@ function playMovie(movie, $http, scope){
     }
 
     $http.get('/movies/'+movie.id+'/play/'+platform).success(function(data) {
+
+        //Get url+port
+        var url = window.location.href
+        var arr = url.split("/");
+        var result = arr[0] + "//" + arr[2];
+
         var fileName                =   movie.originalName
             , outputFile            =   fileName.replace(/ /g, "-")
             , extentionlessFile     =   outputFile.replace(/\.[^\.]+$/, "")
-            , videoUrl              =   "/data/movies/"+extentionlessFile+".mp4"
+            , videoUrl              =   result+data.outputPath
             , subtitleUrl           =   "/data/movies/"+extentionlessFile+".srt"
             , playerID              =   'player'
             , homeURL               =   '/movies/'
