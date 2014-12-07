@@ -110,6 +110,7 @@ Feel free to contribute by translating.
 * [Luis Eduardo Brito](https://github.com/luiseduardobrito) and [Welkson Ramos](https://github.com/welksonramos) for their Portuguese translation
 * [Kasper Isager](https://github.com/kasperisager) for his Danish translation
 * [Robin Larsson](https://github.com/TankMasterRL) for his Swedish translation
+* [Skruf90](https://github.com/skruf90) for his Norwegian translation
 * [Jussi Vatjus](https://github.com/jupe) for his code support
 * [Matthew Szatmary](https://github.com/szatmary) for his FFMPEG expertise
 * [Richard Bernards](https://github.com/RichardBernards) for his architectural knowledge/support
