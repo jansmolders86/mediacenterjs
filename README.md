@@ -109,7 +109,8 @@ Feel free to contribute by translating.
 * [Ionică Bizău](https://github.com/IonicaBizau) for the [Youtube API NPM module](https://github.com/IonicaBizau/youtube-api)
 * [Luis Eduardo Brito](https://github.com/luiseduardobrito) and [Welkson Ramos](https://github.com/welksonramos) for their Portuguese translation
 * [Kasper Isager](https://github.com/kasperisager) for his Danish translation
-* [Robin Larsson](https://github.com/TankMasterRL) for his Swedish translation
+* [Robin Larsson](https://github.com/TankMasterRL) and 
+[Skruf90](https://github.com/skruf90)for their Swedish translation
 * [Skruf90](https://github.com/skruf90) for his Norwegian translation
 * [Jussi Vatjus](https://github.com/jupe) for his code support
 * [Matthew Szatmary](https://github.com/szatmary) for his FFMPEG expertise
