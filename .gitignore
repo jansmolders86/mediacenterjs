@@ -40,8 +40,10 @@ public/tv/data/*
 lib/database/mcjs.sqlite
 .idea
 .idea/*
-bin/
-/bin/
+bin/ffmpeg/
+bin/sqlite/
+/bin/ffmpeg/
+/bin/sqlite/
 
 #Configuration
 configuration/config.ini

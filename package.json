@@ -45,6 +45,9 @@
   "scripts": {
     "start": "node server.js"
   },
+  "bin": {
+    "mediacenterjs": "./bin/mediacenterjs"
+  },
   "readmeFilename": "README.md",
   "dependencies": {
     "adm-zip": "0.4.3",
