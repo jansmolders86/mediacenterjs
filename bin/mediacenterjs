@@ -110,7 +110,7 @@ server = {
             logger.info('Starting server' .green.bold);
             that.watchFile();
 
-            this.process = child_process.spawn(process.argv[0], ['index.js']);
+            this.process = child_process.spawn(process.argv[0], ['./index.js']);
 
             this.process.stdout.addListener('data', function (data) {
                 process.stdout.write(data);
