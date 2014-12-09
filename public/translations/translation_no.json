@@ -1,5 +1,6 @@
-"ok":"OK",
-    "cancel":"Avbryt",
+{ 
+  "ok":"OK",
+  "cancel":"Avbryt",
   "Remote": "Fjernkontroll",
   "loading": "Laster, vennligst vent...",
   "movies": "Filmer",
