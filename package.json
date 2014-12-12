@@ -46,7 +46,7 @@
     "start": "node server.js"
   },
   "bin": {
-    "mediacenterjs": "./bin/mediacenterjs"
+    "mediacenterjs": "./mcjs"
   },
   "readmeFilename": "README.md",
   "dependencies": {
