@@ -60,8 +60,8 @@ block body
                         label(for="theme") #{lingua.setting_theme}
                         select#theme(name="theme", ng-options="theme for theme in themes track by theme", ng-model="config.theme")
                     setting(icon="time")
-                        label(for="schedule") When should data be gathered autmatically?
-                        input#schedule(name="schedule", ng-model="config.schedule", type="text", placeholder="eg. 12:30")
+                        label(for="schedule") #{lingua.setting_data_gathering}
+                        input#schedule(name="schedule", ng-model="config.schedule", type="text", placeholder="#{lingua.settings_placeholder_time_data_gathering}")
                     setting(icon="exchange")
                         label(for="port") #{lingua.setting_port}
                         input#port(name="port", ng-model="config.port", type="text", placeholder="#{lingua.settings_placeholder_port}")
@@ -82,7 +82,7 @@ block body
 
                 .cache-management.col-sm-12.col-md-12.col-lg-3
                     .col-xs-12.col-sm-6.col-md-6.col-lg-12
-                        h2 Cache management
+                        h2 #{lingua.settings_cache_management}
                         .form-group.mcjs-rc-controllable
                             a.btn.mcjs-rc-clickable(ng-click="clearCache('Movie')")
                                 i.trash.icon
@@ -104,21 +104,21 @@ block body
                         .form-group.mcjs-rc-controllable
                             a.btn.scraperlink.mcjs-rc-clickable(ng-click="getScraperData('movies')")
                                 i.cloud.download.icon
-                                | Get movie metadata
+                                | #{lingua.settings_get_movie_metadata}
                         .form-group.mcjs-rc-controllable
                             a.btn.scraperlink.mcjs-rc-clickable(ng-click="getScraperData('music')")
                                 i.cloud.download.icon
-                                | Get music metadata
+                                | #{lingua.settings_get_music_metadata}
                         .form-group.mcjs-rc-controllable
                             a.btn.scraperlink.mcjs-rc-clickable(ng-click="getScraperData('tv')")
                                 i.cloud.download.icon
-                                | Get tv Metadata
+                                | #{lingua.settings_get_tv_metadata}
                         .form-group.mcjs-rc-controllable
                             a.btn.scraperlink.mcjs-rc-clickable(ng-click="getScraperData('all')")
                                 i.cloud.download.icon
-                                | Get all metadata
+                                |#{lingua.settings_get_all_metadata}
                 .access-table.col-sm-12.col-md-12.col-lg-9
-                    h2 Access management
+                    h2 #{lingua.settings_access_management}
                     .form-group.mcjs-rc-controllable
                         strong #{lingua.settings_device_connected}:
                         table.table
@@ -139,10 +139,10 @@ block body
 
 
                 #oauthContainer.col-sm-12.col-md-12.col-lg-3
-                    h2 OAUTH Login
+                    h2 #{lingua.settings_oauth_login}
                     span.info
                         span.quote &ldquo;
-                        span !{lingua.setting_oauth_explanation}
+                        span #{lingua.setting_oauth_explanation}
                         span.quote &rdquo;
                     .mcjs-rc-controllable.row
                         a.btn.btn-alternative#oauth(ng-click="oauth($event)") #{lingua.setting_register_oauth}
