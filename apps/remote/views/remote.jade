@@ -8,96 +8,95 @@ block declarations
 block additional_metadata
     meta(name="HandheldFriendly" content="true")
     meta(name="viewport" content="width=device-width initial-scale=1, maximum-scale=1, user-scalable=no")
-    
+
 block additional_css
     link(rel='stylesheet', href='/remote/css/style.css')
 
 block additional_scripts
-    script.
+    script(type='text/javascript').
         $(function(){
             $('.validate-form').validate();
-        
+
             window.scrollTo(0,0);
-            
+
             $('i.ellipsis.vertical.icon.settings').on('click touchstart', function(){
                 $('#settings').toggleClass('show');
             });
-            
+
             $('.keyboard.link').on('click', function(e){
                 $('#keyboard-wrapper').toggle();
                 $("#sendValueInput").focus();
             });
-            
+
             $('#main').on('click', function(){
                 if($('#settings').hasClass('show')) $('#settings').removeClass('show');
             });
-            
+
             $('.status').text('Remote not connected');
-            
+
             $(document).on('touchstart','.link' ,function(){
                 $(this).find('i').css("color","#fb8521");
             }).on('touchend', function(){
                 $(this).find('i').css("color","#333");
             }).on("touchcancel", function() {
                 $(this).find('i').css("color","#333");
-            }); 
+            });
 
-            
             $.ajax({
-                    url: '/configuration/', 
+                    url: '/configuration/',
                     type: 'get'
                 }).done(function(data){
                     var socket = io.connect();
-                    
+
                     socket.on('connect', function(data){
                         socket.emit('remote');
 
                         $('.status').text('Remote connected');
-                        
+
                         $(".left.link").on('click',function(){
-                            socket.emit('control',{action:"goLeft"}); 
+                            socket.emit('control',{action:"goLeft"});
                         });
 
                         $(".right.link").on('click',function(){
-                            socket.emit('control',{action:"goRight"}); 
+                            socket.emit('control',{action:"goRight"});
                         });
-                        
+
                         $(".enter.link").on('click',function(){
-                            socket.emit('control',{action:"enter"}); 
+                            socket.emit('control',{action:"enter"});
                         });
-                        
+
                         $(".dashboard.link").on('click',function(){
-                            socket.emit('control',{action:"dashboard"}); 
+                            socket.emit('control',{action:"dashboard"});
                         });
-                        
+
                         $(".back.link").on('click',function(){
-                            socket.emit('control',{action:"back"}); 
-                        });		
+                            socket.emit('control',{action:"back"});
+                        });
 
                         $(".pause.link").on('click',function(){
-                            socket.emit('control',{action:"pause"}); 
-                        });	
+                            socket.emit('control',{action:"pause"});
+                        });
 
                         $(".fullscreen.link").on('click',function(){
-                            socket.emit('control',{action:"fullscreen"}); 
-                        });		
+                            socket.emit('control',{action:"fullscreen"});
+                        });
 
                         $(".mute.link").on('click',function(){
-                            socket.emit('control',{action:"mute"}); 
-                        });		
-                        
+                            socket.emit('control',{action:"mute"});
+                        });
+
                         $(".shuffle.link").on('click',function(){
-                            socket.emit('control',{action:"shuffle"}); 
-                        });	
-                        
+                            socket.emit('control',{action:"shuffle"});
+                        });
+
                         $("#sendValueInput").keyup(function(){
                             var keyValue = $('#sendValueInput').val();
                             socket.emit('message',keyValue);
-                        });									
+                        });
 
                         socket.on("loading", function(data){
                             console.log(data);
-                        });  
+                        });
                     });
                 });
         });
@@ -125,11 +124,11 @@ block body
             if spotifyUser !== ""
                 .form-group
                     label Spotify Username
-                    input(name="spotifyUser",type="text", value=spotifyUser)	
+                    input(name="spotifyUser",type="text", value=spotifyUser)
             if spotifyPass !== ""
                 .form-group
                     label Spotify Password
-                    input(name="spotifyPass",type="password", value=spotifyPass)	
+                    input(name="spotifyPass",type="password", value=spotifyPass)
             .form-group
                 label(for="screensaver") Screensaver
                 select#screensaver(name="screensaver")
@@ -141,15 +140,15 @@ block body
                     - for theme in themes
                         option(selected=theme) #{theme}
             .form-group.mcjs-rc-controllable
-                label(for="schedule") When should data be gathered autmatically? 
+                label(for="schedule") When should data be gathered autmatically?
                 input#port.mcjs-rc-clickable(name="schedule",type="text",placeholder="eg. 12:30", value= schedule,data-rule-required="true", data-msg-required="This field is required.")
             .form-group
                 label #{lingua.setting_port}
                 input(name="port",type="text",placeholder="#{lingua.settings_placeholder_port}", value= port ,data-rule-required="true")
             .form-group
-                input.btn(type="submit",value="#{lingua.setting_submit}")	
-                input(name="screensaver",type="hidden",value= screensaver) 
-    
+                input.btn(type="submit",value="#{lingua.setting_submit}")
+                input(name="screensaver",type="hidden",value= screensaver)
+
     i.ellipsis.vertical.icon.settings
     #main
         #color-wrapper
@@ -157,7 +156,7 @@ block body
                 span remote
             .push
             #remote-wrapper
-                .inner-wrapper 
+                .inner-wrapper
                     .back.link.vert-top.horiz-middle
                         i.reply.mail.icon
                     .left.link.vert-middle.horiz-left
@@ -179,7 +178,7 @@ block body
                 i.keyboard.icon
             .shuffle.link
                 i.shuffle.icon
-        
+
         .status
         #keyboard-wrapper
             input#sendValueInput(name="sendValue",type="text",value="")

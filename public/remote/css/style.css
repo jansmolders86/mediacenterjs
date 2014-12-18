@@ -194,3 +194,10 @@
 
 #remote #keyboard-wrapper input[type=text]{ margin-bottom:10px; width: 100%;}
 #remote #keyboard-wrapper.show{	display:block; }
+
+
+i{
+    opacity:1;
+    color: #989898;
+
+}
