@@ -32,7 +32,7 @@ The server application runs on Windows, MAC and Linux systems, the client runs i
 
 # Developer manual
 
-[Explanation plugin framework](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-app-framework)
+[Explanation plugin framework](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-plugin-framework)
 
 [Start building an plugin using the plugin generator](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Start-building-an-app-using-the-app-generator)
 
