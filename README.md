@@ -17,7 +17,7 @@ What is MediacenterJS?
 
 MediacenterJS is a media center (like for instance XBMC) running completely from the comfort of your browser.
 The backend is based on Node.JS with ExpressJS and JADE templates. 
-The MVC structure allows developers to add an 'app' or 'plugin' to MCJS with ease. 
+The MVC structure allows developers to add a plugin to MCJS with ease. 
 The server application runs on Windows, MAC and Linux systems, the client runs in every modern browser (Chrome is preferable though).
 
 # User manual
@@ -32,9 +32,9 @@ The server application runs on Windows, MAC and Linux systems, the client runs i
 
 # Developer manual
 
-[Explanation app framework](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-app-framework)
+[Explanation plugin framework](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-app-framework)
 
-[Start building an app using the app generator](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Start-building-an-app-using-the-app-generator)
+[Start building an plugin using the plugin generator](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Start-building-an-app-using-the-app-generator)
 
 [Helper functions](https://github.com/jansmolders86/mediacenterjs/wiki/Developer-manual:-Helper-functions)
 
