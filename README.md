@@ -128,6 +128,8 @@ I'm building MCJS in my free time so if you want to encourage me to continue thi
 
 [![I Love Open Source](http://www.iloveopensource.io/images/logo-lightbg.png)](http://www.iloveopensource.io/projects/5495e0d1084e0d1f2a000599)
 
+[![GitPay]<(http://img.shields.io/gratipay/JanSmolders.svg)](https://gratipay.com/JanSmolders/)
+
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
 This application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
 
