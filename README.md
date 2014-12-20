@@ -126,6 +126,8 @@ I'm building MCJS in my free time so if you want to encourage me to continue thi
 
 [![Donate](http://www.mediacenterjs.com/global/images/github/donate-paypal.jpg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DHV3M4SST8C5L)
 
+[![I Love Open Source](http://www.iloveopensource.io/images/logo-lightbg.png)](http://www.iloveopensource.io/projects/5495e0d1084e0d1f2a000599)
+
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
 This application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
 
