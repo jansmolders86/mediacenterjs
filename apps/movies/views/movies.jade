@@ -6,7 +6,7 @@ block declarations
     - use_angular           = true;
     - angular_app           = "movieApp";
     - angular_body_ctrl     = "movieCtrl";
-    - angular_body_class    = "{playing:playing}";
+    - angular_body_class    = "{playing:mediaPlayer.playing}";
 
 block additional_css
     link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
@@ -29,39 +29,18 @@ block body
                     input#search.pull-right(ng-model="query.$", type="text", placeholder="Search", ng-show="movies")
                     #view-select(ng-hide="!movies")
                         label.view-select(for="showhidden", ng-init="query.hidden='false'", ng-click="query.hidden = query.hidden == 'false' ? '' : 'false'")
-                            | {{query.hidden ? "Show" : "Hide"}} Hidden
+                            | {{query.hidden ? "Show" : "Hide"}} Hidden                    
     .container-fluid
         .row
-            .col-xs-6.col-sm-4.col-md-2(ng-repeat="movie in movies | filter:query  | orderBy: 'title' ", ng-cloak)
-                    .thumbnail.movieposter.boxed.mcjs-rc-clickable(ng-class="{current: movies.focused.id == movie.id }", ng-mouseenter="movies.focused = movie",ng-hide="movie.title === ''", ng-mouseleave="movies.focused = null")
-                        i.circular.inverted.edit.icon(ng-click="open(movie)")
-                        .fixed-ratio-cover.fixed-ratio
-                            img.movieposter(ng-src="{{movie.posterURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'",ng-click="playMovie(movie)")
-                        .caption(ng-click="playMovie(movie)")
-                                img.backdrop(ng-src="{{movie.backgroundURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'", ng-click="playMovie(movie)")
-                                p
-                                    h1.movie-title{{movie.title}}
-                                    .overview
-                                        .summary {{movie.overview}}
-                        .specs
-                            p
-                                strong {{movie.genre}}
-                            p
-                                strong #{lingua.movies_Runtime}: {{movie.runtime}} min
-                        .cdNumber(ng-show="movie.cdNumber.length > 0")
-                            span {{movie.cdNumber}}
+            mcjs-movie(movie="movie", ng-repeat="movie in movies | filter:query  | orderBy: 'title' ", ng-cloak, 
+                ng-class="{current: movies.focused == movie}", ng-mouseenter="movies.focused = movie", ng-mouseleave="movies.focused = null")
 
         h2.loading(ng-show="!movies") #{lingua.loading}
-            .progress-pie-chart(data-percent="{{serverMessage}}", ng-class="{gt50: serverMessage > 50}", ng-show="serverMessage > 0")
-                .ppc-progress
-                    .ppc-progress-fill(style="-webkit-transform:rotate({{360*serverMessage/100}}deg); transform:rotate({{360*serverMessage/100}}deg);")
-                .ppc-percents
-                    .pcc-percents-wrapper
-                        span {{serverMessage}}%
+            mcjs-progress(percent="serverMessage")
             {{serverStatus}}
         h2.loading(ng-show="movies.result === 'none'") No data found, please check the movie filepath
 
-    video#player.video-js.vjs-default-skin(width="100%", height="100%", ng-show="playing", controls, preload="metadata")
+    video#player.video-js.vjs-default-skin(width="100%", height="100%", ng-show="mediaPlayer.playing", controls, preload="metadata")
 
     script(type="text/ng-template", id="editModal.html")
         .modal-header

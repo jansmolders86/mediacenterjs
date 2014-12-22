@@ -17,142 +17,147 @@
 */
 'use strict';
 
-var movieApp = angular.module('movieApp', ['ui.bootstrap']);
+var movieApp = angular.module('movieApp', ['ui.bootstrap', 'mcjsCore']);
 
-movieApp.controller('movieCtrl', function($scope, $http, $modal) {
+
+movieApp.service('mcjsMediaPlayer', function () {
+    return {
+        playing : false,
+        videoJSHandler :  videoJSHandler
+    };
+});
+
+movieApp.factory('Movie', function($http, mcjsMediaPlayer) {
+    var Movie = function(data) {
+        angular.extend(this, data);
+    };
+    Movie.prototype.save = function() {
+        return $http.post("/movies/edit", this);
+    };
+    Movie.prototype.update = function() {
+        var self = this;
+        var promise = $http.post("/movies/update", this);
+        promise.then(function (resp) {
+            angular.extend(self, resp.data);
+        });
+        return promise;
+    };
+    Movie.prototype.play = function () {
+        var platform = 'desktop';
+        if (navigator.userAgent.match(/Android/i)) {
+            platform = 'android';
+        } else if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+            platform = 'ios';
+        }
+        var movie = this;
+        mcjsMediaPlayer.playing = true;
+        $http.get('/movies/'+this.id+'/play/'+platform)
+        .success(function(data) {
+
+            //Get url+port
+            var url = window.location.href;
+            var arr = url.split("/");
+            var result = arr[0] + "//" + arr[2];
+
+            var fileName                =   movie.originalName
+                , outputFile            =   fileName.replace(/ /g, "-")
+                , extentionlessFile     =   outputFile.replace(/\.[^\.]+$/, "")
+                , videoUrl              =   result+data.outputPath
+                , subtitleUrl           =   "/data/movies/"+extentionlessFile+".srt"
+                , playerID              =   'player'
+                , homeURL               =   '/movies/'
+                , type                  =   'movies';
+            mcjsMediaPlayer.videoJSHandler(playerID, data, movie.id, videoUrl, subtitleUrl, movie.originalName,homeURL, 5000, type);
+        })
+        .error(function () {
+            mcjsMediaPlayer.playing = false;
+            sweetAlert({title : "",
+                text : "The movie " +  movie.title + " could not be found",
+                type : "error",
+                allowOutsideClick : true});
+        });
+    };
+    Movie.all = function() {
+        return $http.get('/movies/load')
+        .then(function(resp) {
+            return resp.data.map(function(item) {
+                return new Movie(item);
+            });
+        });
+    };
+    return Movie;
+});
+
+movieApp.directive('mcjsMovie', function() {
+	return { restrict: 'E',
+    scope: {
+    	movie: '='
+    },
+    controller : function ($scope, $modal) {
+		$scope.open = function (movie) {
+	        $modal.open({
+	            templateUrl: 'editModal.html',
+	            controller: 'ModalInstanceCtrl',
+	            size: 'md',
+	            windowClass: "flexible",
+	            resolve: {
+	                current: function () {
+	                    return movie;
+	                }
+	            }
+	        });
+	    }
+    },
+    templateUrl: 'views/movie'
+}
+});
+
+movieApp.controller('ModalInstanceCtrl', function ($scope, $modalInstance, current) {
+    $scope.original = angular.copy(current);
+    $scope.current = current;
+
+    $scope.editItem = function(){
+        current.save()
+        .then(function() {
+            $modalInstance.close();
+        }, function() {
+            $scope.errorMessage = "Couldn't find metadata for movie called " + current.title + " on TMDB";
+        });
+    };
+
+    $modalInstance.result.catch(function() {
+        angular.extend(current, $scope.original);
+    });
+
+    $scope.updateItem = function(){
+        current.update()
+        .then(function() {
+            $modalInstance.close();
+        }, function () {
+            $scope.errorMessage = "Couldn't find metadata for movie called " + current.title + " on TMDB";
+        });
+    };
+});
+movieApp.controller('movieCtrl', function($scope, $http, $modal, Movie, angSocket, mcjsMediaPlayer) {
     $scope.focused = null;
     $scope.serverMessage = 0;
     $scope.serverStatus= '';
+    $scope.mediaPlayer = mcjsMediaPlayer;
 
-    $http.get('/movies/load').success(function(data) {
-        $scope.movies = data;
+    Movie.all()
+    .then(function (movies) {
+        $scope.movies = movies;
     });
 
-    $scope.playMovie = function(movie){
-        $scope.playing = true;
-        playMovie(movie, $http, $scope);
-    }
+    $scope.remote       = remote(angSocket, $scope);
+    $scope.keyevents    = keyevents(angSocket, $scope);
 
-    $scope.open = function (movie) {
-        var modalInstance = $modal.open({
-            templateUrl: 'editModal.html',
-            controller: ModalInstanceCtrl,
-            size: 'md',
-            windowClass: "flexible",
-            resolve: {
-                current: function () {
-                    return movie;
-                }
-            }
-        });
-    }
 
-    var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
-        $scope.original = current;
-        $scope.current = angular.copy(current);
-
-        $scope.editItem = function(){
-            $http({
-                method: "post",
-                data: $scope.current,
-                url: "/movies/edit"
-            }).success(function(data, status, headers, config) {
-                angular.copy($scope.current, $scope.original);
-                $modalInstance.dismiss();
-            }).error(function() {
-                $scope.errorMessage = "Unable to save changes. Check server is running and try again.";
-            });
-        };
-        $scope.updateItem = function(){
-            var title = $scope.current.title;
-            $http({
-                method: "post",
-                data: $scope.current,
-                url: "/movies/update"
-            }).success(function(data, status, headers, config) {
-                angular.copy(data, $scope.original);
-                $modalInstance.dismiss();
-            }).error(function(data, status, headers, config) {
-                $scope.errorMessage = "Couldn't find metadata for movie called " + title + " on TMDB";
-            });
-        };
-    };
-
-    var setupSocket = {
-        async: function() {
-            var promise = $http.get('/configuration/').then(function (response) {
-                var configData  = response.data;
-                var socket      = io.connect();
-                socket.on('connect', function(data){
-                    socket.emit('screen');
-                });
-                return {
-                    on: function (eventName, callback) {
-                        socket.on(eventName, function () {
-                            var args = arguments;
-                            $scope.$apply(function () {
-                                callback.apply(socket, args);
-                            });
-                        });
-
-                    },
-                    emit: function (eventName, data, callback) {
-                        socket.emit(eventName, data, function () {
-                            var args = arguments;
-                            $scope.$apply(function () {
-                                if (callback) {
-                                    callback.apply(socket, args);
-                                }
-                            });
-                        });
-                    }
-                };
-                return data;
-            });
-            return promise;
-        }
-    };
-
-    setupSocket.async().then(function(data) {
-        if (typeof data.on !== "undefined") {
-            $scope.remote       = remote(data, $scope);
-            $scope.keyevents    = keyevents(data, $scope);
-        }
+    angSocket.on('progress', function (data) {
+        $scope.serverMessage = data.msg;
     });
 
+    angSocket.on('serverStatus', function (data) {
+        $scope.serverStatus = data.msg;
+    });
 });
-
-function playMovie(movie, $http, scope){
-
-    var platform = 'desktop';
-    if (navigator.userAgent.match(/Android/i)) {
-        platform = 'android';
-    } else if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
-        platform = 'ios';
-    }
-
-    $http.get('/movies/'+movie.id+'/play/'+platform).success(function(data) {
-
-        //Get url+port
-        var url = window.location.href
-        var arr = url.split("/");
-        var result = arr[0] + "//" + arr[2];
-
-        var fileName                =   movie.originalName
-            , outputFile            =   fileName.replace(/ /g, "-")
-            , extentionlessFile     =   outputFile.replace(/\.[^\.]+$/, "")
-            , videoUrl              =   result+data.outputPath
-            , subtitleUrl           =   "/data/movies/"+extentionlessFile+".srt"
-            , playerID              =   'player'
-            , homeURL               =   '/movies/'
-            , type                  =   'movies';
-        videoJSHandler(playerID, data, movie.id, videoUrl, subtitleUrl, movie.originalName,homeURL, 5000, type);
-    })
-    .error(function (msg, code) {
-        sweetAlert({title : "",
-                    text : "The movie " +  movie.title + " could not be found",
-                    type : "error",
-                    allowOutsideClick : true});
-        scope.playing = false;
-    });
-}

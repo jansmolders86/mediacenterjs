@@ -48,14 +48,6 @@ function remote(socket, $scope){
         $('#search').val(data);
         $scope.query = data;
     });
-
-    socket.on('progress', function (data) {
-        $scope.serverMessage = data.msg;
-    });
-
-    socket.on('serverStatus', function (data) {
-        $scope.serverStatus = data.msg;
-    });
 }
 
 
