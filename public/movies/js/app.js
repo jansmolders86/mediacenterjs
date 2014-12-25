@@ -19,8 +19,33 @@
 
 var movieApp = angular.module('movieApp', ['ui.bootstrap', 'mcjsCore']);
 
+movieApp.config(function($logProvider){
+    $logProvider.debugEnabled(true);
+});
 
-movieApp.service('mcjsMediaPlayer', function () {
+movieApp.service('mcjsMediaPlayer', function (angSocket) {
+    angSocket.on("controlling", function (data) {
+        var player = videojs("player");
+        switch (data.action) {
+            case "pause" :
+                if (player.paused() === false) {
+                    player.pause();
+                } else {
+                    player.play();
+                }
+                break;
+            case "fullscreen" :
+                if (player.isFullScreen) {
+                    player.requestFullScreen();
+                } else {
+                    player.exitFullScreen();
+                }
+                break;
+            case "mute" :
+                player.muted(!player.muted());
+                break;
+        }
+    });
     return {
         playing : false,
         videoJSHandler :  videoJSHandler
@@ -138,6 +163,9 @@ movieApp.controller('ModalInstanceCtrl', function ($scope, $modalInstance, curre
         });
     };
 });
+
+
+
 movieApp.controller('movieCtrl', function($scope, $http, $modal, Movie, angSocket, mcjsMediaPlayer) {
     $scope.focused = null;
     $scope.serverMessage = 0;
@@ -150,7 +178,7 @@ movieApp.controller('movieCtrl', function($scope, $http, $modal, Movie, angSocke
     });
 
     $scope.remote       = remote(angSocket, $scope);
-    $scope.keyevents    = keyevents(angSocket, $scope);
+    //$scope.keyevents    = keyevents(angSocket, $scope);
 
 
     angSocket.on('progress', function (data) {

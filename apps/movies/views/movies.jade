@@ -9,7 +9,7 @@ block declarations
     - angular_body_class    = "{playing:mediaPlayer.playing}";
 
 block additional_css
-    link(href="http://vjs.zencdn.net/4.3/video-js.css", rel="stylesheet")
+    link(href="/core/css/video-js.css", rel="stylesheet")
     link(rel='stylesheet', href='/movies/css/style.css')
 
 block additional_scripts
@@ -31,9 +31,8 @@ block body
                         label.view-select(for="showhidden", ng-init="query.hidden='false'", ng-click="query.hidden = query.hidden == 'false' ? '' : 'false'")
                             | {{query.hidden ? "Show" : "Hide"}} Hidden                    
     .container-fluid
-        .row
-            mcjs-movie(movie="movie", ng-repeat="movie in movies | filter:query  | orderBy: 'title' ", ng-cloak, 
-                ng-class="{current: movies.focused == movie}", ng-mouseenter="movies.focused = movie", ng-mouseleave="movies.focused = null")
+        .row(mcjs-library)
+            mcjs-movie(movie="movie", ng-repeat="movie in movies | filter:query  | orderBy: 'title' ", ng-cloak)
 
         h2.loading(ng-show="!movies") #{lingua.loading}
             mcjs-progress(percent="serverMessage")

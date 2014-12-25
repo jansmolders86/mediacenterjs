@@ -18,31 +18,31 @@
 function remote(socket, $scope){
 
 
-    socket.on('controlling', function(data){
-        switch(data.action) {
-            case "goLeft" :
-                goLeft(socket, $scope);
-                break;
-            case "goRight" :
-                goRight(socket,$scope);
-                break;
-            case "enter" :
-                pushEnter(socket,$scope);
-                break;
-            case "pause" :
-                pushPause(socket,$scope);
-                break;
-            case "back" :
-                pushBack(socket,$scope);
-                break;
-            case "mute" :
-                pushMute(socket,$scope);
-                break;
-            case "dashboard" :
-                pushDashboard(socket,$scope);
-                break;
-        }
-    });
+    //socket.on('controlling', function(data){
+    //    switch(data.action) {
+    //        case "goLeft" :
+    //            goLeft(socket, $scope);
+    //            break;
+    //        case "goRight" :
+    //            goRight(socket,$scope);
+    //            break;
+    //        case "enter" :
+    //            pushEnter(socket,$scope);
+    //            break;
+    //        case "pause" :
+    //            pushPause(socket,$scope);
+    //            break;
+    //        case "back" :
+    //            pushBack(socket,$scope);
+    //            break;
+    //        case "mute" :
+    //            pushMute(socket,$scope);
+    //            break;
+    //        case "dashboard" :
+    //            pushDashboard(socket,$scope);
+    //            break;
+    //    }
+    //});
 
     socket.on('sending', function(data){
         $('#search').val(data);
