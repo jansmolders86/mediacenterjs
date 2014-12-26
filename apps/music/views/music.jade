@@ -66,8 +66,8 @@ block body
 
     .container-fluid(ng-class="{bottom: player.playlist.length > 0}")
             section#library(mcjs-library, ng-class="{side: player.playlist.length > 0  && playlist.Visible}")
-                div.pull-left.row-tracks(mcjs-library-item, ng-repeat="album in albums | filter:query", ng-class="{rowtracks: view == 'tracks'}", ng-style="itemStyle")
-                    .album-wrapper(ng-mouseover="changeSelected(album)")
+                div.pull-left.row-tracks(ng-repeat="album in albums | filter:query", ng-class="{rowtracks: view == 'tracks'}", ng-style="itemStyle")
+                    .album-wrapper(mcjs-library-item, ng-mouseover="changeSelected(album)")
                         .thumbnail(ng-class="{current: focused == $index }", ng-click="player.playlist.add(album); playlist.Visible = true")
                             i.circular.inverted.edit.icon(ng-click="open(album); $event.stopPropagation();")
                             img(ng-src="{{album.posterURL}}")

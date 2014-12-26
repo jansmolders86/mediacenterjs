@@ -53,11 +53,6 @@ angular.module('mcjsCore', [])
             var self = this;
             this.selectedIndex = -1;
 
-            this.getColumns = function () {
-                var itemWidth = $element[0].querySelector("[mcjs-library-item]").clientWidth;
-                return Math.round($element.width() / itemWidth);
-            };
-
             this.select = function (item) {
                 if (items[self.selectedIndex]) {
                     items[self.selectedIndex].setSelected(false);
@@ -82,19 +77,108 @@ angular.module('mcjsCore', [])
             this.addItem = function (item) {
                 items.push(item);
             };
+            function elementIsInRange(el, min, max, vertical) {
+                var offset = el.offset();
+                if (vertical) {
+                    var elright = offset.left + el.width();
+                    return (min >= offset.left  && max <= elright) || (min <= offset.left  && max >= elright);
+                } else {
+                    var elbottom = offset.top + el.height();
+                    return (min >= offset.top  && max <= elbottom) || (min <= offset.top  && max >= elbottom);
+                }
+            }
+            function elementIsAboveElement(el1, el2) {
+                return el1.offset().top < el2.offset().top;
+            }
+            function elementIsLeftOfElement(el1, el2) {
+                return el1.offset().left < el2.offset().left;
+            }
+            function sortFn(a, b){
+                return a.sort == b.sort ? 0 : +(a.sort > b.sort) || -1;
+            }
+            function invSortFn(a, b){
+                return a.sort == b.sort ? 0 : +(a.sort < b.sort) || -1;
+            }
+            this.goDirection = function(mapFn, sortFn) {
+                var el = items.map(mapFn).sort(sortFn)[0];
+                if (el) {
+                    self.select(el.value);
+                    return true;
+                }
+                return false;
+            };
+            this.goLeft = function () {
+                var el2 = self.selectedItem();
+                if (!el2) {
+                    self.select(self.items[0]);
+                    return;
+                }
+                var min = el2.offset().top;
+                var max = min + el2.height();
+                 if (!self.goDirection(function (el) {
+                    if (elementIsInRange(el, min, max, false) && elementIsLeftOfElement(el, el2)) {
+                        return {value: el, sort: el.offset().left + el.width()};
+                    }
+                }, invSortFn)) self.selectOffset(-1);
+            };
+            this.goRight = function () {
+                var el2 = self.selectedItem();
+                if (!el2) {
+                    self.select(self.items[0]);
+                    return;
+                }
+                var min = el2.offset().top;
+                var max = min + el2.height();
+                if (!this.goDirection(function (el) {
+                    if (elementIsInRange(el, min, max, false) && elementIsLeftOfElement(el2, el)) {
+                        return {value: el, sort: el.offset().left};
+                    }
+                }, sortFn)) self.selectOffset(1);
+            };
+            this.goDown = function () {
+                var el2 = self.selectedItem();
+                if (!el2) {
+                    self.select(self.items[0]);
+                    return;
+                }
+                var min = el2.offset().left;
+                var max = min + el2.width();
+                this.goDirection(function (el) {
+                    var el2 = self.selectedItem();
+                    if (elementIsInRange(el, min, max, true) && elementIsAboveElement(el2, el)) {
+                        return {value: el, sort: el.offset().top};
+                    }
+                }, sortFn);
+            };
+            this.goUp = function () {
+                var el2 = self.selectedItem();
+                if (!el2) {
+                    self.select(self.items[0]);
+                    return;
+                }
+                var min = el2.offset().left;
+                var max = min + el2.width();
+                this.goDirection(function (el) {
+                    var el2 = self.selectedItem();
+                    if (elementIsInRange(el, min, max, true) && elementIsAboveElement(el, el2)) {
+                        return {value: el, sort: el.offset().top + el.height()};
+                    }
+                }, invSortFn);
+            };
+
             angSocket.on('controlling', function(data){
                 switch(data.action) {
                     case "goLeft" :
-                        self.selectOffset(-1);
+                        self.goLeft();
                         break;
                     case "goRight" :
-                        self.selectOffset(1);
+                        self.goRight();
                         break;
                     case "goUp" :
-                        self.selectOffset(self.getColumns());
+                        self.goUp();
                         break;
                     case "goDown" :
-                        self.selectOffset(self.getColumns());
+                        self.goDown();
                         break;
                 }
             });
@@ -103,16 +187,16 @@ angular.module('mcjsCore', [])
             document.onkeyup = function (e) {
                 switch (e.keyCode) {
                     case 39 :   //next
-                        controller.selectOffset(1);
+                        controller.goRight();
                         break;
                     case 37 :   //prev
-                        controller.selectOffset(-1);
+                        controller.goLeft();
                         break;
                     case 40 : //down
-                        controller.selectOffset(controller.getColumns());
+                        controller.goDown();
                         break;
                     case 38 : //up
-                        controller.selectOffset(-controller.getColumns());
+                        controller.goUp();
                         break;
                 }
             };
@@ -125,17 +209,17 @@ angular.module('mcjsCore', [])
         restrict: 'A',
         link: function (scope, element, attrs, libraryCtrl) {
 
-            scope.setSelected = function (newVal) {
+            element.setSelected = function (newVal) {
                 attrs.$set('selected', newVal);
                 element.scrollintoview();
             };
-            libraryCtrl.addItem(scope);
+            libraryCtrl.addItem(element);
 
             element[0].onmouseenter = function (e) {
-                libraryCtrl.select(scope);
+                libraryCtrl.select(element);
             };
             element[0].onmouseleave = function(e) {
-                if (libraryCtrl.selectedItem() == scope) {
+                if (libraryCtrl.selectedItem() == element) {
                     libraryCtrl.select(null);
                 }
             };
