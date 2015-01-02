@@ -40,7 +40,8 @@ var express = require('express')
     , server = http.createServer(app)
     , io = require('./lib/utils/setup-socket')(server)
     , methodOverride = require('method-override')
-    , logger = require('./lib/utils/logging');
+    , logger = require('./lib/utils/logging')
+    , apps = require("./lib/utils/apps");
 
 
 var config = configuration_handler.initializeConfiguration();
@@ -97,6 +98,10 @@ app.use(function(req, res) {
     res.status(404).render('404',{ selectedTheme: config.theme});
 });
 
+app.get("/apps", function(req, res) {
+    res.json(apps.getApps());
+});
+
 app.get("/", function(req, res, next) {
 
     DeviceInfo.storeDeviceInfo(req);
@@ -109,97 +114,13 @@ app.get("/", function(req, res, next) {
 
     } else {
 
-        var apps = [];
-
-        //Search core app folder for apps and check if tile icon is present
-        fs.readdirSync(__dirname + '/apps').forEach(function(name){
-
-            // Search for a SVG or PNG tile
-            var tileImg = '';
-            if (fs.existsSync(__dirname + '/public/'+name+'/tile.svg')){
-                tileImg = '/'+name+'/tile.svg';
-            } else if(fs.existsSync(__dirname + '/public/'+name+'/tile.png')){
-                tileImg = '/'+name+'/tile.png';
-            }
-
-            var obj = {
-                appLink     : name,
-                appName     : name,
-                tileLink    : tileImg,
-                tileCSS     : ''
-            }
-
-            if(name === 'movies' && config.moviepath === ""){
-                return;
-            } else if(name === 'music' && config.musicpath === "" ){
-                return;
-            } else if(name === 'tv' && config.tvpath === "" ){
-                return;
-            } else if (tileImg === ''){
-                return;
-            } else {
-                apps.push(obj);
-            }
-
-        });
-
-        //search node_modules for plugins
-        var nodeModules = __dirname + '/node_modules';
-        var pluginPrefix = config.pluginPrefix;
-
-        fs.readdirSync(nodeModules).forEach(function(name){
-
-            //Check if the folder in the node_modules starts with the prefix
-            if(name.substr(0, pluginPrefix.length) !== pluginPrefix){
-                return;
-            }
-
-            var pluginPath = nodeModules + '/' + name;
-
-            // Search for a SVG or PNG tile
-            var tileImg = '';
-            if (fs.existsSync(pluginPath+'/public/tile.svg')){
-                tileImg = '/'+name+'/public/tile.svg';
-            } else if(fs.existsSync(pluginPath+'/public/tile.png')){
-                tileImg = '/'+name+'/public/tile.png';
-            }
-
-            // Search for custom tile css
-            var tileCSS = '';
-            if(fs.existsSync( pluginPath + '/public/tile.css')){
-                tileCSS = '/'+name+'/public/tile.css';
-            }
-
-            var appName = name.replace('mediacenterjs-','');
-
-            var obj = {
-                appLink     : name,
-                appName     : appName,
-                tileLink    : tileImg,
-                tileCSS     : tileCSS
-            }
-
-             if (tileImg === ''){
-                 return;
-             } else{
-                apps.push(obj);
-             }
-
-        });
-
-        var now = new Date();
-        var time = dateFormat(now, "HH:MM");
-        var date = dateFormat(now, "dd-mm-yyyy");
         req.setMaxListeners(0);
 
         DeviceInfo.isDeviceAllowed(req, function(allowed){
             res.render('index', {
                 title: 'Homepage',
                 selectedTheme: config.theme,
-                time: time,
-                date: date,
-                allowed: allowed,
-                apps: apps
+                allowed: allowed
             });
         });
     }

@@ -422,13 +422,6 @@ body > #screensaver {
     float: left;
     width: 100%;
 }
-.tile.focused {
-    border: 0 !important;
-}
-.tile.focused img,
-.tile:hover > a > img {
-    opacity: 0.5;
-}
 #tiles {
     width: 100%;
     height: 100%;
@@ -439,9 +432,6 @@ body > #screensaver {
 .tile img {
     width: 100%;
     height: 100%;
-}
-.tile:hover {
-    cursor: pointer;
 }
 .upgrade-right {
     float: right;

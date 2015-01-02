@@ -50,29 +50,28 @@ angular.module('mcjsCore', [])
         scope: {},
         controller: function($scope, $element, angSocket) {
             var items = this.items = [];
-            var self = this;
             this.selectedIndex = -1;
 
             this.select = function (item) {
-                if (items[self.selectedIndex]) {
-                    items[self.selectedIndex].setSelected(false);
+                if (items[this.selectedIndex]) {
+                    items[this.selectedIndex].setSelected(false);
                 }
                 if (!item) {
-                    self.selectedIndex = -1;
+                    this.selectedIndex = -1;
                     return;
                 }
                 item.setSelected(true);
-                self.selectedIndex = items.indexOf(item);
+                this.selectedIndex = items.indexOf(item);
             };
             this.selectOffset = function (indexOffset) {
-                var newIndex = self.selectedIndex + indexOffset;
-                var item = self.items[newIndex];
+                var newIndex = this.selectedIndex + indexOffset;
+                var item = this.items[newIndex];
                 if (item) {
-                    self.select(item);
+                    this.select(item);
                 }
             };
             this.selectedItem = function () {
-                return items[self.selectedIndex];
+                return items[this.selectedIndex];
             };
             this.addItem = function (item) {
                 items.push(item);
@@ -81,10 +80,16 @@ angular.module('mcjsCore', [])
                 var offset = el.offset();
                 if (vertical) {
                     var elright = offset.left + el.width();
-                    return (min >= offset.left  && max <= elright) || (min <= offset.left  && max >= elright);
+                    if ((min >= offset.left  && max <= elright) || (min <= offset.left  && max >= elright)) {
+                        return 3;
+                    }
+                    return (offset.left >= min && offset.left <= max) + (elright >= min && elright <= max);
                 } else {
                     var elbottom = offset.top + el.height();
-                    return (min >= offset.top  && max <= elbottom) || (min <= offset.top  && max >= elbottom);
+                    if ((min >= offset.top  && max <= elbottom) || (min <= offset.top  && max >= elbottom)) {
+                        return 3;
+                    }
+                    return (offset.top >=  min && offset.top <= max) + (elbottom >= min && elbottom <= max);
                 }
             }
             function elementIsAboveElement(el1, el2) {
@@ -93,92 +98,98 @@ angular.module('mcjsCore', [])
             function elementIsLeftOfElement(el1, el2) {
                 return el1.offset().left < el2.offset().left;
             }
-            function sortFn(a, b){
-                return a.sort == b.sort ? 0 : +(a.sort > b.sort) || -1;
+            function sortFn(a, b) {
+                var m = b.sort[0] - a.sort[0];
+                if (m != 0) {
+                    return m;
+                }
+                return b.sort[1] - a.sort[1];
             }
-            function invSortFn(a, b){
-                return a.sort == b.sort ? 0 : +(a.sort < b.sort) || -1;
+            function invSortFn(a, b) {
+                var m = b.sort[0] - a.sort[0];
+                if (m != 0) {
+                    return m;
+                }
+                return a.sort[1] - b.sort[1];
             }
             this.goDirection = function(mapFn, sortFn) {
                 var el = items.map(mapFn).sort(sortFn)[0];
                 if (el) {
-                    self.select(el.value);
+                    this.select(el.value);
                     return true;
                 }
                 return false;
             };
             this.goLeft = function () {
-                var el2 = self.selectedItem();
+                var el2 = this.selectedItem();
                 if (!el2) {
-                    self.select(self.items[0]);
+                    this.select(this.items[0]);
                     return;
                 }
-                var min = el2.offset().top;
-                var max = min + el2.height();
-                 if (!self.goDirection(function (el) {
-                    if (elementIsInRange(el, min, max, false) && elementIsLeftOfElement(el, el2)) {
-                        return {value: el, sort: el.offset().left + el.width()};
+                var rect = el2[0].getBoundingClientRect();
+                 if (!this.goDirection(function (el) {
+                     var match = elementIsInRange(el, rect.top, rect.bottom, false);
+                    if (match > 0 && elementIsLeftOfElement(el, el2)) {
+                        return {value: el, sort: [match, el.offset().left + el.width()]};
                     }
-                }, invSortFn)) self.selectOffset(-1);
+                }, sortFn)) this.selectOffset(-1);
             };
             this.goRight = function () {
-                var el2 = self.selectedItem();
+                var el2 = this.selectedItem();
                 if (!el2) {
-                    self.select(self.items[0]);
+                    this.select(this.items[0]);
                     return;
                 }
-                var min = el2.offset().top;
-                var max = min + el2.height();
+                var rect = el2[0].getBoundingClientRect();
                 if (!this.goDirection(function (el) {
-                    if (elementIsInRange(el, min, max, false) && elementIsLeftOfElement(el2, el)) {
-                        return {value: el, sort: el.offset().left};
+                    var match = elementIsInRange(el, rect.top, rect.bottom, false)
+                    if (match > 0 && elementIsLeftOfElement(el2, el)) {
+                        return {value: el, sort: [match, el.offset().left]};
                     }
-                }, sortFn)) self.selectOffset(1);
+                }, invSortFn)) this.selectOffset(1);
             };
             this.goDown = function () {
-                var el2 = self.selectedItem();
+                var el2 = this.selectedItem();
                 if (!el2) {
-                    self.select(self.items[0]);
+                    this.select(this.items[0]);
                     return;
                 }
-                var min = el2.offset().left;
-                var max = min + el2.width();
+                var rect = el2[0].getBoundingClientRect();
                 this.goDirection(function (el) {
-                    var el2 = self.selectedItem();
-                    if (elementIsInRange(el, min, max, true) && elementIsAboveElement(el2, el)) {
-                        return {value: el, sort: el.offset().top};
-                    }
-                }, sortFn);
-            };
-            this.goUp = function () {
-                var el2 = self.selectedItem();
-                if (!el2) {
-                    self.select(self.items[0]);
-                    return;
-                }
-                var min = el2.offset().left;
-                var max = min + el2.width();
-                this.goDirection(function (el) {
-                    var el2 = self.selectedItem();
-                    if (elementIsInRange(el, min, max, true) && elementIsAboveElement(el, el2)) {
-                        return {value: el, sort: el.offset().top + el.height()};
+                    var match = elementIsInRange(el, rect.left, rect.right, true);
+                    if (match > 0 && elementIsAboveElement(el2, el)) {
+                        return {value: el, sort: [match, el.offset().top]};
                     }
                 }, invSortFn);
+            };
+            this.goUp = function () {
+                var el2 = this.selectedItem();
+                if (!el2) {
+                    this.select(this.items[0]);
+                    return;
+                }
+                var rect = el2[0].getBoundingClientRect();
+                this.goDirection(function (el) {
+                    var match = elementIsInRange(el, rect.left, rect.right, true);
+                    if (match > 0 && elementIsAboveElement(el, el2)) {
+                        return {value: el, sort: [match, el.offset().top + el.height()]};
+                    }
+                }, sortFn);
             };
 
             angSocket.on('controlling', function(data){
                 switch(data.action) {
                     case "goLeft" :
-                        self.goLeft();
+                        this.goLeft();
                         break;
                     case "goRight" :
-                        self.goRight();
+                        this.goRight();
                         break;
                     case "goUp" :
-                        self.goUp();
+                        this.goUp();
                         break;
                     case "goDown" :
-                        self.goDown();
+                        this.goDown();
                         break;
                 }
             });
@@ -211,7 +222,9 @@ angular.module('mcjsCore', [])
 
             element.setSelected = function (newVal) {
                 attrs.$set('selected', newVal);
-                element.scrollintoview();
+                if (newVal) {
+                    element.scrollintoview();
+                }
             };
             libraryCtrl.addItem(element);
 

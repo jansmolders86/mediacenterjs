@@ -115,7 +115,8 @@ p a:hover {
     float: left;
     margin: 5px;
     list-style: none;
-    display: none;
+    /*opacity: 0;*/
+    display: list-item;
     padding: 0;
     position: relative;
 }
@@ -148,12 +149,8 @@ p a:hover {
     float: left;
     width: 100%;
 }
-.tile.focused {
-    border: 0 !important;
-}
-.tile.focused img,
-.tile:hover > a > img {
-    opacity: 0.5;
+.tile[selected] {
+    -webkit-transform: scale(1.02);
 }
 #tiles {
     width: 100%;
@@ -468,6 +465,16 @@ label,
 .flipin {
     -webkit-animation: flip-in 1s;
     animation: flip-in 1s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+.flipin:nth-of-type(2n+1) {
+    -webkit-animation-delay: 0.1s;
+    animation-delay: 0.1s;
+}
+.flipin:nth-of-type(2n) {
+    -webkit-animation-delay: 0.4s;
+    animation-delay: 0.4s;
 }
 @-webkit-keyframes flip-in {
     0% {

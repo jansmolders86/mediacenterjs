@@ -3,61 +3,37 @@ extends layout
 block declarations
     - body_class = 'homepage';
     - include_remote = true;
-block additional_css
-    each item in apps
-        if(item.tileCSS !== '')
-            link(rel='stylesheet', href='#{item.tileCSS}')
+    - use_angular           = true;
+    - angular_app           = "dashboardApp";
+    - angular_body_ctrl     = "dashboardCtrl";
+
 block additional_scripts
-    script.
-        $(function() {
-
-            $.ajax({
-                url: '/checkForUpdate',
-                type: 'get',
-                dataType: 'json'
-            }).done(function(data){
-                if(data){
-                    $('.upgrade-right> .btn').text(data);
-                    $('.upgrade-right').show();
-                }
-            });
-
-            $('.upgrade-right > .btn').on('click',function(e){
-                e.preventDefault();
-                $('.row').prepend('<div class="message">Downloading and installing update. <br/> Please wait for the installation to finish...</div>');
-                $('#tiles').hide();
-                $('.upgrade-right').hide();
-                $.ajax({
-                    url: '/doUpdate',
-                    type: 'get'
-                }).done(function(data){ if(data === "restarting") setTimeout(function(){ window.location="/"},20000); });
-            });
-
-            $('body').mcjs();
-
-
-        });
+    script(src="/core/js/indexApp.js")
 
 block body
-        header
-            .container
-                .row
-                    .col-md-8.col-xs-12
-                        img.logo(src="/core/css/img/logo.png")
-                        h1 MediacenterJS
-                        -if(allowed === 'no')
-                            h4 Parental lock enabled
-                        div.upgrade-right.boxed(style="display:none;")
-                            a.btn.upgrade
-                    .col-md-4.hidden-xs
-                        #dateandtime
-                            .time=time
-                            .date=date
-        .container-fluid
+    header
+        .container
             .row
-                ul#tiles
-                    each item in apps
-                        li.tile.mcjs-rc-controllable.col-md-2.col-xs-1(class="#{ item.appName }")
-                            a(href="/" + item.appLink + "/").mcjs-rc-clickable
-                                img(src="#{item.tileLink}")
-                                span #{item.appName}
+                .col-md-8.col-xs-12
+                    img.logo(src="/core/css/img/logo.png")
+                    h1 MediacenterJS
+                    -if(allowed === 'no')
+                        h4 Parental lock enabled
+                    div.upgrade-right.boxed(ng-show="newVersion && !updating")
+                        a.btn.upgrade(ng-click="doUpdate()") New version {{newVersion}} Available
+                .col-md-4.hidden-xs
+                    #dateandtime
+                        date-time.time(format="H:mm:ss")
+                        br
+                        date-time.date(format="dd-MM-yyyy")
+    .container-fluid
+        .row
+            .message(ng-show="updating") Downloading and installing update
+                br
+                Please wait for the installation to finish...
+            ul#tiles(mcjs-library, ng-hide="updating")
+                li.tile.mcjs-rc-controllable.col-md-2.col-xs-1(mcjs-library-item, class="{{item.appName}}", ng-repeat="item in apps", style="{{item.tileCSS}}")
+                    a(href="{{item.appLink}}", ng-click="openApp($event)").mcjs-rc-clickable
+                        img(ng-src="{{item.tileLink}}")
+                        span {{item.appName}}
+    link(rel='stylesheet', ng-href='{{item.tileCSS}}', ng-if="item.tileCSS", ng-repeat="item in apps")
