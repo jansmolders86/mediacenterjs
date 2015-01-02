@@ -130,7 +130,7 @@ angular.module('mcjsCore', [])
                 var el2 = this.selectedItem();
                 if (!el2) {
                     this.select(this.items[0]);
-                    return;
+                    return true;
                 }
                 var el = items.map(mapFn).sort(sortFn)[0];
                 if (el) {
@@ -195,11 +195,10 @@ angular.module('mcjsCore', [])
                         this.goDown();
                         break;
                 }
-            });
+            }.bind(this));
         },
         link: function (scope, element, attrs, controller) {
             document.onkeyup = function (e) {
-                console.time("goDir");
                 switch (e.keyCode) {
                     case 39 :   //next
                         controller.goRight();
@@ -214,7 +213,6 @@ angular.module('mcjsCore', [])
                         controller.goUp();
                         break;
                 }
-                console.timeEnd("goDir");
             };
         }
     };
