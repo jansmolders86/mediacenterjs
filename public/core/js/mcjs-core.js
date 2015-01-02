@@ -61,6 +61,7 @@ angular.module('mcjsCore', [])
                     return;
                 }
                 item.setSelected(true);
+                this.selectedRect = item[0].getBoundingClientRect();
                 this.selectedIndex = items.indexOf(item);
             };
             this.selectOffset = function (indexOffset) {
@@ -76,15 +77,22 @@ angular.module('mcjsCore', [])
             this.addItem = function (item) {
                 items.push(item);
             };
-            function elementIsInRange(el, min, max, vertical) {
+            var self = this;
+            function elementIsInRange(el, vertical) {
+                var rect = self.selectedRect;
                 var offset = el.offset();
+                var min, max;
                 if (vertical) {
+                    min = rect.left;
+                    max = rect.right;
                     var elright = offset.left + el.width();
                     if ((min >= offset.left  && max <= elright) || (min <= offset.left  && max >= elright)) {
                         return 3;
                     }
                     return (offset.left >= min && offset.left <= max) + (elright >= min && elright <= max);
                 } else {
+                    min = rect.top;
+                    max = rect.bottom;
                     var elbottom = offset.top + el.height();
                     if ((min >= offset.top  && max <= elbottom) || (min <= offset.top  && max >= elbottom)) {
                         return 3;
@@ -92,11 +100,17 @@ angular.module('mcjsCore', [])
                     return (offset.top >=  min && offset.top <= max) + (elbottom >= min && elbottom <= max);
                 }
             }
-            function elementIsAboveElement(el1, el2) {
-                return el1.offset().top < el2.offset().top;
+            function elementIsAboveSelected(el) {
+                return el.offset().top < self.selectedRect.top;
             }
-            function elementIsLeftOfElement(el1, el2) {
-                return el1.offset().left < el2.offset().left;
+            function elementIsBelowSelected(el) {
+                return self.selectedRect.top < el.offset().top;
+            }
+            function elementIsLeftOfSelected(el) {
+                return el.offset().left < self.selectedRect.left;
+            }
+            function elementIsRightOfSelected(el) {
+                return self.selectedRect.left < el.offset().left;
             }
             function sortFn(a, b) {
                 var m = b.sort[0] - a.sort[0];
@@ -113,6 +127,11 @@ angular.module('mcjsCore', [])
                 return a.sort[1] - b.sort[1];
             }
             this.goDirection = function(mapFn, sortFn) {
+                var el2 = this.selectedItem();
+                if (!el2) {
+                    this.select(this.items[0]);
+                    return;
+                }
                 var el = items.map(mapFn).sort(sortFn)[0];
                 if (el) {
                     this.select(el.value);
@@ -121,58 +140,42 @@ angular.module('mcjsCore', [])
                 return false;
             };
             this.goLeft = function () {
-                var el2 = this.selectedItem();
-                if (!el2) {
-                    this.select(this.items[0]);
-                    return;
-                }
-                var rect = el2[0].getBoundingClientRect();
                  if (!this.goDirection(function (el) {
-                     var match = elementIsInRange(el, rect.top, rect.bottom, false);
-                    if (match > 0 && elementIsLeftOfElement(el, el2)) {
-                        return {value: el, sort: [match, el.offset().left + el.width()]};
-                    }
+                     if (elementIsLeftOfSelected(el)) {
+                         var match = elementIsInRange(el, false);
+                         if (match > 0) {
+                             return {value: el, sort: [match, el.offset().left + el.width()]};
+                         }
+                     }
                 }, sortFn)) this.selectOffset(-1);
             };
             this.goRight = function () {
-                var el2 = this.selectedItem();
-                if (!el2) {
-                    this.select(this.items[0]);
-                    return;
-                }
-                var rect = el2[0].getBoundingClientRect();
                 if (!this.goDirection(function (el) {
-                    var match = elementIsInRange(el, rect.top, rect.bottom, false)
-                    if (match > 0 && elementIsLeftOfElement(el2, el)) {
-                        return {value: el, sort: [match, el.offset().left]};
+                    if (elementIsRightOfSelected(el)) {
+                        var match = elementIsInRange(el, false);
+                        if (match > 0) {
+                            return {value: el, sort: [match, el.offset().left]};
+                        }
                     }
                 }, invSortFn)) this.selectOffset(1);
             };
             this.goDown = function () {
-                var el2 = this.selectedItem();
-                if (!el2) {
-                    this.select(this.items[0]);
-                    return;
-                }
-                var rect = el2[0].getBoundingClientRect();
                 this.goDirection(function (el) {
-                    var match = elementIsInRange(el, rect.left, rect.right, true);
-                    if (match > 0 && elementIsAboveElement(el2, el)) {
-                        return {value: el, sort: [match, el.offset().top]};
+                    if (elementIsBelowSelected(el)) {
+                        var match = elementIsInRange(el, true);
+                        if (match > 0) {
+                            return {value: el, sort: [match, el.offset().top]};
+                        }
                     }
                 }, invSortFn);
             };
             this.goUp = function () {
-                var el2 = this.selectedItem();
-                if (!el2) {
-                    this.select(this.items[0]);
-                    return;
-                }
-                var rect = el2[0].getBoundingClientRect();
                 this.goDirection(function (el) {
-                    var match = elementIsInRange(el, rect.left, rect.right, true);
-                    if (match > 0 && elementIsAboveElement(el, el2)) {
-                        return {value: el, sort: [match, el.offset().top + el.height()]};
+                    if (elementIsAboveSelected(el)) {
+                        var match = elementIsInRange(el, true);
+                        if (match > 0) {
+                            return {value: el, sort: [match, el.offset().top + el.height()]};
+                        }
                     }
                 }, sortFn);
             };
@@ -196,6 +199,7 @@ angular.module('mcjsCore', [])
         },
         link: function (scope, element, attrs, controller) {
             document.onkeyup = function (e) {
+                console.time("goDir");
                 switch (e.keyCode) {
                     case 39 :   //next
                         controller.goRight();
@@ -210,6 +214,7 @@ angular.module('mcjsCore', [])
                         controller.goUp();
                         break;
                 }
+                console.timeEnd("goDir");
             };
         }
     };
