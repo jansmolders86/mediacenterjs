@@ -28,12 +28,10 @@ var express = require('express')
 , functions = require('./tv-functions');
 
 exports.index = function(req, res){
-    deviceInfo.isDeviceAllowed(req, function(allowed){
-        res.render('tvshows', {
-            title: 'tvshows',
-            selectedTheme: config.theme,
-            allowed: allowed
-        });
+    res.render('tvshows', {
+        title: 'tvshows',
+        selectedTheme: config.theme,
+        allowed: allowed
     });
 };
 
