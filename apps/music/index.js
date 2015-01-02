@@ -67,7 +67,7 @@ exports.get = function(req, res, next) {
 
 exports.post = function(req, res, next) {
     if (req.params.id === 'edit') {
-        MusicHandler.editMetadata(req.body.id, data, handleCallback(res));
+        MusicHandler.editMetadata(req.body.id, req.body, handleCallback(res));
     } else {
         next();
     }
