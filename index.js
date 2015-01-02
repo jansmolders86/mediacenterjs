@@ -89,14 +89,7 @@ if ('development' == env) {
 app.all('*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
-
-  DeviceInfo.isDeviceAllowed(req, function (isAllowed) {
-    if (isAllowed === 'yes') {
-        return next();
-    } else {
-        return res.status(403).send();
-    }
-  });
+  next();
 });
 
 mcjsRouting.loadRoutes(app,{ verbose: !module.parent });
@@ -110,20 +103,25 @@ app.get("/apps", function(req, res) {
 });
 
 app.get("/", function(req, res, next) {
+
     DeviceInfo.storeDeviceInfo(req);
 
     if(config.language === '' || config.location === '' || config.moviepath === undefined){
+
         res.render('setup',{
             countries:require('./lib/utils/countries').countries
         });
 
     } else {
+
         req.setMaxListeners(0);
 
-        res.render('index', {
-            title: 'Homepage',
-            selectedTheme: config.theme,
-            allowed: allowed
+        DeviceInfo.isDeviceAllowed(req, function(allowed){
+            res.render('index', {
+                title: 'Homepage',
+                selectedTheme: config.theme,
+                allowed: allowed
+            });
         });
     }
 });

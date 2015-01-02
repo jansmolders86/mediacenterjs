@@ -29,10 +29,12 @@ var express = require('express')
 exports.engine = 'jade';
 
 exports.index = function(req, res, next){
-    res.render('music', {
-        title: 'music',
-        selectedTheme: config.theme,
-        allowed: allowed
+    deviceInfo.isDeviceAllowed(req, function(allowed){
+        res.render('music', {
+            title: 'music',
+            selectedTheme: config.theme,
+            allowed: allowed
+        });
     });
 };
 

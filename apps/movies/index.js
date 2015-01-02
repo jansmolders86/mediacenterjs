@@ -28,10 +28,12 @@ var express = require('express')
 , functions = require('./movie-functions');
 
 exports.index = function(req, res){
-    res.render('movies', {
-        title: 'Movies',
-        selectedTheme: config.theme,
-        allowed: allowed
+    deviceInfo.isDeviceAllowed(req, function(allowed){
+        res.render('movies', {
+            title: 'Movies',
+            selectedTheme: config.theme,
+            allowed: allowed
+        });
     });
 };
 
