@@ -82,7 +82,6 @@
     "socket.io": "~0.9.16",
     "sqlite3": "^2.2.7",
     "to-title-case": "^0.1.5",
-    "trakt": "0.0.5-2",
     "underscore": "~1.5.2",
     "walk": ">=1.2.2",
     "wget": ">=0.0.1",

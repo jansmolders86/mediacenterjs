@@ -78,13 +78,12 @@ movieApp.factory('Movie', function($http, mcjsMediaPlayer) {
         mcjsMediaPlayer.playing = true;
         $http.get('/movies/'+this.id+'/play/'+platform)
         .success(function(data) {
-
             //Get url+port
             var url = window.location.href;
             var arr = url.split("/");
             var result = arr[0] + "//" + arr[2];
 
-            var fileName                =   movie.originalName
+            var fileName                =   movie.fileName
                 , outputFile            =   fileName.replace(/ /g, "-")
                 , extentionlessFile     =   outputFile.replace(/\.[^\.]+$/, "")
                 , videoUrl              =   result+data.outputPath
@@ -92,7 +91,7 @@ movieApp.factory('Movie', function($http, mcjsMediaPlayer) {
                 , playerID              =   'player'
                 , homeURL               =   '/movies/'
                 , type                  =   'movies';
-            mcjsMediaPlayer.videoJSHandler(playerID, data, movie.id, videoUrl, subtitleUrl, movie.originalName,homeURL, 5000, type);
+            mcjsMediaPlayer.videoJSHandler(playerID, data, movie.id, videoUrl, subtitleUrl, movie.fileName,homeURL, 5000, type);
         })
         .error(function () {
             mcjsMediaPlayer.playing = false;

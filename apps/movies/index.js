@@ -21,11 +21,12 @@ exports.engine = 'jade';
 /* Modules */
 var express = require('express')
 , app = express()
-, fs = require('fs.extra')
-, helper = require('../../lib/helpers.js')
 , config = require('../../lib/handlers/configuration-handler').getConfiguration()
 , deviceInfo = require('../../lib/utils/device-utils')
-, functions = require('./movie-functions');
+, MediaHandler = require('../../lib/media-handler')
+, logger = require('winston');
+
+var MovieHandler = new MediaHandler('Movie', 'Movie', require('./metadata-processor'), 'moviepath');
 
 exports.index = function(req, res){
     deviceInfo.isDeviceAllowed(req, function(allowed){
@@ -40,33 +41,15 @@ exports.index = function(req, res){
 exports.get = function(req, res, next){
     var infoRequest = req.params.id,
         optionalParam = req.params.optionalParam,
-        platform = req.params.action,
-        serveToFrontEnd = null;
+        platform = req.params.action;
 
-    var handled = false;
-    if(infoRequest === 'filter') {
-        functions.filter(req, res, optionalParam);
-        handled = true;
-    } else if (!optionalParam) {
-        switch(infoRequest) {
-            case('load'):
-                serveToFrontEnd = true;
-                functions.loadItems(req, res, serveToFrontEnd);
-                handled = true;
-                break;
-        }
-    }
-
-    if(platform !== undefined && optionalParam === 'play') {
-        var id = infoRequest;
-        functions.playFile(req, res, platform, id);
-        handled = true;
-    }
-    if (infoRequest === 'transcodings' && optionalParam === 'stop') {
-        functions.stopTranscoding(req,res);
-        handled = true;
-    }
-    if (!handled) {
+    if (infoRequest === 'load') {
+        MovieHandler.load({}, handleCallback(res));
+    } else if (optionalParam === 'play') {
+        MovieHandler.playFile(res, platform, infoRequest);
+    } else if (optionalParam === 'stop') {
+        MovieHandler.stopTranscoding(handleCallback(res));
+    } else {
         next();
     }
 };
@@ -75,13 +58,27 @@ exports.get = function(req, res, next){
 exports.post = function(req, res, next){
     var data = req.body;
     if(req.params.id === 'progress'){
-        functions.progress(req, res);
-    }
-    else if(req.params.id === 'edit'){
-        functions.edit(req, res, data);
+        MovieHandler.savePlaybackProgress(data.id, data.progression, handleCallback(res));
+    } else if(req.params.id === 'edit'){
+        MovieHandler.editMetadata(data.id, data, handleCallback(res));
     } else if(req.params.id === 'update'){
-        functions.update(req, res, data);
+        MovieHandler.updateMetadata(data.id, data, handleCallback(res));
     } else {
         next();
+    }
+};
+
+function handleCallback(res) {
+    return function (err, results) {
+        if (err) {
+            logger.error(err);
+            return res.status(500).send();
+        }
+
+        if (results) {
+            return res.json(results);
+        }
+
+        return res.status(200).send();
     }
 }
