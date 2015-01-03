@@ -86,11 +86,12 @@ movieApp.factory('Movie', function($http, mcjsMediaPlayer) {
             var fileName                =   movie.fileName
                 , outputFile            =   fileName.replace(/ /g, "-")
                 , extentionlessFile     =   outputFile.replace(/\.[^\.]+$/, "")
-                , videoUrl              =   result+data.outputPath
+                , videoUrl              =   result + data.outputPath
                 , subtitleUrl           =   "/data/movies/"+extentionlessFile+".srt"
                 , playerID              =   'player'
                 , homeURL               =   '/movies/'
                 , type                  =   'movies';
+                
             mcjsMediaPlayer.videoJSHandler(playerID, data, movie.id, videoUrl, subtitleUrl, movie.fileName,homeURL, 5000, type);
         })
         .error(function () {

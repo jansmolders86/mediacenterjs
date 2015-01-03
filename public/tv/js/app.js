@@ -199,8 +199,6 @@ tvApp.factory('player', function( $rootScope) {
 
 
 function playEpisode(episode, $http, scope){
-
-
     var platform = 'desktop';
     if (navigator.userAgent.match(/Android/i)) {
         platform = 'android';

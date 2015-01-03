@@ -48,7 +48,7 @@ exports.get = function(req, res, next) {
         var trackid = optionalParam.replace(/\+/g, ' ');
         switch(action) {
             case('play'):
-                music_playback_handler.startTrackPlayback(res, trackid);
+                MusicHandler.playFile(res, undefined, trackid);
                 break;
             case('next'):
                 // TODO?: functions.nextTrack(req, res, trackid);

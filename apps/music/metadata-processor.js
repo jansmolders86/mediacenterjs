@@ -1,4 +1,3 @@
-var music_playback_handler = require('./music-playback-handler');
 var LastfmAPI = require('lastfmapi');
 var mm = require('musicmetadata');
 var fs = require('fs.extra');
