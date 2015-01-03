@@ -24,7 +24,7 @@ exports.processFile = function (fileObject, callback, id) {
             var posterURL = result.poster_path ? baseUrl + '/t/p/w342' + result.poster_path : '/movies/css/img/nodata.jpg';
             var backgroundURL = result.backdrop_path ? baseUrl + '/t/p/w1920' + result.backdrop_path : '/movies/css/img/backdrop.jpg';
             var metadata = {
-                fileName        : originalTitle,
+                filePath        : fileObject.href,
                 title           : result.title ? result.title : movieTitle,
                 posterURL       : posterURL,
                 backgroundURL   : backgroundURL,

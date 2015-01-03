@@ -83,7 +83,7 @@ movieApp.factory('Movie', function($http, mcjsMediaPlayer) {
             var arr = url.split("/");
             var result = arr[0] + "//" + arr[2];
 
-            var fileName                =   movie.fileName
+            var fileName                =   movie.filePath.split('/').pop()
                 , outputFile            =   fileName.replace(/ /g, "-")
                 , extentionlessFile     =   outputFile.replace(/\.[^\.]+$/, "")
                 , videoUrl              =   result + data.outputPath
@@ -92,7 +92,7 @@ movieApp.factory('Movie', function($http, mcjsMediaPlayer) {
                 , homeURL               =   '/movies/'
                 , type                  =   'movies';
                 
-            mcjsMediaPlayer.videoJSHandler(playerID, data, movie.id, videoUrl, subtitleUrl, movie.fileName,homeURL, 5000, type);
+            mcjsMediaPlayer.videoJSHandler(playerID, data, movie.id, videoUrl, subtitleUrl, fileName, homeURL, 5000, type);
         })
         .error(function () {
             mcjsMediaPlayer.playing = false;

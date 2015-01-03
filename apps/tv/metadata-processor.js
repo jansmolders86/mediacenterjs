@@ -23,7 +23,7 @@ exports.processFile = function (fileObject, callback, id) {
 
     // Store episode data in db and do lookup again
     Episode.create({
-        fileName: originalTitle,
+        filePath: fileObject.href,
         name: trimmedTitle,
         season: episodeDetails.season || 0,
         episode: episodeDetails.episode || 0

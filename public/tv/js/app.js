@@ -214,7 +214,7 @@ function playEpisode(episode, $http, scope){
         var arr = url.split("/");
         var result = arr[0] + "//" + arr[2];
 
-        var fileName                =  episode.fileName
+        var fileName                =  episode.filePath.split('/').pop()
             , outputFile            =   fileName.replace(/ /g, "-")
             , extentionlessFile     =   outputFile.replace(/\.[^/.]+$/, "")
             , videoUrl              =   result+data.outputPath
@@ -223,7 +223,7 @@ function playEpisode(episode, $http, scope){
             , homeURL               =   '/tv/'
             , type                  =   'tv';
 
-        videoJSHandler(playerID, data, episode.id, videoUrl, subtitleUrl, episode.fileName, homeURL, 5000, type);
+        videoJSHandler(playerID, data, episode.id, videoUrl, subtitleUrl, fileName, homeURL, 5000, type);
 
     }) .error(function (msg, code) {
         sweetAlert({title : "",
