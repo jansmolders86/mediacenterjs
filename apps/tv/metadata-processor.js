@@ -4,7 +4,7 @@ var tv_title_cleaner = require('../../lib/utils/title-cleaner');
 
 exports.valid_filetypes = /(avi|mkv|mpeg|mov|mp4|m4v|wmv)$/gi;
 
-exports.processFile = function (fileObject, callback, id) {
+exports.processFile = function (fileObject, callback) {
     var originalTitle           = fileObject.file.split('/').pop()
     , episodeInfo               = tv_title_cleaner.cleanupTitle(originalTitle)
     , episodeReturnedTitle      = episodeInfo.title
@@ -22,7 +22,7 @@ exports.processFile = function (fileObject, callback, id) {
     }
 
     // Store episode data in db and do lookup again
-    Episode.create({
+    Episode.findOrCreate({ filePath: fileObject.href }, {
         filePath: fileObject.href,
         name: trimmedTitle,
         season: episodeDetails.season || 0,

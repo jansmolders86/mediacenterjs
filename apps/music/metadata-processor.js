@@ -4,7 +4,7 @@ var fs = require('fs.extra');
 
 exports.valid_filetypes = /(m4a|mp3)$/gi;
 
-exports.processFile = function (fileObject, callback, id) {
+exports.processFile = function (fileObject, callback) {
     var parser = new mm(fs.createReadStream(fileObject.href));
     var result = null;
 
@@ -72,7 +72,8 @@ exports.processFile = function (fileObject, callback, id) {
                     return Album.findOrCreate({ title: albumData.title }, albumData);
                 })
                 .then(function (album) {
-                    return album.createTrack(trackData);
+                    trackData.AlbumId = album.id;
+                    return Track.findOrCreate({ title: trackData.title }, trackData);
                 })
                 .then(function (track) {
                     callback();

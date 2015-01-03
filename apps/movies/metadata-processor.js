@@ -4,7 +4,7 @@ var config = config = require('../../lib/handlers/configuration-handler').getCon
 
 exports.valid_filetypes = /(avi|mkv|mpeg|mov|mp4|m4v|wmv)$/gi;
 
-exports.processFile = function (fileObject, callback, id) {
+exports.processFile = function (fileObject, callback) {
     var originalTitle = fileObject.file.split('/').pop();
     var movieInfo = movie_title_cleaner.cleanupTitle(originalTitle);
     var movieTitle = movieInfo.title.replace(this.valid_filetypes, '').trimRight();
@@ -38,16 +38,16 @@ exports.processFile = function (fileObject, callback, id) {
                 year            : result.release_date ? new Date(result.release_date).getFullYear() : movieInfo.year
             };
             
-            if (id) {
-                Movie.find(id).success(function(movie) {
+            Movie.find({ filePath: metadata.filePath }).complete(function (err, movie) {
+                if (err || !movie) {
+                    Movie.create(metadata).success(function(err, movie) {
+                        callback();
+                    });
+                } else {
                     movie.updateAttributes(metadata);
                     callback();
-                });
-            } else {
-                Movie.create(metadata).success(function(err, movie) {
-                    callback();
-                });
-            }
+                }
+            });
         }
     });
 }
