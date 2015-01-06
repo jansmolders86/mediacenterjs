@@ -21,9 +21,10 @@ exports.processFile = function (fileObject, callback) {
         trimmedTitle = 'Unknown show';
     }
 
+    var originalFilePath = fileObject.href;
     // Store episode data in db and do lookup again
     Episode.findOrCreate({ filePath: fileObject.href }, {
-        filePath: fileObject.href,
+        filePath: originalFilePath.replace(/[\\]/g, '/'),
         name: trimmedTitle,
         season: episodeDetails.season || 0,
         episode: episodeDetails.episode || 0

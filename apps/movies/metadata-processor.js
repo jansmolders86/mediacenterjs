@@ -20,11 +20,15 @@ exports.processFile = function (fileObject, callback) {
             result = result.results[0];
             if (!result) callback();
 
-            var baseUrl = 'http://image.tmdb.org';
-            var posterURL = result.poster_path ? baseUrl + '/t/p/w342' + result.poster_path : '/movies/css/img/nodata.jpg';
-            var backgroundURL = result.backdrop_path ? baseUrl + '/t/p/w1920' + result.backdrop_path : '/movies/css/img/backdrop.jpg';
+            var baseUrl = 'http://image.tmdb.org'
+                , posterURL = result.poster_path ? baseUrl + '/t/p/w342' + result.poster_path : '/movies/css/img/nodata.jpg'
+                , backgroundURL = result.backdrop_path ? baseUrl + '/t/p/w1920' + result.backdrop_path : '/movies/css/img/backdrop.jpg'
+                , originalFilePath = fileObject.href;
+
+            console.log('sdfsdfsfsdsdsdfsfd', originalFilePath.replace(/\//g, '/'));
+
             var metadata = {
-                filePath        : fileObject.href,
+                filePath        : originalFilePath.replace(/[\\]/g, '/'),
                 title           : result.title ? result.title : movieTitle,
                 posterURL       : posterURL,
                 backgroundURL   : backgroundURL,
