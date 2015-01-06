@@ -1,11 +1,12 @@
 var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3');
 var movie_title_cleaner = require('../../lib/utils/title-cleaner');
 var config = config = require('../../lib/handlers/configuration-handler').getConfiguration();
+var path = require('path');
 
 exports.valid_filetypes = /(avi|mkv|mpeg|mov|mp4|m4v|wmv)$/gi;
 
 exports.processFile = function (fileObject, callback) {
-    var originalTitle = fileObject.file.split('/').pop();
+    var originalTitle = path.basename(fileObject.file);
     var movieInfo = movie_title_cleaner.cleanupTitle(originalTitle);
     var movieTitle = movieInfo.title.replace(this.valid_filetypes, '').trimRight();
     var searchOptions = { query: movieTitle,
@@ -22,13 +23,10 @@ exports.processFile = function (fileObject, callback) {
 
             var baseUrl = 'http://image.tmdb.org'
                 , posterURL = result.poster_path ? baseUrl + '/t/p/w342' + result.poster_path : '/movies/css/img/nodata.jpg'
-                , backgroundURL = result.backdrop_path ? baseUrl + '/t/p/w1920' + result.backdrop_path : '/movies/css/img/backdrop.jpg'
-                , originalFilePath = fileObject.href;
-
-            console.log('sdfsdfsfsdsdsdfsfd', originalFilePath.replace(/\//g, '/'));
+                , backgroundURL = result.backdrop_path ? baseUrl + '/t/p/w1920' + result.backdrop_path : '/movies/css/img/backdrop.jpg';
 
             var metadata = {
-                filePath        : originalFilePath.replace(/[\\]/g, '/'),
+                filePath        : path.normalize(fileObject.href),
                 title           : result.title ? result.title : movieTitle,
                 posterURL       : posterURL,
                 backgroundURL   : backgroundURL,

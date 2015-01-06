@@ -83,7 +83,7 @@ movieApp.factory('Movie', function($http, mcjsMediaPlayer) {
             var arr = url.split("/");
             var result = arr[0] + "//" + arr[2];
 
-            var fileName                =   movie.filePath.split('/').pop()
+            var fileName                =   data.fileName
                 , outputFile            =   fileName.replace(/ /g, "-")
                 , extentionlessFile     =   outputFile.replace(/\.[^\.]+$/, "")
                 , videoUrl              =   result + data.outputPath

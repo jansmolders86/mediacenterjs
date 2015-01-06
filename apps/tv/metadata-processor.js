@@ -1,11 +1,12 @@
 var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3');
 var episoder = require('../../lib/utils/episoder');
 var tv_title_cleaner = require('../../lib/utils/title-cleaner');
+var path = require('path');
 
 exports.valid_filetypes = /(avi|mkv|mpeg|mov|mp4|m4v|wmv)$/gi;
 
 exports.processFile = function (fileObject, callback) {
-    var originalTitle           = fileObject.file.split('/').pop()
+    var originalTitle           = path.basename(fileObject.file)
     , episodeInfo               = tv_title_cleaner.cleanupTitle(originalTitle)
     , episodeReturnedTitle      = episodeInfo.title
     , episodeStripped           = episodeReturnedTitle.replace(this.valid_filetypes, '')
@@ -21,10 +22,9 @@ exports.processFile = function (fileObject, callback) {
         trimmedTitle = 'Unknown show';
     }
 
-    var originalFilePath = fileObject.href;
     // Store episode data in db and do lookup again
     Episode.findOrCreate({ filePath: fileObject.href }, {
-        filePath: originalFilePath.replace(/[\\]/g, '/'),
+        filePath: path.normalize(fileObject.href),
         name: trimmedTitle,
         season: episodeDetails.season || 0,
         episode: episodeDetails.episode || 0
