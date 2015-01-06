@@ -19,17 +19,16 @@
 /* Modules */
 var express = require('express')
 , app = express()
-, fs = require('fs.extra')
-, helper = require('../../lib/helpers.js')
 , config = require('../../lib/handlers/configuration-handler').getConfiguration()
 , deviceInfo = require('../../lib/utils/device-utils')
-, functions = require('./music-functions');
+, MediaHandler = require('../../lib/media-handler');
 
-// Choose your render engine. The default choice is JADE:  http://jade-lang.com/
+var MusicHandler = new MediaHandler('Album', 'Track', require('./metadata-processor'), 'musicpath');
+
 exports.engine = 'jade';
 
-exports.index = function(req, res, next){
-    deviceInfo.isDeviceAllowed(req, function(allowed){
+exports.index = function(req, res, next) {
+    deviceInfo.isDeviceAllowed(req, function (allowed) {
         res.render('music', {
             title: 'music',
             selectedTheme: config.theme,
@@ -38,46 +37,53 @@ exports.index = function(req, res, next){
     });
 };
 
-exports.get = function(req, res, next){
+exports.get = function(req, res, next) {
     var infoRequest = req.params.id
         , optionalParam = req.params.optionalParam
-        , action = req.params.action
-        , serveToFrontEnd = null;
+        , action = req.params.action;
 
-    var handled = false;
-    if (infoRequest == 'load'){
-        serveToFrontEnd = true;
-        functions.loadItems(req,res, serveToFrontEnd);
-        handled = true;
-    }
-
-    if(action){
-        var trackid = optionalParam.replace(/\+/g, " ");
+    if (infoRequest === 'load') {
+        MusicHandler.load({include: [Artist, Track]}, handleCallback(res));
+    } else if (action) {
+        var trackid = optionalParam.replace(/\+/g, ' ');
         switch(action) {
             case('play'):
-                functions.playTrack(req, res, trackid);
-                handled = true;
-            break;
+                MusicHandler.playFile(res, undefined, trackid);
+                break;
             case('next'):
-                functions.nextTrack(req, res, trackid);
-                handled = true;
-            break;
+                // TODO?: functions.nextTrack(req, res, trackid);
+                break;
             case('random'):
-                functions.randomTrack(req, res, trackid);
-                handled = true;
-            break;
+                // TODO?: functions.randomTrack(req, res, trackid);
+                break;
+            default:
+                next();
+                break;
         }
-    }
-    if (!handled) {
-        next();
-    }
-}
-
-exports.post = function(req, res, next){
-    var data = req.body;
-    if(req.params.id === 'edit'){
-        functions.edit(req, res, data);
     } else {
         next();
+    }
+};
+
+exports.post = function(req, res, next) {
+    if (req.params.id === 'edit') {
+        MusicHandler.editMetadata(req.body.id, req.body, handleCallback(res));
+    } else {
+        next();
+    }
+};
+
+function handleCallback(res) {
+    return function (err, results) {
+        if (err) {
+            logger.error(err);
+            return res.status(500).send();
+        }
+
+        if (results) {
+            return res.json(results);
+        }
+
+        return res.status(200).send();
     }
 }
