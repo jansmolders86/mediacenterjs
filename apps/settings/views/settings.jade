@@ -132,7 +132,8 @@ block body
                                 tr.mcjs-rc-controllable(ng-repeat="device in devices")
                                     td.device {{device.deviceID}}
                                     td.seen {{device.lastSeen}}
-                                    td.active {{device.isAllowed}}
+                                    td.active(ng-if="device.isAllowed === 'yes'") #{lingua.setting_yes}
+                                    td.active(ng-if="device.isAllowed === 'no'") #{lingua.setting_no}
                                     td
                                         a.parentalControl.btn.mcjs-rc-clickable.lock(ng-if="device.isAllowed === 'yes'", ng-click="setLocked(device, true)") #{lingua.settings_device_btn_lock}
                                         a.parentalControl.btn.mcjs-rc-clickable.unlock(ng-if="device.isAllowed === 'no'", ng-click="setLocked(device, false)") #{lingua.settings_device_btn_unlock}

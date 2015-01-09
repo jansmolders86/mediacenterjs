@@ -21,11 +21,11 @@ exports.engine = 'jade';
 /* Modules */
 var express = require('express')
 , app = express()
-, fs = require('fs.extra')
-, helper = require('../../lib/helpers.js')
 , config = require('../../lib/handlers/configuration-handler').getConfiguration()
 , deviceInfo = require('../../lib/utils/device-utils')
-, functions = require('./tv-functions');
+, MediaHandler = require('../../lib/media-handler');
+
+var TvShowHandler = new MediaHandler('Show', 'Episode', require('./metadata-processor'), 'tvpath');
 
 exports.index = function(req, res){
     deviceInfo.isDeviceAllowed(req, function(allowed){
@@ -40,25 +40,15 @@ exports.index = function(req, res){
 exports.get = function(req, res, next){
     var infoRequest = req.params.id,
         optionalParam = req.params.optionalParam,
-        platform = req.params.action,
-        serveToFrontEnd = null
+        platform = req.params.action;
 
-    var handled = false;
-
-    if (!optionalParam) {
-        if(infoRequest === 'load') {
-            serveToFrontEnd = true;
-            functions.loadItems(req, res, serveToFrontEnd);
-            handled = true;
-        }
-    }
-
-    if(platform !== undefined && optionalParam === 'play'){
-        var id = infoRequest;
-        functions.playFile(req, res, platform, id);
-        handled = true;
-    }
-    if (!handled) {
+    if (infoRequest === 'load') {
+        TvShowHandler.load({include: [Episode]}, handleCallback(res));
+    } else if(optionalParam === 'play'){
+        TvShowHandler.playFile(res, platform, infoRequest);
+    } else if (optionalParam === 'stop') {
+        TvShowHandler.stopTranscoding(handleCallback(res));
+    } else {
         next();
     }
 
@@ -66,12 +56,26 @@ exports.get = function(req, res, next){
 
 exports.post = function(req, res, next){
     var data = req.body;
-    if(req.params.id === 'progress'){
-        functions.progress(req, res);
-    }
-    else if(req.params.id === 'edit'){
-        functions.edit(req, res, data);
+    if (req.params.id === 'progress') {
+        TvShowHandler.savePlaybackProgress(data.id, data.progression, handleCallback(res));
+    } else if (req.params.id === 'edit') {
+        TvShowHandler.editMetadata(data.id, data, handleCallback(res));
     } else {
         next();
+    }
+};
+
+function handleCallback(res) {
+    return function (err, results) {
+        if (err) {
+            logger.error(err);
+            return res.status(500).send();
+        }
+
+        if (results) {
+            return res.json(results);
+        }
+
+        return res.status(200).send();
     }
 }
