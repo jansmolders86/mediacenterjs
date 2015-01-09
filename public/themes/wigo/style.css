@@ -149,7 +149,9 @@ p a:hover {
     float: left;
     width: 100%;
 }
-.tile[selected] {
+.tile[selected],
+.tile:focus,
+.tile:hover{
     -webkit-transform: scale(1.02);
 }
 #tiles {
@@ -689,5 +691,24 @@ and (-webkit-min-device-pixel-ratio: 3.0) {
     .tile.weather {
         background: #f86049;
     }
+    .tile.remote {
+        background: #f86c3a;
+        width:15%;
+    }
 
+    .tile.remote img{
+        width: 50%;
+        position: absolute;
+        top: -30px;
+        left: 0;
+    }
+
+    .tile.remote.grow img,
+    .tile.remote.grow canvas{
+        display:none!important;
+    }
+
+    .tile.remote span {
+        margin-left: 8px;
+    }
 }
