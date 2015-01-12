@@ -3,7 +3,7 @@
 /* Typography */
 
 html {
-    background-color: #484C52;
+    background: #17181a;
 }
 body {
     font-family: 'Open Sans', sans-serif;
@@ -14,9 +14,7 @@ body {
     box-sizing: border-box;
     background: none;
 }
-body.homepage {
-    background-color: #484C52;
-}
+
 a {
     color: #444;
 }
@@ -200,14 +198,18 @@ p a:hover {
 }
 /* Date and Time */
 
+#dateandtime {top: 20px;}
 #dateandtime .date,
 #dateandtime .time {
     text-align: right;
     font-weight: 300;
-    font-size: 20px;
+    font-size: 25px;
     font-family: 'Open Sans', sans-serif;
     color: #f1f1f1;
 }
+
+#dateandtime .time {margin-right:20px;}
+
 /* Content */
 
 .boxed {
@@ -222,6 +224,11 @@ p a:hover {
     cursor: pointer;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
+
+
+.homepage header{height:75px;}
+
+
 header {
     width: 100%;
     -webkit-box-sizing: border-box;
@@ -230,7 +237,7 @@ header {
     padding: 0;
     position: relative;
     float: left;
-    background: #383B41;
+    background: #232428;
     overflow: hidden;
     border-bottom: 0;
     box-shadow: none;
@@ -265,6 +272,7 @@ a.backlink:hover {
 .homepage h1 {
     text-transform: none;
     font-weight: 300;
+    margin-top: 13px;
 }
 header {
     z-index: 5;
@@ -272,7 +280,7 @@ header {
 header .logo {
     float: left;
     height: 50px;
-    margin: 5px 10px 0 0;
+    margin: 11px 10px 0 0;
 }
 header h1 {
     max-width: 85%;
@@ -348,17 +356,23 @@ textarea {
     margin: 0;
     padding: 0.85em 1.2em;
     font-size: 18px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
     outline: none;
-    color: rgba(0, 0, 0, 0.7);
+    color:#f1f1f1;
     border-radius: 0;
-    -webkit-transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
-    transition: background-color 0.3s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.3) inset;
-    background: #FEFEFE;
+    border:0;
+    background:transparent;
+    border-bottom:2px solid #4D4D4D;
+    max-width: 80%;
+    color:#f1f1f1;
     height: 60px;
     line-height: 60px;
 }
+select option{color:#333; font-size:18px;}
+
+.input-group-addon{border:0; background:#222429; border-bottom:2px solid #4D4D4D;}
+
+.input-group-addon i.icon{opacity:1;}
+
 label,
 .label {
     padding-top: 20px;
@@ -432,20 +446,15 @@ label,
 }
 /* settings override */
 
-.access-table {
-    background: #383B41 !important;
+.table>tbody>tr:nth-child(odd){
+    background: #151618 !important;
     padding: 20px;
 }
-.cache-management,
-#oauthContainer {
-    background: #43464F !important;
-}
-.configurable-options {
-    background: #383B41 !important;
-}
-#oauthContainer {
-    background: #43464F !important;
-}
+
+.configurable-options h2{margin: 20px 0 20px 0px !important;}
+.access-table h2{margin: 20px 0 20px -15px !important;}
+
+
 /***** -----------------   ANIMATIONS  ---------------------- *****/
 
 .glinein {
@@ -646,6 +655,7 @@ and (-webkit-min-device-pixel-ratio: 3.0) {
     }
 }
 @media only screen and (min-width: 771px) {
+    .homepage header .container-fluid{padding:0 100px;}
     .tile img {
         width: 30%;
         padding-top: 40px;
