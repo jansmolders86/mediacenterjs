@@ -238,6 +238,10 @@ app.get('/configuration', function(req, res){
     res.send(config);
 });
 
+app.get('/ip',function(req,res){
+    res.send(getIPAddresses());
+});
+
 app.post('/submit', function(req, res){
     configuration_handler.saveSettings(req.body, function() {
         res.redirect('/');

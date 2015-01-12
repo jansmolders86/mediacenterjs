@@ -18,6 +18,7 @@ label {
 a.scraperlink,
 #oauth{
     margin: 0px 30px;
+    margin: 0px 30px;
     display: block;
     float:none;
     text-overflow: ellipsis;
@@ -71,13 +72,14 @@ a.scraperlink,
     padding: 10px 30px;
     width: 100%;
     max-width: 400px;
+    margin-left: -14px;
 }
 
 #setup input[type=text],
 #setup input[type=password],
 #setup select,
-#setup textarea { background:#dedede; max-width: 80%;}
-
+#setup textarea { border:0; background:transparent; border-bottom:2px solid #4D4D4D; max-width: 80%; color:#f1f1f1; font-size:18px;}
+#setup select option{color:#333; font-size:18px;}
 
 .table>tbody>tr:nth-child(odd){
     background: #33363a;

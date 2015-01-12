@@ -1,7 +1,7 @@
 /* Remote control styling */
 
 #remote #color-wrapper{
-    background:#dcdcdc;
+    background:#232428;
     height:200px;
     width:100%;
     -moz-background-clip: border;  
@@ -16,7 +16,7 @@
     -webkit-background-clip: content;  
     background-clip: content-box; 
 
-    border-bottom:40px solid rgba(220,220,220,.5);
+    border-bottom:40px solid #151618;
     overflow:visible;
 }
 
@@ -27,7 +27,7 @@
     position: absolute;
     top: 0px;
     left: 10px;
-    color:#333;
+    color:#f1f1f1;
 }
 #remote .push{height:80px; width:100%;}
 
@@ -70,7 +70,7 @@
 
 #remote h1{
     float:right;
-    color:#333;
+    color:#f1f1f1;
     font-family: 'Open Sans', sans-serif; 
     font-weight:100;
     font-size:20px;
@@ -161,11 +161,12 @@
     margin:0; 
     padding-left:10px; 
     overflow-y:scroll;
+    background:#151618;
     overflow-x:hidden;
 }
 #remote #settings .row{ width:210px; margin-top:10px;}
 #remote #settings label,
-#remote #settings span.label{color:#333; font-size:13px;width:200px; margin-bottom:10px;}
+#remote #settings span.label{color:#f1f1f1; font-size:13px;width:200px; margin-bottom:10px;}
 
 #remote #main{
     width:100%;
@@ -176,7 +177,7 @@
 }
 
 #remote input,
-#remote select{width:87%;}
+#remote select{width:87%; font-size:12px;}
 #remote .status{bottom:10px; left:0; position:absolute; width:100%; text-align:center;}
 #remote #keyboard-wrapper{
     width:100%;
