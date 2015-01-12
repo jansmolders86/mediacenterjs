@@ -72,6 +72,7 @@ a.scraperlink,
     padding: 10px 30px;
     width: 100%;
     max-width: 400px;
+    margin-left: -14px;
 }
 
 #setup input[type=text],
