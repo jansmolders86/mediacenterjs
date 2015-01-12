@@ -198,14 +198,21 @@ p a:hover {
 }
 /* Date and Time */
 
-#dateandtime {top: 20px;}
+#dateandtime {
+    position: relative;
+    right: 0;
+    float: right;
+    height: 75px;
+    padding: 20px 40px;
+    background: #26272b;
+}
 #dateandtime .date,
 #dateandtime .time {
     text-align: right;
     font-weight: 300;
     font-size: 25px;
     font-family: 'Open Sans', sans-serif;
-    color: #f1f1f1;
+    color:#7B7D83;
 }
 
 #dateandtime .time {margin-right:20px;}
