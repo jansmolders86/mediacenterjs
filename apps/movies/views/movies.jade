@@ -28,7 +28,7 @@ block body
                     h1.hidden-xs #{lingua.movies}
                     input#search.pull-right(ng-model="query.$", type="text", placeholder="Search", ng-show="movies")
                     #view-select(ng-hide="!movies")
-                        label.view-select(for="showhidden", ng-init="query.hidden='false'", ng-click="query.hidden = query.hidden == 'false' ? '' : 'false'")
+                        label.view-select(mcjs-remote-action="{{query.hidden ? 'Show' : 'Hide'}} Hidden" for="showhidden", ng-init="query.hidden='false'", ng-click="query.hidden = query.hidden == 'false' ? '' : 'false'")
                             | {{query.hidden ? "Show" : "Hide"}} Hidden                    
     .container-fluid
         .row(mcjs-library)

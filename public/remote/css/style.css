@@ -202,3 +202,27 @@ i{
     color: #989898;
 
 }
+
+#actions {
+    text-align: center;
+    position: absolute;
+    bottom: -100px;
+    width: 100%;
+}
+#actions span {
+    width: 200px;
+    background: rgb(241, 241, 241);
+    display: inline-block;
+    font-size: 1.4em;
+    padding: 5px;
+    color: grey;
+}
+
+#actions li:not(:first-child) span:hover {
+    background: orange;
+}
+
+#actions li:first-child span {
+    background: grey;
+    color: rgb(241, 241, 241);
+}

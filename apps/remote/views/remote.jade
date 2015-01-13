@@ -93,7 +93,23 @@ block additional_scripts
                             var keyValue = $('#sendValueInput').val();
                             socket.emit('message',keyValue);
                         });
-
+                        function getIDForAction(unsafe) {
+                            return unsafe.replace(" ", "-");
+                        }
+                        socket.on("addAction", function (data) {
+                            var id = getIDForAction(data.name);
+                            var newAction = $("<li id='"+id+"'><span>" + data.name + "</span></li>");
+                            newAction.click(function() {
+                                console.log("sending doaction" + data.name);
+                                socket.emit("doAction", data.name);
+                            });
+                            $("#" + getIDForAction(data.name)).remove();
+                            $("#actions").append(newAction);
+                        });
+                        socket.on("removeAction", function (data) {
+                            $("#" + getIDForAction(data.name)).remove();
+                        });
+                        socket.emit("getActions");
                         socket.on("loading", function(data){
                             console.log(data);
                         });
@@ -178,7 +194,9 @@ block body
                 i.keyboard.icon
             .shuffle.link
                 i.shuffle.icon
-
         .status
+        ul#actions
+            li
+                span Actions
         #keyboard-wrapper
             input#sendValueInput(name="sendValue",type="text",value="")

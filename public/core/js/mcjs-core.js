@@ -41,7 +41,8 @@ angular.module('mcjsCore', [])
                     }
                 });
             });
-        }
+        },
+        rawSocket: socket
     };
 })
 .directive('mcjsLibrary', function() {
@@ -241,4 +242,25 @@ angular.module('mcjsCore', [])
             };
         }
     };
+})
+.directive('mcjsRemoteAction', function (angSocket, $timeout) {
+   return {
+       restrict: 'A',
+       link: function (scope, element, attrs) {
+           var currentName;
+           angSocket.rawSocket.on("doAction", function (data) {
+                if (data == attrs["mcjsRemoteAction"]) {
+                    element.trigger('click');
+                }
+           });
+           angSocket.on("getActions", function (data) {
+               angSocket.emit("addAction", {name: currentName});
+           });
+           attrs.$observe('mcjsRemoteAction', function (val) {
+               angSocket.emit("removeAction", {name: currentName});
+               angSocket.emit("addAction", {name: val});
+               currentName = val;
+           });
+       }
+   }
 });
