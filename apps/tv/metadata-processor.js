@@ -1,7 +1,8 @@
-var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3');
-var episoder = require('../../lib/utils/episoder');
-var tv_title_cleaner = require('../../lib/utils/title-cleaner');
-var path = require('path');
+var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3')
+, episoder = require('../../lib/utils/episoder')
+, tv_title_cleaner = require('../../lib/utils/title-cleaner')
+, path = require('path')
+, logger = require('winston');
 
 exports.valid_filetypes = /(avi|mkv|mpeg|mov|mp4|m4v|wmv)$/gi;
 
@@ -45,7 +46,7 @@ exports.processFile = function (fileObject, callback) {
 
                 var baseUrl = 'http://image.tmdb.org';
                 var posterURL = result.poster_path ? baseUrl + '/t/p/w342' + result.poster_path : '/movies/css/img/nodata.jpg';
-                
+
                 showData.posterURL = posterURL;
                 if (result.genres) {
                     showData.genre = result.genres.join(',');
