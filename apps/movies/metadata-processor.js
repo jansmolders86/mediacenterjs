@@ -1,7 +1,8 @@
-var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3');
-var movie_title_cleaner = require('../../lib/utils/title-cleaner');
-var config = config = require('../../lib/handlers/configuration-handler').getConfiguration();
-var path = require('path');
+var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3')
+, movie_title_cleaner = require('../../lib/utils/title-cleaner')
+, config = config = require('../../lib/handlers/configuration-handler').getConfiguration()
+, path = require('path')
+, logger = require('winston');
 
 exports.valid_filetypes = /(avi|mkv|mpeg|mov|mp4|m4v|wmv)$/gi;
 
@@ -39,7 +40,7 @@ exports.processFile = function (fileObject, callback) {
                 hidden          : "false",
                 year            : result.release_date ? new Date(result.release_date).getFullYear() : movieInfo.year
             };
-            
+
             Movie.find({ filePath: metadata.filePath }).complete(function (err, movie) {
                 if (err || !movie) {
                     Movie.create(metadata).success(function(err, movie) {

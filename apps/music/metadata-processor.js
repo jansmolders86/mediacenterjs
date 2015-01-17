@@ -1,6 +1,7 @@
-var LastfmAPI = require('lastfmapi');
-var mm = require('musicmetadata');
-var fs = require('fs.extra');
+var LastfmAPI = require('lastfmapi')
+, mm = require('musicmetadata')
+, fs = require('fs.extra')
+, logger = require('winston');
 
 exports.valid_filetypes = /(m4a|mp3)$/gi;
 
