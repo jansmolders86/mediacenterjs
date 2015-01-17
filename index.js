@@ -32,6 +32,10 @@ var express = require('express')
     , DeviceInfo = require('./lib/utils/device-utils')
     , fileHandler = require('./lib/utils/file-utils')
     , dbSchema = require('./lib/utils/database-schema')
+    , bodyParser = require('body-parser')
+    , static = require('serve-static')
+    , favicon = require('serve-favicon')
+    , errorHandler = require('errorhandler')
     , http = require('http')
     , os = require('os')
     , jade = require('jade')
@@ -62,11 +66,11 @@ if ('development' == env) {
     app.set('view engine', 'jade');
     app.set('views', __dirname + '/views');
     app.setMaxListeners(100);
-    app.use(express.json());
-    app.use(express.urlencoded());
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded());
     app.use(methodOverride('_method'));
-    app.use(express.static(__dirname + '/public'));
-    app.use(express.favicon(__dirname + '/public/core/favicon.ico'));
+    app.use(static(__dirname + '/public'));
+    app.use(favicon(__dirname + '/public/core/favicon.ico'));
     app.use(lingua(app, {
         defaultLocale: 'translation_' + language,
         storageKey: 'lang',
@@ -77,8 +81,7 @@ if ('development' == env) {
             secure: false
         }
     }));
-    app.use(app.router);
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+    app.use(errorHandler({ dumpExceptions: true, showStack: true }));
     app.locals.pretty = true;
     app.locals.basedir = __dirname + '/views';
 };
@@ -93,10 +96,6 @@ app.all('*', function(req, res, next) {
 });
 
 mcjsRouting.loadRoutes(app,{ verbose: !module.parent });
-
-app.use(function(req, res) {
-    res.status(404).render('404',{ selectedTheme: config.theme});
-});
 
 app.get("/apps", function(req, res) {
     res.json(apps.getApps());
@@ -262,7 +261,9 @@ scheduler.schedule();
 
 app.set('port', process.env.PORT || 3000);
 
-
+app.use(function(req, res) {
+    res.status(404).render('404',{ selectedTheme: config.theme});
+});
 
 // Open App socket
 if (config.port == "" || config.port == undefined ){
