@@ -51,7 +51,6 @@ exports.processFile = function (fileObject, callback) {
         }
 
         Movie.find({ where: { filePath: metadata.filePath } }).complete(function (err, movie) {
-            console.log(err, movie, metadata.filePath);
             if (err || !movie) {
                 Movie.create(metadata).success(function(err, movie) {
                     callback();
