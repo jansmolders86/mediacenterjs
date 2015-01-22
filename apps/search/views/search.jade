@@ -1,0 +1,31 @@
+extends /layout
+block declarations
+    - additional_title      = 'Search';
+    - body_class            = 'appSearch';
+    - use_angular           = true;
+    - angular_app           = "searchApp";
+    - angular_body_ctrl     = "searchCtrl";
+block additional_css
+    each csssrc in appStyleSheets
+        link(rel='stylesheet', href=csssrc)
+    link(rel='stylesheet', href='/search/css/style.css')
+
+block additional_scripts
+    script(src="/core/js/plugins/angular/angular-ui/ui-bootstrap-tpls-0.11.0.js")
+    each jssrc in appScripts
+        script(src=jssrc)
+    script(src="/search/js/app.js")
+
+block body
+    header
+        .container
+            .row
+                .col-md-12
+                    a.backlink(href="/") &#xe113;
+                    h1.hidden-xs Search
+    input#search(ng-model="query.$", type="text", placeholder="Search", ng-change="search(query)")
+    .container-fluid
+        .row(mcjs-library)
+            .section(ng-repeat="(appName, appResults) in results")
+                h2 {{appName}} ({{appResults.results.length}})
+                search-item(ng-repeat="result in appResults.results", item="result", view="appResults.app.search.itemView")

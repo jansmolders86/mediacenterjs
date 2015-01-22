@@ -49,6 +49,8 @@ exports.get = function(req, res, next){
         MovieHandler.playFile(res, platform, infoRequest);
     } else if (optionalParam === 'stop') {
         MovieHandler.stopTranscoding(handleCallback(res));
+    } else if (infoRequest === 'search') {
+        MovieHandler.search(req, res);
     } else {
         next();
     }

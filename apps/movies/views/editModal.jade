@@ -1,0 +1,30 @@
+//
+   Created by jonathan on 22/01/15.
+
+.modal-header
+   h1 Edit movie
+.modal-body
+   div(class="alert alert-danger" role="alert", ng-show="errorMessage") {{errorMessage}}
+   .form-horizontal
+      .row
+         .form-group
+            img.col-md-offset-1(ng-src="{{current.posterPath}}", ng-show="current.posterPath !== original.posterPath")
+         .form-group
+            label.col-md-3.col-md-offset-1 Poster url path
+            input.col-md-7(type="text",name="poster_path",ng-model="current.posterURL",required)
+         .form-group
+            label.col-md-3.col-md-offset-1 Backdrop url path
+            input.col-md-7(type="text",name="backdrop_path",ng-model="current.backgroundURL",required)
+         .form-group
+            label.col-md-3.col-md-offset-1 Title
+            input.col-md-7(type="text",name="title",ng-model="current.title",required)
+         .form-group
+            label.col-md-3.col-md-offset-1 Year
+            input.col-md-7(type="text",name="year",ng-model="current.year",required)
+         .form-group
+            label.col-md-3.col-md-offset-1 Hidden
+            input.col-md-7.icon(type="checkbox",name="hidden",ng-model="current.hidden",required,ng-checked="current.hidden == 'true'")
+.modal-footer
+   button.btn(ng-click="updateItem()") Fetch Metadata
+   button.btn.pull-right(ng-click="$dismiss()") Cancel
+   input.btn.pull-right(type="submit",value="Submit", ng-click="editItem()",required)
