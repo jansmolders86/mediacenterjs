@@ -11,6 +11,8 @@ block additional_css
     link(rel='stylesheet', href='/search/css/style.css')
 
 block additional_scripts
+    script(src="/core/js/plugins/video.js")
+    script(src="/core/js/video.js")
     script(src="/core/js/plugins/angular/angular-ui/ui-bootstrap-tpls-0.11.0.js")
     each jssrc in appScripts
         script(src=jssrc)

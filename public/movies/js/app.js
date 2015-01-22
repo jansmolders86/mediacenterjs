@@ -23,35 +23,6 @@ movieApp.config(function($logProvider){
     $logProvider.debugEnabled(true);
 });
 
-movieApp.service('mcjsMediaPlayer', function (angSocket) {
-    angSocket.on("controlling", function (data) {
-        var player = videojs("player");
-        switch (data.action) {
-            case "pause" :
-                if (player.paused() === false) {
-                    player.pause();
-                } else {
-                    player.play();
-                }
-                break;
-            case "fullscreen" :
-                if (player.isFullScreen) {
-                    player.requestFullScreen();
-                } else {
-                    player.exitFullScreen();
-                }
-                break;
-            case "mute" :
-                player.muted(!player.muted());
-                break;
-        }
-    });
-    return {
-        playing : false,
-        videoJSHandler :  videoJSHandler
-    };
-});
-
 movieApp.controller('movieCtrl', function($scope, $http, $modal, Movie, angSocket, mcjsMediaPlayer) {
     $scope.focused = null;
     $scope.serverMessage = 0;

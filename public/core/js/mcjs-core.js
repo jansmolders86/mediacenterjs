@@ -241,4 +241,31 @@ angular.module('mcjsCore', [])
             };
         }
     };
+}).service('mcjsMediaPlayer', function (angSocket) {
+    angSocket.on("controlling", function (data) {
+        var player = videojs("player");
+        switch (data.action) {
+            case "pause" :
+                if (player.paused() === false) {
+                    player.pause();
+                } else {
+                    player.play();
+                }
+                break;
+            case "fullscreen" :
+                if (player.isFullScreen) {
+                    player.requestFullScreen();
+                } else {
+                    player.exitFullScreen();
+                }
+                break;
+            case "mute" :
+                player.muted(!player.muted());
+                break;
+        }
+    });
+    return {
+        playing : false,
+        videoJSHandler :  videoJSHandler
+    };
 });
