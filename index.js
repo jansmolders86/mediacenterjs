@@ -67,7 +67,7 @@ if ('development' == env) {
     app.set('views', __dirname + '/views');
     app.setMaxListeners(100);
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded());
+    app.use(bodyParser.urlencoded({ extended: true }));
     app.use(methodOverride('_method'));
     app.use(static(__dirname + '/public'));
     app.use(favicon(__dirname + '/public/core/favicon.ico'));
