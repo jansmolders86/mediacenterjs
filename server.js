@@ -24,7 +24,7 @@
 
 
 var child_process = require('child_process')
-    , fs = require("fs")
+    , fs = require("fs-extra")
     , sys = require("sys")
     , logger = require('winston');
 
@@ -43,8 +43,7 @@ var child_process = require('child_process')
 
 function installUpdate(output, dir){
     logger.info('Installing update...');
-    var fsExtra = require("fs-extra");
-    fsExtra.copy('./install/mediacenterjs-master', './', function (err) {
+    fs.copy('./install/mediacenterjs-master', './', function (err) {
         if (err) {
             logger.error('Error', err);
         } else {

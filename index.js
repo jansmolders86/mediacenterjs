@@ -19,7 +19,7 @@
 
 var express = require('express')
     , app = express()
-    , fs = require ('fs')
+    , fs = require ('fs-extra')
     , util = require('util')
     , dateFormat = require('dateformat')
     , lingua = require('lingua')
