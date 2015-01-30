@@ -84,7 +84,7 @@ exports.get = function(req, res, next) {
         case 'getVideo':
             getVideo(req, function (error, videoResult) {
                 if(error) {
-                    res.json({message: error}, 500);
+                    res.status(500).json({message: error});
                 } else {
                     parseVideoData(videoResult, function (video) {
                         res.json({'videos': video});
@@ -96,7 +96,7 @@ exports.get = function(req, res, next) {
             if(config.oauthKey) {
                 res.json({key: config.oauthKey});
             } else {
-                res.json(500, {error: 'Oauth key missing in config file, please update!'});
+                res.status(500).json({error: 'Oauth key missing in config file, please update!'});
             }
         break;
         default:
