@@ -17,7 +17,7 @@
 */
 var express = require('express')
     , app = express()
-    , fs = require('fs')
+    , fs = require('fs-extra')
     , ini = require('ini')
     , semver = require('semver')
     , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
@@ -200,4 +200,3 @@ exports.reloadServer = function(req, res){
         res.json('');
     });
 }
-
