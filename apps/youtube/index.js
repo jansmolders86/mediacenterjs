@@ -70,10 +70,10 @@ exports.get = function(req, res, next) {
             Youtube.videos.list({"part": "snippet,statistics,contentDetails", "chart": "mostPopular", "maxResults": 50}, function (error, activityData) {
                 if( error instanceof Error ) {
                     logger.error('Error searching Youtube', error);
-                    res.json(500, {"error":'Problem getting content from YouTube.'});
+                    res.status(500).json({"error":'Problem getting content from YouTube.'});
                     return;
                 } else if(error) {
-                    res.json(500, {"error":'Need to re-authenticate to Google, popup in '});
+                    res.status(500).json({"error":'Need to re-authenticate to Google, popup in '});
                     return;
                 }
                 parseVideoData(activityData, function (videos) {
