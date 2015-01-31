@@ -20,7 +20,7 @@ exports.engine = 'jade';
 
 var express = require('express')
 , app = express()
-, fs = require('fs')
+, fs = require('fs-extra')
 , ini = require('ini')
 , http = require('http')
 , DeviceInfo = require('../../lib/utils/device-utils')
@@ -142,4 +142,3 @@ function loadCustomSettings(callback){
     });
     callback(plugSettings);
 }
-

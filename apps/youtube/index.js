@@ -23,7 +23,7 @@ exports.engine = 'jade';
 // Render the indexpage
 var Youtube = require('youtube-api')
 , iso8601 = require('./iso8601.js')
-, fs = require('fs')
+, fs = require('fs-extra')
 , ini = require('ini')
 , jade = require('jade')
 , configuration_handler = require('../../lib/handlers/configuration-handler')

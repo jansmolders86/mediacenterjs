@@ -1,6 +1,6 @@
 /*
 	MediaCenterJS - A NodeJS based mediacenter solution
-	
+
     Copyright (C) 2013 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -21,14 +21,14 @@ exports.engine = 'jade';
 
 var express = require('express')
 , app = express()
-, fs = require('fs')
+, fs = require('fs-extra')
 , ini = require('ini')
 , os = require('os')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
 , DeviceInfo = require('../../lib/utils/device-utils')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
-exports.index = function(req, res, next){	
+exports.index = function(req, res, next){
 
     DeviceInfo.storeDeviceInfo(req);
 

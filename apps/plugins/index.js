@@ -1,6 +1,6 @@
 /*
 	MediaCenterJS - A NodeJS based mediacenter solution
-	
+
     Copyright (C) 2013 - Jan Smolders
 
     This program is free software: you can redistribute it and/or modify
@@ -19,25 +19,25 @@
 exports.engine = 'jade';
 
 /* Modules */
-var fs = require('fs')
+var fs = require('fs-extra')
 , ini = require('ini')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'))
 , functions = require('./plugins-functions');
- 
+
 // Choose your render engine. The default choice is JADE:  http://jade-lang.com/
 exports.engine = 'jade';
 
-exports.index = function(req, res, next){	
+exports.index = function(req, res, next){
 	res.render('plugins',{
 		selectedTheme: config.theme
 	});
 };
 
-exports.get = function(req, res, next){	
+exports.get = function(req, res, next){
 	var infoRequest = req.params.id
 	, optionalParam = req.params.optionalParam
 	, action = req.params.action;
-	
+
 	var handled = false;
 
 	if (optionalParam === undefined){
@@ -49,17 +49,17 @@ exports.get = function(req, res, next){
 			case('reloadServer'):
 				functions.reloadServer(req,res);
 				handled = true;
-			break;		
-		}	
+			break;
+		}
 	}
 
-	
+
 	if(!action){
 		switch(optionalParam) {
 			case('uninstall'):
 				functions.pluginManager(req, res, infoRequest, 'remove');
 				handled = true;
-			break;	
+			break;
 			case('install'):
 				functions.pluginManager(req,res, infoRequest, 'install');
 				handled = true;
@@ -67,9 +67,9 @@ exports.get = function(req, res, next){
 			case('upgrade'):
 				functions.pluginManager(req,res, infoRequest, 'install');  //for some reason update isnt working
 				handled = true;
-			break;	
+			break;
 		}
-	}	
+	}
 	if (!handled) {
 		next();
 	}
