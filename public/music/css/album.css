@@ -1,0 +1,120 @@
+mcjs-track .track {
+    padding:15px;
+    border:0;
+    min-height: 25px;
+    line-height: 25px;
+    cursor:pointer;
+    list-style: none;
+    border-bottom:1px solid #313234;
+    font-size: 1.1em;
+}
+
+mcjs-track .track-number {
+    color:#D1D1D1;
+    display:inline-block;
+    margin:0 5px;
+    vertical-align: top;
+}
+mcjs-track .track-title {
+    display: inline-block;
+}
+
+
+mcjs-album {
+    display: inline-block;
+    width: 260px;
+}
+
+
+mcjs-track .track[selected] {
+    background:#444;
+}
+
+mcjs-album .album-title,
+mcjs-album .album-artist,
+mcjs-album .album-year {
+    font-size:12px;
+    font-weight:bold;
+    width: 100%;
+    clear:both;
+    display:block;
+}
+
+mcjs-album .album-year {
+    font-weight:300;
+}
+
+mcjs-album .album-title {
+    height:20px;
+    font-size:14px;
+    max-width:250px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+mcjs-album .thumbnail .caption {
+    height:0;
+    padding:0;
+    width:100%;
+    background:#fff;
+    position:absolute;
+    bottom:0;
+    left:0;
+}
+
+mcjs-album .album-wrapper {
+    padding-left: 5px;
+    padding-right: 5px;
+    -webkit-transition: none;
+    transition: none;
+}
+
+mcjs-album .thumbnail .caption p{
+    padding:9px;
+    margin:0;
+}
+
+
+mcjs-album .thumbnail .album-artist,
+mcjs-album .thumbnail .album-year {
+    font-weight: normal;
+}
+
+mcjs-album .thumbnail {
+    position:relative;
+    cursor:pointer;
+    overflow:hidden;
+    padding:0;
+    background:none;
+    border:0;
+    border-radius: 0;
+}
+
+mcjs-album .thumbnail .edit.icon {
+    display:none;
+}
+mcjs-album .thumbnail:hover .edit.icon {
+    display:block;
+    position:absolute;
+    top:15px;
+    right:5px;
+    z-index:9;
+}
+
+mcjs-album [selected] .thumbnail .caption {
+    height:80px;
+    -webkit-transition: height 0.5s ease-in-out;
+    -moz-transition: height 0.5s ease-in-out;
+    -o-transition: height 0.5s ease-in-out;
+    transition: height 0.5s ease-in-out;
+}
+
+mcjs-album .album-wrapper {
+    max-width: 270px;
+    float: left;
+}
+
+mcjs-album .album-info {
+    padding:10px; position: relative;
+}

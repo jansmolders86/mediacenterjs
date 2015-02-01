@@ -21,8 +21,8 @@ var express = require('express')
 , app = express()
 , config = require('../../lib/handlers/configuration-handler').getConfiguration()
 , deviceInfo = require('../../lib/utils/device-utils')
-, MediaHandler = require('../../lib/media-handler');
-
+, MediaHandler = require('../../lib/media-handler')
+, Sequelize = require('sequelize');
 var MusicHandler = new MediaHandler('Album', 'Track', require('./metadata-processor'), 'musicpath');
 
 exports.engine = 'jade';
@@ -60,6 +60,11 @@ exports.get = function(req, res, next) {
                 next();
                 break;
         }
+    } else if (infoRequest === 'search') {
+        MusicHandler.search(req, res, {
+            include: [ Artist ],
+            where : Sequelize.or({title: {like: '%' + req.query.q + '%'}}, {'Artist.name': {like: '%' + req.query.q + '%'}})
+    });
     } else {
         next();
     }

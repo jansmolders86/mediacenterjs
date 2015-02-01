@@ -2,3 +2,6 @@
     width: 100%;
     max-width: 100%;
 }
+.section {
+    overflow: auto;
+}

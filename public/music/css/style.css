@@ -100,19 +100,7 @@ body,
     padding-left:360px;
 }
 
-.album-wrapper {
-    max-width: 270px;
-    float: left;
-}
-#library .thumbnail{
-    position:relative;
-    cursor:pointer;
-    overflow:hidden;
-    padding:0;
-    background:none;
-    border:0;
-    border-radius: 0;
-}
+
 
 #library [selected] .thumbnail {
     -webkit-transform: scale(1.05);
@@ -122,36 +110,9 @@ body,
     -webkit-transform: scale(1.0);
 }
 
-#library [selected] .thumbnail .caption{
-    height:80px;
-    -webkit-transition: height 0.5s ease-in-out;
-    -moz-transition: height 0.5s ease-in-out;
-    -o-transition: height 0.5s ease-in-out;
-    transition: height 0.5s ease-in-out;
-}
 
 
-#library .thumbnail .caption{
-    height:0;
-    padding:0;
-    width:100%;
-    background:#fff;
-    position:absolute;
-    bottom:0;
-    left:0;
-}
 
-.album-wrapper {
-    padding-left: 5px;
-    padding-right: 5px;
-    -webkit-transition: none;
-    transition: none;
-}
-
-#library .thumbnail .caption p{
-    padding:9px;
-    margin:0;
-}
 
 .rowtracks { width: 100% !important; float: left;}
 #library.side .thumbnail img,
@@ -169,46 +130,15 @@ body,
     opacity:0.5;
 }
 
-.thumbnail .edit.icon{display:none;}
-.thumbnail:hover .edit.icon{
-    display:block;
-    position:absolute;
-    top:15px;
-    right:5px;
-    z-index:9;
-}
 .modal-body img{max-width:300px; max-height:400px;}
 
-.album-title,
-.album-artist,
-.album-year{
-    font-size:12px;
-    font-weight:bold;
-    width: 100%;
-    clear:both;
-    display:block;
+.tracks {
+    display: inline-block;
+    width: calc(100% - 270px);
+    vertical-align: top;
+    margin-bottom: 50px;
 }
 
-.album-year{
-    font-weight:300;
-}
-
-.album-title{
-    height:20px;
-    font-size:14px;
-    max-width:250px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-#library .thumbnail .album-artist,
-#library .thumbnail .album-year {
-    font-weight: normal;
-}
-
-
-.album-info{padding:10px; position: relative;}
 
 /** Playlist **/
 
@@ -285,30 +215,6 @@ body,
 #playlist .album-title{font-size:14px;}
 #playlist .album{ padding:0px;}
 
-.track{
-    padding:15px;
-    border:0;
-    min-height: 25px;
-    line-height: 25px;
-    cursor:pointer;
-    list-style: none;
-    border-bottom:1px solid #313234;
-    font-size: 1.1em;
-}
-
-mcjs-album {
-    display: inline-block;
-    width: 260px;
-}
-
-.tracks {
-    display: inline-block;
-    width: calc(100% - 270px);
-    vertical-align: top;
-    margin-bottom: 50px;
-}
-
-.track[selected]{ background:#444; }
 #playlist ol li{list-style:none;}
 #playlist ol li .play{
     visibility:hidden;
@@ -449,15 +355,7 @@ mcjs-album {
 #player .nav i {
     margin: 10px;
 }
-.track-number{
-    color:#D1D1D1;
-    display:inline-block;
-    margin:0 5px;
-    vertical-align: top;
-}
-.track-title {
-    display: inline-block;
-}
+
 
 .ui.progress {
     width: 100%;
