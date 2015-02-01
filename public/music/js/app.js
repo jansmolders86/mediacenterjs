@@ -21,6 +21,79 @@
 
     var musicApp = angular.module('musicApp', ['ui.bootstrap', 'mcjsCore']);
 
+
+    musicApp.directive('mcjsAlbum',  function() {
+        return { restrict: 'E',
+            scope: {
+                album: '=item'
+            },
+            controller : function ($scope, $modal) {
+                $scope.open = function (album) {
+                    $modal.open({
+                        templateUrl: 'editModal.html',
+                        controller: function ($scope, $modalInstance, current) {
+                            $scope.original = angular.copy(current);
+                            $scope.current = current;
+
+                            $scope.editItem = function(){
+                                current.save()
+                                .then(function() {
+                                    $modalInstance.close();
+                                }, function() {
+                                    $scope.errorMessage = "Error saving " + current.title;
+                                });
+                            };
+
+                            $modalInstance.result.catch(function() {
+                                angular.extend(current, $scope.original);
+                            });
+                        },
+                        size: 'md',
+                        windowClass: "flexible",
+                        resolve: {
+                            current: function () {
+                                return album;
+                            }
+                        }
+                    });
+                };
+            },
+            templateUrl: 'views/album'
+        }
+    });
+
+    musicApp.directive('mcjsTrack',  function() {
+        return { restrict: 'E',
+            scope: {
+                track: '=item'
+            },
+            controller : function ($scope, $modal) {
+
+            },
+            templateUrl: 'views/track'
+        }
+    });
+
+
+    musicApp.factory('Album', function ($http) {
+        var Album = function(data) {
+            angular.extend(this, data);
+        };
+        Album.prototype.save = function() {
+            return $http.post("/music/edit", this);
+        };
+        Album.all = function () {
+            return $http.get('/music/load')
+            .then(function(resp) {
+                return resp.data.map(function(item) {
+                    return new Album(item);
+                });
+            });
+        };
+
+        return Album;
+    });
+
     function createDropDirective(ngevent, jsevent) {
         musicApp.directive(ngevent, function ($parse) {
             return function ($scope, element, attrs) {
@@ -37,156 +110,16 @@
     createDropDirective('ngOnDrop', 'drop');
     createDropDirective('ngOnDragOver', 'dragover');
 
-    window.musicCtrl = function($scope, $http, player, $modal, $filter, audio) {
+    window.musicCtrl = function($scope, $http, player, $modal, $filter, audio, Album) {
         $scope.player = player;
-        $scope.focused = 0;
         $scope.serverMessage = 0;
         $scope.serverStatus= '';
         $scope.className = "normal";
-        $scope.itemStyle = {};
-        //TODO: in a more angular way
-        function layout() {
-            var width = $("#library").width();
-            //{lg: 270, md: 260, sm: 240, xs: 200}
-            var targetWidth = 200;
-            if (width >= 768) {
-                targetWidth = 240;
-            }
-            if (width >= 992) {
-                targetWidth = 260;
-            }
-            if (width >= 1200) {
-                targetWidth = 270;
-            }
-            var itemsCanFit = width/targetWidth>>0;//Math.floor but quicker
-            var itemWidth = 100/(itemsCanFit + 1);
-            return itemWidth + "%";
 
 
-        }
-        $scope.itemStyle.width = layout();
-        $(window).on('resize', function() {
-            $(".row-tracks").css("width", layout());
-        });
-
-        $http.get('/music/load').success(function(data) {
-            $scope.albums = data;
-            angular.forEach($scope.albums, function(album) {
-                album._type = 'album';
-                album.tracks = $filter('orderBy')(album.tracks, 'order');
-                angular.forEach(album.tracks, function(track) {
-                     track.album = album;
-                     track._type = 'track';
-                });
-            });
-
-        });
-        $scope.draggedIndex = null;
-        $scope.startDrag = function(index) {
-            $scope.draggedIndex = index;
-        };
-        $scope.onDrop = function(index) {
-            if ($scope.draggedIndex != null) {
-                var temp = $scope.player.playlist[index];
-                $scope.player.playlist[index] = $scope.player.playlist[$scope.draggedIndex];
-                $scope.player.playlist[$scope.draggedIndex] = temp;
-            }
-        }
-        $scope.changeSelected = function(album){
-            $scope.focused = $scope.albums.indexOf(album);
-        }
-
-        $scope.fullscreen = function() {
-            if ($scope.className === "normal"){
-                $scope.className = "fullscreen";
-            } else {
-                $scope.className = "normal";
-            };
-        }
-
-        $scope.open = function (album) {
-            var modalInstance = $modal.open({
-                templateUrl: 'editModal.html',
-                controller: ModalInstanceCtrl,
-                size: 'md',
-                windowClass: "flexible",
-                resolve: {
-                    current: function () {
-                        return album;
-                    }
-                }
-            });
-        }
-
-        function copyOmit(obj, omitkeys) {
-            var copy = angular.copy(obj);
-            for (var i in omitkeys) {
-                delete copy[omitkeys[i]];
-            }
-            return copy;
-        }
-
-        var ModalInstanceCtrl = function ($scope, $modalInstance, current) {
-            $scope.original = current;
-            $scope.current = angular.copy(current);
-
-            $scope.editItem = function(){
-                $http({
-                    method: "post",
-                    data: copyOmit($scope.current, ['artist', 'tracks']),
-                    url: "/music/edit"
-                }).success(function(data, status, headers, config) {
-                    angular.copy($scope.current, $scope.original);
-                    $modalInstance.dismiss();
-                }).error(function() {
-                    $scope.errorMessage = "Unable to save changes. Check server is running and try again.";
-                });
-            }
-        };
-
-
-
-        var setupSocket = {
-            async: function() {
-                var promise = $http.get('/configuration/').then(function (response) {
-                    var configData  = response.data;
-                    var socket      = io.connect();
-                    socket.on('connect', function(data){
-                        socket.emit('screen');
-                    });
-                    return {
-                        on: function (eventName, callback) {
-                            socket.on(eventName, function () {
-                                var args = arguments;
-                                $scope.$apply(function () {
-                                    callback.apply(socket, args);
-                                });
-                            });
-
-                        },
-                        emit: function (eventName, data, callback) {
-                            socket.emit(eventName, data, function () {
-                                var args = arguments;
-                                $scope.$apply(function () {
-                                    if (callback) {
-                                        callback.apply(socket, args);
-                                    }
-                                });
-                            });
-                        }
-                    };
-                    return data;
-                });
-                return promise;
-            }
-        };
-
-
-        setupSocket.async().then(function(data) {
-            if (typeof data.on !== "undefined") {
-                //$scope.remote       = remote(data, $scope, player, audio);
-                //$scope.keyevents    = keyevents(data, $scope, player, audio);
-            }
+        Album.all()
+        .then(function (albums) {
+            $scope.albums = albums;
         });
 
         $scope.orderProp = 'genre';

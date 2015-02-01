@@ -13,6 +13,8 @@ exports.processFile = function (fileObject, callback) {
     , episodeStripped           = episodeReturnedTitle.replace(this.valid_filetypes, '')
     , episodeTitle              = episodeStripped.trimRight();
 
+    // TODO: Make this more fault tolerant! Crashes in some cases when no
+    // Show name could be found
     var episodeDetails = episoder.parseFilename(originalTitle);
     if (!episodeDetails) return callback();
 
@@ -40,7 +42,6 @@ exports.processFile = function (fileObject, callback) {
         moviedb.searchTv({query: trimmedTitle}, function(err, result) {
             if (err || (result && result.results.length < 1)) {
                 console.log('Error retrieving data for ' + trimmedTitle, err);
-                callback();
             } else {
                 result = result.results[0];
 
@@ -57,15 +58,15 @@ exports.processFile = function (fileObject, callback) {
                 if (result.title) {
                     showData.name = result.title.toLowerCase();
                 }
-
-                Show.findOrCreate({name: showData.name}, showData)
-                    .then(function (show) {
-                        return show.addEpisode(episode);
-                    })
-                    .then(function() {
-                        callback();
-                    });
             }
+
+            Show.findOrCreate({ name: showData.name }, showData)
+                .then(function (show) {
+                    return show.addEpisode(episode);
+                })
+                .then(function() {
+                    callback();
+                });
         });
     });
 }

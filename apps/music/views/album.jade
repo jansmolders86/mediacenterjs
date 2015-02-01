@@ -1,0 +1,9 @@
+.album-wrapper(mcjs-library-item)
+    .thumbnail(ng-class="{current: focused == $index }")
+        i.circular.inverted.edit.icon(ng-click="open(album); $event.stopPropagation();")
+        img(ng-src="{{album.posterURL}}")
+        .caption
+            p
+                span.album-title {{album.title}}
+                span.album-artist {{album.artist.name}}
+                span.album-year(ng-show="album.year !== 0") {{album.year}}
