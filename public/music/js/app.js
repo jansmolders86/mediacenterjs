@@ -115,11 +115,7 @@
                 current.subItemIdx = -1;
             },
             shuffle: function(){
-                if(player.random === true){
-                    player.random = false;
-                } else {
-                    player.random = true;
-                }
+                player.random = !player.random;
                 randomTrack(player, playlist,current);
             },
             seek: function($event) {
@@ -231,8 +227,7 @@
         var currentItem = playlist[current.itemIdx];
         if(player.random === true){
             var currentAlbumTracks  = currentItem.tracks.length;
-            var randomIndex = Math.floor(Math.random() * currentAlbumTracks);
-            current.subItemIdx = randomIndex;
+            current.subItemIdx = Math.floor(Math.random() * currentAlbumTracks);
             if (player.playing){
                 player.play();
             }

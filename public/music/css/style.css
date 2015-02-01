@@ -54,9 +54,8 @@ header, header * {
 
 #show-playlist {
     background: #313234;
-    margin: 0;
     height: 100%;
-    margin-right: 10px;
+    margin: 0 10px 0 0;
 }
 #show-playlist i {
     height: 100%;
@@ -149,8 +148,8 @@ body,
     overflow-y: auto;
     overflow-x: hidden;
     position: absolute;
-    top:0px;
-    left:0px;
+    top:0;
+    left:0;
     bottom: 100px;
     z-index:9;
     -webkit-overflow-scrolling: touch;
@@ -173,12 +172,11 @@ body,
 }
 
 #playlist .album-wrapper{
-    margin-top:360px;
     width:100%;
     max-width:100%;
     padding:20px 0 0 0;
+    float: left;
 }
-
 #playlist h2 {
     z-index: 7;
     height: 60px;
@@ -210,10 +208,9 @@ body,
     cursor:pointer;
     max-width:360px;
     max-height:500px;
-    position: fixed;
 }
 #playlist .album-title{font-size:14px;}
-#playlist .album{ padding:0px;}
+#playlist .album{ padding:0;}
 
 #playlist ol li{list-style:none;}
 #playlist ol li .play{
@@ -242,7 +239,7 @@ body,
 
 #playlist .img-wrapper .icon {
     position: absolute;
-    top: 0px;
+    top: 0;
     color: #f5f5f5;
     font-size: 24px;
     z-index: 1;
@@ -281,6 +278,33 @@ body,
 }
 #playlist .list{  position: relative; overflow: hidden; height: 300px;}
 #playlist .list:hover img{ opacity:0.3 }
+
+
+
+#playlist .album-title,
+#playlist .album-artist,
+#playlist .album-year{
+    font-size:12px;
+    font-weight:bold;
+    width: 100%;
+    clear:both;
+    display:block;
+}
+
+#playlist .album-year{
+    font-weight:300;
+}
+
+#playlist .album-title{
+    height:20px;
+    font-size:14px;
+    max-width:250px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#playlist .album-info{padding:10px; position: relative;}
 
 #playlist .tracks {
     width: 100%;
@@ -325,7 +349,7 @@ body,
 }
 #player.fullscreen .ui.progress{
     position: absolute;
-    top:0px;
+    top:0;
     left:0;
     width:100%;
 }
@@ -335,7 +359,7 @@ body,
 #player.fullscreen  #playing-info img{ max-width:500px; max-height:500px;}
 
 #player #playing-info { position:relative; overflow: hidden; float:left; padding-left: 0;}
-#player #playing-info img{max-width:100px; max-height:100px; float:left; margin:0 20px 0px 0; }
+#player #playing-info img{max-width:100px; max-height:100px; float:left; margin:0 20px 0 0; }
 #player #playing-info .info{float:left; color:#fff; font-size:16px; padding-top: 20px;}
 #player #playing-info .info{float:left; color:#fff; font-size:16px; padding-top: 20px;}
 #player #playing-info .info .album-artist {
@@ -361,7 +385,7 @@ body,
     width: 100%;
     height: 10px;
     background-color: #333;
-    border-radius: 0px;
+    border-radius: 0;
     margin-bottom:0;
     padding:0;
 }
@@ -370,11 +394,11 @@ body,
     display: block;
     height: 100%;
     background-color: #fb8521;
-    webkit-transition: width 3s ease-in-out;
+    -webkit-transition: width 3s ease-in-out;
     -moz-transition: width 3s ease-in-out;
     -o-transition: width 3s ease-in-out;
     transition: width 3s ease-in-out;
-    width:0%;
+    width:0;
 }
 
 
@@ -441,7 +465,7 @@ body,
     }
 
     #library li.track:last-child {
-        margin-bottom: 0px;
+        margin-bottom: 0;
     }
 
     #player i{font-size:20px;}
@@ -480,31 +504,7 @@ body,
     }
 }
 @media (max-width: 600px) {
-    #library .rowtracks .thumbnail .caption {
-        left: 70px;
-        height: 70px;
-        color: rgb(241, 241, 241);
-        background: #3c3d41;
-    }
-    #library .rowtracks .thumbnail img {
-        max-width: 70px;
-        margin-left: 0;
-    }
-    #library .rowtracks .album-wrapper {
-        max-width: 100%;
-        width: 100%;
-    }
-    #library .rowtracks .thumbnail:hover {
-        -webkit-transform: none;
-    }
-    #library .rowtracks {
-        padding: 0;
-    }
-    #library .rowtracks ol {
-        margin-top: 70px;
-        padding-left: 0;
-    }
-    #library .rowtracks li.track {
-        margin-left: 0;
+    mcjs-album {
+        max-width: 160px;
     }
 }

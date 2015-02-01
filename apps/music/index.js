@@ -27,7 +27,7 @@ var MusicHandler = new MediaHandler('Album', 'Track', require('./metadata-proces
 
 exports.engine = 'jade';
 
-exports.index = function(req, res, next) {
+exports.index = function(req, res) {
     deviceInfo.isDeviceAllowed(req, function (allowed) {
         res.render('music', {
             title: 'music',

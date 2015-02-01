@@ -76,10 +76,10 @@ exports.processFile = function (fileObject, callback) {
                     trackData.AlbumId = album.id;
                     return Track.findOrCreate({ title: trackData.title }, trackData);
                 })
-                .then(function (track) {
+                .then(function () {
                     callback();
                 });
             });
         }
     });
-}
+};

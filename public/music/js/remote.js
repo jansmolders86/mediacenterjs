@@ -86,7 +86,7 @@ function keyevents(socket, $scope, player, audio){
                 pushPause(socket, $scope, player, audio);
             break;
         }
-    };
+    }
 }
 
 
@@ -101,13 +101,12 @@ function goLeft(socket, $scope, player, audio){
         //jQuery
         $('.current').scrollintoview({direction: "vertical"});
 
-        $scope.focused = index;
+        $scope.$apply(function(){
+            $scope.focused = index;
+        });
     } else {
         player.previous();
     }
-    $scope.$apply(function(){
-        $scope.focused;
-    });
 }
 
 
@@ -122,26 +121,25 @@ function goRight(socket, $scope, player, audio){
         //jQuery
         $('.current').scrollintoview({direction: "vertical"});
 
-        $scope.focused = index;
+
+       $scope.$apply(function(){
+           $scope.focused = index;
+       });
     }else {
         player.next();
     }
-    $scope.$apply(function(){
-        $scope.focused;
-    });
 }
 
 function pushEnter(socket, $scope, player, audio){
     if(player.playlist.length === 0) {
         var index = $scope.focused;
         var album = $scope.albums[index];
-        player.playlist.push(album);
+        $scope.$apply(function(){
+            player.playlist.push(album);
+        });
     } else {
         player.play();
     }
-    $scope.$apply(function(){
-        player.playlist;
-    });
 }
 
 function pushPause(socket, $scope, player, audio){
@@ -166,13 +164,7 @@ function pushBack(socket, $scope, player, audio){
 }
 
 function pushMute(socket, $scope, player, audio){
-    var mute = false;
-    if(player.playing === true && mute === false) {
-        audio.mute = true;
-        mute = true;
-    } else {
-        audio.mute = false;
-    }
+    audio.mute = !audio.mute;
 }
 
 function pushDashboard(socket, $scope, player, audio){
@@ -185,6 +177,6 @@ function fullscreen($scope){
             $scope.className = "fullscreen";
         } else {
             $scope.className = "normal";
-        };
+        }
     }
 }

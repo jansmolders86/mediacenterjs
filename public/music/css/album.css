@@ -57,7 +57,9 @@ mcjs-album .thumbnail .caption {
     height:0;
     padding:0;
     width:100%;
-    background:#fff;
+
+    color: rgb(226, 226, 226);
+    background: #3c3d41;
     position:absolute;
     bottom:0;
     left:0;
@@ -113,8 +115,4 @@ mcjs-album [selected] .thumbnail .caption {
 mcjs-album .album-wrapper {
     max-width: 270px;
     float: left;
-}
-
-mcjs-album .album-info {
-    padding:10px; position: relative;
 }
