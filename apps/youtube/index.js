@@ -45,7 +45,7 @@ exports.post = function(req, res, next) {
         case 'searchYoutube':
             searchYoutube(req, function (error, searchResults) {
                 if(error) {
-                    res.json(500, {message: error});
+                    res.status(500).json({message: error});
                 } else {
                     parseVideoData(searchResults, function (videos) {
                         res.json({'videos': videos});
