@@ -45,7 +45,7 @@ exports.post = function(req, res, next) {
         case 'searchYoutube':
             searchYoutube(req, function (error, searchResults) {
                 if(error) {
-                    res.json(500, {message: error});
+                    res.status(500).json({message: error});
                 } else {
                     parseVideoData(searchResults, function (videos) {
                         res.json({'videos': videos});
@@ -70,10 +70,10 @@ exports.get = function(req, res, next) {
             Youtube.videos.list({"part": "snippet,statistics,contentDetails", "chart": "mostPopular", "maxResults": 50}, function (error, activityData) {
                 if( error instanceof Error ) {
                     logger.error('Error searching Youtube', error);
-                    res.json(500, {"error":'Problem getting content from YouTube.'});
+                    res.status(500).json({"error":'Problem getting content from YouTube.'});
                     return;
                 } else if(error) {
-                    res.json(500, {"error":'Need to re-authenticate to Google, popup in '});
+                    res.status(500).json({"error":'Need to re-authenticate to Google, popup in '});
                     return;
                 }
                 parseVideoData(activityData, function (videos) {
@@ -84,7 +84,7 @@ exports.get = function(req, res, next) {
         case 'getVideo':
             getVideo(req, function (error, videoResult) {
                 if(error) {
-                    res.json({message: error}, 500);
+                    res.status(500).json({message: error});
                 } else {
                     parseVideoData(videoResult, function (video) {
                         res.json({'videos': video});
@@ -96,7 +96,7 @@ exports.get = function(req, res, next) {
             if(config.oauthKey) {
                 res.json({key: config.oauthKey});
             } else {
-                res.json(500, {error: 'Oauth key missing in config file, please update!'});
+                res.status(500).json({error: 'Oauth key missing in config file, please update!'});
             }
         break;
         default:
