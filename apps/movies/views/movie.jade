@@ -12,7 +12,7 @@
         .specs
             p
                 strong {{movie.genre}}
-            p
+            p(ng-show="movie.runtime != 'Unknown'")
                 strong #{lingua.movies_Runtime}: {{movie.runtime}} min
         .cdNumber(ng-show="movie.cdNumber.length > 0")
             span {{movie.cdNumber}}
