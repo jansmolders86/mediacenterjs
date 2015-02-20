@@ -41,4 +41,9 @@ describe('Episoder', function () {
     var result = episoder.parseFilename('Test S01E04', { offset: 2 });
     assert.equal(result.episode, 6);
   });
+
+  it('should not fail for show name only in filename', function() {
+    var result = episoder.parseFilename('Community');
+    assert.equal(result, null);
+  });
 });
