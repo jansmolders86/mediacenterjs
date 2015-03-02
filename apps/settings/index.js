@@ -24,6 +24,7 @@ var express = require('express')
 , ini = require('ini')
 , http = require('http')
 , DeviceInfo = require('../../lib/utils/device-utils')
+, isThere = require('is-there')
 , config = ini.parse(fs.readFileSync('./configuration/config.ini', 'utf-8'));
 
 
@@ -134,7 +135,7 @@ function loadCustomSettings(callback){
         } else {
             var pluginPath = nodeModules + '/' + name;
             var pluginSettingsJSON = pluginPath + '/settings.json'
-            if(fs.existsSync( pluginSettingsJSON)){
+            if(isThere.sync( pluginSettingsJSON)){
                 var parsedJSON = require(pluginSettingsJSON)
                 plugSettings.push(parsedJSON);
             };
