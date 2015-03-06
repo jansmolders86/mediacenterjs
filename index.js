@@ -20,6 +20,7 @@
 var express = require('express')
     , app = express()
     , fs = require ('fs-extra')
+    , isThere = require('is-there')
     , util = require('util')
     , dateFormat = require('dateformat')
     , lingua = require('lingua')
@@ -58,7 +59,7 @@ if(config.language === ""){
 }
 
 /*Create database*/
-if(fs.existsSync('./lib/database/') === false){
+if(isThere.sync('./lib/database/') === false){
     fs.mkdirSync('./lib/database/');
 }
 var env = process.env.NODE_ENV || 'development';
@@ -287,7 +288,7 @@ function unzip(req, res, output, dir){
     var ExtractDir = './install'
     var options = {};
 
-    if(fs.existsSync(dir) === false){
+    if(isThere.sync(dir) === false){
         fs.mkdirSync(dir);
     } else {
         rimraf(dir, function (err) {

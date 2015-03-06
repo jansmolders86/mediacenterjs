@@ -3,40 +3,14 @@
   "version": "0.1.2",
   "description": "A NodeJS based mediacenter for your browser",
   "homepage": "http://www.mediacenterjs.com",
-  "author": {
-    "name": "Jan Smolders",
-    "email": "jansmolders86@gmail.com"
-  },
+  "author": "Jan Smolders <jansmolders86@gmail.com>",
   "contributors": [
-    {
-      "name": "Adam Schodde",
-      "email": "sparky1010+github@gmail.com"
-    },
-    {
-      "name": "Claire Sarsam",
-      "email": "csarsam+github@gmail.com"
-    },
-    {
-      "name": "Terry Moore II",
-      "email": "terry.moore.ii@gmail.com"
-    },
-    {
-      "name": "Jonathan Bailey"
-    },
-    {
-      "name": "Stefan Hoffman",
-      "email": "stefhoff@go4more.de"
-    },
-    {
-      "name": "Ionică Bizău",
-      "email": "bizauionica@gmail.com"
-    }
-  ],
-  "licenses": [
-    {
-      "type": "GPLv3",
-      "url": "http://www.gnu.org/licenses"
-    }
+    "Adam Schodde <sparky1010+github@gmail.com>",
+    "Claire Sarsam <csarsam+github@gmail.com>",
+    "Terry Moore II <terry.moore.ii@gmail.com>",
+    "Jonathan Bailey",
+    "Stefan Hoffman <stefhoff@go4more.de>",
+    "Ionică Bizău <bizauionica@gmail.com>"
   ],
   "repository": {
     "type": "git",
@@ -48,7 +22,6 @@
   "bin": {
     "mediacenterjs": "./server.js"
   },
-  "readmeFilename": "README.md",
   "dependencies": {
     "adm-zip": "^0.4.4",
     "async": "^0.9.0",
@@ -62,6 +35,7 @@
     "fluent-ffmpeg": "^1.7.2",
     "fs-extra": "^0.16.3",
     "ini": "^1.3.2",
+    "isThere": "^1.1.0",
     "jade": "^1.7.0",
     "lastfmapi": "^0.0.5",
     "lingua": "^0.4.0",
@@ -83,6 +57,16 @@
     "walk": "^2.0.0",
     "wget": "^0.0.1",
     "youtube-api": "~0.3.0",
-    "winston":"^0.8.3"
-  }
+    "winston": "^0.8.3"
+  },
+  "bugs": {
+    "url": "https://github.com/jansmolders86/mediacenterjs/issues"
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "keywords": [
+    "mediacenter",
+    "media"
+  ],
+  "license": "GPLv3"
 }

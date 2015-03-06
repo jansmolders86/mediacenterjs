@@ -26,12 +26,13 @@
 var child_process = require('child_process')
     , fs = require("fs-extra")
     , sys = require("sys")
+    , isThere = require('is-there')
     , logger = require('winston');
 
     var path = require('path');
     var appDir = path.dirname(require.main.filename)
 
-    if(fs.existsSync(appDir + "/log/") === false){
+    if(isThere.sync(appDir + "/log/") === false){
         fs.mkdirSync(appDir + "/log/");
         fs.openSync(appDir + "/log/server.log", 'w');
         fs.chmodSync(appDir + "/log/server.log", 0755);
@@ -77,7 +78,7 @@ function cleanUp(output, dir) {
     });
 
     child.on('exit', function() {
-        if(fs.existsSync(output) === true){
+        if(isThere.sync(output) === true){
             fs.unlinkSync(output);
             server.update = false;
             server.start();
