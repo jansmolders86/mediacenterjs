@@ -107,7 +107,7 @@ server = {
                 installUpdate(output, dir);
             },2000);
         } else {
-            logger.info('Starting server' .green.bold);
+            logger.info('Starting server');
             that.watchFile();
 
             this.process = child_process.spawn(process.argv[0], ['index.js']);
