@@ -25,7 +25,6 @@ var express = require('express')
     , async = require('async')
     , npm = require('npm')
     , pluginPrefix = config.pluginPrefix
-    , npm = require('npm')
     , search = npm + ' search '
     , install = npm + ' install '
     , upgrade = npm + ' upgrade '
