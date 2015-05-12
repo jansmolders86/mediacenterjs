@@ -101,7 +101,7 @@ Feel free to contribute by translating.
 
 
 * [Sylvain](https://github.com/flyinva) for his French translation
-* [Alberto Jerez](https://github.com/ajerez)  for his Spanish translation
+* [Alberto Jerez](https://github.com/ajerez) and David Toraño for their Spanish translation
 * [Domenico Luciani](https://github.com/dlion) for his Italian translation
 * [Alexey Bobyrev](https://github.com/sfate) for his Russian and Ukrainian translation
 * [Doğan Aydın](https://github.com/doganaydin) And [William Belle](https://github.com/williambelle) for their Turkish translation
