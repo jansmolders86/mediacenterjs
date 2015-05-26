@@ -77,6 +77,7 @@ Audio: MP3/M4a
 Known issues:
 ==================
 
+* Youtube app not working (needs to be refactored)
 * Device streaming still in heavy development
 * Seeking beyond buffer not working yet.
 
