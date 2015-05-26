@@ -117,7 +117,7 @@ block body
                             a.btn.scraperlink.mcjs-rc-clickable(ng-click="getScraperData('all')")
                                 i.cloud.download.icon
                                 |#{lingua.settings_get_all_metadata}
-                .access-table.col-sm-12.col-md-12.col-lg-9
+                .access-table.col-sm-12.col-md-12.col-lg-12
                     h2 #{lingua.settings_access_management}
                     .form-group.mcjs-rc-controllable
                         strong #{lingua.settings_device_connected}:
@@ -138,16 +138,6 @@ block body
                                         a.parentalControl.btn.mcjs-rc-clickable.lock(ng-if="device.isAllowed === 'yes'", ng-click="setLocked(device, true)") #{lingua.settings_device_btn_lock}
                                         a.parentalControl.btn.mcjs-rc-clickable.unlock(ng-if="device.isAllowed === 'no'", ng-click="setLocked(device, false)") #{lingua.settings_device_btn_unlock}
 
-
-                #oauthContainer.col-sm-12.col-md-12.col-lg-3
-                    h2 #{lingua.settings_oauth_login}
-                    span.info
-                        span.quote &ldquo;
-                        span #{lingua.setting_oauth_explanation}
-                        span.quote &rdquo;
-                    .mcjs-rc-controllable.row
-                        a.btn.btn-alternative#oauth(ng-click="oauth($event)") #{lingua.setting_register_oauth}
-                    label(for="oauthKey")
     script(type="text/ng-template", id="clearCacheModal.html")
         .modal-body #{lingua.settings_confirm_message}
         .modal-footer
