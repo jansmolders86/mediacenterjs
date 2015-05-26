@@ -1,72 +1,72 @@
 {
-  "name": "mediacenterjs",
-  "version": "0.1.2",
-  "description": "A NodeJS based mediacenter for your browser",
-  "homepage": "http://www.mediacenterjs.com",
-  "author": "Jan Smolders <jansmolders86@gmail.com>",
-  "contributors": [
-    "Adam Schodde <sparky1010+github@gmail.com>",
-    "Claire Sarsam <csarsam+github@gmail.com>",
-    "Terry Moore II <terry.moore.ii@gmail.com>",
-    "Jonathan Bailey",
-    "Stefan Hoffman <stefhoff@go4more.de>",
-    "Ionică Bizău <bizauionica@gmail.com>"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "http://github.com/jansmolders86/mediacenterjs.git"
-  },
-  "scripts": {
-    "start": "node server.js"
-  },
-  "bin": {
-    "mediacenterjs": "./server.js"
-  },
-  "dependencies": {
-    "adm-zip": "^0.4.4",
-    "async": "^0.9.0",
-    "colors": "^1.0.3",
-    "dateformat": "^1.0.11",
-    "express": "^4.11.0",
-    "body-parser": "^1.10.1",
-    "serve-static": "^1.8.0",
-    "serve-favicon": "^2.2.0",
-    "errorhandler": "^1.3.2",
-    "fluent-ffmpeg": "^1.7.2",
-    "fs-extra": "^0.16.3",
-    "ini": "^1.3.2",
-    "is-there": "^1.1.0",
-    "jade": "^1.7.0",
-    "lastfmapi": "^0.0.5",
-    "lingua": "^0.4.0",
-    "method-override": "^2.3.1",
-    "moviedb": "^0.1.9",
-    "musicmetadata": "^0.4.6",
-    "node-ffprobe": "^1.2.2",
-    "node-schedule": "^0.1.13",
-    "npm": "^1.3.15",
-    "open": "^0.0.5",
-    "request": "^2.51.0",
-    "rimraf": "^2.1.4",
-    "semver": ">=2.0.0",
-    "sequelize": "^1.7.9",
-    "socket.io": "^0.9.16",
-    "sqlite3": "^3.0.3",
-    "to-title-case": "^0.1.5",
-    "underscore": "^1.7.0",
-    "walk": "^2.0.0",
-    "wget": "^0.0.1",
-    "youtube-api": "~0.3.0",
-    "winston": "^0.8.3"
-  },
-  "bugs": {
-    "url": "https://github.com/jansmolders86/mediacenterjs/issues"
-  },
-  "main": "index.js",
-  "devDependencies": {},
-  "keywords": [
-    "mediacenter",
-    "media"
-  ],
-  "license": "GPLv3"
+    "name": "mediacenterjs",
+    "version": "0.1.2",
+    "description": "A NodeJS based mediacenter for your browser",
+    "homepage": "http://www.mediacenterjs.com",
+    "author": "Jan Smolders <jansmolders86@gmail.com>",
+    "contributors": [
+        "Adam Schodde <sparky1010+github@gmail.com>",
+        "Claire Sarsam <csarsam+github@gmail.com>",
+        "Terry Moore II <terry.moore.ii@gmail.com>",
+        "Jonathan Bailey",
+        "Stefan Hoffman <stefhoff@go4more.de>",
+        "Ionică Bizău <bizauionica@gmail.com>"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/jansmolders86/mediacenterjs.git"
+    },
+    "scripts": {
+        "start": "node server.js"
+    },
+    "bin": {
+        "mediacenterjs": "./server.js"
+    },
+    "dependencies": {
+        "adm-zip": "^0.4.4",
+        "async": "^0.9.0",
+        "colors": "^1.0.3",
+        "dateformat": "^1.0.11",
+        "express": "^4.11.0",
+        "body-parser": "^1.10.1",
+        "serve-static": "^1.8.0",
+        "serve-favicon": "^2.2.0",
+        "errorhandler": "^1.3.2",
+        "fluent-ffmpeg": "^1.7.2",
+        "fs-extra": "^0.16.3",
+        "ini": "^1.3.2",
+        "is-there": "^1.1.0",
+        "jade": "^1.7.0",
+        "lastfmapi": "^0.0.5",
+        "lingua": "^0.4.0",
+        "method-override": "^2.3.1",
+        "moviedb": "^0.1.9",
+        "musicmetadata": "^0.4.6",
+        "node-ffprobe": "^1.2.2",
+        "node-schedule": "^0.1.13",
+        "npm": "^1.3.15",
+        "open": "^0.0.5",
+        "request": "^2.51.0",
+        "rimraf": "^2.1.4",
+        "semver": ">=2.0.0",
+        "sequelize": "^1.7.9",
+        "socket.io": "^0.9.16",
+        "sqlite3": "^3.0.3",
+        "to-title-case": "^0.1.5",
+        "underscore": "^1.7.0",
+        "walk": "^2.0.0",
+        "wget": "^0.0.1",
+        "youtube-api": "~0.3.0",
+        "winston": "^0.8.3"
+    },
+    "bugs": {
+        "url": "https://github.com/jansmolders86/mediacenterjs/issues"
+    },
+    "main": "index.js",
+    "devDependencies": {},
+    "keywords": [
+        "mediacenter",
+        "media"
+    ],
+    "license": "GPLv3"
 }
