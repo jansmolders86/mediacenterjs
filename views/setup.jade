@@ -9,7 +9,6 @@ block additional_css
     link(rel='stylesheet', href='/settings/css/style.css')
 
 block additional_scripts
-    script(src='/core/js/plugins/oauth.min.js')
     script(src="/settings/js/jquery.mcjs.settings.js")
     script.
         $(function() {
@@ -85,18 +84,8 @@ block body
                             i.exchange.icon
                         input#port.mcjs-rc-clickable.form-control(name="port",type="text", placeholder="ie 3000 or 1337", data-rule-required="true", data-msg-required="This field is required.")
             .form-group.mcjs-rc-controllable
-                span.info.col-md-5
-                    span.quote &ldquo;
-                    span Securely connect to your Google account using oAuth to use the YouTube app. Logging in will enable you to view your personal content. After logging in using oAuth, press 'submit' to save and continue. You can also log in later.
-                    span.quote &rdquo;
-                    input#oauthKey(name="oauthKey" type="hidden", placeholder="OAuth.io Key", value="")
-                    input.oauth(name="oauth" type="hidden")
-            .form-group.mcjs-rc-controllable
                 .col-md-10
-                    a.btn.btn-alternative#oauth(href="#", style="display:inline-block;") Connect to Google using oAuth
                     input.btn.mcjs-rc-clickable(type="submit",value="Submit", style="display:inline-block; margin-left:150px;")
-                    label(for="oauthKey")
-
                     input(name="screensaver",type="hidden",value="dim")
                     input#language(name="language",type="hidden",value="en")
                     input#platform(name="platform",type="hidden",value="")
