@@ -104,7 +104,7 @@ exports.getAvailablePlugins = function(req, res){
                 return {
                     name: pluginObj.name.replace(pluginPrefix, ''), //Remove the Mediacenterjs-
                     desc: pluginObj.description,
-                    author: pluginObj.maintainers[0].replace('=',''),
+                    author: pluginObj.author.replace('=',''),
                     date: d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear(),
                     version: pluginObj.version,
                     keywords: pluginObj.keywords,

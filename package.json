@@ -24,7 +24,7 @@
     },
     "dependencies": {
         "adm-zip": "^0.4.4",
-        "async": "^0.9.0",
+        "async": "1.0.0",
         "colors": "^1.0.3",
         "dateformat": "^1.0.11",
         "express": "^4.11.0",
@@ -51,7 +51,7 @@
         "semver": ">=2.0.0",
         "sequelize": "^1.7.9",
         "socket.io": "^0.9.16",
-        "sqlite3": "^3.0.3",
+        "sqlite3": "^3.0.8",
         "to-title-case": "^0.1.5",
         "underscore": "^1.7.0",
         "walk": "^2.0.0",
@@ -68,5 +68,9 @@
         "mediacenter",
         "media"
     ],
-    "license": "GPLv3"
+    "license": [
+        { 
+            "type":"GPL-3.0"
+        }
+    ]
 }
