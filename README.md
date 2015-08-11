@@ -135,6 +135,6 @@ I'm building MCJS in my free time so if you want to encourage me to continue thi
 For questions/contributions feel free to email me at: jansmolders86@gmail.com
 This application uses the GNU General Public License. See <http://www.gnu.org/licenses/>.
 
-Copyright (C) 2014 - Jan Smolders
+Copyright (C) 2015 - Jan Smolders
 
 [![Analytics](https://ga-beacon.appspot.com/UA-49988223-1/mediacenterjs/index)](https://github.com/igrigorik/ga-beacon)
