@@ -40,7 +40,7 @@
         "lastfmapi": "^0.0.5",
         "lingua": "^0.4.0",
         "method-override": "^2.3.1",
-        "moviedb": "^0.1.9",
+        "moviedb": "^0.2.0",
         "musicmetadata": "^0.4.6",
         "node-ffprobe": "^1.2.2",
         "node-schedule": "^0.1.13",
