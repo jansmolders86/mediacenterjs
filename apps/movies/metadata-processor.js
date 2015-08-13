@@ -1,4 +1,4 @@
-var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3')
+var moviedb = require('moviedb')('1d0a02550b7d3eb40e4e8c47a3d8ffc6')
 , movie_title_cleaner = require('../../lib/utils/title-cleaner')
 , config = config = require('../../lib/handlers/configuration-handler').getConfiguration()
 , path = require('path')
@@ -67,4 +67,3 @@ function buildImageUrl(width, path) {
   if (!path) return;
   return "http://image.tmdb.org/t/p/w" + width + path;
 }
-
