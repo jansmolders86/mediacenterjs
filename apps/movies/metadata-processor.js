@@ -50,16 +50,16 @@ exports.processFile = function (fileObject, callback) {
             metadata.year = result.release_date ? new Date(result.release_date).getFullYear() : metadata.year;
         }
 
-        Movie.find({ where: { filePath: metadata.filePath } }).complete(function (err, movie) {
-            if (err || !movie) {
-                Movie.create(metadata).success(function(err, movie) {
-                    callback();
-                });
-            } else {
-                movie.updateAttributes(metadata);
+        Movie.find({ where: { filePath: metadata.filePath } })
+            .then(function (movie) {
+                if (movie) {
+                    return movie.updateAttributes(metadata);
+                } else {
+                    return Movie.create(metadata);
+                }
+            }).then(function () {
                 callback();
-            }
-        });
+            });
     });
 }
 

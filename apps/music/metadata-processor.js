@@ -67,16 +67,16 @@ exports.processFile = function (fileObject, callback) {
                     filePath: fileObject.href
                 };
 
-                Artist.findOrCreate(artistData, artistData)
-                .then(function (artist) {
+                Artist.findOrCreate({where: artistData, defaults: artistData})
+                .spread(function (artist, created) {
                     albumData.ArtistId = artist.id;
-                    return Album.findOrCreate({ title: albumData.title }, albumData);
+                    return Album.findOrCreate({where: { title: albumData.title }, defaults: albumData});
                 })
-                .then(function (album) {
+                .spread(function (album, created) {
                     trackData.AlbumId = album.id;
-                    return Track.findOrCreate({ title: trackData.title }, trackData);
+                    return Track.findOrCreate({where: { title: trackData.title }, defaults: trackData});
                 })
-                .then(function (track) {
+                .spread(function (track, created) {
                     callback();
                 });
             });
