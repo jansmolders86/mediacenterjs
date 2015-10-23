@@ -117,6 +117,7 @@ Feel free to contribute by translating.
 * [Matthew Szatmary](https://github.com/szatmary) for his FFMPEG expertise
 * [Richard Bernards](https://github.com/RichardBernards) for his architectural knowledge/support
 * [Lucien Immink](https://github.com/lucienimmink) for his javascript knowledge/support
+* [andreme](https://github.com/andreme) for his bugfixes
 * [Jérémie Parker](https://github.com/p-j) for his bugfixes
 * [Gary Katsevman](https://github.com/gkatsev) for his bugfixes
 * [Marco Da Col](https://github.com/ildac) for his bugfixes and Italian translations
