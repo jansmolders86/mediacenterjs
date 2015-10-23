@@ -51,7 +51,7 @@ exports.index = function(req, res, next){
     var availableScreensavers = ['dim','backdrop','off'];
 
     Device.findAll()
-    .complete(function(devices) {
+    .then(function(devices) {
         DeviceInfo.isDeviceAllowed(req, function(allowed){
             res.render('remote',{
                 movielocation: config.moviepath,

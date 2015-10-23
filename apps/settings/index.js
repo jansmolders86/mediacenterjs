@@ -30,7 +30,7 @@ var express = require('express')
 
 getDevices = function (req, res) {
     Device.findAll()
-     .success(function (devices) {
+     .then(function (devices) {
         res.json(devices);
      });
 }
@@ -83,7 +83,7 @@ exports.index = function(req, res, next){
     DeviceInfo.storeDeviceInfo(req);
 
     Device.findAll()
-    .success(function (devices) {
+    .then(function (devices) {
         DeviceInfo.isDeviceAllowed(req, function (allowed) {
             res.render('settings', {
                 title: 'Settings',
