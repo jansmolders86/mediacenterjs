@@ -162,7 +162,7 @@ tvApp.factory('player', function( $rootScope) {
             },
             next: function() {
                 if (!playlist.length) return;
-                if (playlist[current.tvshow].episodes.length > (current.episode + 1)) {
+                if (playlist[current.tvshow].Episodes.length > (current.episode + 1)) {
                     current.episode++;
                 } else {
                     current.episode = 0;

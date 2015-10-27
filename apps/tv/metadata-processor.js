@@ -1,4 +1,4 @@
-var moviedb = require('moviedb')('7983694ec277523c31ff1212e35e5fa3')
+var moviedb = require('../../lib/utils/moviedb-wrapper')('7983694ec277523c31ff1212e35e5fa3')
 , episoder = require('../../lib/utils/episoder')
 , tv_title_cleaner = require('../../lib/utils/title-cleaner')
 , path = require('path')
@@ -37,17 +37,17 @@ exports.processFile = function (fileObject, callback) {
             episode: episodeDetails.episode || 0
         }})
         .spread(function(episode, created) {
-            var showData = {
-                name            : trimmedTitle,
-                posterURL       : '/tv/css/img/nodata.jpg',
-                genre           : 'Unknown',
-                certification   : 'Unknown'
-            };
-            moviedb.searchTv({query: trimmedTitle}, function(err, result) {
-                if (err || (result && result.results.length < 1)) {
+            moviedb.searchTv({query: trimmedTitle})
+                .catch(function (err) {
                     console.log('Error retrieving data for ' + trimmedTitle, err);
-                } else {
-                    result = result.results[0];
+                })
+                .then(function(result) {
+                    var showData = {
+                        name            : trimmedTitle,
+                        posterURL       : '/tv/css/img/nodata.jpg',
+                        genre           : 'Unknown',
+                        certification   : 'Unknown'
+                    };
 
                     var baseUrl = 'http://image.tmdb.org';
                     var posterURL = result.poster_path ? baseUrl + '/t/p/w342' + result.poster_path : '/movies/css/img/nodata.jpg';
@@ -62,18 +62,17 @@ exports.processFile = function (fileObject, callback) {
                     if (result.title) {
                         showData.name = result.title.toLowerCase();
                     }
-                }
 
-                writeSerialise = writeSerialise.then(function () {
-                    return Show.findOrCreate({where: { name: showData.name }, defaults: showData})
-                        .spread(function (show, created) {
-                            return show.addEpisode(episode);
-                        })
-                        .then(function () {
-                            callback();
-                        });
+                    writeSerialise = writeSerialise.then(function () {
+                        return Show.findOrCreate({where: { name: showData.name }, defaults: showData})
+                            .spread(function (show, created) {
+                                return show.addEpisode(episode);
+                            })
+                            .then(function () {
+                                callback();
+                            });
+                    });
                 });
-            });
         });
     });
 }

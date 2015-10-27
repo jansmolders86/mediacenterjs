@@ -1,4 +1,4 @@
-var moviedb = require('moviedb')('1d0a02550b7d3eb40e4e8c47a3d8ffc6')
+var moviedb = require('../../lib/utils/moviedb-wrapper')('1d0a02550b7d3eb40e4e8c47a3d8ffc6')
 , movie_title_cleaner = require('../../lib/utils/title-cleaner')
 , config = config = require('../../lib/handlers/configuration-handler').getConfiguration()
 , path = require('path')
@@ -29,12 +29,11 @@ exports.processFile = function (fileObject, callback) {
         year            : movieInfo.year
     };
 
-    moviedb.searchMovie(searchOptions, function(err, result) {
-        if (err || (result && result.results.length < 1)) {
+    moviedb.searchMovie(searchOptions)
+        .catch(function (err) {
             console.log('Error retrieving data for ' + movieTitle, err);
-        } else {
-            result = result.results[0];
-
+        })
+        .then(function(result) {
             var posterURL = buildImageUrl('342', result.poster_path) || metadata.posterURL;
             var backgroundURL = buildImageUrl('1920', result.backdrop_path) || metadata.backgroundURL;
 
@@ -48,19 +47,18 @@ exports.processFile = function (fileObject, callback) {
             metadata.overview = result.overview;
             metadata.adult = result.adult === 'true';
             metadata.year = result.release_date ? new Date(result.release_date).getFullYear() : metadata.year;
-        }
 
-        Movie.find({ where: { filePath: metadata.filePath } })
-            .then(function (movie) {
-                if (movie) {
-                    return movie.updateAttributes(metadata);
-                } else {
-                    return Movie.create(metadata);
-                }
-            }).then(function () {
-                callback();
-            });
-    });
+            Movie.find({ where: { filePath: metadata.filePath } })
+                .then(function (movie) {
+                    if (movie) {
+                        return movie.updateAttributes(metadata);
+                    } else {
+                        return Movie.create(metadata);
+                    }
+                }).then(function () {
+                    callback();
+                });
+        });
 }
 
 function buildImageUrl(width, path) {
