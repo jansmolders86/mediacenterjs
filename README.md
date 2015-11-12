@@ -10,7 +10,7 @@ Website: http://www.mediacenterjs.com
 Status: 
 =======
 
-__Heavy work in progress__
+__Beta__
 
 What is MediacenterJS?
 =========================
