@@ -1,4 +1,4 @@
-![logo](/public/core/css/img/logo.png) MediacenterJS __Beta__
+![logo](/public/core/css/img/logo.png) MediacenterJS <sup>Beta</sup>
 =============
 
 [![mediacenterjs](http://mediacenterjs.com/global/images/screen1.png)](http://www.mediacenterjs.com)
