@@ -184,6 +184,11 @@ h2.loading{top:80px;}
     color: #fff;
 }
 
+#playlist h2 i,
+header h1 i{
+	cursor: pointer;
+}
+
 #playlist .header{
     clear: both;
     width: 335px;

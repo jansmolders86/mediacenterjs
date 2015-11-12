@@ -232,6 +232,11 @@ body,
     -webkit-overflow-scrolling: touch;
 }
 
+#playlist h2 i,
+header h1 i{
+	cursor: pointer;
+}
+
 #playlist.ng-hide {
     display: block!important;
     -webkit-transform: translateX(-100%);
