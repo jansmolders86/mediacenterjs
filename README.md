@@ -1,4 +1,4 @@
-![logo](/public/core/css/img/logo.png) MediacenterJS
+![logo](/public/core/css/img/logo.png) MediacenterJS __Beta__
 =============
 
 [![mediacenterjs](http://mediacenterjs.com/global/images/screen1.png)](http://www.mediacenterjs.com)
@@ -6,11 +6,6 @@
 __A NodeJS based media center__ 
 
 Website: http://www.mediacenterjs.com 
-
-Status: 
-=======
-
-__Beta__
 
 What is MediacenterJS?
 =========================
