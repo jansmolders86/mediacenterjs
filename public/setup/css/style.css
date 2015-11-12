@@ -1,3 +1,21 @@
+body{
+	background:#17181a;
+}
+
+header, #header {
+	background:#232428;
+	border:0;
+	box-shadow: 0 0 0 0;
+}
+
+header h1, #header h1 {
+	padding:0 75px;
+}
+
+input[type=submit]{
+	margin-left: 190px !important
+}
+
 #oauth {
 	background-color: #0074a2;
 }
