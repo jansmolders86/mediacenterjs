@@ -15,7 +15,7 @@ The backend is based on Node.JS with ExpressJS and JADE templates.
 The MVC structure allows developers to add a plugin to MCJS with ease. 
 The server application runs on Windows, MAC and Linux systems, the client runs in every modern browser (Chrome is preferable though).
 
-Who is this for? there are already services like Netflix/HBO GO/Spotify etc
+Who is this for? 
 =========================
 
 Although all those services are really awesome, they do not have every media you might enjoy or already own. Especially if you're born before the streaming age like me, you'll probably have a lot of media locally somewhere. So, if you want the convienence of the aformentioned services, but you want to use your own media, this app is for you!
