@@ -686,8 +686,16 @@ table tr > th:first-child {
 /** jQuery UI additions**/
 
 .ui-widget {
-    margin-bottom: 20px;
+	position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin: 90px 0 10px;
 }
+
+.ui-widget  .message {
+	padding: 5px 0;
+}
+
 .ui-state-highlight {
     padding: 15px 10px;
 }
