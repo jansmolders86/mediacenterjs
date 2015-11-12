@@ -197,14 +197,10 @@ app.post('/clearCache', function(req, res) {
 
     tableName.forEach(function(name) {
         logger.info('clearing cache',{name : name})
-        app_cache_handler.clearCache(name, function(err) {
-            if (err) {
-                logger.error('Error removing module',{error:e})
-                return res.send('Error clearing cache', e);
-            }
-            var schema = require('./lib/utils/database-schema');
-            schema[name].destroy();
-        });
+		var schema = require('./lib/utils/database-schema');
+		if(name !== undefined){
+			schema[name].destroy(({ truncate: true }));
+		}
     });
 
     return res.send('done');
