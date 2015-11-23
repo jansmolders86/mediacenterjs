@@ -142,6 +142,18 @@ p a:hover {
     font-size: 40px;
     padding-top: 170px;
 }
+
+@media (max-width: 1200px) {
+    .tile > a > span {
+        display: none;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1400px) {
+    .tile > a > span {
+        font-size: 32px;
+    }
+}
 .tile .info {
     font-size: 14px;
     float: left;
@@ -163,6 +175,7 @@ p a:hover {
     width: 100%;
     height: 100%;
 }
+
 .tile:hover {
     cursor: pointer;
 }
@@ -213,6 +226,13 @@ p a:hover {
     font-size: 25px;
     font-family: 'Open Sans', sans-serif;
     color:#7B7D83;
+}
+
+@media (max-width: 1255px) {
+    #dateandtime .date,
+    #dateandtime .time {
+        font-size: 18px;
+    }
 }
 
 #dateandtime .time {margin-right:20px;}
@@ -727,5 +747,20 @@ and (-webkit-min-device-pixel-ratio: 3.0) {
 
     .tile.remote span {
         margin-left: 8px;
+    }
+}
+
+@media (min-width:770px) and (max-width: 1200px) {
+    .tile img{
+        width:50%;
+        margin: 0 auto;
+        float:none;
+        position: relative;
+    }
+}
+
+@media (max-width:1200px) {
+    .tile.remote{
+        display:none;
     }
 }
