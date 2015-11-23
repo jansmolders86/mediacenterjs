@@ -190,16 +190,9 @@ app.post('/getScraperData', function(req, res){
 
 function handleCallback(res) {
 	return function (err, results) {
-		if (err) {
-			logger.error(err);
-			return res.status(500).send();
+		if(!err){
+			return res.send('done');
 		}
-
-		if (results) {
-			return res.json(results);
-		}
-
-		return //res.status(200).send();
 	}
 }
 
