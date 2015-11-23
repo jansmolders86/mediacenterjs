@@ -163,31 +163,46 @@ app.post('/removeModule', function(req, res){
 app.post('/getScraperData', function(req, res){
     var incommingLink = req.body
     , scraperlink = incommingLink.scraperlink
-    , moviesfunctions = require('./apps/movies/movie-functions')
-    , musicfunctions = require('./apps/music/music-functions')
-    , tvfunctions = require('./apps/tv/tv-functions')
-    , serveToFrontEnd = false
-    , req // Dummy variable
-    , res; // Dummy variable
+	, MediaHandler = require('./lib/media-handler');
+	var MovieHandler = new MediaHandler('Movie', 'Movie', require('./apps/movies/metadata-processor'), 'moviepath');
+	var MusicHandler = new MediaHandler('Album', 'Track', require('./apps/music/metadata-processor'), 'musicpath');
+	var TvShowHandler = new MediaHandler('Show', 'Episode', require('./apps/tv/metadata-processor'), 'tvpath');
 
     if(scraperlink === 'movies'){
-        moviesfunctions.loadItems(req, res, serveToFrontEnd);
+		MovieHandler.load({}, handleCallback(res));
+		console.log(scrap,'res');
     } else if (scraperlink === 'music'){
-        musicfunctions.loadItems(req, res, serveToFrontEnd);
+		MusicHandler.load({include: [Artist, Track]}, handleCallback(res));
     } else if (scraperlink === 'tv'){
-        tvfunctions.loadItems(req, res, serveToFrontEnd);
+		TvShowHandler.load({include: [Episode]}, handleCallback(res));
     }  else if(scraperlink === 'all'){
-        moviesfunctions.loadItems(req, res, serveToFrontEnd);
+		MovieHandler.load({}, handleCallback(res));
         setTimeout(function(){
-            musicfunctions.loadItems(req, res, serveToFrontEnd);
+			MusicHandler.load({include: [Artist, Track]}, handleCallback(res));
         },10000);
         setTimeout(function(){
-            tvfunctions.loadItems(req, res, serveToFrontEnd);
+			TvShowHandler.load({include: [Episode]}, handleCallback(res));
         },20000);
     } else {
         res.status(404).send();
     }
 });
+
+function handleCallback(res) {
+	return function (err, results) {
+		if (err) {
+			logger.error(err);
+			return res.status(500).send();
+		}
+
+		if (results) {
+			return res.json(results);
+		}
+
+		return //res.status(200).send();
+	}
+}
+
 
 app.post('/clearCache', function(req, res) {
     var app_cache_handler = require('./lib/handlers/app-cache-handler');
