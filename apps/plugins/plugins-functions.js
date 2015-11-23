@@ -101,6 +101,10 @@ exports.getAvailablePlugins = function(req, res){
                 var compareInfo = isPluginCurrentlyInstalled(installedPlugins, pluginObj.name, pluginObj.version);
                 var d = new Date(pluginObj.time);
 
+				if(pluginObj.author === undefined || pluginObj.author === null){
+					pluginObj.author = '';
+				}
+
                 return {
                     name: pluginObj.name.replace(pluginPrefix, ''), //Remove the Mediacenterjs-
                     desc: pluginObj.description,
