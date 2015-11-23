@@ -77,6 +77,7 @@ exports.getAvailablePlugins = function(req, res){
                         logger.error('NPM Search Error ' + err);
                         callback(err);
                     } else {
+						logger.info('Found something, continuing...');
                         callback(null, res);
                     }
                 });
@@ -104,6 +105,8 @@ exports.getAvailablePlugins = function(req, res){
 				if(pluginObj.author === undefined || pluginObj.author === null){
 					pluginObj.author = '';
 				}
+
+				logger.info('Filtering results...');
 
                 return {
                     name: pluginObj.name.replace(pluginPrefix, ''), //Remove the Mediacenterjs-
