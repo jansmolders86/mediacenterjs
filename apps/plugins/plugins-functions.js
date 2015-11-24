@@ -103,7 +103,7 @@ exports.getAvailablePlugins = function(req, res){
                 var d = new Date(pluginObj.time);
 
 				if(pluginObj.author === undefined || pluginObj.author === null){
-					pluginObj.author = '';
+					pluginObj.author = 'Unknown';
 				}
 
 				logger.info('Filtering results...');
