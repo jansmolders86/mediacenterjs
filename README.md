@@ -75,14 +75,13 @@ Video: AVI/MOV/WMV/MP4/MKV/MPEG
 Audio: MP3/M4a 
 
 Known issues:
-==================
+=================
 
-* Youtube app not working (needs to be refactored)
 * Device streaming still in heavy development
 * Seeking beyond buffer not working yet.
 
 Be sure to check the open issues before filing a new one.
-If you filing a new issue, be sure to mention your NodeJS version and the platform (eg Windows or Ubuntu, Debian etc) you are running the MCJS server on.
+If you're filing a new issue, be sure to mention your NodeJS version (node -v in a terminal or prompt) and the platform (eg Windows or Ubuntu, Debian etc) you are running the MCJS server on.
 
 Also check out what is currently being developed and/or fixed on MCJS Trello page: https://trello.com/b/czjyYsFi/mediacenterjs
 
