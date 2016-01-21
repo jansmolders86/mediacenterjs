@@ -25,7 +25,6 @@
 
 var child_process = require('child_process')
     , fs = require("fs-extra")
-    , sys = require("sys")
     , isThere = require('is-there')
     , logger = require('winston');
 
@@ -117,7 +116,7 @@ server = {
             });
 
             this.process.stderr.addListener('data', function (data) {
-                sys.print(data);
+                console.log(data.toString());
             });
 
             this.process.addListener('exit', function (code) {
