@@ -97,7 +97,7 @@ Feel free to contribute by translating.
 * [Jonathan Bailey](https://github.com/Jon889) for his hudge code contributions and database abstraction layer
 * [Matthew Marino](https://github.com/Karnith) for his FFMPEG expertise
 
-###Special thanks to these contributors:###
+### Special thanks to these contributors: ###
 
 
 * [Sylvain](https://github.com/flyinva) for his French translation
