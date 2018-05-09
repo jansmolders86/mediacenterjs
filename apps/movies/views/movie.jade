@@ -6,7 +6,7 @@
         .caption(ng-click="movie.play()")
                 img.backdrop(ng-src="{{movie.backgroundURL || '/movies/css/img/nodata.jpg'}}", onerror="this.src='/movies/css/img/nodata.jpg'", ng-click="movie.play()")
                 p
-                    h1.movie-title{{movie.title}}
+                    h1.movie-title {{movie.title}}
                     .overview
                         .summary {{movie.overview}}
         .specs
