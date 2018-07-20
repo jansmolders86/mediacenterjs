@@ -42,7 +42,7 @@
         "lingua": "^0.4.0",
         "method-override": "^2.3.1",
         "moviedb": "^0.2.0",
-        "musicmetadata": "^0.4.6",
+        "music-metadata": "^2.4.1",
         "node-ffprobe": "^1.2.2",
         "node-schedule": "^0.1.13",
         "npm": "^3.5.0",
