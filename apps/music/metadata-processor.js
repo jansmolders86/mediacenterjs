@@ -1,85 +1,84 @@
 var LastfmAPI = require('lastfmapi')
-, mm = require('musicmetadata')
+, mm = require('music-metadata')
 , fs = require('fs-extra')
 , logger = require('winston');
 
-exports.valid_filetypes = /(m4a|mp3)$/gi;
+exports.valid_filetypes = /(m4a|mp2|mp3|mp4|flac|wma|asf|ogg|opus|wv|wav)$/gi;
 
-exports.processFile = function (fileObject, callback) {
-    var parser = new mm(fs.createReadStream(fileObject.href));
-    var result = null;
+exports.processFile = function(fileObject, callback) {
+	logger.info(`Parsing ${fileObject.href}`);
+    mm.parseStream(fs.createReadStream(fileObject.href, {skipPostHeaders: true})).then(function(metadata) {
 
-    parser.on('metadata', function(metadata) {
-        result = metadata;
-    });
-    parser.on('done', function(err) {
-        if (err) {
-            logger.error('Music parse error', { error: err });
-        } else {
-            var trackName = 'Unknown Title'
-            ,   trackNo = ''
-            ,   albumName = 'Unknown Album'
-            ,   genre = 'Unknown'
-            ,   artistName = 'Unknown Artist'
-            ,   year = '';
+    	var common = metadata.common;
 
-            if (result) {
-                trackName = (result.title)        ? result.title.replace(/\\/g, '') : trackName;
-                trackNo   = (result.track.no)     ? result.track.no : trackNo;
-                albumName = (result.album)        ? result.album.replace(/\\/g, '') : albumName;
-                artistName= (result.artist[0])    ? result.artist[0].replace(/\\/g, '') : artistName;
-                year      = (result.year)         ? new Date(result.year).getFullYear() : year;
+    	var trackName = 'Unknown Title'
+			,   trackNo = ''
+			,   albumName = 'Unknown Album'
+			,   genre = 'Unknown'
+			,   artistName = 'Unknown Artist'
+			,   year = '';
 
-                // TODO: Genre not used anywhere??
-                var genrelist = result.genre;
-                if (genrelist && genrelist.length > 0) {
-                    genre = genrelist[0];
-                }
-            }
+		if (common) {
+			trackName = (common.title)        ? common.title.replace(/\\/g, '') : trackName;
+			trackNo   = (common.track.no)     ? common.track.no : trackNo;
+			albumName = (common.album)        ? common.album.replace(/\\/g, '') : albumName;
+			artistName= (common.artist)       ? common.artist.replace(/\\/g, '') : artistName;
+			year      = (common.year)         ? new Date(common.year).getFullYear() : year;
 
-            var lastfm = new LastfmAPI({
-                'api_key'   : '36de4274f335c37e12395286ec6e92c4',
-                'secret'    : '1f74849490f1872c71d91530e82428e9'
-            });
+			// TODO: Genre not used anywhere??
+			var genrelist = common.genre;
+			if (genrelist && genrelist.length > 0) {
+				genre = genrelist[0];
+			}
+		}
 
-            lastfm.album.getInfo({ artist: artistName, album: albumName }, function (err, album) {
-                if (err) {
-                    logger.error(err);
-                }
+		var lastfm = new LastfmAPI({
+			'api_key'   : '36de4274f335c37e12395286ec6e92c4',
+			'secret'    : '1f74849490f1872c71d91530e82428e9'
+		});
 
-                // TODO: Maybe also use releasedate here if not already available from musicmetadata?
-                var cover = '/music/css/img/nodata.jpg';
-                if (album && album.image[3] && album.image[3]['#text']) {
-                    cover = album.image[3]['#text']; // Image at Index 3 = Large Album Cover
-                }
+		lastfm.album.getInfo({ artist: artistName, album: albumName }, function (err, album) {
+			if (err) {
+				logger.error(err);
+				callback();
+			}
 
-                var albumData = {
-                    title: albumName,
-                    posterURL: cover,
-                    year: year
-                };
-                var artistData = {
-                    name: artistName
-                };
-                var trackData = {
-                    title: trackName,
-                    order: trackNo,
-                    filePath: fileObject.href
-                };
+			// TODO: Maybe also use releasedate here if not already available from musicmetadata?
+			var cover = '/music/css/img/nodata.jpg';
+			if (album && album.image[3] && album.image[3]['#text']) {
+				cover = album.image[3]['#text']; // Image at Index 3 = Large Album Cover
+			}
 
-                Artist.findOrCreate({where: artistData, defaults: artistData})
-                .spread(function (artist, created) {
-                    albumData.ArtistId = artist.id;
-                    return Album.findOrCreate({where: { title: albumData.title }, defaults: albumData});
-                })
-                .spread(function (album, created) {
-                    trackData.AlbumId = album.id;
-                    return Track.findOrCreate({where: { title: trackData.title }, defaults: trackData});
-                })
-                .spread(function (track, created) {
-                    callback();
-                });
-            });
-        }
-    });
+			var albumData = {
+				title: albumName,
+				posterURL: cover,
+				year: year
+			};
+			var artistData = {
+				name: artistName
+			};
+			var trackData = {
+				title: trackName,
+				order: trackNo,
+				filePath: fileObject.href
+			};
+
+			Artist.findOrCreate({where: artistData, defaults: artistData})
+				.spread(function (artist, created) {
+					albumData.ArtistId = artist.id;
+					return Album.findOrCreate({where: { title: albumData.title }, defaults: albumData});
+				})
+				.spread(function (album, created) {
+					trackData.AlbumId = album.id;
+					return Track.findOrCreate({where: { title: trackData.title }, defaults: trackData});
+				})
+				.spread(function (track, created) {
+					callback();
+				});
+		});
+
+	}).catch(function(err) {
+		logger.error('Music parse error', { error: err });
+		callback();
+	})
 }
