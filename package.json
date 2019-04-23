@@ -50,7 +50,7 @@
         "request": "^2.51.0",
         "rimraf": "^2.1.4",
         "semver": ">=2.0.0",
-        "sequelize": "^3.0.0",
+        "sequelize": ">=5.3.0",
         "socket.io": "^0.9.16",
         "sqlite3": "~3.1.4",
         "to-title-case": "^0.1.5",
